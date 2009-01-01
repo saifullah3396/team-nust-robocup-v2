@@ -93,6 +93,7 @@ void MPComControl<Scalar>::update()
 template<typename Scalar>
 void MPComControl<Scalar>::finish()
 {
+  LOG_INFO("MPComControl.finish() called...")
   this->inBehavior = false;
 }
 

@@ -520,8 +520,7 @@ src/TNRSModules/MotionModule/include/HeadControl/Types/HeadTargetSearch.h
 src/TNRSModules/MotionModule/include/HeadControl/Types/HeadTargetTrack.h
 src/TNRSModules/MotionModule/include/HeadControl/HeadControl.h
 src/TNRSModules/MotionModule/include/HeadControl/HeadTargetTypes.h
-src/TNRSModules/MotionModule/include/ImuFilter/ImuDataFilter.cpp
-src/TNRSModules/MotionModule/include/ImuFilter/ImuDataFilter.h
+src/TNRSModules/MotionModule/include/ImuFilter/ImuFilter.h
 src/TNRSModules/MotionModule/include/KickModule/Deprecated/EEJacobian.h
 src/TNRSModules/MotionModule/include/KickModule/Deprecated/EEJacobian2.h
 src/TNRSModules/MotionModule/include/KickModule/Deprecated/MassMatrix.h
@@ -1193,8 +1192,6 @@ config/BehaviorConfigs/MBConfigs/KickModule/CSpaceBSplineKick.json
 config/BehaviorConfigs/MBConfigs/BalanceModule/MPComControl.json
 src/TNRSModules/MotionModule/include/MotionLogger.h
 src/TNRSModules/MotionModule/src/MotionLogger.cpp
-src/TNRSModules/MotionModule/include/ImuFilter/ImuStateEstimator.cpp
-src/TNRSModules/MotionModule/include/ImuFilter/ImuStateEstimator.h
 src/TNRSModules/MotionModule/include/KinematicsModule/ImuCalibrator.h
 src/TNRSModules/MotionModule/src/KinematicsModule/ImuCalibrator.cpp
 src/Utils/include/JsonLogger.h
@@ -1503,3 +1500,5 @@ src/TNRSModules/UserCommModule/src/TcpServer.cpp
 src/TNRSModules/UserCommModule/include/UserCommTypes.h
 config/Robots/Sim/JointEstimator.json
 config/Common/WalkConfig.ini
+src/TNRSModules/MotionModule/include/KinematicsModule/ImuFilter.h
+src/TNRSModules/MotionModule/src/KinematicsModule/ImuFilter.cpp

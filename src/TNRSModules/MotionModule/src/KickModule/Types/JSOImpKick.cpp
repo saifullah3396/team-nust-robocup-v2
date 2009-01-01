@@ -122,6 +122,8 @@ void JSOImpKick<Scalar>::setupKickBase()
     activeJoints[toUType(Joints::rShoulderPitch)] = true;
     activeJoints[toUType(Joints::rShoulderRoll)] = true;
     this->zmpControlCfgInKick->activeJoints = activeJoints;
+    this->zmpControlCfgInKick->targetX = -0.02;
+    this->zmpControlCfgInKick->targetY = 0.0;
 
     /*Matrix<Scalar, Dynamic, 1> postureTarget(toUType(Joints::count));
     if (this->supportLeg == LinkChains::lLeg) {

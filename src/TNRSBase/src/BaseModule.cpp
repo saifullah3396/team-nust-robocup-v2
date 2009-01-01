@@ -180,7 +180,7 @@ void BaseModule::onIterationComplete()
   auto lastIterationTimeMS =
     duration_cast < milliseconds > (timeNow - iterationStartTime).count();
   //if (moduleName == "MotionModule")
-  //    LOG_INFO(moduleName << " took time: " << lastIterationTimeMS)
+      //LOG_INFO(moduleName << " took time: " << lastIterationTimeMS)
   if (lastIterationTimeMS < periodMinMS) {
     int waitTimeMS = periodMinMS - lastIterationTimeMS;
     usleep(waitTimeMS * 1000);

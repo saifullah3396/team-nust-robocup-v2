@@ -29,8 +29,8 @@
         "baseType" : 0,
         "id" : 4,
         "maxRuntime" : 45,
-        "supportLeg" : 0,
-        "timeToReachB" : 1.0,
+        "supportLeg" : 3,
+        "timeToReachB" : 0.75,
         "type" : 0,
         "logData" : false
     },
@@ -40,13 +40,13 @@
         "keepOtherLegContact" : true,
         "keepTorsoUpright" : false,
         "maxRuntime" : 45,
-        "regularizePosture" : false,
+        "regularizePosture" : true,
         "supportLeg" : 3,
         "type" : 2,
         "logData" : true,
         "timeToReachB" : 1.0,
-        "targetX" : 0.0,
-        "targetY" : 0.01
+        "targetX" : -0.02,
+        "targetY" : 0.0
     },
     "inKickBalance" : true
 }

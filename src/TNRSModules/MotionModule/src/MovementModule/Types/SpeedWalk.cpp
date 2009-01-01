@@ -86,7 +86,9 @@ bool SpeedWalk<Scalar>::initiate()
   while (!walkZmpRefGen->previewsAvailable(this->runTime)) {
     genNextStep();
   }
-  LOG_INFO("NSteps: " << stepsQueue.size());
+  //for(int i = 0; i  <10; ++i)
+  //  genNextStep();
+  //drawSteps();
 
   //! Initiate the Zmp reference generator for walk
   if (!walkZmpRefGen->initiate())
@@ -108,8 +110,8 @@ bool SpeedWalk<Scalar>::initiate()
   //this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(22.0), L_SHOULDER_ROLL);
   //this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(-12.0), R_SHOULDER_ROLL);
   //this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(-22.0), R_SHOULDER_ROLL);
-  params->comHeight = this->kM->getComStateWrtFrame(
-    static_cast<LinkChains>(this->kM->getGlobalBaseIndex()), toUType(LegEEs::footBase)).position[2];
+  //params->comHeight = this->kM->getComStateWrtFrame(
+   // static_cast<LinkChains>(this->kM->getGlobalBaseIndex()), toUType(LegEEs::footBase)).position[2];
 
   this->kM->getTaskSolver()->setMaxVelocityLimitGain(1.0);
   auto activeJoints = vector<bool>(toUType(Joints::count), false);
@@ -204,8 +206,8 @@ void SpeedWalk<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
 template <typename Scalar>
 void SpeedWalk<Scalar>::update()
 {
+  static Matrix<Scalar, 4, 4> totalTransform = Matrix<Scalar, 4, 4>::Identity();
   static int nSteps = 0;
-  LOG_INFO("Runtime: " << this->runTime);
   getBehaviorCast()->velocityInput.clip(-1, 1);
   //! If the curent total number of steps are not enough
   //! to fill the previewable zmp references add another step
@@ -222,6 +224,7 @@ void SpeedWalk<Scalar>::update()
       //LOG_INFO("fs->timeAtFinish: " << fs->timeAtFinish);
       //! Last step is finished so change base support reference frame to
       //! The last step foot which is at stepsQueue.front()
+      totalTransform = totalTransform * stepsQueue.front()->trans;
       auto newBase = stepsQueue.front()->foot;
       auto other = newBase == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
       this->kM->setGlobalBase(newBase, LegEEs::footCenter);
@@ -275,7 +278,7 @@ void SpeedWalk<Scalar>::update()
       //! Create the trajectory for the next step relative to new support
       //! foot frame
       this->genStepTrajectory();
-      if (nSteps >= 1000)
+      if (nSteps >= 999)
         finish();
       break;
     }
@@ -312,11 +315,14 @@ void SpeedWalk<Scalar>::update()
   boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setTargetCom(desComPosition);
   boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setFirstStep(true);
 
+  Matrix<Scalar, 3, 1> zmpRefT;
+  zmpRefT << zmpRef->x[0], zmpRef->y[0], 0.0;
+  zmpRefT = MathsUtils::transformVector(totalTransform, zmpRefT);
   zmpRegLog.open(
     (ConfigManager::getLogsDirPath() + string("SpeedWalk/zmpRef.txt")).c_str(),
     std::ofstream::out | std::ofstream::app
   );
-  zmpRegLog << zmpRef->x[0] << " " << zmpRef->y[0] << endl;
+  zmpRegLog << zmpRefT[0] << " " << zmpRefT[1] << endl;
   zmpRegLog.close();
   comLog.open(
     (ConfigManager::getLogsDirPath() + string("SpeedWalk/Com.txt")).c_str(),
@@ -324,13 +330,19 @@ void SpeedWalk<Scalar>::update()
   );
   auto comState = this->kM->getComStateWrtFrame(
       static_cast<LinkChains>(this->kM->getGlobalBaseIndex()), toUType(LegEEs::footBase));
+
+  comState.position = MathsUtils::transformVector(totalTransform, comState.position);
+  desComPosition = MathsUtils::transformVector(totalTransform, desComPosition);
+  Matrix<Scalar, 3, 1> zmpT;
+  zmpT << comState.zmp[0], comState.zmp[1], 0.0;
+  zmpT = MathsUtils::transformVector(totalTransform, zmpT);
   comLog << this->motionModule->getModuleTime() << "  "
          << comState.position[0] << " "
          << comState.position[1] << " "
          << desComPosition[0] << " "
          << desComPosition[1] << " "
-         << comState.zmp[0] << " "
-         << comState.zmp[1] << endl;
+         << zmpT[0] << " "
+         << zmpT[1] << endl;
   comLog.close();
 
   for (auto& task : tasks) {
@@ -389,7 +401,6 @@ void SpeedWalk<Scalar>::genStepTrajectory()
   Matrix<Scalar, 4, 4> supportToSwingFoot = this->kM->getGlobalToOther();
   Matrix<Scalar, 4, 4> toTrans = getFrontStep()->trans;
   controlPoints.resize(nControlPoints, nDim);
-  LOG_INFO("supportToSwingFoot: " << supportToSwingFoot);
   controlPoints.row(0) = MathsUtils::matToVector(supportToSwingFoot).transpose();
   controlPoints.row(1) = controlPoints.row(0);
   controlPoints.row(2) = controlPoints.row(1);
@@ -397,27 +408,25 @@ void SpeedWalk<Scalar>::genStepTrajectory()
   controlPoints.row(4) = controlPoints.row(3);
   controlPoints.row(5) = controlPoints.row(4);
   controlPoints(2, 2) = params->stepHeight;
-  controlPoints.block(2, 3, 1, 3) = (controlPoints.block(1, 3, 1, 3) + controlPoints.block(4, 3, 1, 3)) / 2;
-  controlPoints.block(3, 3, 1, 3) = controlPoints.block(2, 3, 1, 3);
+  //controlPoints.block(2, 3, 1, 3) = (controlPoints.block(1, 3, 1, 3) + controlPoints.block(4, 3, 1, 3)) / 2;
+  //controlPoints.block(3, 3, 1, 3) = controlPoints.block(2, 3, 1, 3);
   controlPoints(3, 2) = params->stepHeight;
-  LOG_INFO("controlPoints:\n" << controlPoints);
 
-
+  LOG_INFO("Control points: " << controlPoints);
   boost::shared_ptr<BSpline<Scalar> > bSpline =
     boost::make_shared<BSpline<Scalar> >(
       bSplineDegree, nDim, controlPoints, knots, this->cycleTime);
   bSpline->setup();
   stepTraj = bSpline->getSpline(0);
-
+  LOG_INFO("stepTraj: " << stepTraj)
   //! Plotting
-  GnuPlotEnv::PlotEnv<Scalar>
+  /*GnuPlotEnv::PlotEnv<Scalar>
     plotEnv(
       "CSpaceBSplineKick", "x", "y", "z",
       Matrix<Scalar, 2, 1>(-0.2, 0.2),
       Matrix<Scalar, 2, 1>(-.5, .5),
       Matrix<Scalar, 2, 1>(-.5, .5)
-    );
-  LOG_INFO("stepTraj: " << stepTraj);
+    );*/
   stepTrajIndex = 0;
   //plotEnv.plot3D("BSpline", cartTraj.col(0), cartTraj.col(1), cartTraj.col(2));
 }
@@ -469,7 +478,7 @@ void SpeedWalk<Scalar>::addFirstStep()
       atan2(transFromTo(1, 0), transFromTo(0, 0))),
       foot,
       transFromTo,
-      params->totalStepTime*2));
+      params->firstStepTime));
 }
 
 
@@ -496,12 +505,24 @@ void SpeedWalk<Scalar>::genNextStep()
   } else {
     //! Get current foot position
     auto foot = prevStep->foot == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
-    //Matrix<Scalar, 4 ,4> transFromTo = MathsUtils::getTInverse(prevStep->trans) * diffTrans;
-    diffTrans(1, 3) += this->params->getFootSeparation(foot);
-    Matrix<Scalar, 4 ,4> transFromTo = diffTrans;
+    auto pose = RobotPose2D<Scalar>(
+      diffTrans(0, 3), diffTrans(1, 3), atan2(diffTrans(1, 0), diffTrans(0, 0)));
+    //! Clip foot if it is going out of max range
+    pose.x() = VisionUtils::clip(pose.getX(), params->minStepLengthX, params->maxStepLengthX);
+    if (foot == RobotFeet::lFoot) { //! Theta max range for right foot is inverse of left foot
+      pose.theta() = VisionUtils::clip(pose.getTheta(), params->minStepRotation, params->maxStepRotation);
+      pose.y() = VisionUtils::clip(pose.getY(), params->minStepLengthY, params->maxStepLengthY);
+    } else {
+      pose.theta() = VisionUtils::clip(pose.getTheta(), -params->maxStepRotation, params->minStepRotation);
+      pose.y() = VisionUtils::clip(pose.getY(), -params->maxStepLengthY, params->minStepLengthY);
+    }
+    pose.y() += this->params->getFootSeparation(foot);
+    Matrix<Scalar, 3, 3> rot;
+    MathsUtils::makeRotationZ(rot, pose.getTheta());
+    Matrix<Scalar, 4 ,4> transFromTo =
+      MathsUtils::makeTransformation(rot, pose.getX(), pose.getY(), 0.0);
     addStep(boost::make_shared<TNRSFootstep<Scalar> >(
-      RobotPose2D<Scalar>(
-        transFromTo(0, 3), transFromTo(1, 3), atan2(transFromTo(1, 0), transFromTo(0, 0))),
+        pose,
         foot,
         transFromTo,
         prevStep->timeAtFinish + params->totalStepTime));
@@ -514,9 +535,14 @@ void SpeedWalk<Scalar>::drawSteps()
   //! Generate first two steps
   Mat drawing = Mat(Size(500, 500), CV_8UC3);
   cv::Scalar color;
+  Matrix<Scalar, 4, 4> trans;
+  trans = stepsQueue.front()->trans;
   for (const auto& fs : stepsQueue) {
     color = fs->foot == RobotFeet::lFoot ? cv::Scalar(255,0,0) : cv::Scalar(0,0,255);
-    VisionUtils::drawRotatedRect(drawing, fs->getFootRect(Point2f(250, 250), 100), color);
+    trans *= fs->trans;
+    auto transFs = *fs;
+    transFs.pose2D = RobotPose2D<Scalar>(trans(0, 3), trans(1, 3), atan2(trans(1, 0), trans(0, 0)));
+    VisionUtils::drawRotatedRect(drawing, transFs.getFootRect(Point2f(250, 250), 100), color);
     VisionUtils::displayImage("drawing", drawing, 1.0);
     cv::waitKey(0);
   }

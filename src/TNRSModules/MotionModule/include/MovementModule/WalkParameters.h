@@ -33,9 +33,13 @@ struct WalkParameters
 
   Scalar comHeight = {0.26};
   Scalar stepHeight = {0.02};
+  Scalar minStepLengthX = {-0.025};
+  Scalar minStepLengthY = {-0.0};
+  Scalar minStepRotation = {0.0};
   Scalar maxStepLengthX = {0.05};
   Scalar maxStepLengthY = {0.025};
   Scalar maxStepRotation = {Angle::DEG_15};
   Scalar nPreviews = {100};
   Scalar totalStepTime = {0.2};
+  Scalar firstStepTime = {0.6};
 };

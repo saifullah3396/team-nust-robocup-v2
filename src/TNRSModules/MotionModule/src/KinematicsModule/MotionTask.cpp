@@ -73,6 +73,9 @@ Matrix<Scalar, Dynamic, Dynamic>
 MotionTask<Scalar>::getJacobian()
 {
   Matrix<Scalar, Dynamic, Dynamic> jacobian = computeJacobian();
+  //! Removes dependency on rhipyawpitch joint transforms it to lhipyawpitch joint
+  jacobian.col(toUType(Joints::lHipYawPitch)) += jacobian.col(toUType(Joints::rHipYawPitch));
+  jacobian.col(toUType(Joints::rHipYawPitch)).setZero();
   for (size_t i = 0; i < nDof; ++i) {
     if (!activeJoints[i]) {
       jacobian.col(i).setZero();
@@ -134,7 +137,9 @@ template <typename Scalar>
 Matrix<Scalar, Dynamic, Dynamic>
 PostureTask<Scalar>::computeJacobian()
 {
-  return Matrix<Scalar, Dynamic, Dynamic>::Identity(toUType(Joints::count), toUType(Joints::count));
+  Matrix<Scalar, Dynamic, Dynamic> j =
+    Matrix<Scalar, Dynamic, Dynamic>::Identity(toUType(Joints::count), toUType(Joints::count));
+  return j;
 }
 
 template <typename Scalar>
@@ -358,6 +363,7 @@ TorsoTask<Scalar>::computeResidual(const Scalar& dt)
     MathsUtils::getTInverse(
       this->km->getForwardEffector(
         static_cast<LinkChains>(baseFrame), endEffector, this->jsType));
+  //Matrix<Scalar, 4, 4> newTarget = pose * MathsUtils::getTInverse(this->km->getTorsoState()->rot);
   Matrix<Scalar, 6, 1> diff;
   diff.setZero();
   diff.block(0, 0, 3, 1) = target.block(0, 3, 3, 1) - pose.block(0, 3, 3, 1);

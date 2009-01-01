@@ -87,7 +87,7 @@ bool ZmpControl<Scalar>::initiate()
         this->motionModule,
         static_cast<RobotFeet>(getBehaviorCast()->supportLeg),
         nPreviews,
-        (Scalar)getBehaviorCast()->timeToReachB / 2,
+        (Scalar)getBehaviorCast()->timeToReachB,
         zmpTarget
     );
   refGenerator->initiate();
@@ -341,7 +341,8 @@ void ZmpControl<Scalar>::update()
     finish();
   #else
   if (this->runTime > (Scalar)getBehaviorCast()->timeToReachB) {
-    finish();
+    //finish();
+    trackZmp();
   } else {
     trackZmp();
   }
@@ -407,15 +408,14 @@ void ZmpControl<Scalar>::trackZmp()
   );
   zmpRegLog << zmpRef->x[0] << " " << zmpRef->y[0] << endl;
   zmpRegLog.close();
-  auto desState =
+  desComPosition[0] =
     controllers[0]->step(
-      Eigen::Map<Eigen::Matrix<Scalar, Eigen::Dynamic, 1> >(zmpRef->x.linearize(), zmpRef->x.size()));
-  desComPosition[0] = desState[0];
-  desState =
+      Eigen::Map<Eigen::Matrix<Scalar, Eigen::Dynamic, 1> >(
+        zmpRef->x.linearize(), zmpRef->x.size()))[0];
+  desComPosition[1] =
     controllers[1]->step(
-      Eigen::Map<Eigen::Matrix<Scalar, Eigen::Dynamic, 1> >(zmpRef->y.linearize(), zmpRef->y.size()));
-  desComPosition[1] = desState[1];
-
+      Eigen::Map<Eigen::Matrix<Scalar, Eigen::Dynamic, 1> >(
+        zmpRef->y.linearize(), zmpRef->y.size()))[0];
   auto comState =
     this->kM->getComStateWrtFrame(
       static_cast<LinkChains>(refGenerator->getRefFrame()), toUType(LegEEs::footBase));
@@ -448,6 +448,9 @@ void ZmpControl<Scalar>::trackZmp()
   comLog.close();
   boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setTargetCom(desComPosition);
   boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setFirstStep(true);
+  //if (getBehaviorCast()->regularizePosture) {
+//    boost::static_pointer_cast<PostureTask<Scalar> >(tasks[static_cast<int>(IkTasks::posture)])->setTargetPosture(this->kM->getJointPositions());
+//  }
   for (auto& task : tasks) {
     if (task) {
       this->addMotionTask(task);

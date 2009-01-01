@@ -93,8 +93,6 @@ void WalkZmpRefGen<Scalar>::update(const Scalar& timeStep)
     //! Matching floats here, this can be dangerous
     if (fabsf(previewEndTime - fs->timeAtFinish) <= 1e-3) {
       //LOG_INFO("fs->timeAtFinish: " << fs->timeAtFinish);
-      fs->pose2D.print();
-      globalTransPose.print();
       globalTransPose = globalTransPose.transform(fs->pose2D);
       this->zmpRef->x.push_back(globalTransPose.getX());
       this->zmpRef->y.push_back(globalTransPose.getY());

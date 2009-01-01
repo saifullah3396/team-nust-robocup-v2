@@ -105,7 +105,7 @@ void MPComControlConfig::validate()
   if (
     supportLeg != LinkChains::lLeg &&
     supportLeg != LinkChains::rLeg ||
-    timeToReachB <= 1.0f)
+    timeToReachB < 0.5)
   { 
     throw 
       BConfigException(

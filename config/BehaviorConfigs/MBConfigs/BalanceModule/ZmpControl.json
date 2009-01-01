@@ -8,7 +8,7 @@
     "supportLeg" : 3,
     "type" : 2,
     "logData" : true,
-    "timeToBalance" : 1.0,
-    "targetX" : 0.0,
-    "targetY" : 0.01
+    "timeToReachB" : 1.0,
+    "targetX" : -0.02,
+    "targetY" : 0.0
 }

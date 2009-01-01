@@ -129,9 +129,6 @@ template<typename Derived>
 Matrix<typename Derived::Scalar, 3, 1> matToEuler(const MatrixBase<Derived>& rot)
 {
   EIGEN_STATIC_ASSERT_FIXED_SIZE(Derived);
-  EIGEN_STATIC_ASSERT(
-        Derived::RowsAtCompileTime == 3 && Derived::ColsAtCompileTime == 3,
-        THIS_METHOD_IS_ONLY_FOR_MATRICES_OF_A_SPECIFIC_SIZE);
   auto r = atan2(rot(2, 1), rot(2, 2));
   auto p = asin(-rot(2, 0));
   auto y = atan2(rot(1, 0), rot(0, 0));
@@ -139,6 +136,8 @@ Matrix<typename Derived::Scalar, 3, 1> matToEuler(const MatrixBase<Derived>& rot
 }
 template Matrix<typename Matrix<float, 3, 3>::Scalar, 3, 1> matToEuler<Matrix<float, 3, 3> >(const MatrixBase<Matrix<float, 3, 3> >& rot);
 template Matrix<typename Matrix<double, 3, 3>::Scalar, 3, 1> matToEuler<Matrix<double, 3, 3> >(const MatrixBase<Matrix<double, 3, 3> >& rot);
+template Matrix<typename Matrix<float, 4, 4>::Scalar, 3, 1> matToEuler<Matrix<float, 4, 4> >(const MatrixBase<Matrix<float, 4, 4> >& rot);
+template Matrix<typename Matrix<double, 4, 4>::Scalar, 3, 1> matToEuler<Matrix<double, 4, 4> >(const MatrixBase<Matrix<double, 4, 4> >& rot);
 
 template<typename Derived>
 Quaternion<typename Derived::Scalar> matToQuaternion(const MatrixBase<Derived>& rot)

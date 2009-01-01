@@ -36,7 +36,7 @@ public:
     const boost::shared_ptr<ProcessModel<Scalar, StateSize, InputSize, OutputSize> >& model) :
     model(model)
   {
-    this->P.setIdentity();
+    this->P.setZero();
     R.setZero();
   }
 
@@ -53,7 +53,7 @@ public:
     H(H)
   {
     this->Ht = this->H.transpose();
-    this->P.setIdentity();
+    this->P.setZero();
     R.setZero();
   }
 

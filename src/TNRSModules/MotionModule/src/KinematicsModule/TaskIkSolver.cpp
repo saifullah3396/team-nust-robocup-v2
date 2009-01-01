@@ -126,14 +126,14 @@ bool TaskIkSolver<Scalar>::step(
   if (!final) {
     for (size_t i = 0; i < tasks.size(); ++i) {
       if (tasks[i]) {
-        //LOG_INFO("tasks[i]: " << i)
+        LOG_INFO("tasks[i]: " << i)
         Eigen::Matrix<Scalar, Dynamic, Dynamic> J = tasks[i]->getJacobian();
         Eigen::Matrix<Scalar, Dynamic, Dynamic> res = tasks[i]->getGain() * tasks[i]->getResidual(dt);
-        //LOG_INFO("res: " << res.transpose())
+        LOG_INFO("res: " << res.transpose())
         P += tasks[i]->getWeight() * J.transpose() * J;
         v += tasks[i]->getWeight() * - res.transpose() * J;
-        //LOG_INFO("J: " << J.transpose())
-        //LOG_INFO("V: " << tasks[i]->getWeight() * - res.transpose() * J)
+        LOG_INFO("J: " << J.transpose())
+        LOG_INFO("V: " << tasks[i]->getWeight() * - res.transpose() * J)
       }
     }
   } else {
@@ -186,7 +186,7 @@ bool TaskIkSolver<Scalar>::step(
     if (qp->init(qpP, qpV, qpG, NULL, NULL, NULL, qpH, nWSR, 0) == SUCCESSFUL_RETURN)
       solved = true;
     else {
-      LOG_ERROR("QP failed to solve...")
+      LOG_ERROR("QP failed to solve... " << final)
       //cout << "P:\n "<< P << endl;
       //cout << "v:\n  "<< v.transpose() << endl;
       //cout << "G: \n "<< G << endl;
@@ -197,11 +197,12 @@ bool TaskIkSolver<Scalar>::step(
     if (qp->hotstart(qpP, qpV, qpG, NULL, NULL, NULL, qpH, nWSR, 0) == SUCCESSFUL_RETURN)
       solved = true;
     else
-      LOG_ERROR("QP failed to solve...")
+      LOG_ERROR("QP failed to solve... " << final)
   }
   real_t qpQd[nDof];
   qp->getPrimalSolution(qpQd);
   qd = Eigen::Map<Eigen::Matrix<Scalar, Dynamic, 1> >(qpQd, nDof, 1);
+  qd[toUType(Joints::rHipYawPitch)] = qd[toUType(Joints::lHipYawPitch)];
   return solved;
 }
 
@@ -241,7 +242,6 @@ Eigen::Matrix<Scalar, Dynamic, 1> TaskIkSolver<Scalar>::solve(const unsigned& ma
     Eigen::Matrix<Scalar, Dynamic, 1> jointStep;
     bool success = step(jointStep);
     if (success) {
-     // LOG_INFO("jointStep:" << jointStep.transpose())
       jointStep *= dt;
       for (size_t j = 0; j < nDof; ++j) {
         if (activeJoints[j]) {
@@ -249,7 +249,6 @@ Eigen::Matrix<Scalar, Dynamic, 1> TaskIkSolver<Scalar>::solve(const unsigned& ma
         }
       }
       // Always update only in SIM
-      //LOG_INFO("joints f:" << joints.transpose() * 180 / M_PI)
       km->setJointPositions(Joints::first, joints, JointStateType::sim);
     } else {
       for (size_t j = 0; j < activeJoints.size(); ++j) {

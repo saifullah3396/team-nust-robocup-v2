@@ -18,6 +18,7 @@
  */
 
 #include "ControlModule/include/ActuatorRequests.h"
+#include "MotionModule/include/KinematicsModule/ImuFilter.h"
 #include "MotionModule/include/KinematicsModule/ComEstimator.h"
 #include "MotionModule/include/KinematicsModule/ComState.h"
 #include "MotionModule/include/KinematicsModule/Joint.h"
@@ -147,7 +148,7 @@ void KinematicsModule<Scalar>::init()
   feetForcesBuffer.set_capacity(ffBufferSize);
   updateJointStates();
   tis = boost::shared_ptr<TaskIkSolver<Scalar> >( new
-          TaskIkSolver<Scalar>(motionModule->getKinematicsModule(), 100, vector<bool>(), true, 2e-2)
+          TaskIkSolver<Scalar>(motionModule->getKinematicsModule(), 100, vector<bool>(), false, 2e-2)
         );
   tis->init();
   prepareDHTransforms();
@@ -345,6 +346,11 @@ void KinematicsModule<Scalar>::setupWBStates()
     boost::shared_ptr<TorsoState<Scalar> > (
       new TorsoState<Scalar>()
     );
+  imuFilter =
+    boost::shared_ptr<ImuFilter<Scalar> > (
+      new ImuFilter<Scalar>(this->cycleTime)
+    );
+  imuFilter->initiate();
   GET_CONFIG("KinCalibration",
     (Scalar, ImuAccelBias.x, torsoState->bias[0]),
     (Scalar, ImuAccelBias.y, torsoState->bias[1]),
@@ -1002,17 +1008,29 @@ void KinematicsModule<Scalar>::updateTorsoState()
     // Nao sensors are updated almost with cycle time of 40ms in memory
     // Whereas motion module runs at 10ms
     auto& inertial = INERTIAL_SENSORS_OUT(MotionModule);
+    static auto gravity = Matrix<Scalar, 3, 1>(0.0, 0.0, -Constants::gravity);
     torsoState->accel[0] = inertial[toUType(InertialSensors::accelerometerX)];
     torsoState->accel[1] = inertial[toUType(InertialSensors::accelerometerY)];
     torsoState->accel[2] = inertial[toUType(InertialSensors::accelerometerZ)];
+    torsoState->accel = torsoState->scale * (torsoState->accel - torsoState->bias);
+    torsoState->angularVelocity[0] = inertial[toUType(InertialSensors::gyroscopeX)];
+    torsoState->angularVelocity[1] = inertial[toUType(InertialSensors::gyroscopeY)];
+    torsoState->angularVelocity[2] = 0.0; // No data
+    // Madgewick filter not giving right orientation...
+    // imuFilter->update(torsoState->accel, torsoState->angularVelocity);
+    // torsoState->rot.block(0, 0, 3, 3) = imuFilter->getRotation();
+    // LOG_INFO("rotated accel: " << torsoState->rot.block(0, 0, 3, 3) * torsoState->accel);
+    // torsoState->accel = torsoState->rot.block(0, 0, 3, 3) * torsoState->accel - gravity;
+    //LOG_INFO("accel: " << torsoState->rot.block(0, 0, 3, 3) * torsoState->accel - gravity);
     MathsUtils::makeRotationXYZ(
       torsoState->rot,
       (Scalar) inertial[toUType(InertialSensors::torsoAngleX)],
       (Scalar) inertial[toUType(InertialSensors::torsoAngleY)],
       0.0);
-    torsoState->angularVelocity[0] = inertial[toUType(InertialSensors::gyroscopeX)];
-    torsoState->angularVelocity[1] = inertial[toUType(InertialSensors::gyroscopeY)];
-    torsoState->angularVelocity[2] = 0.0; // No data
+    //LOG_INFO("accel: " << torsoState->rot.block(0, 0, 3, 3) * torsoState->accel);
+    torsoState->accel = torsoState->rot.block(0, 0, 3, 3) * torsoState->accel - gravity;
+    torsoState->velocity = torsoState->velocity - torsoState->accel * cycleTime;
+
     if (logImuData) {
       static int count = 0;
       JSON_APPEND(imuLogger->getRoot(), "angleX", inertial[toUType(InertialSensors::torsoAngleX)]);
@@ -1024,28 +1042,6 @@ void KinematicsModule<Scalar>::updateTorsoState()
       count++;
       imuLogger->save();
     }
-    //LOG_INFO("inertial[TORSO_ANGLE_X]: " << inertial[TORSO_ANGLE_X] * 180 / M_PI)
-    //LOG_INFO("inertial[TORSO_ANGLE_Y]: " << inertial[TORSO_ANGLE_Y] * 180 / M_PI )
-    //LOG_INFO("torso Accel:\n" << torsoState->accel )
-    //LOG_INFO("torsoState->rot:\n" << torsoState->rot.block(0, 0, 3, 3) )
-    //LOG_INFO("torsoState->scale: " << torsoState->scale)
-    //LOG_INFO("torsoState->bias: " << torsoState->bias)
-    //LOG_INFO("torsoState->angularVelocity:\n" << torsoState->angularVelocity[0]);
-    //LOG_INFO("torsoState->angularVelocity:\n" << torsoState->angularVelocity[1]);
-    //LOG_INFO("torsoState->angularVelocity:\n" << torsoState->angularVelocity[2]);
-    //LOG_INFO("torsoState->scale: " << torsoState->scale)
-    //LOG_INFO("torsoState->bias: " << torsoState->bias)
-    static auto gravity = Matrix<Scalar, 3, 1>(0.0, 0.0, -Constants::gravity);
-    torsoState->accel =
-      torsoState->rot.block(0, 0, 3, 3) * torsoState->scale * (torsoState->accel - torsoState->bias);
-    //LOG_INFO("torso Accel rotated:\n" << torsoState->accel )
-    torsoState->accel -= gravity;
-    //torsoState->accel *= -1;
-    torsoState->velocity = torsoState->velocity + torsoState->accel * cycleTime;
-    //LOG_INFO("torsoState->rot:\n" << torsoState->rot )
-    //LOG_INFO("torso velocity:\n" << torsoState->velocity )
-
-    //LOG_INFO("torso accel:\n" << torsoState->accel )
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what());
   }
@@ -2496,7 +2492,7 @@ KinematicsModule<Scalar>::solveTasksIK(
   const vector<boost::shared_ptr<MotionTask<Scalar> > >& tasks,
   const unsigned& maxIterations)
 {
-  tis->reset(true);
+  tis->reset(false);
   vector<bool> activeJoints(toUType(Joints::count), false);
   for (size_t i = 0; i < activeJoints.size(); ++i) {
     for (size_t j = 0; j < tasks.size(); ++j) {

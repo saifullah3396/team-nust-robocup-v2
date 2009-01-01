@@ -22,6 +22,7 @@
 #include "Utils/include/Behaviors/MBConfigs/MBBalanceConfig.h"
 #include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
 #include "Utils/include/Behaviors/MBConfigs/MBKickConfig.h"
+#include "Utils/include/Constants.h"
 #include "Utils/include/DataHolders/PostureState.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
 #include "Utils/include/DataHolders/Landmark.h"
@@ -131,6 +132,9 @@ void MotionModule::init()
   LOG_INFO("Initializing MotionModule Output Variables...")
   JOINT_POSITIONS_OUT(MotionModule) = vector<float>(toUType(Joints::count), 0.f);
   INERTIAL_SENSORS_OUT(MotionModule) = vector<float>(toUType(InertialSensors::count), 0.f);
+  INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerX)] = 0.0;
+  INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerY)] = 0.0;
+  INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerZ)] = -Constants::gravity;
   FSR_SENSORS_OUT(MotionModule) = vector<float>(toUType(FsrSensors::count), 0.f);
   N_FOOTSTEPS_OUT(MotionModule) = 0;
   UPPER_CAM_TRANS_OUT(MotionModule) = Matrix4f::Identity();

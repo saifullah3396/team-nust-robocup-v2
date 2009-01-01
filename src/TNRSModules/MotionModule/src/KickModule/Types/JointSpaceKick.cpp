@@ -96,6 +96,7 @@ bool JointSpaceKick<Scalar>::initiate()
 template <typename Scalar>
 void JointSpaceKick<Scalar>::update()
 {
+  LOG_INFO("FsmState:" << fsm->state->name)
   if (fsm->update())
     finish();
 }
@@ -122,15 +123,13 @@ void JointSpaceKick<Scalar>::SetStartPosture::onRun()
 template <typename Scalar>
 void JointSpaceKick<Scalar>::GoToBalance::onStart() {
   //! Sets the balancer in parallel
-  cout << "GoToBalance::onStart..." << endl;
   this->bPtr->setupBalance();
 }
 
 template <typename Scalar>
 void JointSpaceKick<Scalar>::GoToBalance::onRun()
 {
-  cout << "GoToBalance::onRun..." << endl;
-  cout << "this->bPtr->getBehaviorCast()->balanceConfig->timeToReachB:" << this->bPtr->getBehaviorCast()->balanceConfig->timeToReachB << endl;
+  static bool balanceUpdated = false;
   static Scalar wait = 0.0;
   if (
     wait >
@@ -139,16 +138,24 @@ void JointSpaceKick<Scalar>::GoToBalance::onRun()
   {
     //! If balance is reached change the state to kicking
     this->nextState = this->bPtr->planKick.get();
+    balanceUpdated = false;
     wait = 0.0;
+  } else if (
+    this->bPtr->getBehaviorCast()->balanceConfig->type == (int)MBBalanceTypes::zmpControl &&
+    wait > this->bPtr->getBehaviorCast()->balanceConfig->timeToReachB &&
+    !balanceUpdated)
+  {
+    boost::static_pointer_cast<ZmpControlConfig>(this->bPtr->getBehaviorCast()->balanceConfig)->keepOtherLegContact = false;
+    this->bPtr->setupBalance();
+    balanceUpdated = true;
+    wait += this->bPtr->cycleTime;
   } else {
-    cout << "Waiting..." << wait << endl;
     wait += this->bPtr->cycleTime;
   }
 }
 
 template <typename Scalar>
 void JointSpaceKick<Scalar>::PlanKick::onRun() {
-  cout << "PlanKick::onRun" << endl;
   //! Get the current balancing pose
   this->bPtr->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
   //! Set the transformation frames
@@ -158,7 +165,7 @@ void JointSpaceKick<Scalar>::PlanKick::onRun() {
   //! Plan kicking trajectory
   this->bPtr->defineTrajectory();
   //! Plot the kicking trajectory
-  this->bPtr->plotKick();
+  //this->bPtr->plotKick();
   if (!this->bPtr->kickFailed) {
     this->nextState = this->bPtr->executeKick.get();
   } else {
@@ -169,7 +176,6 @@ void JointSpaceKick<Scalar>::PlanKick::onRun() {
 template <typename Scalar>
 void JointSpaceKick<Scalar>::ExecuteKick::onStart()
 {
-  cout << "ExecuteKick::onStart" << endl;
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   if (this->bPtr->getBehaviorCast()->inKickBalance) {
     this->bPtr->requestExecution(true);
@@ -191,7 +197,6 @@ void JointSpaceKick<Scalar>::ExecuteKick::onStart()
 template <typename Scalar>
 void JointSpaceKick<Scalar>::ExecuteKick::onRun()
 {
-  cout << "ExecuteKick::onRun" << endl;
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   if (this->bPtr->execTime > this->bPtr->totalTimeToKick) {
     this->nextState = this->bPtr->setPostKickPosture.get();
@@ -202,16 +207,16 @@ void JointSpaceKick<Scalar>::ExecuteKick::onRun()
   #else
   static unsigned step = 0;
   Matrix<Scalar, Dynamic, 1> desJoints(toUType(Joints::count));
+  desJoints.setZero();
   auto kickChain = this->bPtr->kM->getLinkChain(this->bPtr->kickLeg);
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     if (i >= kickChain->start && i < kickChain->start + kickChain->size)
-      desJoints[i] = this->bPtr->jointTrajectories[i - kickChain->start][step];
-    else
-      desJoints[i] = NAN;
+      desJoints[i] = this->bPtr->jointTrajectories[i - kickChain->start][step];;
   }
   if (this->bPtr->getBehaviorCast()->balanceConfig->type == (int)MBBalanceTypes::mpComControl) {
     this->bPtr->setJointCmds(desJoints);
   } else if (this->bPtr->getBehaviorCast()->balanceConfig->type == (int)MBBalanceTypes::zmpControl) {
+    cout << "Adding posture task..." << endl;
     auto kickTask = this->bPtr->kM->makePostureTask(desJoints, this->bPtr->kickTaskJoints, 10, 1.0);
     this->bPtr->addMotionTask(kickTask);
   }
@@ -277,11 +282,10 @@ void JointSpaceKick<Scalar>::defineTrajectory()
 {
   //! Get end-effector transformation in support leg frame
   Matrix<Scalar, 4, 4> eeTrans = this->supportToKick * this->endEffector;
-
   //! Define via points for pre-impact phase.
   const Scalar balldx = this->ballRadius * this->ballToTargetUnit[0];
   const Scalar balldy = this->ballRadius * this->ballToTargetUnit[1];
-  Matrix<Scalar, 4, 4> preImpactPose3, preImpactPose2, preImpactPose1, preImpactPose0;
+  Matrix<Scalar, 4, 4> preImpactPose2, preImpactPose1, preImpactPose0;
   //preImpactPose3.setIdentity();
   //preImpactPose3(0, 3) = this->impactPose(0, 3);
   //preImpactPose3(1, 3) = this->impactPose(1, 3);
@@ -329,7 +333,6 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   activeResidual[3] = false;
   activeResidual[4] = false;
   activeResidual[5] = false;
-
   //! Remove HipYawPitch joint from calclation of inverse kinematics
   vector<bool> activeJoints = vector<bool>(chainSize, true);
   activeJoints[0] = false;
@@ -346,6 +349,10 @@ void JointSpaceKick<Scalar>::defineTrajectory()
     this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
     //this->kM->setChainPositions(this->kickLeg, jointPosPre.row(i-1).transpose(), JointStateType::sim);
     Matrix<Scalar, Dynamic, 1> angles;
+    //if (this->kickLeg == LinkChains::lLeg)
+    //  angles = this->kM->inverseLeftLeg(this->endEffector, cPosesPre[i])[0];
+    //else
+    // angles = this->kM->inverseRightLeg(this->endEffector, cPosesPre[i])[0];
     angles = this->kM->solveJacobianIK(this->kickLeg, this->endEffector, cPosesPre[i], numIkIterations, activeJoints, activeResidual);
     if (angles[0] != angles[0]) {
         LOG_ERROR("Requested kick cannot be performed.")
@@ -423,12 +430,10 @@ void JointSpaceKick<Scalar>::defineTrajectory()
       jacobian,
       Matrix<Scalar, Dynamic, 1>(desCartesianVel.block(0, 0, 3, 1)));
   }
-
   Matrix<Scalar, Dynamic, Dynamic> jointBoundVels;
   jointBoundVels.resize(2, chainSize);
   jointBoundVels.setZero();
   jointBoundVels.row(1) = preImpJVel.transpose(); // Second row
-  //LOG_INFO("jointBoundVels:" << jointBoundVels)
   //! Pre-impact trajectory optimization
   Matrix<Scalar, Dynamic, 1> knots;
   knots.resize(cPosesPre.size()-1); // 5 poses for pre-impact/post-impact trajectory
@@ -468,10 +473,9 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   vector<Scalar> trajTime;
   cb1.evaluateSpline(jointTrajectories, trajTime, 0);
   kickTimeToImpact = trajTime.back();
-
   //! Constant velocity phase
   Matrix<Scalar, Dynamic, 1> prevJoints = impactJoints;
-  Matrix<Scalar, Dynamic, 1> prevJointsVel;
+  Matrix<Scalar, Dynamic, 1> prevJointsVel = preImpJVel;
   desCartesianVel.block(0, 0, 3, 1) = this->desImpactVel;
   Matrix<Scalar, Dynamic, 1> velLimits;
   velLimits.resize(kickChain->size);
@@ -487,7 +491,6 @@ void JointSpaceKick<Scalar>::defineTrajectory()
       this->supportToTorso *
       this->kM->getForwardEffector(this->kickLeg, this->endEffector, JointStateType::sim);
     eeTrans.block(0 , 3, 3, 1) = eeTrans.block(0, 3, 3, 1) + desCartesianVel.block(0, 0, 3, 1) * this->cycleTime;
-    //LOG_INFO("eeTrans: " << eeTrans)
     Matrix<Scalar, Dynamic, 1> angles;
     angles = this->kM->solveJacobianIK(this->kickLeg, this->endEffector, eeTrans, numIkIterations, activeJoints, activeResidual);
     if (angles[0] != angles[0]) {
@@ -669,7 +672,7 @@ void JointSpaceKick<Scalar>::requestExecution(const bool& addArmsMovement)
 {
   if (addArmsMovement) {
     //! Make center of mass task
-    auto comState = this->kM->getComStateWrtFrame(this->supportLeg, toUType(LegEEs::footBase));
+    auto comState = this->kM->getComStateWrtFrame(this->supportLeg, toUType(LegEEs::footCenter));
     auto comResidual = vector<bool>(3, true);
     comResidual[2] = false;
     vector<boost::shared_ptr<MotionTask<Scalar> > > tasks;
@@ -732,7 +735,7 @@ void JointSpaceKick<Scalar>::requestExecution(const bool& addArmsMovement)
       this->kM->setJointPositions(Joints::first, simJoints, JointStateType::sim);
       tis.solve(10);
       simJoints = this->kM->getJointPositions(Joints::first, toUType(Joints::count), JointStateType::sim);
-      //auto simComState = this->kM->computeComWrtBase(this->supportLeg, toUType(LegEEs::footBase), JointStateType::sim);
+      //auto simComState = this->kM->computeComWrtBase(this->supportLeg, toUType(LegEEs::footCenter), JointStateType::sim);
       //cout << "simComState:" << simComState.transpose() << endl;
       for (size_t i = 0; i < jointIds.size(); ++i) {
         jointPositions[i].arrayPush(simJoints[jointIds[i]]);

@@ -3,7 +3,7 @@
     "id" : 4,
     "maxRuntime" : 45,
     "supportLeg" : 3,
-    "timeToReachB" : 1.0,
+    "timeToReachB" : 0.75,
     "type" : 0,
     "logData" : false
 }

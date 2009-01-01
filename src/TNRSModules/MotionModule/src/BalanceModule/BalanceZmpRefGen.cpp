@@ -29,7 +29,7 @@ bool BalanceZmpRefGen<Scalar>::initiate() {
   initZmpPosition =
     this->kM->getComStateWrtFrame(
       static_cast<LinkChains>(this->refFrame), toUType(LegEEs::footBase)).zmp;
-  auto shiftStep = this->totalTime / this->cycleTime / 2;
+  auto shiftStep = this->totalTime / this->cycleTime * 0.5;
   for (size_t i = 0; i < this->nReferences; ++i) {
     if (i < shiftStep) {
       this->zmpRef->x.push_back(initZmpPosition[0]);

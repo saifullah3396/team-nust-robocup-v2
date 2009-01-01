@@ -43,6 +43,8 @@ class ComState;
 template <typename Scalar>
 class TorsoState;
 template <typename Scalar>
+class ImuFilter;
+template <typename Scalar>
 class Joint;
 template <typename Scalar>
 class JointState;
@@ -1210,6 +1212,9 @@ private:
 
   //! Torso acceleration of the robot in X-Y-Z
   boost::shared_ptr<TorsoState<Scalar> > torsoState;
+
+  //! Imu filter
+  boost::shared_ptr<ImuFilter<Scalar> > imuFilter;
   
   //! Com state of the robot wrt the torso
   boost::shared_ptr<ComState<Scalar> > comState;

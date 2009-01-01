@@ -31,6 +31,7 @@ void WalkParameters<Scalar>::loadConfig()
     (Scalar, maxStepRotation, maxStepRotation),
     (Scalar, nPreviews, nPreviews),
     (Scalar, totalStepTime, totalStepTime),
+    (Scalar, firstStepTime, firstStepTime),
   )
 }
 

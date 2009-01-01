@@ -155,7 +155,7 @@ bool KickModule<Scalar>::setTransformFrames(const JointStateType& type)
         (supportLeg == LinkChains::lLeg ||
         supportLeg == LinkChains::rLeg))
     {
-      torsoToSupport = this->kM->getForwardEffector(supportLeg, toUType(LegEEs::footBase), type);
+      torsoToSupport = this->kM->getForwardEffector(supportLeg, toUType(LegEEs::footCenter), type);
       supportToTorso =
         MathsUtils::getTInverse(torsoToSupport);
       supportToKick = 
