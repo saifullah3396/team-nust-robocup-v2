@@ -4,7 +4,7 @@ set -eu
 
 scriptPath=$(echo $0 | sed "s|^\.\./|`pwd`/../|" | sed "s|^\./|`pwd`/|")
 baseDir=$(dirname "${scriptPath}")
-bhDir=$(dirname "${baseDir}")
+tnDir=$(dirname "${baseDir}")
 includeDir="${baseDir}/Include/"
 
 networkDir="${baseDir}/Network"
@@ -13,6 +13,7 @@ profileDir="${networkDir}/Profiles"
 source "${includeDir}/bhumanBase"
 
 robotName=""
+version=""
 teamID=""
 robotPart=""
 deleteBeforeWrite=""
@@ -22,10 +23,11 @@ profilesOnly=""
 usage() {
   echo "usage:"
   echo "${0} [-h]"
-  echo "${0} [-d] -t <teamID> -r <robotPart> <name>"
+  echo "${0} [-d] -t <teamID> -r <robotPart> <version> <name>"
   echo "${0} -D <name>"
   echo ""
   echo " <name>     : name of the robot"
+  echo " <version>     : version of the robot"
   echo " <teamID>   : the third part of the IPv4 address of the robot"
   echo "              Needs to be the same on all robots of your team"
   echo " <robotPart>: the last part of the IPv4 address of the robot"
@@ -66,12 +68,13 @@ parseOptions() {
   debug $OPTIND
   shift $(($OPTIND-1))
   
-  if ! [ $# -eq 1 ] ; then
+  if ! [ $# -eq 2 ] ; then
     error "bad number of arguments"
     usage
   fi
   
-  robotName=${1}
+  version=${1}
+  robotName=${2}
 
   robotDir="${baseDir}/Robots/${robotName}"
   
@@ -146,11 +149,19 @@ function createProfiles()
   message "Creating network profiles"
   mkdir -p "${profileDir}"
   
-  sed -e "s/%teamID%/${teamID}/g" -e "s/%robotPart%/${robotPart}/g" <"${networkDir}/wired" >"${robotDir}/wired" || return 1
+  sed -e "s/%teamID%/${teamID}/g" -e "s/%robotPart%/${robotPart}/g" <"${networkDir}/${version}/wired" >"${robotDir}/wired" || return 1
   chmod +x "${robotDir}/wired"
   
-  sed -e "s/%teamID%/${teamID}/g" -e "s/%robotPart%/${robotPart}/g" <"${networkDir}/wireless" >"${robotDir}/wireless" || return 1
+  sed -e "s/%teamID%/${teamID}/g" -e "s/%robotPart%/${robotPart}/g" <"${networkDir}/${version}/wireless" >"${robotDir}/wireless" || return 1
   chmod +x "${robotDir}/wireless"
+
+  if [ ${version} == "V6" ] ; then
+    sed -e "s/%teamID%/${teamID}/g" -e "s/%robotPart%/${robotPart}/g" <"${networkDir}/${version}/wired.service" >"${robotDir}/wired.service" || return 1
+    chmod +x "${robotDir}/wired.service"
+    
+    sed -e "s/%teamID%/${teamID}/g" -e "s/%robotPart%/${robotPart}/g" <"${networkDir}/${version}/wireless.service" >"${robotDir}/wireless.service" || return 1
+    chmod +x "${robotDir}/wireless.service"
+  fi
   return 0
 }
 

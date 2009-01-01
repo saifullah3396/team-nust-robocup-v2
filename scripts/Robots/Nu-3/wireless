@@ -1,0 +1,8 @@
+BASE_WLAN0_IP="10.0.30."
+ROBOT_ID="3"
+
+ifconfig wlan0 up
+killall -q wpa_supplicant
+wpa_supplicant -iwlan0 -Dnl80211 -c/home/nao/team_nust/Profiles/teamNUST-SPL -B
+sleep 1
+ifconfig wlan0 "${BASE_WLAN0_IP}${ROBOT_ID}" netmask 255.255.0.0

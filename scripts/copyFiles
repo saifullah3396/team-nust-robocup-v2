@@ -12,16 +12,16 @@ ROBOT=""
 IP_PREFIX="192.168.30"
 WLAN_PREFIX="10.0.30"
 ROBOT_VERSION="V5"
+TOOLCHAIN="cross"
 
 usage()
 {
     echo "Usage:"
-    echo "./install_robot.sh -b=<BUILD> -t=<TOOLCHAIN> -r=<ROBOT> -f=<FILES> -w"
+    echo "./copyFiles -b=<BUILD> -r=<ROBOT> -f=<FILES> -w"
     echo ""
     echo " -h | --help : Displays the help"
     echo " -b | --build : Build type (Release/Debug/Release-Motion)"
-    echo " -t | --tool-chain : Toolchain name used in code compilation (" $TOOLCHAIN ")"
-    echo " -r | --robot : Name of the robot for which calibration is needed (" Nu-<ROBOT_NUMBER> ")"
+    echo " -r | --robot : Name of the robot ( Nu-<ROBOT_NUMBER> )"
     echo " -f | --files: Files to be copied on to the robot (ALL/DEPENDS/CONFIG/LIBS)"
     echo " -w | --robot : If the robot is connected through the lan network"
     echo " -rv | --robot-version : V5 or V6 robot"
@@ -73,10 +73,6 @@ if [ "$FILES" = "" ]; then
   FILES="ALL"
 fi
 
-if [ "$TOOLCHAIN" = "" ]; then
-  TOOLCHAIN="cross"
-fi
-
 PREFIX="${ROBOT:0:3}"
 NUMBER_LEN=`expr 3 + ${#ROBOT} - 3`
 ROBOT_NUM="${ROBOT:3:${NUMBER_LEN}}"
@@ -110,18 +106,17 @@ ssh -i "${privateKey}" ${sshOptions} nao@$IP_PREFIX.$ROBOT_NUM "mkdir -p ${LIB_T
 ssh -i "${privateKey}" ${sshOptions} nao@$IP_PREFIX.$ROBOT_NUM "mkdir -p ${CONFIG_TARGET}" || fatal "Can't create '${CONFIG_TARGET}' on NAO"
 ssh -i "${privateKey}" ${sshOptions} nao@$IP_PREFIX.$ROBOT_NUM "mkdir -p ${LOGS_TARGET}" || fatal "Can't create '${LOGS_TARGET}' on NAO"
 
-ROBOT_DIR=$PATH_TO_TEAM_NUST_DIR/config/Robots/Nu-1$ROBOT_NUM
+ROBOT_DIR=$PATH_TO_TEAM_NUST_DIR/config/Robots/Nu-$ROBOT_NUM
 CROSS_DEPENDS_DIR=$PATH_TO_TEAM_NUST_DIR/cross-depends
 BUILD_DIR=$PATH_TO_TEAM_NUST_DIR/build-$ROBOT_VERSION/$BUILD/$TOOLCHAIN/lib
 echo $BUILD_DIR
 if [ "$FILES" = "ALL" ]; then
-  # Copy naoqi config over to the robot
-  rsync ${rsyncOptions} -e "${sshCommand}" ./Files/* nao@$IP_PREFIX.$ROBOT_NUM:${FILES_TARGET} || fatal "Can't copy to '${FILES_TARGET}' on NAO"
   # Copy configuration files to the robot 
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../Common/* nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../Keys nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" Files/* nao@$IP_PREFIX.$ROBOT_NUM:${FILES_TARGET} || fatal "Can't copy to '${FILES_TARGET}' on NAO"
   if [ "$ROBOT_VERSION" = "V5" ]; then
   # Copy camera driver if it is V5 robot
   rsync ${rsyncOptions} -e "${sshCommand}" $PATH_TO_TEAM_NUST_DIR/bkernel-modules/mt9m114.ko nao@$IP_PREFIX.$ROBOT_NUM:${DEPENDS_TARGET}
