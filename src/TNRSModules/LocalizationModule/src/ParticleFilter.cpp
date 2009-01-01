@@ -17,13 +17,14 @@
 #include "RandomLib/include/RandomSelect.hpp"
 #include "RandomLib/include/NormalDistribution.hpp"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "Utils/include/HardwareIds.h"
+#include "Utils/include/AngleDefinitions.h"
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/DataHolders/GoalInfo.h"
 #include "Utils/include/DataHolders/Landmark.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
 #include "Utils/include/DataHolders/PositionInput.h"
 #include "Utils/include/DataHolders/VelocityInput.h"
+#include "Utils/include/HardwareIds.h"
 #include "Utils/include/MathsUtils.h"
 #include "Utils/include/TeamPositions.h"
 #include "Utils/include/VisionUtils.h"
@@ -38,15 +39,14 @@ ParticleFilter::ParticleFilter(LocalizationModule* lModule) :
   MemoryBase(lModule),
   DebugBase("ParticleFilter", this),
   lModule(lModule),
-  cycleTime(lModule->getPeriodMinMS() / (1000.f)),
-  landmarkTypeCount(NUM_LANDMARK_TYPES),
-  landmarkTypeStarts(NUM_LANDMARK_TYPES)
+  cycleTime(lModule->getPeriodMinMS() / (1000.f))
 {
   initDebugBase();
   GET_DEBUG_CONFIG(
     LocalizationConfig, ParticleFilter,
     (int, displayLandmarksMap),
     (int, displayVoronoiMap),
+    (int, displayInfo),
   );
 
   GET_CLASS_CONFIG(
@@ -71,6 +71,9 @@ ParticleFilter::ParticleFilter(LocalizationModule* lModule) :
 
 void ParticleFilter::init(const RobotPose2D<float>& state)
 {
+  if (GET_DVAR(int, displayInfo)) {
+    LOG_INFO("Initiating particle filter...");
+  }
   NormalDistribution<double> dist;
   auto w = 1.0 / (float) nParticles;
   for (size_t i = 0; i < nParticles; ++i) {
@@ -94,6 +97,9 @@ void ParticleFilter::init(const RobotPose2D<float>& state)
 
 void ParticleFilter::init(const boost::circular_buffer<RobotPose2D<float> >& states)
 {
+  if (GET_DVAR(int, displayInfo)) {
+    LOG_INFO("Initiating particle filter...");
+  }
   //Mat worldImage = Mat(vMapSize, CV_8UC3, Scalar(0,0,0));
   avgState.x() = 0.f;
   avgState.y() = 0.f;
@@ -125,7 +131,7 @@ void ParticleFilter::init(const boost::circular_buffer<RobotPose2D<float> >& sta
 
 void ParticleFilter::update()
 {
-  //auto worldImage = Mat(vMapSize, CV_8UC3, Scalar(0,0,0));
+  //fauto worldImage = Mat(vMapSize, CV_8UC3, Scalar(0,0,0));
   //cout << "initiated: " << initiated << endl;
   //cout << "localized: " << localized << endl;
   if (!initiated) {
@@ -143,9 +149,9 @@ void ParticleFilter::update()
     obsLandmarks.insert(obsLandmarks.begin(), knownLandmarks.begin(), knownLandmarks.end());
     obsLandmarks.insert(obsLandmarks.begin(), unknownLandmarks.begin(), unknownLandmarks.end());
     prediction();
-    cout << "obsLandmarks.size() : " << obsLandmarks.size() << endl;
-    cout << "knownLandmarks.size() : " << knownLandmarks.size() << endl;
-    cout << "unknownLandmarks.size() : " << unknownLandmarks.size() << endl;
+    //cout << "obsLandmarks.size() : " << obsLandmarks.size() << endl;
+    //cout << "knownLandmarks.size() : " << knownLandmarks.size() << endl;
+    //cout << "unknownLandmarks.size() : " << unknownLandmarks.size() << endl;
     static auto minObsLandmarksRequired = 10;
     if (obsLandmarks.size() > minObsLandmarksRequired) {// && !ROBOT_IN_MOTION_IN(LocalizationModule)) { // Movement results in a lot of bad candidates
       updateWeights(obsLandmarks);
@@ -170,16 +176,31 @@ void ParticleFilter::update()
     drawParticle(p, worldImage, Scalar(0,0,255));
   }
   if (bestParticle)
-    drawParticle(*bestParticle, worldImage, Scalar(255,0,0));*/
-  //VisionUtils::displayImage("particles", worldImage, 0.25);
-  //waitKey(0);
+    drawParticle(*bestParticle, worldImage, Scalar(255,0,0));
+  VisionUtils::displayImage("particles", worldImage, 0.5);
+  waitKey(0);
+  if (bestParticle) {
+    LOG_INFO("Best particle: " << bestParticle->get().transpose());
+  } else {
+    LOG_INFO("No best particle found.");
+  }*/
+  if (GET_DVAR(int, displayInfo)) {
+    if (localized) {
+      LOG_INFO("Robot localized.");
+      if (bestParticle) {
+        LOG_INFO("Current best state: " << bestParticle->get().transpose());
+      }
+    } else {
+      LOG_INFO("Robot not localized.");
+    }
+  }
   knownLandmarks.clear();
   unknownLandmarks.clear();
 }
 
 void ParticleFilter::reset()
 {
-  cout << "Resetting filter..." << endl;
+  //cout << "Resetting filter..." << endl;
   particles.clear();
   estimatedStates.clear();
   initiated = false;
@@ -192,22 +213,6 @@ void ParticleFilter::reset()
 
 void ParticleFilter::setupLandmarks()
 {
-  landmarkTypeCount[FL_TYPE_GOAL_POST] = FL_GOAL_POSTS;
-  landmarkTypeCount[FL_TYPE_T_CORNER] = FL_T_CORNERS;
-  landmarkTypeCount[FL_TYPE_LINES] = 0;
-  landmarkTypeCount[FL_TYPE_L_CORNER] = FL_L_CORNERS;
-  landmarkTypeCount[FL_TYPE_CIRCLE] = FL_CIRCLES;
-  landmarkTypeCount[FL_TYPE_PENALTY_MARK] = FL_PENALTY_MARKS;
-  landmarkTypeStarts[FL_TYPE_GOAL_POST] = FL_LT_GOALPOST;
-  landmarkTypeStarts[FL_TYPE_T_CORNER] = FL_GOAL_POSTS;
-  landmarkTypeStarts[FL_TYPE_LINES] = 0;
-  landmarkTypeStarts[FL_TYPE_L_CORNER] =
-    FL_GOAL_POSTS + FL_T_CORNERS;
-  landmarkTypeStarts[FL_TYPE_CIRCLE] =
-    FL_GOAL_POSTS + FL_T_CORNERS + FL_L_CORNERS;
-  landmarkTypeStarts[FL_TYPE_PENALTY_MARK] =
-    FL_GOAL_POSTS + FL_T_CORNERS + FL_L_CORNERS + FL_CIRCLES;
-
   for (size_t i = 0; i < FL_GOAL_POSTS; ++i) {
     fieldLandmarks.push_back(
       boost::make_shared<Landmark<float> >(
@@ -444,7 +449,9 @@ void ParticleFilter::updateRobotStateEstimate()
       }
       ///< We know the robot is in our half
       lastKnownHalf = FieldHalf::teamHalf;
-      cout << "estimatedStates: " << estimatedStates.size() << endl;
+      if (GET_DVAR(int, displayInfo)) {
+        LOG_INFO("Getting robot state estimates: " << estimatedStates.size());
+      }
       init(estimatedStates);
       estimatedStates.clear();
     } else {
@@ -453,7 +460,9 @@ void ParticleFilter::updateRobotStateEstimate()
       estimateForSideLines();
     }
   } else {
-    cout << "estimatedStates: " << estimatedStates.size() << endl;
+    if (GET_DVAR(int, displayInfo)) {
+      LOG_INFO("Getting robot state estimates: " << estimatedStates.size());
+    }
     if (estimatedStates.size() >= nParticles / 2.0) {
       init(estimatedStates);
     } else {
@@ -888,7 +897,7 @@ void ParticleFilter::normalizeWeights(const bool& noData)
     if (maxWeight < 1e-9) {
       lostCount++;
       if (lostCount > MAX_LOST_COUNT) {
-        cout << "lostCount > MAXLOSTCOUNT" << endl;
+        //cout << "lostCount > MAXLOSTCOUNT" << endl;
         reset();
         lostCount = 0;
       } else {
@@ -942,14 +951,24 @@ void ParticleFilter::updatePositionConfidence()
 {
   if (bestParticle)
     LAST_POSE_2D_OUT(LocalizationModule) = *bestParticle;
-  auto std = 0.0;
+  auto stdPos = 0.0;
+  auto stdAngle = 0.0;
   for (const auto& p : particles) {
-    std += (p - avgState).get().segment(0, 2).norm();
+    auto diff = p - avgState;
+    stdPos += diff.get().segment(0, 2).norm(); // x-y
+    stdAngle += fabsf(diff.get()[2]); // theta
   }
-  std = sqrt(std / nParticles);
+  stdPos = sqrt(stdPos / nParticles);
+  stdAngle = sqrt(stdAngle / nParticles);
   auto& positionConfidence = POSITION_CONFIDENCE_OUT(LocalizationModule);
-  static auto maxEstimateStd = 1.0;
-  positionConfidence = (1 - min(std, maxEstimateStd) / maxEstimateStd) * 100;
+  static double maxPosEstimateStd = 1.0;
+  static double maxAngleEstimateStd = Angle::DEG_30;
+  positionConfidence = (1 - min(stdPos, maxPosEstimateStd) / maxPosEstimateStd) * 100;
+  auto angleConfidence = (1 - min(stdAngle, maxAngleEstimateStd) / maxAngleEstimateStd) * 100;
+  if (GET_DVAR(int, displayInfo)) {
+    LOG_INFO("Current position confidence: " << positionConfidence);
+    LOG_INFO("Current angle confidence: " << angleConfidence);
+  }
   if (POSITION_CONFIDENCE_OUT(LocalizationModule) < 25) {
     localized = false;
   } else {

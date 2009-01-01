@@ -79,6 +79,8 @@ namespace VisionUtils
     const std::vector<cv::Point_<int> >&, cv::Mat&, const cv::Scalar&);
   template void drawPoints<float>(
     const std::vector<cv::Point_<float> >&, cv::Mat&, const cv::Scalar&);
+  template void drawPoints<double>(
+    const std::vector<cv::Point_<double> >&, cv::Mat&, const cv::Scalar&);
 
   template<typename T>
   auto minContourDist(

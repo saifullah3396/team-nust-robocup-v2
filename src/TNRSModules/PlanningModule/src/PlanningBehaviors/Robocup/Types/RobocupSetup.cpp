@@ -149,21 +149,11 @@ void RobocupSetup::cfgHandlingAction()
   } else if ((unsigned) gameData.state == STATE_SET) {
     LOG_INFO("GameCtrlState: STATE_SET")
     auto secState = (unsigned) gameData.secondaryState;
-    auto kickOffTeam = (unsigned) gameData.kickOffTeam;
-    const auto& ourTeamNumber = TEAM_NUMBER_IN(PlanningModule);
     if (secState == STATE2_PENALTYSHOOT) {
-      LOG_INFO("GameCtrlState: STATE2_PENALTYSHOOT")
-      if (kickOffTeam == ourTeamNumber) {
-        LOG_INFO("GameState: PENALTY_STRIKER")
-         // auto planConfig =
-         //   boost::make_shared < PBPenaltiesConfig > (PBPenaltiesTypes::PENALTY_STRIKER);
-         // setupChildBehaviorRequest(planConfig);
-      } else {
-        LOG_INFO("GameState: PENALTY_GOALKEEPER")
-         //auto planConfig =
-         //   boost::make_shared < PBPenaltiesConfig > (PBPenaltiesTypes::PENALTY_GOALKEEPER);
-         // setupChildBehaviorRequest(planConfig);
-      }
+      LOG_INFO("GameState: PENALTY_STRIKER")
+      //auto planConfig =
+      //  boost::make_shared<PBPenaltiesConfig> ();
+      //setupChildBehaviorRequest(planConfig);
     } else if (secState == STATE2_NORMAL) {
       behaviorState = setSequence;
     }

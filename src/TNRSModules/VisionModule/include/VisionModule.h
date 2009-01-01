@@ -52,15 +52,19 @@ class VisionModule : public BaseModule, public DebugBase
    */
   INIT_DEBUG_BASE_(
     ///< Option to enable any kind of debugging.
-    (int, debug, 1),
+    (int, debug, 0),
     ///< Option to choose which output image should be sent for debugging.
     (int, debugImageIndex, 2),
+    ///< Option to log camera transformation
+    (int, logCameraTransform, 0),
     ///< Option to send a binarized image for a given color
     (int, sendBinaryImage, -1),
     ///< Option to enable known landmark info to be sent
-    (int, sendKnownLandmarks, 1),
+    (int, sendKnownLandmarks, 0),
     ///< Option to enable unknown landmark info to be sent
-    (int, sendUnknownLandmarks, 1),
+    (int, sendUnknownLandmarks, 0),
+    ///< Displays info about vision modules
+    (int, displayInfo, 0),
   );
 
   DECLARE_INPUT_CONNECTOR(

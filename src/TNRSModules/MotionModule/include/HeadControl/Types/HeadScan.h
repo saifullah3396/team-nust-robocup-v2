@@ -93,6 +93,12 @@ private:
 
   ///< RightScan: Scan right direction
   DECLARE_FSM_STATE(HeadScan<Scalar>, RightScan, rightScan, onStart, onRun,)
+
+  ///< FinishSequence: Sequence of head movement when behavior is killed
+  DECLARE_FSM_STATE(HeadScan<Scalar>, FinishSequence, finishSequence, onStart, onRun,)
+
+  ///< Current sequence of yaw targets to be tracked
+  vector<float> yawTargets;
 };
 
 typedef boost::shared_ptr<HeadScan<MType> > HeadScanPtr;

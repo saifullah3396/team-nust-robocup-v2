@@ -201,7 +201,6 @@ private:
   float findFeaturesTime;
   float findCircleTime;
   float addLandmarksTime;
-  float processTime;
 
   ///< Scanning step sizes
   int scanStepHighUpperCam;
@@ -209,5 +208,30 @@ private:
   int scanStepLowUpperCam;
   int scanStepLowLowerCam;
 
+  float connectedEdgesHighTolRatio = {2.5}; ///< Tolerance ratio wrt highStep in direction of scan for scanned edges
+  int minLineChainLength = {3}; ///< Minimum number of points for making a chain of line out of line edges
+  int linesRANSACMaxIter = {5}; ///< RANSAC maximum iterations for fitting a line on points
+  float linesRANSACMaxDist = {0.05}; ///< Maxmimum distane from line for RANSAC fitting
+  float linesRANSACGoodCntRatio = {0.95}; ///< Ratio of points above which the line is considered a ver good fit
+  float linesRANSACBadCntRatio = {0.5}; ///< Minimum ratio of points required from given points for considering it a sufficient fit
+  int linesFitMinPointCnt = {3}; ///< Minimum number of points needed for fitting a line after RANSAC
+  float pointsOnLineDistTol = {0.1}; ///< Distance within which points are associated with a line resulting from RANSAC
+  float minDistFromBorder = {0.1}; ///< Minimum distance from border in cms for line to be consdered
+  float circleLineMaxLength1 = {1.0}; ///< Maximum length of a line to be consdered a part of a circle, first time filteration
+  float minDistFromBorderCircleLine1 = {1.5}; ///< Minimum distance required from border for a line to be consdered a circle line, first time filteration
+  float overlappingLinesTolerance = {0.1}; ///< Distane within which lines are considered overlapping and filtered out
+  float circleLineMaxLength2 = {0.65}; ///< Maximum length of a line to be consdered a part of a circle, second time filteration
+  float minDistFromBorderCircleLine2 = {2.5}; ///< Minimum distance required from border for a line to be consdered a circle line, second time filteration
+  int interPointImagePadding = {20}; ///< Image boundary padding within which a line itersection point is considered
+  float midCircleRadiusWorld = {0.75}; ///< Circle radius in world, 0.75 m
+  int minRANSACCirclePointsCnt = {15}; ///< Minimum points considered in RANSAC for circle
+  float minMeanToMaxCircleDistRatio = {0.5}; ///< Ratio of minimum distance required from mean of points to furthest point wrt circle radius
+  int maxRANSACCirclePointsCnt = {40}; ///< Maximum points considered in RANSAC for circle
+  float maxRANSACCircleToPointDist = {0.05}; ///< Maximum points to circle distance considered in RANSAC for circle
+  float circleRANSACGoodCntRatio = {0.65}; ///< Ratio of points count above which a circle is considered a good fit
+  float cirlceBisectorMaxDist = {0.2}; ///< Maximum distance of cirlce bisector from center for considered a circle mid line
+  float linesLandmarktNDiscretizationDist = {0.2}; ///< Distance for equally spaced points resulting from a line
+  float maxLineUnknownLandmarks = {40};
+  unsigned maxCircleStates = {5};
   Mat mapDrawing;
 };

@@ -1,5 +1,5 @@
-/**
- * @file VisionModule/src/FeatureExtraction/LinesExtraction.cpp
+﻿/**d
+ * @file VisionModule/src/FeatureExtraction/cpp
  *
  * This file declares the class for field corners extraction from
  * the image.
@@ -10,6 +10,7 @@
 
 #include <chrono>
 #include "LocalizationModule/include/FieldLandmarkIds.h"
+#include "LocalizationModule/include/LandmarkDefinitions.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/AngleDefinitions.h"
 #include "Utils/include/ConfigMacros.h"
@@ -38,48 +39,55 @@ LinesExtraction::LinesExtraction(VisionModule* visionModule) :
 {
   ///< Initialize debug variables
   initDebugBase();
-  int tempSendTime;
-  int tempDrawScannedEdges;
-  int tempDrawBorderLines;
-  int tempDrawWorldLines;
-  int tempDrawFiltWorldLines;
-  int tempDrawCircle;
-  int tempDrawUnknownLandmarks;
-  int tempDrawCorners;
-  int tempDisplayInfo;
-  int tempDisplayOutput;
-  GET_CONFIG(
-    "VisionConfig",
-    (int, LinesExtraction.scanStepHighUpperCam, scanStepHighUpperCam),
-    (int, LinesExtraction.scanStepHighLowerCam, scanStepHighLowerCam),
-    (int, LinesExtraction.scanStepLowUpperCam, scanStepLowUpperCam),
-    (int, LinesExtraction.scanStepLowLowerCam, scanStepLowLowerCam),
-    (int, LinesExtraction.sendTime, tempSendTime),
-    (int, LinesExtraction.drawScannedEdges, tempDrawScannedEdges),
-    (int, LinesExtraction.drawBorderLines, tempDrawBorderLines),
-    (int, LinesExtraction.drawWorldLines, tempDrawWorldLines),
-    (int, LinesExtraction.drawFiltWorldLines, tempDrawFiltWorldLines),
-    (int, LinesExtraction.drawCircle, tempDrawCircle),
-    (int, LinesExtraction.drawCorners, tempDrawCorners),
-    (int, LinesExtraction.displayInfo, tempDisplayInfo),
-    (int, LinesExtraction.displayOutput, tempDisplayOutput),
-    (int, LinesExtraction.drawUnknownLandmarks, tempDrawUnknownLandmarks),
-  )
-  SET_DVAR(int, sendTime, tempSendTime);
-  SET_DVAR(int, drawScannedEdges, tempDrawScannedEdges);
-  SET_DVAR(int, drawBorderLines, tempDrawBorderLines);
-  SET_DVAR(int, drawWorldLines, tempDrawWorldLines);
-  SET_DVAR(int, drawFiltWorldLines, tempDrawFiltWorldLines);
-  SET_DVAR(int, drawCircle, tempDrawCircle);
-  SET_DVAR(int, drawCorners, tempDrawCorners);
-  SET_DVAR(int, drawUnknownLandmarks, tempDrawUnknownLandmarks);
-  SET_DVAR(int, displayInfo, tempDisplayInfo);
-  SET_DVAR(int, displayOutput, tempDisplayOutput);
+  GET_DEBUG_CONFIG(
+    VisionConfig,
+    LinesExtraction,
+    (int, sendTime),
+    (int, drawScannedEdges),
+    (int, drawBorderLines),
+    (int, drawWorldLines),
+    (int, drawFiltWorldLines),
+    (int, drawCircle),
+    (int, drawUnknownLandmarks),
+    (int, drawCorners),
+    (int, displayInfo),
+    (int, displayOutput),
+  );
+
+  GET_CLASS_CONFIG(
+    VisionConfig,
+    LinesExtraction,
+    connectedEdgesHighTolRatio,
+    minLineChainLength,
+    linesRANSACMaxIter,
+    linesRANSACMaxDist,
+    linesRANSACGoodCntRatio,
+    linesRANSACBadCntRatio,
+    linesFitMinPointCnt,
+    pointsOnLineDistTol,
+    minDistFromBorder,
+    circleLineMaxLength1,
+    minDistFromBorderCircleLine1,
+    overlappingLinesTolerance,
+    circleLineMaxLength2,
+    minDistFromBorderCircleLine2,
+    interPointImagePadding,
+    midCircleRadiusWorld,
+    minRANSACCirclePointsCnt,
+    minMeanToMaxCircleDistRatio,
+    maxRANSACCirclePointsCnt,
+    maxRANSACCircleToPointDist,
+    circleRANSACGoodCntRatio,
+    cirlceBisectorMaxDist,
+    linesLandmarktNDiscretizationDist,
+    maxLineUnknownLandmarks,
+    maxCircleStates
+  );
 
   ///< Get other feature extraction classes
   fieldExt = GET_FEATURE_EXT_CLASS(FieldExtraction, FeatureExtractionIds::field);
   regionSeg = GET_FEATURE_EXT_CLASS(RegionSegmentation, FeatureExtractionIds::segmentation);
-  robotExt = GET_FEATURE_EXT_CLASS(RobotExtraction, FeatureExtractionIds::robot );
+  robotExt = GET_FEATURE_EXT_CLASS(RobotExtraction, FeatureExtractionIds::robot);
 
   worldImage = Mat(Size(1000, 700), CV_8UC3, Scalar(0));
   int width = 1000;
@@ -191,7 +199,7 @@ void LinesExtraction::processImage()
     if (scanForEdges(connectedEdges)) {
       vector<FittedLinePtr> worldLines;
       findLinesFromEdges(connectedEdges, worldLines);
-      if (activeCamera != CameraId::headBottom) {
+      if (!worldLines.empty()) {
         vector<Point2f> circlePoints;
         filterLines(worldLines, circlePoints);
         findFeatures(worldLines);
@@ -225,9 +233,13 @@ void LinesExtraction::processImage()
     LOG_INFO("Time taken by overall processing: " << processTime);
     LOG_INFO("Number of known landmarks: " << knownLandmarks.size());
     LOG_INFO("Number of unknown landmarks: " << unknownLandmarks.size());
+    for (const auto& kl : knownLandmarks) {
+      cout << "kl.type: " << kl->type << endl;
+    }
   }
+
   if (GET_DVAR(int, displayOutput)) {
-    VisionUtils::displayImage("LinesExtraction Image", bgrMat[toUType(activeCamera)]);
+    VisionUtils::displayImage("LinesExtraction Image",      bgrMat[toUType(activeCamera)]);
     VisionUtils::displayImage("LinesExtraction World", worldImage);
     waitKey(0);
   }
@@ -289,7 +301,7 @@ bool LinesExtraction::scanForEdges(
       verLineEdges.push_back(se);
     }
     findConnectedEdges(
-      connectedEdges, verLineEdges, scanStepHigh * 2.5, scanStepHigh, true);
+      connectedEdges, verLineEdges, scanStepHigh * connectedEdgesHighTolRatio, scanStepHigh, true);
   }
   if (!horImagePoints.empty()) {
     cameraTransforms[toUType(activeCamera)]->imageToWorld(
@@ -303,7 +315,7 @@ bool LinesExtraction::scanForEdges(
       horLineEdges.push_back(se);
     }
     findConnectedEdges(
-      connectedEdges, horLineEdges, scanStepHigh, scanStepHigh * 2.5, false);
+      connectedEdges, horLineEdges, scanStepHigh, scanStepHigh * connectedEdgesHighTolRatio, false);
   }
   if (GET_DVAR(int, drawScannedEdges)) {
     VisionUtils::drawPoints(horImagePoints, bgrMat[toUType(activeCamera)]);
@@ -406,7 +418,6 @@ void LinesExtraction::findConnectedEdges(
     }
   }*/
   reverse(scannedEdges.begin(), scannedEdges.end());
-  const int minChainLength = 3;
   for (const auto& se : scannedEdges) {
     if (se) {
       if (se->searched || se->bestTo) continue;
@@ -423,7 +434,7 @@ void LinesExtraction::findConnectedEdges(
         //cout << "neighbor->angleW: " << neighbor->angleW * MathsUtils::RAD_TO_DEG<< endl;
         //cout << "prevAngle: " << prevAngle * MathsUtils::RAD_TO_DEG << endl;
         if (fabsf(neighbor->angleW - prevAngle) > Angle::DEG_60) {
-          if (groupedEdges.size() >= minChainLength) {
+          if (groupedEdges.size() >= minLineChainLength) {
             connectedEdges.push_back(groupedEdges);
             groupedEdges.clear();
           }
@@ -435,7 +446,7 @@ void LinesExtraction::findConnectedEdges(
         //imshow("bgr", bgrMat[toUType(activeCamera)]);
         //waitKey(0);
       }
-      if (groupedEdges.size() >= minChainLength) {
+      if (groupedEdges.size() >= minLineChainLength) {
         connectedEdges.push_back(groupedEdges);
       }
     }
@@ -458,7 +469,6 @@ void LinesExtraction::findLinesFromEdges(
   auto tStart = high_resolution_clock::now();
   mt19937 rng;
   uniform_real_distribution<> dist { 0, 1 };
-  const int maxIters = 5;
   for (const auto& ce : connectedEdges) {
     float bestNx = 0;
     float bestNy = 0;
@@ -467,7 +477,7 @@ void LinesExtraction::findLinesFromEdges(
     Point2f p1, p2;
     p1 = ce.front()->pW;
     p2 = ce.back()->pW;
-    for (size_t n = 0; n < maxIters; ++n) {
+    for (size_t n = 0; n < linesRANSACMaxIter; ++n) {
       if (p1.x > p2.x) {
         auto tmp = p1;
         p1 = p2;
@@ -482,14 +492,14 @@ void LinesExtraction::findLinesFromEdges(
       for (const auto& edge : ce) {
         auto& p = edge->pW;
         auto dist = fabsf(nx * p.x + ny * p.y - perpDist);
-        if (dist < 0.05) cnt++;
+        if (dist < linesRANSACMaxDist) cnt++;
       }
       if (cnt > pointsCnt) {
         pointsCnt = cnt;
         bestNx = nx;
         bestNy = ny;
         bestD = perpDist;
-        if (pointsCnt >= 0.95 * ce.size())
+        if (pointsCnt >= linesRANSACGoodCntRatio * ce.size())
           break;
       }
       if (ce.size() < 3)
@@ -502,7 +512,7 @@ void LinesExtraction::findLinesFromEdges(
       } while(p1.x == p2.x && p1.y == p2.y);
     }
 
-    if (pointsCnt < 0.5 * ce.size()) {
+    if (pointsCnt < linesRANSACBadCntRatio * ce.size()) {
       auto fl = boost::make_shared<FittedLine>();
       fl->circleLine = true;
       vector<Point2f> points;
@@ -510,12 +520,12 @@ void LinesExtraction::findLinesFromEdges(
         points.push_back(edge->pW);
       fl->points = boost::make_shared<vector<Point2f> >(points);
     } else {
-      if (pointsCnt >= 3) {
+      if (pointsCnt >= linesFitMinPointCnt) {
         vector<Point2f> collinearPoints;
         for (const auto& edge : ce) {
           auto& p = edge->pW;
           float dist = fabsf(bestNx * p.x + bestNy * p.y - bestD);
-          if (dist <= 0.1f) collinearPoints.push_back(p);
+          if (dist <= pointsOnLineDistTol) collinearPoints.push_back(p);
         }
         Point2f minP = collinearPoints[0];
         Point2f maxP = collinearPoints.back();
@@ -561,13 +571,15 @@ void LinesExtraction::filterLines(
   auto tStart = high_resolution_clock::now();
   auto borderLines = fieldExt->getBorderLinesWorld();
   FittedLinePtr borderLine;
-  auto maxLen = 0;
+  auto maxLen = 0.0;
   for (const auto& line : borderLines) {
     if (line->d > maxLen) {
       borderLine = line;
       maxLen = line->d;
     }
   }
+  if (!borderLine)
+    return;
   if(GET_DVAR(int, drawBorderLines)) {
     auto p11 = worldToImage(borderLine->p1);
     auto p12 = worldToImage(borderLine->p2);
@@ -577,8 +589,6 @@ void LinesExtraction::filterLines(
   angleL = MathsUtils::rangeToPi(angleL);
   //angleL = angleL > M_PI_2 ? M_PI - angleL : angleL;
   //angleL = angleL < 0 ? M_PI + angleL : angleL;
-  const auto minDistFromBorder = 0.1f;
-
   ///< Filter lines based on relationship with border line
   for (auto& wl : worldLines) {
     if (!wl) continue;
@@ -595,14 +605,13 @@ void LinesExtraction::filterLines(
       //waitKey(0);
       continue;
     }
-
     ///< Find intersection with border line
     Point2f inter;
     if (wl->findIntersection(*borderLine, inter)) {
       auto diff1 = norm(inter - wl->p1);
       auto diff2 = norm(inter - wl->p2);
       auto ratio = diff1 / wl->d + diff2 / wl->d;
-      VisionUtils::drawPoint(Point(inter.x, inter.y), worldImage);
+      //VisionUtils::drawPoint(Point(inter.x, inter.y), worldImage);
       //cout << "diff1:" << diff1 << endl;
       //cout << "diff2:" << diff2 << endl;
       //cout << "ratio:" << ratio << endl;
@@ -615,7 +624,6 @@ void LinesExtraction::filterLines(
         continue;
       }
     }
-
     ///< Find line angle and compare with borderline angle
     wl->angle = atan2(wl->unit.y, wl->unit.x);
     wl->angle = MathsUtils::rangeToPi(wl->angle);
@@ -632,7 +640,7 @@ void LinesExtraction::filterLines(
       ///< If line is far from border, add it as circle line
       //cout << "wl->d: " << wl->d << endl;
       //cout << "dist: " << dist << endl;
-      if (wl->d < 1.0f && dist > 1.5f) {
+      if (wl->d < circleLineMaxLength1 && dist > minDistFromBorderCircleLine1) {
         auto points = *(wl->points);
         //line(worldImage, worldToImage(wl->p1),  worldToImage(wl->p2), Scalar(255,0,255), 1);
         //cout << "circleLine: "<< endl;
@@ -649,8 +657,6 @@ void LinesExtraction::filterLines(
     //imshow("worldImage", worldImage);
     //waitKey(0);
   }
-
-  const auto minLineFilterDist = 0.1f;
   ///< Filter lines by removing overlapping parts and joining them into one line
   for (auto& wl1 : worldLines) {
     if (!wl1 || wl1->circleLine) continue;
@@ -661,7 +667,7 @@ void LinesExtraction::filterLines(
       if (fabsf(wl2->angle - wl1->angle) < Angle::DEG_15) {
         ///< Find the perpendicular distance between the lines
         auto dist = wl2->findShortest(*wl1);
-        if (fabsf(dist) < minLineFilterDist) {
+        if (fabsf(dist) < overlappingLinesTolerance) {
           collinearPoints.push_back(wl1->p1);
           collinearPoints.push_back(wl1->p2);
           collinearPoints.push_back(wl2->p1);
@@ -669,6 +675,7 @@ void LinesExtraction::filterLines(
           (*wl1->points).insert((*wl1->points).begin(), (*wl2->points).begin(), (*wl2->points).end());
           wl2.reset();
         }
+
       }
     }
     if (!collinearPoints.empty()) {
@@ -708,7 +715,7 @@ void LinesExtraction::filterLines(
   for (auto& wl : worldLines) {
     if (!wl || wl->circleLine) continue;
     auto dist = borderLine->findShortest(*wl);
-    if (wl->d < 0.65f && fabsf(dist) > 2.5f) {
+    if (wl->d < circleLineMaxLength2 && fabsf(dist) > minDistFromBorderCircleLine2) {
       wl->circleLine = true;
     }
   }
@@ -754,20 +761,12 @@ void LinesExtraction::filterLines(
     }
   }*/
 
-  size_t nCircleLines = 0;
   for (auto& wl : worldLines) {
     if (wl && wl->circleLine) {
       auto& points = wl->points;
       circlePoints.insert(circlePoints.begin(), (*points).begin(), (*points).end());
-      nCircleLines++;
     }
   }
-
-  //if (nCircleLines < 2) {
-  //    for (auto& wl : worldLines) {
-  //      if (wl && wl->circleLine) wl->circleLine = false;
-  //    }
-  //  }
 
   //for (size_t i = 0; i < circlePoints.size(); ++i) {
   //  VisionUtils::drawPoint(worldToImage(circlePoints[i]), worldImage);
@@ -796,8 +795,7 @@ void LinesExtraction::findFeatures(vector<FittedLinePtr>& worldLines)
     //imshow("worldImage test", worldImage);
     //waitKey(0);
   //}
-  static auto padding = 20;
-  static auto interImageBox = cv::Rect(padding, padding, getImageWidth() - padding * 2, getImageHeight() - padding * 2);
+  static auto interImageBox = cv::Rect(interPointImagePadding, interPointImagePadding, getImageWidth() - interPointImagePadding * 2, getImageHeight() - interPointImagePadding * 2);
   for (size_t i = 0; i < worldLines.size(); ++i) {
     const auto& wl1 = worldLines[i];
     if (!wl1 || wl1->circleLine) continue;
@@ -955,6 +953,25 @@ void LinesExtraction::computeLandmark(
       inter,
       poseFromLandmark);
   knownLandmarks.push_back(l);
+
+  unsigned lCount = landmarkTypeCount[l->type];
+  unsigned lStart = landmarkTypeStarts[l->type];
+  for (size_t j = 0; j < lCount; ++j) {
+    auto landmarkPose = landmarksOnField[j + lStart];
+    //cout << "lX: " << lPose.x << endl;
+    //cout << "lY: " << lPose.y << endl;
+    //cout << "lTheta: " << lPose.theta * 180 / M_PI << endl;
+    RobotPose2D<float> p = landmarkPose.transform(l->poseFromLandmark);
+    auto lineEnd = static_cast<RobotPose2D<float>>(p).transform(Point2f(0.15,   0.0));
+    circle(worldImage, worldToImage(Point2f(p.getX(), p.getY())), 10, Scalar(255,0,0));
+    line(
+      worldImage,
+      worldToImage(Point2f(p.getX(), p.getY())),
+      worldToImage(lineEnd),
+      Scalar(255,255,0)
+    );
+  }
+
   //cout << "inter: " << inter << endl;
   //cout << "robotX: "<< l.poseFromLandmark.x << endl;
   //cout << "robotY: "<< l.poseFromLandmark.y << endl;
@@ -967,28 +984,37 @@ void LinesExtraction::computeLandmark(
 bool LinesExtraction::findCircle(Circle& circleOutput, vector<Point2f>& circlePoints)
 {
   auto tStart = high_resolution_clock::now();
+  //cout << "circlePoints.size():  "<< circlePoints.size() << endl;
   if (circlePoints.empty()) {
     duration<double> timeSpan = high_resolution_clock::now() - tStart;
     findCircleTime = timeSpan.count();
     return false;
   }
-  if (circlePoints.size() > 15) {
-    float radius = 0.75;
+  if (circlePoints.size() > minRANSACCirclePointsCnt) {
+    sort(circlePoints.begin(), circlePoints.end(), [](
+      const Point2f& p1,
+      const Point2f& p2)
+    { return p1.y < p2.y;});
+
+    int divider = std::max(1, (int)circlePoints.size() / maxRANSACCirclePointsCnt);
+    //for (size_t i = 0 ; i < circlePoints.size(); ++i)
+    //  VisionUtils::drawPoint(worldToImage(circlePoints[i]), worldImage, Scalar(0,0,255));
+    vector<Point2f> newPoints;
+    for (size_t i = 0 ; i < circlePoints.size(); i = i + divider) {
+      newPoints.push_back(circlePoints[i]);
+      VisionUtils::drawPoint(worldToImage(circlePoints[i]), worldImage, Scalar(255,255,0));
+    }
+
     Mat meanMat;
-    reduce(circlePoints, meanMat, 01, CV_REDUCE_AVG);
+    reduce(newPoints, meanMat, 01, CV_REDUCE_AVG);
     Point2f meanP = Point2f(meanMat.at<float>(0, 0), meanMat.at<float>(0, 1));
     float maxDist = 0.f;
-    for (int i = 0; i < circlePoints.size(); ++i) {
-      auto dist = norm(meanP - circlePoints[i]);
+    for (int i = 0; i < newPoints.size(); ++i) {
+      auto dist = norm(meanP - newPoints[i]);
       maxDist = dist > maxDist ? dist : maxDist;
     }
-    //cout << "meanP: " << meanP << endl;
-    //cout << "maxDist: " << maxDist << endl;
-    if (maxDist < radius - 0.1)
+    if (maxDist < midCircleRadiusWorld * minMeanToMaxCircleDistRatio)
       return false;
-    //for (size_t i = 0 ; i < circlePoints.size(); ++i)
-    //  VisionUtils::drawPoint(worldToImage(circlePoints[i]), worldImage);
-    int maxCount = circlePoints.size() > 20 ? 20 : circlePoints.size();
     unsigned RANSACiterations = 10;
     int bestPoints = 0;
     Circle bestCircle;
@@ -996,56 +1022,63 @@ bool LinesExtraction::findCircle(Circle& circleOutput, vector<Point2f>& circlePo
     uniform_real_distribution<> dist
       { 0, 1 };
     bool circleFound = false;
+    auto nPoints = newPoints.size();
     for (size_t n = 0; n < RANSACiterations; ++n) {
       if (circleFound)
         break;
-      Point2f p1 = circlePoints[(int) (dist(rng) * circlePoints.size())];
-      Point2f p2 = circlePoints[(int) (dist(rng) * circlePoints.size())];
+      Point2f p1, p2;
+      do {
+        p1 =
+          newPoints[(int) (dist(rng) * newPoints.size())];
+        p2 =
+          newPoints[(int) (dist(rng) * newPoints.size())];
+      } while(p1.x == p2.x && p1.y == p2.y);
       ///< Make a circle for two points
-      auto circles = Circle::pointsToCircle(p1, p2, radius);
-      for (size_t c = 0; c < circles.size(); ++c) {
+      auto circles = Circle::pointsToCircle(p1, p2, midCircleRadiusWorld);
+      for (const auto& circle : circles) {
+        /*if (GET_DVAR(int, drawCircle)) {
+          cv::circle(
+            worldImage,
+            worldToImage(circle.center),
+            circle.radius * 100,
+            Scalar(0, 255, 255),
+            1
+          );
+        }
+        VisionUtils::drawPoint(worldToImage(p1), worldImage, Scalar(255,255,255));
+        VisionUtils::drawPoint(worldToImage(p2), worldImage, Scalar(255,255,255));
+        */
         int numPoints = 0;
-        //cout << "center: " << circles[c].center << endl;
-        //cout << "radius: " << radius << endl;
-        for (size_t i = 0; i < maxCount; ++i) {
-          float dist = norm(circles[c].center - circlePoints[i]) - radius;
-          //cout << "dist: " << norm(circles[c].center - circlePoints[i]) << endl;
-          if (fabsf(dist) < 0.05) {
+        for (size_t i = 0; i < nPoints; ++i) {
+          float dist = fabsf(norm(circle.center - newPoints[i / divider]) - midCircleRadiusWorld);
+          if (dist < maxRANSACCircleToPointDist) {
             ++numPoints;
           } //else {
           //  --numPoints;
           //}
         }
-        //cout << "numPoints: " << numPoints << endl;
         if (numPoints > bestPoints) {
           bestPoints = numPoints;
-          bestCircle = circles[c];
+          bestCircle = circle;
         }
-        /*if (GET_DVAR(int, drawCircle)) {
-          circle(
-            worldImage,
-            worldToImage(circles[c].center),
-            circles[c].radius * 100,
-            Scalar(0, 255, 255 - c * 100),
-            1
-          );
-        }*/
         //cout << "bestPoints:"  << bestPoints << endl;
-        //cout << "maxCount:"  << maxCount << endl;
-        if (bestPoints >= maxCount * 0.65)
-          circleFound = true; break;
+        //cout << "nPoints:"  << nPoints << endl;
+        if (bestPoints >= nPoints * circleRANSACGoodCntRatio) {
+          circleFound = true;
+          break;
+        }
       }
-      //if (n > RANSACiterations / 4.0 && bestPoints <= maxCount / 4.0)
+      //if (n > RANSACiterations / 4.0 && bestPoints <= nPoints / 4.0)
       //  return false;
       //cout << "bestPoints: " << bestPoints << endl;
-      //cout << "maxCount: " << maxCount << endl;
-      //VisionUtils::displayImage(worldImage, "circle");
+      //cout << "nPoints: " << nPoints << endl;
+      //VisionUtils::displayImage("circle", worldImage);
       //waitKey(0);
     }
     duration<double> timeSpan = high_resolution_clock::now() - tStart;
     findCircleTime = timeSpan.count();
-    //cout << "maxCount:" << maxCount << endl;
-    if (bestPoints >= maxCount * 0.65) {
+    //cout << "nPoints:" << nPoints << endl;
+    if (bestPoints >= nPoints * circleRANSACGoodCntRatio) {
       circleOutput = bestCircle;
       return true;
     } else {
@@ -1058,11 +1091,11 @@ bool LinesExtraction::findCircle(Circle& circleOutput, vector<Point2f>& circlePo
 void LinesExtraction::computeCircleLandmark(const Circle& c,
   const vector<FittedLinePtr>& worldLines)
 {
-  for (size_t i = 0; i < worldLines.size(); ++i) {
-    if (!worldLines[i]) continue;
+  bool lineIntersectionFound = false;
+  for (auto& wl : worldLines) {
+    if (!wl || wl->circleLine) continue;
     vector<Point2f> inters;
-    auto wl = worldLines[i];
-    if (wl->d > 0.6) {
+    if (wl->d > 0.2) {
       if (findCircleLineIntersection(c, wl, inters)) {
         if (!inters.empty()) {
           for (int i = 0; i < inters.size(); ++i) {
@@ -1072,13 +1105,32 @@ void LinesExtraction::computeCircleLandmark(const Circle& c,
             Point2f unit = Point2f(diff.x / dist, diff.y / dist);
             computeLandmark(c.center, unit, FL_TYPE_CIRCLE);
           }
+          lineIntersectionFound = true;
           break;
         }
-        //VisionUtils::drawPoint(Point(inters[0].x * 100 + 500, 350 - 100 * inters[0].y), worldImage, Scalar(0,255,0));
-        //VisionUtils::drawPoint(Point(inters[1].x * 100 + 500, 350 - 100 * inters[1].y), worldImage, Scalar(0,255,0));
-        //imshow("worldImage", worldImage);
-        //waitKey(0);
       }
+    }
+  }
+  if (!lineIntersectionFound) {
+    auto angle = -M_PI / 2;
+    auto updateAngle = 0.0;
+    for (size_t i = 0; i < maxCircleStates; ++i) {
+      auto ca1 = cos(angle + updateAngle);
+      auto sa1 = sin(angle + updateAngle);
+      auto ca2 = cos(angle - updateAngle);
+      auto sa2 = sin(angle - updateAngle);
+      auto unit1 = Point2f(ca1, sa1);
+      auto unit2 = Point2f(ca2, sa2);
+      if (cv::norm(unit1 - unit2) > 1e-5) {
+        computeLandmark(c.center, unit1, FL_TYPE_CIRCLE);
+        computeLandmark(c.center, unit2, FL_TYPE_CIRCLE);
+        computeLandmark(c.center, -unit1, FL_TYPE_CIRCLE);
+        computeLandmark(c.center, -unit2, FL_TYPE_CIRCLE);
+      } else {
+        computeLandmark(c.center, unit1, FL_TYPE_CIRCLE);
+        computeLandmark(c.center, -unit1, FL_TYPE_CIRCLE);
+      }
+      updateAngle += Angle::DEG_15;
     }
   }
 }
@@ -1092,7 +1144,7 @@ bool LinesExtraction::findCircleLineIntersection(const Circle& c,
   bisectorP.x = t * wl->unit.x + wl->p1.x;
   bisectorP.y = t * wl->unit.y + wl->p1.y;
   float perpDist = norm(bisectorP - c.center);
-  if (perpDist < 0.2) {
+  if (perpDist < cirlceBisectorMaxDist) {
     float dt = sqrt(c.radius * c.radius - perpDist * perpDist);
     Point2f inter1, inter2;
     inter1.x = bisectorP.x + dt * wl->unit.x;
@@ -1112,12 +1164,12 @@ void LinesExtraction::addLineLandmarks(vector<FittedLinePtr>& worldLines)
 {
   auto tStart = high_resolution_clock::now();
   int count = 0;
-  float nDiv;
-  nDiv = activeCamera == CameraId::headTop ? 0.2 : 0.05;
+  //float nDiv;
+  //nDiv = activeCamera == CameraId::headTop ? 0.2 : 0.05;
   for (size_t i = 0; i < worldLines.size(); ++i) {
     if (!worldLines[i]) continue;
     auto wl = worldLines[i];
-    int numPoints = ceil(wl->d / nDiv);
+    int numPoints = ceil(wl->d / linesLandmarktNDiscretizationDist);
     for (int i = 0; i < numPoints; ++i) {
       float r = i / (float) numPoints;
       auto l =
@@ -1132,7 +1184,7 @@ void LinesExtraction::addLineLandmarks(vector<FittedLinePtr>& worldLines)
       unknownLandmarks.push_back(l);
       count++;
     }
-    if (count >= 20) break;
+    if (count >= maxLineUnknownLandmarks) break;
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   addLandmarksTime = timeSpan.count();

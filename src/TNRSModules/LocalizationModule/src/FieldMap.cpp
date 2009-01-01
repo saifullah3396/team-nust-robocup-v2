@@ -224,7 +224,6 @@ void FieldMap::updateOccupancyMap()
   ///< Check if robot is localized
   //if (!localizer->isLocalized()) return;
 
-  useOccupancyMap = true;
   if (useOccupancyMap) {
     auto& occupancyMap = OCCUPANCY_MAP_OUT(LocalizationModule);
     occupancyMap.data = occupancyMapBase.clone();

@@ -90,7 +90,7 @@ namespace GnuPlotEnv
   {
   public:
     /**
-     * @brief Constructor that initializes the GnuPlot base class with 
+     * @brief Constructor that initializes the GnuPlot base class with
      *   default parameters.
      */
     PlotEnv(const std::string& title, const std::string& labelx,
@@ -114,9 +114,9 @@ namespace GnuPlotEnv
     }
 
     /**
-     * @brief Constructor that initializes the GnuPlot base class with 
+     * @brief Constructor that initializes the GnuPlot base class with
      *   default parameters
-     * 
+     *
      * @param style: Type of style to be used during plot
      */
     PlotEnv(const GnuPlotStyle& style) :
@@ -126,7 +126,7 @@ namespace GnuPlotEnv
 
     /**
      * @brief Plots a 1D graph.
-     * 
+     *
      * @param x: A vector of values to plot on the x-axis
      * @param title: Title of the plot
      * @param labelx: Label for the x-axis of the plot
@@ -142,7 +142,7 @@ namespace GnuPlotEnv
 
     /**
      * @brief Plots a 2D graph.
-     * 
+     *
      * @param x: A vector of values to plot on the x-axis
      * @param y: A vector of values to plot on the y-axis
      * @param title: Title of the plot
@@ -159,7 +159,7 @@ namespace GnuPlotEnv
 
     /**
      * @brief Plots a 3D graph.
-     * 
+     *
      * @param x: A vector of values to plot on the x-axis
      * @param y: A vector of values to plot on the y-axis
      * @param z: A vector of values to plot on the z-axis
@@ -188,7 +188,7 @@ namespace GnuPlotEnv
 
     /**
      * @brief Plots a 2D graph.
-     * 
+     *
      * @param title: Title of the plot
      * @param x: A vector of values to plot on the x-axis
      * @param y: A vector of values to plot on the y-axis
@@ -196,7 +196,7 @@ namespace GnuPlotEnv
      */
     void plot2D(
       const std::string& title,
-      const vector<Scalar>& x, 
+      const vector<Scalar>& x,
       const vector<Scalar>& y,
       const GnuPlotStyle& style = GnuPlotStyle::lines)
     {
@@ -214,7 +214,7 @@ namespace GnuPlotEnv
      */
     void plot2D(
       const std::string& title,
-      const Matrix<Scalar, Dynamic, 1>& x, 
+      const Matrix<Scalar, Dynamic, 1>& x,
       const Matrix<Scalar, Dynamic, 1>& y,
       const GnuPlotStyle& style = GnuPlotStyle::lines)
     {
@@ -225,7 +225,7 @@ namespace GnuPlotEnv
 
     /**
      * @brief Plots a 3D graph.
-     * 
+     *
      * @param title: Title of the plot
      * @param x: A vector of values to plot on the x-axis
      * @param y: A vector of values to plot on the y-axis
@@ -242,10 +242,10 @@ namespace GnuPlotEnv
     {
       plot_xyz(x, y, z, title);
     }
-    
+
     /**
      * @brief Plots a 3D graph.
-     * 
+     *
      * @param title: Title of the plot
      * @param x: A vector of values to plot on the x-axis
      * @param y: A vector of values to plot on the y-axis
@@ -272,7 +272,7 @@ namespace GnuPlotEnv
       const Matrix<Scalar, 2, 1>& xRange = Matrix<Scalar, 2, 1>(-1.f, 1.f), const Matrix<Scalar, 2, 1>& yRange =
         Matrix<Scalar, 2, 1>(-1.f, 1.f), const Matrix<Scalar, 2, 1>& zRange = Matrix<Scalar, 2, 1>(-1.f, 1.f))
     {
-      Gnuplot::set_terminal_std("qt");
+      Gnuplot::set_terminal_std("wxt");
       if (two_dim) cmd("set size ratio -1"); ///< Equal x-y ratios for better view
       else cmd("set view equal xyz"); ///< Equal x-y-z ratios for better view
       //cmd("set size ratio -1");
@@ -304,7 +304,7 @@ namespace GnuPlotEnv
 
       set_style("lines");
     }
-    
+
     inline void
     setCmd(const std::ostringstream& cmdstr)
     {
@@ -361,28 +361,28 @@ namespace GnuPlotEnv
       }
       updateArrowStyle(as);
     }
-    
+
     inline void
     setCircle(const Matrix<Scalar, 2, 1>& center, const Scalar& radius)
     {
       std::ostringstream cmdstr;
-      cmdstr 
-        << "set object 1 circle at " 
-        << center[0] 
-        << "," 
-        << center[1] 
-        << " size first " 
-        << radius 
+      cmdstr
+        << "set object 1 circle at "
+        << center[0]
+        << ","
+        << center[1]
+        << " size first "
+        << radius
         << " fs transparent solid 0.35 fc rgb 'red'";
       cmd(cmdstr.str());
       replot();
     }
-    
+
     inline void
     setSphere(const Matrix<Scalar, 3, 1> center, const Scalar& radius)
     {
       std::ostringstream cmdstr;
-      cmdstr 
+      cmdstr
         << "set parametric;\n"
         << "set urange [-pi:pi];\n"
         << "set vrange [-pi/2:pi/2];\n"
@@ -453,7 +453,7 @@ namespace GnuPlotEnv
       replot();
     }
 
-    inline void 
+    inline void
     plotPoint(const Scalar& x, const Scalar& y, const unsigned& lsId)
     {
       std::ostringstream cmdstr;
@@ -464,8 +464,8 @@ namespace GnuPlotEnv
       cmdstr << "\"<echo '" << x << " " << y << "'\" with points ls " << lineStyles["DefLine"].id << "ps " << 1.0;
       cmd(cmdstr.str());
     }
-    
-    inline void 
+
+    inline void
     plotPoint(const Matrix<Scalar, 2, 1>& vec)
     {
       std::ostringstream cmdstr;
@@ -476,8 +476,8 @@ namespace GnuPlotEnv
       cmdstr << "\"<echo '" << vec[0] << " " << vec[1] << "'\" with points ls " << lineStyles["DefLine"].id << "ps " << 1.0;
       cmd(cmdstr.str());
     }
-    
-    inline void 
+
+    inline void
     plotPoint(const Matrix<Scalar, 3, 1>& vec)
     {
       std::ostringstream cmdstr;
@@ -488,13 +488,13 @@ namespace GnuPlotEnv
       cmdstr << "\"<echo '" << vec[0] << " " << vec[1] << " " << vec[2] << "'\" with points ls " << lineStyles["DefLine"].id << "ps " << 1.0;
       cmd(cmdstr.str());
     }
-    
-    inline int 
+
+    inline int
     getNPlots()
     {
       return nplots;
     }
-    
+
     inline void setTitle(const string& title) { set_title(title); }
 
     string title;

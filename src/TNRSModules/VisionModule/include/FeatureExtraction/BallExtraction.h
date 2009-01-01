@@ -64,11 +64,6 @@ public:
    * @brief processImage Derived from FeatureExtraction
    */
   void processImage();
-
-  /**
-   * Returns the state of the ball if it is found or not
-   */
-  bool getBallFound();
 private:
   /**
    * @brief drawResults Derived from FeatureExtraction
@@ -172,7 +167,7 @@ private:
   boost::shared_ptr<FieldExtraction> fieldExt; ///< Field Extraction module object.
   boost::shared_ptr<RobotExtraction> robotExt; ///< Robot Extraction module object.
   boost::shared_ptr<RegionSegmentation> regionSeg; ///< Field Extraction module object.
-  boost::shared_ptr<BallTracker> ballTracker;///< Ball tracker class object.
+  vector<boost::shared_ptr<BallTracker>> ballTrackers;///< Ball tracker class object.
 
   vector<Rect> classifiedBalls; ///< Balls classified in current iteration
   float ballRadius = {0.05}; ///< Ball radius in xyz frame
@@ -205,7 +200,7 @@ private:
   float maxBallBlobSizeRatio = {0.8}; ///< Ratio of maximum blob size for ball pentagon features wrt expected ball size
   float minBallBlobSizeRatio = {0.2}; ///< Ratio of minimum blob size for ball pentagon features wrt expected ball size
   float ballBlobMaxAspectRatio = {3}; ///< Minimum aspect ratio for regions found in width and height
-  float maxBallBlobIntensity = {100}; ///< Maximum blob intensity for ball blobs
+  float maxBallBlobIntensity = {150}; ///< Maximum blob intensity for ball blobs
   int minPentagonsRequired = {3}; ///< Minimum 3 are required for making a triangle combination
   int maxPentagonsRequired = {6}; ///< Maximum 6 are set because ball cannot have many blobs
   int minPentagonsPoorCandidates = {2}; ///< Minimum 2 pentagons are required to call it a poor but sufficient candidates
@@ -226,6 +221,9 @@ private:
   float CNNClassificationTolerance = 0.25; ///< Max difference of classified label and actual label
 
   float predictedAreaRoiRatio = {3}; /// Size of ROI wrt predicted state
+  float maxBallRangeWorld = {3};
+  int minBlackRange = {65};
+  int minBlackCount = {10};
 
   std::unique_ptr<FlatBufferModel> model; ///< Tflite model
   ops::builtin::BuiltinOpResolver resolver; ///< Tflite model resolvier
@@ -234,7 +232,6 @@ private:
   CascadeClassifier cascade; ///< OpenCv Cascade classifier for ball.
 
   ///< Processing times
-  float processTime = {0.f};
   float resetBallTrackerTime = {0.f};
   float findBallFromPredStateTime = {0.f};
   float findBallRegionsTime = {0.f};

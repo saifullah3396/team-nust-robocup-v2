@@ -40,9 +40,9 @@ struct Circle
     vector<Circle> cs;
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
-    float t = sqrt(r * r / (dx * dx + dy * dy) - 1 / 4);
-    float cx = (p1.x + p2.x) / 2;
-    float cy = (p1.y + p2.y) / 2;
+    float t = sqrt(r * r / (dx * dx + dy * dy) - 1.0 / 4.0);
+    float cx = (p1.x + p2.x) / 2.0;
+    float cy = (p1.y + p2.y) / 2.0;
     auto c1 = Point2f(cx - t * dy, cy + t * dx);
     auto c2 = Point2f(cx + t * dy, cy - t * dx);
     cs.push_back(Circle(c1, r));

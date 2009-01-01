@@ -145,11 +145,14 @@ private:
   ///< Rect for the extracted field
   Rect fieldRect;
 
-  ///< Total number of ransac iterations for fitting lines
-  int maxRANSACIterations;
+  int maxRANSACIterations = {20}; ///< Max number of ransac iterations for fitting lines
+  int minRANSACPoints = {5}; ///< Minimum number of points required for RANSAC on first line
+  int minMatchedRANSACPoints = {5}; ///< Minimum number of matched RANSAC points to be considered a sufficient line
+  float minRANSACLineLength = {16.0}; ///< Minimum length of line for RANSAC in pixels
+  float minRANSACPointDist = {4.0}; ///< Maximum distance of point to be associated with line in pixels
+  int borderPointsImageHeightTol = {10}; ///< Tolerance for distance of border point from average
 
   ///< Processing times
-  float processTime;
   float pointsFilterTime;
   float fitLinesTime;
   float borderTransformTime;

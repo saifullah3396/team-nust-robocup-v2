@@ -24,6 +24,7 @@
 #include <boost/circular_buffer.hpp>
 #include <boost/shared_ptr.hpp>
 #include "TNRSBase/include/MemoryBase.h"
+#include "TNRSBase/include/DebugBase.h"
 #include "MotionModule/include/MTypeHeader.h"
 #include "MotionModule/include/KinematicsModule/JointStateType.h"
 #include "Utils/include/MathsUtils.h"
@@ -81,8 +82,14 @@ namespace SymEngine {
  * @brief The class for kinematics and dynamics of the robot.
  */
 template <typename Scalar>
-class KinematicsModule : public MemoryBase
+class KinematicsModule : public MemoryBase, public DebugBase
 {
+  INIT_DEBUG_BASE(
+    (int, debug, 0),
+    (float, torsoRollOffset, 0.f),
+    (float, torsoPitchOffset, 0.f),
+  )
+
 public:
   /**
    * Default constructor for this class

@@ -9,6 +9,7 @@
 
 #include "MotionModule/include/BalanceModule/BalanceModule.h"
 #include "MotionModule/include/BalanceModule/Types/MPComControl.h"
+#include "MotionModule/include/BalanceModule/Types/KeyFrameBalance.h"
 #include "MotionModule/include/BalanceModule/Types/PIDComControl.h"
 #include "MotionModule/include/BalanceModule/Types/ZmpControl.h"
 #include "Utils/include/ConfigManager.h"
@@ -31,6 +32,8 @@ boost::shared_ptr<BalanceModule<Scalar> > BalanceModule<Scalar>::getType(
   switch (cfg->type) {
       case toUType(MBBalanceTypes::mpComControl):
         bm = new MPComControl<Scalar>(motionModule, SPC(MPComControlConfig, cfg)); break;
+      case toUType(MBBalanceTypes::keyFrameBalance):
+        bm = new KeyFrameBalance<Scalar>(motionModule, SPC(KeyFrameBalanceConfig, cfg)); break;
       case toUType(MBBalanceTypes::pidComControl):
         bm = new PIDComControl<Scalar>(motionModule, SPC(PIDComControlConfig, cfg)); break;
       case toUType(MBBalanceTypes::zmpControl):

@@ -30,6 +30,14 @@
         "id" : 4,
         "maxRuntime" : 45,
         "supportLeg" : 3,
+        "type" : 1,
+        "logData" : false
+    },
+    "balanceConfig-ignore" : {
+        "baseType" : 0,
+        "id" : 4,
+        "maxRuntime" : 45,
+        "supportLeg" : 3,
         "timeToReachB" : 1.5,
         "type" : 0,
         "logData" : false

@@ -73,6 +73,7 @@ enum class MBBallThrowTypes
 enum class MBBalanceTypes
 : unsigned int {
   mpComControl,
+  keyFrameBalance,
   pidComControl,
   zmpControl,
   count

@@ -66,11 +66,11 @@ public:
   void processImage();
 
   /**
-   * Returns the best goal posts extracted from the image.
+   * Returns the goal posts extracted from the image.
    *
-   * @return vector<Point>
+   * @return vector<GoalPostPtr>
    */
-  //vector<vector<Point2f> > getBestGoalPosts() { return bestGoalPosts; }
+  vector<GoalPostPtr> getGoalPosts() { return this->goalPosts; }
 
 private:
   /**
@@ -132,7 +132,6 @@ private:
   void drawResults();
 
   ///< Procesing times
-  float processTime;
   float scanTime;
   float classifyPostsTime;
   float findBestPostsTime;
@@ -153,6 +152,23 @@ private:
   ///< Robot Extraction module object
   boost::shared_ptr<RobotExtraction> robotExt;
 
-  static constexpr float refreshTime = 0.5;
+  float lineLinkHighStepRatio = {2.5}; ///< Tolerance along high step wrt high step for linking goal post lines
+  float lineLinkLowToHighStepRatio = {0.5}; ///< Tolerance along low step wrt high step tolerance for linking goal post lines
+  float maxLineLengthDiffRatio = {1.25}; ///< Maximum difference ratio in line length while linking
+  float goalBaseToBorderDistance = {0.7}; ///< Distance of goal post base from field boundary in world in meters
+  float goalPostMinWidth = {5}; ///< Minimum goal post region width in image
+  float goalPostMinArea = {50}; ///< Minimum goal post region area in image
+  float maxHeightToWidthRatio = {1.5}; ///< Maximum goal post height to width ratio
+  float minGoalPostWidthWorld = {0.075}; ///< Minimum goal post width in world in meters
+  float maxGoalPostWidthWorld = {0.2}; ///< Maximum goal post width in world in meters
+  int goalPostWindowHeight = {20}; ///< Goal post base window height in pixels
+  float minWindowGreenRatio = {0.35}; ///< Minimum ratio of green ratio in window
+  int minGoalPostImageDist = {75}; ///< Maximum distance between two goal posts
+  float minGoalToGoalDist = {1.35}; ///< Minimum distance between two goal posts to be considered separate in meters
+  float maxGoalToGoalDist = {1.85}; ///< Maximum distance between two goal posts to be considered separate in meters
+  float actualGoalToGoalDist = {1.6}; ///< Actual distance between goal posts in world in meters
+  float maxGoalKeeperParallelDist = {0.8}; ///< Maximum distance of goal keeper from center
+  float maxGoalKeeperPerpDist = {0.65}; ///< Maximum distance of goal keeper from center
+  float refreshTime = {0.5};
   typedef vector<GoalPostPtr>::iterator GPIter;
 };

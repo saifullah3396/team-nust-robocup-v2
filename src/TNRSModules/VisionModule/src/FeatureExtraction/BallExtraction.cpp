@@ -120,6 +120,9 @@ BallExtraction::BallExtraction(VisionModule* visionModule) :
     cascadePaddingRatio,
     CNNClassificationTolerance,
     predictedAreaRoiRatio,
+    maxBallRangeWorld,
+    minBlackRange,
+    minBlackCount,
   );
 
   ///< Get other extraction classes
@@ -128,8 +131,13 @@ BallExtraction::BallExtraction(VisionModule* visionModule) :
   regionSeg = GET_FEATURE_EXT_CLASS(RegionSegmentation, FeatureExtractionIds::segmentation);
 
   ///< Make a ball tracker
-  ballTracker = boost::make_shared <BallTracker> (visionModule);
-  ballTracker->init(CameraId::headTop);
+  ballTrackers.resize(2);
+  ballTrackers[toUType(CameraId::headTop)] =
+    boost::make_shared <BallTracker> (visionModule);
+  ballTrackers[toUType(CameraId::headTop)]->init(CameraId::headTop);
+  ballTrackers[toUType(CameraId::headBottom)] =
+    boost::make_shared <BallTracker> (visionModule);
+  ballTrackers[toUType(CameraId::headBottom)]->init(CameraId::headBottom);
 
   ///< Load ball classifier
   try {
@@ -172,64 +180,65 @@ void BallExtraction::processImage()
     ///< Whether the ball extraction class is working on the lower cam
     vector<Rect> bestCandidates;
     vector<Rect> poorCandidates;
-    if (resetBallTracker()) {
-      classifiedBalls.clear();
+    classifiedBalls.clear();
+    Mat predState = ballTrackers[toUType(activeCamera)]->predict();
+    if (ballTrackers[toUType(activeCamera)]->getBallFound()) {
       ///< Update ball tracker prediction
-      Mat predState = ballTracker->predict();
       if (GET_DVAR(int, drawPredictionState))
         drawState(predState, Scalar(0, 255, 0));
-
-      vector<ScannedRegionPtr> ballRegions;
-      if (ballType == 1) {
-        findBallRegions(ballRegions);
-        if (activeCamera == CameraId::headTop)
-          filterFromRobotRegions(ballRegions);
-      }
-
-      Rect roi = Rect(0, 0, getImageWidth(), getImageHeight());
-      if (ballTracker->getBallFound()) {
-        findBallROIFromPredState(roi, predState);
-      }
-
-      if (GET_DVAR(int, drawPredictionROI))
-        rectangle(bgrMat[toUType(activeCamera)], roi, Scalar(255, 255, 255), 0);
-
-      if (ballType == 0) {
-        redBallDetector(roi);
-      } else if (ballType == 1) {
-        for (auto& br : ballRegions) {
-          if (!br) continue;
-          br->rect = br->rect & roi;
-          if (br->rect.area() <= 100) {
-            br.reset();
-            continue;
-          }
-          br->resetParams();
-        }
-      }
-
-      findCandidatesWithBallFeatures(ballRegions, bestCandidates, poorCandidates);
-      for (const auto& c : bestCandidates) {
-        rectangle(bgrMat[toUType(activeCamera)], c, Scalar(255, 0, 0), 2);
-      }
-      for (const auto& c : poorCandidates) {
-        rectangle(bgrMat[toUType(activeCamera)], c, Scalar(0, 0, 255), 2);
-      }
-      if (!bestCandidates.empty()) {
-        classifyRegionsCNN(bestCandidates);
-      } else {
-        classifyRegionsCascade(poorCandidates);
-      }
-      ///< Perform ball tracker correction step
-      ballTracker->updateFilter(classifiedBalls);
-      ///< Update ball info in memory
-      updateBallInfo();
-      drawResults();
     }
+    vector<ScannedRegionPtr> ballRegions;
+    if (ballType == 1) {
+      findBallRegions(ballRegions);
+      if (activeCamera == CameraId::headTop)
+        filterFromRobotRegions(ballRegions);
+    }
+    Rect roi = Rect(0, 0, getImageWidth(), getImageHeight());
+    if (ballTrackers[toUType(activeCamera)]->getBallFound()) {
+      findBallROIFromPredState(roi, predState);
+    }
+    if (GET_DVAR(int, drawPredictionROI))
+      rectangle(bgrMat[toUType(activeCamera)], roi, Scalar(255, 255, 255), 0);
+    if (ballType == 0) {
+      redBallDetector(roi);
+    } else if (ballType == 1) {
+      for (auto& br : ballRegions) {
+        if (!br) continue;
+        br->rect = br->rect & roi;
+        if (br->rect.area() <= 100) {
+          br.reset();
+          continue;
+        }
+        br->resetParams();
+      }
+    }
+    if (GET_DVAR(int, displayInfo)) {
+      LOG_INFO("BallExtraction Results:");
+      LOG_INFO("Number of ball regions: " << ballRegions.size());
+    }
+    findCandidatesWithBallFeatures(ballRegions, bestCandidates, poorCandidates);
+    for (const auto& c : bestCandidates) {
+      rectangle(bgrMat[toUType(activeCamera)], c, Scalar(255, 255, 0), 1);
+    }
+    for (const auto& c : poorCandidates) {
+      rectangle(bgrMat[toUType(activeCamera)], c, Scalar(0, 255, 255), 1);
+    }
+    //VisionUtils::displayImage(name + "1", bgrMat[0]);
+    //VisionUtils::displayImage(name + "2", bgrMat[1]);
+    //waitKey(0);
+    if (!bestCandidates.empty()) {
+      classifyRegionsCascade(bestCandidates);
+    } else if (!poorCandidates.empty()) {
+      classifyRegionsCascade(poorCandidates);
+    }
+    ///< Perform ball tracker correction step
+    ballTrackers[toUType(activeCamera)]->updateFilter(classifiedBalls);
+    ///< Update ball info in memory
+    updateBallInfo();
+    drawResults();
     duration<double> timeSpan = high_resolution_clock::now() - tStart;
     processTime = timeSpan.count();
     if (GET_DVAR(int, displayInfo)) {
-      LOG_INFO("BallExtraction Results:");
       LOG_INFO("Time taken by processImage(): " << processTime);
       LOG_INFO("Time taken by resetBallTracker(): " << resetBallTrackerTime);
       LOG_INFO("Time taken by findBallFromPredState(): " << findBallFromPredStateTime);
@@ -245,9 +254,13 @@ void BallExtraction::processImage()
       LOG_INFO("classifiedBalls found: " << classifiedBalls.size());
     }
     if (GET_DVAR(int, displayOutput)) {
-      if (this->ballTracker->getBallFound()) {
-        VisionUtils::displayImage(name, bgrMat[toUType(BALL_INFO_OUT(VisionModule).cameraNext)]);
-      }
+      //if (this->ballTracker->getBallFound()) {
+      VisionUtils::displayImage(name + "1", bgrMat[0]);
+      //VisionUtils::displayImage(name + "2", bgrMat[1]);
+      //VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+      cout << "getBallFound top : " << this->ballTrackers[0]->getBallFound() << endl;
+      //cout << "getBallFound bottom: " << this->ballTrackers[1]->getBallFound() << endl;
+      //}
       //waitKey(0);
     }
   } catch (exception& e){
@@ -257,13 +270,14 @@ void BallExtraction::processImage()
 
 bool BallExtraction::resetBallTracker()
 {
-  auto tStart = high_resolution_clock::now();
+  /*auto tStart = high_resolution_clock::now();
   auto& ballInfo = BALL_INFO_OUT(VisionModule);
   bool continueProcessing = true;
   if (ballTracker->getBallFound())///< Ball is found
   {
     if (ballInfo.cameraNext == activeCamera) { ///< If the other camera is curret image))
       if (ballInfo.cameraNext != ballInfo.camera) { ///< It is expected to be found in other camera from previous one
+        auto otherCam = activeCamera == CameraId::headTop ? CameraId::headBottom : CameraId::headTop;
         auto ballState = ballTracker->getEstimatedState();
 
         ///< Relative position in real world
@@ -274,25 +288,31 @@ bool BallExtraction::resetBallTracker()
         Point2f ballInCurrent;
         cameraTransforms[toUType(activeCamera)]->worldToImage(ballWorldRel, ballInCurrent);
 
+        //if (ballInCurrent.x >= 0 && ballInCurrent.x <= getImageWidth() &&
+        //    ballInCurrent.y >= 0 && ballInCurrent.y <= getImageHeight())
+        //{
+        ///< Ball in this current camera
+        ///< Position is shifted from the previous cam to new cam
+        ballState.at<float>(6) = ballInCurrent.x;
+        ballState.at<float>(7) = ballInCurrent.y;
+
+        ///< Reassigning ball width and height and scaling velocity according
+        ///< to current camera
         if (ballInCurrent.x >= 0 && ballInCurrent.x <= getImageWidth() &&
             ballInCurrent.y >= 0 && ballInCurrent.y <= getImageHeight())
         {
-          ///< Ball in this current camera
-          ///< Position is shifted from the previous cam to new cam
-          ballState.at<float>(6) = ballInCurrent.x;
-          ballState.at<float>(7) = ballInCurrent.y;
-
-          ///< Reassigning ball width and height and scaling velocity according
-          ///< to current camera
-          auto camRatio = getImageWidth() / imageWidth[toUType(ballInfo.camera)];
+          float camRatio = getImageWidth() / (float) imageWidth[toUType(otherCam)];
+          cout << "camRatio: " << camRatio << endl;
           ballState.at<float>(8) *= camRatio;
           ballState.at<float>(9) *= camRatio;
           ballState.at<float>(10) *= camRatio;
           ballState.at<float>(11) *= camRatio;
           ballTracker->reset(activeCamera, ballState);
-          //xySeen.clear();
         }
       }
+        //xySeen.clear();
+      //}
+      //}
     } else {
       continueProcessing = false; ///< Expected camera is not the current image
     }
@@ -302,7 +322,7 @@ bool BallExtraction::resetBallTracker()
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   resetBallTrackerTime = timeSpan.count();
-  return continueProcessing;
+  return continueProcessing;*/
 }
 
 void BallExtraction::findBallROIFromPredState(Rect& roi, Mat& predState)
@@ -311,15 +331,21 @@ void BallExtraction::findBallROIFromPredState(Rect& roi, Mat& predState)
   ///< Update predicted position with new position for current
   ///< camera transformation matrix. This is important for when
   ///< robot head is moving during scan
-  MatrixXf predImagePos;
-  predImagePos.resize(3, 1);
-  predImagePos(0, 0) = predState.at<float>(6);
-  predImagePos(1, 0) = predState.at<float>(7);
-  predImagePos(2, 0) = 1.0;
-  Matrix<float, 3, 1> newImagePos =
-    cameraTransforms[toUType(activeCamera)]->prevImageToCurrentImage(predImagePos);
-  predState.at<float>(6) = newImagePos(0, 0);
-  predState.at<float>(7) = newImagePos(1, 0);
+  //MatrixXf predImagePos;
+  //predImagePos.resize(3, 1);
+  //predImagePos(0, 0) = predState.at<float>(6);
+  //predImagePos(1, 0) = predState.at<float>(7);
+  //predImagePos(2, 0) = 1.0;
+  //Matrix<float, 3, 1> newImagePos =
+  //  cameraTransforms[toUType(activeCamera)]->prevImageToCurrentImage(predImagePos);
+  //predState.at<float>(6) = newImagePos(0, 0);
+  //predState.at<float>(7) = newImagePos(1, 0);
+
+  Point3f ballWorld = Point3f(predState.at<float>(0), predState.at<float>(1), this->ballRadius);
+  Point2f ballImage;
+  cameraTransforms[toUType(activeCamera)]->worldToImage(ballWorld, ballImage);
+  predState.at<float>(6) = ballImage.x;
+  predState.at<float>(7) = ballImage.y;
 
   roi.width = predState.at<float>(10) * predictedAreaRoiRatio;
   roi.height = predState.at<float>(11) * predictedAreaRoiRatio;
@@ -476,9 +502,9 @@ void BallExtraction::findBallRegions(vector<ScannedRegionPtr>& ballRegions)
         br.reset();
         continue;
       }
+      if (GET_DVAR(int, drawScannedRegions))
+        br->draw(bgrMat[toUType(activeCamera)], Scalar(255, 255, 255));
     }
-    if (GET_DVAR(int, drawScannedRegions))
-      br->draw(bgrMat[toUType(activeCamera)], Scalar(255, 255, 255));
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   findBallRegionsTime = timeSpan.count();
@@ -597,10 +623,8 @@ void BallExtraction::filterFromRobotRegions(
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   filterFromRobotRegionsTime = timeSpan.count();
   //for (auto& br : ballRegions) {
-  //  if (br) br->draw(bgrMat[toUType(activeCamera)], Scalar(0, 255, 0), 2);
-  //}
-  //VisionUtils::displayImage("bgr", bgrMat[toUType(activeCamera)]);
-  //waitKey(0);
+//    if (br) br->draw(bgrMat[toUType(activeCamera)], Scalar(0, 255, 0), 2);
+//  }
 }
 
 void BallExtraction::findCandidatesWithBallFeatures(
@@ -620,15 +644,21 @@ void BallExtraction::findCandidatesWithBallFeatures(
       //! Region offset in original image
       auto offset = Point(r.x, r.y);
 
-      //! Get gray scale image
-      auto gray = getGrayImage()(r);
-
+      rectangle(bgrMat[toUType(activeCamera)], r, Scalar(255,255,0), 2);
+//      VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+//      waitKey(0);
       //! Get the expected ball size in image for this region
-      auto center = Point(gray.rows / 2, gray.cols / 2) + offset;
+      auto center = Point(r.x + r.width / 2, r.y + r.height / 2);
       Point2f centerWorld;
       cameraTransforms[toUType(activeCamera)]->imageToWorld(centerWorld, center, 0.05);
       auto worldCenterL = cv::Point3_<float>(centerWorld.x, centerWorld.y - this->ballRadius, 0.05);
       auto worldCenterR = cv::Point3_<float>(centerWorld.x, centerWorld.y + this->ballRadius, 0.05);
+
+      if (norm(centerWorld) > maxBallRangeWorld) {
+//        cout << "out of range..." << endl;
+        continue;
+      }
+
       cv::Point_<float> imageL, imageR;
       cameraTransforms[toUType(activeCamera)]->worldToImage(worldCenterL, imageL);
       cameraTransforms[toUType(activeCamera)]->worldToImage(worldCenterR, imageR);
@@ -638,8 +668,24 @@ void BallExtraction::findCandidatesWithBallFeatures(
       ballExpected.height = ballExpected.width;
       ballExpected.y = center.y - ballExpected.height / 2;
 
+      //cout << "ballExpected: " << ballExpected << endl;
       if (ballExpected.width <= 5)
+      {
+        //cout << "bad widht of range..." << endl;
         continue;
+      }
+
+      //! Get gray scale image
+      auto gray = getGrayImage()(r);
+      Mat black;
+
+      threshold(gray, black, minBlackRange, 255, 1);
+      //cout << "cv::countNonZero(black) : " << cv::countNonZero(black)   <<endl;
+      if (cv::countNonZero(black) < minBlackCount) { // Should have at least a minimum of black in it
+        continue;
+      }
+     //VisionUtils::displayImage("gray", gray);
+     //waitKey(0);
 
       //! Window size for adaptive threshold
       int windowSize = ballExpected.width / adaptiveThresholdWindowSizeRatio;
@@ -655,6 +701,7 @@ void BallExtraction::findCandidatesWithBallFeatures(
       //VisionUtils::displayImage("gray", gray);
       adaptiveThreshold(gray, binary, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY_INV, windowSize, subC);
       //VisionUtils::displayImage("binary", binary);
+      //waitKey(0);
 
       vector<vector<Point>> contours;
       vector<Vec4i> hierarchy;
@@ -668,28 +715,42 @@ void BallExtraction::findCandidatesWithBallFeatures(
 
       auto maxBlobSize = maxBallBlobSizeRatio * ballExpected.width;
       auto minBlobSize = minBallBlobSizeRatio * ballExpected.width;
+      //cout << "minBlobSize:" << minBlobSize << endl;
+      //cout << "mBlobSize:" << maxBlobSize << endl;
       vector<boost::shared_ptr<Blob> > pentagons;
       for (size_t i = 0; i < contours.size(); i++) {
         //! Make a bounding box for contour
         Rect boundRect = boundingRect(contours[i]);
+
+        //if (GET_DVAR(int, drawClassifiedPentagons))
+        //  drawContours(bgrMat[toUType(activeCamera)], contours, i, Scalar(255,0,0), -1, 8, hierarchy, 0, offset);
 
         //! Ignore contour if it is too small
         if (
             boundRect.width < minBlobSize ||
             boundRect.height < minBlobSize)
         {
+          //cout << "too small" << endl;
+          //VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+          //waitKey(0);
           continue;
         }
 
         //! Ignore contour if its width is close to expected width but set it as ball expected width
         if (fabsf(boundRect.width - ballExpected.width) / ballExpected.width < 0.3) {
           ballExpected.width = max(boundRect.width, ballExpected.width);
+          //cout << "good for boundary" << endl;
+          //VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+          //waitKey(0);
           continue;
         }
 
         //! Ignore contour if its height is close to expected height but set it as ball expected height
         if (fabsf(boundRect.height - ballExpected.height) / ballExpected.height < 0.3) {
           ballExpected.height = max(boundRect.height, ballExpected.height);
+          //cout << "good for boundary" << endl;
+          //VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+          //waitKey(0);
           continue;
         }
 
@@ -698,17 +759,30 @@ void BallExtraction::findCandidatesWithBallFeatures(
             boundRect.width > maxBlobSize ||
             boundRect.height > maxBlobSize)
         {
+ //         cout << "too big" << endl;
+ //         VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+  //        waitKey(0);
           continue;
         }
 
         //! Ignore if region aspect ratio is above max ratio
         auto ratio = boundRect.width / (float) boundRect.height;
-        if (1.0 / ratio > ballBlobMaxAspectRatio || ratio > ballBlobMaxAspectRatio)
+        if (1.0 / ratio > ballBlobMaxAspectRatio || ratio > ballBlobMaxAspectRatio) {
+//          cout << "bad ratio" << endl;
+//          VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+//          waitKey(0);
           continue;
+        }
 
         //! Ignore if mean intensity of the blob is above the threshold
-        if (mean(gray(boundRect))[0] > maxBallBlobIntensity)
+        if (mean(gray(boundRect))[0] > maxBallBlobIntensity) {
+          //cout << "not black" << endl;
+          //cout << "mean(gray(boundRect)): " << mean(gray(boundRect)) << endl;
+          //VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+          //VisionUtils::displayImage("mean", gray(boundRect));
+          //waitKey(0);
           continue;
+        }
 
         //! Get the contour center
         auto pc =
@@ -722,19 +796,26 @@ void BallExtraction::findCandidatesWithBallFeatures(
         pentagons.push_back(boost::make_shared<Blob> (boundRect, pc, contours[i]));
       }
 
+      //cout << "pentagons: " << pentagons.size() << endl;
+      if (pentagons.size() >= minPentagonsPoorCandidates) {
+        Point center;
+        for (const auto& p : pentagons) {
+          center += p->center;
+        }
+        center *= (1.0 / (float)pentagons.size());
+        static const float paddingRatio = 1.5;
+        ballExpected.width *= paddingRatio; // Half radisu padding
+        ballExpected.height *= paddingRatio; // Half radisu padding
+        ballExpected.x = center.x - ballExpected.width / 2.0 + offset.x;
+        ballExpected.y = center.y - ballExpected.height / 2.0 + offset.y;
+        poorCandidates.push_back(ballExpected);
+      }
+
+      continue;
       //! Ignore if the number of pentagons are too many or less than required
       if (pentagons.size() < minPentagonsRequired ||
           pentagons.size() >= maxPentagonsRequired)
       {
-        if (pentagons.size() >= minPentagonsPoorCandidates) {
-          auto center = (pentagons[0]->center + pentagons[1]->center) * 0.5;
-          auto radius = cv::norm(pentagons[0]->center - pentagons[1]->center) * 2;
-          ballExpected.x = center.x - radius + offset.x;
-          ballExpected.y = center.y - radius + offset.y;
-          ballExpected.width = radius * 2;
-          ballExpected.height = radius * 2;
-          poorCandidates.push_back(ballExpected);
-        }
         continue;
       }
 
@@ -772,6 +853,11 @@ void BallExtraction::findCandidatesWithBallFeatures(
         auto d1 = norm(t->points[0] - t->points[1]);
         auto d2 = norm(t->points[1] - t->points[2]);
         auto d3 = norm(t->points[2] - t->points[0]);
+
+        if (d1 > ballExpected.width || d2 > ballExpected.width || d3 > ballExpected.width) {
+          t.reset();
+          continue;
+        }
 
         //! Cosine law
         auto a1 = acos((d2*d2 + d3*d3 - d1*d1) / (2.f * d2 * d3));
@@ -812,23 +898,31 @@ void BallExtraction::findCandidatesWithBallFeatures(
           contours.push_back(t->pentagons[i]->contour);
           //! This draw command is a part of algorithm, do not comment
           //! Draw pentagons on binary image
-          drawContours(binary, contours, i, Scalar(255), -1);
+          drawContours(gray, contours, i, Scalar(255), -1);
         }
-        //! Smooth out the image
-        GaussianBlur(binary, binary, Size(gaussianSizeX, gaussianSizeY), gaussianSigmaX, gaussianSigmaY);
 
-        //VisionUtils::displayImage("binary", binary);
+        Mat white;
+        threshold(gray, white, 150, 255, 0);
+        //VisionUtils::displayImage("white", white);
+        //VisionUtils::displayImage("canny", canny);
+
+        //! Smooth out the image
+        GaussianBlur(white, white, Size(gaussianSizeX, gaussianSizeY), gaussianSigmaX, gaussianSigmaY);
+
+        //VisionUtils::displayImage("blur", canny);
+        //waitKey(0);
         vector<Vec3f> circles;
         auto expRadius = max(ballExpected.width, ballExpected.height);
         HoughCircles(
-          binary,
+          white,
           circles,
           CV_HOUGH_GRADIENT,
           2,
-          binary.rows / houghCirclesMinDistRatio,
+          white.rows / houghCirclesMinDistRatio,
           max(10, expRadius - minRadiusPixelTolerance),
           expRadius + maxRadiusPixelTolerance);
 
+        //cout << "circles.size() :  " << circles.size() << endl;
         //! If a circle is found, set it as expected ball bounding box
         if (!circles.empty()) {
           for (const auto& c : circles)
@@ -837,7 +931,7 @@ void BallExtraction::findCandidatesWithBallFeatures(
             int radius = cvRound(c[2]);
 
             if (GET_DVAR(int, drawBallCircles)) {
-              circle(bgrMat[toUType(activeCamera)], center, radius, Scalar(255, 0, 0));
+              circle(bgrMat[toUType(activeCamera)], center + offset, radius, Scalar(255, 0, 0));
             }
 
             if (cv::norm(centroid - center) < ballExpected.width / triangleToCircleMaxDistRatio) { // center to centroid minimum
@@ -1057,10 +1151,19 @@ void BallExtraction::drawResults()
 void BallExtraction::updateBallInfo()
 {
   auto tStart = high_resolution_clock::now();
+  boost::shared_ptr<BallTracker> ballTracker;
+  auto otherCam = activeCamera == CameraId::headTop ? CameraId::headBottom : CameraId::headTop;
+  if (ballTrackers[toUType(activeCamera)]->getBallFound()) {
+    ballTracker = ballTrackers[toUType(activeCamera)];
+  } else if (ballTrackers[toUType(otherCam)]->getBallFound()) {
+    ballTracker = ballTrackers[toUType(otherCam)];
+  } else {
+    ballTracker = ballTrackers[toUType(CameraId::headTop)];
+  }
   Mat ballState = ballTracker->getEstimatedState();
   BallInfo<float> ballInfo;
   ballInfo.found = ballTracker->getBallFound();
-  ballInfo.camera = static_cast<CameraId>(activeCamera);
+  ballInfo.camera = ballTracker->getCamIndex();
   ballInfo.posRel.x = ballState.at<float>(0);
   ballInfo.posRel.y = ballState.at<float>(1);
   ballInfo.velRel.x = ballState.at<float>(2);
@@ -1077,14 +1180,14 @@ void BallExtraction::updateBallInfo()
   ballInfo.bboxHeight = ballState.at<float>(11);
   ballInfo.ballAge = ballTracker->getTimeSinceLost();
   ballInfo.radius = ballRadius;
-  getBallFrameInNextCycle(ballInfo);
-  /*cout << "Ball Position: " << ballInfo.posRel << endl;
-  cout << "Ball posImage: " << ballInfo.posImage << endl;
-  cout << "Ball Camera: " << ballInfo.camera << endl;
-  cout << "Ball Camera Next frame: " << ballInfo.cameraNext << endl;
-  cout << "Ball Found: " << ballInfo.found << endl;
-  cout << "Ball W: " << ballInfo.width << endl;
-  cout << "Ball H: " << ballInfo.height << endl;*/
+  //getBallFrameInNextCycle(ballInfo);
+  //cout << "Ball Position: " << ballInfo.posRel << endl;
+  //cout << "Ball found: " << ballInfo.found << endl;
+  //cout << "Ball posImage: " << ballInfo.posImage << endl;
+  //cout << "Ball Camera: " << toUType(ballInfo.camera) << endl;
+  //cout << "Ball Found: " << ballInfo.found << endl;
+  //cout << "Ball W: " << ballInfo.bboxWidth << endl;
+  //cout << "Ball H: " << ballInfo.bboxHeight << endl;
   BALL_INFO_OUT(VisionModule) = ballInfo;
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   updateBallInfoTime = timeSpan.count();
@@ -1121,11 +1224,6 @@ unsigned BallExtraction::getBallFrameInNextCycle(BallInfo<float>& ballInfo)
     }
   }
   ballInfo.cameraNext = activeCamera;
-}
-
-bool BallExtraction::getBallFound()
-{
-  return ballTracker->getBallFound();
 }
 
 /*void BallExtraction::simpleDetect(const Rect& origRect, Mat croppedImage)

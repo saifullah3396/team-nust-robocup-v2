@@ -10,6 +10,7 @@
 #include "MotionModule/include/KickModule/MaxMomentumEEOpt.h"
 #include "MotionModule/include/KickModule/Types/JSOImpKick.h"
 #include "MotionModule/include/BalanceModule/BalanceDefinitions.h"
+#include "MotionModule/include/BalanceModule/KeyFrameBalanceTypes.h"
 #include "MotionModule/include/JointRequest.h"
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
 #include "MotionModule/include/KinematicsModule/LinkChain.h"
@@ -69,7 +70,7 @@ void JSOImpKick<Scalar>::setupKickBase()
       this->ballToTargetUnit =
         Matrix<Scalar, 3, 1>(cos(this->targetAngle), sin(this->targetAngle), 0.0);
       this->desImpactVel = reqVel.x * this->ballToTargetUnit;
-      this->desImpactVel[2] = 0.1;
+      this->desImpactVel[2] = 0.0;
       this->desImpactVelKnown = true;
     } else if (targetDistAngle[0] != -1.f) { // if target is defined use this
       targetDistAngle[1] *= M_PI / 180.0;
@@ -137,22 +138,23 @@ void JSOImpKick<Scalar>::setupKickBase()
     Matrix<Scalar, Dynamic, 1> postureTarget(toUType(Joints::count));
     if (this->supportLeg == LinkChains::lLeg) {
       postureTarget = Matrix<Scalar, Dynamic, 1>::Map(
-        &balanceDefs[0][0],
-        sizeof(balanceDefs[0]) / sizeof(balanceDefs[0][0]));
+        &lBalanceKeyFrames[2][1],
+        sizeof(lBalanceKeyFrames[0]) / sizeof(lBalanceKeyFrames[2][0])) * MathsUtils::DEG_TO_RAD;
     } else {
       postureTarget = Matrix<Scalar, Dynamic, 1>::Map(
-        &balanceDefs[1][0],
-        sizeof(balanceDefs[1]) / sizeof(balanceDefs[1][0]));
+        &rBalanceKeyFrames[2][1],
+        sizeof(rBalanceKeyFrames[1]) / sizeof(rBalanceKeyFrames[2][0])) * MathsUtils::DEG_TO_RAD;
     }
-    /*this->kM->setJointPositions(Joints::first, postureTarget, JointStateType::sim);
+    //cout << "postureTarget:" << postureTarget << endl;
+    //this->kM->setJointPositions(Joints::first, postureTarget, JointStateType::sim);
     ///< Set the transformation frames
-    this->setTransformFrames(JointStateType::sim);
+    //this->setTransformFrames(JointStateType::sim);
     ///< Solve the impact conditions
-    this->solveForImpact();
+    //this->solveForImpact();
     ///< Plan kicking trajectory
-    this->defineTrajectory();
+    //this->defineTrajectory();
     ///< Plot the kicking trajectory
-    this->plotKick();*/
+    //this->plotKick();
     if (this->config->logData) {
       Json::Value jsonSetup;
       JSON_ASSIGN(jsonSetup, "targetPosition", JsonUtils::matrixToJson(this->targetPosition));

@@ -5,8 +5,11 @@
   "type" : 0,
   "testType" : "FieldProjection",
   "startPose" : [0.0, 0.0, 0.0],
-  "loggingCam" : 1,
+  "loggingCam" : 2,
+  "colorIndex" : 5,
+  "useLoggedData" : false,
   "logData" : false
 }
+
 
 

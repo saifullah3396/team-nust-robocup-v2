@@ -7,14 +7,17 @@
  * @date 21 Jul 2018
  */
 
+#include <opencv2/highgui/highgui.hpp>
 #include "TNRSBase/include/DebugBase.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "PlanningModule/include/PlanningRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/VisionTestSuite.h"
 #include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
 #include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
 #include "Utils/include/ConfigMacros.h"
+#include "Utils/include/AngleDefinitions.h"
 #include "VisionModule/include/VisionRequest.h"
 
 VisionTestSuite::VisionTestSuite(
@@ -46,6 +49,14 @@ bool VisionTestSuite::initiate()
     boost::make_shared<InitiateLocalizer>(
       getBehaviorCast()->startPose)
   );
+
+  #ifdef MODULE_IS_REMOTE
+  if (getBehaviorCast()->useLoggedData) {
+    auto uliRequest =
+      boost::make_shared<SwitchUseLoggedImages>(true);
+    BaseModule::publishModuleRequest(uliRequest);
+  }
+  #endif
   return true;
 }
 
@@ -57,6 +68,8 @@ void VisionTestSuite::update()
     auto& testType = getBehaviorCast()->testType;
     if (testType == "LogImages") {
       logImages();
+    } else if (testType == "LogImagesWhileMoving") {
+      logImagesWhileMoving();
     } else if (testType == "Segmentation") {
       testSegmentation();
     } else if (testType == "FieldExtraction") {
@@ -71,6 +84,8 @@ void VisionTestSuite::update()
       testLinesExtraction();
     } else if (testType == "FieldProjection") {
       testFieldProjection();
+    } else if (testType == "ColorClassification") {
+      testColorClassification();
     } else if (testType == "All") {
       testAll();
     } else {
@@ -103,9 +118,96 @@ void VisionTestSuite::logImages()
   Json::Value value;
   value["VisionModule"]["debugImageIndex"] = getBehaviorCast()->loggingCam;
   DebugBase::processDebugMsg(value);
-  auto sliRequest =
-    boost::make_shared<SwitchLogImages>(true, static_cast<CameraId>(getBehaviorCast()->loggingCam));
-  BaseModule::publishModuleRequest(sliRequest);
+  if (getBehaviorCast()->loggingCam >= 2) {
+    auto sliRequest1 =
+      boost::make_shared<SwitchLogImages>(true, CameraId::headTop);
+    auto sliRequest2 =
+      boost::make_shared<SwitchLogImages>(true, CameraId::headBottom);
+    BaseModule::publishModuleRequest(sliRequest1);
+    BaseModule::publishModuleRequest(sliRequest2);
+  } else {
+    auto sliRequest =
+      boost::make_shared<SwitchLogImages>(true, static_cast<CameraId>(getBehaviorCast()->loggingCam));
+    BaseModule::publishModuleRequest(sliRequest);
+  }
+}
+
+void VisionTestSuite::logImagesWhileMoving()
+{
+  ///< Switch on field extraction modules
+  static bool loaded = false;
+  static vector<RobotPose2D<float>> targets;
+  static auto targetNum = 0;
+  if (!loaded) {
+    BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(false));
+      Json::Value value;
+    value["VisionModule"]["debugImageIndex"] = getBehaviorCast()->loggingCam;
+    value["VisionModule"]["logCameraTransform"] = 1;
+    DebugBase::processDebugMsg(value);
+    if (getBehaviorCast()->loggingCam >= 2) {
+      auto sliRequest1 =
+        boost::make_shared<SwitchLogImages>(true, CameraId::headTop);
+      auto sliRequest2 =
+        boost::make_shared<SwitchLogImages>(true, CameraId::headBottom);
+      BaseModule::publishModuleRequest(sliRequest1);
+      BaseModule::publishModuleRequest(sliRequest2);
+    } else {
+      auto sliRequest =
+        boost::make_shared<SwitchLogImages>(true, static_cast<CameraId>(getBehaviorCast()->loggingCam));
+      BaseModule::publishModuleRequest(sliRequest);
+    }
+    targets.push_back(RobotPose2D<float>(0.0, 0.0, Angle::DEG_90));
+    targets.push_back(RobotPose2D<float>(2.0, 0.0, 0.0));
+    targets.push_back(RobotPose2D<float>(0.0, 0.0, -Angle::DEG_90));
+    targets.push_back(RobotPose2D<float>(3.5, 0.0, 0.0));
+    targets.push_back(RobotPose2D<float>(0.0, 0.0, -Angle::DEG_90));
+    targets.push_back(RobotPose2D<float>(3.0, 0.0, 0.0));
+    targets.push_back(RobotPose2D<float>(0.0, 0.0, Angle::DEG_90));
+    loaded = true;
+  }
+
+  static bool moving = false;
+  static bool moveSet = false;
+  static float wait = 0.f;
+  cout << "wait..." << wait << endl;
+  if (!moving) {
+    if (!mbInProgress()) {
+      auto mConfig =
+        boost::make_shared <HeadScanConfig> ();
+      mConfig->scanMaxYaw = 90 * M_PI / 180;
+      setupMBRequest(0, mConfig);
+    }
+  }
+  /*
+    if (wait < 6.0) {
+      wait += this->cycleTime;
+    } else {
+      wait = 0.f;
+      this->killAllMotionBehaviors();
+      if (targetNum > targets.size())
+        finish();
+      moving = true;
+    }
+  } else {
+    if (moveSet) {
+      if (!mbInProgress()) {
+        moveSet = false;
+        moving = false;
+      }
+    }
+
+    if (!moveSet) {
+      if (!mbInProgress()) {
+        auto moveConfig =
+          boost::make_shared<NaoqiMoveToConfig>();
+        moveConfig->goal = targets[targetNum];
+        setupMBRequest(0, moveConfig);
+        targetNum++;
+        cout << "setting move" << endl;
+          moveSet = true;
+      }
+    }
+  }*/
 }
 
 void VisionTestSuite::testSegmentation()
@@ -152,8 +254,8 @@ void VisionTestSuite::testFieldExtraction()
     setupMBRequest(0, mConfig);
   }*/
   Json::Value value;
-  value["RegionSegmentation"]["drawPoints"] = 1;
-  value["FieldExtraction"]["drawFiltPoints"] = 1;
+  //value["RegionSegmentation"]["drawPoints"] = 1;
+  //value["FieldExtraction"]["drawFiltPoints"] = 1;
   value["FieldExtraction"]["drawBorder"] = 1;
   value["FieldExtraction"]["drawBorderLines"] = 1;
   #ifdef MODULE_IS_REMOTE
@@ -227,6 +329,7 @@ void VisionTestSuite::testBallExtraction()
   value["BallExtraction"]["drawClassifiedTriangles"] = 1;
   value["BallExtraction"]["drawScannedRegions"] = 1;
   value["BallExtraction"]["drawBallContour"] = 1;
+  value["BallExtraction"]["drawBallCircles"] = 1;
   value["BallExtraction"]["drawPredictionROI"] = 1;
   #ifdef MODULE_IS_REMOTE
   value["BallExtraction"]["displayOutput"] = 1;
@@ -312,7 +415,26 @@ void VisionTestSuite::testFieldProjection()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::field));
+  if (!mbInProgress()) {
+    auto mConfig =
+      boost::make_shared <HeadScanConfig> ();
+    mConfig->scanMaxYaw = 90 * M_PI / 180;
+    mConfig->totalWaitTime = 3.0;
+    setupMBRequest(0, mConfig);
+  }
   BaseModule::publishModuleRequest(boost::make_shared<SwitchFieldProjection>(true));
+}
+
+void VisionTestSuite::testColorClassification()
+{
+  if (getBehaviorCast()->colorIndex >= 0) {
+    Json::Value value;
+    value["VisionModule"]["sendBinaryImage"] = getBehaviorCast()->colorIndex;
+    value["VisionModule"]["debugImageIndex"] = 0;
+    DebugBase::processDebugMsg(value);
+  } else {
+    LOG_ERROR("Invalid color index: " << getBehaviorCast()->colorIndex);
+  }
 }
 
 void VisionTestSuite::testAll()

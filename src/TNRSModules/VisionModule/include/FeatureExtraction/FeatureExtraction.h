@@ -23,6 +23,9 @@
 using namespace std::chrono;
 using namespace cv;
 
+#define GET_FEATURE_EXT_CLASS_(name, index) \
+  boost::static_pointer_cast<name>(this->getFeatureExtClass(index))
+
 #define GET_FEATURE_EXT_CLASS(name, index) \
   boost::static_pointer_cast<name>(visionModule->getFeatureExtClass(index));
 
@@ -124,6 +127,7 @@ public:
 
   ///< Getters
   const string& getName() const { return name; }
+  const float& getProcessTime() const { return processTime; }
   const bool& isEnabled() const { return enabled; }
   const CameraId& getActiveCamera() const { return activeCamera; }
   static const uint8_t* getYuv422Image(const unsigned& index) { return image[index]; }
@@ -281,7 +285,7 @@ protected:
   CameraId activeCamera;
 
   ///< Whether this module is enabled
-  bool enabled = {false};
+  bool enabled = {true};
 
   ///< Feature extraction iteration start time
   clock_t iterationStartTime;
@@ -294,6 +298,9 @@ protected:
 
   ///< Class name
   string name;
+
+  ///< Time taken by the module
+  float processTime = {0.f};
 private:
   ///< Pointer to camera module class.
   static CameraModulePtr camModule;

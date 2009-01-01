@@ -21,6 +21,11 @@
 #include "VisionModule/include/CameraModule.h"
 #include "VisionModule/include/VisionModule.h"
 
+string CameraModule::logDateTime;
+#ifdef MODULE_IS_REMOTE
+directory_entry CameraModule::currentImagePath;
+#endif
+
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
 CameraModule::CameraModule(VisionModule* visionModule) :
   camProxy(visionModule->getCamProxy())
@@ -242,15 +247,16 @@ bool CameraModule::setupCameras()
         //VisionUtils::bgrToYuv422(cams[toUType(index)]->image, img, img.cols, img.rows);
         memcpy (cams[toUType(index)]->image, (uint8_t*) img[6].GetBinary(), img[6].getSize());
         if(saveImages) {
+          logDateTime = DataUtils::getCurrentDateTime();
           string imageStr;
           if (index == CameraId::headTop) {
             imageStr = ConfigManager::getLogsDirPath() +
-            "Images/Top/" + DataUtils::getCurrentDateTime() + ".jpg";
+            "Images/Top/" + logDateTime + ".jpg";
           } else {
             imageStr = ConfigManager::getLogsDirPath() +
-            "Images/Bottom/" + DataUtils::getCurrentDateTime() + ".jpg";
+            "Images/Bottom/" + logDateTime + ".jpg";
           }
-          cout << imageStr << endl;
+          //cout << imageStr << endl;
           cv::Mat yuv = cv::Mat(Size(img[0], img[1]), CV_8UC2);
           yuv.data = cams[toUType(index)]->image;
           cv::Mat bgr;
@@ -268,33 +274,51 @@ bool CameraModule::setupCameras()
           camProxy.call<void>("releaseImage", cameraClient);
         #endif
       } else {
-        string name;
-        string imageStr;
-        if (index == CameraId::headTop) {
-          GET_CONFIG(
-            "VisionConfig",
-            (string, InputImage.testImageTop, name),
-          )
-          imageStr = ConfigManager::getLogsDirPath() +
-          "Images/Top/" + name;
-        } else {
-          GET_CONFIG(
-            "VisionConfig",
-            (string, InputImage.testImageBot, name),
-          )
-          imageStr = ConfigManager::getLogsDirPath() +
-          "Images/Bottom/" + name;
+        using namespace boost::filesystem;
+        static auto filesLoaded = false;
+        if (!filesLoaded) {
+          static auto topDir = ConfigManager::getLogsDirPath() + "Images/Top/";
+          if(is_directory(topDir)) {
+            copy(directory_iterator(topDir), directory_iterator(), back_inserter(topImageFiles));
+          }
+
+          static auto bottomDir = ConfigManager::getLogsDirPath() + "Images/Bottom/";
+          if(is_directory(bottomDir)) {
+            copy(directory_iterator(bottomDir), directory_iterator(), back_inserter(bottomImageFiles));
+          }
+          filesLoaded = true;
+          std::sort(
+            topImageFiles.begin(),
+            topImageFiles.end(),
+            [](const directory_entry& d1, const directory_entry& d2)
+            { return d1.path().stem() < d2.path().stem().string(); }
+          );
+          std::sort(
+            bottomImageFiles.begin(),
+            bottomImageFiles.end(),
+            [](const directory_entry& d1, const directory_entry& d2)
+            { return d1.path().stem() < d2.path().stem().string(); }
+          );
+          topIter = topImageFiles.begin();
+          bottomIter = bottomImageFiles.begin();
         }
-        cout << "reading image" << imageStr << endl;
-        cv::Mat img = imread(imageStr);
-        //Mat yuv;
-        //cvtColor(img, yuv, COLOR_RGB2YUV);
-        //VisionUtils::displayImage(yuv, "InputYuv1");
-        //cout << yuv.at<Vec3b>(0, 0) << endl;
-        //cout << yuv.at<Vec3b>(1, 0) << endl;
-        //cout << yuv.at<Vec3b>(2, 0) << endl;
+
+        if (index == CameraId::headTop) {
+          currentImagePath = (*topIter);
+        } else {
+          currentImagePath = (*bottomIter);
+        }
+
+        cv::Mat img = imread(currentImagePath.path().string());
         bgrToYuv422(cams[toUType(index)]->image, img, img.cols, img.rows);
-        //VisionUtils::displayImage(cams[toUType(index)]->image, "cams[toUType(index)]->image");
+
+        if (index == CameraId::headTop) {
+          if (topIter != topImageFiles.end())
+            topIter++;
+        } else {
+          if (bottomIter != bottomImageFiles.end())
+            bottomIter++;
+        }
       }
     } catch (const exception& e) {
       LOG_EXCEPTION(e.what())

@@ -22,4 +22,5 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
     OPENCV2_VIDEO
     OPENCV2_FEATURES2D
   )
+  target_link_libraries(tnrs-camera-calibrator -ljsoncpp)
 endif()

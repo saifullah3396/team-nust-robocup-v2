@@ -4,7 +4,7 @@
  * This file declares the landmark positions on the field.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 22 Aug 2017  
+ * @date 22 Aug 2017
  */
 
 #pragma once

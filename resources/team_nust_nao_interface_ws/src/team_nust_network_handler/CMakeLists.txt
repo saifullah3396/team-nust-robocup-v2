@@ -71,7 +71,11 @@ target_link_libraries(team_nust_network_handler_node
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
 )
-
+qi_use_lib(team_nust_network_handler_node
+    OPENCV2_CORE
+    OPENCV2_HIGHGUI
+    OPENCV2_IMGPROC
+)
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )

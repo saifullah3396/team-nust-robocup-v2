@@ -117,7 +117,7 @@ BallTracker::updateFilter(vector<Rect> ballRect)
       meas.at<float>(5) = ballRect[0].height;
       //cout << "meas: " << meas << endl;
       //cout << "measurement exists" << endl;
-      if (reinitialize) { ///< First detection!
+      if (lost) { ///< First detection!
         //cout << "lost" << endl;
         ///< >>>> Initialization
         setIdentity(kFilter.errorCovPre);

@@ -137,10 +137,10 @@ void GBModule::initMemoryConn()
 
 void GBModule::init()
 {
-  LOG_INFO("Initializing static behaviors manager...")
+  LOG_INFO("Initializing GBManager...")
   gbManager = boost::make_shared<GBManager>(this);
   ///< Make new layers for sensors directly related with gbmodule
-  LOG_INFO("Initializing static behavior module sensor layers...")
+  LOG_INFO("Initializing GBModule sensor layers...")
   #ifndef V6_CROSS_BUILD
     sensorLayers.resize(toUType(GBSensors::count));
     sensorLayers[toUType(GBSensors::jointStiffnesses)] =
@@ -154,9 +154,9 @@ void GBModule::init()
     ///< Update the sensors
     sensorsUpdate();
 
-    #ifndef MODULE_IS_REMOTE
-      ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::sensorsUpdate, this));
-    #endif
+    //#ifndef MODULE_IS_REMOTE
+    //  ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::sensorsUpdate, this));
+    //#endif
   #else
     #ifndef REALTIME_LOLA_AVAILABLE
       sensorLayers.resize(toUType(GBSensors::count));
@@ -173,7 +173,7 @@ void GBModule::init()
     #endif
   #endif
 
-  LOG_INFO("Initializing static behavior module actuator layers...")
+  LOG_INFO("Initializing GBModule actuator layers...")
   ///< Make new layers for actuators directly related with gbmodule
   #ifndef V6_CROSS_BUILD
     //! No need for realtime actuator if naoqi motion proxy is present
@@ -183,13 +183,12 @@ void GBModule::init()
           ActuatorLayer::makeActuatorLayer(
             toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness),
             dcmProxy);
-      #ifndef MODULE_IS_REMOTE
-        ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::actuatorsUpdate, this));
-      #endif
+      actuatorLayers[toUType(GBActuators::led)] =
+        ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators), dcmProxy);
+      //#ifndef MODULE_IS_REMOTE
+////        ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::actuatorsUpdate, this));
+//      #endif
     #endif
-
-    actuatorLayers[toUType(GBActuators::led)] =
-      ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators), dcmProxy);
   #else
     #ifndef REALTIME_LOLA_AVAILABLE // No need for actuator layers in either case for V6
     #endif
@@ -244,10 +243,10 @@ void GBModule::mainRoutine()
 {
   // Update led sensors in mainRoutine()...
   #ifndef V6_CROSS_BUILD
-    sensorLayers[toUType(GBSensors::led)]->update();
-    #ifdef MODULE_IS_REMOTE
-      sensorsUpdate();
-    #endif
+    //sensorLayers[toUType(GBSensors::led)]->update();
+    //#ifdef MODULE_IS_REMOTE
+    sensorsUpdate();
+    //#endif
   #else
   #ifndef REALTIME_LOLA_AVAILABLE
     sensorLayers[toUType(GBSensors::led)]->update();
@@ -257,9 +256,9 @@ void GBModule::mainRoutine()
   gbManager->update();
   GB_INFO_OUT(GBModule) = gbManager->getBehaviorInfo();
   #ifndef V6_CROSS_BUILD
-    #ifdef MODULE_IS_REMOTE
-      actuatorsUpdate();
-    #endif
+    //#ifdef MODULE_IS_REMOTE
+    actuatorsUpdate();
+    //#endif
   #else //! No actuators
   #endif
 }
@@ -267,17 +266,15 @@ void GBModule::mainRoutine()
 #ifndef V6_CROSS_BUILD
 void GBModule::sensorsUpdate()
 {
-  for (size_t i = 0; i < sensorLayers.size(); ++i) {
-    // LEDSensors are updated in mainRoutine() because of their large number
-    if (i != toUType(GBSensors::led))
-      sensorLayers[i]->update();
+  for (const auto& sl : sensorLayers) {
+    if (sl) sl->update();
   }
 }
 
 void GBModule::actuatorsUpdate()
 {
-  for (size_t i = 0; i < actuatorLayers.size(); ++i) {
-    actuatorLayers[i]->update();
+  for (const auto& al : actuatorLayers) {
+    if (al) al->update();
   }
 }
 #else

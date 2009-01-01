@@ -313,7 +313,7 @@ int main(int argc, char* argv[])
         imageSize = view.size();  // Format input image.
         Mat inputImage;
         if (imageSize.width < 480) {
-          inputImage = Mat(Size(imageSize.width * 4, imageSize.height * 4), view.type());
+          inputImage = Mat(Size(imageSize.width * 2, imageSize.height * 2), view.type());
           resize(view, inputImage, inputImage.size(), 0, 0, CV_INTER_AREA);
           Mat dst;
           cv::GaussianBlur(inputImage, dst, cv::Size(0, 0), 3);
@@ -351,8 +351,8 @@ int main(int argc, char* argv[])
                   Size thres = Size(11,11);
                    if (resized) {
                     for (int i = 0; i < pointBuf.size(); ++i) {
-                      pointBuf[i].x = pointBuf[i].x / 4;
-                      pointBuf[i].y = pointBuf[i].y / 4;
+                      pointBuf[i].x = pointBuf[i].x / 2;
+                      pointBuf[i].y = pointBuf[i].y / 2;
                     }
                     thres= Size(3,3);
                   }
@@ -543,16 +543,16 @@ static void saveCameraParams( Settings& s, Size& imageSize, Mat& cameraMatrix, M
         cameraName = "visionBottom";
       config.close();
 
-      json[cameraName]["intrinsic"]["focalX"] = cameraMatrix.at<float>(0, 0);
-      json[cameraName]["intrinsic"]["focalY"] = cameraMatrix.at<float>(1, 1);
-      json[cameraName]["intrinsic"]["centerOffX"] = cameraMatrix.at<float>(0, 2);
-      json[cameraName]["intrinsic"]["centerOffY"] = cameraMatrix.at<float>(1, 2);
+      json[cameraName]["intrinsic"]["focalX"] = cameraMatrix.at<double>(0, 0);
+      json[cameraName]["intrinsic"]["focalY"] = cameraMatrix.at<double>(1, 1);
+      json[cameraName]["intrinsic"]["centerOffX"] = cameraMatrix.at<double>(0, 2);
+      json[cameraName]["intrinsic"]["centerOffY"] = cameraMatrix.at<double>(1, 2);
 
-      json[cameraName]["distortion"]["a"] = distCoeffs.at<float>(0, 0);
-      json[cameraName]["distortion"]["b"] = distCoeffs.at<float>(1, 0);
-      json[cameraName]["distortion"]["c"] = distCoeffs.at<float>(2, 0);
-      json[cameraName]["distortion"]["d"] = distCoeffs.at<float>(3, 0);
-      json[cameraName]["distortion"]["e"] = distCoeffs.at<float>(4, 0);
+      json[cameraName]["distortion"]["a"] = distCoeffs.at<double>(0, 0);
+      json[cameraName]["distortion"]["b"] = distCoeffs.at<double>(1, 0);
+      json[cameraName]["distortion"]["c"] = distCoeffs.at<double>(2, 0);
+      json[cameraName]["distortion"]["d"] = distCoeffs.at<double>(3, 0);
+      json[cameraName]["distortion"]["e"] = distCoeffs.at<double>(4, 0);
 
       std::ofstream out;
       out.open(jsonFile);

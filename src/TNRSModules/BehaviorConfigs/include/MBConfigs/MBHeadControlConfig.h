@@ -44,6 +44,9 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (float, totalWaitTime, 1.0),
   (float, scanMaxYaw, Angle::DEG_100),
   (float, scanMaxPitch, Angle::DEG_16),
+  (int, scanYawDivs, 2),
+  (int, scanPitchDivs, 1),
+  (bool, resetOnKill, true),
 );
 
 /**

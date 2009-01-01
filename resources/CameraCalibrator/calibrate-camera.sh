@@ -53,14 +53,14 @@ while [ "$1" != "" ]; do
     shift
 done
 
-if [ "$ROBOT" != "Nu-11" ] && 
-   [ "$ROBOT" != "Nu-12" ] && 
-   [ "$ROBOT" != "Nu-13" ] && 
-   [ "$ROBOT" != "Nu-14" ] && 
-   [ "$ROBOT" != "Nu-15" ]; then
-   [ "$ROBOT" != "Nu-16" ]; then
-   [ "$ROBOT" != "Nu-17" ]; then
-   [ "$ROBOT" != "Nu-18" ]; then
+if [ "$ROBOT" != "Nu-1" ] && 
+   [ "$ROBOT" != "Nu-2" ] && 
+   [ "$ROBOT" != "Nu-3" ] && 
+   [ "$ROBOT" != "Nu-4" ] && 
+   [ "$ROBOT" != "Nu-5" ] &&
+   [ "$ROBOT" != "Nu-6" ] &&
+   [ "$ROBOT" != "Nu-7" ] &&
+   [ "$ROBOT" != "Nu-8" ]; then
     echo "Invalid robot name: $ROBOT . Options are: ( $ROBOTS )."
     exit 1;
 fi
@@ -70,24 +70,24 @@ if [ "$TOOLCHAIN" = "" ]; then
   exit 1
 fi
 
-cd $PATH_TO_TEAM_NUST_DIR/Config/Robots/$ROBOT/ImageLogs/$CAM
+cd $PATH_TO_TEAM_NUST_DIR/logs/Robots/$ROBOT/Images/$CAM
 
 ROBOT_NUM=""
-if [ "$ROBOT" = "Nu-11" ]; then
+if [ "$ROBOT" = "Nu-1" ]; then
   ROBOT_NUM=1
-elif [ "$ROBOT" = "Nu-12" ]; then
+elif [ "$ROBOT" = "Nu-2" ]; then
   ROBOT_NUM=2
-elif [ "$ROBOT" = "Nu-13" ]; then
+elif [ "$ROBOT" = "Nu-3" ]; then
   ROBOT_NUM=3
-elif [ "$ROBOT" = "Nu-14" ]; then
+elif [ "$ROBOT" = "Nu-4" ]; then
   ROBOT_NUM=4
-elif [ "$ROBOT" = "Nu-15" ]; then
+elif [ "$ROBOT" = "Nu-5" ]; then
   ROBOT_NUM=5
-elif [ "$ROBOT" = "Nu-16" ]; then
+elif [ "$ROBOT" = "Nu-6" ]; then
   ROBOT_NUM=6
-elif [ "$ROBOT" = "Nu-17" ]; then
+elif [ "$ROBOT" = "Nu-7" ]; then
   ROBOT_NUM=7
-elif [ "$ROBOT" = "Nu-18" ]; then
+elif [ "$ROBOT" = "Nu-8" ]; then
   ROBOT_NUM=8
 fi
 
@@ -106,8 +106,8 @@ fi
 if [ "$(ls -A . | grep .jpg)" ]; then
   ls -d "$PWD"/*.jpg > ../../"$CAM"Images.txt 
 else
-  echo "No image data found. Please save '.jpg' image files in  the directory $PATH_TO_TEAM_NUST_DIR/logs/Robots/$ROBOT/ImageLogs/$CAM to continue."
+  echo "No image data found. Please save '.jpg' image files in  the directory $PATH_TO_TEAM_NUST_DIR/logs/Robots/$ROBOT/Images/$CAM to continue."
   exit 1
 fi
 
-$PATH_TO_TEAM_NUST_DIR/build-$ROBOT_VERSION/Release-Motion/$TOOLCHAIN/bin/camera-calibrator --robot $ROBOT --camera $CAM
+$PATH_TO_TEAM_NUST_DIR/build-$ROBOT_VERSION/Release-Motion/$TOOLCHAIN/bin/tnrs-camera-calibrator --robot $ROBOT --camera $CAM

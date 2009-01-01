@@ -54,6 +54,8 @@ class ParticleFilter : public MemoryBase, DebugBase
     (int, displayLandmarksMap, 0),
     ///< Option to display voronoi map made from landmark positions
     (int, displayVoronoiMap, 0),
+    ///< Option to display info
+    (int, displayInfo, 0),
   );
 public:
   /**
@@ -300,12 +302,6 @@ private:
   ///< Vector of the actual field landmarks, labelled according to their
   ///< position using voronoi map of the environment
   vector<vector<LandmarkPtr> > labelledLandmarks;
-
-  ///< Number of landmarks in each type
-  vector<unsigned> landmarkTypeCount;
-
-  ///< Starting index of each type of landmark
-  vector<unsigned> landmarkTypeStarts;
 
   ///< Random  library object
   Random random;

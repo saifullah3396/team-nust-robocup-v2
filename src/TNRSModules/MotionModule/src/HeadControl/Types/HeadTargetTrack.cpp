@@ -37,10 +37,12 @@ bool HeadTargetTrack<Scalar>::initiate()
     this->trackersXY[i]->setPidGains(HeadTargetTrack::pidGains[i]);
   }
   if (this->getBehaviorCast()->scanConfig) {
+    this->getBehaviorCast()->scanConfig->resetOnKill = false;
     this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
   } else {
     this->getBehaviorCast()->scanConfig =
       boost::shared_ptr<HeadScanConfig>(new HeadScanConfig());
+    this->getBehaviorCast()->scanConfig->resetOnKill = false;
     this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
   }
   return true;
@@ -57,6 +59,7 @@ void HeadTargetTrack<Scalar>::update()
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   Matrix<Scalar, 4, 1> posWorld;
   bool trackable;
+  static bool tracking = false;
   if (this->findTarget(getBehaviorCast()->headTargetType, posWorld, trackable)) {
     if (!trackable) {
       finish();
@@ -70,7 +73,17 @@ void HeadTargetTrack<Scalar>::update()
       // finish();
       // keep tracking until killed
     }
-    this->killChild();
+    if (this->getChild())
+      this->killChild();
+    tracking = true;
+  } else if (tracking) {
+    static float timeSinceLost = 0.f;
+    if (timeSinceLost > 1.f) {
+      tracking = false;
+      timeSinceLost = 0.f;
+    } else {
+      timeSinceLost += this->cycleTime;
+    }
   } else {
     this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
   }

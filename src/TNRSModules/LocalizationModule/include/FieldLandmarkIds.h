@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <vector>
+
 /**
  * Enumeration for the field landmarks.
  *
@@ -63,4 +65,24 @@ enum FieldLandmarkTypes
   FL_TYPE_CIRCLE,
   FL_TYPE_PENALTY_MARK,
   NUM_LANDMARK_TYPES
+};
+
+///< Number of landmarks in each type
+static const std::vector<unsigned> landmarkTypeCount {
+  FL_GOAL_POSTS,
+  0,
+  FL_T_CORNERS,
+  FL_L_CORNERS,
+  FL_CIRCLES,
+  FL_PENALTY_MARKS
+};
+
+///< Starting index of each type of landmark
+static const std::vector<unsigned> landmarkTypeStarts {
+  FL_LT_GOALPOST,
+  0,
+  FL_GOAL_POSTS,
+  FL_GOAL_POSTS + FL_T_CORNERS,
+  FL_GOAL_POSTS + FL_T_CORNERS + FL_L_CORNERS,
+  FL_GOAL_POSTS + FL_T_CORNERS + FL_L_CORNERS + FL_CIRCLES
 };

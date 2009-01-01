@@ -1,21 +1,88 @@
 {
     "ballType" : 1,
+    "VisionModule" : {
+        "debug" : {
+            "debug" : 1,
+            "debugImageIndex" : 0,
+            "logCameraTransform" : 0,
+            "sendBinaryImage" : -1,
+            "sendKnownLandmarks" : 0,
+            "sendUnknownLandmarks" : 0,
+            "displayInfo" : 0
+        }
+    },
     "RegionSegmentation" : {
         "debug" : {
             "sendTime" : 0,
             "drawVerticalLines" : 0,
             "drawHorizontalLines" : 0,
-            "drawPoints" : 0,
+            "drawPos" : 0,
             "displayInfo" : 0,
             "displayOutput" : 0
         },
         "params" : {
-		    "hScanStepHigh" : [8, 4],
-		    "vScanStepHigh" : [8, 4],
-		    "hScanStepSizes" : [[8, 4, 4, 8, 8, 4, 8], [2, 2, 2, 2, 2, 2, 2]],
-		    "vScanStepSizes" : [[8, 4, 4, 8, 8, 4, 8], [2, 2, 2, 2, 2, 2, 2]]
-		}
-	},
+            "hScanStepHigh" : [8, 4],
+            "vScanStepHigh" : [8, 4],
+            "hScanStepSizes" : [[8, 4, 4, 8, 8, 4, 8], [2, 2, 2, 2, 2, 2, 2]],
+            "vScanStepSizes" : [[8, 4, 4, 8, 8, 4, 8], [2, 2, 2, 2, 2, 2, 2]]
+        }
+    },
+    "FieldExtraction" : {
+        "debug" : {
+            "sendTime" : 0,
+            "drawFiltPos" : 0,
+            "drawBorder" : 0,
+            "drawBorderLines" : 0,
+            "displayInfo" : 0,
+            "displayOutput" : 0
+        },
+        "params" : {
+            "maxRANSACIterations" : 20,
+            "minRANSACPos" : 5,
+            "minMatchedRANSACPos" : 5,
+            "minRANSACLineLength" : 16,
+            "minRANSACPoDist" : 4,
+            "borderPosImageHeightTol" : 10
+        }
+    },
+    "RobotExtraction" : {
+        "debug" : {
+            "sendTime" : 0,
+            "drawScannedLines" : 0,
+            "drawJerseyRegions" : 0,
+            "drawRobotRegions" : 0,
+            "drawLowerBodyRegions" : 0,
+            "displayInfo" : 0,
+            "displayOutput" : 0
+        },
+        "params" : {
+            "refreshTime" : 1.0,
+            "maxRobotTrackers" : 5,
+            "maxRobotWorldWidth" : 0.50,
+            "fallenRobotWidth" : 0.75,
+            "robotMatchMaxDistance" : 0.35,
+            "jerseyApproxHeight" : 0.325,
+            "maxJerseyWidthRatio" : 2.5,
+            "jerseyBelowBorderMin" : 5,
+            "jerseyAboveBorderRelCutoff" : 50,
+            "lineLinkHorXTolRatio" : 1.5,
+            "lineLinkHorYTolRatio" : 1.5,
+            "lineLinkVerXTolRatio" : 1.5,
+            "lineLinkVerYTolRatio" : 1.5,
+            "maxLineLengthDiffRatio" : 2.5,
+            "regionsXDiffTol" : 50,
+            "regionsYDiffTol" : 50,
+            "maxRegionSizeDiffRatio" : 3.0,
+            "lowerBodyRegionsXDiffTol" :16,
+            "lowerBodyRegionsYDiffTol" :16,
+            "lowerBodyMaxRegionSizeDiffRatio" :2.5,
+            "lowerBodyLineLinkHorXTolRatio" : 1.5,
+            "lowerBodyLineLinkHorYTolRatio" : 1.5,
+            "lowerBodyLineLinkVerXTolRatio" : 1.5,
+            "lowerBodyLineLinkVerYTolRatio" : 1.5,
+            "lowerBodyMaxLineLengthDiffRatio" : 2.5
+        }
+    },
     "BallExtraction" : {
         "debug" : {
             "sendTime" : 0,
@@ -49,21 +116,21 @@
             "robotMaxOverlapBottom" : 0.95,
             "minOverlapAreaThreshold" : 100,
             "maxBallRegionSizeRatio" : 0.5,
-            "ballRegionPaddingRatio" : 1.25,
-            "adaptiveThresholdWindowSizeRatio" : 2.0,
+            "ballRegionPaddingRatio" : 2.0,
+            "adaptiveThresholdWindowSizeRatio" : 1.0,
             "adaptiveThresholdSubConstantRatio" : 2.0,
             "maxBallBlobSizeRatio" : 0.8,
-            "minBallBlobSizeRatio" : 0.2,
-            "ballBlobMaxAspectRatio" : 3,
+            "minBallBlobSizeRatio" : 0.1,
+            "ballBlobMaxAspectRatio" : 2.0,
             "maxBallBlobIntensity" : 150,
             "minPentagonsRequired" : 3,
-            "maxPentagonsRequired" : 6,
+            "maxPentagonsRequired" : 7,
             "minPentagonsPoorCandidates" : 2,
-            "maxBlobToBlobSizeDiffRatio" : 0.5,
+            "maxBlobTobBlobSizeDiffRatio" : 0.5,
             "gaussianSizeX" : 3,
             "gaussianSizeY" : 3,
-            "gaussianSigmaX" : 2,
-            "gaussianSigmaY" : 2,
+            "gaussianSigmaX" : 1,
+            "gaussianSigmaY" : 1,
             "houghCirclesMethod" : 3,
             "houghCirclesMinDistRatio" : 2,
             "minRadiusPixelTolerance" : 25,
@@ -71,7 +138,82 @@
             "triangleToCircleMaxDistRatio" : 2.0,
             "cascadePaddingRatio" : 1.25,
             "CNNClassificationTolerance" : 0.25,
-            "predictedAreaRoiRatio" : 3
+            "predictedAreaRoiRatio" : 3,
+            "maxBallRangeWorld" : 5.0,
+            "minBlackRange" : 100,
+            "minBlackCount" : 10
+        }
+    },
+    "GoalExtraction" : {
+        "debug" : {
+            "sendTime" : 0,
+            "drawScannedLines" : 0,
+            "drawScannedRegions" : 0,
+            "drawGoalBaseWindows" : 0,
+            "drawShiftedBorderLines" : 0,
+            "drawShiftedBorderLines" : 0,
+            "displayInfo" : 0,
+            "displayOutput" : 0
+        },
+        "params" : {
+            "lineLinkHighStepRatio" : 2.5,
+            "lineLinkLowToHighStepRatio" : 0.5,
+            "maxLineLengthDiffRatio" : 1.25,
+            "goalBaseToBorderDistance" : 0.2,
+            "goalPostMinWidth" : 5,
+            "goalPostMinArea" : 50,
+            "maxHeightToWidthRatio" : 0.25,
+            "minGoalPostWidthWorld" : 0.05,
+            "maxGoalPostWidthWorld" : 0.3,
+            "goalPostWindowHeight" : 20,
+            "minWindowGreenRatio" : 0.35,
+            "minGoalPostImageDist" : 75,
+            "minGoalToGoalDist" : 1.35,
+            "maxGoalToGoalDist" : 1.85,
+            "actualGoalToGoalDist" : 1.6,
+            "maxGoalKeeperParallelDist" : 0.8,
+            "maxGoalKeeperPerpDist" : 0.65,
+            "refreshTime" : 0.5
+        }
+    },
+    "LinesExtraction" : {
+        "debug" : {
+            "sendTime" : 0,
+            "drawScannedEdges" : 0,
+            "drawBorderLines" : 0,
+            "drawWorldLines" : 0,
+            "drawFiltWorldLines" : 0,
+            "drawCircle" : 0,
+            "drawUnknownLandmarks" : 0,
+            "drawCorners" : 0,
+            "displayInfo" : 0,
+            "displayOutput" : 0
+        },
+        "params" : {
+            "connectedEdgesHighTolRatio" : 2.5,
+            "minLineChainLength" : 3,
+            "linesRANSACMaxIter" : 5,
+            "linesRANSACMaxDist" : 0.05,
+            "linesRANSACGoodCntRatio" : 0.95,
+            "linesRANSACBadCntRatio" : 0.5,
+            "linesFitMinPoCnt" : 3,
+            "posOnLineDistTol" : 0.1,
+            "minDistFromBorder" : 0.1,
+            "circleLineMaxLength1" : 1.0,
+            "minDistFromBorderCircleLine1" : 1.5,
+            "overlappingLinesTolerance" : 0.1,
+            "circleLineMaxLength2" : 0.65,
+            "minDistFromBorderCircleLine2" : 2.5,
+            "erPoImagePadding" : 20,
+            "midCircleRadiusWorld" : 0.75,
+            "minRANSACCirclePosCnt" : 15,
+            "minMeanToMaxCircleDistRatio" : 0.5,
+            "maxRANSACCirclePosCnt" : 40,
+            "maxRANSACCircleToPoDist" : 0.05,
+            "circleRANSACGoodCntRatio" : 0.85,
+            "cirlceBisectorMaxDist" : 0.2,
+            "linesLandmarktNDiscretizationDist" : 0.2,
+            "maxLineUnknownLandmarks" : 40
         }
     }
 }

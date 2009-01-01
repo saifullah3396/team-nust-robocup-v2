@@ -154,7 +154,6 @@ private:
   vector<boost::shared_ptr<ScannedRegion>> lowerCamRobotRegions;
 
   ///< Processing times
-  float processTime;
   float linesFilterTime;
   float findJerseysTime;
   float classifyRobotsTime;
@@ -163,24 +162,30 @@ private:
 
   typedef vector<RobotRegionPtr>::iterator RRIter;
 
-  ///< Time taken to refresh previous robot information
-  static float refreshTime;
+  float refreshTime = {1.0}; ///< Time taken to refresh previous robot information
+  unsigned maxRobotTrackers = {5}; ///< Max number of robots that can be tracked at a time
+  float maxRobotWorldWidth = {0.50}; ///< Threshold for maximum width of a standing robot in real world
+  float fallenRobotWidth = {0.75}; ///< Threshold for maximum width of a fallen robot in real world
+  float robotMatchMaxDistance = {0.35}; ///< Maximum distance between two robots to be considered the same
+  float jerseyApproxHeight = {0.325}; ///< Approximate height of jersey for computations when robot feet cannot be seen
+  float maxJerseyWidthRatio = {2.5}; ///< Maximum jersey width possible with respect to
+  int jerseyBelowBorderMin = {5};
+  int jerseyAboveBorderRelCutoff = {50};
+  float lineLinkHorXTolRatio = {1.5}; ///< Line difference ratio in X for horizontal scan
+  float lineLinkHorYTolRatio = {1.5}; ///< Line difference ratio in Y for horizontal scan
+  float lineLinkVerXTolRatio = {1.5}; ///< Line difference ratio in X for vertical scan
+  float lineLinkVerYTolRatio = {1.5}; ///< Line difference ratio in Y for vertical scan
+  float maxLineLengthDiffRatio = {2.5}; ///< Line length difference ratio for both scans
+  int regionsXDiffTol = 50; // pixels
+  int regionsYDiffTol = 50; // pixels
+  float maxRegionSizeDiffRatio = 3.0;
 
-  ///< Max number of robots that can be tracked at a time
-  static unsigned maxRobotTrackers;
-
-  ///< Threshold for maximum width of a standing robot in real world
-  static float maxRobotWorldWidth;
-
-  ///< Threshold for maximum width of a fallen robot in real world
-  static float fallenRobotWidth;
-
-  ///< Maximum distance between two robots to be considered the same
-  static float robotMatchMaxDistance;
-
-  ///< Approximate height of jersey for computations when robot feet cannot be seen
-  static float jerseyApproxHeight;
-
-  ///< Maximum jersey width possible with respect to
-  static float maxJerseyWidthRatio;
+  float lowerBodyRegionsXDiffTol = 16; // pixels
+  float lowerBodyRegionsYDiffTol = 16; // pixels
+  float lowerBodyMaxRegionSizeDiffRatio = 2.5;
+  float lowerBodyLineLinkHorXTolRatio = {1.5}; ///< Line difference ratio in X for horizontal scan
+  float lowerBodyLineLinkHorYTolRatio = {1.5}; ///< Line difference ratio in Y for horizontal scan
+  float lowerBodyLineLinkVerXTolRatio = {1.5}; ///< Line difference ratio in X for vertical scan
+  float lowerBodyLineLinkVerYTolRatio = {1.5}; ///< Line difference ratio in Y for vertical scan
+  float lowerBodyMaxLineLengthDiffRatio = {2.5}; ///< Line length difference ratio for both scans
 };

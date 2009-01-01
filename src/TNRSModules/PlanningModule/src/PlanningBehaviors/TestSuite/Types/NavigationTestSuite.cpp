@@ -160,6 +160,7 @@ void NavigationTestSuite::FollowBall::onRun()
     auto planConfig = boost::make_shared<PlanTowardsConfig>();
     planConfig->goal = targetWorld;
     planConfig->tolerance = RobotPose2D<float>(0.05, 0.05, Angle::DEG_30);
+    planConfig->maxLimit = VelocityInput<float>(0.5, 0.5, 0.25);
     bPtr->setupChildRequest(planConfig, true);
   } else {
     auto planConfig = boost::make_shared<PlanTowardsConfig>();
@@ -176,6 +177,8 @@ void NavigationTestSuite::PlanTowards::onStart()
   bPtr->killMotionBehavior(MOTION_1);
   auto planConfig = boost::make_shared<PlanTowardsConfig>();
   planConfig->goal = bPtr->getBehaviorCast()->goalPose;
+  planConfig->tolerance = RobotPose2D<float>(0.1, 0.1, Angle::DEG_30);
+  planConfig->maxLimit = VelocityInput<float>(0.5, 0.5, 0.25);
   bPtr->setupChildRequest(planConfig, true);
 }
 

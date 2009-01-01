@@ -164,7 +164,6 @@ void LocalizationModule::mainRoutine()
 {
   // Execution of this module is decided by planning module.
   if (runLocalization) {
-    //cout << "lastIterationTimeMS: " << this->lastIterationTimeMS << endl;
     if (updateFilter)
       particleFilter->update();
     if (updateMap)

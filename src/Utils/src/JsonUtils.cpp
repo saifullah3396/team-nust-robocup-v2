@@ -426,7 +426,6 @@ namespace JsonUtils
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(WorldBallInfo<float>)
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(GoalInfo<float>)
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(RobotFeet)
-  DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(Matrix4f)
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(ObsObstacles<float>)
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(OccupancyMap<float>)
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(RoboCupGameControlData)
@@ -589,7 +588,7 @@ namespace JsonUtils
       } else {
         for (int i = 0; i < val.size(); ++i) {
           if (val[i] != Json::nullValue) {
-            var[i] = static_cast<Scalar>(val[i].asFloat());
+            var(i, 0) = static_cast<Scalar>(val[i].asFloat());
           } else {
             LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion: " << val[i]);
           }
@@ -601,6 +600,8 @@ namespace JsonUtils
   }
   template void jsonToType<float, 2, 1>(
     Matrix<float, 2, 1>& var, Json::Value val, const Matrix<float, 2, 1>& def);
+  template void jsonToType<float, 4, 4>(
+    Matrix<float, 4, 4>& var, Json::Value val, const Matrix<float, 4, 4>& def);
 
   void jsonToType(Matrix<unsigned, 3, 1>& var, Json::Value val, const Matrix<unsigned, 3, 1>& def)
   {
@@ -629,6 +630,23 @@ namespace JsonUtils
       var[0] = val[0].asFloat();
       var[1] = val[1].asFloat();
       var[2] = val[2].asFloat();
+    } else {
+      var = def;
+    }
+  }
+
+  void jsonToType(Matrix4f& var, Json::Value val, const Matrix4f& def)
+  {
+    if (!val.empty()) {
+      for (int i = 0; i < val.size(); ++i) {
+        for (int j = 0; j < val.size(); ++j) {
+          if (val[i][j] != Json::nullValue) {
+            var(i, j) = val[i][j].asFloat();
+          } else {
+            LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion: " << val[i][j]);
+          }
+        }
+      }
     } else {
       var = def;
     }

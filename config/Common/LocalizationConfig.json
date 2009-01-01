@@ -13,7 +13,8 @@
     "ParticleFilter" : {
         "debug" : {
             "displayLandmarksMap" : 0,
-            "displayVoronoiMap" : 0
+            "displayVoronoiMap" : 0,
+            "displayInfo" : 0
         },
         "params" : {
             "_comment_1" : "Number of particles used.",

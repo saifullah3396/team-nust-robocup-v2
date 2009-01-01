@@ -29,58 +29,53 @@
 #include "VisionModule/include/VisionModule.h"
 #include "VisionModule/include/VisionExceptions.h"
 
-float RobotExtraction::refreshTime = 1.0;
-unsigned RobotExtraction::maxRobotTrackers = 3;
-float RobotExtraction::maxRobotWorldWidth = 0.50;
-float RobotExtraction::fallenRobotWidth = 0.75;
-float RobotExtraction::robotMatchMaxDistance = 0.35;
-float RobotExtraction::jerseyApproxHeight = 0.325;
-float RobotExtraction::maxJerseyWidthRatio = 2.5;
-
 RobotExtraction::RobotExtraction(VisionModule* visionModule) :
   FeatureExtraction(visionModule, "RobotExtraction"),
   DebugBase("RobotExtraction", this)
 {
   ///< Set up debugging variables
   initDebugBase();
-  int tempSendTime;
-  int tempDrawScannedLines;
-  int tempDrawRobotRegions;
-  int tempDrawJerseyRegions;
-  int tempDrawLowerBodyRegions;
-  int tempDisplayInfo;
-  int tempDisplayOutput;
-  GET_CONFIG(
-    "VisionConfig",
-    (int, RobotExtraction.sendTime, tempSendTime),
-    (int, RobotExtraction.drawScannedLines, tempDrawScannedLines),
-    (int, RobotExtraction.drawJerseyRegions, tempDrawJerseyRegions),
-    (int, RobotExtraction.drawRobotRegions, tempDrawRobotRegions),
-    (int, RobotExtraction.drawLowerBodyRegions, tempDrawLowerBodyRegions),
-    (int, RobotExtraction.displayInfo, tempDisplayInfo),
-    (int, RobotExtraction.displayOutput, tempDisplayOutput),
-    (float, RobotExtraction.refreshTime, refreshTime),
-    (unsigned, RobotExtraction.maxRobotTrackers, maxRobotTrackers),
-    (float, RobotExtraction.maxRobotWorldWidth, maxRobotWorldWidth),
-    (float, RobotExtraction.fallenRobotWidth, fallenRobotWidth),
-    (float, RobotExtraction.robotMatchMaxDistance, robotMatchMaxDistance),
-    (float, RobotExtraction.jerseyApproxHeight, jerseyApproxHeight),
+  GET_DEBUG_CONFIG(
+    VisionConfig,
+    RobotExtraction,
+    (int, sendTime),
+    (int, drawScannedLines),
+    (int, drawJerseyRegions),
+    (int, drawRobotRegions),
+    (int, drawLowerBodyRegions),
+    (int, displayInfo),
+    (int, displayOutput),
   );
-  SET_DVAR(int, sendTime, tempSendTime);
-  SET_DVAR(int, drawScannedLines, tempDrawScannedLines);
-  SET_DVAR(int, drawJerseyRegions, tempDrawJerseyRegions);
-  SET_DVAR(int, drawRobotRegions, tempDrawRobotRegions);
-  //SET_DVAR(int, drawLowerBodyRegions, tempDrawLowerBodyRegions);
-  SET_DVAR(int, displayInfo, tempDisplayInfo);
-  SET_DVAR(int, displayOutput, tempDisplayOutput);
 
-  // Not used anymore
-  //try {
-  //  loadRobotClassifier();
-  //} catch (VisionException& e) {
-  //  LOG_EXCEPTION(e.what());
-  //}
-
+  GET_CLASS_CONFIG(
+    VisionConfig,
+    RobotExtraction,
+    refreshTime,
+    maxRobotTrackers,
+    maxRobotWorldWidth,
+    fallenRobotWidth,
+    robotMatchMaxDistance,
+    jerseyApproxHeight,
+    maxJerseyWidthRatio,
+    jerseyBelowBorderMin,
+    jerseyAboveBorderRelCutoff,
+    lineLinkHorXTolRatio,
+    lineLinkHorYTolRatio,
+    lineLinkVerXTolRatio,
+    lineLinkVerYTolRatio,
+    maxLineLengthDiffRatio,
+    regionsXDiffTol,
+    regionsYDiffTol,
+    maxRegionSizeDiffRatio,
+    lowerBodyRegionsXDiffTol,
+    lowerBodyRegionsYDiffTol,
+    lowerBodyMaxRegionSizeDiffRatio,
+    lowerBodyLineLinkHorXTolRatio,
+    lowerBodyLineLinkHorYTolRatio,
+    lowerBodyLineLinkVerXTolRatio,
+    lowerBodyLineLinkVerYTolRatio,
+    lowerBodyMaxLineLengthDiffRatio,
+  )
   ///< Get other feature extraction classes
   fieldExt = GET_FEATURE_EXT_CLASS(FieldExtraction, FeatureExtractionIds::field);
   regionSeg = GET_FEATURE_EXT_CLASS(RegionSegmentation, FeatureExtractionIds::segmentation);
@@ -164,8 +159,6 @@ void RobotExtraction::filterRobotLines()
   if (activeCamera == CameraId::headTop) {
     const auto& border = fieldExt->getBorder();
     ///< Filter with border
-    static const auto jerseyBelowBorderMin = 5;
-    static const auto jerseyAboveBorderRelCutoff = 50;
     for (auto& rl : verRobotLines) {
       if (!rl) continue;
       int yBorder = border[rl->baseIndex];
@@ -211,18 +204,18 @@ void RobotExtraction::findJerseys(vector<RobotRegionPtr>& outputRegions)
   auto horJerseyLinesOurs = regionSeg->getHorizontalScan(ScanTypes::ourJersey)->scanLines;
   auto verJerseyLinesOpps = regionSeg->getVerticalScan(ScanTypes::oppJersey)->scanLines;
   auto horJerseyLinesOpps = regionSeg->getHorizontalScan(ScanTypes::oppJersey)->scanLines;
-
   vector<ScannedRegionPtr> verJerseyRegionsOurs;
   vector<ScannedRegionPtr> horJerseyRegionsOurs;
   vector<ScannedRegionPtr> verJerseyRegionsOpps;
   vector<ScannedRegionPtr> horJerseyRegionsOpps;
   auto verLineLinkXTol =
-    regionSeg->getVerticalScan(ScanTypes::ourJersey)->highStep * 1.5; // pixels
-  auto verLineLinkYTol = verLineLinkXTol;
+    regionSeg->getVerticalScan(ScanTypes::ourJersey)->highStep * lineLinkVerXTolRatio; // pixels
+  auto verLineLinkYTol =
+    regionSeg->getVerticalScan(ScanTypes::ourJersey)->highStep * lineLinkVerYTolRatio; // pixels
   auto horLineLinkXTol =
-    regionSeg->getHorizontalScan(ScanTypes::ourJersey)->highStep * 1.5; // pixels
-  auto horLineLinkYTol = horLineLinkXTol;
-  auto maxLineLengthDiffRatio = 2.5;
+    regionSeg->getHorizontalScan(ScanTypes::ourJersey)->highStep * lineLinkHorXTolRatio; // pixels
+  auto horLineLinkYTol =
+    regionSeg->getHorizontalScan(ScanTypes::ourJersey)->highStep * lineLinkHorYTolRatio; // pixels
   findRegions(
     verJerseyRegionsOurs,
     verJerseyLinesOurs,
@@ -248,12 +241,12 @@ void RobotExtraction::findJerseys(vector<RobotRegionPtr>& outputRegions)
     horLineLinkYTol,
     maxLineLengthDiffRatio,
     bgrMat[toUType(activeCamera)]);
-  //ScannedRegion::drawRegions(
-  //  bgrMat[toUType(activeCamera)], verJerseyRegionsOurs, Scalar(255,0,0), 2);
-  //ScannedRegion::drawRegions(
-  //  bgrMat[toUType(activeCamera)], horJerseyRegionsOurs, Scalar(0,0,255), 2);
-  //regionSeg->getVerticalScan(ScanTypes::ourJersey)->draw(bgrMat[toUType(activeCamera)]);
-  //regionSeg->getHorizontalScan(ScanTypes::ourJersey)->draw(bgrMat[toUType(activeCamera)]);
+  ScannedRegion::drawRegions(
+    bgrMat[toUType(activeCamera)], verJerseyRegionsOurs, Scalar(255,0,0), 2);
+  ScannedRegion::drawRegions(
+    bgrMat[toUType(activeCamera)], horJerseyRegionsOurs, Scalar(0,0,255), 2);
+  regionSeg->getVerticalScan(ScanTypes::ourJersey)->draw(bgrMat[toUType(activeCamera)]);
+  regionSeg->getHorizontalScan(ScanTypes::ourJersey)->draw(bgrMat[toUType(activeCamera)]);
   horJerseyRegionsOurs.insert(
     horJerseyRegionsOurs.end(),
     verJerseyRegionsOurs.begin(),
@@ -264,9 +257,6 @@ void RobotExtraction::findJerseys(vector<RobotRegionPtr>& outputRegions)
     verJerseyRegionsOpps.end());
   vector<ScannedRegionPtr> oursFiltered;
   vector<ScannedRegionPtr> oppsFiltered;
-  static const auto regionsXDiffTol = 50; // pixels
-  static const auto regionsYDiffTol = 50; // pixels
-  static const auto maxRegionSizeDiffRatio = 3.0;
   ScannedRegion::linkRegions(
     oursFiltered,
     horJerseyRegionsOurs,
@@ -281,10 +271,10 @@ void RobotExtraction::findJerseys(vector<RobotRegionPtr>& outputRegions)
     regionsYDiffTol,
     maxRegionSizeDiffRatio,
     bgrMat[toUType(activeCamera)]);
-  //ScannedRegion::drawRegions(
-  //  bgrMat[toUType(activeCamera)], oursFiltered, Scalar(255,0,0), 2);
-  //ScannedRegion::drawRegions(
-  //  bgrMat[toUType(activeCamera)], oppsFiltered, Scalar(0,0,255), 2);
+  ScannedRegion::drawRegions(
+    bgrMat[toUType(activeCamera)], oursFiltered, Scalar(255,0,0), 2);
+  ScannedRegion::drawRegions(
+    bgrMat[toUType(activeCamera)], oppsFiltered, Scalar(0,0,255), 2);
   for (const auto& jr : oursFiltered) {
     if (jr) {
       if (jr->rect.width > 5 * jr->rect.height ||
@@ -387,8 +377,8 @@ void RobotExtraction::classifyRobots(vector<RobotRegionPtr>& robotRegions, vecto
       }
     } else {
       // Small area
-      static const auto bodyToJerseyMinHeightRatio = 1.5;
-      static const auto bodyToJerseyMinWidthRatio = 1.5;
+      float bodyToJerseyMinHeightRatio = 1.5;
+      float bodyToJerseyMinWidthRatio = 1.5;
       auto doubleWidth = rr->sr->rect.width * 2;
       auto minY = rr->sr->rect.y - rr->sr->rect.height;
       auto maxY = rr->sr->leftBase.y + rr->sr->rect.height;
@@ -649,25 +639,26 @@ void RobotExtraction::findLowerBodyRegions(vector<RobotRegionPtr>& robotRegions)
   vector<ScannedRegionPtr> verRobotRegions;
   vector<ScannedRegionPtr> horRobotRegions;
   auto verLineLinkXTol =
-    regionSeg->getVerticalScan(ScanTypes::robot)->highStep * 1.5; // pixels
-  auto verLineLinkYTol = verLineLinkXTol;
+    regionSeg->getVerticalScan(ScanTypes::ourJersey)->highStep * lowerBodyLineLinkVerXTolRatio; // pixels
+  auto verLineLinkYTol =
+    regionSeg->getVerticalScan(ScanTypes::ourJersey)->highStep * lowerBodyLineLinkVerYTolRatio; // pixels
   auto horLineLinkXTol =
-    regionSeg->getHorizontalScan(ScanTypes::robot)->highStep * 1.5; // pixels
-  auto horLineLinkYTol = horLineLinkXTol;
-  auto maxLineLengthDiffRatio = 1.5;
+    regionSeg->getHorizontalScan(ScanTypes::ourJersey)->highStep * lowerBodyLineLinkHorXTolRatio; // pixels
+  auto horLineLinkYTol =
+    regionSeg->getHorizontalScan(ScanTypes::ourJersey)->highStep * lowerBodyLineLinkHorYTolRatio; // pixels
   findRegions(
     verRobotRegions,
     verRobotLines,
     verLineLinkXTol,
     verLineLinkYTol,
-    maxLineLengthDiffRatio,
+    lowerBodyMaxLineLengthDiffRatio,
     bgrMat[toUType(activeCamera)]);
   findRegions(
     horRobotRegions,
     horRobotLines,
     horLineLinkXTol,
     horLineLinkYTol,
-    maxLineLengthDiffRatio,
+    lowerBodyMaxLineLengthDiffRatio,
     bgrMat[toUType(activeCamera)]);
   //ScannedRegion::drawRegions(
   //  bgrMat[toUType(activeCamera)], verRobotRegions, Scalar(255,0,0));
@@ -677,16 +668,14 @@ void RobotExtraction::findLowerBodyRegions(vector<RobotRegionPtr>& robotRegions)
     horRobotRegions.end(),
     verRobotRegions.begin(),
     verRobotRegions.end());
-  static const auto regionsXDiffTol = 16; // pixels
-  static const auto regionsYDiffTol = 16; // pixels
-  static const auto maxRegionSizeDiffRatio = 2.5;
+
   this->lowerCamRobotRegions.clear();
   ScannedRegion::linkRegions(
     this->lowerCamRobotRegions,
     horRobotRegions,
-    regionsXDiffTol,
-    regionsYDiffTol,
-    maxRegionSizeDiffRatio,
+    lowerBodyRegionsXDiffTol,
+    lowerBodyRegionsYDiffTol,
+    lowerBodyMaxRegionSizeDiffRatio,
     bgrMat[toUType(activeCamera)]);
 
   if (GET_DVAR(int, drawLowerBodyRegions))

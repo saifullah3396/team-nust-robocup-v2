@@ -34,5 +34,7 @@ enum class PostureState
   diveLeft,
   diveRight,
   diveSumo,
+  lBalance,
+  rBalance,
   unknown
 };

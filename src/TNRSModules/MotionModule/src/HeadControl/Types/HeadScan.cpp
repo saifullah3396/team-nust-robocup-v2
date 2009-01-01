@@ -25,6 +25,7 @@ HeadScan<Scalar>::HeadScan(
   DEFINE_FSM_STATE(HeadScan<Scalar>, MidScan, midScan);
   DEFINE_FSM_STATE(HeadScan<Scalar>, LeftScan, leftScan);
   DEFINE_FSM_STATE(HeadScan<Scalar>, RightScan, rightScan);
+  DEFINE_FSM_STATE(HeadScan<Scalar>, FinishSequence, finishSequence);
   DEFINE_FSM(fsm, HeadScan<Scalar>, midScan);
 }
 
@@ -51,7 +52,7 @@ template <typename Scalar>
 void HeadScan<Scalar>::update()
 {
   if (fsm->update()) {
-    return;
+    finish();
   }
 }
 
@@ -59,7 +60,10 @@ template <typename Scalar>
 void HeadScan<Scalar>::finish()
 {
   LOG_INFO("HeadScan.finish() called...");
-  this->inBehavior = false;
+  if (getBehaviorCast()->resetOnKill)
+    fsm->state = finishSequence.get();
+  else
+    this->inBehavior = false;
 }
 
 template <typename Scalar>
@@ -106,44 +110,53 @@ bool HeadScan<Scalar>::waitOnTargetReached()
 template <typename Scalar>
 void HeadScan<Scalar>::MidScan::onStart()
 {
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   if (this->bPtr->getBehaviorCast()->scanLowerArea) {
     this->bPtr->setScanTarget(0.0, this->bPtr->getBehaviorCast()->scanMaxPitch);
   }
   this->bPtr->setScanTarget(0.0, NAN);
-  #endif
 }
 
 template <typename Scalar>
 void HeadScan<Scalar>::MidScan::onRun()
 {
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached())
     this->nextState = this->bPtr->leftScan.get();
-  #endif
 }
 
 template <typename Scalar>
 void HeadScan<Scalar>::LeftScan::onStart()
 {
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   if (this->bPtr->getBehaviorCast()->scanLowerArea) {
     this->bPtr->setScanTarget(
       this->bPtr->getBehaviorCast()->scanMaxYaw,
       this->bPtr->getBehaviorCast()->scanMaxPitch);
   }
-  this->bPtr->setScanTarget(
-    this->bPtr->getBehaviorCast()->scanMaxYaw, NAN);
-  #endif
+  this->bPtr->yawTargets.clear();
+  const auto& divs = this->bPtr->getBehaviorCast()->scanYawDivs;
+  const auto& maxYaw = this->bPtr->getBehaviorCast()->scanMaxYaw;
+  for (int i = 1; i <= divs; ++i)
+    this->bPtr->yawTargets.push_back(maxYaw * i / (float)divs);
+  for (int i = divs - 1; i >= 0; --i)
+    this->bPtr->yawTargets.push_back(maxYaw * i / (float)divs);
+  if (!this->bPtr->yawTargets.empty())
+    this->bPtr->setScanTarget(this->bPtr->yawTargets[0], NAN);
+  else
+    this->bPtr->finish();
 }
 
 template <typename Scalar>
 void HeadScan<Scalar>::LeftScan::onRun()
 {
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached())
-    this->nextState = this->bPtr->rightScan.get();
-  #endif
+  static unsigned currTarget = 0;
+  if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached()) {
+    currTarget++;
+    if (currTarget >= this->bPtr->yawTargets.size()) {
+      this->nextState = this->bPtr->rightScan.get();
+      currTarget = 0;
+    } else {
+      this->bPtr->setScanTarget(this->bPtr->yawTargets[currTarget], NAN);
+    }
+  }
 }
 
 template <typename Scalar>
@@ -154,16 +167,52 @@ void HeadScan<Scalar>::RightScan::onStart()
       -this->bPtr->getBehaviorCast()->scanMaxYaw,
       this->bPtr->getBehaviorCast()->scanMaxPitch);
   }
-  this->bPtr->setScanTarget(
-    -this->bPtr->getBehaviorCast()->scanMaxYaw, NAN);
+  this->bPtr->yawTargets.clear();
+  const auto& divs = this->bPtr->getBehaviorCast()->scanYawDivs;
+  const auto& maxYaw = -this->bPtr->getBehaviorCast()->scanMaxYaw;
+  for (int i = 1; i <= divs; ++i)
+    this->bPtr->yawTargets.push_back(maxYaw * i / (float)divs);
+  for (int i = divs - 1; i >= 0; --i)
+    this->bPtr->yawTargets.push_back(maxYaw * i / (float)divs);
+  if (!this->bPtr->yawTargets.empty())
+    this->bPtr->setScanTarget(this->bPtr->yawTargets[0], NAN);
+  else
+    this->bPtr->finish();
 }
 
 template <typename Scalar>
 void HeadScan<Scalar>::RightScan::onRun()
 {
+  static unsigned currTarget = 0;
+  if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached()) {
+    currTarget++;
+    if (currTarget >= this->bPtr->yawTargets.size()) {
+      this->nextState = nullptr;
+      currTarget = 0;
+    } else {
+      this->bPtr->setScanTarget(this->bPtr->yawTargets[currTarget], NAN);
+    }
+  }
+}
+
+template <typename Scalar>
+void HeadScan<Scalar>::FinishSequence::onStart()
+{
+  if (this->bPtr->getBehaviorCast()->scanLowerArea) {
+    this->bPtr->setScanTarget(
+      -this->bPtr->getBehaviorCast()->scanMaxYaw,
+      this->bPtr->getBehaviorCast()->scanMaxPitch);
+  }
+  this->bPtr->setScanTarget(0.0, NAN);
+}
+
+template <typename Scalar>
+void HeadScan<Scalar>::FinishSequence::onRun()
+{
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached())
-    this->nextState = this->bPtr->midScan.get();
+  if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached()) {
+    this->bPtr->inBehavior = false;
+  }
   #endif
 }
 

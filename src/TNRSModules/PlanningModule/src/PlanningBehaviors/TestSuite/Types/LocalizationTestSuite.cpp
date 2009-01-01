@@ -167,7 +167,7 @@ void LocalizationTestSuite::LocalizationLostState::onRun()
     }
   } else {
     bPtr->killAllMotionBehaviors();
-    //cout << "Localized..." << endl;
+    cout << "Localized..." << endl;
     cout << "Robot pose: " << ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr).get().transpose() << endl;
     nextState = nullptr;
   }

@@ -100,6 +100,7 @@ void NaoqiMoveToward<Scalar>::walkAction() {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   auto vel = getBehaviorCast()->velocityInput;
   this->naoqiMoveToward(vel.getX(), vel.getY(), vel.getTheta());
+  cout << "OdomPose:" << this->getRobotPosition(true) << endl;
   if (lastOdomTrans.norm() <= 1e-5) { // Zero
     auto odomPose = this->getRobotPosition(true);
     if (odomPose[0] == odomPose[0]) {
@@ -122,6 +123,7 @@ void NaoqiMoveToward<Scalar>::walkAction() {
           trans(0, 3),
           trans(1, 3),
           MathsUtils::matToEuler((Matrix<Scalar, 3, 3>) trans.block(0, 0, 3, 3))[2]);
+      cout << "pi: " << pi.get().transpose() << endl;
       PositionUpdatePtr vu =
         boost::shared_ptr<PositionUpdate>(new PositionUpdate(pi));
       BaseModule::publishModuleRequest(vu);

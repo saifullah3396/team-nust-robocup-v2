@@ -500,7 +500,6 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
       }
     }
   }
-
   if (logger)
     logger->recordJointCmds(positionLists, timesList, activeJoints);
 
@@ -574,8 +573,6 @@ Scalar MotionGenerator<Scalar>::runKeyFrameMotion(
     AL::ALValue jointPositions;
     jointTimes.clear();
     jointPositions.clear();
-    jointTimes.arraySetSize(toUType(Joints::count));
-    jointPositions.arraySetSize(toUType(Joints::count));
     #else
     vector<vector<Scalar>> jointTimes;
     vector<vector<Scalar>> jointPositions;
@@ -588,19 +585,24 @@ Scalar MotionGenerator<Scalar>::runKeyFrameMotion(
     Scalar time = 0;
     vector<unsigned> jointIds;
     for (size_t i = 0; i < toUType(Joints::count); ++i) {
-      jointIds.push_back(i);
-      #ifndef V6_CROSS_BUILD_REMOVED
-      jointPositions[i].arraySetSize(targetJoints.size());
-      jointTimes[i].arraySetSize(targetJoints.size());
-      #else
-      jointPositions[i].resize(targetJoints.size());
-      jointTimes[i].resize(targetJoints.size());
-      #endif
+      AL::ALValue jointPosition;
+      AL::ALValue jointTime;
+      bool ignore = false;
       time = 0;
       for (size_t j = 0; j < targetJoints.size(); ++j) {
-        time += times[j];
-        jointPositions[i][j] = targetJoints[j][i] * M_PI / 180.f;
-        jointTimes[i][j] = time;
+        if (targetJoints[j][i] == targetJoints[j][i]) {
+          time += times[j];
+          jointPosition.arrayPush(targetJoints[j][i] * M_PI / 180.f);
+          jointTime.arrayPush(time);
+        } else {
+          ignore = true;
+          break;
+        }
+      }
+      if (!ignore) {
+        jointIds.push_back(i);
+        jointPositions.arrayPush(jointPosition);
+        jointTimes.arrayPush(jointTime);
       }
     }
     naoqiJointInterpolation(jointIds, jointTimes, jointPositions, true);

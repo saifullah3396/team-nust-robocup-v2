@@ -26,7 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -49,13 +49,14 @@
 #include "Utils/include/HardwareIds.h"
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/PrintUtils.h"
+#include "Utils/include/TNColors.h"
 
 namespace team_nust_visualizer_plugins
 {
 
 ColorCalibration::ColorCalibration(QWidget* parent) : rviz::Panel(parent)
 {
-  ConfigManager::setDirPaths("Robots/Sim/");  
+  ConfigManager::setDirPaths("Robots/Sim/");
   camera_settings_publisher_ = nh_.advertise<std_msgs::String>("/team_nust_user_cmds", 1000);
   QVBoxLayout* v_layout = new QVBoxLayout();
   QWidget* scroll_content = new QWidget;
@@ -95,6 +96,8 @@ ColorCalibration::ColorCalibration(QWidget* parent) : rviz::Panel(parent)
   combo_box_color_tables_.resize(toUType(TNColors::count));
   slider_widgets_stack.resize(toUType(TNColors::count));
   colors_stack_ = new QStackedWidget();
+
+  auto root = JsonUtils::readJson(ConfigManager::getConfigDirPath() + "ColorConfig.json");
   for (size_t i = 0; i < toUType(TNColors::count); ++i) {
     sliders[i].resize(n_color_tables[i]);
     combo_box_color_tables_[i] = new QComboBox();
@@ -104,7 +107,7 @@ ColorCalibration::ColorCalibration(QWidget* parent) : rviz::Panel(parent)
     color_layout_widget->setLayout(color_layout);
     colors_stack_->addWidget(color_layout_widget);
     slider_widgets_stack[i] = new QStackedWidget();
-    for (size_t j = 0; j < n_color_tables[i]; ++j) {
+    for (size_t j = 0; j < root[colorNames[i]]["tables"].asInt(); ++j) {
       sliders[i][j].resize(6);
       combo_box_color_tables_[i]->addItem(QString("Table ") + QString::number(j+1));
       QVBoxLayout* slider_layout = new QVBoxLayout();
@@ -116,7 +119,7 @@ ColorCalibration::ColorCalibration(QWidget* parent) : rviz::Panel(parent)
         sliders[i][j][k]->setRange(0, 255);
         slider_layout->addWidget(sliders[i][j][k]);
         connect(sliders[i][j][k], SIGNAL(sliderReleased()), this, SLOT(publishSettings()));
-      } 
+      }
       QWidget* layout_widget = new QWidget();
       layout_widget->setLayout(slider_layout);
       slider_widgets_stack[i]->addWidget(layout_widget);
@@ -156,7 +159,7 @@ void ColorCalibration::reset(const QString& camera_name)
 {
   Json::Value root;
   camera_name_ = camera_name;
-  root["VisionModule"]["debugImageIndex"] = 
+  root["VisionModule"]["debugImageIndex"] =
     camera_name_ == "visionTop" ? toUType(CameraId::headTop) : toUType(CameraId::headBottom);
   Json::FastWriter fastWriter;
   std::string output = fastWriter.write(root);
@@ -165,13 +168,13 @@ void ColorCalibration::reset(const QString& camera_name)
   camera_settings_publisher_.publish(msg);
 }
 
-void ColorCalibration::updateCamera() 
+void ColorCalibration::updateCamera()
 {
   reset(QString::fromStdString(camera_names[camera_name_combo_box_->currentIndex()]));
   Q_EMIT configChanged();
 }
 
-void ColorCalibration::publishSettings() 
+void ColorCalibration::publishSettings()
 {
   Json::Value root;
   root["ColorHandler"]["colorIndex"] = combo_box_->currentIndex();
@@ -191,7 +194,7 @@ void ColorCalibration::publishSettings()
   camera_settings_publisher_.publish(msg);
 }
 
-void ColorCalibration::updateConfiguration() 
+void ColorCalibration::updateConfiguration()
 {
   auto robot_name = robot_names[robot_name_combo_box_->currentIndex()];
   ConfigManager::setDirPaths("Robots/" + robot_name + "/");

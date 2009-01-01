@@ -16,6 +16,9 @@
     #include <alproxies/alvideodeviceproxy.h>
   #endif
 #endif
+#ifdef MODULE_IS_REMOTE
+#include <boost/filesystem.hpp>
+#endif
 #include <Eigen/Dense>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -24,6 +27,7 @@
 #include "Utils/include/HardwareIds.h"
 #include "Utils/include/alvisiondefinitions.h"
 
+using namespace boost::filesystem;
 using namespace std;
 
 class VisionModule;
@@ -126,6 +130,11 @@ public:
   static void
   yuv422ToBgr(cv::Mat& out, const uint8_t * const in, const int& width, const int& height);
 
+  static string getLogDatTime() { return logDateTime; }
+  #ifdef MODULE_IS_REMOTE
+  static directory_entry getCurrentImagePath() { return currentImagePath; }
+  #endif
+
 private:
   /**
    * Sets up the camera input streaming configuration and image format
@@ -147,8 +156,19 @@ private:
   ///< Vector of cameras
   vector<CameraPtr> cams;
 
+  ///< Current date time of logging
+  static string logDateTime;
+
   ///< Opencv video writer objects for top and bottom cams
   #ifndef V6_CROSS_BUILD
   vector<cv::VideoWriter*> videoWriter;
+  #endif
+
+  #ifdef MODULE_IS_REMOTE
+  std::vector<directory_entry> topImageFiles;
+  std::vector<directory_entry> bottomImageFiles;
+  std::vector<directory_entry>::const_iterator topIter;
+  std::vector<directory_entry>::const_iterator bottomIter;
+  static directory_entry currentImagePath;
   #endif
 };

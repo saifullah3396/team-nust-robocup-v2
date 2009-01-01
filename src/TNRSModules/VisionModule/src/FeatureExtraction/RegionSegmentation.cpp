@@ -161,6 +161,8 @@ void RegionSegmentation::processImage()
 {
   auto tStart = high_resolution_clock::now();
   reset();
+  this->ourColor = TNColors::blue;
+  this->oppColor = TNColors::yellow;
   vScanLimitIdx = getImageHeight() - vMinScanStepLow[toUType(activeCamera)];
   hScanLimitIdx = getImageWidth() - hMinScanStepLow[toUType(activeCamera)];
   horizontalScan();
@@ -179,6 +181,7 @@ void RegionSegmentation::processImage()
   drawResults();
   if (GET_DVAR(int, displayOutput)) {
     VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+    waitKey(0);
   }
 }
 
@@ -233,11 +236,22 @@ void RegionSegmentation::horizontalScan()
 {
   auto tStart = high_resolution_clock::now();
 
+  /* Test for histogrram based green color classification
+   * for (int y = 0; y < getImageHeight(); ++y) {
+    for (int x = 0; x < getImageWidth(); ++x) {
+      auto pixel = getYUV(x, y);
+      if (colorHandler->isGreenHist(pixel))
+        bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(0,255,0);
+    }
+  }
+  VisionUtils::displayImage("green:", bgrMat[toUType(activeCamera)]);
+  waitKey(0);*/
+
   //! Get the minimum step size for scans
   auto minScanStepLow = hMinScanStepLow[toUType(activeCamera)];
   if (activeCamera == CameraId::headTop) { //! Upper cam scan
     ///< Last field height with some margin
-    auto lastHeight = fieldExt->getFieldHeight() - 50;
+    auto lastHeight = 0;//fieldExt->getFieldHeight() - 50;
     for (int y = 0; y < getImageHeight(); y = y + hScanStepHigh[toUType(activeCamera)]) {
       //! Find the height of field in image
       bool scanInField = y > lastHeight;
@@ -333,7 +347,7 @@ void RegionSegmentation::verticalScan()
   auto minScanStepLow = vMinScanStepLow[toUType(activeCamera)];
   if (activeCamera == CameraId::headTop) {
     ///< Last field height with some margin
-    auto lastHeight = fieldExt->getFieldHeight() - 50;
+    auto lastHeight = 0;//fieldExt->getFieldHeight() - 50;
     avgHeight = 0;
     minBestHeight = 1000;
 

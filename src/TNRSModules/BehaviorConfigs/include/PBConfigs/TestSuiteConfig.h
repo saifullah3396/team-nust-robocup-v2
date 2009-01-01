@@ -30,6 +30,8 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (string, testType, ""),
   (RobotPose2D<float>, startPose, RobotPose2D<float>(0.0, 0.0, 0.0)),
   (unsigned, loggingCam, 0),
+  (int, colorIndex, -1),
+  (bool, useLoggedData, false),
 );
 
 DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(

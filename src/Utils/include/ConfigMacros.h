@@ -102,8 +102,15 @@
 #define SET_VAR_FROM_JSON(VAR) \
   JsonUtils::jsonToType(VAR, classParams[#VAR], VAR);
 
-#define SET_DVAR_FROM_JSON_2(TYPE, VAR) \
-  JsonUtils::jsonToType(GET_DVAR_REF(TYPE, VAR), debugParams[#VAR], GET_DVAR_REF(TYPE, VAR));
+#define SET_DVAR_FROM_JSON_3(TYPE, VAR) { \
+  TYPE temp; \
+  JsonUtils::jsonToType(temp, debugParams[#VAR], temp); \
+  SET_DVAR(TYPE, VAR, temp); \
+}
+
+#define SET_DVAR_FROM_JSON_2(TYPE, VAR) { \
+  SET_DVAR_FROM_JSON_3(TYPE, VAR); \
+}
 
 #define SET_DVAR_FROM_JSON(TYPE_VAR) \
   SET_DVAR_FROM_JSON_2( \
@@ -116,12 +123,20 @@
   auto path = string(ConfigManager::getConfigDirPath() + #ConfigName + string(".json")); \
   if (boost::filesystem::exists(path)) { \
     auto debugParams = JsonUtils::readJson(path)[#ClassName]["debug"]; \
-    FOR_EACH(SET_DVAR_FROM_JSON, __VA_ARGS__) \
+    try { \
+      FOR_EACH(SET_DVAR_FROM_JSON, __VA_ARGS__) \
+    } catch (exception& e) { \
+      LOG_ERROR("Error while reading configuration" << #ConfigName << e.what()); \
+    } \
   } else { \
     auto path = string(ConfigManager::getCommonConfigDirPath() + #ConfigName + string(".json")); \
     if (boost::filesystem::exists(path)) { \
       auto debugParams = JsonUtils::readJson(path)[#ClassName]["debug"]; \
-      FOR_EACH(SET_DVAR_FROM_JSON, __VA_ARGS__) \
+      try { \
+        FOR_EACH(SET_DVAR_FROM_JSON, __VA_ARGS__) \
+      } catch (exception& e) { \
+        LOG_ERROR("Error while reading configuration" << #ConfigName << e.what()); \
+      } \
     } else { \
       LOG_ERROR("Configuration file: " << path <<" does not exist."); \
     } \

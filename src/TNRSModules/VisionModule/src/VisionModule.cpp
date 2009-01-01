@@ -115,6 +115,17 @@ void VisionModule::init()
 {
   LOG_INFO("Initializing vision debug base...")
   initDebugBase();
+  GET_DEBUG_CONFIG(
+    VisionConfig,
+    VisionModule,
+    (int, debug),
+    (int, debugImageIndex),
+    (int, logCameraTransform),
+    (int, sendBinaryImage),
+    (int, sendKnownLandmarks),
+    (int, sendUnknownLandmarks),
+    (int, displayInfo),
+  );
   LOG_INFO("Initializing CameraModule...")
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
   cameraModule =
@@ -135,24 +146,6 @@ void VisionModule::init()
   LOG_INFO("Initializing FeatureExtraction classes...")
   setupFeatureExtraction();
   LOG_INFO("Initializing VisionModule debugging variables... See" << ConfigManager::getConfigDirPath() << "VisionConfig.ini")
-  int tempDebug;
-  int tempDebugImageIndex;
-  int tempSendBinaryImage;
-  int tempSendKnownLandmarks;
-  int tempSendUnknownLandmarks;
-  GET_CONFIG(
-    "VisionConfig",
-    (int, VisionModule.debug, tempDebug),
-    (int, VisionModule.debugImageIndex, tempDebugImageIndex),
-    (int, VisionModule.sendBinaryImage, tempSendBinaryImage),
-    (int, VisionModule.sendKnownLandmarks, tempSendKnownLandmarks),
-    (int, VisionModule.sendUnknownLandmarks, tempSendUnknownLandmarks),
-  )
-  SET_DVAR(int, debug, tempDebug);
-  SET_DVAR(int, debugImageIndex, tempDebugImageIndex);
-  SET_DVAR(int, sendBinaryImage, tempSendBinaryImage);
-  SET_DVAR(int, sendKnownLandmarks, tempSendKnownLandmarks);
-  SET_DVAR(int, sendUnknownLandmarks, tempSendUnknownLandmarks);
   LOG_INFO("Initializing VisionModule Output variables...")
   BALL_INFO_OUT(VisionModule) = BallInfo<float>();
   GOAL_INFO_OUT(VisionModule) = GoalInfo<float>();
@@ -199,7 +192,6 @@ void VisionModule::mainRoutine()
   OBSTACLES_OBS_OUT(VisionModule).data.clear();
   // Execution of this module is decided by planning module.
   if (runVision) {
-    //cout << "lastIterationTimeMS:" << lastIterationTimeMS << endl;
     // update cameras and get images
     cameraUpdate();
     // save video if required
@@ -213,8 +205,9 @@ void VisionModule::mainRoutine()
     }
     waitKey(0);*/
     FeatureExtraction::updateImageMatrices(activeCamera, bool(GET_DVAR(int, debug)));
-    if (activeCamera == CameraId::headBottom)
-      FeatureExtraction::createYuvHist(activeCamera, false);
+    //Not using histograms
+    //if (activeCamera == CameraId::headBottom)
+    //  FeatureExtraction::createYuvHist(activeCamera, false);
     FeatureExtraction::clearLandmarks();
     if (GET_DVAR(int, debug))
       colorHandler->update();
@@ -230,6 +223,31 @@ void VisionModule::mainRoutine()
       saveImages();
       #endif
     }
+    if (GET_DVAR(int, displayInfo)) {
+      LOG_INFO("Active camerae:" << toUType(activeCamera));
+      LOG_INFO("RegionSegmentation Time: " << GET_FEATURE_EXT_CLASS_(RegionSegmentation, FeatureExtractionIds::segmentation)->getProcessTime());
+      LOG_INFO("Field border found: " << GET_FEATURE_EXT_CLASS_(FieldExtraction, FeatureExtractionIds::field)->isFound());
+      LOG_INFO("FieldExtraction Time: " << GET_FEATURE_EXT_CLASS_(FieldExtraction, FeatureExtractionIds::field)->getProcessTime());
+      LOG_INFO("Robots reagions: " << GET_FEATURE_EXT_CLASS_(RobotExtraction, FeatureExtractionIds::robot)->getRobotRegions().size());
+      LOG_INFO("RobotExtraction Time: " << GET_FEATURE_EXT_CLASS_(RobotExtraction, FeatureExtractionIds::robot)->getProcessTime());
+      LOG_INFO("Ball found: " << BALL_INFO_OUT(VisionModule).found);
+      LOG_INFO("Ball position: " << BALL_INFO_OUT(VisionModule).posRel);
+      LOG_INFO("BallExtraction Time: " << GET_FEATURE_EXT_CLASS_(BallExtraction, FeatureExtractionIds::ball)->getProcessTime());
+      LOG_INFO("Goal posts found: " << GET_FEATURE_EXT_CLASS_(GoalExtraction, FeatureExtractionIds::goal)->getGoalPosts().size());
+      LOG_INFO("Goal found: " << GOAL_INFO_OUT(VisionModule).found);
+      LOG_INFO("GoalExtraction Time: " << GET_FEATURE_EXT_CLASS_(GoalExtraction, FeatureExtractionIds::goal)->getProcessTime());
+      LOG_INFO("Unknown landmarks found: " << FeatureExtraction::getUnknownLandmarks().size());
+      LOG_INFO("Known landmarks found: " << FeatureExtraction::getKnownLandmarks().size());
+      for (const auto& l : FeatureExtraction::getKnownLandmarks()) {
+          LOG_INFO("Type:" << l->type);
+      }
+      LOG_INFO("LinesExtraction Time: " << GET_FEATURE_EXT_CLASS_(LinesExtraction, FeatureExtractionIds::lines)->getProcessTime());
+      LOG_INFO("Last iteration time in MS: " << this->lastIterationTimeMS);
+    }
+    //VisionUtils::displayImage("Top", FeatureExtraction::getBgrMat(0));
+    //VisionUtils::displayImage("Bottom", FeatureExtraction::getBgrMat(1));
+    //waitKey(0);
+
     // Update the id of newly observed obstacles
     OBSTACLES_OBS_OUT(VisionModule).resetId();
   }
@@ -238,13 +256,45 @@ void VisionModule::mainRoutine()
 void VisionModule::cameraUpdate()
 {
   activeCamera = activeCamera == CameraId::headTop ? CameraId::headBottom : CameraId::headTop;
+  //cout << "logImages[toUType(activeCamera)]:" <<logImages[toUType(activeCamera)] << endl;
   #ifdef MODULE_IS_REMOTE
   cameraModule->updateImage(activeCamera, logImages[toUType(activeCamera)], useLoggedImages);
+  if (useLoggedImages) {
+    Json::Value root;
+    string basePath = ConfigManager::getLogsDirPath() + "Transformations/";
+    if (activeCamera == CameraId::headTop) {
+      root = JsonUtils::readJson(basePath + "Top/Transformation-" + CameraModule::getCurrentImagePath().path().stem().string() + ".json");
+      auto upperCamTrans = IVAR_PTR(Matrix4f, VisionModule::Input::upperCamInFeet);
+      JsonUtils::jsonToType(*upperCamTrans, root, Matrix4f::Identity());
+    } else {
+      root = JsonUtils::readJson(basePath + "Bottom/Transformation-" + CameraModule::getCurrentImagePath().path().stem().string() + ".json");
+      auto lowerCamTrans = IVAR_PTR(Matrix4f, VisionModule::Input::lowerCamInFeet);
+      JsonUtils::jsonToType(*lowerCamTrans, root, Matrix4f::Identity());
+    }
+  }
   cameraTransforms[toUType(activeCamera)]->update();
   #else
   cameraModule->updateImage(activeCamera);
   cameraTransforms[toUType(activeCamera)]->update();
   #endif
+  if (GET_DVAR(int, logCameraTransform)) {
+    Json::Value root;
+    string filePath;
+    if (activeCamera == CameraId::headTop) {
+      root = JsonUtils::getJson(UPPER_CAM_TRANS_IN(VisionModule));
+      filePath = ConfigManager::getLogsDirPath() +
+            "Images/Top/Transformation-" + CameraModule::getLogDatTime() + ".json";
+    } else {
+      root = JsonUtils::getJson(LOWER_CAM_TRANS_IN(VisionModule));
+      filePath = ConfigManager::getLogsDirPath() +
+            "Images/Bottom/Transformation-" + CameraModule::getLogDatTime() + ".json";
+    }
+    std::ofstream file;
+    file.open(filePath);
+    Json::FastWriter fastWriter;
+    file << fastWriter.write(root);
+    file.close();
+  }
 }
 
 void VisionModule::handleVideoWriting()
@@ -266,26 +316,20 @@ void VisionModule::handleVideoWriting()
 
 bool VisionModule::featureExtractionUpdate()
 {
-  /*featureExt[toUType(FeatureExtractionIds::segmentation)]->setEnabled(true);
-  featureExt[toUType(FeatureExtractionIds::field)]->setEnabled(true);
-  featureExt[toUType(FeatureExtractionIds::ball)]->setEnabled(true);
-  featureExt[toUType(FeatureExtractionIds::robot)]->setEnabled(true);
-  featureExt[toUType(FeatureExtractionIds::goal)]->setEnabled(false);
-  featureExt[toUType(FeatureExtractionIds::lines)]->setEnabled(true);*/
-  if (colorHandler->fieldHistFormed()) {
-    for (const auto& fe : featureExt) {
-      if (fe->isEnabled()) {
-        fe->setActiveCamera(activeCamera);
-        try {
-          fe->processImage();
-        } catch (exception& e) {
-          LOG_EXCEPTION("Exception raised in " << fe->getName() << "::processImage():\n\t" << e.what());
-        }
+  //if (colorHandler->fieldHistFormed()) {
+  for (const auto& fe : featureExt) {
+    if (fe->isEnabled()) {
+      fe->setActiveCamera(activeCamera);
+      try {
+        fe->processImage();
+      } catch (exception& e) {
+        LOG_EXCEPTION("Exception raised in " << fe->getName() << "::processImage():\n\t" << e.what());
       }
     }
-    return true;
   }
-  return false;
+  return true;
+  //}
+  //return false;
 }
 
 void VisionModule::updateLandmarksInfo()
@@ -298,9 +342,9 @@ void VisionModule::updateLandmarksInfo()
       FeatureExtraction::getUnknownLandmarks());
   BaseModule::publishModuleRequest(klu);
   BaseModule::publishModuleRequest(ulu);
-  LOG_INFO("N landmarks seen1: " << ulu->landmarks.size());
-  LOG_INFO("N landmarks seen2: " << klu->landmarks.size());
-  LOG_INFO("LastIterationTimeMS: " << this->lastIterationTimeMS);
+  //LOG_INFO("N landmarks seen1: " << ulu->landmarks.size());
+  //LOG_INFO("N landmarks seen2: " << klu->landmarks.size());
+  //LOG_INFO("LastIterationTimeMS: " << this->lastIterationTimeMS);
   /*for (auto l : klu->landmarks) {
     if (l->type == 0) {
       cout << "l->type:" << l->type << endl;
@@ -331,15 +375,9 @@ void VisionModule::setupFieldProjection()
       fieldPoints.push_back(Point3f(x, -y, 0.0));
       x -= 0.5f;
     }
-    float xEllipse = 0;
     float ellipseRadius = 0.75;
-    for (int i = 0; i < 25; ++i) {
-      xEllipse += 0.75 / 25.0;
-      //cout << "xEllipse: " << xEllipse << endl;
-      float yEllipse =
-      sqrt(ellipseRadius * ellipseRadius - xEllipse * xEllipse);
-      fieldPoints.push_back(Point3f(xEllipse, yEllipse, 0.0));
-      fieldPoints.push_back(Point3f(xEllipse, -yEllipse, 0.0));
+    for (int i = 0; i < 360; ++i) {
+      fieldPoints.push_back(Point3f(ellipseRadius * cos(i*MathsUtils::DEG_TO_RAD), ellipseRadius * sin(i*MathsUtils::DEG_TO_RAD), 0.0));
     }
     fieldPointsSaved = true;
   }
@@ -349,8 +387,10 @@ void VisionModule::setupFieldProjection()
   VisionUtils::drawPoints(imagePs, FeatureExtraction::getBgrMat(0));
   cameraTransforms[1]->worldToImage(fieldPoints, imagePs);
   VisionUtils::drawPoints(imagePs, FeatureExtraction::getBgrMat(1));
+  #ifdef MODULE_IS_REMOTE
   VisionUtils::displayImage("Top", FeatureExtraction::getBgrMat(0));
   VisionUtils::displayImage("Bottom", FeatureExtraction::getBgrMat(1));
+  #endif
 }
 
 void VisionModule::setupFeatureExtraction()
@@ -461,10 +501,14 @@ void VisionModule::sendImages()
       Mat image = FeatureExtraction::makeYuvMat(static_cast<CameraId>(GET_DVAR(int, debugImageIndex)));
       Mat out;
       colorHandler->getBinary(image, out, static_cast<TNColors>(GET_DVAR(int, sendBinaryImage)));
-      image = out;
+      #ifndef MODULE_IS_REMOTE
       UserCommRequestPtr request =
-        boost::make_shared<SendImageRequest>(image);
+        boost::make_shared<SendImageRequest>(out);
       BaseModule::publishModuleRequest(request);
+      #else
+      VisionUtils::displayImage("binary", out);
+      waitKey(0);
+      #endif
     } else {
       Mat image = FeatureExtraction::getBgrMat(cameraIndex);
       ///cv::resize(image, image, Size(160, 120));

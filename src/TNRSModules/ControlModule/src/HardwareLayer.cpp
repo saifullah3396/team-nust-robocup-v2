@@ -259,6 +259,7 @@ void ActuatorLayer::update()
     if (requests.isEmpty())
       return;
     ///< Get the earliest request in queue
+    cout << "Getting que front" << endl;
     auto request = requests.queueFront();
     #ifndef V6_CROSS_BUILD
       for (size_t i = 0; i < size; ++i) {
@@ -271,6 +272,7 @@ void ActuatorLayer::update()
     ///< @todo Define lola based request handler for realtime usage
     #endif
     #endif
+    cout << "popping que" << endl;
     ///< Execute in remove
     requests.popQueue();
   } catch (const exception& e) {

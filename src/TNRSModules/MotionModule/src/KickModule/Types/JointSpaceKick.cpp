@@ -107,6 +107,7 @@ bool JointSpaceKick<Scalar>::initiate()
 template <typename Scalar>
 void JointSpaceKick<Scalar>::update()
 {
+  cout << "state: " << fsm->state->name << endl;
   if (fsm->update())
     finish();
 }
@@ -176,14 +177,23 @@ void JointSpaceKick<Scalar>::GoToBalance::onRun()
 
 template <typename Scalar>
 void JointSpaceKick<Scalar>::PlanKick::onRun() {
+  auto tStart = high_resolution_clock::now();
   ///< Get the current balancing pose
   this->bPtr->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
+  duration<double> timeSpan = high_resolution_clock::now() - tStart;
+  cout << "time takne: " << timeSpan.count() << endl;
   ///< Set the transformation frames
   this->bPtr->setTransformFrames(JointStateType::sim);
+  timeSpan = high_resolution_clock::now() - tStart;
+  cout << "time takne: " << timeSpan.count() << endl;
   ///< Solve the impact conditions
   this->bPtr->solveForImpact();
+  timeSpan = high_resolution_clock::now() - tStart;
+  cout << "time takne: " << timeSpan.count() << endl;
   ///< Plan kicking trajectory
   this->bPtr->defineTrajectory();
+  timeSpan = high_resolution_clock::now() - tStart;
+  cout << "time takne: " << timeSpan.count() << endl;
   ///< Plot the kicking trajectory
   //this->bPtr->plotKick();
   if (!this->bPtr->kickFailed) {
@@ -191,6 +201,8 @@ void JointSpaceKick<Scalar>::PlanKick::onRun() {
   } else {
     this->nextState = this->bPtr->setStartPosture.get();
   }
+  timeSpan = high_resolution_clock::now() - tStart;
+  cout << "time takne: " << timeSpan.count() << endl;
 }
 
 template <typename Scalar>
@@ -307,11 +319,11 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   }
 
   ///< Get end-effector transformation in support leg frame
-  //cout << "this->supportToKick:" << this->supportToKick << endl;
-  //cout << "this->endEffector:" << this->endEffector << endl;
+  cout << "this->supportToKick:" << this->supportToKick << endl;
+  cout << "this->endEffector:" << this->endEffector << endl;
   ///
   Matrix<Scalar, 4, 4> eeTrans = this->supportToKick * this->endEffector;
-  //cout << "this->eeTrans:" << eeTrans << endl;
+  cout << "this->eeTrans:" << eeTrans << endl;
   ///< Define via points for pre-impact phase.
   const Scalar balldx = this->ballRadius * this->ballToTargetUnit[0];
   const Scalar balldy = this->ballRadius * this->ballToTargetUnit[1];
@@ -328,29 +340,29 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   preImpactPose1 = eeTrans;
   preImpactPose1(2, 3) += preImpactAlpha;
   preImpactPose2.setIdentity();
-  preImpactPose2(0, 3) = (this->impactPose(0, 3) + preImpactPose1(0, 3)) / 2;
-  preImpactPose2(1, 3) = (this->impactPose(1, 3) + preImpactPose1(1, 3)) / 2;
-  preImpactPose2(2, 3) = (this->impactPose(2, 3) + preImpactPose1(2, 3)) / 2;
+  preImpactPose2(0, 3) = (this->impactPose(0, 3) + preImpactPose0(0, 3)) / 2;
+  preImpactPose2(1, 3) = (this->impactPose(1, 3) + preImpactPose0(1, 3)) / 2;
+  preImpactPose2(2, 3) = (this->impactPose(2, 3) + preImpactPose0(2, 3)) / 2;
   preImpactPose2(0, 3) =
     preImpactPose2(0, 3) - balldx * preImpactBeta;
   preImpactPose2(1, 3) =
     preImpactPose2(1, 3) - balldy * preImpactBeta;
   ///< Define via points for post-impact phase
-  Matrix<Scalar, 4, 4> postImpactPose2, postImpactPose1;
-  postImpactPose1 = preImpactPose1;
-  postImpactPose1(2, 3) += postImpactGroundDist;
+  Matrix<Scalar, 4, 4> postImpactPose2;//, postImpactPose1;
+  //postImpactPose1 = preImpactPose0;
+  //postImpactPose1(2, 3) += postImpactGroundDist;
   postImpactPose2 = preImpactPose0;
   postImpactPose2(2, 3) += postImpactGroundDist;
   ///< Update all cartesian poses
   cPosesPre.push_back(preImpactPose0);
-  cPosesPre.push_back(preImpactPose1);
+  //cPosesPre.push_back(preImpactPose1);
   cPosesPre.push_back(preImpactPose2);
   //cPosesPre.push_back(preImpactPose3);
   cPosesPre.push_back(this->impactPose);
   cPosesPost.push_back(this->impactPose);
-  //cout << "impactJoints:" << this->impactPose << endl;
-  //cout << "endeffector:" << this->endEffector << endl;
-  cPosesPost.push_back(postImpactPose1);
+  cout << "impactJoints:" << this->impactPose << endl;
+  cout << "endeffector:" << this->endEffector << endl;
+  //cPosesPost.push_back(postImpactPose1);
   cPosesPost.push_back(postImpactPose2);
   ///< Setup for inverse kinematics
   Matrix<Scalar, Dynamic, Dynamic> jointPosPre;
@@ -770,7 +782,7 @@ void JointSpaceKick<Scalar>::requestExecution(const bool& addArmsMovement)
       timeStep++;
     }
     this->totalTimeToKick = (timeStep-1) *  this->cycleTime;
-    this->naoqiJointInterpolation(jointIds, jointTimes, jointPositions, true);
+    this->naoqiJointInterpolation(jointIds, jointTimes, jointPositions, false);
   } else {
     auto linkChain = this->kM->getLinkChain(this->kickLeg);
     unsigned chainStart = linkChain->start;
@@ -795,7 +807,7 @@ void JointSpaceKick<Scalar>::requestExecution(const bool& addArmsMovement)
     }
     this->totalTimeToKick = (trajStep + 1) * this->cycleTime;
     //this->kickTimeStep = 0.f;
-    this->naoqiJointInterpolation(jointIds, jointTimes, jointPositions, true);
+    this->naoqiJointInterpolation(jointIds, jointTimes, jointPositions, false);
     //plotJointTrajectories();
   }
 }
@@ -905,6 +917,7 @@ void JointSpaceKick<Scalar>::plotKick()
     eeZ.push_back(eeTrans(2,3));
   }
   plotEnv.plot3D("End-Effector Position", eeX, eeY, eeZ);
+  plotEnv.showonscreen();
 }
 
 template class JointSpaceKick<MType>;

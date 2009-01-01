@@ -14,6 +14,7 @@
 DEFINE_BEHAVIOR_CONFIG(
   MBBalanceConfig, MBConfig, MBBalanceConfigPtr,
   (MBBalanceTypes, mpComControl, MPComControlConfig),
+  (MBBalanceTypes, keyFrameBalance, KeyFrameBalanceConfig),
   (MBBalanceTypes, pidComControl, PIDComControlConfig),
   (MBBalanceTypes, zmpControl, ZmpControlConfig),
 );
@@ -37,6 +38,9 @@ void MPComControlConfig::validate()
       );
   }
 }
+
+void KeyFrameBalanceConfig::init() {}
+void KeyFrameBalanceConfig::validate() {}
 
 void PIDComControlConfig::init() {}
 void PIDComControlConfig::validate()

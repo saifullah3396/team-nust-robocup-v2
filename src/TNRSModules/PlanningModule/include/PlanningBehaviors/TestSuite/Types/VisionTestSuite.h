@@ -62,13 +62,15 @@ private:
   boost::shared_ptr<VisionTestSuiteConfig> getBehaviorCast();
 
   void logImages(); ///< Test for for logging images, this is used for camera calibration
+  void logImagesWhileMoving(); ///< Test for for logging images, this is used for camera calibration
   void testSegmentation(); ///< Test for region segmentation
   void testFieldExtraction(); ///< Test for field extraction
   void testGoalExtraction(); ///< Test for goal extraction
   void testBallExtraction(); ///< Test for ball extraction
   void testRobotExtraction(); ///< Test for robot extraction
   void testLinesExtraction(); ///< Test for lines extraction
-  void testFieldProjection(); ///< Test for lines extraction
+  void testFieldProjection(); ///< Test for field projection
+  void testColorClassification(); ///< Test for color calibration
   void testAll(); ///< Test for all vision modules
 };
 

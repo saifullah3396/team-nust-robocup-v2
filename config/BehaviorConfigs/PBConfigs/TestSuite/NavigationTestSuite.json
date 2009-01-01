@@ -3,8 +3,8 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 3,
-  "startState" : "FollowBall",
+  "startState" : "PlanTowards",
   "startPose" : [0.0, 0.0, 0.0],
-  "goalPose" : [0.0, 0.0, 0.0],
+  "goalPose" : [0.5, 0.0, 0.0],
   "logData" : false
 }

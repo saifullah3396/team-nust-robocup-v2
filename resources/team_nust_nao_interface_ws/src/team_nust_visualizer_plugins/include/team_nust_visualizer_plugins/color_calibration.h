@@ -26,7 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 #pragma once
 
 #include <vector>
@@ -47,14 +47,14 @@ class QStackedWidget;
 
 namespace team_nust_visualizer_plugins
 {
-  
+
 class ColorCalibration: public rviz::Panel
 {
 Q_OBJECT
 public:
   ColorCalibration(QWidget* parent = 0);
   ~ColorCalibration() {}
-  
+
 virtual void load(const rviz::Config& config);
 virtual void save(rviz::Config config) const;
 
@@ -68,7 +68,7 @@ public Q_SLOTS:
 private Q_SLOTS:
   void publishSettings();
 
-private:     
+private:
   void readConfiguration();
 
   // Changes the camera
@@ -109,7 +109,7 @@ private:
 
   // Publishes the output to robot as a user command
   ros::Publisher camera_settings_publisher_;
-  
+
   // The ROS node handle.
   ros::NodeHandle nh_;
 };

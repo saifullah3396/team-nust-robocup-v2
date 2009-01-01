@@ -14,7 +14,6 @@
 #include "VisionModule/include/CameraTransform.h"
 #include "VisionModule/include/VisionModule.h"
 
-//!@todo: Replace Opencv kalman filter with our own kalman filter in BallTracker
 /**
  * @class BallTracker
  * @brief A class that provides a definition of a ball tracker based on

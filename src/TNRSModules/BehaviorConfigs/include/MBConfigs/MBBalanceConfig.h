@@ -45,6 +45,17 @@ DECLARE_BEHAVIOR_CONFIG_TYPE(
 );
 
 /**
+ * @struct KeyFrameBalanceConfig
+ * @brief Key frame balance shifting behavior
+ */
+DECLARE_BEHAVIOR_CONFIG_TYPE(
+  KeyFrameBalanceConfig,
+  MBBalanceConfig,
+  MBBalanceTypes::keyFrameBalance,
+  KeyFrameBalanceConfigPtr
+);
+
+/**
  * @struct PIDComControlConfig
  * @brief PID controller based com balance behavior
  */

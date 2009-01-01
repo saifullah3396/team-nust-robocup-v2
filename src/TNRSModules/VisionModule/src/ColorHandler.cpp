@@ -120,8 +120,8 @@ void ColorHandler::computeUVHist(const Mat& uv, const Mat& mask, const bool& dra
       minMaxLoc(avgHistU, &uMin, &uMax);
       minMaxLoc(avgHistV, &vMin, &vMax);
       for (int i = 0; i < 256; ++i) {
-        greenHistU[i] = avgHistU.at<float>(i / 8) < 0.3 * uMax ? 0 : 1.0;
-        greenHistV[i] = avgHistV.at<float>(i / 8) < 0.3 * vMax ? 0 : 1.0;
+        greenHistU[i] = avgHistU.at<float>(i / 8) < 0.1 * uMax ? 0 : 1.0;
+        greenHistV[i] = avgHistV.at<float>(i / 8) < 0.1 * vMax ? 0 : 1.0;
       }
       fieldHist = true;
       #ifdef MODULE_IS_REMOTE

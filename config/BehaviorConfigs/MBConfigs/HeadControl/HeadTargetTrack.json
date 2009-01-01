@@ -1,9 +1,21 @@
 {
-	"baseType" : 0,
-    "headTargetType" : 0,
-	"id" : 5,
-	"maxRuntime" : 9999,
-    "type" : 0,
-    "logData" : false
-}
-
+        "baseType" : 0,
+        "headTargetType" : 0,
+        "id" : 5,
+        "maxRuntime" : 15,
+        "type" : 1,
+        "scanConfig" : {
+            "baseType" : 0,
+            "headTargetType" : 0,
+            "id" : 5,
+            "maxRuntime" : 25.0,
+            "type" : 0,
+            "scanLowerArea" : false,
+            "totalWaitTime" : 0.0,
+            "scanMaxPitch" : 0.27925267815589905,
+            "scanMaxYaw" : 1.57,
+            "scanYawDivs" : 2,
+            "scanPitchDivs" : 1,
+            "logData" : false
+        }
+    },

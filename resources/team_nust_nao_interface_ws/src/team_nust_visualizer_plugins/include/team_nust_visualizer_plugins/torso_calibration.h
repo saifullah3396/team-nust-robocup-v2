@@ -27,38 +27,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <string>
+#pragma once
+
 #include <vector>
-#include "Utils/include/JsonUtils.h"
-#include "Utils/include/HardwareIds.h"
+#include <std_msgs/String.h>
+#include <ros/ros.h>
+#include <rviz/panel.h>
+
+class QPushButton;
+class QComboBox;
+class QSlider;
+class QLineEdit;
+class QTableWidget;
+class QTableWidgetItem;
+
+#define MAX_TEXT_BUFFER 100
 
 namespace team_nust_visualizer_plugins
 {
 
-#define NUM_ROBOT_NAMES 9
-
-static const std::string slider_names[6] {
-  "Ymin:", "Umin:", "Vmin:",
-  "Ymax:", "Umax:", "Vmax:"
-};
-
-static const std::string camera_names[toUType(CameraId::count)] {
-  "visionTop",
-  "visionBottom"
-};
-
-static const std::string robot_names[NUM_ROBOT_NAMES]
+class TorsoCalibration: public rviz::Panel
 {
- "Sim",
- "Nu-1",
- "Nu-2",
- "Nu-3",
- "Nu-4",
- "Nu-5",
- "Nu-6",
- "Nu-7",
- "Nu-8",
+Q_OBJECT
+public:
+  TorsoCalibration(QWidget* parent = 0);
+  ~TorsoCalibration() {}
+
+public Q_SLOTS:
+  void updateConfiguration();
+  void saveConfiguration();
+
+private Q_SLOTS:
+  void publishSettings();
+
+private:
+  // Name of the handled robot necessary to find robot configuration files
+  QString robot_name_;
+
+  // Editor for robot name
+  QComboBox* robot_name_combo_box_;
+
+  // Qt sliders for all the setting parameters
+  std::vector<QSlider*> sliders;
+
+  // Configuration save button
+  QPushButton* save_button_;
+
+  // Publishes the output to robot as a user command
+  ros::Publisher torso_settings_publisher_;
+
+  // The ROS node handle.
+  ros::NodeHandle nh_;
 };
 
-} // end namespace team_nust_visualizer_plugins
+} // team_nust_visualizer_plugins

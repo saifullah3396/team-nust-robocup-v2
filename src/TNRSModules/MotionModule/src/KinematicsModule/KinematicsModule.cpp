@@ -116,6 +116,7 @@ DenseMatrix transformVector(
 template <typename Scalar>
 KinematicsModule<Scalar>::KinematicsModule(MotionModule* motionModule) :
   MemoryBase(motionModule),
+  DebugBase("KinematicsModule", this),
   motionModule(motionModule),
   joints(toUType(Joints::count)),
   links(toUType(Links::count)), // + 1 for torso link
@@ -125,7 +126,8 @@ KinematicsModule<Scalar>::KinematicsModule(MotionModule* motionModule) :
   globalEnd(LegEEs::footCenter),
   logKinData(false)
 {
-  GET_CONFIG( "KinCalibration",
+  initDebugBase();
+  GET_CONFIG("KinCalibration",
     (Scalar, torsoPitchOffset, torsoPitchOffset),
     (Scalar, torsoRollOffset, torsoRollOffset),
     (bool, logKinData, logKinData),
@@ -2357,11 +2359,11 @@ void KinematicsModule<Scalar>::updateFootOnGround()
     }
     bufferAvg = bufferAvg / ffBufferSize;
 
-    if (bufferAvg[toUType(RobotFeet::lFoot)] < 0.1 && bufferAvg[toUType(RobotFeet::rFoot)] < 0.1) {
+    if (bufferAvg[0] < 0.1 && bufferAvg[1] < 0.1) {
       footOnGround = RobotFeet::unknown;
     } else {
-      if (bufferAvg[toUType(RobotFeet::lFoot)] > 1.3) footOnGround = RobotFeet::lFoot;
-      else if (bufferAvg[toUType(RobotFeet::lFoot)] > 1.3) footOnGround = RobotFeet::rFoot;
+      if (bufferAvg[0] > 1.3) footOnGround = RobotFeet::lFoot;
+      else if (bufferAvg[0] > 1.3) footOnGround = RobotFeet::rFoot;
       else footOnGround = RobotFeet::lFoot;
     }
   }
@@ -2451,13 +2453,21 @@ template <typename Scalar> void
 KinematicsModule<Scalar>::updateFootToCamT()
 {
   Matrix<Scalar, 4, 4> torsoToFeet = getFeetCenterT();
-  Matrix<Scalar, 4, 4> torsoPitchRot;
-  MathsUtils::makeRotationXYZ(
-    torsoPitchRot,
-    (Scalar) -torsoRollOffset * M_PI / 180,
-    (Scalar) -torsoPitchOffset * M_PI / 180,
-    (Scalar) 0.0);
-  torsoToFeet = torsoPitchRot * torsoToFeet;
+  Matrix<Scalar, 4, 4> torsoRot;
+  if (GET_DVAR(int, debug)) {
+    MathsUtils::makeRotationXYZ(
+      torsoRot,
+      (Scalar) -GET_DVAR(float, torsoRollOffset) * M_PI / 180,
+      (Scalar) -GET_DVAR(float, torsoPitchOffset) * M_PI / 180,
+      (Scalar) 0.0);
+  } else {
+    MathsUtils::makeRotationXYZ(
+      torsoRot,
+      (Scalar) -torsoRollOffset * M_PI / 180,
+      (Scalar) -torsoPitchOffset * M_PI / 180,
+      (Scalar) 0.0);
+  }
+  torsoToFeet = torsoRot * torsoToFeet;
   UPPER_CAM_TRANS_OUT(MotionModule) =
     (MathsUtils::getTInverse(
       getForwardEffector(
