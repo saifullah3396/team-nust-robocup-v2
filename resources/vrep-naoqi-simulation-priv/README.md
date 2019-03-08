@@ -42,10 +42,10 @@ For dynamic simulations in vrep, there are two versions of nao provided in model
  properties of an actual nao (real life robot). This model can be run by:
  
  ```
-./scripts/simulation_single_simple.sh
+./scripts/run_simulation.sh <scenes>/simple_nao.ttt
 ```
 
-* The other model named V50_nao_model_vrep.ttm is further modified from the 
+* The other model named v50_nao_model_vrep.ttm is a modified version of the 
  same model to have the inertial properties of an actual V50 Nao robot. 
  In addition, this model also has the foot collision mesh similar to an 
  actual Nao instead of a box mesh as provided in the vrep model. 
@@ -54,7 +54,7 @@ For dynamic simulations in vrep, there are two versions of nao provided in model
  by the script:
  
 ```
-./scripts/simulation_single_v50.sh
+./scripts/run_simulation.sh <scenes>/v50_dynamic.ttt
 ```
 
 Once the scene is loaded, and played, use the following script to start the interface:

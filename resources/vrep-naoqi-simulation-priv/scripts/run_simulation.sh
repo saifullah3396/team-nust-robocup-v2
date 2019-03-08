@@ -8,4 +8,4 @@ killgroup() {
 }
 
 killall vrep
-$PATH_TO_VREP_DIR/vrep.sh ../scenes/$1 -s
+$PATH_TO_VREP_DIR/vrep.sh $1 -s
