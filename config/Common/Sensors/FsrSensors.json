@@ -1,0 +1,18 @@
+{
+  "keys" : [
+    "Device/SubDeviceList/LFoot/FSR/FrontLeft/Sensor/Value",
+    "Device/SubDeviceList/LFoot/FSR/FrontRight/Sensor/Value",
+    "Device/SubDeviceList/LFoot/FSR/RearLeft/Sensor/Value",
+    "Device/SubDeviceList/LFoot/FSR/RearRight/Sensor/Value",
+    "Device/SubDeviceList/LFoot/FSR/TotalWeight/Sensor/Value",
+    "Device/SubDeviceList/LFoot/FSR/CenterOfPressure/X/Sensor/Value",
+    "Device/SubDeviceList/LFoot/FSR/CenterOfPressure/Y/Sensor/Value",
+    "Device/SubDeviceList/RFoot/FSR/FrontLeft/Sensor/Value",
+    "Device/SubDeviceList/RFoot/FSR/FrontRight/Sensor/Value",
+    "Device/SubDeviceList/RFoot/FSR/RearLeft/Sensor/Value",
+    "Device/SubDeviceList/RFoot/FSR/RearRight/Sensor/Value",
+    "Device/SubDeviceList/RFoot/FSR/TotalWeight/Sensor/Value",
+    "Device/SubDeviceList/RFoot/FSR/CenterOfPressure/X/Sensor/Value",
+    "Device/SubDeviceList/RFoot/FSR/CenterOfPressure/Y/Sensor/Value"
+  ]
+}

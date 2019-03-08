@@ -1,0 +1,14 @@
+{
+    "baseType" : 0,
+    "id" : 4,
+    "keepOtherLegContact" : true,
+    "keepTorsoUpright" : false,
+    "maxRuntime" : 45,
+    "regularizePosture" : true,
+    "supportLeg" : 3,
+    "type" : 2,
+    "logData" : true,
+    "timeToBalance" : 1.0,
+    "targetX" : 0.0,
+    "targetY" : 0.01
+}

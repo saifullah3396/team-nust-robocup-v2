@@ -1,0 +1,18 @@
+{
+  "keys" : [
+    "Device/SubDeviceList/Head/Touch/Front/Sensor/Value",
+    "Device/SubDeviceList/Head/Touch/Rear/Sensor/Value",
+    "Device/SubDeviceList/Head/Touch/Middle/Sensor/Value",
+    "Device/SubDeviceList/LHand/Touch/Back/Sensor/Value",
+    "Device/SubDeviceList/LHand/Touch/Left/Sensor/Value",
+    "Device/SubDeviceList/LHand/Touch/Right/Sensor/Value",
+    "Device/SubDeviceList/RHand/Touch/Back/Sensor/Value",
+    "Device/SubDeviceList/RHand/Touch/Left/Sensor/Value",
+    "Device/SubDeviceList/RHand/Touch/Right/Sensor/Value"
+  ]
+}
+
+
+
+
+

@@ -1,0 +1,8 @@
+{
+  "baseType" : 2,
+  "id" : 5,
+  "maxRuntime" : 9999,
+  "type" : 2,
+  "requestedBehavior" : "MovementModule/SpeedWalk.json",
+  "logData" : false
+}

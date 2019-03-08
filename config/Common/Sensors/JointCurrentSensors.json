@@ -1,0 +1,28 @@
+{
+  "keys" : [
+    "Device/SubDeviceList/HeadYaw/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/HeadPitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LShoulderPitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LShoulderRoll/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LElbowYaw/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LElbowRoll/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LWristYaw/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RShoulderPitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RShoulderRoll/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RElbowYaw/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RElbowRoll/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RWristYaw/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LHipYawPitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LHipRoll/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LHipPitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LKneePitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LAnklePitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LAnkleRoll/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/LHipYawPitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RHipRoll/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RHipPitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RKneePitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RAnklePitch/ElectricCurrent/Sensor/Value",
+    "Device/SubDeviceList/RAnkleRoll/ElectricCurrent/Sensor/Value"
+  ]
+}

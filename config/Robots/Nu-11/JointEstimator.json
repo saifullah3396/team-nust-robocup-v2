@@ -1,0 +1,146 @@
+{
+  "HeadYaw" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "HeadPitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LShoulderPitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LShoulderRoll" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LElbowYaw" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LElbowRoll" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LWristYaw" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RShoulderPitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RShoulderRoll" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RElbowYaw" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RElbowRoll" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RWristYaw" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LHipYawPitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LHipRoll" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LHipPitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LKneePitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LAnklePitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "LAnkleRoll" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RHipYawPitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RHipRoll" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RHipPitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RKneePitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RAnklePitch" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  },
+  "RAnkleRoll" : {
+    "pid" : [1000, 0.0, 50],
+    "procVariance" : [0.001, 0.001],
+    "measVariance" : 0.001,
+    "useInput" : false
+  }
+}

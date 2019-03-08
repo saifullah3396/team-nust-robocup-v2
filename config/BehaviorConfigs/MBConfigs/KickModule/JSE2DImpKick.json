@@ -1,0 +1,30 @@
+{
+	"ball" : 
+	[
+		0,
+		0
+	],
+	"ballVel" : 
+	[
+		0,
+		0
+	],
+	"baseType" : 0,
+	"id" : 1,
+	"maxRuntime" : 20,
+	"minTimeToKick" : 1,
+	"reqVel" : 
+	[
+		-1,
+		-1
+	],
+	"target" : 
+	[
+		-1,
+		-1
+	],
+	"timeUntilImpact" : 0,
+    "type" : 1,
+    "logData" : false
+}
+

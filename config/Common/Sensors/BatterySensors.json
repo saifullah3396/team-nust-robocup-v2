@@ -1,0 +1,8 @@
+{
+  "keys" : [
+    "Device/SubDeviceList/Battery/Temperature/Sensor/Value",
+    "Device/SubDeviceList/Battery/Current/Sensor/Value",
+    "Device/SubDeviceList/Battery/Charge/Sensor/Value",
+    "Device/SubDeviceList/Battery/Temperature/Sensor/Value"
+  ]
+}

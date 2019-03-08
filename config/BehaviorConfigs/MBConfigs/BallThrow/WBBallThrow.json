@@ -1,0 +1,11 @@
+{
+    "baseType" : 0,
+    "id" : 3,
+    "maxRuntime" : 999,
+    "type" : 0,
+    "timeToThrow" : 2.0,
+    "throwVelocity" : 1.0,
+    "throwAngle" : 0.0,
+    "headTapToStart" : false,
+    "logData" : true
+}

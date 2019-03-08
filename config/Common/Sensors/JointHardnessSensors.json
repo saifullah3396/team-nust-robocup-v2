@@ -1,0 +1,28 @@
+{
+  "keys" : [
+    "Device/SubDeviceList/HeadYaw/Hardness/Actuator/Value",
+    "Device/SubDeviceList/HeadPitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LShoulderPitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LShoulderRoll/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LElbowYaw/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LElbowRoll/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LWristYaw/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RShoulderPitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RShoulderRoll/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RElbowYaw/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RElbowRoll/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RWristYaw/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LHipYawPitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LHipRoll/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LHipPitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LKneePitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LAnklePitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LAnkleRoll/Hardness/Actuator/Value",
+    "Device/SubDeviceList/LHipYawPitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RHipRoll/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RHipPitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RKneePitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RAnklePitch/Hardness/Actuator/Value",
+    "Device/SubDeviceList/RAnkleRoll/Hardness/Actuator/Value"
+  ]
+}

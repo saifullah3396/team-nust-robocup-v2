@@ -1,0 +1,9 @@
+{
+    "baseType" : 0,
+    "id" : 6,
+    "keyFrameDiveType" : 2,
+    "maxRuntime" : 999,
+    "type" : 1,
+    "supportLeg" : 3,
+    "logData" : false
+}

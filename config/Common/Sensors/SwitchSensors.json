@@ -1,0 +1,9 @@
+{
+  "keys" : [
+    "Device/SubDeviceList/ChestBoard/Button/Sensor/Value",
+    "Device/SubDeviceList/LFoot/Bumper/Right/Sensor/Value",
+    "Device/SubDeviceList/LFoot/Bumper/Left/Sensor/Value",
+    "Device/SubDeviceList/RFoot/Bumper/Right/Sensor/Value",
+    "Device/SubDeviceList/RFoot/Bumper/Left/Sensor/Value"
+  ]
+}

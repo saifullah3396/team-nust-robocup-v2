@@ -1,0 +1,7 @@
+{
+    "baseType" : 0,
+    "id" : 2,
+    "maxRuntime" : 3600,
+    "type" : 1,
+    "logData" : false
+}

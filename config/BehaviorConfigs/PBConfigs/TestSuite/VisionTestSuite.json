@@ -1,0 +1,9 @@
+{
+  "baseType" : 2,
+  "id" : 5,
+  "maxRuntime" : 9999,
+  "type" : 0,
+  "testType" : "LinesExtraction",
+  "startPose" : [0.0, 0.0, 0.0],
+  "logData" : false
+}

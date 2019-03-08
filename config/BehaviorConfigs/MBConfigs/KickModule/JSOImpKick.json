@@ -1,0 +1,52 @@
+{
+	"ball" : 
+	[
+        0.16,
+        -0.05
+	],
+	"baseType" : 0,
+	"id" : 1,
+    "maxRuntime" : 999,
+	"minTimeToKick" : 1,
+    "logData" : true,
+	"reqVel" : 
+	[
+        0.75,
+        0
+	],
+	"target" : 
+	[
+        -1.0,
+        0.0
+    ],
+    "targetDistAngle" :
+    [
+        -1,
+        0
+    ],
+    "type" : 0,
+    "balanceConfig1" : {
+        "baseType" : 0,
+        "id" : 4,
+        "maxRuntime" : 45,
+        "supportLeg" : 0,
+        "timeToReachB" : 1.0,
+        "type" : 0,
+        "logData" : false
+    },
+    "balanceConfig" : {
+        "baseType" : 0,
+        "id" : 4,
+        "keepOtherLegContact" : true,
+        "keepTorsoUpright" : false,
+        "maxRuntime" : 45,
+        "regularizePosture" : false,
+        "supportLeg" : 3,
+        "type" : 2,
+        "logData" : true,
+        "timeToReachB" : 1.0,
+        "targetX" : 0.0,
+        "targetY" : 0.01
+    },
+    "inKickBalance" : true
+}

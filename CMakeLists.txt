@@ -1,0 +1,23 @@
+# General parameters
+cmake_minimum_required(VERSION 2.8.12)
+project (team-nust-spl)
+
+find_package(qibuild)
+
+include($ENV{PATH_TO_TEAM_NUST_DIR}/make/cmake/common.cmake)
+include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources)
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/RandomLib)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/SbplLib)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/Utils)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSBase)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/BehaviorManager)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/GameCommModule)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/UserCommModule)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/ControlModule)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/SBModule)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/MotionModule)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/PlanningModule)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/VisionModule)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/LocalizationModule)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TeamNUSTSPL)
