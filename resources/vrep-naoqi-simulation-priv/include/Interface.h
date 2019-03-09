@@ -125,5 +125,5 @@ private:
   int actuatorsUpdatePeriod;
   
   //! Sensors update period
-  int sensorsUpdatePeriod
+  int sensorsUpdatePeriod;
 };
