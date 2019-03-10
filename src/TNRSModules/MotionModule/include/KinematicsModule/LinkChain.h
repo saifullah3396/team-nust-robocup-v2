@@ -75,7 +75,13 @@ struct LinkChain
     const Scalar& mass = Scalar(0),
     const Matrix<Scalar, 4, 4>& startT = Matrix<Scalar, 4, 4>::Identity(),
     const Matrix<Scalar, 4, 4>& endT = Matrix<Scalar, 4, 4>::Identity()) :
-    index(index), start(toUType(start)), size(toUType(size)), mass(mass), startT(startT), endT(endT)
+    index(index),
+    start(toUType(start)),
+    size(toUType(size)),
+    end(toUType(start) + toUType(size)),
+    mass(mass),
+    startT(startT),
+    endT(endT)
   {
     for (size_t i = 0; i < toUType(JointStateType::count); ++i) {
       jacobianInfo.push_back(
@@ -91,6 +97,9 @@ struct LinkChain
   
   //! LinkChain size
   unsigned size;
+
+  //! LinkChain size
+  unsigned end;
   
   //! Total mass of the chain
   Scalar mass;

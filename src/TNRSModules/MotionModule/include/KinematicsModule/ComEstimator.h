@@ -60,6 +60,14 @@ public:
   void update(const Matrix<Scalar, MeasSize, 1>& meas);
 
   /**
+   * @brief setState Sets the model state
+   * @param state Center of mass state
+   */
+  void setState(const Matrix<Scalar, 3, 1>& state) {
+    model->setState(state);
+  }
+
+  /**
    * @brief getState Returns the current system state
    */ 
   Matrix<Scalar, 3, 1> getState() { return model->getState(); }

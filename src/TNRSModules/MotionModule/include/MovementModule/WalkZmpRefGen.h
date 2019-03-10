@@ -54,6 +54,13 @@ public:
   void update(const Scalar& timeStep) final;
 
   /**
+   * @brief retransform Retransforms the zmp references to the
+   *   current global support foot frame
+   * @param timeStep Current time step of update
+   */
+  void retransform(Scalar timeStep);
+
+  /**
    * @brief previewsAvailable Returns true if the queued steps
    * are sufficient to fill the preview window
    * @param timeStep Time step of walk update cycle
@@ -65,7 +72,7 @@ private:
   std::deque<boost::shared_ptr<TNRSFootstep<Scalar>>>* footsteps;
 
   //! Pose that determines total transformation
-  RobotPose2D<Scalar> transPose;
+  RobotPose2D<Scalar> globalTransPose;
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

@@ -120,8 +120,7 @@ void RequestBehavior::StartRequested::onRun() {
       BehaviorException(
         bPtr,
         "Unable to parse json config:\n\t" +
-        ConfigManager::getPBConfigsPath() +
-        "RobotStartup/RequestBehavior.json.",
+        jsonConfigPath,
         true
       );
     }

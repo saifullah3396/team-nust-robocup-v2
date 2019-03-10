@@ -41,7 +41,8 @@ Json::Value RobotPose2D<Scalar>::getJson() const
 
 template <typename Scalar>
 template <typename OtherScalar>
-RobotPose2D<OtherScalar> RobotPose2D<Scalar>::transform(const RobotPose2D<OtherScalar>& p) {
+RobotPose2D<OtherScalar> RobotPose2D<Scalar>::transform(const RobotPose2D<OtherScalar>& p)
+{
   return
     RobotPose2D<OtherScalar>(
       getX() + p.getX() * ct - p.getY() * st,
@@ -56,7 +57,8 @@ template RobotPose2D<double> RobotPose2D<double>::transform(const RobotPose2D<do
 
 template <typename Scalar>
 template <typename OtherScalar>
-Matrix<OtherScalar, 3, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScalar, 3, 1>& p) {
+Matrix<OtherScalar, 3, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScalar, 3, 1>& p)
+{
   return
     Matrix<OtherScalar, 3, 1>(
       getX() + p[0] * ct - p[1] * st,
@@ -71,7 +73,8 @@ template Matrix<double, 3, 1> RobotPose2D<double>::transform(const Matrix<double
 
 template <typename Scalar>
 template <typename OtherScalar>
-Matrix<OtherScalar, 2, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScalar, 2, 1>& p) {
+Matrix<OtherScalar, 2, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScalar, 2, 1>& p)
+{
  return Matrix<OtherScalar, 2, 1>(
      getX() + p[0] * ct - p[1] * st,
      getY() + p[0] * st + p[1] * ct
@@ -84,7 +87,8 @@ template Matrix<double, 2, 1> RobotPose2D<double>::transform(const Matrix<double
 
 template <typename Scalar>
 template <typename OtherScalar>
-cv::Point_<OtherScalar> RobotPose2D<Scalar>::transform(const cv::Point_<OtherScalar>& p) {
+cv::Point_<OtherScalar> RobotPose2D<Scalar>::transform(const cv::Point_<OtherScalar>& p)
+{
   return
     cv::Point_<OtherScalar>(
       getX() + p.x * ct - p.y * st,
@@ -98,6 +102,16 @@ template cv::Point_<float> RobotPose2D<double>::transform(const cv::Point_<float
 template cv::Point_<double> RobotPose2D<float>::transform(const cv::Point_<double>& p);
 template cv::Point_<double> RobotPose2D<double>::transform(const cv::Point_<double>& p);
 
+template <typename Scalar>
+RobotPose2D<Scalar> RobotPose2D<Scalar>::getInverse() const
+{
+  return
+    RobotPose2D<Scalar>(
+      -ct * getX() - st * getY(),//-(cos(-getTheta()) * x - sin(-getTheta()) * y),
+      st * getX() - ct * getY(),//-(sin(-getTheta()) * x + cos(-getTheta()) * y),
+      -getTheta()
+    );
+}
+
 template struct RobotPose2D<float>;
 template struct RobotPose2D<double>;
-

@@ -1054,21 +1054,11 @@ void KinematicsModule<Scalar>::updateTorsoState()
 template <typename Scalar>
 void KinematicsModule<Scalar>::updateComState()
 {
-  static auto lastGlobalBase = globalBase;
   Matrix<Scalar, 3, 1> comFoot;
   Matrix<Scalar, 2, 1> fsrZmp = computeFsrZmp(globalBase);
   //computeComWrtBase(globalBase, globalEnd, comFoot, JointStateType::sim);
   computeComWrtBase(static_cast<LinkChains>(globalBase), toUType(globalEnd), comFoot, JointStateType::actual);
   comState->position[2] = (Scalar) comFoot[2];
-  comState->baseFrame = globalBase;
-  comState->eeIndex = toUType(globalEnd);
-  if (lastGlobalBase != globalBase) {
-    for (int i = 0; i < comEstimator.size(); ++i) {
-      Matrix<Scalar, Dynamic, 1> state(3, 1);
-      state << comFoot[i], 0.0, 0.0;
-      comEstimator[i]->reset(state);
-    }
-  }
   Matrix<Scalar, 3, 1> imuPos =
     (globalToBody[(unsigned)JointStateType::actual] * Matrix<Scalar, 4, 1>(-0.008, 0.00606, 0.027, 1.0)).block(0, 0, 3, 1);
   //LOG_INFO("imuPos:" << imuPos)
@@ -1116,7 +1106,6 @@ void KinematicsModule<Scalar>::updateComState()
          << comAccel[0] << " "
          << comAccel[1] << endl;
   comLog.close();
-  lastGlobalBase = globalBase;
 }
 
 template <typename Scalar>
@@ -2440,7 +2429,7 @@ KinematicsModule<Scalar>::makeCartesianTask(
   const Scalar& gain,
   vector<bool> activeResidual)
 {
-  makeCartesianTask(
+  return makeCartesianTask(
     chainIndex,
     linkChains[toUType(chainIndex)]->endEffectors[eeIndex],
     targetT,
@@ -3242,10 +3231,25 @@ void KinematicsModule<Scalar>::setGlobalBase(
   const RobotFeet& globalBase, const LegEEs& globalEnd)
 {
   if (globalBase != this->globalBase) {
+    //! Get the transformation from new globalBase to previous globalBase
+    Matrix<Scalar, 4, 4> trans =
+      MathsUtils::getTInverse(
+        (Matrix<Scalar, 4, 4>)(getGlobalToBody() *
+        getForwardEffector(static_cast<LinkChains>(globalBase), toUType(globalEnd))));
     this->globalBase = globalBase;
     this->globalEnd = globalEnd;
     prepareDHTransforms();
-    updateComState();
+
+    comState->position = MathsUtils::transformVector(trans, comState->position);
+    comState->velocity = trans.block(0, 0, 3, 3) * comState->velocity;
+    comState->accel = trans.block(0, 0, 3, 3) * comState->accel;
+    Matrix<Scalar, 3, 1> xState, yState;
+    xState << comState->position[0],comState->velocity[0], comState->accel[0];
+    yState << comState->position[1],comState->velocity[1], comState->accel[1];
+    comEstimator[0]->setState(xState);
+    comEstimator[1]->setState(yState);
+    comState->baseFrame = globalBase;
+    comState->eeIndex = toUType(globalEnd);
   }
 }
 

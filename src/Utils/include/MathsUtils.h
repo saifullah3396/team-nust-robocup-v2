@@ -111,6 +111,15 @@ namespace MathsUtils
   MatrixBase<Derived> quaternionToMat(const QuaternionBase<Derived>& q);
 
   /**
+   * @brief matToVector Returns the x-y-z-r-p-y configuration vector for given
+   *   transformation matrix
+   * @param tMat Transformation matrix
+   * @return Configuration vector
+   */
+  template<typename Derived>
+  Matrix<typename Derived::Scalar, 6, 1> matToVector(const MatrixBase<Derived>& tMat);
+
+  /**
    * @brief Returns the euler angles for a given rotation matrix.
    * @param rot Input rotation matrix
    * @return Matrix<typename Derived::Scalar, 3, 1> Euler angles
@@ -133,7 +142,7 @@ namespace MathsUtils
    * @return MatrixBase<Derived> Rotaion matrix
    */
   template<typename Derived>
-  MatrixBase<Derived> eulerToMat(const MatrixBase<Derived>& euler);
+  Matrix<typename Derived::Scalar, 3, 3> eulerToMat(const MatrixBase<Derived>& euler);
 
   /**
    * @brief Returns the euler representation for a given quaternion.

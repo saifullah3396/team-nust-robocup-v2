@@ -27,7 +27,7 @@ void MotionGenerator<Scalar>::update()
   }
   if (!motionTasks.empty()) {
     this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
-    jointCmds = this->kM->solveTasksIK(motionTasks, 5);
+    jointCmds = this->kM->solveTasksIK(motionTasks, 1);
     motionTasks.clear();
   }
   auto jr = boost::make_shared<JointRequest>();

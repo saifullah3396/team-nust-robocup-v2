@@ -112,6 +112,20 @@ MatrixBase<Derived> quaternionToMat(const QuaternionBase<Derived>& q)
 }
 
 template<typename Derived>
+Matrix<typename Derived::Scalar, 6, 1> matToVector(const MatrixBase<Derived>& tMat)
+{
+  EIGEN_STATIC_ASSERT_FIXED_SIZE(Derived);
+  EIGEN_STATIC_ASSERT(
+        Derived::RowsAtCompileTime == 4 && Derived::ColsAtCompileTime == 4,
+        THIS_METHOD_IS_ONLY_FOR_MATRICES_OF_A_SPECIFIC_SIZE);
+  Matrix<typename Derived::Scalar, 6, 1> out;
+  out << tMat.block(0, 3, 3, 1), matToEuler((Matrix<typename Derived::Scalar, 3, 3>)tMat.block(0, 0, 3, 3));
+  return out;
+}
+template Matrix<typename Matrix<float, 4, 4>::Scalar, 6, 1> matToVector<Matrix<float, 4, 4> >(const MatrixBase<Matrix<float, 4, 4> >& tMat);
+template Matrix<typename Matrix<double, 4, 4>::Scalar, 6, 1> matToVector<Matrix<double, 4, 4> >(const MatrixBase<Matrix<double, 4, 4> >& tMat);
+
+template<typename Derived>
 Matrix<typename Derived::Scalar, 3, 1> matToEuler(const MatrixBase<Derived>& rot)
 {
   EIGEN_STATIC_ASSERT_FIXED_SIZE(Derived);

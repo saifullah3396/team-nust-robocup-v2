@@ -107,4 +107,37 @@ Matrix<Scalar, Dynamic, 1> ZmpPreviewController<Scalar>::step(const Matrix<Scala
   return trueState;
 }
 
+template<typename Scalar>
+Matrix<Scalar, Dynamic, 1> ZmpPreviewController<Scalar>::stepActual(const Matrix<Scalar, Dynamic, 1>& zmpRef)
+{
+  updateGains();
+  /*Scalar R = 1.0;
+  Matrix<Scalar, 3, 3> obsQ;
+  obsQ.setIdentity();
+  GET_CONFIG(
+    "MotionBehaviors",
+    (Scalar, ZmpControl.obsQ1, obsQ(0, 0)),
+    (Scalar, ZmpControl.obsQ2, obsQ(1, 1)),
+    (Scalar, ZmpControl.obsQ3, obsQ(2, 2)),
+    (Scalar, ZmpControl.obsR, R),
+  );
+  model->computeObsGain(obsQ, R);*/
+  //model->setTrueState(trueState);
+  Matrix<Scalar, 3, 1> estState = model->getState();
+  //cout << "comState:"  << estState.transpose() << endl;
+  //cout << "zmpRef: " << zmpRef.transpose() << endl;
+  //cout << "currentZmp: " << (model->getOutputMatrix() * estState)(0, 0) << endl;
+  //LOG_INFO("State Error: " << (trueState - estState).transpose());
+  Scalar prevGain = matPrevGain.dot(zmpRef);
+  intError = intError + ((model->getOutputMatrix() * estState)(0, 0) - zmpRef[0]);
+  //trueIntError = trueIntError + ((model->getOutputMatrix() * trueState)(0, 0) - zmpRef[0]);
+  Scalar controlInput =
+    -kGain(0, 0) * intError - (kGain.block(0, 1, 1, 3) * estState)(0, 0) - prevGain;
+  //Scalar controlInputTrue =
+  //  -kGain(0, 0) * trueIntError - (kGain.block(0, 1, 1, 3) * trueState)(0, 0) - prevGain;
+  //trueState = model->getUpdatedState(trueState, controlInputTrue);
+  model->setInput(controlInput);
+  return model->getUpdatedState(trueState, controlInput);
+}
+
 template class ZmpPreviewController<MType>;

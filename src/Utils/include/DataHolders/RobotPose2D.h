@@ -79,6 +79,12 @@ struct RobotPose2D : public TNRSPoint<Scalar, 3>, public DataHolder
   template <typename OtherScalar>
   cv::Point_<OtherScalar> transform(const cv::Point_<OtherScalar>& p);
 
+  /**
+   * @brief getInverse Returns the inverse pose
+   * @return RobotPose2D<Scalar>
+   */
+  RobotPose2D<Scalar> getInverse() const;
+
   template <typename OtherScalar>
   RobotPose2D<Scalar>& operator+=(const RobotPose2D<OtherScalar>& other)
   {

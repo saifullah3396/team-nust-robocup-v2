@@ -162,4 +162,6 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBMovementTypes::speedWalk,
   SpeedWalkConfigPtr,
   (VelocityInput<float>, velocityInput, VelocityInput<float>()),
+  (bool, minimizeJointVels, false),
+  (bool, keepTorsoUpright, false),
 )

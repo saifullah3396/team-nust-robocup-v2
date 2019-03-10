@@ -52,7 +52,14 @@ public:
    *
    * @return Matrix<Scalar, 3, 1> next state vector
    */
-  virtual Matrix<Scalar, Dynamic, 1> step(const Matrix<Scalar, Dynamic, 1>& zmpRef);
+  Matrix<Scalar, Dynamic, 1> step(const Matrix<Scalar, Dynamic, 1>& zmpRef);
+
+  /**
+   * @brief stepActual Updates the controller based on actual com state
+   * @param zmpRef Current zmp references
+   * @return Center of mass state
+   */
+  Matrix<Scalar, Dynamic, 1> stepActual(const Matrix<Scalar, Dynamic, 1>& zmpRef);
 
   /**
    * Sets the number of previewed steps for the preview controller.
@@ -62,6 +69,14 @@ public:
   void setPreviewLength(const unsigned& nPreviews)
   {
     this->nPreviews = nPreviews;
+  }
+
+  void setTrueState(const Matrix<Scalar, 3, 1>& trueState) {
+    this->trueState = trueState;
+  }
+
+  Matrix<Scalar, 3, 1> getTrueState() {
+    return trueState;
   }
 
 protected:

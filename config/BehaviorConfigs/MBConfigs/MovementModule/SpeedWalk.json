@@ -4,5 +4,7 @@
     "maxRuntime" : 3600,
     "type" : 2,
     "logData" : false,
-    "velocityInput" : [0.0, 0.0, 0.0]
+    "velocityInput" : [0.0, 0.0, 0.5],
+    "minimizeJointVels" : true,
+    "keepTorsoUpright" : true
 }

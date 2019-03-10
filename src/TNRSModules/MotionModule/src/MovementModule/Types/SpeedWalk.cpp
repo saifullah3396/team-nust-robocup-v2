@@ -8,8 +8,12 @@
  */
 
 #include "BehaviorManager/include/StateMachine.h"
+#include "MotionModule/include/BalanceModule/ZmpPreviewController.h"
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
+#include "MotionModule/include/KinematicsModule/ComState.h"
 #include "MotionModule/include/KinematicsModule/LinkChain.h"
+#include "MotionModule/include/KinematicsModule/MotionTask.h"
+#include "MotionModule/include/KinematicsModule/TaskIkSolver.h"
 #include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/MovementModule/TNRSFootstep.h"
 #include "MotionModule/include/MovementModule/Types/SpeedWalk.h"
@@ -18,7 +22,15 @@
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
 #include "Utils/include/Behaviors/MBConfigs/MBMovementConfig.h"
+#include "Utils/include/ConfigMacros.h"
 #include "Utils/include/VisionUtils.h"
+#include "Utils/include/Splines/BSpline.h"
+#include "Utils/include/PlotEnv.h"
+
+template<typename Scalar>
+vector<Scalar> SpeedWalk<Scalar>::taskWeights;
+template<typename Scalar>
+vector<Scalar> SpeedWalk<Scalar>::taskGains;
 
 template <typename Scalar>
 SpeedWalk<Scalar>::SpeedWalk(
@@ -26,17 +38,20 @@ SpeedWalk<Scalar>::SpeedWalk(
   const boost::shared_ptr<SpeedWalkConfig>& config) :
   MovementModule<Scalar>(motionModule, config, "SpeedWalk")
 {
-  DEFINE_FSM_STATE(SpeedWalk<Scalar>, PlanSteps, planSteps);
-  DEFINE_FSM_STATE(SpeedWalk<Scalar>, ExecuteDSS, executeDSS);
-  DEFINE_FSM_STATE(SpeedWalk<Scalar>, ExecuteSSS, executeSSS);
-  DEFINE_FSM(fsm, SpeedWalk<Scalar>, planSteps);
   params = boost::make_shared<WalkParameters<Scalar> >();
+  params->loadConfig();
   walkZmpRefGen =
     boost::make_shared<WalkZmpRefGen<Scalar> >(
       this->motionModule,
       this->kM->getGlobalBaseIndex(),
       params->nPreviews,
       &stepsQueue);
+}
+template <typename Scalar>
+SpeedWalk<Scalar>::~SpeedWalk()
+{
+  for (auto& c :  controllers)
+    delete c;
 }
 
 template <typename Scalar>
@@ -49,37 +64,134 @@ template <typename Scalar>
 bool SpeedWalk<Scalar>::initiate()
 {
   LOG_INFO("SpeedWalk.initiate() called...")
+  //! Set robotInMotion memory parameter
   ROBOT_IN_MOTION_OUT(MotionModule) = false;
+
+  //! Set global base
+  RobotFeet globalBase = RobotFeet::lFoot;
+
+  //! Set the global base to be the left foot
+  this->kM->setGlobalBase(globalBase, LegEEs::footCenter);
+
+  //! Set other leg as right foot
+  auto otherLeg = globalBase == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
+
   //! Set normalized walk velocity between -1 and 1
-  this->kM->setGlobalBase(RobotFeet::lFoot, LegEEs::footCenter);
   getBehaviorCast()->velocityInput.clip(-1, 1);
-  addFirstStep(); //! Generate first balance shift step
-  //for (const auto& fs : stepsQueue)
-  //{
-  //  fs->print();
-  //}
+
+  //! Generate first balance shift step
+  addFirstStep();
+
+  //! Fill the preview window
+  while (!walkZmpRefGen->previewsAvailable(this->runTime)) {
+    genNextStep();
+  }
+  LOG_INFO("NSteps: " << stepsQueue.size());
+
+  //! Initiate the Zmp reference generator for walk
   if (!walkZmpRefGen->initiate())
     return false;
 
-  //! Generate first two steps
-  //Mat drawing = Mat(Size(500, 500), CV_8UC3);
-  //genNextStep(vi);
-  /*auto step = this->getFrontStep();
-  cout << "Step at front:" << step << endl;
-  step->print();
-  cv::Scalar color;
-  color = step->foot == RobotFeet::lFoot ? cv::Scalar(255,0,0) : cv::Scalar(0,0,255);
-  VisionUtils::drawRotatedRect(drawing, step->getFootRect(Point2f(250, 250), 100), color);
-  for (int i = 0; i < 10; ++i) {
-    this->addStep(genNextStep(this->getBackStep()));
-    step = this->getBackStep();
-    cout << "Step at front:" << step << endl;
-    color = step->foot == RobotFeet::lFoot ? cv::Scalar(255,0,0) : cv::Scalar(0,0,255);
-    step->print();
-    VisionUtils::drawRotatedRect(drawing, step->getFootRect(Point2f(250, 250), 100), color);
-    VisionUtils::displayImage("drawing", drawing, 1.0);
-    cv::waitKey(0);
-  }*/
+  //! Set current joint estimates to simulated states
+  this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
+
+  //! Initiate the preview controllers for x-y directions
+  controllers.resize(2);
+  for (int i = 0; i < controllers.size(); ++i) {
+    controllers[i] = new ZmpPreviewController<Scalar>(this->kM->getComModel(i));
+    controllers[i]->setPreviewLength(params->nPreviews);
+    controllers[i]->initController();
+  }
+
+  //! Set shoulder pitch roll joint limits so it does not self collide if used
+  //this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(12.0), L_SHOULDER_ROLL);
+  //this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(22.0), L_SHOULDER_ROLL);
+  //this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(-12.0), R_SHOULDER_ROLL);
+  //this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(-22.0), R_SHOULDER_ROLL);
+  params->comHeight = this->kM->getComStateWrtFrame(
+    static_cast<LinkChains>(this->kM->getGlobalBaseIndex()), toUType(LegEEs::footBase)).position[2];
+
+  this->kM->getTaskSolver()->setMaxVelocityLimitGain(1.0);
+  auto activeJoints = vector<bool>(toUType(Joints::count), false);
+  auto baseChain = this->kM->getGlobalBase();
+  auto otherChain = this->kM->getLinkChain(static_cast<LinkChains>(otherLeg));
+  for (size_t i = baseChain->start; i < baseChain->end; ++i)
+    activeJoints[i] = true;
+  for (size_t i = otherChain->start; i < otherChain->end; ++i)
+    activeJoints[i] = true;
+
+  tasks.resize(toUType(IkTasks::count));
+  //! Make a center of mass task to control its desired trajectory
+  auto comResidual = vector<bool>(3, true);
+
+  //! Initiate a center of mass tracking task
+  tasks[toUType(IkTasks::com)] =
+    this->kM->makeComTask(
+      globalBase,
+      LegEEs::footCenter,
+      Matrix<Scalar, 3, 1>(),
+      activeJoints,
+      taskWeights[toUType(IkTasks::com)],
+      taskGains[toUType(IkTasks::com)],
+      comResidual
+    );
+
+  //! Initiate a step task
+  Matrix<Scalar, 4, 4> target = this->kM->getGlobalToOther();
+  tasks[toUType(IkTasks::step)] =
+    this->kM->makeCartesianTask(
+      static_cast<LinkChains>(otherLeg),
+      toUType(LegEEs::footCenter),
+      target,
+      activeJoints,
+      taskWeights[toUType(IkTasks::step)],
+      taskGains[toUType(IkTasks::step)]
+    );
+  Matrix<Scalar, Dynamic, 1> joints = this->kM->getJointPositions();
+  if (getBehaviorCast()->minimizeJointVels) {
+    //! Initiate a task to minimize the joint velocities
+    tasks[toUType(IkTasks::minJointVel)] =
+      this->kM->makePostureTask(
+        joints,
+        activeJoints,
+        taskWeights[toUType(IkTasks::minJointVel)],
+        taskGains[toUType(IkTasks::minJointVel)]
+      );
+  }
+
+  if (getBehaviorCast()->keepTorsoUpright) {
+    //! Torso task to keep torso orientation to the initial orientation
+    //! This can be useful if the torso is to be kept upright
+    Matrix<Scalar, 4, 4> target = Matrix<Scalar, 4, 4>::Identity();
+    auto activeResidual = vector<bool>(6, false); //! X-Y-Z, Roll-Pitch-Yaw
+    //! Only use Pitch and Yaw tracking
+    activeResidual[3] = true;
+    activeResidual[4] = true;
+    tasks[toUType(IkTasks::torso)] =
+      this->kM->makeTorsoTask(
+        globalBase,
+        LegEEs::footCenter,
+        target,
+        activeJoints,
+        taskWeights[toUType(IkTasks::torso)],
+        taskGains[toUType(IkTasks::torso)],
+        activeResidual
+      );
+  }
+
+  //! Set up center of mass and zmp reference logs
+  comLog.open(
+    (ConfigManager::getLogsDirPath() + string("SpeedWalk/Com.txt")).c_str(),
+    std::ofstream::out | std::ofstream::trunc
+  );
+  comLog << "# X Y" << endl;
+  comLog.close();
+  zmpRegLog.open(
+    (ConfigManager::getLogsDirPath() + string("SpeedWalk/zmpRef.txt")).c_str(),
+    std::ofstream::out | std::ofstream::trunc
+  );
+  zmpRegLog << "# X Y" << endl;
+  zmpRegLog.close();
   return true;
 }
 
@@ -92,51 +204,140 @@ void SpeedWalk<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
 template <typename Scalar>
 void SpeedWalk<Scalar>::update()
 {
+  static int nSteps = 0;
+  LOG_INFO("Runtime: " << this->runTime);
   getBehaviorCast()->velocityInput.clip(-1, 1);
-  if (!walkZmpRefGen->previewsAvailable(this->runTime)) {
-    cout << "Adding new step..." << endl;
-    cout << "nSteps:" << stepsQueue.size() << endl;
+  //! If the curent total number of steps are not enough
+  //! to fill the previewable zmp references add another step
+  //! relative to the latest step available in queue
+  while (!walkZmpRefGen->previewsAvailable(this->runTime)) {
     genNextStep();
   }
-  if (fsm->update())
-    finish();
-}
 
-template <typename Scalar>
-void SpeedWalk<Scalar>::PlanSteps::onRun()
-{
-  cout << "This->runtime:" << this->bPtr->runTime << endl;
-  for (const auto& fs : this->bPtr->stepsQueue)
-  {
-    if (this->bPtr->runTime == fs->timeAtFinish)
-      this->bPtr->popStep();
-  }
-  this->bPtr->walkZmpRefGen->update(this->bPtr->runTime);
-  //this->genStepTrajectory();
-  //this->nextState = this->bPtr->executeDSS.get();
-}
+  //! Move the zmp references one step forward
+  walkZmpRefGen->update(this->runTime);
 
-template <typename Scalar>
-void SpeedWalk<Scalar>::ExecuteDSS::onRun()
-{
-  /*
-  this->solveDSSMotion();
-  if (this->executeDSSMotion()) {
-    this->popStep();
-    this->nextState = this->bPtr->executeSSS.get();
-  }
-  */
-}
+  for (const auto& fs : stepsQueue) {
+    if (fabsf(this->runTime - fs->timeAtFinish) <= 1e-3) {
+      //LOG_INFO("fs->timeAtFinish: " << fs->timeAtFinish);
+      //! Last step is finished so change base support reference frame to
+      //! The last step foot which is at stepsQueue.front()
+      auto newBase = stepsQueue.front()->foot;
+      auto other = newBase == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
+      this->kM->setGlobalBase(newBase, LegEEs::footCenter);
+      boost::static_pointer_cast<CartesianTask<Scalar> >(tasks[static_cast<int>(IkTasks::step)])->setChainIndex(static_cast<LinkChains>(other));
+      boost::static_pointer_cast<CartesianTask<Scalar> >(tasks[static_cast<int>(IkTasks::step)])->setEndEffector(
+        this->kM->getLinkChain(static_cast<LinkChains>(other))->endEffectors[toUType(LegEEs::footCenter)]);
+      boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setBaseFrame(newBase);
+      if (getBehaviorCast()->keepTorsoUpright) {
+        //auto prevTarget = boost::static_pointer_cast<TorsoTask<Scalar> >(tasks[static_cast<int>(IkTasks::torso)])->getTarget();
+        //boost::static_pointer_cast<TorsoTask<Scalar> >(tasks[static_cast<int>(IkTasks::torso)])->setTarget(this->kM->getGlobalToOther() * prevTarget);
+        Matrix<Scalar, 4, 4> target = Matrix<Scalar, 4, 4>::Identity();
+        boost::static_pointer_cast<TorsoTask<Scalar> >(tasks[static_cast<int>(IkTasks::torso)])->setTarget(target);
+        boost::static_pointer_cast<TorsoTask<Scalar> >(tasks[static_cast<int>(IkTasks::torso)])->setBaseFrame(newBase);
+        boost::static_pointer_cast<TorsoTask<Scalar> >(tasks[static_cast<int>(IkTasks::torso)])->setEndEffector(
+          this->kM->getLinkChain(static_cast<LinkChains>(newBase))->endEffectors[toUType(LegEEs::footCenter)]);
+      }
 
-template <typename Scalar>
-void SpeedWalk<Scalar>::ExecuteSSS::onRun()
-{
-  /*
-  this->solveSSSMotion();
-  if (this->executeSSSMotion()) {
-    this->nextState = this->bPtr->planSteps.get();
+      //! Retransform the zmp references to the new support foot frame
+      walkZmpRefGen->retransform(this->runTime);
+      nSteps++;
+
+      Matrix<Scalar, 4, 4> trans = this->kM->getGlobalToOther();
+      Matrix<Scalar, 3, 1> cp, cv, ca;
+      Matrix<Scalar, 3, 1> xState = controllers[0]->getTrueState();
+      Matrix<Scalar, 3, 1> yState = controllers[1]->getTrueState();
+      cp[0] = xState[0];
+      cv[0] = xState[1];
+      ca[0] = xState[2];
+      cp[1] = yState[0];
+      cv[1] = yState[1];
+      ca[1] = yState[2];
+      cp[2] = params->comHeight;
+      cv[2] = 0.0;
+      ca[2] = 0.0;
+
+      cp = MathsUtils::transformVector(trans, cp);
+      cv = trans.block(0, 0, 3, 3) * cv;
+      ca = trans.block(0, 0, 3, 3) * ca;
+      xState[0] = cp[0];
+      xState[1] = cv[0];
+      xState[2] = ca[0];
+      yState[0] = cp[1];
+      yState[1] = cv[1];
+      yState[2] = ca[1];
+      controllers[0]->setTrueState(xState);
+      controllers[1]->setTrueState(yState);
+
+      //! Remove the last step from steps sequence
+      popStep();
+
+      //! Create the trajectory for the next step relative to new support
+      //! foot frame
+      this->genStepTrajectory();
+      if (nSteps >= 1000)
+        finish();
+      break;
+    }
   }
-  */
+
+  Matrix<Scalar, 3, 1> desComPosition;
+  auto& zmpRef = walkZmpRefGen->getCurrentRef();
+  desComPosition[0] =
+    controllers[0]->step(
+      Eigen::Map<Eigen::Matrix<Scalar, Eigen::Dynamic, 1> >(
+        zmpRef->x.linearize(), zmpRef->x.size()))[0];
+  desComPosition[1] =
+    controllers[1]->step(
+      Eigen::Map<Eigen::Matrix<Scalar, Eigen::Dynamic, 1> >(
+        zmpRef->y.linearize(), zmpRef->y.size()))[0];
+  desComPosition[2] = params->comHeight;
+  //Matrix<Scalar, 4, 4> target = this->kM->getGlobalToOther();
+  Matrix<Scalar, Dynamic, 1> targetJoints = this->kM->getJointPositions();
+  if (getBehaviorCast()->minimizeJointVels) {
+    //! Initiate a task to minimize the joint velocities
+    boost::static_pointer_cast<PostureTask<Scalar> >(tasks[toUType(IkTasks::minJointVel)])->setTargetPosture(targetJoints);
+  }
+
+  if (stepTraj.rows() > 0) {
+    Matrix<Scalar, 4, 4> stepTarget = Matrix<Scalar, 4, 4>::Identity();
+    Matrix<Scalar, 6, 1> desStepConfig = stepTraj.row(stepTrajIndex).transpose();
+    stepTarget.block(0, 3, 3, 1) = desStepConfig.block(0, 0, 3, 1);
+    Matrix<Scalar, 3, 1> eulers = desStepConfig.block(3, 0, 3, 1);
+    stepTarget.block(0, 0, 3, 3) = MathsUtils::eulerToMat(eulers);
+    boost::static_pointer_cast<CartesianTask<Scalar> >(tasks[static_cast<int>(IkTasks::step)])->setTarget(stepTarget);
+    stepTrajIndex++;
+  }
+
+  boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setTargetCom(desComPosition);
+  boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setFirstStep(true);
+
+  zmpRegLog.open(
+    (ConfigManager::getLogsDirPath() + string("SpeedWalk/zmpRef.txt")).c_str(),
+    std::ofstream::out | std::ofstream::app
+  );
+  zmpRegLog << zmpRef->x[0] << " " << zmpRef->y[0] << endl;
+  zmpRegLog.close();
+  comLog.open(
+    (ConfigManager::getLogsDirPath() + string("SpeedWalk/Com.txt")).c_str(),
+    std::ofstream::out | std::ofstream::app
+  );
+  auto comState = this->kM->getComStateWrtFrame(
+      static_cast<LinkChains>(this->kM->getGlobalBaseIndex()), toUType(LegEEs::footBase));
+  comLog << this->motionModule->getModuleTime() << "  "
+         << comState.position[0] << " "
+         << comState.position[1] << " "
+         << desComPosition[0] << " "
+         << desComPosition[1] << " "
+         << comState.zmp[0] << " "
+         << comState.zmp[1] << endl;
+  comLog.close();
+
+  for (auto& task : tasks) {
+    if (task) {
+      this->addMotionTask(task);
+    }
+  }
 }
 
 template <typename Scalar>
@@ -144,6 +345,81 @@ void SpeedWalk<Scalar>::finish()
 {
   LOG_INFO("SpeedWalk.finish() called...")
   this->inBehavior = false;
+  while(true);
+}
+
+template<typename Scalar>
+void SpeedWalk<Scalar>::loadExternalConfig()
+{
+  static bool loaded = false;
+  if (!loaded) {
+    taskGains.resize(toUType(IkTasks::count));
+    taskWeights.resize(toUType(IkTasks::count));
+    GET_CONFIG(
+      "MotionBehaviors",
+      (Scalar, SpeedWalk.comWeight, taskWeights[toUType(IkTasks::com)]),
+      (Scalar, SpeedWalk.comGain, taskGains[toUType(IkTasks::com)]),
+      (Scalar, SpeedWalk.stepWeight, taskWeights[toUType(IkTasks::step)]),
+      (Scalar, SpeedWalk.stepGain, taskGains[toUType(IkTasks::step)]),
+      (Scalar, SpeedWalk.minJointVelWeight, taskWeights[toUType(IkTasks::minJointVel)]),
+      (Scalar, SpeedWalk.minJointVelGain, taskGains[toUType(IkTasks::minJointVel)]),
+      (Scalar, SpeedWalk.torsoWeight, taskWeights[toUType(IkTasks::torso)]),
+      (Scalar, SpeedWalk.torsoGain, taskGains[toUType(IkTasks::torso)]),
+    )
+    loaded = true;
+  }
+}
+
+template <typename Scalar>
+void SpeedWalk<Scalar>::genStepTrajectory()
+{
+  static const auto nDim = 6;
+  static const auto nControlPoints = 6;
+  static const auto bSplineDegree = 3;
+  static constexpr auto nKnots = nControlPoints + bSplineDegree + 1;
+  auto knotInterval = params->totalStepTime / 3;
+  Matrix<Scalar, Dynamic, 1> knots;
+  knots.resize(nKnots);
+  knots.head(4).setConstant(0.0);
+  knots.tail(4).setConstant(params->totalStepTime);
+  for (size_t i = 4; i < (nKnots - 4); ++i)
+    knots[i] = knots[i-1] + knotInterval;
+
+  Matrix<Scalar, Dynamic, Dynamic> controlPoints;
+  Matrix<Scalar, 4, 4> supportToSwingFoot = this->kM->getGlobalToOther();
+  Matrix<Scalar, 4, 4> toTrans = getFrontStep()->trans;
+  controlPoints.resize(nControlPoints, nDim);
+  LOG_INFO("supportToSwingFoot: " << supportToSwingFoot);
+  controlPoints.row(0) = MathsUtils::matToVector(supportToSwingFoot).transpose();
+  controlPoints.row(1) = controlPoints.row(0);
+  controlPoints.row(2) = controlPoints.row(1);
+  controlPoints.row(3) = MathsUtils::matToVector(toTrans).transpose();
+  controlPoints.row(4) = controlPoints.row(3);
+  controlPoints.row(5) = controlPoints.row(4);
+  controlPoints(2, 2) = params->stepHeight;
+  controlPoints.block(2, 3, 1, 3) = (controlPoints.block(1, 3, 1, 3) + controlPoints.block(4, 3, 1, 3)) / 2;
+  controlPoints.block(3, 3, 1, 3) = controlPoints.block(2, 3, 1, 3);
+  controlPoints(3, 2) = params->stepHeight;
+  LOG_INFO("controlPoints:\n" << controlPoints);
+
+
+  boost::shared_ptr<BSpline<Scalar> > bSpline =
+    boost::make_shared<BSpline<Scalar> >(
+      bSplineDegree, nDim, controlPoints, knots, this->cycleTime);
+  bSpline->setup();
+  stepTraj = bSpline->getSpline(0);
+
+  //! Plotting
+  GnuPlotEnv::PlotEnv<Scalar>
+    plotEnv(
+      "CSpaceBSplineKick", "x", "y", "z",
+      Matrix<Scalar, 2, 1>(-0.2, 0.2),
+      Matrix<Scalar, 2, 1>(-.5, .5),
+      Matrix<Scalar, 2, 1>(-.5, .5)
+    );
+  LOG_INFO("stepTraj: " << stepTraj);
+  stepTrajIndex = 0;
+  //plotEnv.plot3D("BSpline", cartTraj.col(0), cartTraj.col(1), cartTraj.col(2));
 }
 
 template <typename Scalar>
@@ -186,7 +462,6 @@ void SpeedWalk<Scalar>::addFirstStep()
 {
   auto foot = this->kM->getGlobalBaseIndex() == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
   Matrix<Scalar, 4 ,4> transFromTo = this->kM->getGlobalToOther();
-  cout << "transFromTo: "<< transFromTo << endl;
   addStep(boost::make_shared<TNRSFootstep<Scalar> >(
     RobotPose2D<Scalar>(
       transFromTo(0, 3),
@@ -194,7 +469,7 @@ void SpeedWalk<Scalar>::addFirstStep()
       atan2(transFromTo(1, 0), transFromTo(0, 0))),
       foot,
       transFromTo,
-      params->totalStepTime));
+      params->totalStepTime*2));
 }
 
 
@@ -206,7 +481,7 @@ void SpeedWalk<Scalar>::genNextStep()
   Matrix<Scalar, 4, 4> diffTrans;
   MathsUtils::makeRotationZ(diffRot, poseDiff.getTheta());
   diffTrans = MathsUtils::makeTransformation(diffRot, poseDiff.getX(), poseDiff.getY(), 0.0);
-  cout << "diffTrans: " << diffTrans << endl;
+  //LOG_INFO("diffTrans: " << diffTrans);
   auto prevStep = getBackStep();
   if (!prevStep) { //! Robot is standing
     //! Get current foot position
@@ -230,6 +505,20 @@ void SpeedWalk<Scalar>::genNextStep()
         foot,
         transFromTo,
         prevStep->timeAtFinish + params->totalStepTime));
+  }
+}
+
+template <typename Scalar>
+void SpeedWalk<Scalar>::drawSteps()
+{
+  //! Generate first two steps
+  Mat drawing = Mat(Size(500, 500), CV_8UC3);
+  cv::Scalar color;
+  for (const auto& fs : stepsQueue) {
+    color = fs->foot == RobotFeet::lFoot ? cv::Scalar(255,0,0) : cv::Scalar(0,0,255);
+    VisionUtils::drawRotatedRect(drawing, fs->getFootRect(Point2f(250, 250), 100), color);
+    VisionUtils::displayImage("drawing", drawing, 1.0);
+    cv::waitKey(0);
   }
 }
 

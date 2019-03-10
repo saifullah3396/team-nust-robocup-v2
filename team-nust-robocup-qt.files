@@ -1501,3 +1501,5 @@ src/TNRSModules/VisionModule/include/TNRSImage.h
 src/Utils/include/TNRSImage.h
 src/TNRSModules/UserCommModule/src/TcpServer.cpp
 src/TNRSModules/UserCommModule/include/UserCommTypes.h
+config/Robots/Sim/JointEstimator.json
+config/Common/WalkConfig.ini

@@ -170,8 +170,7 @@ template <typename Scalar>
 Matrix<Scalar, Dynamic, Dynamic>
 ComTask<Scalar>::computeJacobian()
 {
-  this->km->setGlobalBase(baseFrame, baseEE);
-  //LOG_INFO("com task jacobian:\n" << this->km->computeComJacobian(this->jsType))
+  //this->km->setGlobalBase(baseFrame, baseEE);
   return this->km->computeComJacobian(this->jsType);
 }
 
@@ -179,10 +178,8 @@ template <typename Scalar>
 Matrix<Scalar, Dynamic, Dynamic>
 ComTask<Scalar>::computeResidual(const Scalar& dt)
 {
-  firstStep = false;
   Matrix<Scalar, 3, 1> diff;
   if (firstStep) {
-    //LOG_INFO("firstStep")
     firstStep = false;
     diff =
       (targetCom - this->km->getComStateWrtFrame(static_cast<LinkChains>(baseFrame), toUType(LegEEs::footBase)).position);
@@ -262,7 +259,7 @@ CartesianTask<Scalar>::computeResidual(const Scalar& dt)
   diff.setZero();
   //LOG_INFO("supportToTorso:\n" << this->km->getGlobalToBody(this->jsType));
   //LOG_INFO("TorsotoEE:\n" << this->km->getForwardEffector(chainIndex, endEffector, this->jsType));
- // LOG_INFO("cartesian pos:\n" << pos);
+  //LOG_INFO("cartesian pos:\n" << pos);
   //LOG_INFO("cartesian target:\n" << target);
   diff.block(0, 0, 3, 1) = target.block(0, 3, 3, 1) - pos.block(0, 3, 3, 1);
   diff.block(3, 0, 3, 1) = MathsUtils::getOrientationDiff(pos, target);
@@ -365,12 +362,7 @@ TorsoTask<Scalar>::computeResidual(const Scalar& dt)
   diff.setZero();
   diff.block(0, 0, 3, 1) = target.block(0, 3, 3, 1) - pose.block(0, 3, 3, 1);
   diff.block(3, 0, 3, 1) = MathsUtils::getOrientationDiff(pose, target);
-  for (size_t i = 0; i < diff.rows(); ++i) {
-    if (diff[i] != diff[i])
-      diff[i] = 0.0;
-  }
   return diff / dt;
-  //return MathsUtils::getOrientationDiff(pose, target) / dt;
 }
 
 template <typename Scalar>

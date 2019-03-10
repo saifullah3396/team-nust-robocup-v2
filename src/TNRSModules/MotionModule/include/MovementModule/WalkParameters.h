@@ -28,14 +28,14 @@ struct WalkParameters
   WalkParameters& operator=(WalkParameters&&) & = default;
   virtual ~WalkParameters() {}
 
+  void loadConfig();
   Scalar getFootSeparation(const RobotFeet& stepFoot);
 
+  Scalar comHeight = {0.26};
   Scalar stepHeight = {0.02};
   Scalar maxStepLengthX = {0.05};
   Scalar maxStepLengthY = {0.025};
   Scalar maxStepRotation = {Angle::DEG_15};
-  Scalar nPreviews = {40};
-  Scalar ssTime = {0.45};
-  Scalar dsTime = {0.15};
-  Scalar totalStepTime = {0.3};
+  Scalar nPreviews = {100};
+  Scalar totalStepTime = {0.2};
 };

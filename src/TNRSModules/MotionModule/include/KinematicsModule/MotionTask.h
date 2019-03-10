@@ -247,6 +247,9 @@ public:
   void setFirstStep(const bool& firstStep)
     { this->firstStep = firstStep; }
 
+  void setBaseFrame(const RobotFeet& baseFrame)
+    { this->baseFrame = baseFrame; }
+
 private:
   //! Reference frame for com computations
   RobotFeet baseFrame;
@@ -316,6 +319,12 @@ public:
   //! Setters
   void setTarget(const Matrix<Scalar, 4, 4>& target)
     { this->target = target; }
+
+  void setChainIndex(const LinkChains& chainIndex)
+    { this->chainIndex = chainIndex; }
+
+  void setEndEffector(const Matrix<Scalar, 4, 4>& endEffector)
+    { this->endEffector = endEffector; }
 
   //! Getters
   Matrix<Scalar, 4, 4> getTarget() { return target; }
@@ -410,10 +419,20 @@ public:
    */
   bool checkConflict(const boost::shared_ptr<MotionTask<Scalar> >& task);
 
+  //! Getters
+  Matrix<Scalar, 4, 4> getTarget()
+    { return target; }
+
   //! Setters
   void setTarget(
     const Matrix<Scalar, 4, 4>& target)
     { this->target = target; }
+
+  void setBaseFrame(const RobotFeet& baseFrame)
+    { this->baseFrame = baseFrame; }
+
+  void setEndEffector(const Matrix<Scalar, 4, 4>& endEffector)
+    { this->endEffector = endEffector; }
 
 protected:
   //! Index of the base chain

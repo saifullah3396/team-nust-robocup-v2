@@ -9,11 +9,15 @@
 
 #pragma once
 
+#include <fstream>
 #include <boost/shared_ptr.hpp>
 #include <deque>
-#include "BehaviorManager/include/StateMachineMacros.h"
 #include "MotionModule/include/MovementModule/MovementModule.h"
 
+template <typename Scalar>
+class MotionTask;
+template <typename Scalar>
+class ZmpPreviewController;
 template <typename Scalar>
 struct WalkParameters;
 template <typename Scalar>
@@ -43,7 +47,7 @@ public:
   /**
    * @brief ~SpeedWalk Destructor
    */
-  ~SpeedWalk() final {}
+  ~SpeedWalk() final;
 
   /**
    * @brief initiate See Behavior::initiate()
@@ -66,6 +70,10 @@ public:
    */
   void finish() final;
 
+  /**
+   * @brief loadExternalConfig See Behavior::loadExternalConfig()
+   */
+  void loadExternalConfig() final;
 private:
   /**
    * @brief getBehaviorCast Returns the cast of config to SpeedWalkConfigPtr
@@ -112,24 +120,53 @@ private:
    */
   void genNextStep();
 
+  /**
+   * @brief genStepTrajectory Generates the trajectory of next step
+   *   in sequence
+   */
+  void genStepTrajectory();
 
-  //! Finite state machine for this behavior
-  DECLARE_FSM(fsm, SpeedWalk<Scalar>)
-
-  //! PlanStep: Plans where should the next two steps be placed
-  DECLARE_FSM_STATE(SpeedWalk<Scalar>, PlanSteps, planSteps, onRun,)
-
-  //! ExecuteDSS: Executes the current step motion for double support phase
-  DECLARE_FSM_STATE(SpeedWalk<Scalar>, ExecuteDSS, executeDSS, onRun,)
-
-  //! ExecuteSSS: Executes the current step motion for single support phase
-  DECLARE_FSM_STATE(SpeedWalk<Scalar>, ExecuteSSS, executeSSS, onRun,)
+  /**
+   * @brief drawSteps Draws all the steps in queue on an image
+   */
+  void drawSteps();
 
   //! Foot steps queue
   std::deque<boost::shared_ptr<TNRSFootstep<Scalar>>> stepsQueue;
 
   //! Walk zmp reference generator
   boost::shared_ptr<WalkZmpRefGen<Scalar> > walkZmpRefGen;
+
+  //! Zmp preview controllers for x-y directions
+  vector<ZmpPreviewController<Scalar>*> controllers;
+
+  //! Latest step trajectory
+  Matrix<Scalar, Dynamic, Dynamic> stepTraj;
+
+  //! The index of step trajectory in the cycle
+  unsigned stepTrajIndex = {0};
+
+  //! Tasks vector for solving whole-body inverse kinematics
+  vector<boost::shared_ptr<MotionTask<Scalar>>> tasks;
+
+  //! Task weights and gains
+  static vector<Scalar> taskWeights;
+  static vector<Scalar> taskGains;
+
+  //! Log for storing center of mass data
+  fstream comLog;
+
+  //! Log for storing zmp ref data
+  fstream zmpRegLog;
+
+
+  enum IkTasks : unsigned int {
+    com,
+    minJointVel,
+    step,
+    torso,
+    count
+  };
 };
 
 typedef boost::shared_ptr<SpeedWalk<MType> > SpeedWalkPtr;
