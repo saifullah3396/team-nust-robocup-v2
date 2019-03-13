@@ -11,7 +11,7 @@
 #include "LocalizationModule/include/LocalizationModule.h"
 #include "MotionModule/include/MotionModule.h"
 #include "PlanningModule/include/PlanningModule.h"
-#include "SBModule/include/SBModule.h"
+#include "GBModule/include/GBModule.h"
 #include "TeamNUSTSPL/include/TeamNUSTSPL.h"
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "UserCommModule/include/UserCommModule.h"
@@ -120,7 +120,7 @@ void TeamNUSTSPL::setupTNRSModules()
   GET_CONFIG("TeamNUSTSPL",
     (bool, startPlanningModule, modulesToRun[toUType(TNSPLModules::planning)]),
     (bool, startMotionModule, modulesToRun[toUType(TNSPLModules::motion)]),
-    (bool, startSBModule, modulesToRun[toUType(TNSPLModules::sb)]),
+    (bool, startGBModule, modulesToRun[toUType(TNSPLModules::sb)]),
     (bool, startLocalizationModule, modulesToRun[toUType(TNSPLModules::localization)]),
     (bool, startVisionModule, modulesToRun[toUType(TNSPLModules::vision)]),
     (bool, startGameCommModule, modulesToRun[toUType(TNSPLModules::gameComm)]),
@@ -146,13 +146,13 @@ void TeamNUSTSPL::setupTNRSModules()
   }
 
   if (modulesToRun[toUType(TNSPLModules::sb)]) {
-    LOG_INFO("Constructing SBModule... See src/TNRSModules/SBModule.")
+    LOG_INFO("Constructing GBModule... See src/TNRSModules/GBModule.")
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
     childModules[toUType(TNSPLModules::sb)] =
-      boost::make_shared<SBModule>(this, memoryProxy, dcmProxy, motionProxy);
+      boost::make_shared<GBModule>(this, memoryProxy, dcmProxy, motionProxy);
     #else
     childModules[toUType(TNSPLModules::sb)] =
-      boost::make_shared<SBModule>(this, memoryProxy, dcmProxy);
+      boost::make_shared<GBModule>(this, memoryProxy, dcmProxy);
     #endif
   }
 

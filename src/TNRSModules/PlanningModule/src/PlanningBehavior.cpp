@@ -10,11 +10,11 @@
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "PlanningModule/include/PlanningBehavior.h"
 #include "Utils/include/PathPlanner/PathPlanner.h"
-#include "SBModule/include/SBRequest.h"
+#include "GBModule/include/GBRequest.h"
 #include "MotionModule/include/MotionRequest.h"
-#include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
-#include "Utils/include/Behaviors/SBConfigs/SBStiffnessConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
+#include "BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBConfig.h"
 #include "Utils/include/MathsUtils.h"
 
 bool PlanningBehavior::shutdownCallBack()
@@ -25,7 +25,7 @@ bool PlanningBehavior::shutdownCallBack()
     TOUCH_SENSORS_OUT(PlanningModule)[toUType(TouchSensors::headTouchMiddle)] > 0.1 ||
     TOUCH_SENSORS_OUT(PlanningModule)[toUType(TouchSensors::headTouchFront)] > 0.1) {
     this->killAllMotionBehaviors();
-    this->killStaticBehavior();
+    this->killGeneralBehavior();
     shutdown = true;
   }
   if (shutdown && !removeStiffness) {
@@ -55,9 +55,9 @@ bool PlanningBehavior::setPostureAndStiffness(
   } else if (STIFFNESS_STATE_IN(PlanningModule) != desStiffness) {
     if (!sbInProgress()) {
       auto sConfig =
-        boost::make_shared <SBStiffnessConfig> (
+        boost::make_shared <GBStiffnessConfig> (
           desStiffness);
-      setupSBRequest(sConfig);
+      setupGBRequest(sConfig);
     }
     return false;
   } else if (POSTURE_STATE_IN(PlanningModule) != desPosture) {
@@ -71,8 +71,8 @@ bool PlanningBehavior::setPostureAndStiffness(
   }
 }
 
-void PlanningBehavior::killStaticBehavior() {
-  auto request = boost::make_shared<KillStaticBehavior>();
+void PlanningBehavior::killGeneralBehavior() {
+  auto request = boost::make_shared<KillGeneralBehavior>();
   BaseModule::publishModuleRequest(request);
 }
 
@@ -109,15 +109,15 @@ bool PlanningBehavior::matchLastStaticRequest(
   const unsigned& sbId, const unsigned& sbType)
 {
   return
-    lastSBConfig &&
-    lastSBConfig->id == sbId &&
-    lastSBConfig->type == sbType;
+    lastGBConfig &&
+    lastGBConfig->id == sbId &&
+    lastGBConfig->type == sbType;
 }
 
 
-void PlanningBehavior::setupSBRequest(const SBConfigPtr& config)
+void PlanningBehavior::setupGBRequest(const GBConfigPtr& config)
 {
-  auto rsb = boost::make_shared<RequestStaticBehavior>(config);
+  auto rsb = boost::make_shared<RequestGeneralBehavior>(config);
   lastStaticRequest = rsb;
   BaseModule::publishModuleRequest(rsb);
   sRequestTime = pModule->getModuleTime();
@@ -167,7 +167,7 @@ bool PlanningBehavior::behaviorInProgress(const BehaviorInfo& info)
 bool PlanningBehavior::requestInProgress()
 {
   bool inProgress = false;
-  if(requestInProgress(lastStaticRequest, lastSBConfig, SB_INFO_IN(PlanningModule), sRequestTime))
+  if(requestInProgress(lastStaticRequest, lastGBConfig, SB_INFO_IN(PlanningModule), sRequestTime))
     inProgress = true;
   auto mbInfo = MB_INFO_IN(PlanningModule);
   for (size_t i = 0; i < mbManagerIds.size(); ++i)

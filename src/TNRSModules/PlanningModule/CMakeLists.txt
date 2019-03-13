@@ -50,7 +50,7 @@ target_link_libraries(tnrs-planning-module
   libtnrs-behavior-manager.so
   libtnrs-sbpl-lib.so
   libtnrs-motion-module.so
-  libtnrs-sb-module.so
+  libtnrs-gb-module.so
   libtnrs-control-module.so
   -ljsoncpp
 )
@@ -84,7 +84,7 @@ endif (BUILD_TNRS_TESTS)
 #  libtnrs-base.so
 #  libtnrs-behavior-manager.so
 #  libtnrs-motion-module.so
-#  libtnrs-sb-module.so
+#  libtnrs-gb-module.so
 #  libtnrs-vision-module.so
 #  libtnrs-planning-module.so
 #  -ljsoncpp)

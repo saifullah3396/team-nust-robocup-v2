@@ -14,7 +14,7 @@
 #include "MotionModule/include/JointRequest.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/AngleDefinitions.h"
-#include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "Utils/include/MathsUtils.h"
 
 template <typename Scalar>

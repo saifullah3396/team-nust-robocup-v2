@@ -11,7 +11,7 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
-#include "Utils/include/Behaviors/BehaviorConfig.h"
+#include "BehaviorConfigs/include/BehaviorConfig.h"
 #include "Utils/include/Exceptions/TNRSException.h"
 #include "Utils/include/DataUtils.h"
 #include "Utils/include/DataHolders/DataHolder.h"

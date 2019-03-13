@@ -11,7 +11,7 @@
 #include "MotionModule/include/MotionLogger.h"
 #include "MotionModule/include/KickModule/Types/JSE2DImpKick.h"
 #include "MotionModule/include/KickModule/Types/KickImpact2DSolver.h"
-#include "Utils/include/Behaviors/MBConfigs/MBKickConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
 #include "Utils/include/Constants.h"
 
 #define JSE2D_KICK_PTR static_cast<JSE2DImpKick<Scalar>*>(this->bPtr)

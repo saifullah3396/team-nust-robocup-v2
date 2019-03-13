@@ -10,7 +10,7 @@
 #pragma once
 
 #include "PlanningModule/include/PlanningBehavior.h"
-#include "Utils/include/Behaviors/PBConfigs/PBExternalInterfaceConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBExternalInterfaceConfig.h"
 
 /**
  * @class ExternalInterface

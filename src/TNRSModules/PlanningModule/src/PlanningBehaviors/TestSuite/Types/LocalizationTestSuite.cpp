@@ -12,8 +12,8 @@
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.h"
 #include "TNRSBase/include/DebugBase.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "Utils/include/Behaviors/PBConfigs/PBNavigationConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/TestSuiteConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
 #include "Utils/include/ConfigMacros.h"
 #include "VisionModule/include/VisionRequest.h"
 
@@ -126,7 +126,7 @@ void LocalizationTestSuite::LocalizationPrediction::onRun()
       RobotPose2D<float> goalPose;
       RobotPose2D<float> relPose = RobotPose2D<float>(0.0, 1.0, 0.0);
       goalPose = pose.transform(relPose);
-      bPtr->killStaticBehavior();
+      bPtr->killGeneralBehavior();
       bPtr->killMotionBehavior(MOTION_1);
       //auto hcConfig =
       //  boost::make_shared <HeadTargetTrackConfig> (HeadTargetTypes::GOAL);
@@ -173,7 +173,7 @@ void LocalizationTestSuite::LocalizationWithMovement::onRun()
     RobotPose2D<float> goalPose;
     RobotPose2D<float> relPose = RobotPose2D<float>(1.0, 2.0, 0.0);
     goalPose = pose.transform(relPose);
-    bPtr->killStaticBehavior();
+    bPtr->killGeneralBehavior();
     bPtr->killMotionBehavior(MOTION_1);
     auto hcConfig =
       boost::make_shared <HeadTargetTrackConfig> (HeadTargetTypes::goal);

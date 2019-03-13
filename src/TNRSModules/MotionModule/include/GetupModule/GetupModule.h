@@ -11,7 +11,7 @@
 
 #include "MotionModule/include/GetupModule/KeyFrameGetupTypes.h"
 #include "MotionModule/include/MotionBehavior.h"
-#include "Utils/include/Behaviors/MBConfigs/MBGetupConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
 
 /**
  * @class GetupModule

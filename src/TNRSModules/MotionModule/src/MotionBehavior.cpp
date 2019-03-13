@@ -15,7 +15,7 @@
 #include "MotionModule/include/MotionGenerator.h"
 #include "MotionModule/include/MotionLogger.h"
 #include "MotionModule/include/MTypeHeader.h"
-#include "Utils/include/Behaviors/MBConfigs/MBConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBConfig.h"
 #include "Utils/include/HardwareIds.h"
 
 template <typename Scalar>

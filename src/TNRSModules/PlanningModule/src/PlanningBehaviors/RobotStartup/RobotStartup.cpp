@@ -9,7 +9,7 @@
 
 #include "PlanningModule/include/PlanningBehaviors/RobotStartup/RobotStartup.h"
 #include "PlanningModule/include/PlanningBehaviors/RobotStartup/Types/RequestBehavior.h"
-#include "Utils/include/Behaviors/PBConfigs/PBStartupConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBStartupConfig.h"
 
 RobotStartup::RobotStartup(
   PlanningModule* planningModule,

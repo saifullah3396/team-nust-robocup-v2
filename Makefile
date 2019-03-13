@@ -20,4 +20,4 @@ configure:
 	qibuild configure ${BUILD_TESTS_FLAG} ${BUILD_EXAMPLES_FLAG} ${CONFFLAGS} ${TOOLCHAIN_FLAG} --build-prefix ${PATH_TO_TEAM_NUST_DIR}/build/${BUILD_PREFIX} ${MOTION_PROXY_FLAG} ${VIDEO_PROXY_FLAG}
 
 install:
-	qibuild make ${TOOLCHAIN_FLAG} --build-prefix ${PATH_TO_TEAM_NUST_DIR}/build/${BUILD_PREFIX}
+	qibuild make ${TOOLCHAIN_FLAG} --build-prefix ${PATH_TO_TEAM_NUST_DIR}/build/${BUILD_PREFIX} -j3

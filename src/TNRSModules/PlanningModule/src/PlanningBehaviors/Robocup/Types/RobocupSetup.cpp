@@ -10,9 +10,9 @@
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/RobocupSetup.h"
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.h"
-#include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBHeadControlConfig.h"
-#include "Utils/include/Behaviors/SBConfigs/SBWDConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "BehaviorConfigs/include/GBConfigs/SBWDConfig.h"
 #include "Utils/include/DataHolders/RobocupRole.h"
 #include "Utils/include/DataHolders/RoboCupGameControlData.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
@@ -341,7 +341,7 @@ RobocupSetup::setSequenceAction()
     if (!WHISTLE_DETECTED_IN(PlanningModule)) {
       if (!sbInProgress()) {
         auto sConfig = boost::make_shared<SBWDConfig>();
-        setupSBRequest(sConfig);
+        setupGBRequest(sConfig);
       }
     } else {
       //OVAR(bool, PlanningModule::runVisionModule) = true;

@@ -10,8 +10,8 @@
 #include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/MovementModule/Types/NaoqiMoveToward.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "Utils/include/Behaviors/MBConfigs/MBMovementConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 
 template <typename Scalar>
 NaoqiMoveToward<Scalar>::NaoqiMoveToward(

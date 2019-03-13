@@ -64,7 +64,7 @@ public:
   static string getRobotDirPath() { return robotDirPath; }
   static string getPBConfigsPath() { return pbConfigsDirPath; }
   static string getMBConfigsPath() { return mbConfigsDirPath; }
-  static string getSBConfigsPath() { return sbConfigsDirPath; }
+  static string getGBConfigsPath() { return gbConfigsDirPath; }
 
   //! Sets the path to the directory of configuration/logs/robot files.
   static void setDirPaths(const string& robotDir);
@@ -75,7 +75,7 @@ private:
   static string robotDirPath; //! Path to robot directory.
   static string pbConfigsDirPath; //! Path to planning behavior configurations
   static string mbConfigsDirPath; //! Path to motion behavior configurations
-  static string sbConfigsDirPath; //! Path to static behavior configurations
+  static string gbConfigsDirPath; //! Path to static behavior configurations
   boost::property_tree::ptree iniConfig; //! Property tree filled with parsed data
   string cfgFile; //! The config file path
 };

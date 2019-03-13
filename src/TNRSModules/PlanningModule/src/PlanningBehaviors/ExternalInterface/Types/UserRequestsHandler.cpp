@@ -11,7 +11,7 @@
 #include "PlanningModule/include/PlanningBehaviors/ExternalInterface/Types/UserRequestsHandler.h"
 #include "VisionModule/include/VisionRequest.h"
 #include "Utils/include/VisionUtils.h"
-#include "Utils/include/Behaviors/MBConfigs/MBTeleopConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBTeleopConfig.h"
 
 UserRequestsHandlerConfigPtr UserRequestsHandler::getBehaviorCast()
 {

@@ -10,7 +10,7 @@
 #pragma once
 
 #include "BehaviorManager/include/BehaviorManager.h"
-#include "Utils/include/Behaviors/BehaviorConfig.h"
+#include "BehaviorConfigs/include/BehaviorConfig.h"
 
 /**
  * @struct BehaviorRequest

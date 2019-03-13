@@ -41,7 +41,7 @@ SharedMemory::init()
     "BaseModules",
     (int, MotionModule.period, mtPeriod),
     (int, PlanningModule.period, ptPeriod),
-    (int, SBModule.period, sbtPeriod),
+    (int, GBModule.period, sbtPeriod),
     (int, VisionModule.period, vtPeriod),
     (int, LocalizationModule.period, ltPeriod),
     (int, UserCommModule.period, ucommtPeriod),

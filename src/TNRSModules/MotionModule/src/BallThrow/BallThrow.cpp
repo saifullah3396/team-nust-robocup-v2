@@ -11,7 +11,7 @@
 #include "MotionModule/include/BallThrow/Types/WBBallThrow.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/ConfigMacros.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBallThrowConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBallThrowConfig.h"
 
 template <typename Scalar>
 Scalar BallThrow<Scalar>::ballRadius;

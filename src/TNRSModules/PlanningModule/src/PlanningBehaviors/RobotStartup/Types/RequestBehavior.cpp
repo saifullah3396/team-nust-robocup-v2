@@ -10,7 +10,7 @@
 #include "PlanningModule/include/PlanningRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/RobotStartup/Types/RequestBehavior.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "Utils/include/Behaviors/PBConfigs/PBStartupConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBStartupConfig.h"
 
 RequestBehavior::RequestBehavior(
   PlanningModule* planningModule,

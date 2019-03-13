@@ -11,7 +11,7 @@
 #include "MotionModule/include/MotionPlayback/Types/ReplayStoredMB.h"
 #include "MotionModule/include/JointRequest.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "Utils/include/Behaviors/MBConfigs/MBMotionPlaybackConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMotionPlaybackConfig.h"
 #include "Utils/include/DataHolders/PostureState.h"
 #include "Utils/include/JsonUtils.h"
 #include "Utils/include/JsonLogger.h"

@@ -20,7 +20,7 @@
 #include "MotionModule/include/KinematicsModule/MotionTask.h"
 #include "MotionModule/include/KinematicsModule/TaskIkSolver.h"
 #include "MotionModule/include/JointRequest.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBalanceConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
 #include "Utils/include/ConfigMacros.h"
 
 template<typename Scalar>

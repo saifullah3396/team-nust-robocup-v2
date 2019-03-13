@@ -1,11 +1,11 @@
 #include <iostream>
-#include "Utils/include/Behaviors/PBConfigs/PBExternalInterfaceConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBKickSequenceConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBNavigationConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBRobocupConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBStartupConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/TestSuiteConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBExternalInterfaceConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBKickSequenceConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBStartupConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
 
 int main()
 {

@@ -11,7 +11,7 @@
 
 string ConfigManager::pbConfigsDirPath;
 string ConfigManager::mbConfigsDirPath;
-string ConfigManager::sbConfigsDirPath;
+string ConfigManager::gbConfigsDirPath;
 #if defined(MODULE_IS_REMOTE) || defined(MODULE_IS_LOCAL_SIMULATED)
 string ConfigManager::configDirPath = GET_STRINGS(ROOT_DIR "/../config/");
 string ConfigManager::commonConfigDirPath = GET_STRINGS(ROOT_DIR "/../config/Common/");
@@ -63,7 +63,7 @@ void ConfigManager::setDirPaths(const string& robotDir)
 {
   pbConfigsDirPath = configDirPath + "BehaviorConfigs/PBConfigs/";
   mbConfigsDirPath = configDirPath + "BehaviorConfigs/MBConfigs/";
-  sbConfigsDirPath = configDirPath + "BehaviorConfigs/SBConfigs/";
+  gbConfigsDirPath = configDirPath + "BehaviorConfigs/GBConfigs/";
   #if defined(MODULE_IS_REMOTE) || defined(MODULE_IS_LOCAL_SIMULATED)
       robotDirPath = robotDir;
       logsDirPath = logsDirPath + robotDir;

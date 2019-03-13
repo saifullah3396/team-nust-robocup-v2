@@ -10,7 +10,7 @@
 #pragma once
 
 #include "PlanningModule/include/PlanningBehavior.h"
-#include "Utils/include/Behaviors/PBConfigs/PBKickSequenceConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBKickSequenceConfig.h"
 
 /**
  * @class KickSequence

@@ -18,8 +18,8 @@
 #include "MotionModule/include/JointRequest.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/DataHolders/PostureState.h"
-#include "Utils/include/Behaviors/MBConfigs/MBKickConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBalanceConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
 #include "Utils/include/Splines/BSpline.h"
 #include "Utils/include/PlotEnv.h"
 

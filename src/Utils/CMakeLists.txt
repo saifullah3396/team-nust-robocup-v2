@@ -25,12 +25,12 @@ if (EIGEN3_INCLUDE_DIRS)
   include_directories ("${EIGEN3_INCLUDE_DIRS}")
 endif (EIGEN3_INCLUDE_DIRS)
 
-file (GLOB TNRS_UTILS_SRC 
+file (GLOB SRC
   "${TNRS_UTILS_DIR}/src/*.cpp"
-  "${TNRS_UTILS_DIR}/src/Behaviors/*.cpp"
-  "${TNRS_UTILS_DIR}/src/Behaviors/MBConfigs/*.cpp"
-  "${TNRS_UTILS_DIR}/src/Behaviors/SBConfigs/*.cpp"
-  "${TNRS_UTILS_DIR}/src/Behaviors/PBConfigs/*.cpp"
+  "${TNRS_UTILS_DIR}/../TNRSModules/BehaviorConfigs/src/*.cpp"
+  "${TNRS_UTILS_DIR}/../TNRSModules/BehaviorConfigs/src/MBConfigs/*.cpp"
+  "${TNRS_UTILS_DIR}/../TNRSModules/BehaviorConfigs/src/GBConfigs/*.cpp"
+  "${TNRS_UTILS_DIR}/../TNRSModules/BehaviorConfigs/src/PBConfigs/*.cpp"
   "${TNRS_UTILS_DIR}/src/DataHolders/*.cpp"
   "${TNRS_UTILS_DIR}/src/DataHolders/Camera.cpp"
   "${TNRS_UTILS_DIR}/src/PathPlanner/*.cpp"
@@ -38,7 +38,7 @@ file (GLOB TNRS_UTILS_SRC
   "${TNRS_UTILS_DIR}/src/Splines/*.cpp"
   "${TNRS_UTILS_DIR}/src/VREP/*.c"
 )
-add_library (tnrs-utils SHARED ${TNRS_UTILS_SRC})
+add_library (tnrs-utils SHARED ${SRC})
 
 qi_use_lib(tnrs-utils
   ALCOMMON

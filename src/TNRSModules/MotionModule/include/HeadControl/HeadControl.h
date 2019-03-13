@@ -14,8 +14,8 @@
 #include "MotionModule/include/KinematicsModule/TorsoState.h"
 #include "MotionModule/include/KinematicsModule/Joint.h"
 #include "MotionModule/include/KinematicsModule/KinematicsConsts.h"
-#include "Utils/include/Behaviors/MBConfigs/MBHeadControlConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBallThrowConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBallThrowConfig.h"
 #include "Utils/include/ConfigMacros.h"
 
 /** 

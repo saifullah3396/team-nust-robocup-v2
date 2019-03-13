@@ -15,8 +15,8 @@
 #include "Utils/include/DataHolders/PostureState.h"
 #include "Utils/include/DataHolders/StiffnessState.h"
 
-class SBConfig;
-typedef boost::shared_ptr<SBConfig> SBConfigPtr;
+class GBConfig;
+typedef boost::shared_ptr<GBConfig> GBConfigPtr;
 class MBConfig;
 typedef boost::shared_ptr<MBConfig> MBConfigPtr;
 
@@ -88,7 +88,7 @@ protected:
   /**
    * Sends the request to kill the running static behavior
    */ 
-  void killStaticBehavior();
+  void killGeneralBehavior();
   
   /**
    * Sends the request to kill the running motion behavior
@@ -151,7 +151,7 @@ protected:
    * 
    * @param config: Configuration of the required static behavior
    */ 
-  void setupSBRequest(const SBConfigPtr& config);
+  void setupGBRequest(const GBConfigPtr& config);
   
   /**
    * Sets up a request to call a motion behavior
@@ -197,7 +197,7 @@ protected:
   BehaviorConfigPtr lastMBConfig;
 
   //! Configuratoin of the currently running static behavior
-  BehaviorConfigPtr lastSBConfig;
+  BehaviorConfigPtr lastGBConfig;
 
   //! Last motion behaviors requested
   BehaviorRequestPtr lastMotionRequest;

@@ -12,7 +12,7 @@
 #include "TNRSBase/include/DebugBase.h"
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "PlanningModule/include/PlanningBehavior.h"
-#include "Utils/include/Behaviors/PBConfigs/PBNavigationConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
 #include "Utils/include/PathPlanner/PathPlanner.h"
 #include "Utils/include/DataHolders/PostureState.h"
 #include "Utils/include/DataHolders/PositionInput.h"

@@ -1,12 +1,12 @@
 #include <iostream>
-#include "Utils/include/Behaviors/MBConfigs/MBBalanceConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBallThrowConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBDiveConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBGetupConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBHeadControlConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBKickConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBMovementConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBallThrowConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 
 #define PRINT_JSON_CONFIG(NAME) \
   cout << #NAME << boost::make_shared<NAME>()->getJson() << endl;

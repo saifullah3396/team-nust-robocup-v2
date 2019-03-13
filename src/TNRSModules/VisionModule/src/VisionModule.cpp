@@ -411,31 +411,7 @@ void VisionModule::sendUnknownLandmarksInfo()
 
 void VisionModule::sendImages()
 {
-#ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  if (GET_DVAR(int, debugImageIndex) == 0) {
-    UserCommRequestPtr request =
-      boost::make_shared<SendImageRequest>(FeatureExtraction::getBgrMat(0));
-    BaseModule::publishModuleRequest(request);
-  } else if (GET_DVAR(int, debugImageIndex) == 1) {
-    /*UserCommRequestPtr request = boost::make_shared<SendImageRequest>(FeatureExtraction::getBgrMat(1));
-    BaseModule::publishModuleRequest(request);*/
-  }
-#else
-  if (GET_DVAR(int, debugImageIndex) == 0) {
-  CommMessage imageMsg(
-      VisionUtils::cvMatToString(FeatureExtraction::getBgrMat(toUType(CameraId::headTop))),
-    CommMsgTypes::topImage
-  );
   UserCommRequestPtr request =
-    boost::make_shared<SendMsgRequest>(imageMsg);
+    boost::make_shared<SendImageRequest>(FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex)));
   BaseModule::publishModuleRequest(request);
-  } else if (GET_DVAR(int, debugImageIndex) == 1) {
-  CommMessage imageMsg(
-    VisionUtils::cvMatToString(FeatureExtraction::getBgrMat(toUType(CameraId::headBottom))),
-    CommMsgTypes::bottomImage
-  );
-  UserCommRequestPtr request = boost::make_shared<SendMsgRequest>(imageMsg);
-  BaseModule::publishModuleRequest(request);
-  }
-#endif
 }

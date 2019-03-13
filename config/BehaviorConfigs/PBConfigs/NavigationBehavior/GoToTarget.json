@@ -1,14 +1,14 @@
 {
   "_comment_1": "Possible values of baseType, are (0, 1, 2) for (MOTION, STATIC, PLANNING). Do not change its value in this file.",
   "baseType" : 2,
-  "_comment_2": "For possible values of id, see PlanningModule/PlanningBehaviorIds.h, MotionModule/MotionBehaviorIds.h and SBModule/StaticBehaviorsIds.h",
+  "_comment_2": "For possible values of id, see PlanningModule/PlanningBehaviorIds.h, MotionModule/MotionBehaviorIds.h and GBModule/GeneralBehaviorsIds.h",
   "id" : 1,
   "maxRuntime" : 3600,
-  "_comment_3": "For possible values of type, see PlanningModule/PlanningBehaviorIds.h, MotionModule/MotionBehaviorIds.h and SBModule/StaticBehaviorsIds.h",
+  "_comment_3": "For possible values of type, see PlanningModule/PlanningBehaviorIds.h, MotionModule/MotionBehaviorIds.h and GBModule/GeneralBehaviorsIds.h",
   "type" : 0,
   "goal" : [1.0, 0.0, 0.0],
   "reachClosest" : true,
-  "_comment_5": "The requested start posture behavior to run. For details, see Utils/include/Behaviors/PBConfigs/PBNavigationConfig.h",
+  "_comment_5": "The requested start posture behavior to run. For details, see BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h",
   "startPosture" : 
   {     
      "baseType" : 0,

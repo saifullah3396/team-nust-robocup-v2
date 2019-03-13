@@ -11,7 +11,7 @@
 #include "BehaviorManager/include/Behavior.h"
 #include "Utils/include/JsonLogger.h"
 #include "BehaviorManager/include/BehaviorRequest.h"
-#include "Utils/include/Behaviors/BehaviorConfig.h"
+#include "BehaviorConfigs/include/BehaviorConfig.h"
 //#include "Utils/include/ConfigManager.h"
 
 using namespace chrono;

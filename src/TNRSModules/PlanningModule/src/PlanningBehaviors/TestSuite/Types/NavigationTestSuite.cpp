@@ -11,8 +11,8 @@
 #include "PlanningModule/include/PlanningRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "Utils/include/Behaviors/PBConfigs/PBNavigationConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/TestSuiteConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
 #include "VisionModule/include/VisionRequest.h"
 
 NavigationTestSuite::NavigationTestSuite(
@@ -86,7 +86,7 @@ NavigationTestSuiteConfigPtr NavigationTestSuite::getBehaviorCast()
 
 void NavigationTestSuite::GoToTarget::onStart()
 {
-  bPtr->killStaticBehavior();
+  bPtr->killGeneralBehavior();
   bPtr->killMotionBehavior(MOTION_1);
   auto planConfig = boost::make_shared<GoToTargetConfig>();
   planConfig->goal = bPtr->getBehaviorCast()->goalPose;
@@ -119,7 +119,7 @@ void NavigationTestSuite::GoToTarget::onRun()
 
 void NavigationTestSuite::GoalChangedReplan::onStart()
 {
-  bPtr->killStaticBehavior();
+  bPtr->killGeneralBehavior();
   bPtr->killMotionBehavior(MOTION_1);
   auto planConfig = boost::make_shared<GoToTargetConfig>();
   planConfig->goal = bPtr->getBehaviorCast()->goalPose;

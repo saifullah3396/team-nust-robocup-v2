@@ -10,7 +10,7 @@
 #include "MotionModule/include/MotionBehaviorIds.h"
 #include "MotionModule/include/MotionPlayback/MotionPlayback.h"
 #include "MotionModule/include/MotionPlayback/Types/ReplayStoredMB.h"
-#include "Utils/include/Behaviors/MBConfigs/MBMotionPlaybackConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMotionPlaybackConfig.h"
 
 template <typename Scalar>
 MotionPlayback<Scalar>::MotionPlayback(

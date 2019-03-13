@@ -27,8 +27,8 @@ enum class MemoryVariableIds : unsigned int
   //! Output: None
   //! Variable Type: int
   planningThreadPeriod,
-  //! StaticBehaviors Module Thread Period
-  //! Input: SBModule
+  //! GeneralBehaviors Module Thread Period
+  //! Input: GBModule
   //! Output: PlanningModule
   //! Variable Type: int
   sbThreadPeriod,
@@ -194,7 +194,7 @@ enum class MemoryVariableIds : unsigned int
   occupancyMap,
   //! Id of current state of the robot stiffnesses
   //! Input: PlanningModule
-  //! Output: SBModule
+  //! Output: GBModule
   //! Variable Type: unsigned int
   stiffnessState,
   //! Current robot posture id
@@ -301,7 +301,7 @@ enum class MemoryVariableIds : unsigned int
   teamRobots,
   //! Whislte detection flag
   //! Input: PlanningModule
-  //! Output: SBModule
+  //! Output: GBModule
   //! Variable Type: bool
   whistleDetected,
   //! Whether any landmark is found
@@ -311,7 +311,7 @@ enum class MemoryVariableIds : unsigned int
   landmarksFound,
   //! Currently running static behavior info
   //! Input: Any module
-  //! Output: SBModule
+  //! Output: GBModule
   //! Variable Type: bool
   sBehaviorInfo,
   //! Currently running motion behavior info

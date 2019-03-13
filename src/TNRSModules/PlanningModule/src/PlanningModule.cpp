@@ -18,7 +18,7 @@
 #include "PlanningModule/include/WorldBallTracker.h"
 #include "Utils/include/PathPlanner/PathPlanner.h"
 #include "Utils/include/PathPlanner/GridMap2D.h"
-#include "Utils/include/Behaviors/PBConfigs/PBStartupConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBStartupConfig.h"
 #include "Utils/include/HardwareIds.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/BehaviorInfo.h"

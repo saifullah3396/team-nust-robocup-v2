@@ -14,7 +14,7 @@
 #include "MotionModule/include/TrajectoryPlanner/CbOptimizer.h"
 #include "MotionModule/include/TrajectoryPlanner/ZmpConstraint.h"
 #include "MotionModule/include/TrajectoryPlanner/TorqueConstraint.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBallThrowConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBallThrowConfig.h"
 #include "Utils/include/Splines/CubicSpline.h"
 #include "Utils/include/MathsUtils.h"
 #include "Utils/include/JsonUtils.h"

@@ -14,13 +14,13 @@
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/GoalKeeper.h"
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Defender.h"
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Attacker.h"
-#include "Utils/include/Behaviors/MBConfigs/MBGetupConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBHeadControlConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBKickConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBMovementConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBNavigationConfig.h"
-#include "Utils/include/Behaviors/SBConfigs/SBStiffnessConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
+#include "BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/RobocupRole.h"
 #include "Utils/include/DataHolders/RoboCupGameControlData.h"
@@ -131,7 +131,7 @@ bool Robocup::waitForPenalty()
         penaliseMotion = true;
         // Kill all motion and static behaviors
         killAllMotionBehaviors();
-        killStaticBehavior();
+        killGeneralBehavior();
         return true;
       } else {
         return false;
@@ -168,7 +168,7 @@ void Robocup::fallenRobotAction()
   LOG_INFO("Executing Robocup.fallenRobotAction()...")
   this->killChild();
   this->killAllMotionBehaviors();
-  this->killStaticBehavior();
+  this->killGeneralBehavior();
   // Turn off perception modules and reset when robot is stable again
   BaseModule::publishModuleRequest(boost::make_shared<SwitchVision>(false));
   BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(false));
@@ -235,8 +235,8 @@ bool Robocup::getupFromGround(
   if (STIFFNESS_STATE_IN(PlanningModule) != desStiffness) {
     if (!sbInProgress()) {
       auto sConfig =
-        boost::make_shared <SBStiffnessConfig> (desStiffness);
-      setupSBRequest(sConfig);
+        boost::make_shared <GBStiffnessConfig> (desStiffness);
+      setupGBRequest(sConfig);
     }
     return false;
   } else {

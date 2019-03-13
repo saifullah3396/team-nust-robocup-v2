@@ -9,7 +9,7 @@
 
 #include "MotionModule/include/PostureModule/PostureModule.h"
 #include "MotionModule/include/PostureModule/Types/InterpToPosture.h"
-#include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 
 template <typename Scalar>
 PostureModule<Scalar>::PostureModule(

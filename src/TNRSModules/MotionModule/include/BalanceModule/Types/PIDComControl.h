@@ -10,7 +10,7 @@
 #pragma once
 
 #include "MotionModule/include/BalanceModule/BalanceModule.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBalanceConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
 
 struct PIDComControlConfig;
 

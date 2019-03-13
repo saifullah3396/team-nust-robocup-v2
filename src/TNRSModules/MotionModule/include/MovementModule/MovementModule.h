@@ -11,7 +11,7 @@
 
 #include "MotionModule/include/MTypeHeader.h"
 #include "MotionModule/include/MotionBehavior.h"
-//#include "Utils/include/Behaviors/MBConfigs/MBMovementConfig.h"
+//#include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
 
 struct MBMovementConfig;
 

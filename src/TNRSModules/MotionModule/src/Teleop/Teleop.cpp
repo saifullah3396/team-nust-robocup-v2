@@ -9,7 +9,7 @@
 
 #include "MotionModule/include/Teleop/Teleop.h"
 #include "MotionModule/include/Teleop/Types/TeleopJoints.h"
-#include "Utils/include/Behaviors/MBConfigs/MBTeleopConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBTeleopConfig.h"
 
 template <typename Scalar>
 Teleop<Scalar>::Teleop(

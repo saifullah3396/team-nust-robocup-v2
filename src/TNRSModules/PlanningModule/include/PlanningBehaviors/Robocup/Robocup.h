@@ -12,7 +12,7 @@
 #include "BehaviorManager/include/StateMachineMacros.h"
 #include "PlanningModule/include/PlanningBehavior.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "Utils/include/Behaviors/PBConfigs/PBRobocupConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
 
 enum class KeyFrameGetupTypes : unsigned int;
 struct MBHeadControlConfig;

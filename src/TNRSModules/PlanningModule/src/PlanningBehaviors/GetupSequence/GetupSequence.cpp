@@ -40,7 +40,7 @@ GetupSequence::update()
 {
   LOG_INFO("Executing GetupSequnce.update()...")
   if (!inBehavior) return;
-  if (!reqStaticBehaviorState() || !reqMotionBehaviorState() || !reqChildBehaviorState()) return;
+  if (!reqGeneralBehaviorState() || !reqMotionBehaviorState() || !reqChildBehaviorState()) return;
   updatePostureAndStiffness();
   if (!IVAR(bool, PlanningModule::robotFallen)) {
     inBehavior = false;
@@ -81,8 +81,8 @@ GetupSequence::getupBack()
     if (stiffness != StiffnessState::GETUP) {
       if (lastSBFinished) {
         auto sConfig =
-          boost::make_shared < SBStiffnessConfig > (SBStiffnessTypes::GETUP);
-        setupSBRequest(sConfig);
+          boost::make_shared < GBStiffnessConfig > (GBStiffnessTypes::GETUP);
+        setupGBRequest(sConfig);
       }
     } else if (posture != PostureState::GETUP_READY) {
       if (lastMBFinished) {
@@ -112,8 +112,8 @@ GetupSequence::getupFront()
     if (stiffness != StiffnessState::GETUP) {
       if (lastSBFinished) {
         auto sConfig =
-          boost::make_shared < SBStiffnessConfig > (SBStiffnessTypes::GETUP);
-        setupSBRequest(sConfig);
+          boost::make_shared < GBStiffnessConfig > (GBStiffnessTypes::GETUP);
+        setupGBRequest(sConfig);
       }
     } else if (posture != PostureState::GETUP_READY) {
       if (lastMBFinished) {

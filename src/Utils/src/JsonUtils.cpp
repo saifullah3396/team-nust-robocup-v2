@@ -8,26 +8,26 @@
  */
 
 #include "Utils/include/JsonUtils.h"
-#include "Utils/include/Behaviors/BehaviorConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBalanceConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBallThrowConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBDiveConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBGetupConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBHeadControlConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBKickConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBMovementConfig.h"
-#include "Utils/include/Behaviors/MBConfigs/MBPostureConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBExternalInterfaceConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBKickSequenceConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBNavigationConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBRobocupConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBStartupConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/PBConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/TestSuiteConfig.h"
-#include "Utils/include/Behaviors/SBConfigs/SBLedsConfig.h"
-#include "Utils/include/Behaviors/SBConfigs/SBStiffnessConfig.h"
-#include "Utils/include/Behaviors/SBConfigs/SBWDConfig.h"
+#include "BehaviorConfigs/include/BehaviorConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBallThrowConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBExternalInterfaceConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBKickSequenceConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBStartupConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
+#include "BehaviorConfigs/include/GBConfigs/GBLedsConfig.h"
+#include "BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h"
+#include "BehaviorConfigs/include/GBConfigs/GBWDConfig.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/BehaviorInfo.h"
 #include "Utils/include/DataHolders/Camera.h"
@@ -393,7 +393,7 @@ namespace JsonUtils
   DEFINE_JSON_TO_TYPE_CONFIG(PBStartupConfig)
   DEFINE_JSON_TO_TYPE_CONFIG(PBConfig)
   DEFINE_JSON_TO_TYPE_CONFIG(TestSuiteConfig)
-  DEFINE_JSON_TO_TYPE_CONFIG(SBLedsConfig)
-  DEFINE_JSON_TO_TYPE_CONFIG(SBStiffnessConfig)
-  DEFINE_JSON_TO_TYPE_CONFIG(SBWDConfig)
+  DEFINE_JSON_TO_TYPE_CONFIG(GBLedsConfig)
+  DEFINE_JSON_TO_TYPE_CONFIG(GBStiffnessConfig)
+  DEFINE_JSON_TO_TYPE_CONFIG(GBWDConfig)
 }

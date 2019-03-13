@@ -36,7 +36,7 @@ target_link_libraries(tnrs-module
   libtnrs-control-module.so
   libtnrs-planning-module.so
   libtnrs-motion-module.so
-  libtnrs-sb-module.so
+  libtnrs-gb-module.so
   libtnrs-localization-module.so
   libtnrs-vision-module.so
   libtnrs-game-comm-module.so
@@ -61,7 +61,7 @@ target_link_libraries(tnrs-module
   libtnrs-control-module.so
   libtnrs-planning-module.so
   libtnrs-motion-module.so
-  libtnrs-sb-module.so
+  libtnrs-gb-module.so
   libtnrs-localization-module.so
   libtnrs-vision-module.so
   libtnrs-game-comm-module.so
@@ -91,7 +91,7 @@ target_link_libraries(tnrs-module
   libtnrs-control-module.so
   libtnrs-planning-module.so
   libtnrs-motion-module.so
-  libtnrs-sb-module.so
+  libtnrs-gb-module.so
   libtnrs-localization-module.so
   libtnrs-vision-module.so
   libtnrs-game-comm-module.so
@@ -112,7 +112,7 @@ if (BUILD_TNRS_TESTS)
           libtnrs-control-module.so
           libtnrs-planning-module.so
           libtnrs-motion-module.so
-          libtnrs-sb-module.so
+          libtnrs-gb-module.so
           libtnrs-localization-module.so
           libtnrs-vision-module.so
           libtnrs-game-comm-module.so

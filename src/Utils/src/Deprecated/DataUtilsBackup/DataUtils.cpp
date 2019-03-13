@@ -8,7 +8,7 @@
  */
 
 #include <opencv2/opencv.hpp>
-#include "Utils/include/Behaviors/BehaviorInfo.h"
+#include "BehaviorConfigs/include/BehaviorInfo.h"
 #include "Utils/include/DataUtils.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/Camera.h"

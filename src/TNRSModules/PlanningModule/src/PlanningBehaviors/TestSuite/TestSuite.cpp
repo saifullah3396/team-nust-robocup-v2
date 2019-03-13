@@ -12,7 +12,7 @@
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.h"
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/MotionTestSuite.h"
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.h"
-#include "Utils/include/Behaviors/PBConfigs/TestSuiteConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
 
 TestSuite::TestSuite(
   PlanningModule* planningModule,

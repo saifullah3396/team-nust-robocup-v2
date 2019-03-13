@@ -12,8 +12,8 @@
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "PlanningModule/include/PlanningRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/VisionTestSuite.h"
-#include "Utils/include/Behaviors/MBConfigs/MBHeadControlConfig.h"
-#include "Utils/include/Behaviors/PBConfigs/TestSuiteConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
 #include "Utils/include/ConfigMacros.h"
 #include "VisionModule/include/VisionRequest.h"
 

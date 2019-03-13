@@ -11,7 +11,7 @@
 
 #include "MotionModule/include/MotionBehavior.h"
 #include "MotionModule/include/DiveModule/KeyFrameDiveTypes.h"
-#include "Utils/include/Behaviors/MBConfigs/MBDiveConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
 
 /** 
  * @class DiveModule

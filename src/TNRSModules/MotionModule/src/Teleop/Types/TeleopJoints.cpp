@@ -11,7 +11,7 @@
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
 #include "MotionModule/include/KinematicsModule/MotionTask.h"
 #include "MotionModule/include/KinematicsModule/TaskIkSolver.h"
-#include "Utils/include/Behaviors/MBConfigs/MBTeleopConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBTeleopConfig.h"
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/HardwareIds.h"
 

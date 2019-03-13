@@ -40,7 +40,7 @@ set(TNRS_COMPONENTS
     tnrs-planning-module
     tnrs-random-lib
     tnrs-motion-module
-    tnrs-sb-module
+    tnrs-gb-module
     tnrs-localization-module
     tnrs-vision-module
     )

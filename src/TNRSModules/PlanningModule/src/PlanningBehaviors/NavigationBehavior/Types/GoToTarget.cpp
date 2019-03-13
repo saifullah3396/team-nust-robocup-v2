@@ -9,7 +9,7 @@
 
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.h"
-#include "Utils/include/Behaviors/MBConfigs/MBMovementConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
 
 GoToTargetConfigPtr GoToTarget::getBehaviorCast()
 {

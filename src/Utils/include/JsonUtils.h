@@ -39,9 +39,9 @@ struct PBRobocupConfig;
 struct PBStartupConfig;
 struct PBConfig;
 struct TestSuiteConfig;
-struct SBLedsConfig;
-struct SBStiffnessConfig;
-struct SBWDConfig;
+struct GBLedsConfig;
+struct GBStiffnessConfig;
+struct GBWDConfig;
 
 enum class LinkChains : unsigned int;
 enum class RobotFeet : unsigned int;
@@ -295,9 +295,9 @@ namespace JsonUtils
   DECLARE_JSON_TO_TYPE_CONFIG(PBStartupConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(PBConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(TestSuiteConfig)
-  DECLARE_JSON_TO_TYPE_CONFIG(SBLedsConfig)
-  DECLARE_JSON_TO_TYPE_CONFIG(SBStiffnessConfig)
-  DECLARE_JSON_TO_TYPE_CONFIG(SBWDConfig)
+  DECLARE_JSON_TO_TYPE_CONFIG(GBLedsConfig)
+  DECLARE_JSON_TO_TYPE_CONFIG(GBStiffnessConfig)
+  DECLARE_JSON_TO_TYPE_CONFIG(GBWDConfig)
 
   //! Unimplemented conversions for memory variables. Not needed atm
   DECLARE_JSON_TO_TYPE(BallInfo<float>);

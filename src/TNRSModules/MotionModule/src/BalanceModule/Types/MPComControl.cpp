@@ -13,7 +13,7 @@
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
 #include "MotionModule/include/MotionModule.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBalanceConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
 #include "Utils/include/AngleDefinitions.h"
 
 template<typename Scalar>

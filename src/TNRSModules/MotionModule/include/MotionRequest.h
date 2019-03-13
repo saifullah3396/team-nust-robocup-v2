@@ -12,7 +12,7 @@
 #include <opencv2/core/core.hpp>
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "TNRSBase/include/ModuleRequest.h"
-#include "Utils/include/Behaviors/MBConfigs/MBConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBConfig.h"
 #include "BehaviorManager/include/BehaviorRequest.h"
 
 /**

@@ -12,7 +12,7 @@
 #include "MotionModule/include/BalanceModule/Types/PIDComControl.h"
 #include "MotionModule/include/BalanceModule/Types/ZmpControl.h"
 #include "Utils/include/ConfigManager.h"
-#include "Utils/include/Behaviors/MBConfigs/MBBalanceConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
 
 template <typename Scalar>
 BalanceModule<Scalar>::BalanceModule(

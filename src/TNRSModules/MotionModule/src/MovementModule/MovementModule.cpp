@@ -12,7 +12,7 @@
 #include "MotionModule/include/MovementModule/Types/NaoqiFootsteps.h"
 #include "MotionModule/include/MovementModule/Types/NaoqiMoveToward.h"
 #include "MotionModule/include/MovementModule/Types/SpeedWalk.h"
-#include "Utils/include/Behaviors/MBConfigs/MBMovementConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
 
 template <typename Scalar>
 MovementModule<Scalar>::MovementModule(
