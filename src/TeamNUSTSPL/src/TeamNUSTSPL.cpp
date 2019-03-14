@@ -18,7 +18,6 @@
 #include "Utils/include/ConfigMacros.h"
 #include "VisionModule/include/VisionModule.h"
 #include "VisionModule/include/VisionRequest.h"
-
 #include "Utils/include/JsonUtils.h"
 #include "Utils/include/DataHolders/Camera.h"
 

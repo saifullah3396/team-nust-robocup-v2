@@ -101,11 +101,7 @@ public:
   /**
    * Destructor
    */
-  ~MotionModule()
-  {
-		delete inputConnector;
-    delete outputConnector;
-  }
+  ~MotionModule();
 
   /**
    * Derived from BaseModule

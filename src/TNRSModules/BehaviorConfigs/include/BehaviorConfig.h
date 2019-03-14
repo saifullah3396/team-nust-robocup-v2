@@ -11,7 +11,7 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #include "Utils/include/Exceptions/TNRSException.h"
 #include "BehaviorConfigs/include/BehaviorConfigMacros.h"
 

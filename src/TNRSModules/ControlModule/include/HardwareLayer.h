@@ -283,7 +283,7 @@ private:
   string alias; //! Unique actuation request command alias
   ThreadSafeQueue<ActuatorRequestPtr> requests; //! Actuator requests queue
   float dcmTime; //! NaoQi DCM architecture time
-  AL::ALValue commands; //! Commands sent to DCM
+  //AL::ALValue commands; //! Commands sent to DCM
   ALDCMProxyPtr dcmProxy; //! Pointer to NaoQi DCM
 };
 

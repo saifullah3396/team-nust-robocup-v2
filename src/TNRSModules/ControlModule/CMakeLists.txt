@@ -22,22 +22,23 @@ endif (EIGEN3_INCLUDE_DIRS)
 file (GLOB TNRS_CONTROL_MODULE_SRC "${TNRS_CONTROL_MODULE_DIR}/src/*.cpp")
 add_library (tnrs-control-module SHARED ${TNRS_CONTROL_MODULE_SRC})
 
+if(${ROBOT_VERSION} STREQUAL "V6")
+target_link_libraries(tnrs-control-module
+  libtnrs-utils.so
+  libtnrs-base.so
+  #-lalcommon
+  -lalproxies
+)
+else()
 qi_use_lib(tnrs-control-module
   ALCOMMON
   ALPROXIES
-  BOOST
-  OPENCV2_CORE
-  OPENCV2_HIGHGUI
-  OPENCV2_CALIB3D
-  OPENCV2_OBJDETECT
-  OPENCV2_VIDEO
-  PTHREAD
 )
-
 target_link_libraries(tnrs-control-module
   libtnrs-utils.so
   libtnrs-base.so
 )
+endif()
     
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${TNRS_CONTROL_MODULE_DIR}/tests/")

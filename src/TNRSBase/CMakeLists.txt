@@ -21,8 +21,7 @@ qi_use_lib(tnrs-base
   V4L
 )
 
-target_link_libraries(tnrs-base
-  libtnrs-utils.so)
+target_link_libraries(tnrs-base libtnrs-utils.so -ljsoncpp)
     
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")

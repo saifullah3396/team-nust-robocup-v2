@@ -88,11 +88,11 @@ struct GBLedsConfig : GBConfig
   {
     ASSERT(bgr.size() == 3) // For b, g, and r colors
     ASSERT(// RGB only supported for these led groups
-      groupId == LedGroups::L_FACE ||
-      groupId == LedGroups::R_FACE ||
-      groupId == LedGroups::CHEST ||
-      groupId == LedGroups::L_FOOT ||
-      groupId == LedGroups::R_FOOT);
+      groupId == LedGroups::lFace ||
+      groupId == LedGroups::rFace ||
+      groupId == LedGroups::chest ||
+      groupId == LedGroups::lFoot ||
+      groupId == LedGroups::rFoot);
     LedActuators groupStart, groupSize;
     getGroup(groupStart, groupSize, groupId);
     inToReach = vector<float>(static_cast<unsigned>(LedActuators::count), NAN);
@@ -141,10 +141,10 @@ struct GBLedsConfig : GBConfig
     } else if (groupId == LedGroups::chest) {
       groupStart = LedActuators::chestBoardLedRedActuator;
       groupSize = LedActuators::nChestLed;
-    } else if (groupId == LedGroups::lFeet) {
+    } else if (groupId == LedGroups::lFoot) {
       groupStart = LedActuators::lFootLedRedActuator;
       groupSize = LedActuators::nLFeetLed ;
-    } else if (groupId == LedGroups::rFeet) {
+    } else if (groupId == LedGroups::rFoot) {
       groupStart = LedActuators::rFootLedRedActuator;
       groupSize = LedActuators::nRFeetLed;
     }

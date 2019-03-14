@@ -10,7 +10,7 @@
 #pragma once
 
 #include <boost/make_shared.hpp>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #include "Utils/include/JsonUtils.h"
 #include "Utils/include/VariadicMacros.h"
 #include "Utils/include/DataUtils.h"

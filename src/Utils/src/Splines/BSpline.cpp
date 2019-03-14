@@ -103,7 +103,7 @@ template <typename Scalar>
 void BSpline<Scalar>::evaluateSpline(
     vector<vector<Scalar> >& spline,
     vector<Scalar>& splineTime,
-    const unsigned& derivative = 2) 
+    const unsigned& derivative)
 {
   derivativeOrder.clear();
   for (size_t i = 0; i < derivative + 1; ++i)

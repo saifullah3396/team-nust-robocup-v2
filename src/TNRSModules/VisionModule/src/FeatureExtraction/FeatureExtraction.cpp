@@ -76,7 +76,7 @@ void FeatureExtraction::setupImagesAndHists()
     //fastNlMeansDenoising(imageMat[i], imageMat[i], 3, 7, 5);
     cvtColor(imageMat[i], bgrMat[i], COLOR_YUV2BGR_YUY2);
 //#endif
-    if (i == static_cast<unsigned>(CameraId::headBottom)) {
+    if (i == toUType(CameraId::headBottom)) {
       Mat yuv422Ch[2];
       split(imageMat[i], yuv422Ch);
       // Set lower cam gray-scale image

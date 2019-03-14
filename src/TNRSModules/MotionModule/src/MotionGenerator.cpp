@@ -204,7 +204,7 @@ void MotionGenerator<Scalar>::addMotionTask(const boost::shared_ptr<MotionTask<S
 template <typename Scalar>
 bool MotionGenerator<Scalar>::validateTask(const boost::shared_ptr<MotionTask<Scalar> >& task)
 {
-  if (motionTasks.empty()) {
+  /*if (motionTasks.empty()) {
     return true;
   } else {
     for (size_t i = 0; i < motionTasks.size(); ++i) {
@@ -212,7 +212,7 @@ bool MotionGenerator<Scalar>::validateTask(const boost::shared_ptr<MotionTask<Sc
         return false;
       }
     }
-  }
+  }*/
   return true;
 }
 

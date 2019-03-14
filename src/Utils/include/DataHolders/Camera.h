@@ -21,7 +21,6 @@
 #include <sys/mman.h>
 #include <linux/videodev2.h>
 #include <libv4l2.h>
-#include <argp.h>
 #include <pthread.h>
 #else
 #include "Utils/include/alvisiondefinitions.h"
@@ -48,7 +47,11 @@ namespace Json {
 #define V4L2_MT9M114_AE_MAX_VIRT_DGAIN (V4L2_CID_PRIVATE_BASE+6)
 #define V4L2_MT9M114_AE_WEIGHT_TABLE_0_0 (V4L2_CID_PRIVATE_BASE+7)
 #ifdef MODULE_IS_REMOTE
-#define V4L2_CID_EXPOSURE_ALGORITHM (V4L2_CID_PRIVATE_BASE+8)
+  #define V4L2_CID_EXPOSURE_ALGORITHM (V4L2_CID_PRIVATE_BASE+8)
+#else
+  #ifdef V6_CROSS_BUILD
+    #define V4L2_CID_EXPOSURE_ALGORITHM (V4L2_CID_PRIVATE_BASE+8)
+  #endif
 #endif
 
 struct buffer

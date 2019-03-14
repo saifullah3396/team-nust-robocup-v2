@@ -22,18 +22,6 @@ endif (EIGEN3_INCLUDE_DIRS)
 file (GLOB TNRS_BEHAVIOR_MANAGER_SRC "${TNRS_BEHAVIOR_MANAGER_DIR}/src/*.cpp")
 add_library (tnrs-behavior-manager SHARED ${TNRS_BEHAVIOR_MANAGER_SRC})
 
-qi_use_lib(tnrs-behavior-manager
-  ALCOMMON
-  ALPROXIES
-  BOOST
-  OPENCV2_CORE
-  OPENCV2_HIGHGUI
-  OPENCV2_CALIB3D
-  OPENCV2_OBJDETECT
-  OPENCV2_VIDEO
-  PTHREAD
-)
-
 target_link_libraries(tnrs-behavior-manager
   libtnrs-utils.so
   libtnrs-base.so

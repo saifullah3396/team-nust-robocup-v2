@@ -107,8 +107,14 @@ elif [ "$FILES" = "LIBS" ]; then
   rsync -r $BUILD_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
 elif [ "$FILES" = "LIB_UTILS" ]; then
   rsync -r $BUILD_DIR/libtnrs-utils.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+elif [ "$FILES" = "LIB_MOTION" ]; then
+rsync -r $BUILD_DIR/libtnrs-motion-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+elif [ "$FILES" = "LIB_BASE" ]; then
+rsync -r $BUILD_DIR/libtnrs-base.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
 elif [ "$FILES" = "LIB_VISION" ]; then
   rsync -r $BUILD_DIR/libtnrs-vision-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
 elif [ "$FILES" = "LIB_USER_COMM" ]; then
   rsync -r $BUILD_DIR/libtnrs-user-comm-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+elif [ "$FILES" = "LIB_TNRS" ]; then
+  rsync -r $BUILD_DIR/libtnrs-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
 fi

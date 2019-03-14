@@ -67,7 +67,7 @@ bool ZmpControl<Scalar>::initiate()
   comLog << "# X Y" << endl;
   comLog.close();
   zmpRegLog.open(
-    (ConfigManager::getLogsDirPath() + string("ZmpControl/zmpRef.txt")).c_str(),
+    (ConfigManager::getLogsDirPath() + string("ZmpControl/ZmpRef.txt")).c_str(),
     std::ofstream::out | std::ofstream::trunc
   );
   zmpRegLog << "# X Y" << endl;
@@ -79,6 +79,9 @@ bool ZmpControl<Scalar>::initiate()
 
   //! Set current joint estimates to simulated states
   this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
+
+  //! Set max joint velocities to be used
+  this->kM->getTaskSolver()->setMaxVelocityLimitGain(1.0);
 
   //! Set up the reference generator based on given zmp targets
   Matrix<Scalar, 2, 1> zmpTarget;
@@ -205,7 +208,7 @@ bool ZmpControl<Scalar>::initiate()
     refGenerator->update(timeStep * this->cycleTime);
     zmpRef = refGenerator->getCurrentRef();
     zmpRegLog.open(
-      (ConfigManager::getLogsDirPath() + string("ZmpControl/zmpRef.txt")).c_str(),
+      (ConfigManager::getLogsDirPath() + string("ZmpControl/ZmpRef.txt")).c_str(),
       std::ofstream::out | std::ofstream::app
     );
     zmpRegLog << zmpRef->x[0] << " " << zmpRef->y[0] << endl;
@@ -340,9 +343,8 @@ void ZmpControl<Scalar>::update()
   if (this->runTime > (Scalar)getBehaviorCast()->timeToReachB)
     finish();
   #else
-  if (this->runTime > (Scalar)getBehaviorCast()->timeToReachB) {
-    //finish();
-    trackZmp();
+  if (this->runTime > this->maxTime) {
+    finish();
   } else {
     trackZmp();
   }
@@ -378,6 +380,7 @@ void ZmpControl<Scalar>::loadExternalConfig()
       (Scalar, ZmpControl.conTGain, conTGain),
       (Scalar, ZmpControl.torsoTWeight, torsoTWeight),
       (Scalar, ZmpControl.torsoTGain, torsoTGain),
+      (Scalar, ZmpControl.maxTime, maxTime),
     )
     taskWeights[static_cast<int>(IkTasks::com)] = comTWeight;
     taskGains[static_cast<int>(IkTasks::com)] = comTGain;
@@ -403,7 +406,7 @@ void ZmpControl<Scalar>::trackZmp()
   refGenerator->update(this->runTime);
   zmpRef = refGenerator->getCurrentRef();
   zmpRegLog.open(
-    (ConfigManager::getLogsDirPath() + string("ZmpControl/zmpRef.txt")).c_str(),
+    (ConfigManager::getLogsDirPath() + string("ZmpControl/ZmpRef.txt")).c_str(),
     std::ofstream::out | std::ofstream::app
   );
   zmpRegLog << zmpRef->x[0] << " " << zmpRef->y[0] << endl;
@@ -423,8 +426,8 @@ void ZmpControl<Scalar>::trackZmp()
     (ConfigManager::getLogsDirPath() + string("ZmpControl/Com.txt")).c_str(),
     std::ofstream::out | std::ofstream::app
   );
-  auto comFromBase = this->kM->computeComWrtBase(getBehaviorCast()->supportLeg, toUType(LegEEs::footBase));
-  auto simComState = this->kM->computeComWrtBase(getBehaviorCast()->supportLeg, toUType(LegEEs::footBase), JointStateType::sim);
+  auto comFromBase = this->kM->computeComWrtBase(getBehaviorCast()->supportLeg, toUType(LegEEs::footCenter));
+  auto simComState = this->kM->computeComWrtBase(getBehaviorCast()->supportLeg, toUType(LegEEs::footCenter), JointStateType::sim);
   comLog << this->motionModule->getModuleTime() << "  "
          << comState.position[0] << " "
          << comState.position[1] << " "
@@ -449,13 +452,20 @@ void ZmpControl<Scalar>::trackZmp()
   boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setTargetCom(desComPosition);
   boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setFirstStep(true);
   //if (getBehaviorCast()->regularizePosture) {
-//    boost::static_pointer_cast<PostureTask<Scalar> >(tasks[static_cast<int>(IkTasks::posture)])->setTargetPosture(this->kM->getJointPositions());
+//    boost::static_pointer_cast<PostureTask<Scalar> >(tasks[static_cast<int>(IkTasks::posture)])->setTargetPosture();
 //  }
+  auto regTask = this->kM->makePostureTask(
+    this->kM->getJointPositions(),
+    getBehaviorCast()->activeJoints,
+    1e-2,
+    0.95
+  );
   for (auto& task : tasks) {
     if (task) {
       this->addMotionTask(task);
     }
   }
+  this->addMotionTask(regTask);
 }
 
 template class ZmpControl<MType>;

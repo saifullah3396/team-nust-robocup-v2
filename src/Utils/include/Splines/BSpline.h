@@ -83,7 +83,7 @@ public:
   evaluateSpline(
     vector<vector<Scalar> >& spline, 
     vector<Scalar>& splineTime,
-    const unsigned& derivative);
+    const unsigned& derivative = 2);
 
   /**
    * Plots the spline on given time interval.

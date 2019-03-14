@@ -103,4 +103,4 @@ struct ScannedRegion
 };
 
 typedef boost::shared_ptr<ScannedRegion> ScannedRegionPtr;
-typedef cv::vector<ScannedRegionPtr>::iterator SRIter; //! Iterator
+typedef std::vector<ScannedRegionPtr>::iterator SRIter; //! Iterator

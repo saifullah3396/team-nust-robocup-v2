@@ -13,6 +13,23 @@ endif (EIGEN3_INCLUDE_DIRS)
 file (GLOB TNRS_LOCALIZATION_MODULE_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library (tnrs-localization-module SHARED ${TNRS_LOCALIZATION_MODULE_SRC})
 
+
+if(${ROBOT_VERSION} STREQUAL "V6")
+qi_use_lib(tnrs-localization-module
+  BOOST
+)
+target_link_libraries(tnrs-localization-module
+  libtnrs-utils.so
+  libtnrs-base.so
+  libtnrs-user-comm-module.so
+  libtnrs-random-lib.so
+  -lopencv_core
+  -lopencv_highgui
+  -lopencv_calib3d
+  -lopencv_objdetect
+  -lopencv_video
+)
+else()
 qi_use_lib(tnrs-localization-module
   ALCOMMON
   ALPROXIES
@@ -31,6 +48,7 @@ target_link_libraries(tnrs-localization-module
   libtnrs-user-comm-module.so
   libtnrs-random-lib.so
 )
+endif()
     
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")

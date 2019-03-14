@@ -10,7 +10,7 @@
 #pragma once
 #include <boost/make_shared.hpp>
 #include <boost/filesystem.hpp>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #include "Utils/include/Exceptions/TNRSException.h"
 
 #define SPC(type, x) boost::static_pointer_cast<type>(x)

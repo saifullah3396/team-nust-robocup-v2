@@ -76,13 +76,18 @@ public:
   /**
    * Initializes the vision module with its thread.
    *
-   * @param processingModule: Pointer to base class which is in
-   *   this case the ProcessingModule.
+   * @param teamNUSTSPL pointer to base class which is in this case
+   *   the TeamNUSTSPL class
    * @param camProxy: Pointer to NaoQi's camera proxy.
    */
-  VisionModule(void* processingModule, const ALVideoDeviceProxyPtr& camProxy);
+  VisionModule(void* teamNUSTSPL, const ALVideoDeviceProxyPtr& camProxy);
   #else
-  VisionModule(void* processingModule);
+  /**
+   * @brief UserCommModule Constructor
+   * @param teamNUSTSPL pointer to base class which is in this case
+   *   the TeamNUSTSPL class
+   */
+  VisionModule(void* teamNUSTSPL);
   #endif
 
   /**

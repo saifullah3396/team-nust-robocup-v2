@@ -109,6 +109,11 @@ public:
   void update();
 
   /**
+   * @brief cleanup Performs clean up operations
+   */
+  void cleanup();
+
+  /**
    * Sets the simulated joint states equal to actual joint state
    */
   void setStateFromTo(
@@ -1278,8 +1283,8 @@ private:
   fstream comLog;
 
   //! Json log file for imu data
-  JsonLoggerPtr imuLogger;
-  bool logImuData;
+  JsonLoggerPtr kinDataLogger;
+  bool logKinData;
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

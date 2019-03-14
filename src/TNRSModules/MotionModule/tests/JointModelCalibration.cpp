@@ -22,9 +22,11 @@ int main(int argc, char **argv)
     DataUtils::stringToVar(argv[2], index);
     jointIndex = static_cast<Joints>(index);
   }
-  JointModelCalibrator calibrator(jointIndex, path);
-  calibrator.optDef();
-  calibrator.printResults();
+  // (const auto& joint : Joints()) {
+    JointModelCalibrator calibrator(jointIndex, path);
+    calibrator.optDef();
+    calibrator.printResults();
+  //}
   while(true);
   return 0;
 }

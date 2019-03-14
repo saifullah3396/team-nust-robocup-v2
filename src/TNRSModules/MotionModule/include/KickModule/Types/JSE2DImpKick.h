@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #include "MotionModule/include/KickModule/Types/JointSpaceKick.h"
 
 template <typename Scalar>

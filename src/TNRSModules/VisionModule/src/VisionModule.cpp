@@ -54,9 +54,9 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
 )
 
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-VisionModule::VisionModule(void* processingModule,
+VisionModule::VisionModule(void* teamNUSTSPL,
   const ALVideoDeviceProxyPtr& camProxy) :
-  BaseModule(processingModule, toUType(TNSPLModules::vision), "VisionModule"),
+  BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
   DebugBase("VisionModule", this), 
   camProxy(camProxy),
   logImages(vector<bool>(toUType(CameraId::count), false)),
@@ -65,8 +65,8 @@ VisionModule::VisionModule(void* processingModule,
 {
 }
 #else
-VisionModule::VisionModule(void* processingModule) :
-  BaseModule(processingModule, toUType(TNSPLModules::vision), "VisionModule"),
+VisionModule::VisionModule(void* teamNUSTSPL) :
+  BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
   DebugBase("VisionModule", this),
   logImages(vector<bool>(toUType(CameraId::count), false)),
   writeVideo(vector<bool>(toUType(CameraId::count), false)),
@@ -232,6 +232,7 @@ void VisionModule::handleVideoWriting()
 bool VisionModule::featureExtractionUpdate()
 {
   FeatureExtraction::setupImagesAndHists();
+  VisionUtils::displayImage("Image", FeatureExtraction::getBgrMat(toUType(CameraId::headTop)));
   FeatureExtraction::clearLandmarks();
   //colorHandler->update();
   /*Mat blue, yellow, green, yuv;

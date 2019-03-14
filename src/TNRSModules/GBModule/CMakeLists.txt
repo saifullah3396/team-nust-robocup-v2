@@ -26,13 +26,6 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
   qi_use_lib(tnrs-gb-module
     ALCOMMON
     ALPROXIES
-    BOOST
-    OPENCV2_CORE
-    OPENCV2_HIGHGUI
-    OPENCV2_CALIB3D
-    OPENCV2_OBJDETECT
-    OPENCV2_VIDEO
-    PTHREAD
   )
 
   # Linking external libraries installed as pre-requisites.
@@ -45,25 +38,32 @@ else()
   
   add_library (tnrs-gb-module SHARED ${SRC})
   
-  # Linking libraries from the sdk.
-  qi_use_lib(
-    tnrs-gb-module
-    ALCOMMON
-    ALPROXIES
-    BOOST
-    OPENCV2_CORE
-    OPENCV2_HIGHGUI
-    OPENCV2_CALIB3D
-    OPENCV2_OBJDETECT
-    OPENCV2_VIDEO
-    ALSA
-    PTHREAD
-  )
-
-  # Linking external libraries installed as pre-requisites in the toolchain
-  # These libraries are compiled on the virtual-nao in virtualbox robot env
-  # and placed in the folder cross-toolchain/cross/i686-aldebaran-linux-gnu/lib
-  target_link_libraries(tnrs-gb-module -lfftw3 -lfftw3f -lm -ljsoncpp)
+  if(${ROBOT_VERSION} STREQUAL "V6")
+    qi_use_lib(tnrs-gb-module
+      BOOST_SIGNALS
+    )
+    target_link_libraries(tnrs-gb-module
+      #-lfftw3
+      -lfftw3f
+      libtnrs-utils.so
+      libtnrs-base.so
+      -lalcommon
+      -lalproxies
+      -lalvalue
+      ${ALSA_LIBRARIES})
+  else()
+    # Linking libraries from the sdk.
+    qi_use_lib(
+      tnrs-gb-module
+      ALCOMMON
+      ALPROXIES
+      ALSA
+    )
+    # Linking external libraries installed as pre-requisites in the toolchain
+    # These libraries are compiled on the virtual-nao in virtualbox robot env
+    # and placed in the folder cross-toolchain/cross/i686-aldebaran-linux-gnu/lib
+    target_link_libraries(tnrs-gb-module -lfftw3 -lfftw3f -lm -ljsoncpp)
+  endif()
 endif()
 
 target_link_libraries(tnrs-gb-module

@@ -84,6 +84,13 @@ MotionModule::MotionModule(
 }
 #endif
 
+MotionModule::~MotionModule()
+{
+  delete inputConnector;
+  delete outputConnector;
+  kinematicsModule->cleanup();
+}
+
 void MotionModule::setThreadPeriod()
 {
   setPeriodMinMS(MOTION_PERIOD_IN(MotionModule));
@@ -117,7 +124,7 @@ void MotionModule::init()
   #endif
   //! Create kinematics module
   LOG_INFO("Initializing KinematicsModule...")
-  kinematicsModule = KinematicsModulePtr(new KinematicsModule<MType>(this));
+  kinematicsModule = boost::make_shared<KinematicsModule<MType> >(this);
   kinematicsModule->init();
   //! Create motion generator module
   LOG_INFO("Initializing MotionGenerator...")

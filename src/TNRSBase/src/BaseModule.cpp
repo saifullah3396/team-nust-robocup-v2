@@ -77,8 +77,15 @@ void BaseModule::join()
 void* BaseModule::threadFunc(void* pTr)
 {
   BaseModule* pThis = static_cast<BaseModule*>(pTr);
-  while (pThis->upperRoutine()) {}
-  pthread_exit(0);
+  try {
+     while (pThis->upperRoutine()) {}
+     throw ThreadException(
+       pThis->getModuleName() + " thread routine finished...",
+       true);
+  } catch (const ThreadException& e) {
+    LOG_EXCEPTION(e.what());
+    pthread_exit(0);
+  }
   return NULL;
 }
 
@@ -180,7 +187,7 @@ void BaseModule::onIterationComplete()
   auto lastIterationTimeMS =
     duration_cast < milliseconds > (timeNow - iterationStartTime).count();
   //if (moduleName == "MotionModule")
-      //LOG_INFO(moduleName << " took time: " << lastIterationTimeMS)
+  //    LOG_INFO(moduleName << " took time: " << lastIterationTimeMS)
   if (lastIterationTimeMS < periodMinMS) {
     int waitTimeMS = periodMinMS - lastIterationTimeMS;
     usleep(waitTimeMS * 1000);

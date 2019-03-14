@@ -116,6 +116,8 @@ private:
   static vector<Scalar> taskWeights;
   static vector<Scalar> taskGains;
 
+  Scalar maxTime = {0.05};
+
   enum IkTasks : unsigned int {
     com,
     posture,

@@ -38,7 +38,6 @@ class RegionSegmentation : public FeatureExtraction, public DebugBase
     //! Option to display image output
     (int, displayOutput, 0),
   )
-
 public:
   /**
    * Constructor

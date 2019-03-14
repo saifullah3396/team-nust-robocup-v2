@@ -36,7 +36,7 @@ void TNRSFootstep<Scalar>::print()
 
 template <typename Scalar>
 cv::RotatedRect TNRSFootstep<Scalar>::getFootRect(
-  const cv::Point2f& offset = cv::Point2f(0, 0), const Scalar& multiplier = 0.0)
+  const cv::Point2f& offset, const Scalar& multiplier)
 {
   auto center = cv::Point2f(pose2D.getX() * multiplier + offset.x, pose2D.getY() * multiplier + offset.y);
   auto size = cv::Size2f(Constants::footSizeX * multiplier, Constants::footSizeY * multiplier);

@@ -123,19 +123,20 @@ KinematicsModule<Scalar>::KinematicsModule(MotionModule* motionModule) :
   ffBufferSize(15),
   globalBase(RobotFeet::lFoot),
   globalEnd(LegEEs::footCenter),
-  logImuData(false)
+  logKinData(false)
 {
   GET_CONFIG( "KinCalibration",
     (Scalar, torsoPitchOffset, torsoPitchOffset),
     (Scalar, torsoRollOffset, torsoRollOffset),
-    (bool, logImuData, logImuData),
+    (bool, logKinData, logKinData),
   )
-  string imuLogFile = ConfigManager::getLogsDirPath() + "KinematicsModule/ImuData.json";
-  imuLogger = boost::make_shared<Utils::JsonLogger>(imuLogFile);
+  string kinDataLog = ConfigManager::getLogsDirPath() + "KinematicsModule/KinData.json";
+  kinDataLogger = boost::make_shared<Utils::JsonLogger>(kinDataLog);
 }
 
 template <typename Scalar>
-KinematicsModule<Scalar>::~KinematicsModule() {}
+KinematicsModule<Scalar>::~KinematicsModule() {
+}
 
 template <typename Scalar>
 void KinematicsModule<Scalar>::init()
@@ -178,6 +179,12 @@ void KinematicsModule<Scalar>::update()
   );
   zmpLog << zmp[0] << " " << zmp[1] << endl;
   zmpLog.close();*/
+}
+
+template <typename Scalar>
+void KinematicsModule<Scalar>::cleanup()
+{
+  kinDataLogger->save();
 }
 
 template <typename Scalar>
@@ -1030,17 +1037,16 @@ void KinematicsModule<Scalar>::updateTorsoState()
     //LOG_INFO("accel: " << torsoState->rot.block(0, 0, 3, 3) * torsoState->accel);
     torsoState->accel = torsoState->rot.block(0, 0, 3, 3) * torsoState->accel - gravity;
     torsoState->velocity = torsoState->velocity - torsoState->accel * cycleTime;
-
-    if (logImuData) {
-      static int count = 0;
-      JSON_APPEND(imuLogger->getRoot(), "angleX", inertial[toUType(InertialSensors::torsoAngleX)]);
-      JSON_APPEND(imuLogger->getRoot(), "angleY", inertial[toUType(InertialSensors::torsoAngleY)]);
-      JSON_APPEND(imuLogger->getRoot(), "accelX", inertial[toUType(InertialSensors::accelerometerX)]);
-      JSON_APPEND(imuLogger->getRoot(), "accelY", inertial[toUType(InertialSensors::accelerometerY)]);
-      JSON_APPEND(imuLogger->getRoot(), "accelZ", inertial[toUType(InertialSensors::accelerometerZ)]);
-      JSON_ASSIGN(imuLogger->getRoot(), "size", count);
-      count++;
-      imuLogger->save();
+    if(logKinData) {
+      /*Json::Value angle;
+      angle.append(inertial[toUType(InertialSensors::torsoAngleX)]);
+      angle.append(inertial[toUType(InertialSensors::torsoAngleY)]);
+      Json::Value accel;
+      accel.append(inertial[toUType(InertialSensors::accelerometerX)]);
+      accel.append(inertial[toUType(InertialSensors::accelerometerY)]);
+      accel.append(inertial[toUType(InertialSensors::accelerometerZ)]);
+      JSON_APPEND(kinDataLogger->getRoot(), "imuAngleMeas", angle);
+      JSON_APPEND(kinDataLogger->getRoot(), "imuAccelMeas", accel);*/
     }
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what());
@@ -1102,6 +1108,12 @@ void KinematicsModule<Scalar>::updateComState()
          << comAccel[0] << " "
          << comAccel[1] << endl;
   comLog.close();
+  if (logKinData) {
+    Json::Value comMeas;
+    comMeas.append(comFoot[0]);
+    comMeas.append(comFoot[1]);
+    JSON_APPEND(kinDataLogger->getRoot(), "comMeas", comMeas);
+  }
 }
 
 template <typename Scalar>

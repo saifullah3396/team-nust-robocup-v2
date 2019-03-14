@@ -10,7 +10,7 @@
 #pragma once
 
 #include <iostream>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #include <boost/shared_ptr.hpp>
 #include "Eigen/Dense"
 #include <opencv2/core/core.hpp>

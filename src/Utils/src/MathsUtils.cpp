@@ -595,7 +595,7 @@ template Matrix<double, 4, 4> mirrorTransformation<Matrix<double, 4, 4>>(const M
 template<typename Derived>
 bool almostEqual(
   const Derived& first, const Derived& second,
-  const typename Derived::Scalar tol = typename Derived::Scalar(0.5))
+  const typename Derived::Scalar tol)
 {
   typename Derived::Scalar angleNorm =
     (getEulerAngles(first) - getEulerAngles(second)).norm();
@@ -637,7 +637,7 @@ template<typename Derived>
 Eigen::Matrix<typename Derived::Scalar, Dynamic, Dynamic>
 pseudoInverse(
   const MatrixBase<Derived>& mat,
-  const typename Derived::Scalar tolerance = typename Derived::Scalar(1e-4))
+  const typename Derived::Scalar tolerance)
 {
   typedef typename Derived::Scalar Scalar;
   typedef typename internal::plain_row_type<Derived>::type RowVectorType;
@@ -710,6 +710,7 @@ operator*(const vector<Scalar>& vec, const Scalar& constant)
   return result;
 }
 
+#ifndef V6_CROSS_BUILD
 template<typename Scalar>
 cv::Point_<Scalar> operator/(const cv::Point_<Scalar>& p, const Scalar value)
 {
@@ -718,5 +719,6 @@ cv::Point_<Scalar> operator/(const cv::Point_<Scalar>& p, const Scalar value)
 
 template cv::Point_<float> operator/(const cv::Point_<float>& p, const float value);
 template cv::Point_<double> operator/(const cv::Point_<double>& p, const double value);
+#endif
 
 } //! MathsUtils

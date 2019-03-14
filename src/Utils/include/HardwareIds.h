@@ -417,11 +417,11 @@ enum class LedGroups : unsigned int
   lEar,
   rEar,
   chest,
-  lFeet,
-  rFeet,
+  lFoot,
+  rFoot,
   count,
   first = head,
-  last = rFeet
+  last = rFoot
 };
 DECLARE_SPECIALIZED_ENUM(LedGroups)
 

@@ -79,7 +79,7 @@ SensorLayerPtr SensorLayer::makeSensorLayer(
 
 void ActuatorLayer::update()
 {
-  try {
+ /* try {
     if (requests.isEmpty())
       return;
     //! Get the earliest request in queue
@@ -93,12 +93,12 @@ void ActuatorLayer::update()
     requests.popQueue();
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what())
-  }
+  }*/
 }
 
 void ActuatorLayer::setActuatorAlias()
 {
-  AL::ALValue commandAlias;
+  /*AL::ALValue commandAlias;
   commandAlias.arraySetSize(2);
   commandAlias[0] = string(alias);
   commandAlias[1].arraySetSize(size);
@@ -108,12 +108,12 @@ void ActuatorLayer::setActuatorAlias()
     dcmProxy->createAlias(commandAlias);
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what())
-  }
+  }*/
 }
 
 void ActuatorLayer::setActuatorCommand()
 {
-  commands.arraySetSize(6);
+  /*commands.arraySetSize(6);
   commands[0] = string(alias);
   commands[1] = string("ClearAll");
   commands[2] = string("time-separate");
@@ -121,7 +121,7 @@ void ActuatorLayer::setActuatorCommand()
   commands[4].arraySetSize(1);
   commands[5].arraySetSize(size);
   for (size_t i = 0; i < size; ++i)
-    commands[5][i].arraySetSize(1);
+    commands[5][i].arraySetSize(1);*/
 }
 
 ActuatorLayerPtr ActuatorLayer::makeActuatorLayer(

@@ -126,14 +126,14 @@ bool TaskIkSolver<Scalar>::step(
   if (!final) {
     for (size_t i = 0; i < tasks.size(); ++i) {
       if (tasks[i]) {
-        LOG_INFO("tasks[i]: " << i)
+        //LOG_INFO("tasks[i]: " << i)
         Eigen::Matrix<Scalar, Dynamic, Dynamic> J = tasks[i]->getJacobian();
         Eigen::Matrix<Scalar, Dynamic, Dynamic> res = tasks[i]->getGain() * tasks[i]->getResidual(dt);
-        LOG_INFO("res: " << res.transpose())
+        //LOG_INFO("res: " << res.transpose())
         P += tasks[i]->getWeight() * J.transpose() * J;
         v += tasks[i]->getWeight() * - res.transpose() * J;
-        LOG_INFO("J: " << J.transpose())
-        LOG_INFO("V: " << tasks[i]->getWeight() * - res.transpose() * J)
+        //LOG_INFO("J: " << J.transpose())
+        //LOG_INFO("V: " << tasks[i]->getWeight() * - res.transpose() * J)
       }
     }
   } else {

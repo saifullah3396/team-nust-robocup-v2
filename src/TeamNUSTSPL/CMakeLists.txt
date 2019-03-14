@@ -70,6 +70,31 @@ target_link_libraries(tnrs-module
 )
 else()
 add_library (tnrs-module SHARED ${TNRS_SRC})
+
+if(${ROBOT_VERSION} STREQUAL "V6")
+qi_use_lib(
+  tnrs-module
+  PTHREAD
+  BOOST
+  BOOST_FILESYSTEM
+  BOOST_IOSTREAMS
+)
+target_link_libraries(tnrs-module
+  libtnrs-utils.so
+  libtnrs-base.so
+  libtnrs-control-module.so
+  libtnrs-planning-module.so
+  libtnrs-motion-module.so
+  libtnrs-gb-module.so
+  libtnrs-localization-module.so
+  libtnrs-vision-module.so
+  libtnrs-game-comm-module.so
+  libtnrs-user-comm-module.so
+  -ljsoncpp
+  -lalcommon
+  -lalproxies
+)
+else()
 qi_use_lib(
   tnrs-module
   ALCOMMON
@@ -98,6 +123,7 @@ target_link_libraries(tnrs-module
   libtnrs-user-comm-module.so
   -ljsoncpp
 )
+endif()
 endif()
 
 if (BUILD_TNRS_TESTS)

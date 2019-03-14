@@ -1539,3 +1539,6 @@ src/TNRSModules/GBModule/include/LedsModule/LedsModule.h
 src/TNRSModules/GBModule/src/LedsModule/LedsModule.cpp
 src/TNRSModules/GBModule/src/LedsModule/Types/DirectLeds.cpp
 src/TNRSModules/GBModule/src/LedsModule/Types/InterpolateLeds.cpp
+config/Robots/Nu-14/JointEstimator.json
+src/TNRSModules/MotionModule/CMakeLists.txt
+src/BehaviorManager/CMakeLists.txt

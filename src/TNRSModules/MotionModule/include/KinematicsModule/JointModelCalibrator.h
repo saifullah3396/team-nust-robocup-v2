@@ -60,6 +60,7 @@ protected:
 
   Eigen::Matrix<double, 3, 1> pid; //! PID gains
   double timeShift; //! Sensor measurements delay
+  Eigen::Matrix<double, Eigen::Dynamic, 1> modelledPositions; //! Modeled positions
   Eigen::Matrix<double, Eigen::Dynamic, 1> sensedPosition; //! Input joint position
   Eigen::Matrix<double, Eigen::Dynamic, 1> cmdPosition; //! Commanded joint positions
   Eigen::Matrix<double, Eigen::Dynamic, 1> time; //! Time vector

@@ -3,7 +3,7 @@
 	"id" : 0,
     "jointsToReach" : null,
 	"maxRuntime" : 10,
-    "targetPosture" : 1,
+    "targetPosture" : 0,
     "timeToReachP" : 2.0,
     "type" : 0,
     "logData" : true

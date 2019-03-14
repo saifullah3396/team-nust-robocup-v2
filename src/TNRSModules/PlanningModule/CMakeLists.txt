@@ -32,6 +32,26 @@ file (GLOB TNRS_PLANNING_MODULE_SRC
       "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/TestSuite/Types/*.cpp")
       
 add_library (tnrs-planning-module SHARED ${TNRS_PLANNING_MODULE_SRC})
+
+if(${ROBOT_VERSION} STREQUAL "V6")
+qi_use_lib(tnrs-planning-module
+  OPENCV3_CORE
+  OPENCV3_VIDEO
+)
+target_link_libraries(tnrs-planning-module
+  libtnrs-utils.so
+  libtnrs-base.so
+  libtnrs-behavior-manager.so
+  libtnrs-sbpl-lib.so
+  libtnrs-motion-module.so
+  libtnrs-gb-module.so
+  libtnrs-control-module.so
+  -ljsoncpp
+  -lalcommon
+  -lalproxies
+  -lalvalue
+)
+else()
 qi_use_lib(tnrs-planning-module
   ALCOMMON
   ALPROXIES
@@ -54,6 +74,7 @@ target_link_libraries(tnrs-planning-module
   libtnrs-control-module.so
   -ljsoncpp
 )
+endif()
   
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")

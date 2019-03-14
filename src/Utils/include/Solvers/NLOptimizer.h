@@ -10,7 +10,7 @@
 #pragma once
 #include <numeric>
 #include <vector>
-#include <nlopt/nlopt.hpp>
+#include <nlopt.hpp>
 
 using namespace std;
 

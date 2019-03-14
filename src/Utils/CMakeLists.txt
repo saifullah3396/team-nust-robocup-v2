@@ -40,20 +40,42 @@ file (GLOB SRC
 )
 add_library (tnrs-utils SHARED ${SRC})
 
-qi_use_lib(tnrs-utils
-  ALCOMMON
-  BOOST
-  BOOST_FILESYSTEM
-  BOOST_IOSTREAMS
-  OPENCV2_CORE
-  OPENCV2_HIGHGUI
-  OPENCV2_IMGPROC
-  PTHREAD
-  V4L
-  JPEG
-)
-target_link_libraries(tnrs-utils libtnrs-sbpl-lib.so -lnlopt -ljsoncpp)
+if(${ROBOT_VERSION} STREQUAL "V6")
+    qi_use_lib(tnrs-utils
+      BOOST
+      BOOST_FILESYSTEM
+      BOOST_IOSTREAMS
+      PTHREAD
+      OPENCV3_CORE
+      OPENCV3_HIGHGUI
+      OPENCV3_IMGPROC
+      OPENCV3_IMGCODECS
+      V4L
+      JPEG
+    )
+  target_link_libraries(tnrs-utils
+    libtnrs-sbpl-lib.so
+    -lnlopt
+    -ljsoncpp
+    -lalcommon)
+else()
+    qi_use_lib(tnrs-utils
+      ALCOMMON
+      BOOST
+      BOOST_FILESYSTEM
+      BOOST_IOSTREAMS
+      OPENCV2_CORE
+      OPENCV2_HIGHGUI
+      OPENCV2_IMGPROC
+      OPENCV2_IMGCODECS
+      PTHREAD
+      V4L
+      JPEG
+    )
+  target_link_libraries(tnrs-utils
+    libtnrs-sbpl-lib.so -lnlopt -ljsoncpp)
 
+endif()
 #if (BUILD_TNRS_TESTS)
     set (test_DIR "${TNRS_UTILS_DIR}/tests/")
     file (GLOB TESTS RELATIVE "${test_DIR}" "${TNRS_UTILS_DIR}/tests/*.cpp")

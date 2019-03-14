@@ -460,6 +460,7 @@ namespace MathsUtils
   vector<Scalar>
   operator*(const vector<Scalar>& vec, const Scalar& constant);
 
+#ifndef V6_CROSS_BUILD
   /**
    * @brief Division operator for OpenCV points
    * @param p First point
@@ -468,6 +469,6 @@ namespace MathsUtils
    */
   template<typename Scalar>
   cv::Point_<Scalar> operator/(const cv::Point_<Scalar>& p, const Scalar value);
-
+#endif
 } //! MathsUtils
 #endif //! _MATHS_UTILS_H_

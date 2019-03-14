@@ -7,7 +7,7 @@
     "regularizePosture" : true,
     "supportLeg" : 3,
     "type" : 2,
-    "logData" : true,
+    "logData" : false,
     "timeToReachB" : 1.0,
     "targetX" : -0.02,
     "targetY" : 0.0

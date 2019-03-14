@@ -45,16 +45,6 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
   qi_use_lib(tnrs-motion-module
     ALCOMMON
     ALPROXIES
-    PTHREAD
-    BOOST
-    BOOST_FILESYSTEM
-    BOOST_IOSTREAMS
-    OPENCV2_CORE
-    OPENCV2_HIGHGUI
-    OPENCV2_IMGPROC
-    OPENCV2_CALIB3D
-    OPENCV2_OBJDETECT
-    OPENCV2_VIDEO
   )
 
   # Linking external libraries installed as pre-requisites.
@@ -75,34 +65,41 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
 else()
   add_library (tnrs-motion-module SHARED ${TNRS_MOTION_MODULE_SRC})
   # Linking libraries from the sdk.
-  qi_use_lib(
-    tnrs-motion-module
-    ALCOMMON
-    ALPROXIES
-    PTHREAD
-    BOOST
-    BOOST_FILESYSTEM
-    BOOST_IOSTREAMS
-    OPENCV2_CORE
-    OPENCV2_HIGHGUI
-    OPENCV2_CALIB3D
-    OPENCV2_OBJDETECT
-    OPENCV2_VIDEO
-  )
+  if(${ROBOT_VERSION} STREQUAL "V6")
+      qi_use_lib(tnrs-motion-module
+        BOOST_SIGNALS
+      )
+      target_link_libraries(tnrs-motion-module
+      libtnrs-utils.so
+      libtnrs-base.so
+      libtnrs-user-comm-module.so
+      libtnrs-control-module.so
+      libtnrs-behavior-manager.so
+      -lnlopt
+      -ljsoncpp
+      libqpOASES.so
+      -lalcommon
+      -lalproxies)
+  else()
+      qi_use_lib(
+        tnrs-motion-module
+        ALCOMMON
+        ALPROXIES
+      )
 
-  # Linking external libraries installed as pre-requisites in the toolchain
-  # These libraries are compiled on the virtual-nao in virtualbox robot env
-  # and placed in the folder cross-toolchain/cross/i686-aldebaran-linux-gnu/lib
-  target_link_libraries(tnrs-motion-module
-  libtnrs-utils.so
-  libtnrs-base.so
-  libtnrs-user-comm-module.so
-  libtnrs-control-module.so
-  libtnrs-behavior-manager.so
-  -lnlopt 
-  -ljsoncpp 
-  libqpOASES.so
-)
+      # Linking external libraries installed as pre-requisites in the toolchain
+      # These libraries are compiled on the virtual-nao in virtualbox robot env
+      # and placed in the folder cross-toolchain/cross/i686-aldebaran-linux-gnu/lib
+      target_link_libraries(tnrs-motion-module
+      libtnrs-utils.so
+      libtnrs-base.so
+      libtnrs-user-comm-module.so
+      libtnrs-control-module.so
+      libtnrs-behavior-manager.so
+      -lnlopt
+      -ljsoncpp
+      libqpOASES.so)
+  endif()
 endif()
     
 if (BUILD_TNRS_TESTS)

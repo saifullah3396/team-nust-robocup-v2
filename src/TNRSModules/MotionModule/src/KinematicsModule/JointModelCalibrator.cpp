@@ -27,10 +27,12 @@ JointModelCalibrator::JointModelCalibrator(const Joints& jointIndex, const strin
   auto state = json[Constants::jointNames[toUType(jointIndex)]]["state"];
   sensedPosition.resize(state.size());
   cmdPosition.resize(state.size());
+  modelledPositions.resize(state.size());
   time.resize(state.size());
   for (size_t i = 0; i < state.size(); ++i) {
     cmdPosition[i] = state[static_cast<int>(i)]["cmd"].asFloat();
     sensedPosition[i] = state[static_cast<int>(i)]["sensed"].asFloat();
+    modelledPositions[i] = state[static_cast<int>(i)]["position"].asFloat();
     time[i] = state[static_cast<int>(i)]["time"].asFloat();
   }
   Matrix<double, 2, 1> initState;
@@ -142,6 +144,7 @@ void JointModelCalibrator::printResults()
   pe.plot2D("Commanded Position", time, cmdPosition);
   pe.plot2D("Sensed Position", sensedTime, sensedPosition);
   pe.plot2D("Estimated Position", time, estPositions);
+  pe.plot2D("Modelled Position", time, modelledPositions);
   pe.showonscreen();
   while(true);
 }

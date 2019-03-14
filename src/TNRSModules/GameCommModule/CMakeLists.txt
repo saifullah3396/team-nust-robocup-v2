@@ -13,18 +13,6 @@ endif (EIGEN3_INCLUDE_DIRS)
 file (GLOB TNRS_COMM_MODULE_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library (tnrs-game-comm-module SHARED ${TNRS_COMM_MODULE_SRC})
 
-qi_use_lib(tnrs-game-comm-module
-  ALCOMMON
-  ALPROXIES
-  BOOST
-  OPENCV2_CORE
-  OPENCV2_HIGHGUI
-  OPENCV2_CALIB3D
-  OPENCV2_OBJDETECT
-  OPENCV2_VIDEO
-  PTHREAD
-)
-
 target_link_libraries(tnrs-game-comm-module 
   libtnrs-utils.so 
   libtnrs-base.so

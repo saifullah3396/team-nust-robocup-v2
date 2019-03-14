@@ -45,6 +45,29 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
 else()
   add_library (tnrs-vision-module SHARED ${TNRS_VISION_MODULE_SRC})
   # Linking libraries from the sdk.
+
+  if(${ROBOT_VERSION} STREQUAL "V6")
+  qi_use_lib(
+    tnrs-vision-module
+    BOOST
+    BOOST_FILESYSTEM
+    BOOST_IOSTREAMS
+    BLAS
+    LAPACK
+    OPENCV3_CORE
+    OPENCV3_HIGHGUI
+    OPENCV3_CALIB3D
+    OPENCV3_OBJDETECT
+    OPENCV3_VIDEO
+    OPENCV3_FEATURES2D
+    OPENCV3_FLANN
+    V4L
+  )
+  target_link_libraries(tnrs-vision-module
+    -lm
+    -lalcommon
+    -lalproxies)
+  else()
   qi_use_lib(
     tnrs-vision-module
     ALCOMMON
@@ -67,7 +90,8 @@ else()
   # Linking external libraries installed as pre-requisites in the toolchain
   # These libraries are compiled on the virtual-nao in virtualbox robot env
   # and placed in the folder cross-toolchain/cross/i686-aldebaran-linux-gnu/lib
-  target_link_libraries(tnrs-vision-module -lfftw3 -lfftw3f -lm -llapack -lrefblas -lgfortran)
+  target_link_libraries(tnrs-vision-module -lm -llapack -lrefblas -lgfortran)
+  endif()
 endif()
 
 target_link_libraries(tnrs-vision-module

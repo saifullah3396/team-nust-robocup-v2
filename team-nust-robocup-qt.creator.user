@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.0.1, 2009-01-01T05:01:58. -->
+<!-- Written by QtCreator 3.0.1, 2019-03-14T12:27:29. -->
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -54,7 +54,7 @@
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{15f31a9e-a6f2-4ea1-b982-6f63b839fa18}</value>
-   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">3</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">1</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
@@ -115,7 +115,7 @@
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">configure CROSS=cross USE_NAOQI_VIDEO_PROXY=OFF</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">configure CROSS=ctc-2.8 USE_NAOQI_VIDEO_PROXY=OFF USE_NAOQI_MOTION_PROXY=ON ROBOT_VERSION=V6</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Command">make</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Custom Process Step</value>
@@ -124,7 +124,7 @@
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">install CROSS=cross USE_NAOQI_VIDEO_PROXY=OFF</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">install CROSS=ctc-2.8 USE_NAOQI_VIDEO_PROXY=OFF USE_NAOQI_MOTION_PROXY=ON ROBOT_VERSION=V6</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Command">make</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Custom Process Step</value>
@@ -353,7 +353,7 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments"></value>
+    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments">--pip 192.168.30.4 --robot Nu-14</value>
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Executable">/home/sensei/team-nust-robocup/build/Release/remote/bin/tnrs-module</value>
     <value type="bool" key="ProjectExplorer.CustomExecutableRunConfiguration.UseTerminal">false</value>
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory">%{buildDir}</value>
