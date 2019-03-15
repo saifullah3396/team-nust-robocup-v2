@@ -7,6 +7,9 @@
  * @date 02 Aug 2018
  */
 
+#ifndef V6_CROSS_BUILD
+#include <alvalue/alvalue.h>
+#endif
 #include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/MTypeHeader.h"
 #include "MotionModule/include/MotionLogger.h"
@@ -31,18 +34,30 @@ MotionLogger<Scalar>::MotionLogger(
 }
 
 template <typename Scalar>
+#ifdef V6_CROSS_BUILD
 void MotionLogger<Scalar>::recordJointCmds(
   const AL::ALValue& cmds, const AL::ALValue& time, const vector<unsigned>& ids)
+#else
+void recordJointCmds(
+   const vector<Scalar>& cmds, const vector<Scalar>& time, const vector<unsigned>& ids)
+#endif
 {
-  ASSERT(time.getSize() != 0);
+  #ifndef V6_CROSS_BUILD
   ASSERT(cmds.getSize() != 0);
+  #else
+  ASSERT(cmds.size() != 0);
+  #endif
   high_resolution_clock::time_point timeNow = high_resolution_clock::now();
   double timeStart = (duration<double>(timeNow - refTime)).count();  
   vector<int> jointIndices(toUType(Joints::count), -1);
   for (size_t i = 0; i < ids.size(); ++i) {
     jointIndices[ids[i]] = i;
   }
+  #ifndef V6_CROSS_BUILD
   for (size_t i = 0; i < time[0].getSize(); ++i) {
+  #else
+  for (size_t i = 0; i < time[0].size(); ++i) {
+  #endif
     JSON_APPEND(
       root["jointCommands"], 
       "time", 
@@ -67,16 +82,30 @@ void MotionLogger<Scalar>::recordJointCmds(
 }
 
 template <typename Scalar>
+#ifdef V6_CROSS_BUILD
 void MotionLogger<Scalar>::recordJointCmds(
   const AL::ALValue& cmds,
   const AL::ALValue& time,
   const Matrix<bool, Dynamic, 1> activeJoints)
+#else
+void recordJointCmds(
+  const vector<Scalar>& cmds,
+  const vector<Scalar>& time,
+  const Matrix<bool, Dynamic, 1> activeJoints)
+#endif
 {
-  ASSERT(time.getSize() != 0);
+  #ifndef V6_CROSS_BUILD
   ASSERT(cmds.getSize() != 0);
+  #else
+  ASSERT(cmds.size() != 0);
+  #endif
   high_resolution_clock::time_point timeNow = high_resolution_clock::now();
   double timeStart = (duration<double>(timeNow - refTime)).count();
+  #ifndef V6_CROSS_BUILD
   for (size_t i = 0; i < time[0].getSize(); ++i) {
+  #else
+  for (size_t i = 0; i < time[0].size(); ++i) {
+  #endif
     JSON_APPEND(
       root["jointCommands"],
       "time",

@@ -40,6 +40,7 @@ else()
   
   if(${ROBOT_VERSION} STREQUAL "V6")
     qi_use_lib(tnrs-gb-module
+      QI
       BOOST_SIGNALS
     )
     target_link_libraries(tnrs-gb-module
@@ -47,9 +48,6 @@ else()
       -lfftw3f
       libtnrs-utils.so
       libtnrs-base.so
-      -lalcommon
-      -lalproxies
-      -lalvalue
       ${ALSA_LIBRARIES})
   else()
     # Linking libraries from the sdk.

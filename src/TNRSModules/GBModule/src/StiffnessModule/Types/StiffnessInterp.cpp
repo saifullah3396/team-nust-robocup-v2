@@ -62,6 +62,7 @@ bool StiffnessInterp::initiate()
     return false;
   }
 
+  #ifndef V6_CROSS_BUILD
   AL::ALValue jointTimes;
   AL::ALValue jointStiffnesses;
   jointTimes.clear();
@@ -73,6 +74,19 @@ bool StiffnessInterp::initiate()
     jointStiffnesses[i].arraySetSize(totalSteps);
     jointTimes[i].arraySetSize(totalSteps);
   }
+  #else
+  vector<vector<float> > jointTimes;
+  vector<vector<float> > jointStiffnesses;
+  jointTimes.clear();
+  jointStiffnesses.clear();
+  jointTimes.resize(size);
+  jointStiffnesses.resize(size);
+  int totalSteps = timeToReachS / cycleTime;
+  for (int i = 0; i < size; ++i) {
+    jointStiffnesses[i].resize(totalSteps);
+    jointTimes[i].resize(totalSteps);
+  }
+  #endif
   float timeStep = cycleTime;
   for (int j = 0; j < totalSteps; ++j) {
     float timeParam = timeStep / timeToReachS;

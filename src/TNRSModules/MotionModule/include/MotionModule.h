@@ -10,9 +10,11 @@
 #pragma once
 
 #include <map>
+#ifndef V6_CROSS_BUILD
 #include <alproxies/almotionproxy.h>
 #include <alproxies/almemoryproxy.h>
 #include <alproxies/dcmproxy.h>
+#endif
 #include "MotionModule/include/MTypeHeader.h"
 #include "TNRSBase/include/BaseIncludes.h"
 
@@ -31,9 +33,11 @@ template <typename Scalar> class MotionGenerator;
 typedef boost::shared_ptr<MotionGenerator<MType> > MotionGeneratorPtr;
 template <typename Scalar> class TrajectoryPlanner;
 typedef boost::shared_ptr<TrajectoryPlanner<MType> > TrajectoryPlannerPtr;
+#ifndef V6_CROSS_BUILD
 typedef boost::shared_ptr<AL::ALMemoryProxy> ALMemoryProxyPtr;
 typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
 typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
+#endif
 typedef map<unsigned, BehaviorInfo> BehaviorInfoMap;
 
 /**
@@ -71,31 +75,57 @@ class MotionModule : public BaseModule
   )
 public:
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  /**
-   * Constructor
-   *
-   * @param parent: parent: Pointer to parent module
-   * @param memoryProxy: Pointer to NaoQi's memory proxy
-   * @param dcmProxy: Pointer to NaoQi's DCM proxy
-   * @param motionProxy: Pointer to NaoQi's motion proxy
-   */
-  MotionModule(
-   void* parent,
-   const ALMemoryProxyPtr& memoryProxy,
-   const ALDCMProxyPtr& dcmProxy,
-   const ALMotionProxyPtr& motionProxy);
+  #ifndef V6_CROSS_BUILD
+    /**
+     * Constructor
+     *
+     * @param parent: parent: Pointer to parent module
+     * @param memoryProxy: Pointer to NaoQi's memory proxy
+     * @param dcmProxy: Pointer to NaoQi's DCM proxy
+     * @param motionProxy: Pointer to NaoQi's motion proxy
+     */
+    MotionModule(
+     void* parent,
+     const ALMemoryProxyPtr& memoryProxy,
+     const ALDCMProxyPtr& dcmProxy,
+     const ALMotionProxyPtr& motionProxy);
+  #else
+    /**
+     * Constructor
+     *
+     * @param parent: parent: Pointer to parent module
+     * @param memoryProxy: Pointer to NaoQi's memory proxy
+     * @param motionProxy: Pointer to NaoQi's motion proxy
+     */
+    MotionModule(
+     void* parent,
+     const qi::AnyObject& memoryProxy,
+     const qi::AnyObject& motionProxy);
+  #endif
 #else
-  /**
-   * Constructor
-   *
-   * @param parent: parent: Pointer to parent module
-   * @param memoryProxy: Pointer to NaoQi's memory proxy
-   * @param dcmProxy: Pointer to NaoQi's DCM proxy
-   */
-  MotionModule(
-   void* parent,
-   const ALMemoryProxyPtr& memoryProxy,
-   const ALDCMProxyPtr& dcmProxy);
+  #ifndef V6_CROSS_BUILD
+    /**
+     * Constructor
+     *
+     * @param parent: parent: Pointer to parent module
+     * @param memoryProxy: Pointer to NaoQi's memory proxy
+     * @param dcmProxy: Pointer to NaoQi's DCM proxy
+     */
+    MotionModule(
+     void* parent,
+     const ALMemoryProxyPtr& memoryProxy,
+     const ALDCMProxyPtr& dcmProxy);
+  #else
+    /**
+     * Constructor
+     *
+     * @param parent: parent: Pointer to parent module
+     * @param memoryProxy: Pointer to NaoQi's memory proxy
+     */
+    MotionModule(
+     void* parent,
+     const qi::AnyObject& memoryProxy);
+  #endif
 #endif
 
   /**
@@ -155,7 +185,11 @@ public:
    *
    * @return MotionProxyPtr
    */
-  ALMotionProxyPtr getSharedMotionProxy();
+    #ifndef V6_CROSS_BUILD
+      ALMotionProxyPtr getSharedMotionProxy();
+    #else
+      qi::AnyObject getSharedMotionProxy();
+    #endif
   #endif
 
 private:
@@ -195,22 +229,29 @@ private:
   //! Trajectory planner module object
   TrajectoryPlannerPtr trajectoryPlanner;
 
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  //! Pointer to NaoQi internal motion class
-  ALMotionProxyPtr motionProxy;
-  #endif
-
   //! Vector of pointer to SensorLayer objects
   vector<SensorLayerPtr> sensorLayers;
 
   //! Vector of pointer to ActuatorLayer objects
   vector<ActuatorLayerPtr> actuatorLayers;
 
-  //! Pointer to NaoQi internal memory proxy
-  ALMemoryProxyPtr memoryProxy;
+  #ifndef V6_CROSS_BUILD
+    //! Pointer to NaoQi internal memory proxy
+    ALMemoryProxyPtr memoryProxy;
 
-  //! Pointer to NaoQi internal dcm proxy
-  ALDCMProxyPtr dcmProxy;
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+      //! Pointer to NaoQi internal motion class
+      ALMotionProxyPtr motionProxy;
+    #endif
+
+    //! Pointer to NaoQi internal dcm proxy
+    ALDCMProxyPtr dcmProxy;
+  #else
+    qi::AnyObject memoryProxy;
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+      qi::AnyObject motionProxy;
+    #endif
+  #endif
 
   enum class MotionSensors : unsigned {
     jointPosition,

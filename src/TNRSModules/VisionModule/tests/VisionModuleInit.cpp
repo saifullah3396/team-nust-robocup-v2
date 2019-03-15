@@ -1,11 +1,13 @@
 #include <iostream>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
-#include <alproxies/almotionproxy.h>
-#include <alproxies/almemoryproxy.h>
-#include <alproxies/dcmproxy.h>
-#ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-#include <alproxies/alvideodeviceproxy.h>
+#ifndef V6_CROSS_BUILD
+  #include <alproxies/almotionproxy.h>
+  #include <alproxies/almemoryproxy.h>
+  #include <alproxies/dcmproxy.h>
+  #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+  #include <alproxies/alvideodeviceproxy.h>
+  #endif
 #endif
 #include "Utils/include/ConfigManager.h"
 #include "TNRSBase/include/SharedMemory.h"
@@ -14,18 +16,21 @@
 
 using namespace std;
 
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
-typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
-#endif
-typedef boost::shared_ptr<AL::ALMemoryProxy> ALMemoryProxyPtr;
-#ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
-#endif
-typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
+#ifndef V6_CROSS_BUILD
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
+  #endif
+  typedef boost::shared_ptr<AL::ALMemoryProxy> ALMemoryProxyPtr;
+  #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+  typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
+  #endif
+  typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
+#em
 
 int
 main(int argc, char* argv[])
 {
+  #ifndef V6_CROSS_BUILD
   if (argc != 2) {
     std::cerr << "Wrong number of arguments!" << std::endl;
     std::cerr << "Usage: say NAO_IP" << std::endl;
@@ -59,5 +64,6 @@ main(int argc, char* argv[])
   //BaseModule::publishModuleRequest(libRequest);
   //BaseModule::publishModuleRequest(fpRequest);
   vModule->join();
+  #endif
   return 1;
 }

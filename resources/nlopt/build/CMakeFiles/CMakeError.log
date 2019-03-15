@@ -1,0 +1,28 @@
+Performing C SOURCE FILE Test HAVE_THREAD_LOCAL_STORAGE failed with the following output:
+Change Dir: /home/sensei/team-nust-robocup/resources/nlopt/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4bcd9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4bcd9.dir/build.make CMakeFiles/cmTC_4bcd9.dir/build
+make[1]: Entering directory `/home/sensei/team-nust-robocup/resources/nlopt/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4bcd9.dir/src.c.o
+/usr/bin/cc    -DHAVE_THREAD_LOCAL_STORAGE   -o CMakeFiles/cmTC_4bcd9.dir/src.c.o   -c /home/sensei/team-nust-robocup/resources/nlopt/build/CMakeFiles/CMakeTmp/src.c
+/home/sensei/team-nust-robocup/resources/nlopt/build/CMakeFiles/CMakeTmp/src.c: In function ‘__declspec’:
+/home/sensei/team-nust-robocup/resources/nlopt/build/CMakeFiles/CMakeTmp/src.c:3:20: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+     int main(void) {
+                    ^
+/home/sensei/team-nust-robocup/resources/nlopt/build/CMakeFiles/CMakeTmp/src.c:2:28: error: declaration for parameter ‘tls’ but no such parameter
+     __declspec(thread) int tls;
+                            ^
+/home/sensei/team-nust-robocup/resources/nlopt/build/CMakeFiles/CMakeTmp/src.c:5:5: error: expected ‘{’ at end of input
+     }
+     ^
+make[1]: *** [CMakeFiles/cmTC_4bcd9.dir/src.c.o] Error 1
+make[1]: Leaving directory `/home/sensei/team-nust-robocup/resources/nlopt/build/CMakeFiles/CMakeTmp'
+make: *** [cmTC_4bcd9/fast] Error 2
+
+Source file was:
+
+    __declspec(thread) int tls;
+    int main(void) {
+        return 0;
+    }

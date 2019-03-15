@@ -14,7 +14,9 @@
 
 #include <Eigen/Dense>
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-#include <alproxies/alvideodeviceproxy.h>
+  #ifndef V6_CROSS_BUILD
+    #include <alproxies/alvideodeviceproxy.h>
+  #endif
 #endif
 #include "TNRSBase/include/DebugBase.h"
 #include "TNRSBase/include/BaseIncludes.h"
@@ -30,7 +32,9 @@ typedef boost::shared_ptr<CameraTransform> CameraTransformPtr;
 typedef boost::shared_ptr<ColorHandler> ColorHandlerPtr;
 typedef boost::shared_ptr<FeatureExtraction> FeatureExtractionPtr;
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
+  #ifndef V6_CROSS_BUILD
+    typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
+  #endif
 #endif
 
 /**
@@ -73,21 +77,25 @@ class VisionModule : public BaseModule, public DebugBase
 
 public:
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  /**
-   * Initializes the vision module with its thread.
-   *
-   * @param teamNUSTSPL pointer to base class which is in this case
-   *   the TeamNUSTSPL class
-   * @param camProxy: Pointer to NaoQi's camera proxy.
-   */
-  VisionModule(void* teamNUSTSPL, const ALVideoDeviceProxyPtr& camProxy);
+    /**
+     * Initializes the vision module with its thread.
+     *
+     * @param teamNUSTSPL pointer to base class which is in this case
+     *   the TeamNUSTSPL class
+     * @param camProxy: Pointer to NaoQi's camera proxy.
+     */
+    #ifndef V6_CROSS_BUILD
+      VisionModule(void* teamNUSTSPL, const ALVideoDeviceProxyPtr& camProxy);
+    #else
+      VisionModule(void* teamNUSTSPL, const qi::AnyObject& camProxy);
+    #endif
   #else
-  /**
-   * @brief UserCommModule Constructor
-   * @param teamNUSTSPL pointer to base class which is in this case
-   *   the TeamNUSTSPL class
-   */
-  VisionModule(void* teamNUSTSPL);
+    /**
+     * @brief UserCommModule Constructor
+     * @param teamNUSTSPL pointer to base class which is in this case
+     *   the TeamNUSTSPL class
+     */
+    VisionModule(void* teamNUSTSPL);
   #endif
 
   /**
@@ -130,16 +138,23 @@ public:
   setThreadPeriod();
 
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  /**
-   * Returns the pointer to the ALVideoDeviceProxyPtr.
-   *
-   * @return Pointer to ALVideoDeviceProxyPtr
-   */
-  ALVideoDeviceProxyPtr
-  getCamProxy()
-  {
-    return camProxy;
-  }
+    #ifndef V6_CROSS_BUILD
+      /**
+       * Returns the pointer to the ALVideoDeviceProxy.
+       *
+       * @return Pointer to ALVideoDeviceProxyPtr
+       */
+      ALVideoDeviceProxyPtr getCamProxy()
+        { return camProxy; }
+    #else
+      /**
+       * Returns the pointer to the ALVideoDeviceProxy.
+       *
+       * @return Pointer to ALVideoDeviceProxyPtr
+       */
+      qi::AnyObject getCamProxy()
+        { return camProxy; }
+    #endif
   #endif
 
   /**
@@ -278,6 +293,10 @@ private:
 
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
   //! Pointer to NaoQi video device proxy
-  ALVideoDeviceProxyPtr camProxy;
+    #ifndef V6_CROSS_BUILD
+      ALVideoDeviceProxyPtr camProxy;
+    #else
+      qi::AnyObject camProxy;
+    #endif
   #endif
 };

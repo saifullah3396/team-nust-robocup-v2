@@ -54,25 +54,38 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
 )
 
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-VisionModule::VisionModule(void* teamNUSTSPL,
-  const ALVideoDeviceProxyPtr& camProxy) :
-  BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
-  DebugBase("VisionModule", this), 
-  camProxy(camProxy),
-  logImages(vector<bool>(toUType(CameraId::count), false)),
-  writeVideo(vector<bool>(toUType(CameraId::count), false)),
-  featureExtToRun(vector<bool>(toUType(FeatureExtractionIds::count), false))
-{
-}
+  #ifndef V6_CROSS_BUILD
+    VisionModule::VisionModule(void* teamNUSTSPL,
+      const ALVideoDeviceProxyPtr& camProxy) :
+      BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
+      DebugBase("VisionModule", this),
+      camProxy(camProxy),
+      logImages(vector<bool>(toUType(CameraId::count), false)),
+      writeVideo(vector<bool>(toUType(CameraId::count), false)),
+      featureExtToRun(vector<bool>(toUType(FeatureExtractionIds::count), false))
+    {
+    }
+  #else
+    VisionModule::VisionModule(void* teamNUSTSPL,
+      const qi::AnyObject& camProxy) :
+      BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
+      DebugBase("VisionModule", this),
+      camProxy(camProxy),
+      logImages(vector<bool>(toUType(CameraId::count), false)),
+      writeVideo(vector<bool>(toUType(CameraId::count), false)),
+      featureExtToRun(vector<bool>(toUType(FeatureExtractionIds::count), false))
+    {
+    }
+  #endif
 #else
-VisionModule::VisionModule(void* teamNUSTSPL) :
-  BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
-  DebugBase("VisionModule", this),
-  logImages(vector<bool>(toUType(CameraId::count), false)),
-  writeVideo(vector<bool>(toUType(CameraId::count), false)),
-  featureExtToRun(vector<bool>(toUType(FeatureExtractionIds::count), false))
-{
-}
+  VisionModule::VisionModule(void* teamNUSTSPL) :
+    BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
+    DebugBase("VisionModule", this),
+    logImages(vector<bool>(toUType(CameraId::count), false)),
+    writeVideo(vector<bool>(toUType(CameraId::count), false)),
+    featureExtToRun(vector<bool>(toUType(FeatureExtractionIds::count), false))
+  {
+  }
 #endif
 
 void VisionModule::setThreadPeriod()

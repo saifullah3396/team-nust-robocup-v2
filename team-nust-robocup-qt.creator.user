@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.0.1, 2019-03-14T12:27:29. -->
+<!-- Written by QtCreator 3.0.1, 2009-01-01T05:02:18. -->
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -158,7 +158,7 @@
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Cross-Release</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Cross-Release</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">V6-Cross-Release</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">GenericProjectManager.GenericBuildConfiguration</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
@@ -219,7 +219,7 @@
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">configure CROSS=cross USE_NAOQI_VIDEO_PROXY=OFF</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">configure CROSS=cross USE_NAOQI_VIDEO_PROXY=OFF USE_NAOQI_MOTION_PROXY=OFF</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Command">make</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Custom Process Step</value>
@@ -228,7 +228,7 @@
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">install CROSS=cross USE_NAOQI_VIDEO_PROXY=OFF</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">install CROSS=cross USE_NAOQI_VIDEO_PROXY=OFF USE_NAOQI_MOTION_PROXY=OFF</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Command">make</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Custom Process Step</value>
@@ -236,7 +236,7 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.ProcessStep</value>
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.2">
-      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">false</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">configure REMOTE=remote USE_NAOQI_MOTION_PROXY=OFF</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Command">make</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
@@ -245,7 +245,7 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.ProcessStep</value>
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.3">
-      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">false</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">install REMOTE=remote USE_NAOQI_MOTION_PROXY=OFF</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Command">make</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
@@ -298,7 +298,7 @@
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
     <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Cross-Release</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">All-Release</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">All-V5-Release</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">GenericProjectManager.GenericBuildConfiguration</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">4</value>

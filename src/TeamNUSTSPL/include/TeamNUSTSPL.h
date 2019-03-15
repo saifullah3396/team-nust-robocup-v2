@@ -15,39 +15,45 @@
 #include <string.h>
 #include <assert.h>
 #include <boost/shared_ptr.hpp>
-#include <alcommon/almodule.h>
-#include <alcommon/albroker.h>
-#include <alcommon/albrokermanager.h>
-#include <alcommon/alproxy.h>
-#include <alproxies/almemoryproxy.h>
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
-#include <alproxies/almotionproxy.h>
+#ifndef V6_CROSS_BUILD
+  #include <alcommon/almodule.h>
+  #include <alcommon/albroker.h>
+  #include <alcommon/albrokermanager.h>
+  #include <alcommon/alproxy.h>
+  #include <alproxies/almemoryproxy.h>
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  #include <alproxies/almotionproxy.h>
+  #endif
+  #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+  #include <alproxies/alvideodeviceproxy.h>
+  #endif
+  #include <alproxies/dcmproxy.h>
+#else
+  #include <qi/applicationsession.hpp>
+  #include <boost/shared_ptr.hpp>
 #endif
-#ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-#include <alproxies/alvideodeviceproxy.h>
-#endif
-#include <alproxies/dcmproxy.h>
 #include "TNRSBase/include/BaseIncludes.h"
 #include "TNRSBase/include/BaseModuleHandler.h"
-#include "Utils/include/PrintUtils.h"
 
-/**
- * These constants are defined to remove the bug that causes the error
- * "cannot allocate memory in static TLS block." while loading the module
- * on the robot. For details on this bug, see:
- * https://sourceware.org/bugzilla/show_bug.cgi?format=multiple&id=14898
- */
-#ifndef NO_TLS_OFFSET
-# define NO_TLS_OFFSET  0
-#endif
-#ifndef FORCED_DYNAMIC_TLS_OFFSET
-# if NO_TLS_OFFSET == 0
-#  define FORCED_DYNAMIC_TLS_OFFSET -1
-# elif NO_TLS_OFFSET == -1
-#  define FORCED_DYNAMIC_TLS_OFFSET -2
-# else
-#  error "FORCED_DYNAMIC_TLS_OFFSET is not defined"
-# endif
+#ifndef V6_CROSS_BUILD
+  /**
+   * These constants are defined to remove the bug that causes the error
+   * "cannot allocate memory in static TLS block." while loading the module
+   * on the robot. For details on this bug, see:
+   * https://sourceware.org/bugzilla/show_bug.cgi?format=multiple&id=14898
+   */
+  #ifndef NO_TLS_OFFSET
+  # define NO_TLS_OFFSET  0
+  #endif
+  #ifndef FORCED_DYNAMIC_TLS_OFFSET
+  # if NO_TLS_OFFSET == 0
+  #  define FORCED_DYNAMIC_TLS_OFFSET -1
+  # elif NO_TLS_OFFSET == -1
+  #  define FORCED_DYNAMIC_TLS_OFFSET -2
+  # else
+  #  error "FORCED_DYNAMIC_TLS_OFFSET is not defined"
+  # endif
+  #endif
 #endif
 
 extern int USE_LOGGED_IMAGES;
@@ -57,14 +63,16 @@ extern string ROBOT_NAME;
 
 class SharedMemory;
 
-typedef boost::shared_ptr<AL::ALBroker> ALBrokerPtr;
-typedef boost::shared_ptr<AL::ALMemoryProxy> ALMemoryProxyPtr;
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
-typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
-#endif
-typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
-#ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
+#ifndef V6_CROSS_BUILD
+  typedef boost::shared_ptr<AL::ALBroker> ALBrokerPtr;
+  typedef boost::shared_ptr<AL::ALMemoryProxy> ALMemoryProxyPtr;
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
+  #endif
+  typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
+  #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+  typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
+  #endif
 #endif
 
 /**
@@ -75,9 +83,14 @@ typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
  * architecture modules. It also initializes the local shared memory for 
  * data storage and management.
  */
+#ifndef V6_CROSS_BUILD
 class TeamNUSTSPL : public AL::ALModule, public BaseModuleHandler
+#else
+class TeamNUSTSPL : public BaseModuleHandler
+#endif
 {
 public:
+  #ifndef V6_CROSS_BUILD
   /**
    * @brief TeamNUSTSPL Constructor
    *
@@ -87,6 +100,13 @@ public:
    *   naoqi
    */
   TeamNUSTSPL(ALBrokerPtr parentBroker, const string& moduleName);
+  #else
+  /**
+   * @brief TeamNUSTSPL Constructor
+   * @param session Qi session according to naoqi API 2.8
+   */
+  TeamNUSTSPL(qi::SessionPtr session);
+  #endif
 
   /**
    * @brief ~TeamNUSTSPL Destructor
@@ -128,6 +148,7 @@ private:
   //! Pointer to local data shared memory object
   SharedMemoryPtr sharedMemory;
 
+#ifndef V6_CROSS_BUILD
   //! Pointer to NaoQi internal device communication manager (DCM)
   ALDCMProxyPtr dcmProxy;
 
@@ -143,4 +164,20 @@ private:
   //! Pointer to NaoQi internal camera class
   ALVideoDeviceProxyPtr camProxy;
   #endif
+#else
+  //! Pointer to NaoQi internal memory
+  qi::AnyObject memoryProxy;
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  //! Pointer to NaoQi internal motion class
+  qi::AnyObject motionProxy;
+  #endif
+
+  #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+  //! Pointer to NaoQi internal camera class
+  qi::AnyObject camProxy;
+  #endif
+
+  qi::SessionPtr session;
+#endif
 };

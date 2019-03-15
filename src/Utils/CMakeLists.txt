@@ -56,8 +56,7 @@ if(${ROBOT_VERSION} STREQUAL "V6")
   target_link_libraries(tnrs-utils
     libtnrs-sbpl-lib.so
     -lnlopt
-    -ljsoncpp
-    -lalcommon)
+    -ljsoncpp)
 else()
     qi_use_lib(tnrs-utils
       ALCOMMON
@@ -67,7 +66,6 @@ else()
       OPENCV2_CORE
       OPENCV2_HIGHGUI
       OPENCV2_IMGPROC
-      OPENCV2_IMGCODECS
       PTHREAD
       V4L
       JPEG

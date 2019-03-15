@@ -13,14 +13,16 @@
 #include <string.h>
 #include <assert.h>
 #include <boost/shared_ptr.hpp>
-#include <alcommon/almodule.h>
-#include <alcommon/albroker.h>
-#include <alcommon/albrokermanager.h>
-#include <alcommon/alproxy.h>
-#include <alproxies/almemoryproxy.h>
-#include <alproxies/almotionproxy.h>
-#include <alproxies/alvideodeviceproxy.h>
-#include <alproxies/dcmproxy.h>
+#ifndef V6_CROSS_BUILD
+  #include <alcommon/almodule.h>
+  #include <alcommon/albroker.h>
+  #include <alcommon/albrokermanager.h>
+  #include <alcommon/alproxy.h>
+  #include <alproxies/almemoryproxy.h>
+  #include <alproxies/almotionproxy.h>
+  #include <alproxies/alvideodeviceproxy.h>
+  #include <alproxies/dcmproxy.h>
+#endif
 #include "TNRSBase/include/SharedMemory.h"
 #include "TNRSBase/include/BaseModuleHandler.h"
 #include "Utils/include/PrintUtils.h"

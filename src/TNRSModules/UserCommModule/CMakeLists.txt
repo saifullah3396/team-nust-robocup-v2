@@ -14,17 +14,31 @@ endif (EIGEN3_INCLUDE_DIRS)
 file (GLOB TNRS_USER_COMM_MODULE_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_library (tnrs-user-comm-module SHARED ${TNRS_USER_COMM_MODULE_SRC})
 
+if(${ROBOT_VERSION} STREQUAL "V6")
 qi_use_lib(tnrs-user-comm-module
   PTHREAD
   BOOST_IOSTREAMS
   BOOST_THREAD
   BOOST_SERIALIZATION
+  OPENCV2_CORE
 )
-
 target_link_libraries(tnrs-user-comm-module 
   libtnrs-utils.so 
   libtnrs-base.so
 )
+else()
+qi_use_lib(tnrs-user-comm-module
+  PTHREAD
+  BOOST_IOSTREAMS
+  BOOST_THREAD
+  BOOST_SERIALIZATION
+  OPENCV2_CORE
+)
+target_link_libraries(tnrs-user-comm-module
+  libtnrs-utils.so
+  libtnrs-base.so
+)
+endif()
     
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")

@@ -74,6 +74,7 @@ add_library (tnrs-module SHARED ${TNRS_SRC})
 if(${ROBOT_VERSION} STREQUAL "V6")
 qi_use_lib(
   tnrs-module
+  QI
   PTHREAD
   BOOST
   BOOST_FILESYSTEM
@@ -91,8 +92,6 @@ target_link_libraries(tnrs-module
   libtnrs-game-comm-module.so
   libtnrs-user-comm-module.so
   -ljsoncpp
-  -lalcommon
-  -lalproxies
 )
 else()
 qi_use_lib(

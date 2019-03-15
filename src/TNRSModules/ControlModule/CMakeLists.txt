@@ -23,11 +23,12 @@ file (GLOB TNRS_CONTROL_MODULE_SRC "${TNRS_CONTROL_MODULE_DIR}/src/*.cpp")
 add_library (tnrs-control-module SHARED ${TNRS_CONTROL_MODULE_SRC})
 
 if(${ROBOT_VERSION} STREQUAL "V6")
+qi_use_lib(tnrs-control-module
+  QI
+)
 target_link_libraries(tnrs-control-module
   libtnrs-utils.so
   libtnrs-base.so
-  #-lalcommon
-  -lalproxies
 )
 else()
 qi_use_lib(tnrs-control-module

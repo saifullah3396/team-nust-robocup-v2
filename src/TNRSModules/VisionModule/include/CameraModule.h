@@ -12,7 +12,9 @@
 #include <vector>
 #include <alvision/alimage.h>
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-#include <alproxies/alvideodeviceproxy.h>
+  #ifndef V6_CROSS_BUILD
+    #include <alproxies/alvideodeviceproxy.h>
+  #endif
 #endif
 #include <Eigen/Dense>
 #include <opencv2/core/core.hpp>
@@ -29,7 +31,9 @@ template <typename T>
 struct Camera;
 typedef boost::shared_ptr<Camera<float> > CameraPtr;
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
+  #ifndef V6_CROSS_BUILD
+    typedef boost::shared_ptr<AL::ALVideoDeviceProxy> ALVideoDeviceProxyPtr;
+  #endif
 #endif
 
 /**
@@ -136,8 +140,13 @@ private:
   bool setupCameras();
 
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  //! Pointer to NaoQi video device proxy
-  ALVideoDeviceProxyPtr camProxy;
+    #ifndef V6_CROSS_BUILD
+      //! Pointer to NaoQi video device proxy
+      ALVideoDeviceProxyPtr camProxy;
+    #else
+      //! Pointer to NaoQi video device proxy
+      qi::AnyObject camProxy;
+    #endif
   #endif
   //! Vector of cameras
   vector<CameraPtr> cams;

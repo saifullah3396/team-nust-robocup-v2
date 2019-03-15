@@ -7,6 +7,7 @@
  * @date 12 Sep 2017
  */
 
+#include <qi/anyobject.hpp>
 #include "ControlModule/include/ActuatorRequests.h"
 #include "ControlModule/include/HardwareLayer.h"
 #include "MotionModule/include/MotionRequest.h"
@@ -40,28 +41,51 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
   (BehaviorInfo, sBehaviorInfo),
 )
 
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
-GBModule::GBModule(
-  void* parent,
-  const ALMemoryProxyPtr& memoryProxy,
-  const ALDCMProxyPtr& dcmProxy,
-  const ALMotionProxyPtr& motionProxy) :
-  BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
-  memoryProxy(memoryProxy),
-  dcmProxy(dcmProxy),
-  motionProxy(motionProxy)
-{
-}
+#ifndef V6_CROSS_BUILD
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+    GBModule::GBModule(
+      void* parent,
+      const ALMemoryProxyPtr& memoryProxy,
+      const ALDCMProxyPtr& dcmProxy,
+      const ALMotionProxyPtr& motionProxy) :
+      BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
+      memoryProxy(memoryProxy),
+      dcmProxy(dcmProxy),
+      motionProxy(motionProxy)
+    {
+    }
+  #else
+    GBModule::GBModule(
+      void* parent,
+      const ALMemoryProxyPtr& memoryProxy,
+      const ALDCMProxyPtr& dcmProxy) :
+      BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
+      memoryProxy(memoryProxy),
+      dcmProxy(dcmProxy)
+    {
+    }
+  #endif
 #else
-GBModule::GBModule(
-  void* parent,
-  const ALMemoryProxyPtr& memoryProxy,
-  const ALDCMProxyPtr& dcmProxy) :
-  BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
-  memoryProxy(memoryProxy),
-  dcmProxy(dcmProxy)
-{
-}
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+    GBModule::GBModule(
+      void* parent,
+      const qi::AnyObject& memoryProxy,
+      const qi::AnyObject& motionProxy) :
+      BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
+      memoryProxy(memoryProxy),
+      motionProxy(motionProxy)
+    {
+    }
+  #else
+    GBModule::GBModule(
+      void* parent,
+      const qi::AnyObject& memoryProxy) :
+      BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
+      memoryProxy(memoryProxy),
+      motionProxy(motionProxy)
+    {
+    }
+  #endif
 #endif
 
 void GBModule::setThreadPeriod()
@@ -97,19 +121,31 @@ void GBModule::init()
   //! Update the sensors
   sensorsUpdate();
   #ifndef MODULE_IS_REMOTE
-  ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::sensorsUpdate, this));
+    #ifndef V6_CROSS_BUILD
+      ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::sensorsUpdate, this));
+    #endif
   #endif
   LOG_INFO("Initializing static behavior module actuator layers...")
   //! Make new layers for actuators directly related with gbmodule
   actuatorLayers.resize(toUType(SBActuators::count));
-  actuatorLayers[toUType(SBActuators::jointStiffnesses)] =
-    ActuatorLayer::makeActuatorLayer(
-      toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness),
-      dcmProxy);
-  actuatorLayers[toUType(SBActuators::led)] =
-    ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators), dcmProxy);
+  #ifndef V6_CROSS_BUILD
+    actuatorLayers[toUType(SBActuators::jointStiffnesses)] =
+      ActuatorLayer::makeActuatorLayer(
+        toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness),
+        dcmProxy);
+    actuatorLayers[toUType(SBActuators::led)] =
+      ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators), dcmProxy);
+  #else
+    actuatorLayers[toUType(SBActuators::jointStiffnesses)] =
+      ActuatorLayer::makeActuatorLayer(
+        toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness));
+    actuatorLayers[toUType(SBActuators::led)] =
+      ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators));
+  #endif
   #ifndef MODULE_IS_REMOTE
-  ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::actuatorsUpdate, this));
+    #ifndef V6_CROSS_BUILD
+      ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::actuatorsUpdate, this));
+    #endif
   #endif
   LOG_INFO("Initializing GBModule Output Variables...")
   JOINT_STIFFNESSES_OUT(GBModule) = vector<float>(toUType(Joints::count), 0.f);
@@ -150,12 +186,20 @@ void GBModule::mainRoutine()
   // Update led sensors in mainRoutine()...
   sensorLayers[toUType(SBSensors::led)]->update();
   #ifdef MODULE_IS_REMOTE
-  sensorsUpdate();
+    sensorsUpdate();
+  #else
+    #ifdef V6_CROSS_BUILD
+      sensorsUpdate();
+    #endif
   #endif
   gbManager->update();
   SB_INFO_OUT(GBModule) = gbManager->getBehaviorInfo();
   #ifdef MODULE_IS_REMOTE
-  actuatorsUpdate();
+    actuatorsUpdate();
+  #else
+    #ifdef V6_CROSS_BUILD
+      sensorsUpdate();
+    #endif
   #endif
 }
 

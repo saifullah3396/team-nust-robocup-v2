@@ -18,12 +18,20 @@
 CameraModule::CameraModule(VisionModule* visionModule) :
   camProxy(visionModule->getCamProxy())
 {
-  if (camProxy) {
-    if (setupCameras()) ;
+  #ifndef V6_CROSS_BUILD
+    if (camProxy) {
+      if (setupCameras())
+        LOG_INFO("Cameras setup complete.")
+    } else {
+      LOG_ERROR("Could not get access to ALVideoDeviceProxy.")
+    }
+  #else
+  if (setupCameras()) {
     LOG_INFO("Cameras setup complete.")
   } else {
-    LOG_ERROR("Could not get access to ALVideoDeviceProxy.")
+    LOG_ERROR("Cameras not setup properly.")
   }
+  #endif
 }
 #else
 CameraModule::CameraModule() :
@@ -44,7 +52,11 @@ CameraModule::~CameraModule()
 {
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
   for (const auto& cam : cams) {
-    camProxy->unsubscribe(cam->clientName);
+    #ifndef V6_CROSS_BUILD
+      camProxy->unsubscribe(cam->clientName);
+    #else
+      camProxy.call<void>("unsubscribe", cam->clientName);
+    #endif
   }
   #endif
 }
@@ -57,72 +69,93 @@ bool CameraModule::setupCameras()
     cams[(int)CameraId::headBottom] = boost::shared_ptr<Camera<float> >(new Camera<float>("LowerCamera"));
     videoWriter = vector<cv::VideoWriter*> (toUType(CameraId::count));
     #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-    camProxy->unsubscribe("visionTop_0");
-    camProxy->unsubscribe("visionBottom_0");
+      #ifndef V6_CROSS_BUILD
+        camProxy->unsubscribe("visionTop_0");
+        camProxy->unsubscribe("visionBottom_0");
+      #else
+        camProxy.call<void>("unsubscribe", "visionTop_0");
+        camProxy.call<void>("unsubscribe", "visionBottom_0");
+      #endif
     #endif
     for (size_t i = 0; i < toUType(CameraId::count); ++i) {
       #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
       cams[i]->getSettings(cams[i]->name);
+      #ifndef V6_CROSS_BUILD
       AL::ALValue size = camProxy->resolutionToSizes(cams[i]->resolution);
+      #else
+      vector<int> size = camProxy.call<vector<int> >("resolutionToSizes", cams[i]->resolution);
+      #endif
       cams[i]->width = (int) size[0];
       cams[i]->height = (int) size[1];
+      #ifndef V6_CROSS_BUILD
+        cams[i]->clientName =
+          camProxy->subscribeCamera(cams[i]->name, (int)i, cams[i]->resolution, cams[i]->colorSpace, cams[i]->fps);
+      #else
       cams[i]->clientName =
-        camProxy->subscribeCamera(cams[i]->name, (int)i, cams[i]->resolution, cams[i]->colorSpace, cams[i]->fps);
+        camProxy.call<string>("subscribeCamera", cams[i]->name, (int)i, cams[i]->resolution, cams[i]->colorSpace, cams[i]->fps);
+      #endif
       //cams[i]->focalX =
       //  (((float) size[0]) * 0.5) / tan(cams[i]->fovX * 0.5 * M_PI / 180);
       //cams[i]->focalY =
       //  (((float) size[1]) * 0.5) / tan(cams[i]->fovY * 0.5 * M_PI / 180);
       LOG_INFO("Subscribed Camera:" + cams[i]->clientName)
       cams[i]->image = new uint8_t[cams[i]->width * cams[i]->height * 2];
+      #ifndef V6_CROSS_BUILD
       camProxy->setAllParametersToDefault(i);
-      if (cams[i]->settings.autoExposition != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraAutoExpositionID,
-        cams[i]->settings.autoExposition);
-      if (cams[i]->settings.autoWhiteBalance != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraAutoWhiteBalanceID,
-        cams[i]->settings.autoWhiteBalance);
-      if (cams[i]->settings.brightness != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraBrightnessID,
-        cams[i]->settings.brightness);
-      if (cams[i]->settings.contrast != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraContrastID,
-        cams[i]->settings.contrast);
-      if (cams[i]->settings.saturation != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraSaturationID,
-        cams[i]->settings.saturation);
-      if (cams[i]->settings.exposure != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraExposureID,
-        cams[i]->settings.exposure);
-      if (cams[i]->settings.hue != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraHueID,
-        cams[i]->settings.hue);
-      if (cams[i]->settings.gain != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraGainID,
-        cams[i]->settings.gain);
-      if (cams[i]->settings.exposureAlgorithm != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraExposureAlgorithmID,
-        cams[i]->settings.exposureAlgorithm);
-      if (cams[i]->settings.sharpness != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraSharpnessID,
-        cams[i]->settings.sharpness);
-      if (cams[i]->settings.whiteBalance != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraWhiteBalanceID,
-        cams[i]->settings.whiteBalance);
-      if (cams[i]->settings.backlightCompensation != -1000) camProxy->setCameraParameter(
-        cams[i]->clientName,
-        AL::kCameraBacklightCompensationID,
-        cams[i]->settings.backlightCompensation);
+      #else
+      camProxy.call<void>("setAllParametersToDefault", i);
+      #endif
+        #ifndef V6_CROSS_BUILD
+          if (cams[i]->settings.autoExposition != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraAutoExpositionID, cams[i]->settings.autoExposition);
+          if (cams[i]->settings.autoWhiteBalance != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraAutoWhiteBalanceID, cams[i]->settings.autoWhiteBalance);
+          if (cams[i]->settings.brightness != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraBrightnessID, cams[i]->settings.brightness);
+          if (cams[i]->settings.contrast != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraContrastID, cams[i]->settings.contrast);
+          if (cams[i]->settings.saturation != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraSaturationID, cams[i]->settings.saturation);
+          if (cams[i]->settings.exposure != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraExposureID, cams[i]->settings.exposure);
+          if (cams[i]->settings.hue != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraHueID, cams[i]->settings.hue);
+          if (cams[i]->settings.gain != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraGainID, cams[i]->settings.gain);
+          if (cams[i]->settings.exposureAlgorithm != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraExposureAlgorithmID, cams[i]->settings.exposureAlgorithm);
+          if (cams[i]->settings.sharpness != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraSharpnessID, cams[i]->settings.sharpness);
+          if (cams[i]->settings.whiteBalance != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraWhiteBalanceID, cams[i]->settings.whiteBalance);
+          if (cams[i]->settings.backlightCompensation != -1000)
+            camProxy->setCameraParameter(cams[i]->clientName, AL::kCameraBacklightCompensationID, cams[i]->settings.backlightCompensation);
+        #else
+          if (cams[i]->settings.autoExposition != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraAutoExpositionID, cams[i]->settings.autoExposition);
+          if (cams[i]->settings.autoWhiteBalance != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraAutoWhiteBalanceID, cams[i]->settings.autoWhiteBalance);
+          if (cams[i]->settings.brightness != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraBrightnessID, cams[i]->settings.brightness);
+          if (cams[i]->settings.contrast != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraContrastID, cams[i]->settings.contrast);
+          if (cams[i]->settings.saturation != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraSaturationID, cams[i]->settings.saturation);
+          if (cams[i]->settings.exposure != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraExposureID, cams[i]->settings.exposure);
+          if (cams[i]->settings.hue != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraHueID, cams[i]->settings.hue);
+          if (cams[i]->settings.gain != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraGainID, cams[i]->settings.gain);
+          if (cams[i]->settings.exposureAlgorithm != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraExposureAlgorithmID, cams[i]->settings.exposureAlgorithm);
+          if (cams[i]->settings.sharpness != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraSharpnessID, cams[i]->settings.sharpness);
+          if (cams[i]->settings.whiteBalance != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraWhiteBalanceID, cams[i]->settings.whiteBalance);
+          if (cams[i]->settings.backlightCompensation != -1000)
+            camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraBacklightCompensationID, cams[i]->settings.backlightCompensation);
+        #endif
       #else
       cams[i]->getSettings(cams[i]->name + "Cross");
       cams[i]->setupDevice();
@@ -154,7 +187,11 @@ bool CameraModule::setupCameras()
       if(!useLoggedImages) {
         //high_resolution_clock::time_point tEnd, tStart;
         //tStart = high_resolution_clock::now();
-        AL::ALValue img = camProxy->getImageRemote(cameraClient);
+        #ifndef V6_CROSS_BUILD
+          AL::ALValue img = camProxy->getImageRemote(cameraClient);
+        #else
+          auto img = camProxy.call<vector<int> >("getImageRemote", cameraClient);
+        #endif
         //tEnd = high_resolution_clock::now();
         //duration<double> time_span = tEnd - tStart;
         //LOG_INFO("Time cam " << cameraClient << "  " << time_span.count());
@@ -192,7 +229,11 @@ bool CameraModule::setupCameras()
           cvtColor(yuv, bgr, COLOR_YUV2BGR_YUY2);
           imwrite(imageStr, bgr);
         }
-        camProxy->releaseImage(cameraClient);
+        #ifndef V6_CROSS_BUILD
+          camProxy->releaseImage(cameraClient);
+        #else
+          camProxy.call<void>("releaseImage", cameraClient);
+        #endif
       } else {
         string name;
         if (index == toUType(CameraId::headTop)) {
@@ -227,9 +268,17 @@ bool CameraModule::setupCameras()
     string cameraClient = cams[index]->clientName;
     try {
       AL::ALImage* img;
+      #ifndef V6_CROSS_BUILD
       img = (AL::ALImage*) camProxy->getImageLocal(cameraClient);
+      #else
+      img = (AL::ALImage*) camProxy.call<AL::ALImage*>("getImageLocal", cameraClient);
+      #endif
       memcpy(cams[index]->image, (uint8_t*) img->getData(), img->getSize());
+      #ifndef V6_CROSS_BUILD
       camProxy->releaseImage(cameraClient);
+      #else
+      camProxy.call<void>("releaseImage", cameraClient);
+      #endif
     } catch (const exception& e) {
       LOG_EXCEPTION("Exception raised in CameraModule:\n\t" << e.what())
     }
@@ -265,7 +314,11 @@ void CameraModule::releaseImage(const unsigned& index)
 {
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
   string cameraClient = cams[index]->clientName;
+  #ifndef V6_CROSS_BUILD
   camProxy->releaseImage(cameraClient);
+  #else
+  camProxy.call<void>("releaseImage", cameraClient);
+  #endif
   #endif
 }
 

@@ -35,6 +35,7 @@ add_library (tnrs-planning-module SHARED ${TNRS_PLANNING_MODULE_SRC})
 
 if(${ROBOT_VERSION} STREQUAL "V6")
 qi_use_lib(tnrs-planning-module
+  QI
   OPENCV3_CORE
   OPENCV3_VIDEO
 )
@@ -47,9 +48,6 @@ target_link_libraries(tnrs-planning-module
   libtnrs-gb-module.so
   libtnrs-control-module.so
   -ljsoncpp
-  -lalcommon
-  -lalproxies
-  -lalvalue
 )
 else()
 qi_use_lib(tnrs-planning-module

@@ -12,17 +12,29 @@
 #pragma once
 
 #include <queue>
-#include <alproxies/almemoryproxy.h>
-#include <alproxies/dcmproxy.h>
+#ifndef V6_CROSS_BUILD
+  #include <alproxies/almemoryproxy.h>
+  #include <alproxies/dcmproxy.h>
+#else
+  #include <qi/anyobject.hpp>
+#endif
 #include "ControlModule/include/ActuatorRequests.h"
 #include "Utils/include/PrintUtils.h"
 #include "Utils/include/HardwareIds.h"
 #include "Utils/include/ThreadSafeQueue.h"
 #include "Utils/include/JsonUtils.h"
 
+#ifndef V6_CROSS_BUILD
 typedef boost::shared_ptr<AL::ALMemoryProxy> ALMemoryProxyPtr;
 typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
+#endif
 typedef boost::shared_ptr<vector<float> > vectorFloatPtr;
+
+#ifndef V6_CROSS_BUILD
+  #define NAOQI_MEMORY_PROXY_TYPE ALMemoryProxyPtr
+#else
+  #define NAOQI_MEMORY_PROXY_TYPE qi::AnyObject
+#endif
 
 #define DEFINE_SENSOR_LAYER(ClassName, FileName) \
   class ClassName : public SensorLayer \
@@ -33,28 +45,45 @@ typedef boost::shared_ptr<vector<float> > vectorFloatPtr;
      * \
      * @param memoryProxy: pointer to NaoQi's memory proxy. \
      */ \
-    ClassName(const ALMemoryProxyPtr& memoryProxy) : \
+    ClassName(const NAOQI_MEMORY_PROXY_TYPE& memoryProxy) : \
       SensorLayer(memoryProxy) \
     { \
       init(FileName); \
     } \
 };
 
-#define DEFINE_ACTUATOR_LAYER(ClassName, FileName) \
-  class ClassName : public ActuatorLayer \
-  { \
-  public: \
-    /** \
-     * Constructor \
-     * \
-     * @param memoryProxy: pointer to NaoQi's memory proxy. \
-     */ \
-    ClassName(const ALDCMProxyPtr& dcmProxy) : \
-      ActuatorLayer(dcmProxy) \
-    { \
-      init(FileName); \
-    } \
-};
+#ifndef V6_CROSS_BUILD
+  #define DEFINE_ACTUATOR_LAYER(ClassName, FileName) \
+    class ClassName : public ActuatorLayer \
+      { \
+      public: \
+        /** \
+         * Constructor \
+         * \
+         * @param memoryProxy: pointer to NaoQi's memory proxy. \
+         */ \
+        ClassName(const ALDCMProxyPtr& dcmProxy) : \
+          ActuatorLayer(dcmProxy) \
+        { \
+          init(FileName); \
+        } \
+    };
+#else
+  #define DEFINE_ACTUATOR_LAYER(ClassName, FileName) \
+    class ClassName : public ActuatorLayer \
+      { \
+      public: \
+        /** \
+         * Constructor \
+         * \
+         * @param memoryProxy: pointer to NaoQi's memory proxy. \
+         */ \
+        ClassName() \
+        { \
+          init(FileName); \
+        } \
+    };
+#endif
 
 /**
  * @class SensorLayer
@@ -67,7 +96,7 @@ public:
    * @brief SensorLayer Constructor
    * @param memoryProxy Naoqi memory proxy
    */
-  SensorLayer(const ALMemoryProxyPtr& memoryProxy) :
+  SensorLayer(const NAOQI_MEMORY_PROXY_TYPE& memoryProxy) :
     memoryProxy(memoryProxy)
   {
   }
@@ -103,7 +132,7 @@ public:
   static boost::shared_ptr<SensorLayer> makeSensorLayer(
     const unsigned& sensorIndex,
     vector<float>* sensorHandle,
-    const ALMemoryProxyPtr& memoryProxy);
+    const NAOQI_MEMORY_PROXY_TYPE& memoryProxy);
 
 protected:
   /**
@@ -115,7 +144,11 @@ protected:
       #ifndef MODULE_IS_REMOTE
       sensorPtrs.resize(size);
       for (size_t i = 0; i < size; ++i)
-        sensorPtrs[i] = (float*) memoryProxy->getDataPtr(keys[i]);
+        #ifndef V6_CROSS_BUILD
+          sensorPtrs[i] = (float*) memoryProxy->getDataPtr(keys[i]);
+        #else
+          sensorPtrs[i] = (float*) memoryProxy.call<float*>("getDataPtr", keys[i]);
+        #endif
       #endif
     } else {
       LOG_ERROR("Cannot access Naoqi motion proxy at SensorLayer::setSensorPtrs().");
@@ -150,7 +183,7 @@ protected:
 private:
   vector<string> keys; //! Vector of sensor keys
   size_t size; //! Size of Sensors
-  ALMemoryProxyPtr memoryProxy; //! Pointer to NaoQi internal memory
+  NAOQI_MEMORY_PROXY_TYPE memoryProxy; //! Pointer to NaoQi internal memory
   vector<float>* sensorHandle; //! Extracted values of the sensors
   vector<float*> sensorPtrs; //! Pointers to sensors of NaoQi ALMemory
 };
@@ -170,7 +203,7 @@ public:
    * @param type Type of joint sensors
    */
   JointSensorsLayer(
-    const ALMemoryProxyPtr& memoryProxy,
+    const NAOQI_MEMORY_PROXY_TYPE& memoryProxy,
     const JointSensorTypes& type) :
     SensorLayer(memoryProxy)
   {
@@ -197,6 +230,7 @@ DEFINE_SENSOR_LAYER(FsrSensorsLayer, "FsrSensors")
 DEFINE_SENSOR_LAYER(SonarSensorsLayer, "SonarSensors")
 DEFINE_SENSOR_LAYER(LedSensorsLayer, "LedSensors")
 
+
 /**
  * @class ActuatorLayer
  * @brief Defines a layer of actuator handles
@@ -208,8 +242,12 @@ public:
    * @brief ActuatorLayer Constructor
    * @param dcmProxy Naoqi DCM Proxy
    */
-  ActuatorLayer(
-    const ALDCMProxyPtr& dcmProxy) : dcmProxy(dcmProxy) {}
+  #ifndef V6_CROSS_BUILD
+    ActuatorLayer(
+      const ALDCMProxyPtr& dcmProxy) : dcmProxy(dcmProxy) {}
+  #else
+    ActuatorLayer() {}
+  #endif
 
   /**
    * @brief ~ActuatorLayer Destructor
@@ -241,12 +279,14 @@ public:
     } catch (Json::Exception& e) {
       LOG_EXCEPTION("Error reading hardware layer ids from json file:\t" << jsonFile << "\n\t" << e.what());
     }
-    if (dcmProxy) {
-      setActuatorAlias();
-      setActuatorCommand();
-    } else {
-      LOG_ERROR("Cannot access Naoqi DCM proxy at ActuatorLayer::init().");
-    }
+    #ifndef V6_CROSS_BUILD
+      if (dcmProxy) {
+        setActuatorAlias();
+        setActuatorCommand();
+      } else {
+        LOG_ERROR("Cannot access Naoqi DCM proxy at ActuatorLayer::init().");
+      }
+    #endif
   }
 
   /**
@@ -255,6 +295,7 @@ public:
    */
   void update();
 
+  #ifndef V6_CROSS_BUILD
   /**
    * @brief makeActuatorLayer Constructs an actuator layer for given index
    * @param actuatorIndex Actuator layer index
@@ -262,29 +303,44 @@ public:
    * @return ActuatorLayerPtr
    */
   static boost::shared_ptr<ActuatorLayer>
-  makeActuatorLayer(const unsigned& actuatorIndex, const ALDCMProxyPtr& dcmProxy);
+    makeActuatorLayer(const unsigned& actuatorIndex, const ALDCMProxyPtr& dcmProxy);
+  #else
+  /**
+   * @brief makeActuatorLayer Constructs an actuator layer for given index
+   * @param actuatorIndex Actuator layer index
+   * @return ActuatorLayerPtr
+   */
+  static boost::shared_ptr<ActuatorLayer>
+    makeActuatorLayer(const unsigned& actuatorIndex);
+  #endif
 
   virtual void addRequest(const ActuatorRequestPtr& request)
     { requests.pushToQueue(request); }
 
 private:
+  #ifndef V6_CROSS_BUILD
   /**
    * @brief setActuatorAlias Initializes the actuators command alias
    */
   void setActuatorAlias();
+  #endif
 
+  #ifndef V6_CROSS_BUILD
   /**
    * @brief setActuatorCommand Initializes actuator command object
    */
   void setActuatorCommand();
+  #endif
 
   vector<string> keys; //! Vector to memory keys
   unsigned size; //! Size of actuators
   string alias; //! Unique actuation request command alias
   ThreadSafeQueue<ActuatorRequestPtr> requests; //! Actuator requests queue
   float dcmTime; //! NaoQi DCM architecture time
-  //AL::ALValue commands; //! Commands sent to DCM
+  #ifndef V6_CROSS_BUILD
+  AL::ALValue commands; //! Commands sent to DCM
   ALDCMProxyPtr dcmProxy; //! Pointer to NaoQi DCM
+  #endif
 };
 
 typedef boost::shared_ptr<ActuatorLayer> ActuatorLayerPtr;
@@ -302,10 +358,14 @@ public:
    * @param dcmProxy: pointer to NaoQi's dcm proxy.
    * @param type Joint actuator type
    */
+  #ifndef V6_CROSS_BUILD
   JointActuatorsLayer(
-    const ALDCMProxyPtr& dcmProxy, 
+    const ALDCMProxyPtr& dcmProxy,
     const JointActuatorTypes& type) :
     ActuatorLayer(dcmProxy)
+  #else
+  JointActuatorsLayer(const JointActuatorTypes& type)
+  #endif
   {
     string file;
     switch (type) {

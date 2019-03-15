@@ -41,7 +41,7 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
   # Linking external libraries installed as pre-requisites.
   # For remote usage the libraries can just be installed on the local pc.
   link_directories($ENV{PATH_TO_TEAM_NUST_DIR}/remote-depends/lib)
-  target_link_libraries(tnrs-vision-module -lfftw3 -lfftw3f -lm -llapack /home/sensei/tensorflow/tensorflow/lite/tools/make/gen/linux_x86_64/lib/libtensorflow-lite.a -lpthread -ldl)
+  target_link_libraries(tnrs-vision-module -lfftw3 -lfftw3f -lm -llapack -lpthread -ldl)
 else()
   add_library (tnrs-vision-module SHARED ${TNRS_VISION_MODULE_SRC})
   # Linking libraries from the sdk.
@@ -49,6 +49,7 @@ else()
   if(${ROBOT_VERSION} STREQUAL "V6")
   qi_use_lib(
     tnrs-vision-module
+    QI
     BOOST
     BOOST_FILESYSTEM
     BOOST_IOSTREAMS
@@ -63,10 +64,7 @@ else()
     OPENCV3_FLANN
     V4L
   )
-  target_link_libraries(tnrs-vision-module
-    -lm
-    -lalcommon
-    -lalproxies)
+  target_link_libraries(tnrs-vision-module -lm)
   else()
   qi_use_lib(
     tnrs-vision-module

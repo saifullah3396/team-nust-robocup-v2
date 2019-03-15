@@ -9,11 +9,15 @@
 
 #pragma once
 
-#include <alproxies/almemoryproxy.h>
+#ifndef V6_CROSS_BUILD
+#include <alproxies/almemoryproxy.h> //! Not available in SDK 2.8
+#endif
 #include "ControlModule/include/HardwareLayer.h"
 #include "TNRSBase/include/BaseIncludes.h"
 
+#ifndef V6_CROSS_BUILD
 typedef boost::shared_ptr<AL::ALMemoryProxy> ALMemoryProxyPtr;
+#endif
 namespace PathPlannerSpace
 {
   class PathPlanner;
@@ -85,7 +89,11 @@ public:
    *
    * @param parent: Pointer to parent
    */
+  #ifndef V6_CROSS_BUILD
   PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy);
+  #else
+  PlanningModule(void* parent, const qi::AnyObject& memoryProxy); //! New syntax
+  #endif
 
   /**
    * Destructor
@@ -160,8 +168,12 @@ private:
   //! Pointer to base path planner
   PathPlannerSpace::PathPlannerPtr pathPlanner;
 
+  #ifndef V6_CROSS_BUILD
   //! Pointer to NaoQi internal memory proxy
   ALMemoryProxyPtr memoryProxy;
+  #else
+  qi::AnyObject memoryProxy;
+  #endif
 
   //! Team ball tracker class object.
   boost::shared_ptr<WorldBallTracker> wbTracker;

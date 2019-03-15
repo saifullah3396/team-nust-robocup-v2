@@ -9,10 +9,9 @@
 
 #pragma once
 
+#include <chrono>
 #include "MotionModule/include/MTypeHeader.h"
 #include "Utils/include/JsonLogger.h"
-#include <alvalue/alvalue.h>
-#include <chrono>
 
 using namespace std::chrono;
 
@@ -48,8 +47,13 @@ public:
    * @param time Joint command times
    * @param ids Ids of joints updated
    */
+  #ifdef V6_CROSS_BUILD
   void recordJointCmds(
      const AL::ALValue& cmds, const AL::ALValue& time, const vector<unsigned>& ids);
+  #else
+  void recordJointCmds(
+     const vector<Scalar>& cmds, const vector<Scalar>& time, const vector<unsigned>& ids);
+  #endif
 
   /**
    * @brief recordJointCmds Logs the joint commands sent by naoqi-based methods
@@ -57,10 +61,17 @@ public:
    * @param time Joint command times
    * @param activeJoints Active joints
    */
+  #ifdef V6_CROSS_BUILD
   void recordJointCmds(
     const AL::ALValue& cmds,
     const AL::ALValue& time,
     const Matrix<bool, Dynamic, 1> activeJoints);
+  #else
+  void recordJointCmds(
+    const vector<Scalar>& cmds,
+    const vector<Scalar>& time,
+    const Matrix<bool, Dynamic, 1> activeJoints);
+  #endif
 
   /**
    * @brief logJointStates Logs current state of the joints

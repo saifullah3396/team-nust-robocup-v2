@@ -9,9 +9,13 @@
 
 #pragma once
 
+#ifndef V6_CROSS_BUILD
 #include <alproxies/almotionproxy.h>
 #include <alproxies/almemoryproxy.h>
 #include <alproxies/dcmproxy.h>
+#else
+#include <qi/anyobject.hpp>
+#endif
 #include "TNRSBase/include/BaseIncludes.h"
 
 class GBManager;
@@ -20,9 +24,11 @@ class SensorLayer;
 typedef boost::shared_ptr<SensorLayer> SensorLayerPtr;
 class ActuatorLayer;
 typedef boost::shared_ptr<ActuatorLayer> ActuatorLayerPtr;
+#ifndef V6_CROSS_BUILD
 typedef boost::shared_ptr<AL::ALMemoryProxy> ALMemoryProxyPtr;
 typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
 typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
+#endif
 
 /**
  * @class GBModule
@@ -46,32 +52,58 @@ class GBModule : public BaseModule
 	)
 
 public:
-  /**
-   * @brief GBModule Constructor
-   *
-   * @param parent: parent: Pointer to parent module
-   * @param memoryProxy: Pointer to NaoQi's memory proxy
-   * @param dcmProxy: Pointer to NaoQi's DCM proxy
-   * @param motionProxy: Pointer to NaoQi's motion proxy
-   */
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  GBModule(
-   void* parent,
-   const ALMemoryProxyPtr& memoryProxy,
-   const ALDCMProxyPtr& dcmProxy,
-   const ALMotionProxyPtr& motionProxy);
+  #ifndef V6_CROSS_BUILD
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+      /**
+       * @brief GBModule Constructor
+       *
+       * @param parent: parent: Pointer to parent module
+       * @param memoryProxy: Pointer to NaoQi's memory proxy
+       * @param dcmProxy: Pointer to NaoQi's DCM proxy
+       * @param motionProxy: Pointer to NaoQi's motion proxy
+       */
+      GBModule(
+       void* parent,
+       const ALMemoryProxyPtr& memoryProxy,
+       const ALDCMProxyPtr& dcmProxy,
+       const ALMotionProxyPtr& motionProxy);
+    #else
+      /**
+       * @brief GBModule Constructor
+       *
+       * @param parent: parent: Pointer to parent module
+       * @param memoryProxy: Pointer to NaoQi's memory proxy
+       * @param dcmProxy: Pointer to NaoQi's DCM proxy
+       */
+      GBModule(
+       void* parent,
+       const ALMemoryProxyPtr& memoryProxy,
+       const ALDCMProxyPtr& dcmProxy);
+    #endif
   #else
-    /**
-     * @brief GBModule Constructor
-     *
-     * @param parent: parent: Pointer to parent module
-     * @param memoryProxy: Pointer to NaoQi's memory proxy
-     * @param dcmProxy: Pointer to NaoQi's DCM proxy
-     */
-  GBModule(
-   void* parent,
-   const ALMemoryProxyPtr& memoryProxy,
-   const ALDCMProxyPtr& dcmProxy);
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+      /**
+       * @brief GBModule Constructor
+       *
+       * @param parent: parent: Pointer to parent module
+       * @param memoryProxy: Pointer to NaoQi's memory proxy
+       * @param motionProxy: Pointer to NaoQi's motion proxy
+       */
+      GBModule(
+       void* parent,
+       const qi::AnyObject& memoryProxy,
+       const qi::AnyObject& motionProxy);
+    #else
+      /**
+       * @brief GBModule Constructor
+       *
+       * @param parent: parent: Pointer to parent module
+       * @param memoryProxy: Pointer to NaoQi's memory proxy
+       */
+      GBModule(
+       void* parent,
+       const qi::AnyObject& memoryProxy);
+    #endif
   #endif
 
   /**
@@ -110,10 +142,13 @@ public:
 
   //! Getters
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  boost::shared_ptr<AL::ALMotionProxy> getSharedMotionProxy()
-  {
-    return motionProxy;
-  }
+    #ifndef V6_CROSS_BUILD
+      boost::shared_ptr<AL::ALMotionProxy> getSharedMotionProxy()
+        { return motionProxy; }
+    #else
+      qi::AnyObject getSharedMotionProxy()
+        { return motionProxy; }
+    #endif
   #endif
 private:
   /**
@@ -131,10 +166,18 @@ private:
   GBManagerPtr gbManager; //! Static behaviors manager shared object
   vector<SensorLayerPtr> sensorLayers; //! Vector of pointer to SensorLayer objects
   vector<ActuatorLayerPtr> actuatorLayers; //! Vector of pointer to ActuatorLayer objects
-  ALMemoryProxyPtr memoryProxy; //! Pointer to NaoQi internal memory proxy
-  ALDCMProxyPtr dcmProxy; //! Pointer to NaoQi internal dcm proxy
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  boost::shared_ptr<AL::ALMotionProxy> motionProxy; //! Pointer to NaoQi internal motion class
+
+  #ifndef V6_CROSS_BUILD
+    ALMemoryProxyPtr memoryProxy; //! Pointer to NaoQi internal memory proxy
+    ALDCMProxyPtr dcmProxy; //! Pointer to NaoQi internal dcm proxy
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+      boost::shared_ptr<AL::ALMotionProxy> motionProxy; //! Pointer to NaoQi internal motion class
+    #endif
+  #else
+    qi::AnyObject memoryProxy; //! Pointer to NaoQi internal memory proxy
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+      qi::AnyObject motionProxy; //! Pointer to NaoQi internal motion class
+    #endif
   #endif
 
   /**

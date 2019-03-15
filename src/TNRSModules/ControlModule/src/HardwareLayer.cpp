@@ -17,7 +17,11 @@ void SensorLayer::update()
 {
   try {
 #ifdef MODULE_IS_REMOTE
-    *sensorHandle = memoryProxy->getListData(keys);
+    #ifndef V6_CROSS_BUILD
+      *sensorHandle = memoryProxy->getListData(keys);
+    #else
+      *sensorHandle = memoryProxy.call<vector<float> >("getListData", keys);
+    #endif
 #else
     for (size_t i = 0; i < size; ++i) {
       (*sensorHandle)[i] = *sensorPtrs[i];
@@ -31,7 +35,7 @@ void SensorLayer::update()
 SensorLayerPtr SensorLayer::makeSensorLayer(
   const unsigned& sensorIndex,
   vector<float>* sensorHandle,
-  const ALMemoryProxyPtr& memoryProxy)
+  const NAOQI_MEMORY_PROXY_TYPE& memoryProxy)
 {
   try {
     SensorLayerPtr sl;
@@ -79,26 +83,31 @@ SensorLayerPtr SensorLayer::makeSensorLayer(
 
 void ActuatorLayer::update()
 {
- /* try {
+ try {
     if (requests.isEmpty())
       return;
     //! Get the earliest request in queue
     auto request = requests.queueFront();
-    for (size_t i = 0; i < size; ++i) {
-      commands[5][i][0] = (request->getValue())[i];
-    }
-    commands[4][0] = dcmProxy->getTime(20);
-    dcmProxy->setAlias(commands);
+    #ifndef V6_CROSS_BUILD
+      for (size_t i = 0; i < size; ++i) {
+        commands[5][i][0] = (request->getValue())[i];
+      }
+      commands[4][0] = dcmProxy->getTime(20);
+      dcmProxy->setAlias(commands);
+    #else
+    //! @todo Define lola based request handler for realtime usage
+    #endif
     //! Execute in remove
     requests.popQueue();
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what())
-  }*/
+  }
 }
 
+#ifndef V6_CROSS_BUILD
 void ActuatorLayer::setActuatorAlias()
 {
-  /*AL::ALValue commandAlias;
+  AL::ALValue commandAlias;
   commandAlias.arraySetSize(2);
   commandAlias[0] = string(alias);
   commandAlias[1].arraySetSize(size);
@@ -108,12 +117,14 @@ void ActuatorLayer::setActuatorAlias()
     dcmProxy->createAlias(commandAlias);
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what())
-  }*/
+  }
 }
+#endif
 
+#ifndef V6_CROSS_BUILD
 void ActuatorLayer::setActuatorCommand()
 {
-  /*commands.arraySetSize(6);
+  commands.arraySetSize(6);
   commands[0] = string(alias);
   commands[1] = string("ClearAll");
   commands[2] = string("time-separate");
@@ -121,25 +132,43 @@ void ActuatorLayer::setActuatorCommand()
   commands[4].arraySetSize(1);
   commands[5].arraySetSize(size);
   for (size_t i = 0; i < size; ++i)
-    commands[5][i].arraySetSize(1);*/
+    commands[5][i].arraySetSize(1);
 }
+#endif
 
+#ifndef V6_CROSS_BUILD
 ActuatorLayerPtr ActuatorLayer::makeActuatorLayer(
   const unsigned& actuatorIndex,
   const ALDCMProxyPtr& dcmProxy)
+#else
+ActuatorLayerPtr ActuatorLayer::makeActuatorLayer(
+  const unsigned& actuatorIndex)
+#endif
 {
   try {
     ActuatorLayerPtr al;
     switch (actuatorIndex)
     {
       case static_cast<unsigned>(ActuatorTypes::jointActuators) + static_cast<unsigned>(JointActuatorTypes::angles):
-        al = boost::make_shared<JointActuatorsLayer>(dcmProxy, JointActuatorTypes::angles);
+        #ifndef V6_CROSS_BUILD
+          al = boost::make_shared<JointActuatorsLayer>(dcmProxy, JointActuatorTypes::angles);
+        #else
+          al = boost::make_shared<JointActuatorsLayer>(JointActuatorTypes::angles);
+        #endif
         break;
       case static_cast<unsigned>(ActuatorTypes::jointActuators) + static_cast<unsigned>(JointActuatorTypes::hardness):
-        al = boost::make_shared<JointActuatorsLayer>(dcmProxy, JointActuatorTypes::hardness);
+        #ifndef V6_CROSS_BUILD
+          al = boost::make_shared<JointActuatorsLayer>(dcmProxy, JointActuatorTypes::hardness);
+        #else
+          al = boost::make_shared<JointActuatorsLayer>(JointActuatorTypes::hardness);
+        #endif
         break;
       case static_cast<unsigned>(ActuatorTypes::ledActuators):
-        al = boost::make_shared<LedActuatorsLayer>(dcmProxy);
+        #ifndef V6_CROSS_BUILD
+          al = boost::make_shared<LedActuatorsLayer>(dcmProxy);
+        #else
+          al = boost::make_shared<LedActuatorsLayer>();
+        #endif
         break;
     }
     return al;

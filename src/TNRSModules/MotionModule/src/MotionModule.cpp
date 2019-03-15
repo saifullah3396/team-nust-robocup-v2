@@ -61,27 +61,49 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
 )
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-MotionModule::MotionModule(
-  void* parent,
-  const ALMemoryProxyPtr& memoryProxy,
-  const ALDCMProxyPtr& dcmProxy,
-  const ALMotionProxyPtr& motionProxy) :
-  BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
-  memoryProxy(memoryProxy),
-  dcmProxy(dcmProxy),
-  motionProxy(motionProxy)
-{
-}
+    #ifndef V6_CROSS_BUILD
+      MotionModule::MotionModule(
+        void* parent,
+        const ALMemoryProxyPtr& memoryProxy,
+        const ALDCMProxyPtr& dcmProxy,
+        const ALMotionProxyPtr& motionProxy) :
+        BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
+        memoryProxy(memoryProxy),
+        dcmProxy(dcmProxy),
+        motionProxy(motionProxy)
+      {
+      }
+  #else
+    MotionModule::MotionModule(
+      void* parent,
+      const qi::AnyObject& memoryProxy,
+      const qi::AnyObject& motionProxy) :
+      BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
+      memoryProxy(memoryProxy),
+      motionProxy(motionProxy)
+    {
+    }
+  #endif
 #else
-MotionModule::MotionModule(
-  void* parent,
-  const ALMemoryProxyPtr& memoryProxy,
-  const ALDCMProxyPtr& dcmProxy) :
-  BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
-  memoryProxy(memoryProxy),
-  dcmProxy(dcmProxy)
-{
-}
+  #ifndef V6_CROSS_BUILD
+    MotionModule::MotionModule(
+      void* parent,
+      const ALMemoryProxyPtr& memoryProxy,
+      const ALDCMProxyPtr& dcmProxy) :
+      BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
+      memoryProxy(memoryProxy),
+      dcmProxy(dcmProxy)
+    {
+    }
+  #else
+    MotionModule::MotionModule(
+      void* parent,
+      const qi::AnyObject& memoryProxy) :
+      BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
+      memoryProxy(memoryProxy)
+    {
+    }
+  #endif
 #endif
 
 MotionModule::~MotionModule()
@@ -115,12 +137,21 @@ void MotionModule::init()
   LOG_INFO("Initializing motion module actuator layers...")
   setupActuators();
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  //! Disable NaoQi's fall manager
-  LOG_INFO("Disabling Naoqi fall manager...")
-  //motionProxy->setFallManagerEnabled(false);
-  LOG_INFO("Waking Robot Up...")
-  //motionProxy->wakeUp();
-  motionProxy->setMoveArmsEnabled(false, false);
+    //! Disable NaoQi's fall manager
+    LOG_INFO("Disabling Naoqi fall manager...")
+    #ifndef V6_CROSS_BUILD
+      motionProxy->setFallManagerEnabled(false);
+    #else
+      motionProxy.call<void>("setFallManagerEnabled", false);
+    #endif
+    LOG_INFO("Waking Robot Up...")
+    #ifndef V6_CROSS_BUILD
+    //motionProxy->wakeUp();
+    motionProxy->setMoveArmsEnabled(false, false);
+    #else
+    //motionProxy.call<void>("wakeUp");
+    motionProxy.call<void>("setMoveArmsEnabled", false, false);
+    #endif
   #endif
   //! Create kinematics module
   LOG_INFO("Initializing KinematicsModule...")
@@ -176,7 +207,9 @@ void MotionModule::setupSensors()
       memoryProxy);
   sensorsUpdate();
   #ifndef MODULE_IS_REMOTE
-  ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&MotionModule::sensorsUpdate, this));
+    #ifndef V6_CROSS_BUILD
+      ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&MotionModule::sensorsUpdate, this));
+    #endif
   #endif
 }
 
@@ -184,11 +217,18 @@ void MotionModule::setupActuators()
 {
   actuatorLayers.resize(toUType(MotionActuators::count));
   actuatorLayers[toUType(MotionActuators::jointActuators)] =
-    ActuatorLayer::makeActuatorLayer(
-      toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::angles),
-      dcmProxy);
+    #ifndef V6_CROSS_BUILD
+      ActuatorLayer::makeActuatorLayer(
+        toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::angles),
+        dcmProxy);
+    #else
+      ActuatorLayer::makeActuatorLayer(
+        toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::angles));
+    #endif
   #ifndef MODULE_IS_REMOTE
-  ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPreProcess(boost::bind(&MotionModule::actuatorsUpdate, this));
+    #ifndef V6_CROSS_BUILD
+      ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPreProcess(boost::bind(&MotionModule::actuatorsUpdate, this));
+    #endif
   #endif
 }
 
@@ -233,7 +273,11 @@ void MotionModule::mainRoutine()
 {
   MB_INFO_OUT(MotionModule).clear();
   #ifdef MODULE_IS_REMOTE
-  sensorsUpdate();
+    sensorsUpdate();
+  #else
+    #ifdef V6_CROSS_BUILD
+      sensorsUpdate();
+    #endif
   #endif
   kinematicsModule->update();
   fallDetector->update();
@@ -255,7 +299,11 @@ void MotionModule::mainRoutine()
   }
   motionGenerator->update();
   #ifdef MODULE_IS_REMOTE
-  actuatorsUpdate();
+    actuatorsUpdate();
+  #else
+    #ifdef V6_CROSS_BUILD
+      actuatorsUpdate();
+    #endif
   #endif
 }
 
@@ -265,9 +313,12 @@ void MotionModule::sensorsUpdate()
     sensorLayers[i]->update();
   }
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  float steps = memoryProxy->getData("Motion/Walk/NbStep");
-  N_FOOTSTEPS_OUT(MotionModule) =
-    static_cast<int>(steps);
+    #ifndef V6_CROSS_BUILD
+      float steps = memoryProxy->getData("Motion/Walk/NbStep");
+    #else
+      float steps = memoryProxy.call<float>("getData", "Motion/Walk/NbStep");
+    #endif
+    N_FOOTSTEPS_OUT(MotionModule) = static_cast<int>(steps);
   #endif
 }
 
@@ -294,8 +345,11 @@ TrajectoryPlannerPtr MotionModule::getTrajectoryPlanner()
 }
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-ALMotionProxyPtr MotionModule::getSharedMotionProxy() 
-{
-  return motionProxy; 
-}
+  #ifndef V6_CROSS_BUILD
+    ALMotionProxyPtr MotionModule::getSharedMotionProxy()
+      { return motionProxy; }
+  #else
+    qi::AnyObject MotionModule::getSharedMotionProxy()
+      { return motionProxy; }
+  #endif
 #endif

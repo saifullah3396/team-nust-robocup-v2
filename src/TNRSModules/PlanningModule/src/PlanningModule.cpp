@@ -89,6 +89,7 @@ DEFINE_OUTPUT_CONNECTOR(PlanningModule,
   (WorldBallInfo<float>, worldBallInfo),
 )
 
+#ifndef V6_CROSS_BUILD
 PlanningModule::PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy) :
   BaseModule(
     parent, 
@@ -97,6 +98,16 @@ PlanningModule::PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy
   ), memoryProxy(memoryProxy)
 {
 }
+#else
+PlanningModule::PlanningModule(void* parent, const qi::AnyObject& memoryProxy) :
+  BaseModule(
+    parent,
+    toUType(TNSPLModules::planning),
+    "PlanningModule"
+  ), memoryProxy(memoryProxy)
+{
+}
+#endif
 
 void PlanningModule::setThreadPeriod()
 {
@@ -221,11 +232,15 @@ void PlanningModule::sensorsUpdate()
     sensorLayers[i]->update();
   }
   RoboCupGameControlData gameControlData;
-  AL::ALValue value = memoryProxy->getData("GameCtrl/RoboCupGameControlData");
-  if (value.isBinary() && value.getSize() == sizeof(RoboCupGameControlData)) memcpy(
-    &gameControlData,
-    value,
-    sizeof(RoboCupGameControlData));
+  #ifndef V6_CROSS_BUILD
+    AL::ALValue value = memoryProxy->getData("GameCtrl/RoboCupGameControlData");
+    if (value.isBinary() && value.getSize() == sizeof(RoboCupGameControlData))
+      memcpy(&gameControlData, value, sizeof(RoboCupGameControlData));
+  #else
+    auto value = memoryProxy.call<(const char*)>("getData", "GameCtrl/RoboCupGameControlData");
+    if (value.isBinary() && value.getSize() == sizeof(RoboCupGameControlData))
+      memcpy(&gameControlData, value, sizeof(RoboCupGameControlData));
+  #endif
   gameControlData.teams[1].teamColour = 2;
   GAME_DATA_OUT(PlanningModule) = gameControlData;
 }
@@ -275,20 +290,27 @@ void PlanningModule::updateWorldBallInfo()
 
 void PlanningModule::setupRoboCupDataHandler()
 {
-  #ifdef MODULE_IS_REMOTE
-  RoboCupGameControlData gameCtrlData;
-  AL::ALValue value((const char*) &gameCtrlData, sizeof(gameCtrlData));
-  memoryProxy->insertData("GameCtrl/RoboCupGameControlData", value);
+  #ifndef V6_CROSS_BUILD
+    #ifdef MODULE_IS_REMOTE
+    RoboCupGameControlData gameCtrlData;
+    AL::ALValue value((const char*) &gameCtrlData, sizeof(gameCtrlData));
+    memoryProxy->insertData("GameCtrl/RoboCupGameControlData", value);
+    #endif
+    memoryProxy->insertData(
+      "GameCtrl/teamNumber",
+      (int) TEAM_NUMBER_IN(PlanningModule));
+    memoryProxy->insertData(
+      "GameCtrl/teamColour",
+      (int) TEAM_COLOR_IN(PlanningModule));
+    memoryProxy->insertData(
+      "GameCtrl/playerNumber",
+      (int) PLAYER_NUMBER_IN(PlanningModule));
+  #else
+    memoryProxy.call<void>("insertData", "GameCtrl/RoboCupGameControlData", value);
+    memoryProxy.call<void>("insertData", "GameCtrl/teamNumber", (int) TEAM_NUMBER_IN(PlanningModule));
+    memoryProxy.call<void>("insertData", "GameCtrl/teamColour", (int) TEAM_COLOR_IN(PlanningModule));
+    memoryProxy.call<void>("insertData", "GameCtrl/playerNumber", (int) PLAYER_NUMBER_IN(PlanningModule));
   #endif
-  memoryProxy->insertData(
-    "GameCtrl/teamNumber",
-    (int) TEAM_NUMBER_IN(PlanningModule));
-  memoryProxy->insertData(
-    "GameCtrl/teamColour",
-    (int) TEAM_COLOR_IN(PlanningModule));
-  memoryProxy->insertData(
-    "GameCtrl/playerNumber",
-    (int) PLAYER_NUMBER_IN(PlanningModule));
 }
 
 PathPlannerSpace::PathPlannerPtr PlanningModule::getPathPlanner()

@@ -20,15 +20,25 @@
 #include "VisionModule/include/VisionRequest.h"
 #include "Utils/include/JsonUtils.h"
 #include "Utils/include/DataHolders/Camera.h"
+#include "Utils/include/PrintUtils.h"
 
 TeamNUSTSPL* TeamNUSTSPL::self;
 
+#ifndef V6_CROSS_BUILD
 TeamNUSTSPL::TeamNUSTSPL(
   ALBrokerPtr parentBroker, const string& parentName) :
   AL::ALModule(parentBroker, parentName)
 {
   TeamNUSTSPL::self = this;
 }
+#else
+TeamNUSTSPL::TeamNUSTSPL(qi::SessionPtr session) :
+  session(session)
+{
+  TeamNUSTSPL::self = this;
+}
+
+#endif
 
 void TeamNUSTSPL::init()
 {
@@ -55,10 +65,16 @@ void TeamNUSTSPL::init()
   #endif
   LOG_INFO("Config directory path:\n\t" << ConfigManager::getConfigDirPath());
   LOG_INFO("Logs directory path:\n\t" << ConfigManager::getLogsDirPath());
+
+
   LOG_INFO("Getting Naoqi ALMemoryProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/almemoryproxy.h");
   try {
-    memoryProxy = getParentBroker()->getMemoryProxy();
+    #ifndef V6_CROSS_BUILD
+      memoryProxy = getParentBroker()->getMemoryProxy();
+    #else
+      memoryProxy = session->service("ALMemory");
+    #endif
   } catch (const AL::ALError& e) {
     LOG_EXCEPTION(e.what()); return;
   }
@@ -66,7 +82,11 @@ void TeamNUSTSPL::init()
   LOG_INFO("Getting Naoqi ALMotionProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/almotionproxy.h");
   try {
-    motionProxy = getParentBroker()->getMotionProxy();
+    #ifndef V6_CROSS_BUILD
+      motionProxy = getParentBroker()->getMotionProxy();
+    #else
+      motionProxy = session->service("ALMotion");
+    #endif
   } catch (const AL::ALError& e) {
     LOG_EXCEPTION(e.what()); return;
   }
@@ -74,6 +94,7 @@ void TeamNUSTSPL::init()
   LOG_INFO("*** [IMPORTANT] *** The module is built without Naoqi ALMotionProxy handle...");
   LOG_INFO("Set USE_NAOQI_MOTION_PROXY to ON in make/cmake/common.cmake if this is needed");
   #endif
+  #ifndef V6_CROSS_BUILD //! DCM Replaced by LOLA in naoqi 2.8
   LOG_INFO("Getting Naoqi ALDCMProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/aldcmproxy.h");
   try {
@@ -81,12 +102,17 @@ void TeamNUSTSPL::init()
   } catch (const AL::ALError& e) {
     LOG_EXCEPTION(e.what()); return;
   }
+  #endif
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
   LOG_INFO("Getting Naoqi ALVideoDeviceProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/alvideodeviceproxy.h");
   try {
-    camProxy =
-      getParentBroker()->getSpecialisedProxy<AL::ALVideoDeviceProxy>("ALVideoDevice");
+    #ifndef V6_CROSS_BUILD
+      camProxy =
+        getParentBroker()->getSpecialisedProxy<AL::ALVideoDeviceProxy>("ALVideoDevice");
+    #else
+      camProxy = session->service("ALVideoDevice");
+    #endif
   } catch (const AL::ALError& e) {
     LOG_EXCEPTION(e.what()); return;
   }
@@ -136,22 +162,42 @@ void TeamNUSTSPL::setupTNRSModules()
   if (modulesToRun[toUType(TNSPLModules::motion)]) {
     LOG_INFO("Constructing MotionModule... See src/TNRSModules/MotionModule.")
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    childModules[toUType(TNSPLModules::motion)] =
-      boost::make_shared<MotionModule>(this, memoryProxy, dcmProxy, motionProxy);
+      #ifndef V6_CROSS_BUILD
+        childModules[toUType(TNSPLModules::motion)] =
+          boost::make_shared<MotionModule>(this, memoryProxy, dcmProxy, motionProxy);
+      #else
+        childModules[toUType(TNSPLModules::motion)] =
+          boost::make_shared<MotionModule>(this, memoryProxy, motionProxy);
+      #endif
     #else
-    childModules[toUType(TNSPLModules::motion)] =
-      boost::make_shared<MotionModule>(this, memoryProxy, dcmProxy);
+      #ifndef V6_CROSS_BUILD
+        childModules[toUType(TNSPLModules::motion)] =
+          boost::make_shared<MotionModule>(this, memoryProxy, dcmProxy);
+      #else
+        childModules[toUType(TNSPLModules::motion)] =
+          boost::make_shared<MotionModule>(this, memoryProxy);
+      #endif
     #endif
   }
 
   if (modulesToRun[toUType(TNSPLModules::sb)]) {
     LOG_INFO("Constructing GBModule... See src/TNRSModules/GBModule.")
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    childModules[toUType(TNSPLModules::sb)] =
-      boost::make_shared<GBModule>(this, memoryProxy, dcmProxy, motionProxy);
+      #ifndef V6_CROSS_BUILD
+        childModules[toUType(TNSPLModules::sb)] =
+          boost::make_shared<GBModule>(this, memoryProxy, dcmProxy, motionProxy);
+      #else
+        childModules[toUType(TNSPLModules::sb)] =
+          boost::make_shared<GBModule>(this, memoryProxy, motionProxy);
+      #endif
     #else
-    childModules[toUType(TNSPLModules::sb)] =
-      boost::make_shared<GBModule>(this, memoryProxy, dcmProxy);
+      #ifndef V6_CROSS_BUILD
+        childModules[toUType(TNSPLModules::sb)] =
+          boost::make_shared<GBModule>(this, memoryProxy, dcmProxy);
+      #else
+        childModules[toUType(TNSPLModules::sb)] =
+          boost::make_shared<GBModule>(this, memoryProxy);
+      #endif
     #endif
   }
 
@@ -164,8 +210,8 @@ void TeamNUSTSPL::setupTNRSModules()
   if (modulesToRun[toUType(TNSPLModules::vision)]) {
     LOG_INFO("Constructing VisionModule... See src/TNRSModules/VisionModule.")
     #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-    childModules[toUType(TNSPLModules::vision)] =
-      boost::make_shared<VisionModule>(this, camProxy);
+      childModules[toUType(TNSPLModules::vision)] =
+        boost::make_shared<VisionModule>(this, camProxy);
     #else
       childModules[toUType(TNSPLModules::vision)] =
         boost::make_shared<VisionModule>(this);

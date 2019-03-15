@@ -67,6 +67,7 @@ else()
   # Linking libraries from the sdk.
   if(${ROBOT_VERSION} STREQUAL "V6")
       qi_use_lib(tnrs-motion-module
+        QI
         BOOST_SIGNALS
       )
       target_link_libraries(tnrs-motion-module
@@ -77,9 +78,7 @@ else()
       libtnrs-behavior-manager.so
       -lnlopt
       -ljsoncpp
-      libqpOASES.so
-      -lalcommon
-      -lalproxies)
+      libqpOASES.so)
   else()
       qi_use_lib(
         tnrs-motion-module

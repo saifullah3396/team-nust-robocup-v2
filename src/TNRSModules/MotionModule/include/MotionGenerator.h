@@ -113,7 +113,11 @@ public:
    */
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   void killAllMotions() {
-    motionProxy->killAll();
+    #ifndef V6_CROSS_BUILD
+      motionProxy->killAll();
+    #else
+      motionProxy.call<void>("killAll");
+    #endif
   }
   #endif
 
@@ -122,7 +126,11 @@ public:
    */
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   void stopMove() {
-    motionProxy->stopMove();
+    #ifndef V6_CROSS_BUILD
+      motionProxy->stopMove();
+    #else
+      motionProxy.call<void>("stopMove");
+    #endif
   }
   #endif
 
@@ -131,7 +139,11 @@ public:
    * Wrapper for MotionGenerator::stopMove()
    */
   AL::ALValue getFootsteps() {
-    return motionProxy->getFootSteps();
+    #ifndef V6_CROSS_BUILD
+      return motionProxy->getFootSteps();
+    #else
+      return motionProxy.call<void>("getFootSteps");
+    #endif
   }
   #endif
 
@@ -142,10 +154,17 @@ public:
    */
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   void openHand(const RobotHands& handIndex) {
-    if (handIndex == RobotHands::lHand)
-      motionProxy->post.openHand("LHand");
-    else if (handIndex == RobotHands::rHand)
-      motionProxy->post.openHand("RHand");
+    #ifndef V6_CROSS_BUILD
+      if (handIndex == RobotHands::lHand)
+        motionProxy->post.openHand("LHand");
+      else if (handIndex == RobotHands::rHand)
+        motionProxy->post.openHand("RHand");
+    #else
+      if (handIndex == RobotHands::lHand)
+        motionProxy.async<void>("openHand", "LHand");
+      else if (handIndex == RobotHands::rHand)
+        motionProxy.async<void>("openHand", "RHand");
+    #endif
   }
   #endif
 
@@ -156,10 +175,17 @@ public:
    */
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   void closeHand(const RobotHands& handIndex) {
-    if (handIndex == RobotHands::lHand)
-      motionProxy->post.closeHand("LHand");
-    else if (handIndex == RobotHands::rHand)
-      motionProxy->post.closeHand("RHand");
+    #ifndef V6_CROSS_BUILD
+      if (handIndex == RobotHands::lHand)
+        motionProxy->post.closeHand("LHand");
+      else if (handIndex == RobotHands::rHand)
+        motionProxy->post.closeHand("RHand");
+    #else
+      if (handIndex == RobotHands::lHand)
+        motionProxy.async<void>("closeHand", "LHand");
+      else if (handIndex == RobotHands::rHand)
+        motionProxy.async<void>("closeHand", "RHand");
+    #endif
   }
   #endif
 

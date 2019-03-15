@@ -9,15 +9,25 @@
 
 #pragma once
 
+#ifndef V6_CROSS_BUILD
 #include <alproxies/almotionproxy.h>
+#else
+#include <qi/anyobject.hpp>
+#endif
 #include "TNRSBase/include/MemoryBase.h"
 #include "BehaviorManager/include/Behavior.h"
 
-class GBModule;
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
-//! Naoqi motion proxy object
-typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
+#ifndef V6_CROSS_BUILD
+  #define NAOQI_MOTION_PROXY_TYPE ALMotionProxyPtr
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  //! Naoqi motion proxy object
+  typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
+  #endif
+#else
+  #define NAOQI_MOTION_PROXY_TYPE qi::AnyObject
 #endif
+
+class GBModule;
 
 /**
  * @class GeneralBehavior
@@ -55,15 +65,23 @@ protected:
    * @param postCommand Whether this command is to be run in a
    *   separate thread or as a blocking call
    */
+  #ifndef V6_CROSS_BUILD
   void naoqiStiffnessInterpolation(
     const vector<unsigned>& ids,
     const AL::ALValue& timeLists,
     const AL::ALValue& stiffnessLists,
     const bool& postCommand);
+  #else
+  void naoqiStiffnessInterpolation(
+    const vector<unsigned>& ids,
+    const vector<vector<float> >& timeLists,
+    const vector<vector<float> >& stiffnessLists,
+    const bool& postCommand);
+  #endif
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  ALMotionProxyPtr motionProxy; //! Naoqi motion proxy object
+  NAOQI_MOTION_PROXY_TYPE motionProxy; //! Naoqi motion proxy object
   #endif
   GBModule* gbModule; //! Pointer to base static module
 };
