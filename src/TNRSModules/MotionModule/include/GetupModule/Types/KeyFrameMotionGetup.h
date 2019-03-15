@@ -11,46 +11,57 @@
 
 #include "MotionModule/include/GetupModule/GetupModule.h"
 
+struct KeyFrameMotionGetupConfig;
+
 template<typename Scalar>
 class KeyFrameMotionGetup : public GetupModule<Scalar>
 {
 public:
-
   /**
-   * Constructor
+   * @brief KeyFrameMotionGetup Constructor
    *
-   * @param motionModule: Pointer to base motion module
-   * @param config: Configuration of the behavior
+   * @param motionModule Pointer to base motion module
+   * @param config Configuration of this behavior
    */
   KeyFrameMotionGetup(
     MotionModule* motionModule,
-    const BehaviorConfigPtr& config) :
-    GetupModule<Scalar>(motionModule, config, "KeyFrameMotionGetup"),
-    getupTime(Scalar(0)),
-    execTime(Scalar(0))
-  {
-  }
+    const boost::shared_ptr<KFMGetupConfig>& config);
 
   /**
-   * Default destructor for this class.
+   * @brief ~KeyFrameMotionGetup Destructor
    */
   ~KeyFrameMotionGetup()
   {
   }
-  
+
   /**
-   * Derived from Behavior
-   */ 
-  bool initiate();
-  void update();
-  void finish();
-  
+   * @brief initiate See Behavior::initiate()
+   */
+  bool initiate() final;
+
+  /**
+   * @brief update See Behavior::update()
+   */
+  void update() final;
+
+  /**
+   * @brief finish See Behavior::finish()
+   */
+  void finish() final;
 private:
   /**
-	 * Returns the cast of config to KFMGetupConfigPtr
+   * @brief getBehaviorCast Returns the cast of config to
+   *   KFMGetupConfigPtr
 	 */
-  KFMGetupConfigPtr getBehaviorCast();
+  boost::shared_ptr<KFMGetupConfig> getBehaviorCast();
+
+  /**
+   * @brief setupGetupMotion Sets up the motion request
+   * @param keyFrames Array of keyframe states
+   */
   void setupGetupMotion(const Scalar keyFrames[][25]);
+
+  //! Total time to get up
   Scalar getupTime;
 
   //! Motion execution time updated after each update

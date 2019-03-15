@@ -47,10 +47,89 @@ void MotionGenerator<Scalar>::update()
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+void MotionGenerator<Scalar>::killAllMotions() {
+  #ifndef V6_CROSS_BUILD
+    motionProxy->killAll();
+  #else
+    motionProxy.call<void>("killAll");
+  #endif
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+void MotionGenerator<Scalar>::stopMove() {
+  #ifndef V6_CROSS_BUILD
+    motionProxy->stopMove();
+  #else
+    motionProxy.call<void>("stopMove");
+  #endif
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+#ifndef V6_CROSS_BUILD
+AL::ALValue MotionGenerator<Scalar>::getFootsteps()
+#else
+vector<vector<float> > MotionGenerator<Scalar>::getFootsteps()
+#endif
+{
+  #ifndef V6_CROSS_BUILD
+    return motionProxy->getFootSteps();
+  #else
+    return vector<vector<float>>();//motionProxy.call<void>("getFootSteps");
+  #endif
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+void MotionGenerator<Scalar>::openHand(const RobotHands& handIndex) {
+  #ifndef V6_CROSS_BUILD
+    if (handIndex == RobotHands::lHand)
+      motionProxy->post.openHand("LHand");
+    else if (handIndex == RobotHands::rHand)
+      motionProxy->post.openHand("RHand");
+  #else
+    if (handIndex == RobotHands::lHand)
+      motionProxy.async<void>("openHand", "LHand");
+    else if (handIndex == RobotHands::rHand)
+      motionProxy.async<void>("openHand", "RHand");
+  #endif
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+void MotionGenerator<Scalar>::closeHand(const RobotHands& handIndex) {
+  #ifndef V6_CROSS_BUILD
+    if (handIndex == RobotHands::lHand)
+      motionProxy->post.closeHand("LHand");
+    else if (handIndex == RobotHands::rHand)
+      motionProxy->post.closeHand("RHand");
+  #else
+    if (handIndex == RobotHands::lHand)
+      motionProxy.async<void>("closeHand", "LHand");
+    else if (handIndex == RobotHands::rHand)
+      motionProxy.async<void>("closeHand", "RHand");
+  #endif
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 void MotionGenerator<Scalar>::naoqiSetAngles(
   const AL::ALValue& names,
   const AL::ALValue& angles,
   const float& fractionMaxSpeed)
+#else
+void MotionGenerator<Scalar>::naoqiSetAngles(
+  const vector<string>& names,
+  const vector<Scalar>& angles,
+  const float& fractionMaxSpeed)
+#endif
 {
   #ifndef V6_CROSS_BUILD
     motionProxy->setAngles(names, angles, fractionMaxSpeed);
@@ -62,10 +141,17 @@ void MotionGenerator<Scalar>::naoqiSetAngles(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 void MotionGenerator<Scalar>::naoqiChangeAngles(
   const AL::ALValue& names,
   const AL::ALValue& angles,
   const float& fractionMaxSpeed)
+#else
+void MotionGenerator<Scalar>::naoqiChangeAngles(
+  const vector<string>& names,
+  const vector<Scalar>& angles,
+  const float& fractionMaxSpeed)
+#endif
 {
   #ifndef V6_CROSS_BUILD
     motionProxy->changeAngles(names, angles, fractionMaxSpeed);
@@ -100,11 +186,19 @@ void MotionGenerator<Scalar>::naoqiMoveToward(const float& vx, const float& vy, 
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 void MotionGenerator<Scalar>::naoqiSetFootsteps(
-  const AL::ALValue& footName, 
-  const AL::ALValue& footSteps, 
-  const AL::ALValue& timeList, 
-  const bool& clearExisting) 
+  const AL::ALValue& footName,
+  const AL::ALValue& footSteps,
+  const AL::ALValue& timeList,
+  const bool& clearExisting)
+#else
+void MotionGenerator<Scalar>::naoqiSetFootsteps(
+  const vector<string>& footName,
+  const vector<vector<float> >& footSteps,
+  const vector<string>& timeList,
+  const bool& clearExisting)
+#endif
 {
   #ifndef V6_CROSS_BUILD
     motionProxy->setFootSteps(footName, footSteps, timeList, clearExisting);
@@ -116,20 +210,39 @@ void MotionGenerator<Scalar>::naoqiSetFootsteps(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 void MotionGenerator<Scalar>::naoqiJointInterpolation(
   const vector<unsigned>& ids,
   const AL::ALValue& timeLists,
   const AL::ALValue& positionLists,
   const bool& postCommand,
   const MotionLoggerPtr& logger)
+#else
+void MotionGenerator<Scalar>::naoqiJointInterpolation(
+  const vector<unsigned>& ids,
+  const vector<vector<float> >& timeLists,
+  const vector<vector<float> >& positionLists,
+  const bool& postCommand,
+  const MotionLoggerPtr& logger)
+#endif
 {
-  ASSERT(
-    ids.size() == timeLists.getSize() &&
-    timeLists.getSize() == positionLists.getSize()
-  );
-  AL::ALValue names;
-  names.clear();
-  names.arraySetSize(ids.size());
+  #ifndef V6_CROSS_BUILD
+    ASSERT(
+      ids.size() == timeLists.getSize() &&
+      timeLists.getSize() == positionLists.getSize()
+    );
+    AL::ALValue names;
+    names.clear();
+    names.arraySetSize(ids.size());
+  #else
+    ASSERT(
+      ids.size() == timeLists.size() &&
+      timeLists.getSize() == positionLists.size()
+    );
+    vector<string> names;
+    names.clear();
+    names.resize(ids.size());
+  #endif
   for (int i = 0; i < ids.size(); ++i)
     names[i] = Constants::jointNames[ids[i]];
 
@@ -167,12 +280,21 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
   const bool& postCommand,
   const MotionLoggerPtr& logger)
 {
+  #ifndef V6_CROSS_BUILD
   AL::ALValue names;
   AL::ALValue positionLists;
   AL::ALValue timesList;
   names.arraySetSize(activeJoints.count());
   positionLists.arraySetSize(activeJoints.count());
   timesList.arraySetSize(activeJoints.count());
+  #else
+  vector<string> names;
+  vector<vector<Scalar> > positionLists;
+  vector<vector<Scalar> > timesList;
+  names.resize(activeJoints.count());
+  positionLists.resize(activeJoints.count());
+  timesList.resize(activeJoints.count());
+  #endif
   for (size_t i = 0, k = 0; i < toUType(Joints::count); ++i) {
     if (activeJoints[i]) {
       names[k] = Constants::jointNames[i];
@@ -183,8 +305,13 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
     int k = 0;
     for (size_t j = 0; j < joints[i].size(); ++j) {
       if (activeJoints[j]) {
+        #ifndef V6_CROSS_BUILD
         positionLists[k].arrayPush(joints[i][j]);
         timesList[k].arrayPush(times[i]);
+        #else
+        positionLists[k].push_back(joints[i][j]);
+        timesList[k].push_back(times[i]);
+        #endif
         ++k;
       }
     }
@@ -200,7 +327,7 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
           names, positionLists, timeLists, true);
       #else
         motionProxy.call<void>(
-          "angleInterpolation", names, positionLists, timeLists, true);
+          "angleInterpolation", names, positionLists, timesList, true);
       #endif
     } else {
       #ifndef V6_CROSS_BUILD
@@ -208,7 +335,7 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
           names, positionLists, timeLists, true);
       #else
         motionProxy.async<void>(
-          "angleInterpolation", names, positionLists, timeLists, true);
+          "angleInterpolation", names, positionLists, timesList, true);
       #endif
     }
   } catch (exception &e) {
@@ -245,19 +372,33 @@ template <typename Scalar>
 Scalar MotionGenerator<Scalar>::runKeyFrameMotion(
   const vector<Matrix<Scalar, Dynamic, 1>>& targetJoints, const Matrix<Scalar, Dynamic, 1>& times)
 {
+  #ifndef V6_CROSS_BUILD
   AL::ALValue jointTimes;
   AL::ALValue jointPositions;
   jointTimes.clear();
   jointPositions.clear();
   jointTimes.arraySetSize(toUType(Joints::count));
   jointPositions.arraySetSize(toUType(Joints::count));
+  #else
+  vector<vector<Scalar>> jointTimes;
+  vector<vector<Scalar>> jointPositions;
+  jointTimes.clear();
+  jointPositions.clear();
+  jointTimes.resize(toUType(Joints::count));
+  jointPositions.resize(toUType(Joints::count));
+  #endif
 
   Scalar time = 0;
   vector<unsigned> jointIds;
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     jointIds.push_back(i);
+    #ifndef V6_CROSS_BUILD
     jointPositions[i].arraySetSize(targetJoints.size());
     jointTimes[i].arraySetSize(targetJoints.size());
+    #else
+    jointPositions[i].resize(targetJoints.size());
+    jointTimes[i].resize(targetJoints.size());
+    #endif
     time = 0;
     for (size_t j = 0; j < targetJoints.size(); ++j) {
       time += times[j];

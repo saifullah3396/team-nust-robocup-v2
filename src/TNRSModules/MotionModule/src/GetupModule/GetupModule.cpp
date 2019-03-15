@@ -7,6 +7,7 @@
  * @date 26 Dec 2017
  */
 
+#include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
 #include "MotionModule/include/GetupModule/GetupModule.h"
 #include "MotionModule/include/GetupModule/Types/KeyFrameMotionGetup.h"
 
@@ -16,9 +17,8 @@ boost::shared_ptr<GetupModule<Scalar> > GetupModule<Scalar>::getType(
 { 
   GetupModule<Scalar>* gm;
   switch (cfg->type) {
-      case toUType(MBGetupTypes::KEY_FRAME_MOTION_GETUP):
-        gm = new KeyFrameMotionGetup<Scalar>(motionModule, cfg); break;
-      default: gm = new KeyFrameMotionGetup<Scalar>(motionModule, cfg); break;
+      case toUType(MBGetupTypes::kfmGetup):
+        gm = new KeyFrameMotionGetup<Scalar>(motionModule, SPC(KFMGetupConfig, cfg)); break;
   }
   return boost::shared_ptr<GetupModule<Scalar> >(gm);
 }

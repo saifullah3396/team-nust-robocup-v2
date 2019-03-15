@@ -7,6 +7,8 @@
  * @date 21 Jul 2018
  */
 
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/HeadControl/Types/HeadScan.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 
@@ -19,15 +21,14 @@ HeadScanConfigPtr HeadScan<Scalar>::getBehaviorCast()
 }
 
 template <typename Scalar>
-void HeadScan<Scalar>::initiate()
+bool HeadScan<Scalar>::initiate()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   LOG_INFO("HeadScan.initiate() called...");
-  this->totalWaitTime = this->getBehaviorCast()->totalWaitTime;
-  this->inBehavior = true;
+  return true;
   #else
   LOG_ERROR("Behavior HeadScan undefined without Naoqi")
-  finish();
+  return false;
   #endif
 }
 
@@ -62,6 +63,7 @@ void HeadScan<Scalar>::scanEnv()
   AL::ALValue namePitch = AL::ALValue::array("HeadPitch");
   AL::ALValue anglePitch = AL::ALValue::array(0.f);
   Scalar fractionMaxSpeed = 0.1f;
+  auto& totalWaitTime = getBehaviorCast()->totalWaitTime;
   if (getBehaviorCast()->scanLowerArea) {
     anglePitch[0] = getBehaviorCast()->scanMaxPitch;
     this->naoqiSetAngles(namePitch, anglePitch, fractionMaxSpeed);

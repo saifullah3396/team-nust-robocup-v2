@@ -84,13 +84,21 @@ public:
    *   separate thread or as a blocking call
    * @param Pointer to logger if present
    */
+  #ifndef V6_CROSS_BUILD
   void naoqiJointInterpolation(
     const vector<unsigned>& ids,
     const AL::ALValue& timeLists,
     const AL::ALValue& positionLists,
     const bool& postCommand,
     const MotionLoggerPtr& logger = MotionLoggerPtr());
-
+  #else
+  void naoqiJointInterpolation(
+    const vector<unsigned>& ids,
+    const vector<vector<float> >& timeLists,
+    const vector<vector<float> >& positionLists,
+    const bool& postCommand,
+    const MotionLoggerPtr& logger = MotionLoggerPtr());
+  #endif
   /**
    * @brief naoqiJointInterpolation Interpolates joints using naoqi joint interpolation
    * @param joints Joint commands
@@ -112,39 +120,25 @@ public:
    * Stops all naoqi generated motions
    */
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  void killAllMotions() {
-    #ifndef V6_CROSS_BUILD
-      motionProxy->killAll();
-    #else
-      motionProxy.call<void>("killAll");
-    #endif
-  }
+  void killAllMotions();
   #endif
 
   /**
    * Stops all naoqi generated movement
    */
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  void stopMove() {
-    #ifndef V6_CROSS_BUILD
-      motionProxy->stopMove();
-    #else
-      motionProxy.call<void>("stopMove");
-    #endif
-  }
+  void stopMove();
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  /**
-   * Wrapper for MotionGenerator::stopMove()
-   */
-  AL::ALValue getFootsteps() {
+    /**
+     * Uses naoqi api to get the list of current footsteps in queue
+     */
     #ifndef V6_CROSS_BUILD
-      return motionProxy->getFootSteps();
+    AL::ALValue getFootsteps();
     #else
-      return motionProxy.call<void>("getFootSteps");
+    vector<vector<float> > getFootsteps();
     #endif
-  }
   #endif
 
   /**
@@ -153,19 +147,7 @@ public:
    * @handIndex: Hand index defined in Utils/Hardwareids.h
    */
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  void openHand(const RobotHands& handIndex) {
-    #ifndef V6_CROSS_BUILD
-      if (handIndex == RobotHands::lHand)
-        motionProxy->post.openHand("LHand");
-      else if (handIndex == RobotHands::rHand)
-        motionProxy->post.openHand("RHand");
-    #else
-      if (handIndex == RobotHands::lHand)
-        motionProxy.async<void>("openHand", "LHand");
-      else if (handIndex == RobotHands::rHand)
-        motionProxy.async<void>("openHand", "RHand");
-    #endif
-  }
+  void openHand(const RobotHands& handIndex);
   #endif
 
   /**
@@ -174,19 +156,7 @@ public:
    * @handIndex: Hand index defined in Utils/Hardwareids.h
    */
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  void closeHand(const RobotHands& handIndex) {
-    #ifndef V6_CROSS_BUILD
-      if (handIndex == RobotHands::lHand)
-        motionProxy->post.closeHand("LHand");
-      else if (handIndex == RobotHands::rHand)
-        motionProxy->post.closeHand("RHand");
-    #else
-      if (handIndex == RobotHands::lHand)
-        motionProxy.async<void>("closeHand", "LHand");
-      else if (handIndex == RobotHands::rHand)
-        motionProxy.async<void>("closeHand", "RHand");
-    #endif
-  }
+  void closeHand(const RobotHands& handIndex);
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
@@ -204,10 +174,17 @@ public:
    * @param angles: Joint angles as requested
    * @param fractionMaxSpeed: Maximum speed limit
    */
+  #ifndef V6_CROSS_BUILD
   void naoqiSetAngles(
     const AL::ALValue& names,
     const AL::ALValue& angles,
     const float& fractionMaxSpeed);
+  #else
+  void naoqiSetAngles(
+    const vector<string>& names,
+    const vector<Scalar>& angles,
+    const float& fractionMaxSpeed);
+  #endif
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
@@ -218,11 +195,18 @@ public:
    * @param angles: Joint angles as requested
    * @param fractionMaxSpeed: Maximum speed limit
    */
+  #ifndef V6_CROSS_BUILD
   void naoqiChangeAngles(
     const AL::ALValue& names,
     const AL::ALValue& angles,
     const float& fractionMaxSpeed);
-  #endif\
+  #else
+  void naoqiChangeAngles(
+    const vector<string>& names,
+    const vector<Scalar>& angles,
+    const float& fractionMaxSpeed);
+  #endif
+  #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
@@ -243,11 +227,19 @@ public:
    * @param timeList: Times at which feet are to be placed
    * @param clearExisting: Whether to clear existing commanded footsteps
    */  
-  void naoqiSetFootsteps(
-    const AL::ALValue& footName, 
-    const AL::ALValue& footSteps, 
-    const AL::ALValue& timeList, 
-    const bool& clearExisting);
+  #ifndef V6_CROSS_BUILD
+    void naoqiSetFootsteps(
+      const AL::ALValue& footName,
+      const AL::ALValue& footSteps,
+      const AL::ALValue& timeList,
+      const bool& clearExisting);
+  #else
+    void naoqiSetFootsteps(
+      const vector<string>& footName,
+      const vector<vector<float> >& footSteps,
+      const vector<string>& timeList,
+      const bool& clearExisting);
+  #endif
   #endif
 
   /**
@@ -299,8 +291,12 @@ private:
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  //! NaoQi's motion proxy
-  ALMotionProxyPtr motionProxy;
+    //! NaoQi's motion proxy
+    #ifndef V6_CROSS_BUILD
+    ALMotionProxyPtr motionProxy;
+    #else
+    qi::AnyObject motionProxy;
+    #endif
   #endif
 
   //! Base MotionModule object pointer

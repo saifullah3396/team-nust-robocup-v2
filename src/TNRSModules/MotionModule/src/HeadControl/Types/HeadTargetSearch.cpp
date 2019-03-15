@@ -22,7 +22,7 @@ HeadTargetSearchConfigPtr HeadTargetSearch<Scalar>::getBehaviorCast()
 }
 
 template <typename Scalar>
-void HeadTargetSearch<Scalar>::initiate()
+bool HeadTargetSearch<Scalar>::initiate()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   LOG_INFO("HeadTargetSearch.initiate() called...");
@@ -30,10 +30,10 @@ void HeadTargetSearch<Scalar>::initiate()
   this->targetType = getBehaviorCast()->headTargetType;
   hyCmdResetCount = 0;
   hpCmdResetCount = 0;
-  this->inBehavior = true;
+  return true;
   #else
   LOG_ERROR("Behavior HeadTargetSearch undefined without Naoqi")
-  finish();
+  return false;
   #endif
 }
 

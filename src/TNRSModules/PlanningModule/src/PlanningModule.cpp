@@ -9,6 +9,9 @@
  * @date 04 Feb 2017
  */
 
+#ifdef V6_CROSS_BUILD
+#include <qi/anyvalue.hpp>
+#endif
 #include <boost/make_shared.hpp>
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
@@ -237,9 +240,8 @@ void PlanningModule::sensorsUpdate()
     if (value.isBinary() && value.getSize() == sizeof(RoboCupGameControlData))
       memcpy(&gameControlData, value, sizeof(RoboCupGameControlData));
   #else
-    auto value = memoryProxy.call<(const char*)>("getData", "GameCtrl/RoboCupGameControlData");
-    if (value.isBinary() && value.getSize() == sizeof(RoboCupGameControlData))
-      memcpy(&gameControlData, value, sizeof(RoboCupGameControlData));
+    auto value = memoryProxy.call<vector<char>>("getData", "GameCtrl/RoboCupGameControlData");
+    memcpy(&gameControlData, &value, sizeof(RoboCupGameControlData));
   #endif
   gameControlData.teams[1].teamColour = 2;
   GAME_DATA_OUT(PlanningModule) = gameControlData;
@@ -306,6 +308,8 @@ void PlanningModule::setupRoboCupDataHandler()
       "GameCtrl/playerNumber",
       (int) PLAYER_NUMBER_IN(PlanningModule));
   #else
+    RoboCupGameControlData gameCtrlData;
+    auto value = vector<char>((const char*) &gameCtrlData, (const char*) &gameCtrlData + sizeof(gameCtrlData));
     memoryProxy.call<void>("insertData", "GameCtrl/RoboCupGameControlData", value);
     memoryProxy.call<void>("insertData", "GameCtrl/teamNumber", (int) TEAM_NUMBER_IN(PlanningModule));
     memoryProxy.call<void>("insertData", "GameCtrl/teamColour", (int) TEAM_COLOR_IN(PlanningModule));

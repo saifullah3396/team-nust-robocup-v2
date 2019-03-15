@@ -60,7 +60,11 @@ void MotionBehavior<Scalar>::stopMove()
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 AL::ALValue MotionBehavior<Scalar>::getFootsteps()
+#else
+vector<vector<float> > MotionBehavior<Scalar>::getFootsteps()
+#endif
 {
   return mG->getFootsteps();
 }
@@ -92,10 +96,17 @@ bool MotionBehavior<Scalar>::naoqiMoveIsActive()
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 void MotionBehavior<Scalar>::naoqiSetAngles(
   const AL::ALValue& names,
   const AL::ALValue& angles,
   const float& fractionMaxSpeed)
+#else
+void MotionBehavior<Scalar>::naoqiSetAngles(
+  const vector<string>& names,
+  const vector<Scalar>& angles,
+  const float& fractionMaxSpeed)
+#endif
 {
   mG->naoqiSetAngles(names, angles, fractionMaxSpeed);
 }
@@ -103,10 +114,17 @@ void MotionBehavior<Scalar>::naoqiSetAngles(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 void MotionBehavior<Scalar>::naoqiChangeAngles(
   const AL::ALValue& names,
   const AL::ALValue& angles,
   const float& fractionMaxSpeed)
+#else
+void MotionBehavior<Scalar>::naoqiChangeAngles(
+  const vector<string>& names,
+  const vector<Scalar>& angles,
+  const float& fractionMaxSpeed)
+#endif
 {
   mG->naoqiChangeAngles(names, angles, fractionMaxSpeed);
 }
@@ -125,11 +143,19 @@ void MotionBehavior<Scalar>::naoqiMoveToward(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 void MotionBehavior<Scalar>::naoqiSetFootsteps(
   const AL::ALValue& footName,
   const AL::ALValue& footSteps,
   const AL::ALValue& timeList,
   const bool& clearExisting)
+#else
+void MotionBehavior<Scalar>::naoqiSetFootsteps(
+  const vector<string>& footName,
+  const vector<vector<float> >& footSteps,
+  const vector<string>& timeList,
+  const bool& clearExisting)
+#endif
 {
   mG->naoqiSetFootsteps(footName, footSteps, timeList, true);
 }
@@ -148,11 +174,19 @@ void MotionBehavior<Scalar>::addMotionTask(const boost::shared_ptr<MotionTask<Sc
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+#ifndef V6_CROSS_BUILD
 void MotionBehavior<Scalar>::naoqiJointInterpolation(
   const vector<unsigned>& ids,
   const AL::ALValue& timeLists,
   const AL::ALValue& positionLists,
   const bool& postCommand)
+#else
+void MotionBehavior<Scalar>::naoqiJointInterpolation(
+  const vector<unsigned>& ids,
+  const vector<vector<float> >& timeLists,
+  const vector<vector<float> >& positionLists,
+  const bool& postCommand)
+#endif
 {
   if (this->config->logData)
     mG->naoqiJointInterpolation(ids, timeLists, positionLists, postCommand, MOTION_LOGGER);

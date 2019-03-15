@@ -7,7 +7,9 @@
  * @date 20 Nov 2017
  */
 
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
 #include "MotionModule/include/HeadControl/HeadControl.h"
+#include "MotionModule/include/HeadControl/HeadTargetTypes.h"
 #include "MotionModule/include/HeadControl/Types/HeadTargetTrack.h"
 #include "MotionModule/include/HeadControl/Types/HeadTargetSearch.h"
 #include "MotionModule/include/HeadControl/Types/HeadScan.h"
@@ -22,11 +24,11 @@ boost::shared_ptr<HeadControl<Scalar> > HeadControl<Scalar>::getType(
   HeadControl<Scalar>* hc;
   switch (cfg->type) {
       case toUType(MBHeadControlTypes::headTargetTrack):
-        hc = new HeadTargetTrack<Scalar>(motionModule, cfg); break;
+        hc = new HeadTargetTrack<Scalar>(motionModule, SPC(HeadTargetTrackConfig, cfg)); break;
       case toUType(MBHeadControlTypes::headTargetSearch):
-        hc = new HeadTargetSearch<Scalar>(motionModule, cfg); break;
+        hc = new HeadTargetSearch<Scalar>(motionModule, SPC(HeadTargetSearchConfig, cfg)); break;
       case toUType(MBHeadControlTypes::headScan):
-        hc = new HeadScan<Scalar>(motionModule, cfg); break;
+        hc = new HeadScan<Scalar>(motionModule, SPC(HeadScanConfig, cfg)); break;
   }
   return boost::shared_ptr<HeadControl<Scalar> >(hc);
 }
@@ -47,7 +49,7 @@ bool HeadControl<Scalar>::findTarget(
       } else {
         return false;
       }
-    } else if (targetType == HeadTargetTypes::GOAL) {
+    } else if (targetType == HeadTargetTypes::goal) {
       auto goalInfo = GOAL_INFO_IN(MotionModule);
       if (
         goalInfo.found && 
@@ -60,7 +62,7 @@ bool HeadControl<Scalar>::findTarget(
       } else {
         return false;
       }
-    } else if (targetType == HeadTargetTypes::LANDMARKS) {
+    } else if (targetType == HeadTargetTypes::landmarks) {
       if (LANDMARKS_FOUND_IN(MotionModule)) {
         targetZ = -1.f;
         return true;
@@ -69,7 +71,7 @@ bool HeadControl<Scalar>::findTarget(
       }
     } else {
       throw BehaviorException(
-        this, "Undefined target type for HeadControl", false, EXC_INVALID_BEHAVIOR_SETUP);
+        this, "Undefined target type for HeadControl", falses);
     }
   } catch (BehaviorException& e) {
     LOG_EXCEPTION(e.what());

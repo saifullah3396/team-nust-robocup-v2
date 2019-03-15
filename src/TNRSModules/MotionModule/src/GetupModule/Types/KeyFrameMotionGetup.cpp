@@ -7,9 +7,10 @@
  * @date 21 Jul 2018
  */
 
+#include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
+#include "MotionModule/include/GetupModule/Types/KeyFrameMotionGetup.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/DataHolders/PostureState.h"
-#include "MotionModule/include/GetupModule/Types/KeyFrameMotionGetup.h"
 
 template <typename Scalar>
 KFMGetupConfigPtr KeyFrameMotionGetup<Scalar>::getBehaviorCast()
@@ -18,7 +19,7 @@ KFMGetupConfigPtr KeyFrameMotionGetup<Scalar>::getBehaviorCast()
 }
 
 template <typename Scalar>
-void KeyFrameMotionGetup<Scalar>::initiate()
+bool KeyFrameMotionGetup<Scalar>::initiate()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   this->closeHand(L_HAND);
@@ -27,20 +28,21 @@ void KeyFrameMotionGetup<Scalar>::initiate()
   if (type == KeyFrameGetupTypes::FRONT) {
     this->endPosture = PostureState::STAND;
     this->getupTime = this->runKeyFrameMotion(getupFromFront);
-    this->inBehavior = true;
+    return true;
   } else if (type == KeyFrameGetupTypes::BACK) {
     this->endPosture = PostureState::STAND;
     this->getupTime = this->runKeyFrameMotion(getupFromBack);
-    this->inBehavior = true;
+    return true;
   } else if (type == KeyFrameGetupTypes::SIT) {
     this->endPosture = PostureState::STAND;
     this->getupTime = this->runKeyFrameMotion(getupFromSit);
-    this->inBehavior = true;
+    return true;
   }
   #else
   LOG_ERROR("Behavior KeyFrameMotionDive undefined without Naoqi")
   finish();
   #endif
+  return false;
 }
 
 template <typename Scalar>

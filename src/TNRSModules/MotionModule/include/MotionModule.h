@@ -14,6 +14,8 @@
 #include <alproxies/almotionproxy.h>
 #include <alproxies/almemoryproxy.h>
 #include <alproxies/dcmproxy.h>
+#else
+#include <qi/anyobject.hpp>
 #endif
 #include "MotionModule/include/MTypeHeader.h"
 #include "TNRSBase/include/BaseIncludes.h"

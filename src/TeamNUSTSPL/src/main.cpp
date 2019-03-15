@@ -9,6 +9,10 @@
  * @date 01 Feb 2017
  */
 
+#ifdef V6_CROSS_BUILD
+  #include <qi/applicationsession.hpp>
+  #include <boost/shared_ptr.hpp>
+#endif
 #include <string>
 #include "Utils/include/ConfigManager.h"
 #include "TeamNUSTSPL.h"
@@ -201,7 +205,7 @@
     qi::ApplicationSession app(argc, argv);
     app.start();
     qi::SessionPtr session = app.session();
-    session->registerService("TeamNUSTSPL", qi::AnyObject(boost::make_shared<TeamNUSTSPL>()));
+    session->registerService("TeamNUSTSPL", qi::AnyObject(boost::make_shared<TeamNUSTSPL>(session)));
     app.run();
     return 0;
   }

@@ -9,6 +9,9 @@
 
 #pragma once
 
+#ifndef V6_CROSS_BUILD
+#include <alvalue/alvalue.h>
+#endif
 #include <chrono>
 #include "MotionModule/include/MTypeHeader.h"
 #include "Utils/include/JsonLogger.h"
@@ -47,12 +50,14 @@ public:
    * @param time Joint command times
    * @param ids Ids of joints updated
    */
-  #ifdef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
   void recordJointCmds(
      const AL::ALValue& cmds, const AL::ALValue& time, const vector<unsigned>& ids);
   #else
   void recordJointCmds(
-     const vector<Scalar>& cmds, const vector<Scalar>& time, const vector<unsigned>& ids);
+    const vector<vector<Scalar> >& cmds,
+    const vector<vector<Scalar> >& time,
+    const vector<unsigned>& ids);
   #endif
 
   /**
@@ -61,15 +66,15 @@ public:
    * @param time Joint command times
    * @param activeJoints Active joints
    */
-  #ifdef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
   void recordJointCmds(
     const AL::ALValue& cmds,
     const AL::ALValue& time,
     const Matrix<bool, Dynamic, 1> activeJoints);
   #else
   void recordJointCmds(
-    const vector<Scalar>& cmds,
-    const vector<Scalar>& time,
+    const vector<vector<Scalar> >& cmds,
+    const vector<vector<Scalar> >& time,
     const Matrix<bool, Dynamic, 1> activeJoints);
   #endif
 

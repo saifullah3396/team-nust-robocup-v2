@@ -30,12 +30,12 @@ file (GLOB TNRS_MOTION_MODULE_SRC
       "${CMAKE_CURRENT_SOURCE_DIR}/src/MovementModule/Types/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/BallThrow/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/BallThrow/Types/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/GetupModule/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/GetupModule/Types/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/HeadControl/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/GetupModule/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/GetupModule/Types/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/HeadControl/*.cpp"
       #"${CMAKE_CURRENT_SOURCE_DIR}/src/HeadControl/Types/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/DiveModule/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/DiveModule/Types/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/DiveModule/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/DiveModule/Types/*.cpp"
     )
 
 # Building the code for remote usage.

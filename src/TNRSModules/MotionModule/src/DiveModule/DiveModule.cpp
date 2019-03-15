@@ -7,9 +7,10 @@
  * @date 26 Dec 2017
  */
 
+#include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
 #include "MotionModule/include/DiveModule/DiveModule.h"
-#include "MotionModule/include/DiveModule/Types/KeyFrameMotionDive.h"
 #include "MotionModule/include/DiveModule/Types/HandSaveDive.h"
+#include "MotionModule/include/DiveModule/Types/KeyFrameMotionDive.h"
 
 template <typename Scalar>
 boost::shared_ptr<DiveModule<Scalar> > DiveModule<Scalar>::getType(
@@ -17,10 +18,10 @@ boost::shared_ptr<DiveModule<Scalar> > DiveModule<Scalar>::getType(
 { 
   DiveModule<Scalar>* dm;
   switch (cfg->type) {
-      case toUType(MBDiveTypes::KEY_FRAME_MOTION_DIVE):
-        dm = new KeyFrameMotionDive<Scalar>(motionModule, cfg); break;
-      case toUType(MBDiveTypes::HAND_SAVE_DIVE):
-        dm = new HandSaveDive<Scalar>(motionModule, cfg); break;
+      case toUType(MBDiveTypes::kfmDive):
+        dm = new KeyFrameMotionDive<Scalar>(motionModule, SPC(KFMDiveConfig, cfg)); break;
+      case toUType(MBDiveTypes::handSaveDive):
+        dm = new HandSaveDive<Scalar>(motionModule, SPC(HandSaveDiveConfig, cfg)); break;
   }
   return boost::shared_ptr<DiveModule<Scalar> >(dm);
 }

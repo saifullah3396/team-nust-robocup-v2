@@ -11,7 +11,8 @@
 
 #include "MotionModule/include/MotionBehavior.h"
 #include "MotionModule/include/DiveModule/KeyFrameDiveTypes.h"
-#include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
+
+struct MBDiveConfig;
 
 /** 
  * @class DiveModule
@@ -23,44 +24,37 @@ class DiveModule : public MotionBehavior<Scalar>
 {
 public:
   /**
-   * Constructor
+   * @brief DiveModule Constructor
    *
-   * @param motionModule: Pointer to base motion module
-   * @param config: Configuration of the behavior
-   * @param name: Name of the behavior
+   * @param motionModule Pointer to base motion module
+   * @param config Configuration of the behavior
+   * @param name Name of the behavior
    */
   DiveModule(
     MotionModule* motionModule,
-    const BehaviorConfigPtr& config,
-		const string& name = "Not assigned.") :
-    MotionBehavior<Scalar>(motionModule, config, name),
-    execTime(0.0)
-  {
-  }
+    const boost::shared_ptr<MBDiveConfig>& config,
+    const string& name = "DiveModule");
 
   /**
-   * Destructor
+   * @brief ~DiveModule Destructor
    */
-  ~DiveModule()
-  {
-  }
-  
+  virtual ~DiveModule() {}
+
   /**
-   * Returns its own child based on the given type
-   * 
+   * @brief getType Returns its own child based on the given type
+   *
    * @param motionModule: Pointer to base motion module
    * @param cfg: Config of the requested behavior
-   * 
+   *
    * @return BehaviorConfigPtr
    */
   static boost::shared_ptr<DiveModule<Scalar> > getType(
     MotionModule* motionModule, const BehaviorConfigPtr& cfg);
-  
+
   /**
-   * Derived from Behavior. Child type may or may not use the same 
-   * behavior config as parent.
+   * @brief loadExternalConfig See Behavior::loadExternalConfig
    */
-  virtual void loadExternalConfig() {}
+  virtual void loadExternalConfig() override {}
 
 protected:
   //! The final posture state after dive

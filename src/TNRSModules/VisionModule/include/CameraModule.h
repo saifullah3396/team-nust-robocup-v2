@@ -10,9 +10,9 @@
 #pragma once
 
 #include <vector>
-#include <alvision/alimage.h>
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
   #ifndef V6_CROSS_BUILD
+    #include <alvision/alimage.h>
     #include <alproxies/alvideodeviceproxy.h>
   #endif
 #endif

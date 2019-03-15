@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "MotionModule/include/MTypeHeader.h"
 #include "MotionModule/include/HeadControl/HeadControl.h"
 
 template <typename Scalar>
@@ -16,56 +17,67 @@ class HeadTargetSearch : public HeadControl<Scalar>
 {
 public:
   /**
-   * Constructor
+   * @brief HeadTargetSearch Constructor
    *
-   * @param motionModule: Pointer to base motion module
-   * @param config: Configuration of the behavior
+   * @param motionModule Pointer to base motion module
+   * @param config Configuration of this behavior
    */
   HeadTargetSearch(
     MotionModule* motionModule,
-    const BehaviorConfigPtr& config) :
-    HeadControl<Scalar>(motionModule, config, "HeadTargetSearch"),
-    totalWaitTime(Scalar(1.0)),
-    waitTime(Scalar(0.0)),
-    hyCmdResetCount(0),
-    hpCmdResetCount(0)
-  {
-    targetType = HeadTargetTypes::ball;
-    behaviorState = midScan;
-    intError.setZero();
-  }
+    const boost::shared_ptr<HeadTargetSearchConfig>& config);
 
   /**
-   * Default destructor for this class.
+   * @brief ~HeadTargetSearch Destructor
    */
-  ~HeadTargetSearch()
-  {
-  }
-  
+  ~HeadTargetSearch() final {}
+
   /**
-   * Derived from Behavior
-   */ 
-  bool initiate();
-  void update();
-  void finish();
-  void loadExternalConfig();
+   * @brief initiate See Behavior::initiate()
+   */
+  bool initiate() final;
+
+  /**
+   * @brief update See Behavior::update()
+   */
+  void update() final;
+
+  /**
+   * @brief finish See Behavior::finish()
+   */
+  void finish() final;
+
+  /**
+   * @brief loadExternalConfig See Behavior::loadExternalConfig()
+   */
+  void loadExternalConfig() final;
 private:
   /**
-	 * Returns the cast of config to HeadTargetSearchConfigPtr
-	 */
-  HeadTargetSearchConfigPtr getBehaviorCast();  
+   * @brief getBehaviorCast Returns the casted config
+   * @return boost::shared_ptr<HeadTargetSearchConfig>
+   */
+  boost::shared_ptr<HeadTargetSearchConfig> getBehaviorCast();
+
+  /**
+   * @brief moveHeadToTarget Moves the head to target if found
+   * @param posCam Position of target in camera frame
+   * @return True on success
+   */
   bool moveHeadToTarget(const Matrix<Scalar, 4, 1>& posCam);
+
+  /**
+   * @brief scanEnv Scans the environment
+   */
   void scanEnv();
-  
-  Scalar waitTime;
-  Scalar totalWaitTime; // bconfig
+
+  Scalar waitTime = {0.0};
+  Scalar totalWaitTime = {1.0}; // bconfig
   HeadTargetTypes targetType; // bconfig
-  Matrix<Scalar, 2, 1> intError;
+  Matrix<Scalar, 2, 1> intError = {Matrix<Scalar, 2, 1>::Zero()};
   static Matrix<Scalar, 3, 1> pidGains;
 
   Matrix<Scalar, 2, 1> prevCmdError;
-  int hyCmdResetCount;
-  int hpCmdResetCount;
+  int hyCmdResetCount = {0};
+  int hpCmdResetCount = {0};
 
   unsigned behaviorState;
   enum behaviorState {

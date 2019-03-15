@@ -7,7 +7,9 @@
  * @date 12 Sep 2017
  */
 
+#ifdef V6_CROSS_BUILD
 #include <qi/anyobject.hpp>
+#endif
 #include "ControlModule/include/ActuatorRequests.h"
 #include "ControlModule/include/HardwareLayer.h"
 #include "MotionModule/include/MotionRequest.h"

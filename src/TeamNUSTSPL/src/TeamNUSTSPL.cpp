@@ -69,27 +69,27 @@ void TeamNUSTSPL::init()
 
   LOG_INFO("Getting Naoqi ALMemoryProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/almemoryproxy.h");
-  try {
-    #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
+    try {
       memoryProxy = getParentBroker()->getMemoryProxy();
-    #else
-      memoryProxy = session->service("ALMemory");
-    #endif
-  } catch (const AL::ALError& e) {
-    LOG_EXCEPTION(e.what()); return;
-  }
+    } catch (const AL::ALError& e) {
+      LOG_EXCEPTION(e.what()); return;
+    }
+  #else
+    memoryProxy = session->service("ALMemory");
+  #endif
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   LOG_INFO("Getting Naoqi ALMotionProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/almotionproxy.h");
-  try {
-    #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
+    try {
       motionProxy = getParentBroker()->getMotionProxy();
-    #else
-      motionProxy = session->service("ALMotion");
-    #endif
-  } catch (const AL::ALError& e) {
-    LOG_EXCEPTION(e.what()); return;
-  }
+    } catch (const AL::ALError& e) {
+      LOG_EXCEPTION(e.what()); return;
+    }
+  #else
+    motionProxy = session->service("ALMotion");
+  #endif
   #else
   LOG_INFO("*** [IMPORTANT] *** The module is built without Naoqi ALMotionProxy handle...");
   LOG_INFO("Set USE_NAOQI_MOTION_PROXY to ON in make/cmake/common.cmake if this is needed");
@@ -128,7 +128,6 @@ void TeamNUSTSPL::init()
   setupTNRSModules();
   join();
   LOG_INFO("Exiting TeamNUSTSPL...")
-  this->exit();
 }
 
 void TeamNUSTSPL::signal_handler(
@@ -281,3 +280,7 @@ void TeamNUSTSPL::setupTNRSModules()
 
   cout << DebugBase::processDebugMsg(output);*/
 }
+
+#ifdef V6_CROSS_BUILD
+QI_REGISTER_MT_OBJECT(TeamNUSTSPL, init);
+#endif

@@ -11,6 +11,7 @@
 
 #include "MotionModule/include/DiveModule/DiveModule.h"
 
+struct HandSaveDiveConfig;
 template <typename Scalar>
 class MotionTask;
 typedef boost::shared_ptr<MotionTask<MType> > TaskPtr;
@@ -20,40 +21,46 @@ class HandSaveDive : public DiveModule<Scalar>
 {
 public:
   /**
-   * Constructor
+   * @brief HandSaveDive Constructor
    *
-   * @param motionModule: Pointer to base motion module
-   * @param config: Configuration of the behavior
+   * @param motionModule Pointer to base motion module
+   * @param config Configuration of this behavior
    */
   HandSaveDive(
     MotionModule* motionModule,
-    const BehaviorConfigPtr& config) :
-    DiveModule<Scalar>(motionModule, config, "HandSaveDive"),
-    diveTime(0.f)
-  {
-  }
+    const boost::shared_ptr<HandSaveDiveConfig>& config);
 
   /**
-   * Default destructor for this class.
+   * @brief ~HandSaveDive Destructor
    */
-  ~HandSaveDive()
-  {
-  }
+  ~HandSaveDive() final {}
 
   /**
-   * Derived from Behavior
+   * @brief initiate See Behavior::initiate()
    */
   bool initiate() final;
+
+  /**
+   * @brief update See Behavior::update()
+   */
   void update() final;
+
+  /**
+   * @brief finish See Behavior::finish()
+   */
   void finish() final;
+
+  /**
+   * @brief finish See Behavior::loadExternalConfig()
+   */
   void loadExternalConfig() final;
 
 private:
   /**
-   * Returns the cast of config to KFMDiveConfigPtr
+   * @brief getBehaviorCast Returns the casted config
+   * @return boost::shared_ptr<HandSaveDiveConfig>
    */
-  HandSaveDiveConfigPtr getBehaviorCast();
-  Scalar diveTime;
+  boost::shared_ptr<HandSaveDiveConfig> getBehaviorCast();
 
   //! Weights and gains
   static vector<Scalar> taskWeights;
@@ -61,6 +68,9 @@ private:
 
   //! Tasks for solving inverse kinematics
   vector<TaskPtr> tasks;
+
+  //! Total dive time
+  Scalar diveTime;
 
   enum Tasks {
     POSTURE_TASK,

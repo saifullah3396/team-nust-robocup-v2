@@ -11,51 +11,59 @@
 
 #include "MotionModule/include/HeadControl/HeadControl.h"
 
+struct HeadScanConfig;
+
 template <typename Scalar>
 class HeadScan : public HeadControl<Scalar>
 {
 public:
   /**
-   * Constructor
+   * @brief HeadScan Constructor
    *
-   * @param motionModule: Pointer to base motion module
-   * @param config: Configuration of the behavior
+   * @param motionModule Pointer to base motion module
+   * @param config Configuration of this behavior
    */
   HeadScan(
     MotionModule* motionModule,
-    const BehaviorConfigPtr& config) :
-    HeadControl<Scalar>(motionModule, config, "HeadScan"),
-    totalWaitTime(Scalar(1.0)),
-    waitTime(Scalar(0.0))
-  {
-    behaviorState = midScan;
-  }
+    const boost::shared_ptr<HeadScanConfig>& config);
 
   /**
-   * Default destructor for this class.
+   * @brief ~HeadScan Destructor
    */
-  ~HeadScan()
-  {
-  }
+  ~HeadScan() final {}
 
   /**
-   * Derived from Behavior
+   * @brief initiate See Behavior::initiate()
    */
-  bool initiate();
-  void update();
-  void finish();
+  bool initiate() final;
+
+  /**
+   * @brief update See Behavior::update()
+   */
+  void update() final;
+
+  /**
+   * @brief finish See Behavior::finish()
+   */
+  void finish() final;
 private:
   /**
    * Returns the cast of config to HeadScanConfigPtr
    */
-  HeadScanConfigPtr getBehaviorCast();
+  /**
+   * @brief getBehaviorCast Returns the casted config
+   * @return boost::shared_ptr<HeadScanConfig>
+   */
+  boost::shared_ptr<HeadScanConfig> getBehaviorCast();
+
+  /**
+   * @brief scanEnv Scans the environment
+   */
   void scanEnv();
 
-  Scalar waitTime;
-  Scalar totalWaitTime; // bconfig
-  HeadTargetTypes targetType; // bconfig
+  Scalar waitTime = {0.0};
 
-  unsigned behaviorState;
+  unsigned behaviorState = {midScan};
   enum behaviorState {
     midScan = 0,
     midWait,

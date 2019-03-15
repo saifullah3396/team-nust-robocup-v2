@@ -34,12 +34,14 @@ MotionLogger<Scalar>::MotionLogger(
 }
 
 template <typename Scalar>
-#ifdef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD
 void MotionLogger<Scalar>::recordJointCmds(
   const AL::ALValue& cmds, const AL::ALValue& time, const vector<unsigned>& ids)
 #else
-void recordJointCmds(
-   const vector<Scalar>& cmds, const vector<Scalar>& time, const vector<unsigned>& ids)
+void MotionLogger<Scalar>::recordJointCmds(
+  const vector<vector<Scalar> >& cmds,
+  const vector<vector<Scalar> >& time,
+  const vector<unsigned>& ids)
 #endif
 {
   #ifndef V6_CROSS_BUILD
@@ -82,15 +84,15 @@ void recordJointCmds(
 }
 
 template <typename Scalar>
-#ifdef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD
 void MotionLogger<Scalar>::recordJointCmds(
   const AL::ALValue& cmds,
   const AL::ALValue& time,
   const Matrix<bool, Dynamic, 1> activeJoints)
 #else
-void recordJointCmds(
-  const vector<Scalar>& cmds,
-  const vector<Scalar>& time,
+void MotionLogger<Scalar>::recordJointCmds(
+  const vector<vector<Scalar> >& cmds,
+  const vector<vector<Scalar> >& time,
   const Matrix<bool, Dynamic, 1> activeJoints)
 #endif
 {

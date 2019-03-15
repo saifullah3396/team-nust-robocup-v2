@@ -9,7 +9,11 @@
 
 #pragma once
 
+#ifndef V6_CROSS_BUILD
 #include <alvalue/alvalue.h>
+#else
+#include <qi/anyobject.hpp>
+#endif
 #include <boost/filesystem.hpp>
 #include "BehaviorManager/include/Behavior.h"
 #include "TNRSBase/include/MemoryBase.h"
@@ -73,7 +77,11 @@ public:
   /**
    * @brief getFootsteps Wrapper for MotionGenerator::stopMove()
    */
-  AL::ALValue getFootsteps();
+    #ifndef V6_CROSS_BUILD
+    AL::ALValue getFootsteps();
+    #else
+    vector<vector<float> > getFootsteps();
+    #endif
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
@@ -101,20 +109,34 @@ public:
   /**
    * @brief naoqiSetAngles Wrapper for MotionGenerator::naoqiSetAngles()
    */
-  void naoqiSetAngles(
-    const AL::ALValue& names,
-    const AL::ALValue& angles,
-    const float& fractionMaxSpeed);
+  #ifndef V6_CROSS_BUILD
+    void naoqiSetAngles(
+      const AL::ALValue& names,
+      const AL::ALValue& angles,
+      const float& fractionMaxSpeed);
+  #else
+    void naoqiSetAngles(
+      const vector<string>& names,
+      const vector<Scalar>& angles,
+      const float& fractionMaxSpeed);
+  #endif
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
    * @brief naoqiChangeAngles Wrapper for MotionGenerator::naoqiChangeAngles()
    */
+  #ifndef V6_CROSS_BUILD
   void naoqiChangeAngles(
     const AL::ALValue& names,
     const AL::ALValue& angles,
     const float& fractionMaxSpeed);
+  #else
+    void naoqiChangeAngles(
+      const vector<string>& names,
+      const vector<Scalar>& angles,
+      const float& fractionMaxSpeed);
+  #endif
   #endif
   
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
@@ -131,11 +153,19 @@ public:
   /**
    * @brief naoqiSetFootsteps Wrapper for MotionGenerator::naoqiSetFootsteps()
    */
-  void naoqiSetFootsteps(
-    const AL::ALValue& footName, 
-    const AL::ALValue& footSteps, 
-    const AL::ALValue& timeList, 
-    const bool& clearExisting);
+  #ifndef V6_CROSS_BUILD
+    void naoqiSetFootsteps(
+      const AL::ALValue& footName,
+      const AL::ALValue& footSteps,
+      const AL::ALValue& timeList,
+      const bool& clearExisting);
+  #else
+    void naoqiSetFootsteps(
+      const vector<string>& footName,
+      const vector<vector<float> >& footSteps,
+      const vector<string>& timeList,
+      const bool& clearExisting);
+  #endif
   #endif  
 
   /**
@@ -182,11 +212,19 @@ protected:
   /**
    * Wrapper for MotionGenerator::naoqiJointInterpolation()
    */
+  #ifndef V6_CROSS_BUILD
   void naoqiJointInterpolation(
     const vector<unsigned>& ids,
     const AL::ALValue& timeLists,
     const AL::ALValue& positionLists,
     const bool& postCommand);
+  #else
+  void naoqiJointInterpolation(
+    const vector<unsigned>& ids,
+    const vector<vector<float> >& timeLists,
+    const vector<vector<float> >& positionLists,
+    const bool& postCommand);
+  #endif
 
   /**
    * Wrapper for MotionGenerator::naoqiJointInterpolation()

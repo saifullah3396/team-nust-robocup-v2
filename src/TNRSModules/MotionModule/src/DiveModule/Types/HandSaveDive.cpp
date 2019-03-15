@@ -7,6 +7,8 @@
  * @date 21 Jul 2018
  */
 
+#include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
 #include "MotionModule/include/DiveModule/Types/HandSaveDive.h"
 #include "MotionModule/include/MotionGenerator.h"
 #include "MotionModule/include/BalanceModule/Types/ZmpControl.h"
@@ -34,21 +36,21 @@ static const MType diveRightDef[1][24] =
 
 
 template <typename Scalar>
-HandSaveDiveConfigPtr HandSaveDive<Scalar>::getBehaviorCast()
+boost::shared_ptr<HandSaveDiveConfig> HandSaveDive<Scalar>::getBehaviorCast()
 {
   return boost::static_pointer_cast<HandSaveDiveConfig> (this->config);
 }
 
 template <typename Scalar>
-void HandSaveDive<Scalar>::initiate()
+bool HandSaveDive<Scalar>::initiate()
 {
-  cout << "HandSaveDive.initiate()" << endl;
+  LOG_INFO("HandSaveDive.initiate() called...")
   auto zmpControlCfg =
     boost::make_shared<ZmpControlConfig>(
       getBehaviorCast()->supportLeg, true, false, false);
 
   Matrix<Scalar, Dynamic, 1> targetJoints(toUType(Joints::count));
-  if (getBehaviorCast()->supportLeg == CHAIN_L_LEG) {
+  if (getBehaviorCast()->supportLeg == static_cast<LinkChains>(RobotFeet::lFoot)) {
     targetJoints = Matrix<Scalar, Dynamic, 1>::Map(
       &diveLeftDef[0][0],
       sizeof(diveLeftDef[0]) / sizeof(diveLeftDef[0][0]));
@@ -60,13 +62,17 @@ void HandSaveDive<Scalar>::initiate()
   targetJoints *= M_PI / 180.f;
 
   tasks.resize(NUM_TASKS);
-  auto activeJoints = vector<bool>(toUType(Joints::count), true);
-  for (size_t i = 0; i < R_ARM_END; ++i)
-    activeJoints[i] = false;
+  auto activeJoints = vector<bool>(toUType(Joints::count), false);
+  for (size_t i = 0; i < toUType(HardwareIds::nLLeg); ++i)
+    activeJoints[toUType(HardwareIds::lLegStart) + i] = false;
+  for (size_t i = 0; i < toUType(HardwareIds::nRLeg); ++i)
+    activeJoints[toUType(HardwareIds::rLegStart) + i] = false;
   zmpControlCfg->activeJoints = activeJoints;
   this->setupChildRequest(zmpControlCfg, true);
 
-  Matrix<Scalar, 4, 4> target = MathsUtils::getTInverse(this->kM->getForwardEffector(getBehaviorCast()->supportLeg, FEET_BASE));
+  Matrix<Scalar, 4, 4> target =
+    MathsUtils::getTInverse(
+      this->kM->getForwardEffector(getBehaviorCast()->supportLeg, toUType(LegEEs::footCenter)));
   Matrix<Scalar, 4, 4> rot;
   //MathsUtils::makeRotationX(rot, -5 * M_PI / 180.0);
   //target *= rot;
@@ -92,13 +98,12 @@ void HandSaveDive<Scalar>::initiate()
   //auto otherLeg = getBehaviorCast()->supportLeg == CHAIN_L_LEG ? CHAIN_R_LEG : CHAIN_L_LEG;
   //tasks[OTHER_LEG_TASK] = this->kM->makeCartesianTask(otherLeg, )
   //tasks[POSTURE_TASK] = this->kM->makePostureTask(targetJoints, activeJoints, taskWeights[POSTURE_TASK], taskGains[POSTURE_TASK]);
-  this->inBehavior = true;
+  return true;
 }
 
 template <typename Scalar>
 void HandSaveDive<Scalar>::update()
 {
-  cout << "HandSaveDive::update" << endl;
   for (const auto& task : tasks) {
     if (task) this->addMotionTask(task);
   }
