@@ -80,7 +80,7 @@ template <typename Scalar>
 void NaoqiMoveToward<Scalar>::setPostureAction() {
   if (getBehaviorCast()->startPosture) {
     // if posture is not equal to desired one
-    if (getBehaviorCast()->startPosture->targetPosture !=
+    if (SPC(InterpToPostureConfig, getBehaviorCast()->startPosture)->targetPosture !=
         POSTURE_STATE_OUT(MotionModule))
     {
       this->setupChildRequest(getBehaviorCast()->startPosture);

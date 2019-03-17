@@ -135,7 +135,7 @@ struct KnownLandmark : Landmark<T>
     JSON_ASSIGN_(val, id, this->id);
     JSON_ASSIGN_(val, type, static_cast<unsigned>(this->type));
     JSON_ASSIGN_(val, pos, JsonUtils::getJson(this->pos));
-    JSON_ASSIGN_(val, poseFromLandmark, JsonUtils::MatrixToJson(this->poseFromLandmark.get().transpose()));
+    JSON_ASSIGN_(val, poseFromLandmark, JsonUtils::matrixToJson(this->poseFromLandmark.get().transpose()));
     return val;
   }
 

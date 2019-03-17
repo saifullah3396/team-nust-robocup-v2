@@ -89,11 +89,12 @@ void CSpaceBSplineKick<Scalar>::update()
     if (this->getBehaviorCast()->balanceConfig->type == (int)MBBalanceTypes::zmpControl) {
       if (!kickSetup) {
         if (!this->kickFailed) {
-          auto zmpConfig = boost::make_shared <ZmpControlConfig> (this->supportLeg);
+          auto zmpConfig = boost::make_shared <ZmpControlConfig> ();
+          zmpConfig->supportLeg = this->supportLeg;
           zmpConfig->keepOtherLegContact = false;
           zmpConfig->regularizePosture = true;
           zmpConfig->keepTorsoUpright = false;
-          zmpConfig->activeJoints = activeJoints;
+          zmpConfig->activeJoints = vector<unsigned>(activeJoints.begin(), activeJoints.end());
           //for (size_t i = 2; i < 12; ++i)
           //  zmpConfig->activeJoints[i] = true;
           this->getBehaviorCast()->balanceConfig = zmpConfig;
@@ -205,11 +206,11 @@ void CSpaceBSplineKick<Scalar>::setupKickBase()
       JSON_ASSIGN(jsonSetup, "targetAngle", this->targetAngle * 180.0 / M_PI);
       JSON_ASSIGN(jsonSetup, "kickLeg", toUType(this->kickLeg));
       JSON_ASSIGN(jsonSetup, "supportLeg", toUType(this->supportLeg));
-      JSON_ASSIGN(jsonSetup, "ballToTargetUnit", JsonUtils::MatrixToJson(this->ballToTargetUnit));
+      JSON_ASSIGN(jsonSetup, "ballToTargetUnit", JsonUtils::matrixToJson(this->ballToTargetUnit));
       JSON_ASSIGN(jsonSetup, "footSpacingInit", this->footSpacing);
-      JSON_ASSIGN(jsonSetup, "supportToTorsoInit", JsonUtils::MatrixToJson(this->supportToTorso));
-      JSON_ASSIGN(jsonSetup, "supportToKickInit", JsonUtils::MatrixToJson(this->supportToKick));
-      JSON_ASSIGN(jsonSetup, "endEffectorInit", JsonUtils::MatrixToJson(this->endEffector));
+      JSON_ASSIGN(jsonSetup, "supportToTorsoInit", JsonUtils::matrixToJson(this->supportToTorso));
+      JSON_ASSIGN(jsonSetup, "supportToKickInit", JsonUtils::matrixToJson(this->supportToKick));
+      JSON_ASSIGN(jsonSetup, "endEffectorInit", JsonUtils::matrixToJson(this->endEffector));
       JSON_ASSIGN(this->dataLogger->getRoot(), "setup", jsonSetup);
     }
     Matrix<Scalar, Dynamic, 1> balanceJoints(toUType(Joints::count));
@@ -350,20 +351,20 @@ void CSpaceBSplineKick<Scalar>::defineTrajectory()
 
   /*if (this->logData) {
     Json::Value jsonPlanning, jsonTraj;
-    JSON_ASSIGN(jsonPlanning, "torsoToSupport", JsonUtils::MatrixToJson(this->torsoToSupport));
-    JSON_ASSIGN(jsonPlanning, "supportToKick", JsonUtils::MatrixToJson(this->supportToKick));
-    JSON_ASSIGN(jsonPlanning, "endEffectorTransformed", JsonUtils::MatrixToJson(eeTrans));
+    JSON_ASSIGN(jsonPlanning, "torsoToSupport", JsonUtils::matrixToJson(this->torsoToSupport));
+    JSON_ASSIGN(jsonPlanning, "supportToKick", JsonUtils::matrixToJson(this->supportToKick));
+    JSON_ASSIGN(jsonPlanning, "endEffectorTransformed", JsonUtils::matrixToJson(eeTrans));
     Json::Value jsoncPoses;
     Json::Value jsoncPosesT;
     for (int i = 0; i < cPoses.size(); ++i) {
-      jsoncPoses.append(JsonUtils::MatrixToJson(cPoses[i]));
-      jsoncPosesT.append(JsonUtils::MatrixToJson(cPosesT[i]));
+      jsoncPoses.append(JsonUtils::matrixToJson(cPoses[i]));
+      jsoncPosesT.append(JsonUtils::matrixToJson(cPosesT[i]));
     }
     JSON_ASSIGN(jsonPlanning, "cPoses", jsoncPoses);
     JSON_ASSIGN(jsonPlanning, "cPosesT", jsoncPosesT);
-    JSON_ASSIGN(jsonTraj, "optknots", JsonUtils::MatrixToJson(cb1.getKnots()));
-    JSON_ASSIGN(jsonTraj, "jointPoses", JsonUtils::MatrixToJson(jointPos));
-    JSON_ASSIGN(jsonTraj, "jointBoundVels", JsonUtils::MatrixToJson(jointBoundVels));
+    JSON_ASSIGN(jsonTraj, "optknots", JsonUtils::matrixToJson(cb1.getKnots()));
+    JSON_ASSIGN(jsonTraj, "jointPoses", JsonUtils::matrixToJson(jointPos));
+    JSON_ASSIGN(jsonTraj, "jointBoundVels", JsonUtils::matrixToJson(jointBoundVels));
     JSON_ASSIGN(jsonTraj, "kickTimeToImpact", kickTimeToImpact);
     JSON_ASSIGN(jsonTraj, "totalKickTime", kickTimeToImpact + trajTime.back());
 
@@ -384,7 +385,7 @@ void CSpaceBSplineKick<Scalar>::defineTrajectory()
       JSON_APPEND(
         jsonEE,
         "endEffectorCmd",
-        JsonUtils::MatrixToJson(eeTrans)
+        JsonUtils::matrixToJson(eeTrans)
       );
     }
     JSON_ASSIGN(this->dataLogger->getRoot(), "planning", jsonPlanning);

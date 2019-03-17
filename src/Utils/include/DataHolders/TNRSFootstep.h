@@ -18,8 +18,9 @@ struct RobotPose2D;
 enum class RobotFeet : unsigned int;
 
 template <typename Scalar>
-struct TNRSFootstep
+struct TNRSFootstep : public DataHolder
 {
+  TNRSFootstep() = default;
   TNRSFootstep(const TNRSFootstep&) = default;
   TNRSFootstep(TNRSFootstep&&) = default;
   TNRSFootstep& operator=(const TNRSFootstep&) & = default;
@@ -35,7 +36,9 @@ struct TNRSFootstep
   /**
    * @brief print Prints step data
    */
-  void print();
+  void print() const final;
+
+  Json::Value getJson() const final;
 
   /**
    * @brief getFootRect Makes a rotated rectangle for footstep

@@ -17,11 +17,9 @@
 BConfigException::BConfigException(
   BehaviorConfig* config, 
   const string& message,
-  const bool& bSysMsg, 
-  const BConfigExceptionType& type) throw () :
+  const bool& bSysMsg) throw () :
   TNRSException(message, bSysMsg),
-  config(config),
-  type(type)
+  config(config)
 {
 }
 

@@ -35,7 +35,7 @@ template <typename Scalar>
 Json::Value RobotPose2D<Scalar>::getJson() const
 {
   Json::Value val;
-  JSON_ASSIGN_(val, pose2D, JsonUtils::MatrixToJson(this->get().transpose()));
+  JSON_ASSIGN_(val, pose2D, JsonUtils::matrixToJson(this->get().transpose()));
   return val;
 }
 

@@ -42,11 +42,22 @@
 #include "Utils/include/DataHolders/StiffnessState.h"
 #include "Utils/include/DataHolders/WorldBallInfo.h"
 #include "Utils/include/DataHolders/TeamRobot.h"
+#include "Utils/include/DataHolders/TNRSFootstep.h"
 #include "Utils/include/HardwareIds.h"
 
 #define DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(TYPE) \
 void jsonToType(TYPE& var, Json::Value val, const TYPE& def) { \
   LOG_ERROR("Function jsonToType not implemented for type " << #TYPE << "."); \
+}
+
+#define DEFINE_ENUM_CLASS_JSON_TO_TYPE(NAME) \
+void jsonToType(NAME& var, Json::Value val, const NAME& def) \
+{ \
+  if (!val.empty()) { \
+    var = static_cast<NAME>(val.asUInt()); \
+  } else { \
+    var = def; \
+  } \
 }
 
 #define DEFINE_JSON_TO_TYPE_CONFIG(NAME) \
@@ -78,11 +89,12 @@ namespace JsonUtils
   {
     return Json::Value(var);
   }
-  template Json::Value getJson<string>(const string&);
-  template Json::Value getJson<float>(const float&);
-  template Json::Value getJson<int>(const int&);
   template Json::Value getJson<bool>(const bool&);
   template Json::Value getJson<unsigned>(const unsigned&);
+  template Json::Value getJson<int>(const int&);
+  template Json::Value getJson<float>(const float&);
+  template Json::Value getJson<double>(const double&);
+  template Json::Value getJson<string>(const string&);
 
   template<typename T>
   Json::Value getJson(const vector<T>& var)
@@ -95,12 +107,15 @@ namespace JsonUtils
   }
   template Json::Value getJson<unsigned>(const vector<unsigned>&);
   template Json::Value getJson<int>(const vector<int>&);
+  template Json::Value getJson<bool>(const vector<bool>&);
   template Json::Value getJson<float>(const vector<float>&);
+  template Json::Value getJson<double>(const vector<double>&);
   template Json::Value getJson<TeamRobot<float> >(const vector<TeamRobot<float> >&);
   template Json::Value getJson<TeamRobot<double> >(const vector<TeamRobot<double> >&);
+  template Json::Value getJson<TNRSFootstep<float> >(const vector<TNRSFootstep<float> >&);
 
   /*template<typename Derived>
-  Json::Value MatrixToJson(const MatrixBase<Derived>& mat)
+  Json::Value matrixToJson(const MatrixBase<Derived>& mat)
   {
     Json::Value jsonMat;
     for (int i = 0; i < mat.rows(); ++i) {
@@ -252,22 +267,55 @@ namespace JsonUtils
   template Json::Value getJson<float>(const VelocityInput<float>& velocityInput);
   template Json::Value getJson<double>(const VelocityInput<double>& velocityInput);
 
+  template<typename T>
+  Json::Value getJson(const TNRSFootstep<T>& fs) {
+    return fs.getJson();
+  }
+  template Json::Value getJson<float>(const TNRSFootstep<float>&);
+  template Json::Value getJson<double>(const TNRSFootstep<double>&);
+
   template<typename Derived>
   Json::Value getJson(const MatrixBase<Derived>& mat)
   {
-    return MatrixToJson(mat);
+    return matrixToJson(mat);
   }
 
   template<typename Scalar, size_t Rows, size_t Cols>
   Json::Value getJson(const Matrix<Scalar, Rows, Cols>& mat)
   {
-    return MatrixToJson(mat);
+    return matrixToJson(mat);
   }
   template Json::Value getJson<float, 2, 1>(const Matrix<float, 2, 1>&);
   template Json::Value getJson<float, 3, 1>(const Matrix<float, 3, 1>&);
+  template Json::Value getJson<float, -1, 1>(const Matrix<float, -1, 1>&);
 
   Json::Value getJson(const Matrix4f& mat) {
-    return MatrixToJson(mat);
+    return matrixToJson(mat);
+  }
+
+  Json::Value getJson(const Matrix4d& mat) {
+    return matrixToJson(mat);
+  }
+
+  Json::Value getJson(const Vector2f& mat) {
+    return matrixToJson(mat);
+  }
+
+  Json::Value getJson(const VectorXf& mat) {
+    return matrixToJson(mat);
+  }
+
+
+  Json::Value getJson(const HeadTargetTypes& state) {
+    return getJson(toUType(state));
+  }
+
+  Json::Value getJson(const KeyFrameGetupTypes& state) {
+    return getJson(toUType(state));
+  }
+
+  Json::Value getJson(const KeyFrameDiveTypes& state) {
+    return getJson(toUType(state));
   }
 
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(BallInfo<float>);
@@ -278,9 +326,6 @@ namespace JsonUtils
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(Matrix4f);
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(ObsObstacles<float>);
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(OccupancyMap<float>);
-  DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(PostureState);
-  DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(StiffnessState);
-  DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(PlanningState);
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(RoboCupGameControlData);
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(BehaviorInfo);
   DEFINE_UNIMPLEMENTED_JSON_TO_TYPE(BehaviorInfoMap);
@@ -342,6 +387,21 @@ namespace JsonUtils
   template void jsonToType(vector<unsigned>& var, Json::Value val, const vector<unsigned>& def);
   template void jsonToType(vector<float>& var, Json::Value val, const vector<float>& def);
   template void jsonToType(vector<TeamRobot<float> >& var, Json::Value val, const vector<TeamRobot<float> >& def);
+  template void jsonToType(vector<TNRSFootstep<float> >& var, Json::Value val, const vector<TNRSFootstep<float> >& def);
+
+  template <typename Scalar>
+  void jsonToType(
+    TNRSFootstep<Scalar>& var,
+    Json::Value val,
+    const TNRSFootstep<Scalar>& def)
+  {
+    JsonUtils::jsonToType(var.foot, Json::Value(val["foot"]), def.foot);
+    JsonUtils::jsonToType(var.pose2D, Json::Value(val["pose2D"]), def.pose2D);
+    JsonUtils::jsonToType(var.trans, Json::Value(val["trans"]), def.trans);
+    JsonUtils::jsonToType(var.timeAtFinish, Json::Value(val["timeAtFinish"]), def.timeAtFinish);
+  }
+  template void jsonToType<float>(
+    TNRSFootstep<float>& var, Json::Value val, const TNRSFootstep<float>& def);
 
   template <typename Scalar>
   void jsonToType(
@@ -362,15 +422,69 @@ namespace JsonUtils
   template void jsonToType<double>(
     RobotPose2D<double>& var, Json::Value val, const RobotPose2D<double>& def);
 
-
-  void jsonToType(LinkChains& var, Json::Value val, const LinkChains& def)
+  template <typename Scalar, size_t Rows, size_t Cols>
+  void jsonToType(
+    Matrix<Scalar, Rows, Cols>& var, Json::Value val, const Matrix<Scalar, Rows, Cols>& def)
   {
     if (!val.empty()) {
-      var = static_cast<LinkChains>(val[0].asUInt());
+      if (Rows > 1 && Cols > 1) {
+        for (int i = 0; i < val.size(); ++i) {
+          for (int j = 0; j < val.size(); ++j) {
+            if (val[i][j].asFloat() != Json::nullValue) {
+              var(i, j) = static_cast<Scalar>(val[i][j].asFloat());
+            } else {
+              LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion")
+            }
+          }
+        }
+      } else {
+        for (int i = 0; i < val.size(); ++i) {
+          if (val[i].asFloat() != Json::nullValue) {
+            var[i] = static_cast<Scalar>(val[i].asFloat());
+          } else {
+            LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion")
+          }
+        }
+      }
     } else {
       var = def;
     }
   }
+  template void jsonToType<float, 2, 1>(
+    Matrix<float, 2, 1>& var, Json::Value val, const Matrix<float, 2, 1>& def);
+
+  void jsonToType(Vector2f& var, Json::Value val, const Vector2f& def)
+  {
+    if (!val.empty()) {
+      var[0] = val[0].asFloat();
+      var[1] = val[1].asFloat();
+    } else {
+      var = def;
+    }
+  }
+
+  void jsonToType(VectorXf& var, Json::Value val, const VectorXf& def)
+  {
+    if (!val.empty()) {
+      for (int i = 0; i < val.size(); ++i) {
+        if (val[i].asFloat() != Json::nullValue) {
+          var[i] = val[i].asFloat();
+        } else {
+          LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion");
+        }
+      }
+    } else {
+      var = def;
+    }
+  }
+
+  DEFINE_ENUM_CLASS_JSON_TO_TYPE(KeyFrameDiveTypes);
+  DEFINE_ENUM_CLASS_JSON_TO_TYPE(KeyFrameGetupTypes);
+  DEFINE_ENUM_CLASS_JSON_TO_TYPE(HeadTargetTypes);
+  DEFINE_ENUM_CLASS_JSON_TO_TYPE(PostureState);
+  DEFINE_ENUM_CLASS_JSON_TO_TYPE(StiffnessState);
+  DEFINE_ENUM_CLASS_JSON_TO_TYPE(PlanningState);
+  DEFINE_ENUM_CLASS_JSON_TO_TYPE(LinkChains);
 
   string jsonToMinimalString(const Json::Value& root) {
     Json::StreamWriterBuilder minimalStringBuilder;
@@ -383,6 +497,8 @@ namespace JsonUtils
   DEFINE_JSON_TO_TYPE_CONFIG(MBDiveConfig)
   DEFINE_JSON_TO_TYPE_CONFIG(MBGetupConfig)
   DEFINE_JSON_TO_TYPE_CONFIG(MBHeadControlConfig)
+  DEFINE_JSON_TO_TYPE_CONFIG(HeadScanConfig)
+  DEFINE_JSON_TO_TYPE_CONFIG(HeadTargetTrackConfig)
   DEFINE_JSON_TO_TYPE_CONFIG(MBKickConfig)
   DEFINE_JSON_TO_TYPE_CONFIG(MBMovementConfig)
   DEFINE_JSON_TO_TYPE_CONFIG(MBPostureConfig)

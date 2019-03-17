@@ -7,6 +7,7 @@
  * @date 23 Jul 2018
  */
 
+#include <ctime>
 #include "BehaviorManager/include/StateMachine.h"
 #include "MotionModule/include/MotionLogger.h"
 #include "MotionModule/include/KickModule/Types/JSE2DImpKick.h"
@@ -31,7 +32,7 @@ template <typename Scalar>
 bool JSE2DImpKick<Scalar>::initiate()
 {
   if (this->config->logData)
-    MOTION_LOGGER->setRefTime(this->getBehaviorCast()->timeAtEstimation);
+    MOTION_LOGGER->setRefTime(high_resolution_clock::now());
   return JointSpaceKick<Scalar>::initiate();
 }
 
@@ -47,11 +48,7 @@ void JSE2DImpKick<Scalar>::JSE2DPlanKick::onRun()
 template <typename Scalar>
 void JSE2DImpKick<Scalar>::WaitForExecution::onRun()
 {
-  auto timeFromStart =
-    duration<double>(
-      high_resolution_clock::now() -
-      JSE2D_KICK_PTR->getBehaviorCast()->timeAtEstimation
-    ).count();
+  auto timeFromStart = (clock() / (double)CLOCKS_PER_SEC - JSE2D_KICK_PTR->getBehaviorCast()->timeAtEstimation);
   auto timeToKick =
     JSE2D_KICK_PTR->getBehaviorCast()->timeUntilImpact - JSE2D_KICK_PTR->kickTimeToImpact;
   if (MathsUtils::almostEqual((Scalar)timeFromStart, (Scalar)timeToKick, (Scalar)JSE2D_KICK_PTR->cycleTime)) {

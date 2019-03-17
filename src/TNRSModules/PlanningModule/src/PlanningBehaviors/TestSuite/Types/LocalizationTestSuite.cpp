@@ -96,9 +96,10 @@ void LocalizationTestSuite::SideLineLocalization::onRun()
   if (!localized) {
     if (!bPtr->mbInProgress()) {
       auto mConfig =
-        boost::make_shared <HeadTargetSearchConfig> (HeadTargetTypes::goal);
+        boost::make_shared <HeadTargetTrackConfig> ();
+      mConfig->headTargetType = HeadTargetTypes::goal;
       // Robot is on sidelines with other robots so keep scan range minimum.
-      mConfig->scanMaxYaw = 45 * M_PI / 180;
+      mConfig->scanConfig->scanMaxYaw = 45 * M_PI / 180;
       bPtr->setupMBRequest(MOTION_1, mConfig);
     }
   } else {
@@ -136,13 +137,13 @@ void LocalizationTestSuite::LocalizationPrediction::onRun()
       planConfig->goal = goalPose;
       planConfig->reachClosest = true;
       planConfig->startPosture =
-        boost::make_shared<MBPostureConfig>(
-          PostureState::standHandsBehind,
-          1.0f);
+        boost::make_shared<InterpToPostureConfig>();
+      planConfig->startPosture->targetPosture = PostureState::standHandsBehind;
+      planConfig->startPosture->timeToReachP = 1.0;
       planConfig->endPosture =
-        boost::make_shared<MBPostureConfig>(
-          PostureState::standHandsBehind,
-          1.0f);
+        boost::make_shared<InterpToPostureConfig>();
+      planConfig->endPosture->targetPosture = PostureState::standHandsBehind;
+      planConfig->endPosture->timeToReachP = 1.0;
       bPtr->setupChildRequest(planConfig, true);
       setupNav = true;
       LOCALIZE_LAST_KNOWN_OUT_REL(PlanningModule, bPtr) = true;
@@ -164,8 +165,9 @@ void LocalizationTestSuite::LocalizationWithMovement::onRun()
   if (!localized) {
     if (!bPtr->mbInProgress()) {
       auto mConfig =
-        boost::make_shared <HeadTargetSearchConfig> (HeadTargetTypes::goal);
-      mConfig->scanMaxYaw = 45 * M_PI / 180;
+        boost::make_shared <HeadTargetTrackConfig> ();
+      mConfig->headTargetType = HeadTargetTypes::goal;
+      mConfig->scanConfig->scanMaxYaw = 45 * M_PI / 180;
       bPtr->setupMBRequest(MOTION_1, mConfig);
     }
   } else {
@@ -176,20 +178,21 @@ void LocalizationTestSuite::LocalizationWithMovement::onRun()
     bPtr->killGeneralBehavior();
     bPtr->killMotionBehavior(MOTION_1);
     auto hcConfig =
-      boost::make_shared <HeadTargetTrackConfig> (HeadTargetTypes::goal);
+      boost::make_shared <HeadTargetTrackConfig> ();
+    hcConfig->headTargetType = HeadTargetTypes::goal;
     bPtr->setupMBRequest(MOTION_1, hcConfig);
     auto planConfig =
       boost::make_shared<GoToTargetConfig>();
     planConfig->goal = goalPose;
     planConfig->reachClosest = true;
     planConfig->startPosture =
-      boost::make_shared<MBPostureConfig>(
-        PostureState::standHandsBehind,
-        1.0f);
+      boost::make_shared<InterpToPostureConfig>();
+    planConfig->startPosture->targetPosture = PostureState::standHandsBehind;
+    planConfig->startPosture->timeToReachP = 1.0;
     planConfig->endPosture =
-      boost::make_shared<MBPostureConfig>(
-        PostureState::standHandsBehind,
-        1.0f);
+      boost::make_shared<InterpToPostureConfig>();
+    planConfig->endPosture->targetPosture = PostureState::standHandsBehind;
+    planConfig->endPosture->timeToReachP = 1.0;
     bPtr->setupChildRequest(planConfig, true);
     ON_SIDE_LINE_OUT_REL(PlanningModule, bPtr) = false;
     LOCALIZE_LAST_KNOWN_OUT_REL(PlanningModule, bPtr) = true;

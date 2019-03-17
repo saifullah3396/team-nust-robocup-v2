@@ -29,6 +29,8 @@ struct MBConfig;
 struct MBDiveConfig;
 struct MBGetupConfig;
 struct MBHeadControlConfig;
+struct HeadScanConfig;
+struct HeadTargetTrackConfig;
 struct MBKickConfig;
 struct MBMovementConfig;
 struct MBPostureConfig;
@@ -43,6 +45,9 @@ struct GBLedsConfig;
 struct GBStiffnessConfig;
 struct GBWDConfig;
 
+enum class KeyFrameDiveTypes : unsigned int;
+enum class KeyFrameGetupTypes : unsigned int;
+enum class HeadTargetTypes : unsigned int;
 enum class LinkChains : unsigned int;
 enum class RobotFeet : unsigned int;
 enum class BaseBehaviorType : unsigned int;
@@ -78,6 +83,8 @@ struct WorldBallInfo;
 template <typename T>
 struct TeamRobot;
 typedef map<unsigned, BehaviorInfo> BehaviorInfoMap;
+template <typename T>
+struct TNRSFootstep;
 
 #define DECLARE_JSON_TO_TYPE_CONFIG(NAME) \
   /** \
@@ -105,81 +112,12 @@ typedef map<unsigned, BehaviorInfo> BehaviorInfoMap;
 namespace JsonUtils
 {
   /**
-   * @brief getJson Creates a JSON object from given input variable
-   * @param var Input variable
-   * @return JSON object
-   */
-  template<typename T>
-  Json::Value getJson(const T& var);
-
-  template<typename T>
-  Json::Value getJson(const vector<T>& var);
-
-  Json::Value getJson(const BaseBehaviorType& type);
-
-  Json::Value getJson(const ObstacleType& type);
-
-  Json::Value getJson(const PostureState& state);
-
-  Json::Value getJson(const PlanningState& state);
-
-  Json::Value getJson(const StiffnessState& state);
-
-  Json::Value getJson(const LinkChains& state);
-
-  Json::Value getJson(const RobotFeet& state);
-
-  Json::Value getJson(const CameraId& id);
-
-  template<typename T>
-  Json::Value getJson(const BallInfo<T>& ballInfo);
-
-  Json::Value getJson(const BehaviorInfo& behaviorInfo);
-
-  Json::Value getJson(const BehaviorInfoMap& behaviorInfo);
-
-  template<typename T>
-  Json::Value getJson(const Camera<T>& camera);
-
-  template<typename T>
-  Json::Value getJson(const GoalInfo<T>& goalInfo);
-
-  template<typename T>
-  Json::Value getJson(const Obstacle<T>& obstacle);
-
-  template<typename T>
-  Json::Value getJson(const ObsObstacles<T>& obsObstacles);
-
-  template<typename T>
-  Json::Value getJson(const OccupancyMap<T>& occupancyMap);
-
-  template<typename T>
-  Json::Value getJson(const cv::Point_<T>& p2);
-
-  template<typename T>
-  Json::Value getJson(const cv::Point3_<T>& p3);
-
-  template<typename T>
-  Json::Value getJson(const RobotPose2D<T>& robotPose2D);
-
-  template<typename T>
-  Json::Value getJson(const VelocityInput<T>& velocityInput);
-
-  Json::Value getJson(const RoboCupGameControlData& data);
-
-  template <typename T>
-  Json::Value getJson(const WorldBallInfo<T>& worldBallInfo);
-
-  template<typename T>
-  Json::Value getJson(const TeamRobot<T>& teamRobot);
-
-  /**
-   * @brief MatrixToJson Creates a JSON object from Eigen matrix
+   * @brief matrixToJson Creates a JSON object from Eigen matrix
    * @param mat Eigen matrix
    * @return JSON object
    */
   template<typename Derived>
-  Json::Value MatrixToJson(const MatrixBase<Derived>& mat)
+  Json::Value matrixToJson(const MatrixBase<Derived>& mat)
   {
     Json::Value jsonMat;
     for (int i = 0; i < mat.rows(); ++i) {
@@ -192,99 +130,100 @@ namespace JsonUtils
   }
 
   /**
-   * @brief getJson Wrapper for MatrixToJson()
-   * @param mat Eigen matrix
-   * @return JSON object
+   * @brief jsonToMinimalString Converts a json object to string
+   * @param root Json object
+   * @return string
    */
-  template<typename Derived>
-  Json::Value getJson(const MatrixBase<Derived>& mat);
-
-  template<typename Scalar, size_t Rows, size_t Cols>
-  Json::Value getJson(const Matrix<Scalar, Rows, Cols>& mat);
-
-  Json::Value getJson(const Matrix4f& mat);
-
-  /**
-   * @brief jsonToType Converts a JSON object to integer type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  void jsonToType(int& var, Json::Value val, const int& def);
-
-  /**
-   * @brief jsonToType Converts a JSON object to unsigned type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  void jsonToType(unsigned& var, Json::Value val, const unsigned& def);
-
-  /**
-   * @brief jsonToType Converts a JSON object to float type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  void jsonToType(float& var, Json::Value val, const float& def);
-
-  /**
-   * @brief jsonToType Converts a JSON object to double type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  void jsonToType(double& var, Json::Value val, const double& def);
-
-  /**
-   * @brief jsonToType Converts a JSON object to bool type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  void jsonToType(bool& var, Json::Value val, const bool& def);
-
-  /**
-   * @brief jsonToType Converts a JSON object to bool type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  template <typename T>
-  void jsonToType(vector<T>& var, Json::Value val, const vector<T>& def);
-
-  /**
-   * @brief jsonToType Converts a JSON object to string type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  void jsonToType(string& var, Json::Value val, const string& def);
-
-  /**
-   * @brief jsonToType Converts a JSON object to RobotPose2D<Scalar> type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  template <typename Scalar>
-  void jsonToType(RobotPose2D<Scalar>& var, Json::Value val, const RobotPose2D<Scalar>& def);
-
-  /**
-   * @brief jsonToType Converts a JSON object to LinkChains type
-   * @param var Typed output
-   * @param val JSON object
-   * @param def Default value for typed output
-   */
-  void jsonToType(LinkChains& var, Json::Value val, const LinkChains& def);
-
   string jsonToMinimalString(const Json::Value& root);
 
+  /**
+   * @brief getJson Creates a JSON object from given input variable
+   * @param var Input variable
+   * @return JSON object
+   */
+  template<typename T>
+  Json::Value getJson(const T& var);
+  template<typename T>
+  Json::Value getJson(const vector<T>& var);
+  Json::Value getJson(const BaseBehaviorType& type);
+  Json::Value getJson(const ObstacleType& type);
+  Json::Value getJson(const PostureState& state);
+  Json::Value getJson(const PlanningState& state);
+  Json::Value getJson(const StiffnessState& state);
+  Json::Value getJson(const LinkChains& state);
+  Json::Value getJson(const RobotFeet& state);
+  Json::Value getJson(const CameraId& id);
+  Json::Value getJson(const KeyFrameDiveTypes& id);
+  Json::Value getJson(const KeyFrameGetupTypes& id);
+  Json::Value getJson(const HeadTargetTypes& id);
+  template<typename T> Json::Value getJson(const BallInfo<T>& ballInfo);
+  Json::Value getJson(const BehaviorInfo& behaviorInfo);
+  Json::Value getJson(const BehaviorInfoMap& behaviorInfo);
+  template<typename T> Json::Value getJson(const Camera<T>& camera);
+  template<typename T> Json::Value getJson(const GoalInfo<T>& goalInfo);
+  template<typename T> Json::Value getJson(const Obstacle<T>& obstacle);
+  template<typename T> Json::Value getJson(const ObsObstacles<T>& obsObstacles);
+  template<typename T> Json::Value getJson(const OccupancyMap<T>& occupancyMap);
+  template<typename T> Json::Value getJson(const cv::Point_<T>& p2);
+  template<typename T> Json::Value getJson(const cv::Point3_<T>& p3);
+  template<typename T> Json::Value getJson(const RobotPose2D<T>& robotPose2D);
+  template<typename T> Json::Value getJson(const VelocityInput<T>& velocityInput);
+  template<typename T> Json::Value getJson(const WorldBallInfo<T>& worldBallInfo);
+  template<typename T> Json::Value getJson(const TeamRobot<T>& teamRobot);
+  template<typename T> Json::Value getJson(const TNRSFootstep<T>& fs);
+  Json::Value getJson(const RoboCupGameControlData& data);
+  //! Eigen matrix conversions
+  template<typename Derived> Json::Value getJson(const MatrixBase<Derived>& mat);
+  template<typename Scalar, size_t Cols> Json::Value getJson(const Matrix<Scalar, Dynamic, Cols>& mat);
+  template<typename Scalar, size_t Rows, size_t Cols> Json::Value getJson(const Matrix<Scalar, Rows, Cols>& mat);
+  Json::Value getJson(const Matrix4f& mat);
+  Json::Value getJson(const Matrix4d& mat);
+  Json::Value getJson(const Vector2f& mat);
+  Json::Value getJson(const VectorXf& mat);
+
+  DECLARE_JSON_TO_TYPE(int)
+  DECLARE_JSON_TO_TYPE(unsigned)
+  DECLARE_JSON_TO_TYPE(float)
+  DECLARE_JSON_TO_TYPE(double)
+  DECLARE_JSON_TO_TYPE(bool)
+  DECLARE_JSON_TO_TYPE(string)
+  DECLARE_JSON_TO_TYPE(LinkChains)
+  DECLARE_JSON_TO_TYPE(KeyFrameDiveTypes)
+  DECLARE_JSON_TO_TYPE(KeyFrameGetupTypes)
+  DECLARE_JSON_TO_TYPE(HeadTargetTypes)
+  template <typename T> void jsonToType(vector<T>& var, Json::Value val, const vector<T>& def);
+  template <typename Scalar> void jsonToType(RobotPose2D<Scalar>& var, Json::Value val, const RobotPose2D<Scalar>& def);
+  template <typename Scalar> void jsonToType(TNRSFootstep<Scalar>& var, Json::Value val, const TNRSFootstep<Scalar>& def);
+  template <typename Scalar, size_t Rows, size_t Cols> void jsonToType(Matrix<Scalar, Rows, Cols>& var, Json::Value val, const Matrix<Scalar, Rows, Cols>& def);
+  DECLARE_JSON_TO_TYPE(Vector2f)
+  DECLARE_JSON_TO_TYPE(VectorXf)
+
+  //! Unimplemented conversions for memory variables. Not needed atm
+  DECLARE_JSON_TO_TYPE(BallInfo<float>)
+  DECLARE_JSON_TO_TYPE(WorldBallInfo<float>)
+  DECLARE_JSON_TO_TYPE(GoalInfo<float>)
+  DECLARE_JSON_TO_TYPE(cv::Point_<float>)
+  DECLARE_JSON_TO_TYPE(RobotFeet)
+  DECLARE_JSON_TO_TYPE(Matrix4f)
+  DECLARE_JSON_TO_TYPE(ObsObstacles<float>)
+  DECLARE_JSON_TO_TYPE(OccupancyMap<float>)
+  DECLARE_JSON_TO_TYPE(PostureState)
+  DECLARE_JSON_TO_TYPE(StiffnessState)
+  DECLARE_JSON_TO_TYPE(PlanningState)
+  DECLARE_JSON_TO_TYPE(RoboCupGameControlData)
+  DECLARE_JSON_TO_TYPE(BehaviorInfo)
+  typedef std::map<unsigned, BehaviorInfo> BehaviorInfoMap;
+  DECLARE_JSON_TO_TYPE(BehaviorInfoMap)
+  DECLARE_JSON_TO_TYPE(TeamRobot<float>)
+
+  //! Behavior configuration conversions
   DECLARE_JSON_TO_TYPE_CONFIG(MBBalanceConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBBallThrowConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBDiveConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBGetupConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBHeadControlConfig)
+  DECLARE_JSON_TO_TYPE_CONFIG(HeadScanConfig)
+  DECLARE_JSON_TO_TYPE_CONFIG(HeadTargetTrackConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBKickConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBMovementConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBPostureConfig)
@@ -298,22 +237,4 @@ namespace JsonUtils
   DECLARE_JSON_TO_TYPE_CONFIG(GBLedsConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(GBStiffnessConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(GBWDConfig)
-
-  //! Unimplemented conversions for memory variables. Not needed atm
-  DECLARE_JSON_TO_TYPE(BallInfo<float>);
-  DECLARE_JSON_TO_TYPE(WorldBallInfo<float>);
-  DECLARE_JSON_TO_TYPE(GoalInfo<float>);
-  DECLARE_JSON_TO_TYPE(cv::Point_<float>);
-  DECLARE_JSON_TO_TYPE(RobotFeet);
-  DECLARE_JSON_TO_TYPE(Matrix4f);
-  DECLARE_JSON_TO_TYPE(ObsObstacles<float>);
-  DECLARE_JSON_TO_TYPE(OccupancyMap<float>);
-  DECLARE_JSON_TO_TYPE(PostureState);
-  DECLARE_JSON_TO_TYPE(StiffnessState);
-  DECLARE_JSON_TO_TYPE(PlanningState);
-  DECLARE_JSON_TO_TYPE(RoboCupGameControlData);
-  DECLARE_JSON_TO_TYPE(BehaviorInfo);
-  typedef std::map<unsigned, BehaviorInfo> BehaviorInfoMap;
-  DECLARE_JSON_TO_TYPE(BehaviorInfoMap);
-  DECLARE_JSON_TO_TYPE(TeamRobot<float>);
 }

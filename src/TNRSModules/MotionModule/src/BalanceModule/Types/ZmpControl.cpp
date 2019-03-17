@@ -84,14 +84,12 @@ bool ZmpControl<Scalar>::initiate()
   this->kM->getTaskSolver()->setMaxVelocityLimitGain(1.0);
 
   //! Set up the reference generator based on given zmp targets
-  Matrix<Scalar, 2, 1> zmpTarget;
-  zmpTarget << getBehaviorCast()->targetX, getBehaviorCast()->targetY;
   refGenerator = boost::make_shared<BalanceZmpRefGen<Scalar>>(
         this->motionModule,
         static_cast<RobotFeet>(getBehaviorCast()->supportLeg),
         nPreviews,
         (Scalar)getBehaviorCast()->timeToReachB,
-        zmpTarget
+        getBehaviorCast()->target
     );
   refGenerator->initiate();
 
@@ -115,7 +113,7 @@ bool ZmpControl<Scalar>::initiate()
 
   otherLeg =
     getBehaviorCast()->supportLeg == LinkChains::lLeg ? LinkChains::rLeg : LinkChains::lLeg;
-  auto& activeJoints = getBehaviorCast()->activeJoints;
+  activeJoints = vector<bool>(getBehaviorCast()->activeJoints.begin(), getBehaviorCast()->activeJoints.end());
 
   tasks.resize(static_cast<int>(IkTasks::count));
   //! Make a center of mass task to control its desired trajectory
@@ -259,7 +257,7 @@ void ZmpControl<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
   getBehaviorCast()->regularizePosture = casted->regularizePosture;
   getBehaviorCast()->keepTorsoUpright = casted->keepTorsoUpright;
   getBehaviorCast()->activeJoints = casted->activeJoints;
-  auto& activeJoints = getBehaviorCast()->activeJoints;
+  activeJoints = vector<bool>(getBehaviorCast()->activeJoints.begin(), getBehaviorCast()->activeJoints.end());
 
   // Set dummy target
   Matrix<Scalar, 3, 1> comTarget;
@@ -456,7 +454,7 @@ void ZmpControl<Scalar>::trackZmp()
 //  }
   auto regTask = this->kM->makePostureTask(
     this->kM->getJointPositions(),
-    getBehaviorCast()->activeJoints,
+    activeJoints,
     1e-2,
     0.95
   );

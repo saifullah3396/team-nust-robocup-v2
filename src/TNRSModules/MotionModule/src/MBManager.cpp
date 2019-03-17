@@ -12,9 +12,9 @@
 #include "MotionModule/include/MotionBehaviorIds.h"
 #include "MotionModule/include/BalanceModule/BalanceModule.h"
 #include "MotionModule/include/BallThrow/BallThrow.h"
-//#include "MotionModule/include/DiveModule/DiveModule.h"
-//#include "MotionModule/include/GetupModule/GetupModule.h"
-//#include "MotionModule/include/HeadControl/HeadControl.h"
+#include "MotionModule/include/DiveModule/DiveModule.h"
+#include "MotionModule/include/GetupModule/GetupModule.h"
+#include "MotionModule/include/HeadControl/HeadControl.h"
 #include "MotionModule/include/KickModule/KickModule.h"
 #include "MotionModule/include/PostureModule/PostureModule.h"
 #include "MotionModule/include/MovementModule/MovementModule.h"
@@ -32,8 +32,9 @@ template <typename Scalar>
 bool MBManager<Scalar>::makeBehavior(
   BehaviorPtr& behavior, const BehaviorConfigPtr& cfg)
 {
-  if (cfg->baseType != BaseBehaviorType::motion)
+  if (cfg->baseType != BaseBehaviorType::motion) {
     return false;
+  }
   if (cfg->id == toUType(MBIds::posture)) {
     behavior = BehaviorPtr(PostureModule<Scalar>::getType(motionModule, cfg));
   } else if (cfg->id == toUType(MBIds::kick)) {
@@ -44,12 +45,12 @@ bool MBManager<Scalar>::makeBehavior(
     behavior = BehaviorPtr(BallThrow<Scalar>::getType(motionModule, cfg));
   } else if (cfg->id == toUType(MBIds::movement)) {
     behavior = BehaviorPtr(MovementModule<Scalar>::getType(motionModule, cfg));
-  //} else if (cfg->id == toUType(MBIds::headControl)) {
-  //  behavior = BehaviorPtr(HeadControl<Scalar>::getType(motionModule, cfg));
-  //} else if (cfg->id == toUType(MBIds::dive)) {
-  //  behavior = BehaviorPtr(DiveModule<Scalar>::getType(motionModule, cfg));
-  //} else if (cfg->id == toUType(MBIds::getup)) {
-  //  behavior = BehaviorPtr(GetupModule<Scalar>::getType(motionModule, cfg));
+  } else if (cfg->id == toUType(MBIds::headControl)) {
+    behavior = BehaviorPtr(HeadControl<Scalar>::getType(motionModule, cfg));
+  } else if (cfg->id == toUType(MBIds::dive)) {
+    behavior = BehaviorPtr(DiveModule<Scalar>::getType(motionModule, cfg));
+  } else if (cfg->id == toUType(MBIds::getup)) {
+    behavior = BehaviorPtr(GetupModule<Scalar>::getType(motionModule, cfg));
   } else if (cfg->id == toUType(MBIds::motionPlayback)) {
     behavior = BehaviorPtr(MotionPlayback<Scalar>::getType(motionModule, cfg));
   } else if (cfg->id == toUType(MBIds::teleop)) {

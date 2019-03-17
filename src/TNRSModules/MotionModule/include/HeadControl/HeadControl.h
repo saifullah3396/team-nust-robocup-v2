@@ -4,7 +4,7 @@
  * This file declares the class HeadControl
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 20 Nov 2017 
+ * @date 20 Nov 2017
  */
 
 #pragma once
@@ -14,7 +14,7 @@
 enum class HeadTargetTypes : unsigned int;
 struct MBHeadControlConfig;
 
-/** 
+/**
  * @class HeadControl
  * @brief The class for controlling the robot head movement
  */
@@ -54,20 +54,26 @@ public:
    * @brief loadExternalConfig See Behavior::loadExternalConfig
    */
   virtual void loadExternalConfig() override {}
-  
+
 protected:
   /**
-   * Returns true if a target of type targetType is found and saves its
+   * @brief findTarget Returns true if a target of type targetType is found and saves its
    * x-y-z coordinates in the input variables
-   * 
+   *
    * @param targetType: Target type
-   * @param targetXY: x-y coordinate output if the target is found
-   * @param targetZ: z coordinate output if the target is found
-   */ 
+   * @param targetPos x-y-z coordinate output if the target is found
+   * @param trackable Whether the target is trackable
+   */
   bool findTarget(
-    const HeadTargetTypes& targetType, 
-    cv::Point_<Scalar>& targetXY,
-    Scalar& targetZ);
+    const HeadTargetTypes& targetType,
+    Matrix<Scalar, 4, 1>& targetPos,
+    bool& trackable);
+
+  vector<Scalar> targetAngles = {0.0, 0.0};
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  const vector<std::string> naoqiNames = {"HeadYaw", "HeadPitch"};
+  const Scalar fractionMaxSpeed = {0.1};
+#endif
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

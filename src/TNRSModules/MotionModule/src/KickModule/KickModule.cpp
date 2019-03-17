@@ -324,12 +324,14 @@ template <typename Scalar>
 void KickModule<Scalar>::setupPosture()
 {
   LOG_INFO("KickModule.setupPosture()")
-  if (this->getBehaviorCast()->postureConfig)
+  if (this->getBehaviorCast()->postureConfig) {
     this->setupChildRequest(this->getBehaviorCast()->postureConfig);
-  else 
-    this->setupChildRequest(
-      boost::make_shared<MBPostureConfig>(PostureState::stand, 1.f)
-    );
+  } else {
+    auto postureConfig = boost::make_shared<InterpToPostureConfig>();
+    postureConfig->targetPosture = PostureState::stand;
+    postureConfig->timeToReachP = 1.0;
+    this->setupChildRequest(postureConfig);
+  }
 }
 
 template <typename Scalar>
@@ -411,9 +413,9 @@ void KickModule<Scalar>::computeDesImpactVel(const Matrix<Scalar, Dynamic, 1>& i
     JSON_ASSIGN(jsonImpact, "coeffRest", coeffRest);
     JSON_ASSIGN(jsonImpact, "virtualMass", vm);
     JSON_ASSIGN(jsonImpact, "desEndEffVel", desEndEffVel);
-    JSON_ASSIGN(jsonImpact, "desImpactVel", JsonUtils::MatrixToJson(desImpactVel));
-    JSON_ASSIGN(jsonImpact, "impJoints", JsonUtils::MatrixToJson(impJoints * 180 / M_PI));
-    JSON_ASSIGN(jsonImpact, "endEffector", JsonUtils::MatrixToJson(this->endEffector));
+    JSON_ASSIGN(jsonImpact, "desImpactVel", JsonUtils::matrixToJson(desImpactVel));
+    JSON_ASSIGN(jsonImpact, "impJoints", JsonUtils::matrixToJson(impJoints * 180 / M_PI));
+    JSON_ASSIGN(jsonImpact, "endEffector", JsonUtils::matrixToJson(this->endEffector));
     JSON_ASSIGN(this->dataLogger->getRoot(), "impact", jsonImpact);
   }
 }

@@ -516,7 +516,6 @@ src/TNRSModules/MotionModule/include/FallDetector/FallDetector.h
 src/TNRSModules/MotionModule/include/GetupModule/Types/KeyFrameMotionGetup.h
 src/TNRSModules/MotionModule/include/GetupModule/GetupModule.h
 src/TNRSModules/MotionModule/include/GetupModule/KeyFrameGetupTypes.h
-src/TNRSModules/MotionModule/include/HeadControl/Types/HeadTargetSearch.h
 src/TNRSModules/MotionModule/include/HeadControl/Types/HeadTargetTrack.h
 src/TNRSModules/MotionModule/include/HeadControl/HeadControl.h
 src/TNRSModules/MotionModule/include/HeadControl/HeadTargetTypes.h
@@ -584,7 +583,6 @@ src/TNRSModules/MotionModule/src/DiveModule/DiveModule.cpp
 src/TNRSModules/MotionModule/src/FallDetector/FallDetector.cpp
 src/TNRSModules/MotionModule/src/GetupModule/Types/KeyFrameMotionGetup.cpp
 src/TNRSModules/MotionModule/src/GetupModule/GetupModule.cpp
-src/TNRSModules/MotionModule/src/HeadControl/Types/HeadTargetSearch.cpp
 src/TNRSModules/MotionModule/src/HeadControl/Types/HeadTargetTrack.cpp
 src/TNRSModules/MotionModule/src/HeadControl/HeadControl.cpp
 src/TNRSModules/MotionModule/src/KickModule/Backup/KickModule.cpp
@@ -1542,3 +1540,8 @@ src/TNRSModules/GBModule/src/LedsModule/Types/InterpolateLeds.cpp
 config/Robots/Nu-14/JointEstimator.json
 src/TNRSModules/MotionModule/CMakeLists.txt
 src/BehaviorManager/CMakeLists.txt
+src/Utils/include/PIDController.h
+src/Utils/include/TNRSFootstep.h
+src/Utils/include/DataHolders/TNRSFootstep.h
+src/Utils/src/DataHolders/TNRSFootstep.cpp
+config/BehaviorConfigs/MBConfigs/BalanceModule/PIDComControl.json

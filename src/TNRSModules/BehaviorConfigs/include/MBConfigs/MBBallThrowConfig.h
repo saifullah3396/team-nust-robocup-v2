@@ -13,49 +13,20 @@
 
 /**
  * @struct MBBallThrowConfig
- * @brief Ball throw behavior configuration
+ * @brief Ball throw behavior base configuration
+ * @param timeToThrow Total throw time
+ * @param headTapToStart Whether to wait for head tap
  */
-struct MBBallThrowConfig : MBConfig
-{
-  /**
-   * @param type: Type of the ball throw behavior
-   * @param timeToThrow: Total ball throw execution time
-   * @param headTapToStart: Whether to execute behavior on head tap
-   * @param 
-   */ 
-  MBBallThrowConfig(
-    const MBBallThrowTypes& type = MBBallThrowTypes::wbBallThrow,
-    const float& timeToThrow = 2.f,
-    const bool& headTapToStart = false);
-
-  /**
-   * @derived
-   */ 
-  void validate();
-
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  /**
-   * Makes an object of type this and returns it if valid
-   */ 
-  static boost::shared_ptr<MBBallThrowConfig> 
-    makeFromJson(const Json::Value& obj);
-
-  //! Total ball throw execution time
-  float timeToThrow;
-  
-  //! Whether to execute behavior on head tap
-  bool headTapToStart;
-};
-typedef boost::shared_ptr<MBBallThrowConfig> MBBallThrowConfigPtr;
+DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
+  MBBallThrowConfig,
+  MBConfig,
+  MBBallThrowConfigPtr,
+  MBIds::ballThrow,
+  20.0,
+  MBBallThrowTypes,
+  (float, timeToThrow, 2.f),
+  (bool, headTapToStart, false),
+)
 
 /**
  * @struct WBBallThrowConfig

@@ -7,34 +7,38 @@
  * @date 21 Jul 2018
  */
 
+#include "MotionModule/include/MotionModule.h"
 #include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
 #include "MotionModule/include/GetupModule/Types/KeyFrameMotionGetup.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/DataHolders/PostureState.h"
+#include "Utils/include/HardwareIds.h"
 
 template <typename Scalar>
-KFMGetupConfigPtr KeyFrameMotionGetup<Scalar>::getBehaviorCast()
+KeyFrameMotionGetup<Scalar>::KeyFrameMotionGetup(
+  MotionModule* motionModule,
+  const boost::shared_ptr<KFMGetupConfig>& config) :
+  GetupModule<Scalar>(motionModule, config, "KeyFrameMotionGetup")
 {
-  return boost::static_pointer_cast <KFMGetupConfig> (this->config);
 }
 
 template <typename Scalar>
 bool KeyFrameMotionGetup<Scalar>::initiate()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  this->closeHand(L_HAND);
-  this->closeHand(R_HAND);
+  this->closeHand(RobotHands::lHand);
+  this->closeHand(RobotHands::rHand);
   KeyFrameGetupTypes type = this->getBehaviorCast()->keyFrameGetupType;
-  if (type == KeyFrameGetupTypes::FRONT) {
-    this->endPosture = PostureState::STAND;
+  if (type == KeyFrameGetupTypes::front) {
+    this->endPosture = PostureState::stand;
     this->getupTime = this->runKeyFrameMotion(getupFromFront);
     return true;
-  } else if (type == KeyFrameGetupTypes::BACK) {
-    this->endPosture = PostureState::STAND;
+  } else if (type == KeyFrameGetupTypes::back) {
+    this->endPosture = PostureState::stand;
     this->getupTime = this->runKeyFrameMotion(getupFromBack);
     return true;
-  } else if (type == KeyFrameGetupTypes::SIT) {
-    this->endPosture = PostureState::STAND;
+  } else if (type == KeyFrameGetupTypes::sit) {
+    this->endPosture = PostureState::stand;
     this->getupTime = this->runKeyFrameMotion(getupFromSit);
     return true;
   }
@@ -65,6 +69,12 @@ template <typename Scalar>
 void KeyFrameMotionGetup<Scalar>::finish()
 {
   this->inBehavior = false;
+}
+
+template <typename Scalar>
+KFMGetupConfigPtr KeyFrameMotionGetup<Scalar>::getBehaviorCast()
+{
+  return boost::static_pointer_cast <KFMGetupConfig> (this->config);
 }
 
 template class KeyFrameMotionGetup<MType>;

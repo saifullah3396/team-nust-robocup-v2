@@ -117,7 +117,7 @@ void BallIntercept::ballIncomingAction()
             Point2f(velocity[0], velocity[1]),
             timeToReach,
             timeAtEstimation,
-            boost::make_shared<MBPostureConfig>(PostureState::STAND, 1.0f),
+            boost::make_shared<InterpToPostureConfig>(PostureState::STAND, 1.0f),
             boost::make_shared<MPComControlConfig>(CHAIN_L_LEG, 1.0f)
           );
         kConfig->target = Point2f(position[0]+1e-6, position[1]);

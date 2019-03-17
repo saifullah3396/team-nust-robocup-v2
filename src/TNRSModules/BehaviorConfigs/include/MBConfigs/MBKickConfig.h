@@ -13,8 +13,12 @@
 #include <opencv2/core/core.hpp>
 #include <chrono>
 #include "MBConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 
 using namespace chrono;
+
+//! Since commas in macros cause problems
+#define POINT_DEFINITION cv::Point2f(-1.0, -1.0)
 
 struct MBPostureConfig;
 struct MBBalanceConfig;
@@ -25,362 +29,79 @@ typedef boost::shared_ptr<MBHeadControlConfig> MBHeadControlConfigPtr;
 
 /**
  * @struct MBKickConfig
- * @brief Kick behavior configuration
+ * @brief Kick behavior base configuration
+ * @param target Target position in robot foot center frame
+ * @param reqVel Required ball velocity on hit
+ * @param ball Position of the ball in robot foot center frame
+ * @param targetDistAngle Target in terms of distance and angle
+ * @param postureConfig If passed the robot first goes to the desired
+ *   posture
+ * @param balanceConfig If passed the balancer config is used for
+ *   shifting balance of the robot to the support leg
  */
-struct MBKickConfig : MBConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param type: Type of the kick behavior
-   * @param ball: Initial ball position
-   * @param postureConfig: If passed the robot first goes to the desired
-   *   posture
-   */ 
-  MBKickConfig(
-    const MBKickTypes& type,
-    const cv::Point2f& ball,
-    const MBPostureConfigPtr& postureConfig);
-  
-  /**
-   * Constructor
-   *
-   * @param type: Type of the kick behavior
-   * @param ball: Initial ball position
-   * @param postureConfig: If passed the robot first goes to the desired
-   *   posture
-   * @param balanceConfig: If passed the balancer config is used for
-   *   shifting balance of the robot to the support leg
-   */
-  MBKickConfig(
-    const MBKickTypes& type,
-    const cv::Point2f& ball,
-    const MBPostureConfigPtr& postureConfig,
-    const MBBalanceConfigPtr& balanceConfig);
-
-  /**
-   * Constructor
-   *
-   * @param type: Type of the kick behavior
-   * @param ball: Initial ball position
-   * @param balanceConfig: If passed the balancer config is used for
-   *   shifting balance of the robot to the support leg
-   */
-  MBKickConfig(
-    const MBKickTypes& type,
-    const cv::Point2f& ball,
-    const MBBalanceConfigPtr& balanceConfig);
-
-  /**
-   * Constructor
-   * 
-   * @param type: Type of the kick behavior
-   * @param ball: Initial ball position
-   */ 
-  MBKickConfig(
-    const MBKickTypes& type,
-    const cv::Point2f& ball);
-
-  /**
-   * Constructor
-   *
-   * @param type: Type of the kick behavior
-   */
-  MBKickConfig(const MBKickTypes& type);
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  /**
-   * Makes an object of type this and returns it if valid
-   */ 
-  static boost::shared_ptr<MBKickConfig> 
-    makeFromJson(const Json::Value& obj);
-  
-  //! Target of the kick in robot frame
-  cv::Point2f target;
-
-  //! Target of the kick in robot frame
-  Matrix<float, 2, 1> targetDistAngle;
-  
-  //! Required velocity of the end-effector
-  cv::Point2f reqVel;
-  
-  //! Initial position of the ball
-  cv::Point2f ball;
-
-  //! Posture configuration
-  MBPostureConfigPtr postureConfig;
-
-  //! Balance configuration
-  MBBalanceConfigPtr balanceConfig;
-};
-typedef boost::shared_ptr<MBKickConfig> MBKickConfigPtr;
+DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
+  MBKickConfig,
+  MBConfig,
+  MBKickConfigPtr,
+  MBIds::kick,
+  15.0,
+  MBKickTypes,
+  (cv::Point2f, target, POINT_DEFINITION),
+  (cv::Point2f, reqVel, POINT_DEFINITION),
+  (cv::Point2f, ball, POINT_DEFINITION),
+  (Eigen::Vector2f, targetDistAngle, Eigen::Vector2f::Zero()),
+  (MBPostureConfigPtr, postureConfig, InterpToPostureConfigPtr()),
+  (MBBalanceConfigPtr, balanceConfig, MBBalanceConfigPtr()),
+)
 
 /**
- * @struct JSImpKickConfig
+ * @struct JSKickConfig
  * @brief Joint space base kick behavior configuration
+ * @param minTimeToKick: Minimum possible time for overall kick
+ *   trajectory. This is important if we don't want the kick to be
+ *   too fast even if we're using time optimization
  */
-struct JSKickConfig : MBKickConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param type: Type of the kick behavior
-   * @param ball: Initial ball position
-   * @param postureConfig: If passed the robot first goes to the desired
-   *   posture
-   * @param balanceConfig: If passed the balancer config is used for 
-   *   shifting balance of the robot to the support leg
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSKickConfig(
-    const MBKickTypes& type,
-    const cv::Point2f& ball,
-    const boost::shared_ptr<MBPostureConfig>& postureConfig,
-	const boost::shared_ptr<MBBalanceConfig>& balanceConfig,
-	const float& minTimeToKick);
-  
-  /**
-   * Constructor
-   * 
-   * @param type: Type of the kick behavior
-   * @param ball: Initial ball position
-   * @param balanceConfig: If passed the balancer config is used for 
-   *   shifting balance of the robot to the support leg
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSKickConfig(
-	const MBKickTypes& type,
-    const cv::Point2f& ball,
-	const boost::shared_ptr<MBBalanceConfig>& balanceConfig,
-	const float& minTimeToKick);
-  
-  /**
-   * Constructor
-   * 
-   * @param type: Type of the kick behavior
-   * @param ball: Initial ball position
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSKickConfig(
-    const MBKickTypes& type,
-    const cv::Point2f& ball,
-    const float& minTimeToKick);
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-
-  virtual Json::Value getJson();
-  
-  //! Minimum possible time for overall kick trajectory.
-  float minTimeToKick = {1.f};
-
-  //! Whether to perform real-time balance during kicking
-  bool inKickBalance = {true};
-};
-typedef boost::shared_ptr<JSKickConfig> JSKickConfigPtr;
+DECLARE_BEHAVIOR_CONFIG_BASE_TYPE_WITH_VARS(
+  JSKickConfig,
+  MBKickConfig,
+  MBKickTypes,
+  JSKickConfigPtr,
+  (float, minTimeToKick, 1.f),
+  (bool, inKickBalance, true),
+)
 
 /**
  * @struct JSOImpKickConfig
  * @brief Joint space optimized impulse kick behavior configuration
  */
-struct JSOImpKickConfig : JSKickConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param ball: Initial ball position
-   * @param postureConfig: If passed the robot first goes to the desired
-   *   posture
-   * @param balanceConfig: If passed the balancer config is used for 
-   *   shifting balance of the robot to the support leg
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSOImpKickConfig(
-    const cv::Point2f& ball,
-    const boost::shared_ptr<MBPostureConfig>& postureConfig,
-    const boost::shared_ptr<MBBalanceConfig>& balanceConfig,
-    const float& minTimeToKick = 1.f);
-  
-  /**
-   * Constructor
-   * 
-   * @param ball: Initial ball position
-   * @param balanceConfig: If passed the balancer config is used for 
-   *   shifting balance of the robot to the support leg
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSOImpKickConfig(
-    const cv::Point2f& ball,
-    const boost::shared_ptr<MBBalanceConfig>& balanceConfig,
-    const float& minTimeToKick = 1.f);
-  
-  /**
-   * Constructor
-   * 
-   * @param ball: Initial ball position
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSOImpKickConfig(
-    const cv::Point2f& ball = cv::Point2f(0.f, 0.f),
-    const float& minTimeToKick = 1.f);
-  
-  /**
-   * @derived
-   */  
-  void validate();
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */ 
-  virtual Json::Value getJson();
-};
-typedef boost::shared_ptr<JSOImpKickConfig> JSOImpKickConfigPtr;
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  JSOImpKickConfig,
+  JSKickConfig,
+  MBKickTypes::jsoImpKick,
+  JSOImpKickConfigPtr,
+  (float, minTimeToKick, 1.f),
+  (bool, inKickBalance, true),
+)
 
 /**
  * @struct JSE2DImpKickConfig
  * @brief Joint space estimated 2D impulse kick behavior configuration
+ * @param ballVel: Estimated initial ball velocity which ball reaches
+ *   the initial position
+ * @param timeUntilImpact: Estimated time until ball reaches the
+ *   initial position
+ * @param timeAtEstimation: Time at which the observed ball state is
+ *   used to get an estimate
  */
-struct JSE2DImpKickConfig : JSKickConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param ball: Initial ball position
-   * @param ballVel: Estimated initial ball velocity which ball reaches
-   *   the initial position
-   * @param timeUntilImpact: Estimated time until ball reaches the 
-   *   initial position
-   * @param timeAtEstimation: Time at which the observed ball state is 
-   *   used to get an estimate
-   * @param postureConfig: If passed the robot first goes to the desired
-   *   posture
-   * @param balanceConfig: If passed the balancer config is used for 
-   *   shifting balance of the robot to the support leg
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSE2DImpKickConfig(
-    const cv::Point2f& ball,
-    const cv::Point2f& ballVel,
-    const double& timeUntilImpact,
-    const high_resolution_clock::time_point& timeAtEstimation,
-    const boost::shared_ptr<MBPostureConfig>& postureConfig,
-    const boost::shared_ptr<MBBalanceConfig>& balanceConfig,
-    const float& minTimeToKick = 1.f);
-  
-  /**
-   * Constructor
-   * 
-   * @param ball: Initial ball position
-   * @param ballVel: Estimated initial ball velocity which ball reaches
-   *   the initial position
-   * @param timeUntilImpact: Estimated time until ball reaches the 
-   *   initial position
-   * @param balanceConfig: If passed the balancer config is used for 
-   *   shifting balance of the robot to the support leg
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSE2DImpKickConfig(
-    const cv::Point2f& ball,
-    const cv::Point2f& ballVel,
-    const double& timeUntilImpact,
-    const high_resolution_clock::time_point& timeAtEstimation,
-    const boost::shared_ptr<MBBalanceConfig>& balanceConfig,
-    const float& minTimeToKick = 1.f);
-  
-  /**
-   * Constructor
-   * 
-   * @param ball: Initial ball position
-   * @param ballVel: Estimated initial ball velocity which ball reaches
-   *   the initial position
-   * @param timeUntilImpact: Estimated time until ball reaches the 
-   *   initial position
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSE2DImpKickConfig(
-    const cv::Point2f& ball,
-    const cv::Point2f& ballVel,
-    const double& timeUntilImpact,
-    const high_resolution_clock::time_point& timeAtEstimation,
-    const float& minTimeToKick = 1.f);
-  
-/**
-   * Constructor
-   * 
-   * @param ball: Initial ball position
-   * @param ballVel: Estimated initial ball velocity which ball reaches
-   *   the initial position
-   * @param timeUntilImpact: Estimated time until ball reaches the 
-   *   initial position
-   * @param minTimeToKick: Minimum possible time for overall kick 
-   *   trajectory. This is important if we don't want the kick to be
-   *   too fast even if we're using time optimization
-   */
-  JSE2DImpKickConfig(
-    const cv::Point2f& ball = cv::Point2f(0.f, 0.f),
-    const cv::Point2f& ballVel = cv::Point2f(0.f, 0.f),
-    const double& timeUntilImpact = 0.0,
-    const float& minTimeToKick = 1.f);
-  
-  /**
-   * @derived
-   */ 
-  void validate();
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */ 
-  virtual Json::Value getJson();
-  
-  //! Estimated initial ball velocity which ball reaches the initial position
-  cv::Point2f ballVel;
-  
-  //! Time at which the observed ball state is used to get an estimate
-  high_resolution_clock::time_point timeAtEstimation;
-  
-  //! Estimated time until ball reaches the initial position
-  double timeUntilImpact;
-};
-typedef boost::shared_ptr<JSE2DImpKickConfig> JSE2DImpKickConfigPtr;
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  JSE2DImpKickConfig,
+  JSKickConfig,
+  MBKickTypes::jse2DImpKick,
+  JSE2DImpKickConfigPtr,
+  (cv::Point2f, ballVel, cv::Point2f()),
+  (double, timeUntilImpact, 0.0),
+  (double, timeAtEstimation, 0.0),
+)
 
 /**
  * @struct CSpaceBSplineKick

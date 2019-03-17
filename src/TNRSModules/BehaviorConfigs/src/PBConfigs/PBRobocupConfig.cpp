@@ -18,8 +18,13 @@ DEFINE_BEHAVIOR_CONFIG(
   (PBRobocupTypes, penalties, PenaltiesConfig),
 )
 
+void RobocupSetupConfig::init() {}
 void RobocupSetupConfig::validate() {}
+void GoalKeeperConfig::init() {}
 void GoalKeeperConfig::validate() {}
+void AttackerConfig::init() {}
 void AttackerConfig::validate() {}
+void DefenderConfig::init() {}
 void DefenderConfig::validate() {}
+void PenaltiesConfig::init() {}
 void PenaltiesConfig::validate() {}

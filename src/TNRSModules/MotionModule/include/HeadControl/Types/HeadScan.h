@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "BehaviorManager/include/StateMachineMacros.h"
 #include "MotionModule/include/HeadControl/HeadControl.h"
 
 struct HeadScanConfig;
@@ -57,22 +58,35 @@ private:
   boost::shared_ptr<HeadScanConfig> getBehaviorCast();
 
   /**
+   * @brief setScanTarget Sets the current scan target
+   * @param yaw Target head yaw
+   * @param pitch Target head pitch
+   */
+  void setScanTarget(
+    const Scalar& yaw, const Scalar& pitch);
+
+  /**
+   * @brief waitOnTargetReached Waits for scan on reaching the target
+   * @return True if it should still wait
+   */
+  bool waitOnTargetReached();
+
+  /**
    * @brief scanEnv Scans the environment
    */
   void scanEnv();
 
-  Scalar waitTime = {0.0};
+  //! Finite state machine for this behavior
+  DECLARE_FSM(fsm, HeadScan<Scalar>)
 
-  unsigned behaviorState = {midScan};
-  enum behaviorState {
-    midScan = 0,
-    midWait,
-    leftScan,
-    leftWait,
-    rightScan,
-    rightWait,
-    finishState
-  };
+  //! MidScan: Look in the middle
+  DECLARE_FSM_STATE(HeadScan<Scalar>, MidScan, midScan, onStart, onRun,)
+
+  //! LeftScan: Scan left direction
+  DECLARE_FSM_STATE(HeadScan<Scalar>, LeftScan, leftScan, onStart, onRun,)
+
+  //! RightScan: Scan right direction
+  DECLARE_FSM_STATE(HeadScan<Scalar>, RightScan, rightScan, onStart, onRun,)
 };
 
 typedef boost::shared_ptr<HeadScan<MType> > HeadScanPtr;

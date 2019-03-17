@@ -7,9 +7,9 @@
  * @date 06 Oct 2017
  */
 
-#include "MotionModule/include/MovementModule/TNRSFootstep.h"
-#include "Utils/include/HardwareIds.h"
 #include "Utils/include/Constants.h"
+#include "Utils/include/DataHolders/TNRSFootstep.h"
+#include "Utils/include/HardwareIds.h"
 #include "Utils/include/MathsUtils.h"
 
 template <typename Scalar>
@@ -27,11 +27,22 @@ TNRSFootstep<Scalar>::TNRSFootstep(
 }
 
 template <typename Scalar>
-void TNRSFootstep<Scalar>::print()
+void TNRSFootstep<Scalar>::print() const
 {
   LOG_INFO("Pose2D: " << pose2D.get().transpose());
   LOG_INFO("Foot: " << toUType(foot));
   LOG_INFO("Transformation:\n" << trans);
+}
+
+template <typename Scalar>
+Json::Value TNRSFootstep<Scalar>::getJson() const
+{
+  Json::Value val;
+  val["foot"] = toUType(foot);
+  val["pose2D"] = pose2D.getJson();
+  val["trans"] = JsonUtils::getJson(trans);
+  val["timeAtFinish"] = timeAtFinish;
+  return val;
 }
 
 template <typename Scalar>

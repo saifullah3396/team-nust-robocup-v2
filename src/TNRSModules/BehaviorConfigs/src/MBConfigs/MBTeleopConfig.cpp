@@ -15,6 +15,7 @@ DEFINE_BEHAVIOR_CONFIG(
   (MBTeleopTypes, teleopJoints, TeleopJointsConfig),
 )
 
+void TeleopJointsConfig::init() {}
 void TeleopJointsConfig::validate()
 {
   if (jointCommands.size() != toUType(Joints::count))
@@ -23,8 +24,7 @@ void TeleopJointsConfig::validate()
       BConfigException(
         this,
         "Invalid behavior configuration parameters passed.",
-        false,
-        EXC_INVALID_BCONFIG_PARAMETERS
+        false
       );
   }
 }

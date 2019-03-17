@@ -12,7 +12,10 @@
 #include "MotionModule/include/MTypeHeader.h"
 #include "MotionModule/include/HeadControl/HeadControl.h"
 
+struct HeadScanConfig;
 struct HeadTargetTrackConfig;
+template <typename Scalar>
+struct PIDController;
 
 template <typename Scalar>
 class HeadTargetTrack : public HeadControl<Scalar>
@@ -52,24 +55,24 @@ public:
    * @brief loadExternalConfig See Behavior::loadExternalConfig()
    */
   void loadExternalConfig() final;
-  
 private:
   /**
    * @brief getBehaviorCast Returns the casted config
-   * @return boost::shared_ptr<HeadTargetSearchConfig>
+   * @return boost::shared_ptr<HeadTargetTrackConfig>
    */
   boost::shared_ptr<HeadTargetTrackConfig> getBehaviorCast();
 
-  void followTarget(const Matrix<Scalar, 4, 1>& posCam);
-  
-  static Matrix<Scalar, 3, 1> pidGains;
-  Matrix<Scalar, 2, 1> intError = {Matrix<Scalar, 2, 1>::Zero()};
-  Matrix<Scalar, 2, 1> prevCommand = {Matrix<Scalar, 2, 1>::Zero()};
-  Matrix<Scalar, 2, 1> errorK1 = {Matrix<Scalar, 2, 1>::Zero()};
-  Matrix<Scalar, 2, 1> errorK2 = {Matrix<Scalar, 2, 1>::Zero()};
-  
-  HeadTargetTypes targetType; // bconfig
-  Scalar targetLostTime = {0.0};
-};
+  /**
+   * @brief moveHeadToTarget Moves the head to target if found
+   * @param posCam Position of target in camera frame
+   * @return True on success
+   */
+  bool trackTarget(const Matrix<Scalar, 4, 1>& posCam);
 
-typedef boost::shared_ptr<HeadTargetTrack<MType> > HeadTargetTrackPtr;
+  //! Pid controller for target tracking
+  vector<boost::shared_ptr<PIDController<Scalar> > > trackersXY;
+
+  static vector<Matrix<Scalar, 3, 1>> pidGains;
+  static Scalar lowerCamUsageRange; //! meters
+  static Scalar lowerCamUsageZ; //! meters
+};

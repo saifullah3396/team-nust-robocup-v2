@@ -14,6 +14,7 @@ DEFINE_BEHAVIOR_CONFIG(
   (MBMotionPlaybackTypes, replayStoredMB, ReplayStoredMBConfig),
 )
 
+void ReplayStoredMBConfig::init() {}
 void ReplayStoredMBConfig::validate()
 {
   //LOG_INFO("ReplayStoredMBConfig::validate() called...:")

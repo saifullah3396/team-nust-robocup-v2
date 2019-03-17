@@ -13,6 +13,10 @@
 #include "BehaviorConfigs/include/MBConfigs/MBConfig.h"
 #include "BehaviorConfigs/include/BehaviorConfigMacros.h"
 
+/**
+ * @struct MBTeleopConfig
+ * @brief Teleop behavior base configuration
+ */
 DECLARE_BEHAVIOR_CONFIG(
   MBTeleopConfig,
   MBConfig,
@@ -22,6 +26,10 @@ DECLARE_BEHAVIOR_CONFIG(
   MBTeleopTypes
 )
 
+/**
+ * @struct TeleopJointsConfig
+ * @brief Used to send and update joint commands based on user input
+ */
 DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   TeleopJointsConfig,
   MBTeleopConfig,

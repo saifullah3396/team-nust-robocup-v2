@@ -73,8 +73,8 @@ protected:
   void printGameData();
   void setNavigationConfig(
     const RobotPose2D<float>& target,
-    const boost::shared_ptr<MBPostureConfig>& startPosture = boost::shared_ptr<MBPostureConfig>(),
-    const boost::shared_ptr<MBPostureConfig>& endPosture = boost::shared_ptr<MBPostureConfig>());
+    const boost::shared_ptr<InterpToPostureConfig>& startPosture = boost::shared_ptr<InterpToPostureConfig>(),
+    const boost::shared_ptr<InterpToPostureConfig>& endPosture = boost::shared_ptr<InterpToPostureConfig>());
   void resetLocalizer();
   bool getupFromGround(
     const KeyFrameGetupTypes& getupType,

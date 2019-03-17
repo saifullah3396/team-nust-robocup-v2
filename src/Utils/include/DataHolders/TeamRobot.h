@@ -56,7 +56,7 @@ struct TeamRobot : public DataHolder
     JSON_ASSIGN_(val, ballAge, ballAge);
     JSON_ASSIGN_(val, ballPos, JsonUtils::getJson(ballPos));
     JSON_ASSIGN_(val, ballVel, JsonUtils::getJson(ballVel));
-    JSON_ASSIGN_(val, pose, JsonUtils::MatrixToJson(pose.get().transpose()));
+    JSON_ASSIGN_(val, pose, JsonUtils::matrixToJson(pose.get().transpose()));
     JSON_ASSIGN_(val, walkingTo, JsonUtils::getJson(walkingTo));
     JSON_ASSIGN_(val, shootingTo, JsonUtils::getJson(shootingTo));
     return val;

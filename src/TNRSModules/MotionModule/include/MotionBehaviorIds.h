@@ -98,9 +98,8 @@ enum class MBMovementTypes
  */
 enum class MBHeadControlTypes
 : unsigned int {
-  headTargetTrack,
-  headTargetSearch,
   headScan,
+  headTargetTrack,
   count
 };
 

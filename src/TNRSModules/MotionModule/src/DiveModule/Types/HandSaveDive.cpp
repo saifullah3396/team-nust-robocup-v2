@@ -34,11 +34,12 @@ static const MType diveRightDef[1][24] =
     -14.2, 0.0, -30.0, 100.0, -50, -7.0, -14.2, -18.3, -45, 120, -67, -4.5},
   };
 
-
 template <typename Scalar>
-boost::shared_ptr<HandSaveDiveConfig> HandSaveDive<Scalar>::getBehaviorCast()
+HandSaveDive<Scalar>::HandSaveDive(
+  MotionModule* motionModule,
+  const boost::shared_ptr<HandSaveDiveConfig>& config) :
+  DiveModule<Scalar>(motionModule, config, "HandSaveDive")
 {
-  return boost::static_pointer_cast<HandSaveDiveConfig> (this->config);
 }
 
 template <typename Scalar>
@@ -46,8 +47,11 @@ bool HandSaveDive<Scalar>::initiate()
 {
   LOG_INFO("HandSaveDive.initiate() called...")
   auto zmpControlCfg =
-    boost::make_shared<ZmpControlConfig>(
-      getBehaviorCast()->supportLeg, true, false, false);
+    boost::make_shared<ZmpControlConfig>();
+  zmpControlCfg->supportLeg = getBehaviorCast()->supportLeg,
+  zmpControlCfg->keepOtherLegContact = true;
+  zmpControlCfg->regularizePosture = false;
+  zmpControlCfg->keepTorsoUpright = false;
 
   Matrix<Scalar, Dynamic, 1> targetJoints(toUType(Joints::count));
   if (getBehaviorCast()->supportLeg == static_cast<LinkChains>(RobotFeet::lFoot)) {
@@ -67,7 +71,7 @@ bool HandSaveDive<Scalar>::initiate()
     activeJoints[toUType(HardwareIds::lLegStart) + i] = false;
   for (size_t i = 0; i < toUType(HardwareIds::nRLeg); ++i)
     activeJoints[toUType(HardwareIds::rLegStart) + i] = false;
-  zmpControlCfg->activeJoints = activeJoints;
+  zmpControlCfg->activeJoints = vector<unsigned>(activeJoints.begin(), activeJoints.end());
   this->setupChildRequest(zmpControlCfg, true);
 
   Matrix<Scalar, 4, 4> target =
@@ -148,6 +152,12 @@ void HandSaveDive<Scalar>::loadExternalConfig()
     taskGains[TORSO_TASK] = torsoTaskGain;
     loaded = true;
   }
+}
+
+template <typename Scalar>
+boost::shared_ptr<HandSaveDiveConfig> HandSaveDive<Scalar>::getBehaviorCast()
+{
+  return boost::static_pointer_cast<HandSaveDiveConfig> (this->config);
 }
 
 template class HandSaveDive<MType>;

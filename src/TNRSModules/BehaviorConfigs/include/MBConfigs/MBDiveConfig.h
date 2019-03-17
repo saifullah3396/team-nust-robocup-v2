@@ -15,71 +15,34 @@
 
 /**
  * @struct MBDiveConfig
- * @brief Dive behavior configuration
+ * @brief Dive behavior base configuration
  */
-struct MBDiveConfig : MBConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param type: Type of the dive behavior
-   */ 
-  MBDiveConfig(const MBDiveTypes& type);
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  /**
-   * Makes an object of type this and returns it if valid
-   */ 
-  static boost::shared_ptr<MBDiveConfig> makeFromJson(const Json::Value& obj);
-};
-typedef boost::shared_ptr<MBDiveConfig> MBDiveConfigPtr;
+DECLARE_BEHAVIOR_CONFIG(
+  MBDiveConfig,
+  MBConfig,
+  MBDiveConfigPtr,
+  MBIds::dive,
+  10.0,
+  MBDiveTypes
+)
 
 /**
  * @struct KFMDiveConfig
- * @brief Key frame motion dive behavior configuration
+ * @brief Key-frame motion based dive behavior configuration
+ * @param keyFrameDiveType Type of dive motion
  */
-struct KFMDiveConfig : MBDiveConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param keyFrameDiveType: Type of the key frame dive
-   */ 
-  KFMDiveConfig(
-    const KeyFrameDiveTypes& keyFrameDiveType = KeyFrameDiveTypes::inPlace);
-  
-  /**
-   * @derived
-   */ 
-  void validate();
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  //! Type of the key frame dive
-  KeyFrameDiveTypes keyFrameDiveType;
-};
-typedef boost::shared_ptr<KFMDiveConfig> KFMDiveConfigPtr;
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  KFMDiveConfig,
+  MBDiveConfig,
+  MBDiveTypes::kfmDive,
+  KFMDiveConfigPtr,
+  (KeyFrameDiveTypes, keyFrameDiveType, KeyFrameDiveTypes::inPlace),
+)
 
 /**
  * @struct HandSaveDiveConfig
  * @brief Whole body motion based dive with hand movement for saving
+ * @param supportLeg Support reference frame for diving
  */
 DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   HandSaveDiveConfig,

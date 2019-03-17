@@ -276,7 +276,7 @@ void GoalKeeper::PostDive::onRun()
   } else {
     if (!GOAL_KEEPER_PTR->mbInProgress()) {
       auto pConfig =
-        boost::make_shared<MBPostureConfig>(
+        boost::make_shared<InterpToPostureConfig>(
           PostureState::STAND_HANDS_BEHIND, 2.f);
       GOAL_KEEPER_PTR->setupMBRequest(MOTION_1, pConfig);
       nextState = GOAL_KEEPER_PTR->react.get();

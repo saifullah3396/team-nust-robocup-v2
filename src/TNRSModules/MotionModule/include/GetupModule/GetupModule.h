@@ -32,7 +32,7 @@ public:
    */
   GetupModule(
     MotionModule* motionModule,
-    const boost::shared_ptr<MBGetupModuleConfig>& config,
+    const boost::shared_ptr<MBGetupConfig>& config,
     const string& name = "GetupModule");
 
   /**

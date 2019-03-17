@@ -474,7 +474,9 @@ void GoalExtraction::updateGoalInfo()
 {
   auto tStart = high_resolution_clock::now();
   GoalInfo<float> goalInfo;
-  Point2f goalMid, rightPost, leftPost;
+  auto goalMid = Point2f(NAN, NAN);
+  auto rightPost = Point2f(NAN, NAN);
+  auto leftPost = Point2f(NAN, NAN);
   if (ON_SIDE_LINE_IN(VisionModule)) {
     if (!goalPosts.empty()) {
       if (goalPosts.size() == 2) {
@@ -536,7 +538,7 @@ void GoalExtraction::updateGoalInfo()
     goalInfo.mid = goalMid;
   } else {
     if (goalPosts.size() == 2) {
-      if (goalPosts[0]->image.x < goalPosts[1]->image.x) { // 0 is to the left in image
+      if (goalPosts[0]->image.x < goalPosts[1]->image.x) { //! Post at index 0 is to the left in image
         goalInfo.leftPost = goalPosts[0]->world;
         goalInfo.rightPost = goalPosts[1]->world;
       } else {

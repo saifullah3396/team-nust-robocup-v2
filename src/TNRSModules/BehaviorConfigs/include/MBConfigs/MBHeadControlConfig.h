@@ -12,185 +12,51 @@
 
 #include "MBConfig.h"
 #include "MotionModule/include/HeadControl/HeadTargetTypes.h"
+#include "Utils/include/AngleDefinitions.h"
 
 /**
  * @struct MBHeadControlConfig
  * @brief Head control behavior base configuration
  */
-struct MBHeadControlConfig : MBConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param type: Type of the head control behavior
-   * @param maxRunTime: Maximum allowed run time for this behavior
-   */ 
-  MBHeadControlConfig(
-    const MBHeadControlTypes& type, 
-    const float& maxRunTime = 15.f);
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  /**
-   * Makes an object of type this and returns it if valid
-   */ 
-  static boost::shared_ptr<MBHeadControlConfig> 
-    makeFromJson(const Json::Value& obj);
-};
-typedef boost::shared_ptr<MBHeadControlConfig> MBHeadControlConfigPtr;
-
-/**
- * @struct HeadTargetSearchConfig
- * @brief Head control behavior to search for chosen target behavior 
- *   configuration
- */
-struct HeadTargetSearchConfig : MBHeadControlConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param headTargetType: The head target type
-   * @param scanLowerArea: Whether to scan the area near the robot feet
-   *   as well
-   * @param totalWaitTime: Total time to wait in each scan, left, right
-   *   and middle
-   * @param scanMaxYaw: Maximum head anglular motion about the z-axis
-   * @param scanMaxPitch: Maximum head angular motion about the y-axis
-   */
-  HeadTargetSearchConfig(
-    const HeadTargetTypes& headTargetType = HeadTargetTypes::ball,
-    const bool& scanLowerArea = false,
-    const float& totalWaitTime = 1.f,
-    const float& scanMaxYaw = 100.f * M_PI / 180,
-    const float& scanMaxPitch = 16.f * M_PI / 180);
-    
-  /**
-   * @derived
-   */  
-  void validate();
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  //! Whether lower area scan is turned on
-  bool scanLowerArea;
-  
-  //! Maximum head anglular motion about the z-axis
-  float scanMaxYaw;
-  
-  //! Maximum head anglular motion about the y-axis
-  float scanMaxPitch;
-  
-  //! Total time to wait in each scan, left, right and middle
-  float totalWaitTime;
-  
-  //! Head target type
-  HeadTargetTypes headTargetType;
-};
-typedef boost::shared_ptr<HeadTargetSearchConfig> HeadTargetSearchConfigPtr;
-
-/**
- * @struct HeadTargetTrackConfig
- * @brief Head control behavior to track the chosen target behavior 
- *   configuration
- */
-struct HeadTargetTrackConfig : MBHeadControlConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param headTargetType: The head target type
-   * @param maxRunTime: Maximum allowed runtime for this behavior
-   */
-  HeadTargetTrackConfig(
-    const HeadTargetTypes& headTargetType = HeadTargetTypes::ball,
-    const float& maxRunTime = 999999.f);
-  
-  /**
-   * @derived
-   */ 
-  void validate();
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  //! Head target type
-  HeadTargetTypes headTargetType;
-
-  //! Search config as child
-  HeadTargetSearchConfigPtr htsConfig;
-};
-typedef boost::shared_ptr<HeadTargetTrackConfig> HeadTargetTrackConfigPtr;
+DECLARE_BEHAVIOR_CONFIG(
+  MBHeadControlConfig,
+  MBConfig,
+  MBHeadControlConfigPtr,
+  MBIds::headControl,
+  15.0,
+  MBHeadControlTypes
+)
 
 /**
  * @struct HeadScanConfig
- * @brief Head control behavior to scan the area
+ * @brief Head scan behavior configuration
+ * @param scanLowerArea Whether to scan lower area
+ * @param totalWaitTime Time to wait in one scan
+ * @param scanMaxYaw Maximum head yaw range for scan
+ * @param scanMaxPitch Maximum head pitch range for scan
  */
-struct HeadScanConfig : MBHeadControlConfig
-{
-  /**
-   * Constructor
-   *
-   * @param scanLowerArea: Whether to scan the area near the robot feet
-   *   as well
-   * @param totalWaitTime: Total time to wait in each scan, left, right
-   *   and middle
-   * @param scanMaxYaw: Maximum head anglular motion about the z-axis
-   * @param scanMaxPitch: Maximum head angular motion about the y-axis
-   */
-  HeadScanConfig(
-    const bool& scanLowerArea = false,
-    const float& totalWaitTime = 1.f,
-    const float& scanMaxYaw = 100.f * M_PI / 180,
-    const float& scanMaxPitch = 16.f * M_PI / 180);
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  HeadScanConfig,
+  MBHeadControlConfig,
+  MBHeadControlTypes::headScan,
+  HeadScanConfigPtr,
+  (bool, scanLowerArea, false),
+  (float, totalWaitTime, 1.0),
+  (float, scanMaxYaw, Angle::DEG_100),
+  (float, scanMaxPitch, Angle::DEG_16),
+)
 
-  /**
-   * @derived
-   */
-  void validate();
-
-  /**
-   * @derived
-   */
-  virtual bool assignFromJson(const Json::Value& obj);
-
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-
-  //! Whether lower area scan is turned on
-  bool scanLowerArea;
-
-  //! Maximum head anglular motion about the z-axis
-  float scanMaxYaw;
-
-  //! Maximum head anglular motion about the y-axis
-  float scanMaxPitch;
-
-  //! Total time to wait in each scan, left, right and middle
-  float totalWaitTime;
-};
-typedef boost::shared_ptr<HeadScanConfig> HeadScanConfigPtr;
+/**
+ * @struct HeadTargetTrackConfig
+ * @brief Head target track behavior configuration
+ * @param scanConfig HeadScanConfig
+ * @param headTargetType Type of target
+ */
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  HeadTargetTrackConfig,
+  MBHeadControlConfig,
+  MBHeadControlTypes::headTargetTrack,
+  HeadTargetTrackConfigPtr,
+  (HeadScanConfigPtr, scanConfig, HeadScanConfigPtr()),
+  (HeadTargetTypes, headTargetType, HeadTargetTypes::ball),
+)

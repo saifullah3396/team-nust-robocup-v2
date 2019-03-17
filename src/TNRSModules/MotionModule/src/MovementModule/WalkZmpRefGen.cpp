@@ -11,7 +11,7 @@
 #include "MotionModule/include/KinematicsModule/ComState.h"
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
 #include "MotionModule/include/MovementModule/WalkZmpRefGen.h"
-#include "MotionModule/include/MovementModule/TNRSFootstep.h"
+#include "Utils/include/DataHolders/TNRSFootstep.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
 #include "Utils/include/Constants.h"
 

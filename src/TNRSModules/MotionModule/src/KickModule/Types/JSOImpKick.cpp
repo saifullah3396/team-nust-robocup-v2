@@ -112,7 +112,8 @@ void JSOImpKick<Scalar>::setupKickBase()
     auto rArmChain = this->kM->getLinkChain(LinkChains::rArm);
     for (size_t i = 0; i < rArmChain->size; ++i)
       this->armsTaskJoints[rArmChain->start + i] = true;
-    this->zmpControlCfgInKick = boost::make_shared <ZmpControlConfig> (this->supportLeg);
+    this->zmpControlCfgInKick = boost::make_shared <ZmpControlConfig> ();
+    this->zmpControlCfgInKick->supportLeg = this->supportLeg;
     this->zmpControlCfgInKick->keepOtherLegContact = false;
     this->zmpControlCfgInKick->regularizePosture = true;
     this->zmpControlCfgInKick->keepTorsoUpright = false;
@@ -121,9 +122,9 @@ void JSOImpKick<Scalar>::setupKickBase()
     activeJoints[toUType(Joints::lShoulderRoll)] = true;
     activeJoints[toUType(Joints::rShoulderPitch)] = true;
     activeJoints[toUType(Joints::rShoulderRoll)] = true;
-    this->zmpControlCfgInKick->activeJoints = activeJoints;
-    this->zmpControlCfgInKick->targetX = -0.02;
-    this->zmpControlCfgInKick->targetY = 0.0;
+    this->zmpControlCfgInKick->activeJoints = vector<unsigned>(activeJoints.begin(), activeJoints.end());
+    this->zmpControlCfgInKick->target[0] = -0.02;
+    this->zmpControlCfgInKick->target[1] = 0.0;
 
     /*Matrix<Scalar, Dynamic, 1> postureTarget(toUType(Joints::count));
     if (this->supportLeg == LinkChains::lLeg) {
@@ -143,17 +144,17 @@ void JSOImpKick<Scalar>::setupKickBase()
     //this->defineTrajectory();
     if (this->config->logData) {
       Json::Value jsonSetup;
-      JSON_ASSIGN(jsonSetup, "targetPosition", JsonUtils::MatrixToJson(this->targetPosition));
+      JSON_ASSIGN(jsonSetup, "targetPosition", JsonUtils::matrixToJson(this->targetPosition));
       JSON_ASSIGN(jsonSetup, "actualPosition", Json::nullValue);
       JSON_ASSIGN(jsonSetup, "targetDistance", this->targetDistance);
       JSON_ASSIGN(jsonSetup, "targetAngle", this->targetAngle * 180.0 / M_PI);
       JSON_ASSIGN(jsonSetup, "kickLeg", toUType(this->kickLeg));
       JSON_ASSIGN(jsonSetup, "supportLeg", toUType(this->supportLeg));
-      JSON_ASSIGN(jsonSetup, "ballToTargetUnit", JsonUtils::MatrixToJson(this->ballToTargetUnit));
+      JSON_ASSIGN(jsonSetup, "ballToTargetUnit", JsonUtils::matrixToJson(this->ballToTargetUnit));
       JSON_ASSIGN(jsonSetup, "footSpacingInit", this->footSpacing);
-      JSON_ASSIGN(jsonSetup, "supportToTorsoInit", JsonUtils::MatrixToJson(this->supportToTorso));
-      JSON_ASSIGN(jsonSetup, "supportToKickInit", JsonUtils::MatrixToJson(this->supportToKick));
-      JSON_ASSIGN(jsonSetup, "endEffectorInit", JsonUtils::MatrixToJson(this->endEffector));
+      JSON_ASSIGN(jsonSetup, "supportToTorsoInit", JsonUtils::matrixToJson(this->supportToTorso));
+      JSON_ASSIGN(jsonSetup, "supportToKickInit", JsonUtils::matrixToJson(this->supportToKick));
+      JSON_ASSIGN(jsonSetup, "endEffectorInit", JsonUtils::matrixToJson(this->endEffector));
       JSON_ASSIGN(this->dataLogger->getRoot(), "setup", jsonSetup);
     }
   } else {

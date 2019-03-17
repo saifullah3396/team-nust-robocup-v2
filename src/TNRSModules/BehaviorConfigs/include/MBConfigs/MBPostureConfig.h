@@ -1,7 +1,7 @@
 /**
  * @file BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
  *
- * This file defines the structs MBPostureConfig 
+ * This file defines the structs MBPostureConfig
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 3 April 2018
@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <Eigen/Dense>
 #include "MBConfig.h"
 #include "MotionModule/include/PostureModule/PostureDefinitions.h"
 #include "Utils/include/DataHolders/PostureState.h"
@@ -16,67 +17,27 @@
 
 /**
  * @struct MBPostureConfig
- * @brief Posture behavior configuration
+ * @brief Posture behavior base configuration
  */
-struct MBPostureConfig : MBConfig
-{
-  /**
-   * Constructor
-   */
-  MBPostureConfig();
+DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
+  MBPostureConfig,
+  MBConfig,
+  MBPostureConfigPtr,
+  MBIds::posture,
+  10.0,
+  MBPostureTypes,
+  (float, timeToReachP, 2.0),
+  (PostureState, targetPosture, PostureState::unknown),
+)
 
-  /**
-   * Constructor
-   * 
-   * @param jointsToReach: Joints to reach for the posture
-   * @param timeToReachP: Time to reach the posture in
-   * @param type: Type of the posture behavior
-   */  
-  MBPostureConfig(
-    const VectorXf& jointsToReach,
-    const float& timeToReachP = 2.f,
-    const MBPostureTypes type = MBPostureTypes::interpToPosture);
-    
-  /**
-   * Constructor
-   * 
-   * @param targetPosture: Target posture to reach
-   * @param timeToReachP: Time to reach the posture in
-   * @param type: Type of the posture behavior
-   */  
-  MBPostureConfig(
-    const PostureState& targetPosture,
-    const float& timeToReachP = 2.f,
-    const MBPostureTypes type = MBPostureTypes::interpToPosture);
-
-  /**
-   * @derived
-   */ 
-  void validate();
-  
-  /**
-   * Makes an object of type this and returns it if valid
-   */ 
-  static boost::shared_ptr<MBPostureConfig> 
-    makeFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-
-  //! Time to reach the posture in
-  float timeToReachP;
-  
-  //! Joints to reach for the posture
-  VectorXf jointsToReach;
-  
-  //! Target posture to reach
-  PostureState targetPosture;
-};
-typedef boost::shared_ptr<MBPostureConfig> MBPostureConfigPtr;
+/**
+ * @struct InterpToPostureConfig
+ * @brief Simply interpolates to a desired posture using quintic splines
+ */
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  InterpToPostureConfig,
+  MBPostureConfig,
+  MBPostureTypes::interpToPosture,
+  InterpToPostureConfigPtr,
+  (Eigen::VectorXf, jointsToReach, Eigen::VectorXf()),
+)

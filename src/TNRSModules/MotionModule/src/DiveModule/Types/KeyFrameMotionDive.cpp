@@ -14,9 +14,11 @@
 #include "Utils/include/DataHolders/PostureState.h"
 
 template <typename Scalar>
-boost::shared_ptr<KFMDiveConfig> KeyFrameMotionDive<Scalar>::getBehaviorCast()
+KeyFrameMotionDive<Scalar>::KeyFrameMotionDive(
+  MotionModule* motionModule,
+  const boost::shared_ptr<KFMDiveConfig>& config) :
+DiveModule<Scalar>(motionModule, config, "KeyFrameMotionDive")
 {
-  return boost::static_pointer_cast<KFMDiveConfig> (this->config);
 }
 
 template <typename Scalar>
@@ -24,23 +26,23 @@ bool KeyFrameMotionDive<Scalar>::initiate()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   LOG_INFO("KeyFrameMotionDive.initiate() called...")
-  this->mG->closeHand(L_HAND);
-  this->mG->closeHand(R_HAND);
+  this->mG->closeHand(RobotHands::lHand);
+  this->mG->closeHand(RobotHands::rHand);
   KeyFrameDiveTypes type = getBehaviorCast()->keyFrameDiveType;
-  if (type == KeyFrameDiveTypes::IN_PLACE) {
-    this->endPosture = PostureState::DIVE_IN_PLACE;
+  if (type == KeyFrameDiveTypes::inPlace) {
+    this->endPosture = PostureState::diveInPlace;
     this->diveTime = this->runKeyFrameMotion(diveInPlace);
     return true;
-  } else if (type == KeyFrameDiveTypes::SUMO) {
-    this->endPosture = PostureState::DIVE_SUMO;
+  } else if (type == KeyFrameDiveTypes::sumo) {
+    this->endPosture = PostureState::diveSumo;
     this->diveTime = this->runKeyFrameMotion(diveSumo);
     return true;
-  } else if (type == KeyFrameDiveTypes::LEFT) {
-    this->endPosture = PostureState::DIVE_LEFT;
+  } else if (type == KeyFrameDiveTypes::left) {
+    this->endPosture = PostureState::diveLeft;
     this->diveTime = this->runKeyFrameMotion(diveLeft);
     return true;
-  } else if (type == KeyFrameDiveTypes::RIGHT) {
-    this->endPosture = PostureState::DIVE_RIGHT;
+  } else if (type == KeyFrameDiveTypes::right) {
+    this->endPosture = PostureState::diveRight;
     this->diveTime = this->runKeyFrameMotion(diveRight);
     return true;
   }
@@ -74,6 +76,12 @@ void KeyFrameMotionDive<Scalar>::finish()
 {
   LOG_INFO("KeyFrameMotionDive.finish() called...")
   this->inBehavior = false;
+}
+
+template <typename Scalar>
+boost::shared_ptr<KFMDiveConfig> KeyFrameMotionDive<Scalar>::getBehaviorCast()
+{
+  return boost::static_pointer_cast<KFMDiveConfig> (this->config);
 }
 
 template class KeyFrameMotionDive<MType>;

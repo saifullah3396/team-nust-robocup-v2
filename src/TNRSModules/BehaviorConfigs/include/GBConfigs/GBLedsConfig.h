@@ -161,8 +161,7 @@ struct GBLedsConfig : GBConfig
         BConfigException(
           this,
           "Invalid behavior configuration parameters passed.",
-          false,
-          EXC_INVALID_BCONFIG_PARAMETERS
+          false
         );
     }
   }

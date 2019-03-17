@@ -251,8 +251,8 @@ bool Robocup::getupFromGround(
 }
 
 void Robocup::setNavigationConfig(const RobotPose2D<float>& target,
-  const boost::shared_ptr<MBPostureConfig>& startPosture,
-  const boost::shared_ptr<MBPostureConfig>& endPosture)
+  const boost::shared_ptr<InterpToPostureConfig>& startPosture,
+  const boost::shared_ptr<InterpToPostureConfig>& endPosture)
 {
   //if (this->getChild())
   //  return;

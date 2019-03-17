@@ -233,9 +233,8 @@ void VisionTestSuite::testBallExtraction()
 {
   if (!mbInProgress()) {
     auto mConfig =
-      boost::make_shared <HeadTargetTrackConfig> (HeadTargetTypes::ball);
-    mConfig->htsConfig =
-      boost::make_shared <HeadTargetSearchConfig> (HeadTargetTypes::ball);
+      boost::make_shared <HeadTargetTrackConfig> ();
+    mConfig->headTargetType = HeadTargetTypes::ball;
     setupMBRequest(0, mConfig);
   }
 

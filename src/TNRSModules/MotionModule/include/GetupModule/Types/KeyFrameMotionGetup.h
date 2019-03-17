@@ -11,7 +11,7 @@
 
 #include "MotionModule/include/GetupModule/GetupModule.h"
 
-struct KeyFrameMotionGetupConfig;
+struct KFMGetupConfig;
 
 template<typename Scalar>
 class KeyFrameMotionGetup : public GetupModule<Scalar>

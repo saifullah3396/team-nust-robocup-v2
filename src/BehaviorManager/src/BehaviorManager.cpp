@@ -42,6 +42,7 @@ void BehaviorManager::manageRequest(
     }
     auto reqConfig = req->getReqConfig();
     //! Requested behavior configuration is valid or not
+    reqConfig->init();
     reqConfig->validate();
     req->setReceived(true);
     //! Behavior already exists
@@ -100,7 +101,7 @@ bool BehaviorManager::setupBehavior(
     if (!makeBehavior(bPtr, cfg)) {
       throw BManagerException(
         this,
-        "Requested behavior is undefined.",
+        "Unable to construct the behavior with requested configuration.",
         false,
         EXC_BEHAVIOR_SETUP_FAILED);
     }
@@ -122,7 +123,7 @@ BehaviorManager::update()
     }
     killRequested = false;
   }
-  
+
   //! If a current behavior exists
   if (currBehavior) {
     behaviorInfo->clearConfigs();
@@ -156,7 +157,7 @@ void BehaviorManager::updateBehavior(BehaviorPtr& bPtr)
     }
     childReq.reset();
   }
-	
+
   //! If a child exists now
   if (child) {
     //! Update the child
@@ -166,10 +167,10 @@ void BehaviorManager::updateBehavior(BehaviorPtr& bPtr)
   } else {
     bPtr->setChildInParallel(false);
   }
-  
+
   //! Initiate if not, update otherwise
   bPtr->manage();
-  
+
   //! If behavior is initiated but still not valid for update
   if (bPtr->isInitiated() && !bPtr->isRunning()) {
     bPtr.reset(); //! Behavior is finished so delete it

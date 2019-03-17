@@ -24,8 +24,8 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   PBNavigationTypes,
   (RobotPose2D<float>, goal, RobotPose2D<float>(0.0, 0.0, 0.0)),
   (bool, reachClosest, true),
-  (boost::shared_ptr<MBPostureConfig>, startPosture, MBPostureConfigPtr()),
-  (boost::shared_ptr<MBPostureConfig>, endPosture, MBPostureConfigPtr()),
+  (boost::shared_ptr<MBPostureConfig>, startPosture, InterpToPostureConfigPtr()),
+  (boost::shared_ptr<MBPostureConfig>, endPosture, InterpToPostureConfigPtr()),
 )
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(

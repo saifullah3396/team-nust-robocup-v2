@@ -3,6 +3,6 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 2,
-  "requestedBehavior" : "BalanceModule/ZmpControl.json",
+  "requestedBehavior" : "DiveModule/KFMDive.json",
   "logData" : false
 }

@@ -15,5 +15,7 @@ DEFINE_BEHAVIOR_CONFIG(
   (PBKickSequenceTypes, findAndKick, FindAndKickConfig),
 )
 
+void BallInterceptConfig::init() {}
 void BallInterceptConfig::validate() {}
+void FindAndKickConfig::init() {}
 void FindAndKickConfig::validate() {}

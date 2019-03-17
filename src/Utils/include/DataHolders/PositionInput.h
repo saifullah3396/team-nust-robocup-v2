@@ -45,7 +45,7 @@ struct PositionInput : public RobotPose2D<Scalar>
   Json::Value getJson() const final
   {
     Json::Value val;
-    JSON_ASSIGN_(val, input, JsonUtils::MatrixToJson(this->get().transpose()));
+    JSON_ASSIGN_(val, input, JsonUtils::matrixToJson(this->get().transpose()));
     return val;
   }
 };

@@ -6,9 +6,9 @@
     "maxRuntime" : 45,
     "regularizePosture" : true,
     "supportLeg" : 3,
+    "activeJoints" : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
     "type" : 2,
     "logData" : false,
     "timeToReachB" : 1.0,
-    "targetX" : -0.02,
-    "targetY" : 0.0
+    "target" : [-0.02, 0.0]
 }

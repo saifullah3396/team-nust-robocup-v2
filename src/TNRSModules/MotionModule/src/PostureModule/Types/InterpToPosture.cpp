@@ -20,9 +20,15 @@
 template <typename Scalar>
 InterpToPosture<Scalar>::InterpToPosture(
   MotionModule* motionModule,
-  const boost::shared_ptr<MBPostureConfig>& config) :
+  const boost::shared_ptr<InterpToPostureConfig>& config) :
   PostureModule<Scalar>(motionModule, config, "InterpToPosture")
 {
+}
+
+template <typename Scalar>
+boost::shared_ptr<InterpToPostureConfig> InterpToPosture<Scalar>::getBehaviorCast()
+{
+  return SPC(InterpToPostureConfig, this->config);
 }
 
 template <typename Scalar>

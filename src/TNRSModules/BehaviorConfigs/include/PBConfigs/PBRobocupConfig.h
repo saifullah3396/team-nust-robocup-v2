@@ -26,7 +26,6 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   (RobotPose2D<float>, startPose, RobotPose2D<float>(-4.25, 0.0, 0.0)),
   (MBHeadControlConfigPtr, hsConfig, HeadScanConfigPtr()),
   (MBHeadControlConfigPtr, httConfig, HeadTargetTrackConfigPtr()),
-  (MBHeadControlConfigPtr, htsConfig, HeadTargetSearchConfigPtr()),
 )
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(

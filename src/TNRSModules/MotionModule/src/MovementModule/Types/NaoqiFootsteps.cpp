@@ -10,7 +10,7 @@
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/MovementModule/Types/NaoqiFootsteps.h"
-#include "MotionModule/include/MovementModule/TNRSFootstep.h"
+#include "Utils/include/DataHolders/TNRSFootstep.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
@@ -119,8 +119,8 @@ template <typename Scalar>
 bool NaoqiFootsteps<Scalar>::initWalk()
 {
   try {
-    StateIterT pathIter = this->plannedPath.begin();
-    const PathPlannerSpace::State* fromPlanned = pathIter.base();
+    auto pathIter = this->plannedPath.begin();
+    const TNRSFootstep<float>* fromPlanned = pathIter.base();
     pathIter++;
     int unchangeable = 0;
     AL::ALValue naoqiFs = this->getFootsteps()[1];
@@ -129,8 +129,8 @@ bool NaoqiFootsteps<Scalar>::initWalk()
     if (naoqiFs.getSize() > 0) {
       for (size_t i = 0; i < naoqiFs.getSize(); ++i) {
         string legStr;
-        if ((*pathIter).getLeg() == LEFT) legStr = "LLeg";
-        else if ((*pathIter).getLeg() == RIGHT) legStr = "RLeg";
+        if ((*pathIter).foot == RobotFeet::lFoot) legStr = "LLeg";
+        else if ((*pathIter).foot == RobotFeet::rFoot) legStr = "RLeg";
         if (((string)naoqiFs[i][0]) == legStr) {
           fromPlanned = pathIter.base();
           pathIter++;
@@ -143,14 +143,9 @@ bool NaoqiFootsteps<Scalar>::initWalk()
         stepTrans(1, 3) = naoqiFs[i][2][1];
         MathsUtils::makeRotationZ(stepRot, naoqiFs[i][2][2]);
         stepTrans.block(0, 0, 3, 3) = stepRot;
-        auto stepLeg = LEFT;
         auto stepFoot = RobotFeet::lFoot;
-        if (((string)naoqiFs[i][0]) == "LLeg")
-          stepLeg = LEFT;
-        else {
-          stepLeg = RIGHT;
+        if (((string)naoqiFs[i][0]) != "LLeg")
           stepFoot = RobotFeet::rFoot;
-        }
         auto s =
           boost::make_shared<TNRSFootstep<Scalar> >(
             RobotPose2D<Scalar>(
@@ -172,32 +167,17 @@ bool NaoqiFootsteps<Scalar>::initWalk()
     while (pathIter != this->plannedPath.end()) {
       // Get a step from the planned path
       Matrix<Scalar, 4, 4> stepTrans;
-      PathPlannerSpace::State step = this->getFootstep(*fromPlanned, *pathIter, stepTrans);
+      TNRSFootstep<float> step = this->getFootstep(*fromPlanned, *pathIter, stepTrans);
       // Generate a NaoQi footstep array
       footSteps[stepIndex].arraySetSize(3);
       // Foot type
-      if (step.getLeg() == LEFT) footName[stepIndex] = "LLeg";
-      else if (step.getLeg() == RIGHT) footName[stepIndex] = "RLeg";
+      if (step.foot == RobotFeet::lFoot) footName[stepIndex] = "LLeg";
+      else if (step.foot == RobotFeet::rFoot) footName[stepIndex] = "RLeg";
       // Foot position
-      footSteps[stepIndex][0] = step.getX();
-      footSteps[stepIndex][1] = step.getY();
-      footSteps[stepIndex][2] = step.getTheta();
-      boost::shared_ptr<TNRSFootstep<Scalar>> s;
-      if (step.getLeg() == LEFT)
-        s =
-          boost::make_shared<TNRSFootstep<Scalar> >(
-            RobotPose2D<Scalar>(
-              step.getX(), step.getY(), step.getTheta()),
-            RobotFeet::lFoot,
-            stepTrans);
-      else if (step.getLeg() == RIGHT)
-        s =
-          boost::make_shared<TNRSFootstep<Scalar> >(
-            RobotPose2D<Scalar>(
-              step.getX(), step.getY(), step.getTheta()),
-            RobotFeet::rFoot,
-            stepTrans);
-      steps.push(s);
+      footSteps[stepIndex][0] = step.pose2D.getX();
+      footSteps[stepIndex][1] = step.pose2D.getY();
+      footSteps[stepIndex][2] = step.pose2D.getTheta();
+      steps.push(boost::make_shared<TNRSFootstep<Scalar> >(step));
       // Time taken by footstep
       timeList[stepIndex] = (stepIndex + 1) * this->footstepTime;
       ++stepIndex;
@@ -365,33 +345,33 @@ void NaoqiFootsteps<Scalar>::postStopWalkAction()
 }
 
 template <typename Scalar>
-PathPlannerSpace::State NaoqiFootsteps<Scalar>::getFootstep(
-  const PathPlannerSpace::State& from,
-  const PathPlannerSpace::State& to,
+TNRSFootstep<float> NaoqiFootsteps<Scalar>::getFootstep(
+  const TNRSFootstep<float>& from,
+  const TNRSFootstep<float>& to,
   Matrix<Scalar, 4, 4>& stepTrans)
 {
   Matrix<Scalar, 3, 3> toRotation;
-  MathsUtils::makeRotationZ(toRotation, to.getTheta());
+  MathsUtils::makeRotationZ(toRotation, to.pose2D.getTheta());
   Matrix<Scalar, 3, 3> fromRotation;
-  MathsUtils::makeRotationZ(fromRotation, from.getTheta());
+  MathsUtils::makeRotationZ(fromRotation, from.pose2D.getTheta());
 
   stepTrans =
     MathsUtils::getTInverse(
       MathsUtils::makeTransformation(
         fromRotation,
-        from.getX(),
-        from.getY(),
+        from.pose2D.getX(),
+        from.pose2D.getY(),
         0.0)) * MathsUtils::makeTransformation(
       toRotation,
-      to.getX(),
-      to.getY(),
+      to.pose2D.getX(),
+      to.pose2D.getY(),
       0.0);
-  PathPlannerSpace::State footstep;
-  footstep.setX(stepTrans(0, 3));
-  footstep.setY(stepTrans(1, 3));
-  footstep.setTheta(
-    MathsUtils::matToEuler((Matrix<Scalar, 3, 3>) stepTrans.block(0, 0, 3, 3))[2]);
-  footstep.setLeg(to.getLeg());
+  TNRSFootstep<float> footstep;
+  footstep.pose2D.x() = stepTrans(0, 3);
+  footstep.pose2D.y() = stepTrans(1, 3);
+  footstep.pose2D.theta() =
+    MathsUtils::matToEuler((Matrix<Scalar, 3, 3>) stepTrans.block(0, 0, 3, 3))[2];
+  footstep.foot = to.foot;
   return footstep;
 }
 

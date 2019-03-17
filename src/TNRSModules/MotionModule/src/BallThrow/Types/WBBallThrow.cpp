@@ -66,8 +66,8 @@ void WBBallThrow<Scalar>::update()
     auto& root = this->dataLogger->getRoot();
     Matrix<Scalar, 4, 4> tl = this->kM->getForwardEffector(LinkChains::lArm, 0);
     Matrix<Scalar, 4, 4> tr = this->kM->getForwardEffector(LinkChains::rArm, 0);
-    JSON_APPEND(root["eeTraj"], "lArm", JsonUtils::MatrixToJson(tl.block(0, 3, 3, 1)));
-    JSON_APPEND(root["eeTraj"], "rArm", JsonUtils::MatrixToJson(tr.block(0, 3, 3, 1)));
+    JSON_APPEND(root["eeTraj"], "lArm", JsonUtils::matrixToJson(tl.block(0, 3, 3, 1)));
+    JSON_APPEND(root["eeTraj"], "rArm", JsonUtils::matrixToJson(tr.block(0, 3, 3, 1)));
     JSON_APPEND(root["eeTraj"], "time", this->motionModule->getModuleTime());
   }
   if (fsm->update())

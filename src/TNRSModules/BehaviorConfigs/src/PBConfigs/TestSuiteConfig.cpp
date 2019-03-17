@@ -17,7 +17,11 @@ DEFINE_BEHAVIOR_CONFIG(
   (TestSuiteTypes, navigation, NavigationTestSuiteConfig),
 )
 
+void VisionTestSuiteConfig::init() {}
 void VisionTestSuiteConfig::validate() {}
+void MotionTestSuiteConfig::init() {}
 void MotionTestSuiteConfig::validate() {}
+void LocalizationTestSuiteConfig::init() {}
 void LocalizationTestSuiteConfig::validate() {}
+void NavigationTestSuiteConfig::init() {}
 void NavigationTestSuiteConfig::validate() {}

@@ -11,6 +11,8 @@
 
 #include "MotionModule/include/PostureModule/PostureModule.h"
 
+struct InterpToPostureConfig;
+
 /**
  * @class InterpToPosture
  * @brief A class that interpolates the joints from initial state to
@@ -28,7 +30,7 @@ public:
    */
   InterpToPosture(
     MotionModule* motionModule,
-    const boost::shared_ptr<MBPostureConfig>& config);
+    const boost::shared_ptr<InterpToPostureConfig>& config);
 
   /**
    * @brief ~InterpToPosture Destructor
@@ -56,6 +58,11 @@ public:
   void loadExternalConfig() final {}
 
 private:
+  /**
+   * Returns the cast of config to MBPostureConfigPtr
+   */
+  boost::shared_ptr<InterpToPostureConfig> getBehaviorCast();
+
   //! Joint configuration initial
   Matrix<Scalar, Dynamic, 1> jointsI;
 

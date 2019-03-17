@@ -63,8 +63,9 @@ bool PlanningBehavior::setPostureAndStiffness(
   } else if (POSTURE_STATE_IN(PlanningModule) != desPosture) {
     if (!mbInProgress()) {
       auto pConfig = 
-        boost::make_shared<MBPostureConfig>(
-          desPosture, postureTime);
+        boost::make_shared<InterpToPostureConfig>();
+      pConfig->targetPosture = desPosture;
+      pConfig->timeToReachP = postureTime;
       setupMBRequest(mbManagerId, pConfig);
     }
     return false;

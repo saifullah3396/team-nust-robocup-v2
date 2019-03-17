@@ -15,11 +15,13 @@ DEFINE_BEHAVIOR_CONFIG(
   (PBExternalInterfaceTypes, userReqHandler, UserRequestsHandlerConfig),
 )
 
+void NIHACognitionConfig::init() {}
 void NIHACognitionConfig::validate()
 {
   
 }
 
+void UserRequestsHandlerConfig::init() {}
 void UserRequestsHandlerConfig::validate()
 {
   

@@ -14,4 +14,5 @@ DEFINE_BEHAVIOR_CONFIG(
   (PBStartupTypes, requestBehavior, RequestBehaviorConfig),
 )
 
+void RequestBehaviorConfig::init() {}
 void RequestBehaviorConfig::validate() {}

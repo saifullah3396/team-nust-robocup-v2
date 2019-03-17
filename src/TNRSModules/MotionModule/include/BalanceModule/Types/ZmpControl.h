@@ -116,6 +116,9 @@ private:
   static vector<Scalar> taskWeights;
   static vector<Scalar> taskGains;
 
+  //! Active joints for tasks
+  vector<bool> activeJoints;
+
   Scalar maxTime = {0.05};
 
   enum IkTasks : unsigned int {

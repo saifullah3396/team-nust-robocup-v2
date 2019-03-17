@@ -7,118 +7,108 @@
  * @date 21 Jul 2018
  */
 
+#include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
+#include "MotionModule/include/KinematicsModule/Joint.h"
 #include "MotionModule/include/HeadControl/Types/HeadTargetTrack.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "Utils/include/PIDController.h"
+#include "Utils/include/HardwareIds.h"
+#include "Utils/include/Constants.h"
+#include "Utils/include/ConfigMacros.h"
 
 template <typename Scalar>
-Matrix<Scalar, 3, 1> HeadTargetTrack<Scalar>::pidGains;
+vector<Matrix<Scalar, 3, 1> > HeadTargetTrack<Scalar>::pidGains;
+template <typename Scalar>
+Scalar HeadTargetTrack<Scalar>::lowerCamUsageRange =  0.6;
+template <typename Scalar>
+Scalar HeadTargetTrack<Scalar>::lowerCamUsageZ = 0.5;
 
 template <typename Scalar>
-HeadTargetTrackConfigPtr HeadTargetTrack<Scalar>::getBehaviorCast()
+HeadTargetTrack<Scalar>::HeadTargetTrack(
+  MotionModule* motionModule,
+  const boost::shared_ptr<HeadTargetTrackConfig>& config) :
+  HeadControl<Scalar>(motionModule, config, "HeadTargetTrack")
 {
-  return boost::static_pointer_cast<HeadTargetTrackConfig> (this->config);
 }
 
 template <typename Scalar>
-void HeadTargetTrack<Scalar>::initiate()
+bool HeadTargetTrack<Scalar>::initiate()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-	LOG_INFO("HeadTargetTrack.initiate()")
-  this->targetType = this->getBehaviorCast()->headTargetType;
-  this->inBehavior = true;
+  LOG_INFO("HeadTargetTrack.initiate() called...");
+  trackersXY.resize(2);
+  for (size_t i = 0; i < trackersXY.size(); ++i) {
+    trackersXY[i] = boost::make_shared<PIDController<Scalar>>(this->cycleTime);
+    trackersXY[i]->setPidGains(HeadTargetTrack::pidGains[i]);
+  }
+  if (this->getBehaviorCast()->scanConfig) {
+    this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
+  } else {
+    this->getBehaviorCast()->scanConfig = boost::make_shared<HeadScanConfig>();
+    this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
+  }
+  return true;
   #else
-  LOG_ERROR("Behavior HeadTargetTrack undefined without Naoqi")
-  finish();
+  LOG_ERROR("Behavior HeadTargetTrack is undefined without Naoqi motion proxy");
+  return false;
   #endif
 }
 
 template <typename Scalar>
 void HeadTargetTrack<Scalar>::update()
 {
+  //LOG_INFO("HeadTargetTrack.update()...")
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  Scalar targetZ;
-  cv::Point_<Scalar> targetXY;
-  if (this->findTarget(targetType, targetXY, targetZ)) {
-    if (targetZ < 0.f) { // Used for killing behavior if a target is found and cannot be tracked
-      LOG_INFO("HeadTargetTrack.update(): Cannot track target. Finishing behavior...")
+  Matrix<Scalar, 4, 1> posWorld;
+  bool trackable;
+  if (this->findTarget(getBehaviorCast()->headTargetType, posWorld, trackable)) {
+    if (!trackable) {
       finish();
     }
-    Matrix<Scalar, 4, 1> posCam, posWorld;
-    posWorld = Matrix<Scalar, 4, 1>(targetXY.x, targetXY.y, targetZ, 1.f);
-    if (
-      norm(targetXY) < 0.6 &&
-      targetZ < 0.5f)
-    { // If targetXY is within 60 cm and z is reasonably low, use lower cam
-      posCam = this->kM->getWorldToCam(CameraId::headBottom, posWorld);
-    } else { // else use upper cam
-      posCam = this->kM->getWorldToCam(CameraId::headTop, posWorld);
+    CameraId trackingCam = CameraId::headTop;
+    if (posWorld.head(2).norm() < lowerCamUsageRange && posWorld[2] < lowerCamUsageZ) {
+      //! If targetXY is within 60 cm and z is reasonably low, use lower cam
+      trackingCam = CameraId::headBottom;
     }
-    followTarget(posCam);
-  } else {
-  /*  targetLostTime += this->cycleTime;
-    if (targetLostTime > 5.f) {
-      LOG_INFO("HeadTargetTrack.update(): Target lost. Finishing behavior...")
+    if (trackTarget(this->kM->getWorldToCam(trackingCam, posWorld))) { //! Target reached
       finish();
     }
-  0} else {*/
-    this->setupChildRequest(getBehaviorCast()->htsConfig);
   }
   #else
-  LOG_ERROR("Behavior HeadTargetTrack undefined without Naoqi")
+  LOG_ERROR("Behavior HeadTargetTrack undefined without Naoqi");
   finish();
   #endif
 }
 
 template <typename Scalar>
-void HeadTargetTrack<Scalar>::followTarget(const Matrix<Scalar, 4, 1>& posCam)
+bool HeadTargetTrack<Scalar>::trackTarget(const Matrix<Scalar, 4, 1>& posCam)
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  // TODO: Fix this. Too messy. Also add the use of pid somewhere e.e 
-  Matrix<Scalar, 2, 1> dAngles, aAngles;
-  Matrix<Scalar, 2, 1> error, command;
-  aAngles[HEAD_YAW] = this->kM->getJointState(HEAD_YAW)->position();
-  aAngles[HEAD_PITCH] = this->kM->getJointState(HEAD_PITCH)->position();
-  error[HEAD_YAW] =
-    atan2(posCam[2], posCam[0]) - M_PI / 2;
-  error[HEAD_PITCH] =
-    -(atan2(posCam[2], posCam[1]) - M_PI / 2);
-  command = pidGains[0] * error + pidGains[1] * intError;
-  /*command =
-   prevCommand +
-   (pidKp + pidKi * this->cycleTime / 2 + pidKd / this->cycleTime) * error +
-   (-pidKp + pidKi * this->cycleTime / 2 - 2 * pidKd / this->cycleTime) * errorK1 +
-   (pidKd / this->cycleTime) * errorK2;
-   prevCommand = command;
-   errorK2 = errorK1;
-   errorK1 = error;
-   command[HEAD_YAW] += aAngles[HEAD_YAW];
-   command[HEAD_PITCH] += aAngles[HEAD_PITCH];*/
-  intError += error;
-  Matrix<Scalar, 2, 1> fAngle;
-  fAngle[HEAD_YAW] = aAngles[HEAD_YAW] + command[HEAD_YAW];
-  fAngle[HEAD_PITCH] = aAngles[HEAD_PITCH] - command[HEAD_PITCH];
-  if (fAngle[HEAD_YAW] >= headYawHigh) {
-    command[HEAD_YAW] = 0.f;
-  } else if (fAngle[HEAD_YAW] <= headYawLow) {
-    command[HEAD_YAW] = 0.f;
+  Matrix<Scalar, 2, 1> cmd, meas;
+  cmd[0] = atan2(posCam[2], posCam[0]) - M_PI / 2; //! X-angle
+  cmd[1] = atan2(posCam[2], posCam[0]) - M_PI / 2; //! Y-angle
+  meas[0] = this->kM->getJointState(Joints::headYaw)->position();
+  meas[1] = this->kM->getJointState(Joints::headPitch)->position();
+  for (size_t i = 0 ; i < trackersXY.size(); ++i) {
+    trackersXY[i]->setCmd(cmd[i]);
+    auto input = trackersXY[i]->update(meas[i]);
+    cmd[i] = meas[i] + input * this->cycleTime;
+    this->targetAngles[i] = std::max(Constants::jointMinPositions[i], std::min((double)cmd[i], Constants::jointMaxPositions[i]));
   }
-  if (fAngle[HEAD_PITCH] >= headPitchHigh) {
-    command[HEAD_PITCH] = 0.f;
-  } else if (fAngle[HEAD_PITCH] <= headPitchLow) {
-    command[HEAD_PITCH] = 0.f;
+  if (fabsf(trackersXY[0]->prevError1()) < Angle::DEG_5 &&
+      fabsf(trackersXY[1]->prevError1()) < Angle::DEG_5)
+  {
+    this->naoqiChangeAngles(this->naoqiNames, this->targetAngles, this->fractionMaxSpeed);
+    return true;
   }
-  AL::ALValue names = AL::ALValue::array("HeadYaw", "HeadPitch");
-  AL::ALValue angles = AL::ALValue::array(
-    command[HEAD_YAW],
-    command[HEAD_PITCH]);
-  Scalar fractionMaxSpeed = 1.f;
-  this->naoqiChangeAngles(names, angles, fractionMaxSpeed);
+  return false;
   #endif
 }
 
 template <typename Scalar>
 void HeadTargetTrack<Scalar>::finish()
 {
+  LOG_INFO("HeadTargetTrack.finish() called...");
   this->inBehavior = false;
 }
 
@@ -127,13 +117,25 @@ void HeadTargetTrack<Scalar>::loadExternalConfig()
 {
   static bool loaded = false;
   if (!loaded) {
+    pidGains.resize(2);
     GET_CONFIG("MotionBehaviors",
-      (Scalar, HeadTargetTrack.kp, pidGains[0]),
-      (Scalar, HeadTargetTrack.ki, pidGains[1]),
-      (Scalar, HeadTargetTrack.kd, pidGains[2]),
-    )
+      (Scalar, HeadTargetTrack.kpx, pidGains[0][0]),
+      (Scalar, HeadTargetTrack.kix, pidGains[0][1]),
+      (Scalar, HeadTargetTrack.kdx, pidGains[0][2]),
+      (Scalar, HeadTargetTrack.kpy, pidGains[1][0]),
+      (Scalar, HeadTargetTrack.kiy, pidGains[1][1]),
+      (Scalar, HeadTargetTrack.kdy, pidGains[1][2]),
+      (Scalar, HeadTargetTrack.lowerCamUsageRange, lowerCamUsageRange),
+      (Scalar, HeadTargetTrack.lowerCamUsageZ, lowerCamUsageZ),
+    );
     loaded = true;
   }
+}
+
+template <typename Scalar>
+HeadTargetTrackConfigPtr HeadTargetTrack<Scalar>::getBehaviorCast()
+{
+  return boost::static_pointer_cast<HeadTargetTrackConfig> (this->config);
 }
 
 template class HeadTargetTrack<MType>;

@@ -356,7 +356,7 @@ void Soccer::FallRecovery::onRun()
     if (posture != PostureState::STAND) {
       if (!bPtr->mbInProgress()) {
         auto pConfig =
-          boost::make_shared<MBPostureConfig>(
+          boost::make_shared<InterpToPostureConfig>(
             PostureState::STAND, postureTime);
         bPtr->setupMBRequest(MOTION_1, pConfig);
       }

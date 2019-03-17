@@ -12,6 +12,15 @@
 #include "MotionModule/include/GetupModule/Types/KeyFrameMotionGetup.h"
 
 template <typename Scalar>
+GetupModule<Scalar>::GetupModule(
+  MotionModule* motionModule,
+  const boost::shared_ptr<MBGetupConfig>& config,
+  const string& name) :
+  MotionBehavior<Scalar>(motionModule, config, name)
+{
+}
+
+template <typename Scalar>
 boost::shared_ptr<GetupModule<Scalar> > GetupModule<Scalar>::getType(
   MotionModule* motionModule, const BehaviorConfigPtr& cfg) 
 { 

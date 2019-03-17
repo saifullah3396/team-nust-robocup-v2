@@ -11,6 +11,10 @@
 
 #include "MBConfig.h"
 
+/**
+ * @struct MBMotionPlaybackConfig
+ * @brief Motion playback behavior base configuration
+ */
 DECLARE_BEHAVIOR_CONFIG(
   MBMotionPlaybackConfig,
   MBConfig,
@@ -20,6 +24,11 @@ DECLARE_BEHAVIOR_CONFIG(
   MBMotionPlaybackTypes
 )
 
+/**
+ * @struct ReplayStoredMBConfig
+ * @brief Replays stored motion commands based on logged
+ *   motion behavior configurations
+ */
 DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   ReplayStoredMBConfig,
   MBMotionPlaybackConfig,

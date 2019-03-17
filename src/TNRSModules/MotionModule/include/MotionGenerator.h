@@ -78,7 +78,7 @@ public:
    * @brief naoqiJointInterpolation Interpolates joints using naoqi joint interpolation
    *
    * @param ids: Ids of all the joints under consideration
-   * @param timeLists: Times for interpolation of each joint
+   * @param timesList: Times for interpolation of each joint
    * @param positionLists: List of joint angular positions
    * @param postCommand: Whether this command is to be run in a
    *   separate thread or as a blocking call
@@ -87,14 +87,14 @@ public:
   #ifndef V6_CROSS_BUILD
   void naoqiJointInterpolation(
     const vector<unsigned>& ids,
-    const AL::ALValue& timeLists,
+    const AL::ALValue& timesList,
     const AL::ALValue& positionLists,
     const bool& postCommand,
     const MotionLoggerPtr& logger = MotionLoggerPtr());
   #else
   void naoqiJointInterpolation(
     const vector<unsigned>& ids,
-    const vector<vector<float> >& timeLists,
+    const vector<vector<float> >& timesList,
     const vector<vector<float> >& positionLists,
     const bool& postCommand,
     const MotionLoggerPtr& logger = MotionLoggerPtr());

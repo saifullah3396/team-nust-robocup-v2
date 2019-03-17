@@ -27,9 +27,7 @@ boost::shared_ptr<PostureModule<Scalar> > PostureModule<Scalar>::getType(
   PostureModule<Scalar>* pm;
   switch (cfg->type) {
       case toUType(MBPostureTypes::interpToPosture):
-        pm =
-          new InterpToPosture<Scalar>(
-            motionModule, boost::static_pointer_cast<MBPostureConfig>(cfg)); break;
+        pm = new InterpToPosture<Scalar>(motionModule, SPC(InterpToPostureConfig, cfg)); break;
   }
   return boost::shared_ptr<PostureModule<Scalar> >(pm);
 }

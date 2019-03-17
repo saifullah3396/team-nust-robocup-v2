@@ -92,11 +92,11 @@ void NavigationTestSuite::GoToTarget::onStart()
   planConfig->goal = bPtr->getBehaviorCast()->goalPose;
   //planConfig->reachClosest = true;
   /*planConfig->startPosture =
-    boost::make_shared<MBPostureConfig>(
+    boost::make_shared<InterpToPostureConfig>(
       PostureState::STAND_HANDS_BEHIND,
       1.0f);
   planConfig->endPosture =
-    boost::make_shared<MBPostureConfig>(
+    boost::make_shared<InterpToPostureConfig>(
       PostureState::STAND_HANDS_BEHIND,
       1.0f);*/
   bPtr->setupChildRequest(planConfig, true);

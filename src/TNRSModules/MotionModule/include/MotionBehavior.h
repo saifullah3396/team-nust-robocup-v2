@@ -16,6 +16,7 @@
 #endif
 #include <boost/filesystem.hpp>
 #include "BehaviorManager/include/Behavior.h"
+#include "MotionModule/include/MotionGenerator.h"
 #include "TNRSBase/include/MemoryBase.h"
 
 template <typename Scalar>

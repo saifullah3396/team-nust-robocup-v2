@@ -206,21 +206,21 @@ void MotionGenerator<Scalar>::naoqiSetFootsteps(
     motionProxy.call<void>("setFootSteps", footName, footSteps, timeList, clearExisting);
   #endif
 }
-#endif  
+#endif
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 #ifndef V6_CROSS_BUILD
 void MotionGenerator<Scalar>::naoqiJointInterpolation(
   const vector<unsigned>& ids,
-  const AL::ALValue& timeLists,
+  const AL::ALValue& timesList,
   const AL::ALValue& positionLists,
   const bool& postCommand,
   const MotionLoggerPtr& logger)
 #else
 void MotionGenerator<Scalar>::naoqiJointInterpolation(
   const vector<unsigned>& ids,
-  const vector<vector<float> >& timeLists,
+  const vector<vector<float> >& timesList,
   const vector<vector<float> >& positionLists,
   const bool& postCommand,
   const MotionLoggerPtr& logger)
@@ -228,16 +228,16 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
 {
   #ifndef V6_CROSS_BUILD
     ASSERT(
-      ids.size() == timeLists.getSize() &&
-      timeLists.getSize() == positionLists.getSize()
+      ids.size() == timesList.getSize() &&
+      timesList.getSize() == positionLists.getSize()
     );
     AL::ALValue names;
     names.clear();
     names.arraySetSize(ids.size());
   #else
     ASSERT(
-      ids.size() == timeLists.size() &&
-      timeLists.getSize() == positionLists.size()
+      ids.size() == timesList.size() &&
+      timesList.getSize() == positionLists.size()
     );
     vector<string> names;
     names.clear();
@@ -247,24 +247,24 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
     names[i] = Constants::jointNames[ids[i]];
 
   if (logger)
-    logger->recordJointCmds(positionLists, timeLists, ids);
+    logger->recordJointCmds(positionLists, timesList, ids);
 
   try {
     if (postCommand) {
       #ifndef V6_CROSS_BUILD
         motionProxy->post.angleInterpolation(
-          names, positionLists, timeLists, true);
+          names, positionLists, timesList, true);
       #else
         motionProxy.call<void>(
-          "angleInterpolation", names, positionLists, timeLists, true);
+          "angleInterpolation", names, positionLists, timesList, true);
       #endif
     } else {
       #ifndef V6_CROSS_BUILD
-        motionProxyangleInterpolation(
-          names, positionLists, timeLists, true);
+        motionProxy->angleInterpolation(
+          names, positionLists, timesList, true);
       #else
         motionProxy.async<void>(
-          "angleInterpolation", names, positionLists, timeLists, true);
+          "angleInterpolation", names, positionLists, timesList, true);
       #endif
     }
   } catch (exception &e) {
@@ -324,15 +324,15 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
     if (postCommand) {
       #ifndef V6_CROSS_BUILD
         motionProxy->post.angleInterpolation(
-          names, positionLists, timeLists, true);
+          names, positionLists, timesList, true);
       #else
         motionProxy.call<void>(
           "angleInterpolation", names, positionLists, timesList, true);
       #endif
     } else {
       #ifndef V6_CROSS_BUILD
-        motionProxyangleInterpolation(
-          names, positionLists, timeLists, true);
+        motionProxy->angleInterpolation(
+          names, positionLists, timesList, true);
       #else
         motionProxy.async<void>(
           "angleInterpolation", names, positionLists, timesList, true);

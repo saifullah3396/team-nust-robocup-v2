@@ -396,9 +396,9 @@ void JointSpaceKick<Scalar>::defineTrajectory()
       JSON_ASSIGN(jsonImpact, "ballMass", this->ballMass);
       JSON_ASSIGN(jsonImpact, "coeffRest", coeffRest);
       JSON_ASSIGN(jsonImpact, "virtualMass", vm);
-      JSON_ASSIGN(jsonImpact, "desImpactVel", JsonUtils::MatrixToJson(this->desImpactVel));
-      JSON_ASSIGN(jsonImpact, "impJoints", JsonUtils::MatrixToJson(impactJoints * 180 / M_PI));
-      JSON_ASSIGN(jsonImpact, "endEffector", JsonUtils::MatrixToJson(this->endEffector));
+      JSON_ASSIGN(jsonImpact, "desImpactVel", JsonUtils::matrixToJson(this->desImpactVel));
+      JSON_ASSIGN(jsonImpact, "impJoints", JsonUtils::matrixToJson(impactJoints * 180 / M_PI));
+      JSON_ASSIGN(jsonImpact, "endEffector", JsonUtils::matrixToJson(this->endEffector));
       JSON_ASSIGN(this->dataLogger->getRoot(), "impact", jsonImpact);
     }
   }
@@ -607,24 +607,24 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   }*/
   if (this->config->logData) {
     Json::Value jsonPlanning, jsonTraj;
-    JSON_ASSIGN(jsonPlanning, "torsoToSupport", JsonUtils::MatrixToJson(this->torsoToSupport));
-    JSON_ASSIGN(jsonPlanning, "supportToKick", JsonUtils::MatrixToJson(this->supportToKick));
-    JSON_ASSIGN(jsonPlanning, "endEffectorTransformed", JsonUtils::MatrixToJson(eeTrans));
+    JSON_ASSIGN(jsonPlanning, "torsoToSupport", JsonUtils::matrixToJson(this->torsoToSupport));
+    JSON_ASSIGN(jsonPlanning, "supportToKick", JsonUtils::matrixToJson(this->supportToKick));
+    JSON_ASSIGN(jsonPlanning, "endEffectorTransformed", JsonUtils::matrixToJson(eeTrans));
     Json::Value jsonCPoses;
     Json::Value jsonJointPos;
-    jsonJointPos.append(JsonUtils::MatrixToJson(jointPosPre));
-    jsonJointPos.append(JsonUtils::MatrixToJson(jointPosPost));
+    jsonJointPos.append(JsonUtils::matrixToJson(jointPosPre));
+    jsonJointPos.append(JsonUtils::matrixToJson(jointPosPost));
     for (int i = 0; i < cPosesPre.size(); ++i) {
-      jsonCPoses.append(JsonUtils::MatrixToJson(cPosesPre[i]));
+      jsonCPoses.append(JsonUtils::matrixToJson(cPosesPre[i]));
     }
     for (int i = 0; i < cPosesPost.size(); ++i) {
-      jsonCPoses.append(JsonUtils::MatrixToJson(cPosesPost[i]));
+      jsonCPoses.append(JsonUtils::matrixToJson(cPosesPost[i]));
     }
     JSON_ASSIGN(jsonPlanning, "cPoses", jsonCPoses);
     JSON_ASSIGN(jsonTraj, "jointPoses", jsonJointPos);
-    JSON_ASSIGN(jsonTraj, "opt1knots", JsonUtils::MatrixToJson(cb1.getKnots()));
-    JSON_ASSIGN(jsonTraj, "opt2knots", JsonUtils::MatrixToJson(cb2.getKnots()));
-    JSON_ASSIGN(jsonTraj, "jointBoundVels", JsonUtils::MatrixToJson(jointBoundVels));
+    JSON_ASSIGN(jsonTraj, "opt1knots", JsonUtils::matrixToJson(cb1.getKnots()));
+    JSON_ASSIGN(jsonTraj, "opt2knots", JsonUtils::matrixToJson(cb2.getKnots()));
+    JSON_ASSIGN(jsonTraj, "jointBoundVels", JsonUtils::matrixToJson(jointBoundVels));
     JSON_ASSIGN(jsonTraj, "kickTimeToImpact", kickTimeToImpact);
     JSON_ASSIGN(jsonTraj, "totalKickTime", kickTimeToImpact + trajTime.back());
 
@@ -647,7 +647,7 @@ void JointSpaceKick<Scalar>::defineTrajectory()
       JSON_APPEND(
         jsonEE,
         "endEffectorCmd",
-        JsonUtils::MatrixToJson(eeTrans)
+        JsonUtils::matrixToJson(eeTrans)
       );
       Matrix<Scalar, 3, 1> eePos = Matrix<Scalar, 3, 1>(eeTrans(0, 3), eeTrans(1, 3), eeTrans(2, 3));
       Matrix<Scalar, 3, 1> eeVel = (eePos - eePrevPos) / this->cycleTime;
@@ -656,7 +656,7 @@ void JointSpaceKick<Scalar>::defineTrajectory()
       JSON_APPEND(
         jsonEE,
         "endEffectorTraj",
-        JsonUtils::MatrixToJson(eeTraj)
+        JsonUtils::matrixToJson(eeTraj)
       );
       eePrevPos = eePos;
     }
@@ -783,7 +783,7 @@ void JointSpaceKick<Scalar>::logJointStatesActual()
   JSON_APPEND(
     root["jointStates"],
     "jointStatesActual",
-    JsonUtils::MatrixToJson(js->position)
+    JsonUtils::matrixToJson(js->position)
   );
 }
 */
@@ -798,7 +798,7 @@ void JointSpaceKick<Scalar>::logEndEffectorActual()
   JSON_APPEND(
     root["endEffector"],
     "actualTrans",
-    JsonUtils::MatrixToJson(supportToEE)
+    JsonUtils::matrixToJson(supportToEE)
   );
   Matrix<Scalar, 3, 1> eePos = Matrix<Scalar, 3, 1>(supportToEE(0, 3), supportToEE(1, 3), supportToEE(2, 3));
   static Matrix<Scalar, 3, 1> eePrevPos = eePos;
@@ -808,7 +808,7 @@ void JointSpaceKick<Scalar>::logEndEffectorActual()
   JSON_APPEND(
     root["endEffector"],
     "actualTraj",
-    JsonUtils::MatrixToJson(eeTraj)
+    JsonUtils::matrixToJson(eeTraj)
   );
   eePrevPos = eePos;
 }

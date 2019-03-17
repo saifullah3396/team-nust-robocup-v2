@@ -15,13 +15,6 @@
 #include "Utils/include/Exceptions/TNRSException.h"
 #include "BehaviorConfigs/include/BehaviorConfigMacros.h"
 
-DEFINE_ENUM_WITH_STRING_CONVERSIONS(
-	BConfigExceptionType, 
-	(EXC_INVALID_BCONFIG_PARAMETERS)
-  (EXC_INVALID_BCONFIG)
-  (INVALID_JSON_INPUT)
-)
-
 struct BehaviorConfig;
 
 /**
@@ -38,13 +31,11 @@ public:
    * @param message explanatory message
    * @param bSysMsg true if the system message (from strerror(errno))
    *   should be postfixed to the user provided message
-   * @param type Argument parser exception type
    */
   BConfigException(
     BehaviorConfig* config, 
 		const string& message,
-		const bool& bSysMsg, 
-		const BConfigExceptionType& type) throw ();
+    const bool& bSysMsg) throw ();
 
   /**
    * Destructor
@@ -52,10 +43,8 @@ public:
   ~BConfigException() throw () {}
   
   string getExcPrefix();
-
 private:
   BehaviorConfig* config;
-	BConfigExceptionType type;
 };
 
 /**
@@ -108,6 +97,12 @@ struct BehaviorConfig
   }
 
   /**
+   * @brief init This function can be defined by user handling changes in
+   *   configuration after constructor call
+   */
+  virtual void init() {}
+
+  /**
    * Throws an exception if the configuration is invalid
    * 
    * @return void
@@ -117,8 +112,7 @@ struct BehaviorConfig
       BConfigException(
         this,
         "Requested behavior configuration is invalid or undefined for use.",
-        false,
-        EXC_INVALID_BCONFIG
+        false
       );
   }
   

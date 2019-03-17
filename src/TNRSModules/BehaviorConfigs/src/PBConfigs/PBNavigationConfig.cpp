@@ -14,4 +14,5 @@ DEFINE_BEHAVIOR_CONFIG(
   (PBNavigationTypes, goToTarget, GoToTargetConfig),
 )
 
+void GoToTargetConfig::init() {}
 void GoToTargetConfig::validate() {}

@@ -86,7 +86,7 @@ GetupSequence::getupBack()
       }
     } else if (posture != PostureState::GETUP_READY) {
       if (lastMBFinished) {
-        auto pConfig = boost::make_shared<MBPostureConfig>();
+        auto pConfig = boost::make_shared<InterpToPostureConfig>();
         pConfig->timeToReachP = 1.0;
         pConfig->posture = PostureState::GETUP_READY;
         setupMBRequest(pConfig);
@@ -117,7 +117,7 @@ GetupSequence::getupFront()
       }
     } else if (posture != PostureState::GETUP_READY) {
       if (lastMBFinished) {
-        auto pConfig = boost::make_shared<MBPostureConfig>();
+        auto pConfig = boost::make_shared<InterpToPostureConfig>();
         pConfig->timeToReachP = 1.0;
         pConfig->posture = PostureState::GETUP_READY;
         setupMBRequest(pConfig);

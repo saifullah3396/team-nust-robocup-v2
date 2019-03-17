@@ -49,7 +49,7 @@ struct GoalInfo : public DataHolder, public DataHeader
     JSON_ASSIGN_(val, leftPost, JsonUtils::getJson(leftPost));
     JSON_ASSIGN_(val, rightPost, JsonUtils::getJson(rightPost));
     JSON_ASSIGN_(val, mid, JsonUtils::getJson(mid));
-    JSON_ASSIGN_(val, poseFromGoal, JsonUtils::MatrixToJson(poseFromGoal.get().transpose()));
+    JSON_ASSIGN_(val, poseFromGoal, JsonUtils::matrixToJson(poseFromGoal.get().transpose()));
     return val;
   }
 

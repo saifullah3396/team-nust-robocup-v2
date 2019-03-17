@@ -8,25 +8,20 @@
  */
 #pragma once
 
-#include "MBConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBConfig.h"
+#include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
 #include "Utils/include/DataHolders/VelocityInput.h"
 #include "Utils/include/PathPlanner/State.h"
+#include "Utils/include/DataHolders/TNRSFootstep.h"
 
 namespace PathPlannerSpace
 {
   typedef vector<State>::const_iterator StateIterT;
 }
 
-struct MBPostureConfig;
-typedef boost::shared_ptr<MBPostureConfig> MBPostureConfigPtr;
-
-namespace PathPlannerSpace {
-  class PathPlanner;
-  typedef boost::shared_ptr<PathPlanner> PathPlannerPtr;
-}
-
-using namespace PathPlannerSpace;
+template <typename Scalar>
+struct TNRSFootstep;
 
 /**
  * @brief WalkInputType enumeration for type of input
@@ -39,122 +34,48 @@ enum class WalkInputType {
 
 /**
  * @struct MBMovementConfig
- * @brief Movement behavior configuration
+ * @brief Movement behavior base configuration
  */
-struct MBMovementConfig : MBConfig
-{
-  /**
-   * Constructor
-   *
-   * @param type: Type of MovementModule
-   */
-  MBMovementConfig(const MBMovementTypes& type);
-  
-  /**
-   * @derived
-   */
-  virtual bool assignFromJson(const Json::Value& obj);
-
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-
-  /**
-   * Makes an object of type this and returns it if valid
-   */
-  static boost::shared_ptr<MBMovementConfig>
-    makeFromJson(const Json::Value& obj);
-
-  MBPostureConfigPtr startPosture;
-  MBPostureConfigPtr endPosture;
-};
-
-typedef boost::shared_ptr<MBMovementConfig> MBMovementConfigPtr;
-
-/**
- * @struct NaoqiFootstepsConfig
- * @brief Naoqi footsteps based movement behavior configuration
- */
-struct NaoqiFootstepsConfig : MBMovementConfig
-{
-  /**
-   * Constructor
-   *
-   * @param plannedPath: Path given in terms of footsteps
-   * @param type: Type of MovementModule
-   */
-  NaoqiFootstepsConfig(
-    const vector<PathPlannerSpace::State>& plannedPath = vector<PathPlannerSpace::State>());
-
-  /**
-   * @derived
-   */
-  void validate();
-
-  /**
-   * @derived
-   */
-  virtual bool assignFromJson(const Json::Value& obj);
-
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-
-  /**
-   * Makes an object of type this and returns it if valid
-   */
-  static boost::shared_ptr<NaoqiFootstepsConfig>
-    makeFromJson(const Json::Value& obj);
-
-  vector<PathPlannerSpace::State> plannedPath;
-};
-typedef boost::shared_ptr<NaoqiFootstepsConfig> NaoqiFootstepsConfigPtr;
+DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
+  MBMovementConfig,
+  MBConfig,
+  MBMovementConfigPtr,
+  MBIds::movement,
+  3600.0,
+  MBMovementTypes,
+  (MBPostureConfigPtr, startPosture, InterpToPostureConfigPtr()),
+  (MBPostureConfigPtr, endPosture, InterpToPostureConfigPtr()),
+)
 
 /**
  * @struct NaoqiMoveTowardConfig
- * @brief Naoqi move toward based movement behavior configuration
+ * @brief Naoqi based movement based on preplanned footsteps
  */
-struct NaoqiMoveTowardConfig : MBMovementConfig
-{
-  /**
-   * Constructor
-   *
-   * @param plannedPath: Path given in terms of footsteps
-   * @param type: Type of MovementModule
-   */
-  NaoqiMoveTowardConfig(
-    const VelocityInput<float>& velocityInput = VelocityInput<float>());
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  NaoqiFootstepsConfig,
+  MBMovementConfig,
+  MBMovementTypes::naoqiFootsteps,
+  NaoqiFootstepsConfigPtr,
+  (vector<TNRSFootstep<float>>, plannedPath, vector<TNRSFootstep<float>>()),
+)
 
-  /**
-   * @derived
-   */
-  void validate();
-
-  /**
-   * @derived
-   */
-  virtual bool assignFromJson(const Json::Value& obj);
-
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-
-  /**
-   * Makes an object of type this and returns it if valid
-   */
-  static boost::shared_ptr<NaoqiMoveTowardConfig>
-    makeFromJson(const Json::Value& obj);
-
-  VelocityInput<float> velocityInput;
-};
-typedef boost::shared_ptr<NaoqiFootstepsConfig> NaoqiFootstepsConfigPtr;
+/**
+ * @struct NaoqiMoveTowardConfig
+ * @brief Replays stored motion commands based on logged
+ *   motion behavior configurations
+ */
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  NaoqiMoveTowardConfig,
+  MBMovementConfig,
+  MBMovementTypes::naoqiMoveToward,
+  NaoqiMoveTowardConfigPtr,
+  (VelocityInput<float>, velocityInput, VelocityInput<float>()),
+)
 
 /**
  * @struct SpeedWalkConfig
- * @brief Config for speed-based walking behavior
+ * @brief Movement based on whole-body ik and preview controllers for
+ *   speed-based walking behavior
  */
 DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   SpeedWalkConfig,

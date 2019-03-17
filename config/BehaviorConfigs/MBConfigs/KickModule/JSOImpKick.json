@@ -1,21 +1,21 @@
 {
-	"ball" : 
-	[
+    "ball" :
+    [
         0.16,
         -0.05
-	],
-	"baseType" : 0,
-	"id" : 1,
+    ],
+    "baseType" : 0,
+    "id" : 1,
     "maxRuntime" : 999,
-	"minTimeToKick" : 1,
+    "minTimeToKick" : 1,
     "logData" : true,
-	"reqVel" : 
-	[
+    "reqVel" :
+    [
         0.75,
         0
-	],
-	"target" : 
-	[
+    ],
+    "target" :
+    [
         -1.0,
         0.0
     ],
@@ -42,11 +42,11 @@
         "maxRuntime" : 45,
         "regularizePosture" : true,
         "supportLeg" : 3,
+        "activeJoints" : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
         "type" : 2,
-        "logData" : true,
+        "logData" : false,
         "timeToReachB" : 1.0,
-        "targetX" : -0.02,
-        "targetY" : 0.0
+        "target" : [-0.02, 0.0]
     },
     "inKickBalance" : true
 }

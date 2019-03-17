@@ -11,9 +11,6 @@
 
 template <typename Scalar>
 struct TNRSFootstep;
-namespace PathPlannerSpace {
-  class State;
-}
 
 #include <queue>
 #include "MotionModule/include/MovementModule/MovementModule.h"
@@ -104,8 +101,8 @@ private:
    * @param stepTrans transformation from support foot to step foot
    * @return State
    */
-  PathPlannerSpace::State getFootstep(
-    const PathPlannerSpace::State& from, const PathPlannerSpace::State& to, Matrix<Scalar, 4, 4>& stepTrans);
+  TNRSFootstep<float> getFootstep(
+    const TNRSFootstep<float>& from, const TNRSFootstep<float>& to, Matrix<Scalar, 4, 4>& stepTrans);
 
   void setPostureAction();
   void setupWalkAction();
@@ -114,7 +111,7 @@ private:
   void postStopWalkAction();
 
   //! Planned footsteps
-  vector<PathPlannerSpace::State> plannedPath;
+  vector<TNRSFootstep<float>> plannedPath;
 
   //! Time taken by one step
   static Scalar footstepTime;

@@ -14,65 +14,26 @@
 
 /**
  * @struct MBGetupConfig
- * @brief Getup behavior configuration
+ * @brief Getup motion behavior base configuration
  */
-struct MBGetupConfig : MBConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param type: Type of the getup behavior
-   */ 
-  MBGetupConfig(const MBGetupTypes& type);
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  /**
-   * Makes an object of type this and returns it if valid
-   */ 
-  static boost::shared_ptr<MBGetupConfig> 
-    makeFromJson(const Json::Value& obj);
-};
-typedef boost::shared_ptr<MBGetupConfig> MBGetupConfigPtr;
+DECLARE_BEHAVIOR_CONFIG(
+  MBGetupConfig,
+  MBConfig,
+  MBGetupConfigPtr,
+  MBIds::getup,
+  20.0,
+  MBGetupTypes
+)
 
 /**
  * @struct KFMGetupConfig
- * @brief Key frame motion getup from fall behavior configuration
+ * @brief Key-frame motion based getup behavior configuration
+ * @param keyFrameGetupType Type of getup motion
  */
-struct KFMGetupConfig : MBGetupConfig
-{
-  /**
-   * Constructor
-   * 
-   * @param keyFrameGetupType: Type of they key frame getup motion
-   */ 
-  KFMGetupConfig(
-    const KeyFrameGetupTypes& keyFrameGetupType = 
-    (KeyFrameGetupTypes) 0);
-  /**
-   * @derived
-   */ 
-  void validate();
-  
-  /**
-   * @derived
-   */ 
-  virtual bool assignFromJson(const Json::Value& obj);
-  
-  /**
-   * @derived
-   */
-  virtual Json::Value getJson();
-  
-  //! Type of the key frame getup motion
-  KeyFrameGetupTypes keyFrameGetupType;
-};
-typedef boost::shared_ptr<KFMGetupConfig> KFMGetupConfigPtr;
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  KFMGetupConfig,
+  MBGetupConfig,
+  MBGetupTypes::kfmGetup,
+  KFMGetupConfigPtr,
+  (KeyFrameGetupTypes, keyFrameGetupType, KeyFrameGetupTypes::back),
+)

@@ -332,7 +332,7 @@ RobocupSetup::setSequenceAction()
   if (POSTURE_STATE_IN(PlanningModule) != PostureState::STAND) {
     if (!mbInProgress()) {
       auto pConfig = 
-        boost::make_shared<MBPostureConfig>(PostureState::STAND, 2.f);
+        boost::make_shared<InterpToPostureConfig>(PostureState::STAND, 2.f);
       setupMBRequest(MOTION_1, pConfig);
     }
     //OVAR(bool, PlanningModule::runVisionModule) = false;
