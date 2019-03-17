@@ -71,8 +71,12 @@ void HeadTargetTrack<Scalar>::update()
       trackingCam = CameraId::headBottom;
     }
     if (trackTarget(this->kM->getWorldToCam(trackingCam, posWorld))) { //! Target reached
-      finish();
+      // finish();
+      // keep tracking until killed
     }
+    this->killChild();
+  } else {
+    this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
   }
   #else
   LOG_ERROR("Behavior HeadTargetTrack undefined without Naoqi");
@@ -84,21 +88,19 @@ template <typename Scalar>
 bool HeadTargetTrack<Scalar>::trackTarget(const Matrix<Scalar, 4, 1>& posCam)
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  Matrix<Scalar, 2, 1> cmd, meas;
-  cmd[0] = atan2(posCam[2], posCam[0]) - M_PI / 2; //! X-angle
-  cmd[1] = atan2(posCam[2], posCam[0]) - M_PI / 2; //! Y-angle
+  Matrix<Scalar, 2, 1> posFromCenter, meas;
+  posFromCenter[0] = atan2(posCam[2], posCam[0]) - M_PI / 2; //! X-angle
+  posFromCenter[1] = -(atan2(posCam[2], posCam[1]) - M_PI / 2); //! Y-angle
   meas[0] = this->kM->getJointState(Joints::headYaw)->position();
   meas[1] = this->kM->getJointState(Joints::headPitch)->position();
-  for (size_t i = 0 ; i < trackersXY.size(); ++i) {
-    trackersXY[i]->setCmd(cmd[i]);
+  for (size_t i = 0; i < 1; ++i) { // Moving it about Y has problems, so keep it fixed
+    trackersXY[i]->setCmd(posFromCenter[i] + meas[i]);
     auto input = trackersXY[i]->update(meas[i]);
-    cmd[i] = meas[i] + input * this->cycleTime;
-    this->targetAngles[i] = std::max(Constants::jointMinPositions[i], std::min((double)cmd[i], Constants::jointMaxPositions[i]));
+    this->naoqiChangeAngles(this->naoqiNames[i], input, this->fractionMaxSpeed);
   }
-  if (fabsf(trackersXY[0]->prevError1()) < Angle::DEG_5 &&
-      fabsf(trackersXY[1]->prevError1()) < Angle::DEG_5)
+  if (fabsf(trackersXY[0]->prevError1()) < Angle::DEG_2 &&
+      fabsf(trackersXY[1]->prevError1()) < Angle::DEG_2)
   {
-    this->naoqiChangeAngles(this->naoqiNames, this->targetAngles, this->fractionMaxSpeed);
     return true;
   }
   return false;

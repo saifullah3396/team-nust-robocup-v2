@@ -184,14 +184,17 @@ void BehaviorManager::setBehaviorInfo(const BehaviorPtr& bPtr)
     behaviorInfo->setFsmState(bPtr->getFsmState());
     behaviorInfo->setInitiated(bPtr->isInitiated());
     behaviorInfo->setRunning(bPtr->isRunning());
+    behaviorInfo->setPaused(bPtr->isPaused());
     behaviorInfo->setConfig(bPtr->getBehaviorConfig());
   } else {
     if (behaviorInfo->isInitiated()) {
       behaviorInfo->setFinished(true);
       behaviorInfo->setRunning(false);
+      behaviorInfo->setPaused(false);
     } else {
       behaviorInfo->setInitiated(false);
       behaviorInfo->setRunning(false);
+      behaviorInfo->setPaused(false);
       behaviorInfo->resetConfig();
     }
   }

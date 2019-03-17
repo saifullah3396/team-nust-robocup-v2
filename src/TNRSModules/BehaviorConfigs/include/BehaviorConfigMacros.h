@@ -61,8 +61,7 @@
     LOG_EXCEPTION("Exception caught in " #ConfigName << ": "); \
     LOG_EXCEPTION(e.what()); \
     return false; \
-  } \
-  return true;
+  }
 
 #define DECLARE_CONFIG_VAR_3(TYPE, VAR_NAME) \
   TYPE VAR_NAME;
@@ -131,6 +130,7 @@
       if (!BaseConfigName::assignFromJson(obj)) \
         return false; \
       ASSIGN_CONFIG_FROM_JSON(ConfigName, __VA_ARGS__); \
+      return true; \
     } \
     /** \
      * @brief getJson Makes a json object from config paramters \
@@ -169,6 +169,27 @@
      * @return ConfigPtr \
      */ \
     static boost::shared_ptr<ConfigName> makeFromJson(const Json::Value& obj); \
+    \
+    /** \
+     * @brief assignFromJson Assigns configuration parameters from json \
+     * @param obj Json configuration \
+     * @return true if successful \
+     */ \
+    virtual bool assignFromJson(const Json::Value& obj) { \
+      if (!BaseConfigName::assignFromJson(obj)) \
+        return false; \
+      return true; \
+    } \
+    \
+    /** \
+     * @brief getJson Makes a json object from config paramters \
+     * @return Json object \
+     */ \
+    \
+    virtual Json::Value getJson() { \
+      Json::Value obj = BaseConfigName::getJson(); \
+      return obj; \
+    } \
   }; \
   typedef boost::shared_ptr<ConfigName> PointerName;
 
@@ -195,6 +216,27 @@
      * @derived \
      */ \
     virtual void init();\
+    \
+    /** \
+     * @brief assignFromJson Assigns configuration parameters from json \
+     * @param obj Json configuration \
+     * @return true if successful \
+     */ \
+    virtual bool assignFromJson(const Json::Value& obj) { \
+      if (!BaseConfigName::assignFromJson(obj)) \
+        return false; \
+      return true; \
+    } \
+    \
+    /** \
+     * @brief getJson Makes a json object from config paramters \
+     * @return Json object \
+     */ \
+    \
+    virtual Json::Value getJson() { \
+      Json::Value obj = BaseConfigName::getJson(); \
+      return obj; \
+    } \
   }; \
   typedef boost::shared_ptr<TypeName> PointerName;
 
@@ -226,6 +268,7 @@
       if (!BaseConfigName::assignFromJson(obj)) \
         return false; \
       ASSIGN_CONFIG_FROM_JSON(ConfigName, __VA_ARGS__); \
+      return true; \
     } \
     /** \
      * @brief getJson Makes a json object from config paramters \
@@ -275,6 +318,7 @@
       if (!BaseConfigName::assignFromJson(obj)) \
         return false; \
       ASSIGN_CONFIG_FROM_JSON(ConfigName, __VA_ARGS__); \
+      return true; \
     } \
     /** \
      * @brief getJson Makes a json object from config paramters \
@@ -291,7 +335,6 @@
 
 #define GET_CHILD_TYPE_3(ENUM, ID, NAME) \
   case toUType(ENUM::ID): \
-    LOG_INFO("id: " << toUType(ENUM::ID)) \
     config = boost::make_shared<NAME>(); \
     break;
 

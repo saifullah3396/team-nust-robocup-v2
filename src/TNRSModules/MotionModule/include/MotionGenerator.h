@@ -131,6 +131,13 @@ public:
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
+   * @brief getNaoqiTaskList Gets the list of currently running tasks in a thread
+   */
+  vector<vector<string> > getNaoqiTaskList();
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
     /**
      * Uses naoqi api to get the list of current footsteps in queue
      */
@@ -226,7 +233,7 @@ public:
    * @param footSteps: Corresponding positions of those feet
    * @param timeList: Times at which feet are to be placed
    * @param clearExisting: Whether to clear existing commanded footsteps
-   */  
+   */
   #ifndef V6_CROSS_BUILD
     void naoqiSetFootsteps(
       const AL::ALValue& footName,

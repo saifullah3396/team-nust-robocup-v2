@@ -106,7 +106,7 @@ DenseMatrix transformVector(
 #define JOINT_STATE_ACTUAL(index) \
   static_pointer_cast<ActualJointState<Scalar> >( \
     joints[static_cast<unsigned>(index)]->states[toUType(JointStateType::actual)])
-  
+
 #define JOINT_T(index, type) \
   joints[static_cast<unsigned>(index)]->states[toUType(type)]->trans
 
@@ -114,8 +114,8 @@ DenseMatrix transformVector(
   joints[static_cast<unsigned>(index)]->states[toUType(type)]->transInBase
 
 template <typename Scalar>
-KinematicsModule<Scalar>::KinematicsModule(MotionModule* motionModule) :  
-  MemoryBase(motionModule), 
+KinematicsModule<Scalar>::KinematicsModule(MotionModule* motionModule) :
+  MemoryBase(motionModule),
   motionModule(motionModule),
   joints(toUType(Joints::count)),
   links(toUType(Links::count)), // + 1 for torso link
@@ -191,7 +191,7 @@ template <typename Scalar>
 void KinematicsModule<Scalar>::setupLinksAndInertias()
 {
   for (size_t i = 0; i < toUType(Links::count); ++i) {
-    links[i] = 
+    links[i] =
       boost::shared_ptr<LinkInfo<Scalar> > (
         new LinkInfo<Scalar>()
       );
@@ -212,7 +212,7 @@ void KinematicsModule<Scalar>::setupJoints()
 {
   auto& posSensors = JOINT_POSITIONS_OUT(MotionModule);
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
-    DHParams<Scalar>* params = 
+    DHParams<Scalar>* params =
       new DHParams<Scalar>(
         jointDHParams[i][0],
         jointDHParams[i][1],
@@ -273,10 +273,10 @@ void KinematicsModule<Scalar>::setupChains()
     boost::shared_ptr<LinkChain<Scalar> > (
       new LinkChain<Scalar>(LinkChains::rLeg, HardwareIds::rLegStart, HardwareIds::nRLeg)
     );
-  
+
   for (size_t i = 0; i < toUType(LinkChains::count); ++i) {
-    for (size_t j = linkChains[i]->start; 
-         j < linkChains[i]->start+linkChains[i]->size; ++j) 
+    for (size_t j = linkChains[i]->start;
+         j < linkChains[i]->start+linkChains[i]->size; ++j)
     {
       links[j]->chain = linkChains[i];
     }
@@ -287,12 +287,12 @@ void KinematicsModule<Scalar>::setupChains()
     bodyToGlobal.push_back(Matrix<Scalar, 4, 4>::Identity());
     globalToBody.push_back(Matrix<Scalar, 4, 4>::Identity());
   }
-  
+
   setupHeadChain();
   setupArmChains();
   setupLegChains();
   setupEndEffectors();
-  
+
   Matrix<Scalar, 3, 3> iMat = Matrix<Scalar, 3, 3>::Identity();
   //!Moving Inertias of all joints to to center of mass
   for (size_t i = 0; i < toUType(Links::count); ++i) {
@@ -311,14 +311,14 @@ void KinematicsModule<Scalar>::setupChains()
     }
   }
   LinkChain<Scalar>::totalChainsMass = totalChainsMass;
-  
+
   //! Update links partial masses used in determining com jacobian
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     joints[i]->link->partialMass = joints[i]->link->mass / totalChainsMass;
   }
-  
+
   /* Inertia verification
-   * 
+   *
    * vector<Matrix<Scalar, 3, 1> > comsGlobal(toUType(Joints::count));
   Matrix<Scalar, 4, 4> T;
   unsigned chainStart = 0;
@@ -339,9 +339,9 @@ void KinematicsModule<Scalar>::setupChains()
     cout << "com" << endl;
     cout << comsGlobal[i] << endl;
     //cout << "inertia" << endl;
-    //cout << 
-    //  inertiaTrans[i].transpose() * 
-    //  linkInertias[i] * 
+    //cout <<
+    //  inertiaTrans[i].transpose() *
+    //  linkInertias[i] *
     //  inertiaTrans[i] << endl;
   }*/
 }
@@ -349,7 +349,7 @@ void KinematicsModule<Scalar>::setupChains()
 template <typename Scalar>
 void KinematicsModule<Scalar>::setupWBStates()
 {
-  torsoState = 
+  torsoState =
     boost::shared_ptr<TorsoState<Scalar> > (
       new TorsoState<Scalar>()
     );
@@ -366,7 +366,7 @@ void KinematicsModule<Scalar>::setupWBStates()
     (Scalar, ImuAccelScale.y, torsoState->scale(1, 1)),
     (Scalar, ImuAccelScale.z, torsoState->scale(2, 2)),
   )
-  comState = 
+  comState =
     boost::shared_ptr<ComState<Scalar> > (
       new ComState<Scalar>()
     );
@@ -400,7 +400,7 @@ void KinematicsModule<Scalar>::setupHeadChain()
   //!Center of mass vectors.
   links[toUType(Links::headYaw)]->com = Matrix<Scalar, 4, 1>(headYawX, headYawY, headYawZ, 1.0f);
   links[toUType(Links::headPitch)]->com = Matrix<Scalar, 4, 1>(headPitchX, headPitchY, headPitchZ, 1.0f);
-  
+
   //!Fixing the coordinate system of center of mass.
   links[toUType(Links::headPitch)]->inertiaTrans = linkChains[toUType(LinkChains::head)]->endT.block(0, 0, 3, 3);
   links[toUType(Links::headPitch)]->com = linkChains[toUType(LinkChains::head)]->endT * links[toUType(Links::headPitch)]->com;
@@ -423,7 +423,7 @@ void KinematicsModule<Scalar>::setupArmChains()
     (Scalar) 0.0,
     (Scalar) -(shoulderOffsetY),
     (Scalar) shoulderOffsetZ);
-  
+
   //! Chain end transformation
   MathsUtils::makeRotationXYZ(
     linkChains[toUType(LinkChains::rArm)]->endT,
@@ -433,7 +433,7 @@ void KinematicsModule<Scalar>::setupArmChains()
   linkChains[toUType(LinkChains::rArm)]->endT(0, 3) = 0.f;
   linkChains[toUType(LinkChains::rArm)]->endT(1, 3) = -handOffsetZ;
   linkChains[toUType(LinkChains::rArm)]->endT(2, 3) = handOffsetX;
-  
+
   //! Masses
   links[toUType(Links::rShoulderPitch)]->mass = rShoulderPitchMass;
   links[toUType(Links::rShoulderRoll)]->mass = rShoulderRollMass;
@@ -650,7 +650,7 @@ void KinematicsModule<Scalar>::setupLegChains()
 
   //!Fixing the coordinate system of center of mass.
   t1 = MathsUtils::getTInverse(t1);
-  
+
   links[toUType(Joints::rHipYawPitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Joints::rHipYawPitch)]->com = t1 * links[toUType(Joints::rHipYawPitch)]->com;
 
@@ -786,7 +786,7 @@ void KinematicsModule<Scalar>::setupLegChains()
 
   //!Fixing the coordinate system of center of mass.
   t1 = MathsUtils::getTInverse(t1);
-  
+
   links[toUType(Joints::lHipYawPitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Joints::lHipYawPitch)]->com = t1 * links[toUType(Joints::lHipYawPitch)]->com;
 
@@ -799,7 +799,7 @@ void KinematicsModule<Scalar>::setupLegChains()
   //!Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::lHipRoll)]->com = Matrix<Scalar, 4, 1>(rHipRollX, -rHipRollY, rHipRollZ, 1.0f);
-  
+
   links[toUType(Links::lHipRoll)]->inertiaTrans = t1.block(0, 0, 3, 3);
   //!Fixing the coordinate system of center of mass.
   links[toUType(Links::lHipRoll)]->com = t1 * links[toUType(Links::lHipRoll)]->com;
@@ -1005,8 +1005,8 @@ void KinematicsModule<Scalar>::updateJointStates()
   ACCELEROMETER_X,
   ACCELEROMETER_Y,
   ACCELEROMETER_Z,
- */ 
- 
+ */
+
 template <typename Scalar>
 void KinematicsModule<Scalar>::updateTorsoState()
 {
@@ -1247,7 +1247,7 @@ KinematicsModule<Scalar>::getComStateWrtFrame(
   if (baseFrame == static_cast<LinkChains>(tComState.baseFrame)) {
     return tComState;
   } else if (toUType(baseFrame) >= 0 && toUType(baseFrame) < toUType(LinkChains::count)) {
-    Matrix<Scalar, 4, 4> T = 
+    Matrix<Scalar, 4, 4> T =
       MathsUtils::getTInverse(getForwardEffector(baseFrame, eeIndex)) *
       getForwardEffector(static_cast<LinkChains>(tComState.baseFrame), tComState.eeIndex);
     tComState.position = MathsUtils::transformVector(T, tComState.position);
@@ -1404,7 +1404,7 @@ KinematicsModule<Scalar>::computeComJacobian(const JointStateType& type)
   jacobian.resize(3, toUType(Joints::count));
   //! Get the center of mass jacobian in body center frame
   for (size_t i = 0; i < toUType(LinkChains::count); ++i) { // FIXME LATER CHANGING i=0 to i=3 for testing computation speed
-    jacobian.block(0, linkChains[i]->start, 3, linkChains[i]->size) = 
+    jacobian.block(0, linkChains[i]->start, 3, linkChains[i]->size) =
       computeLimbComJ(static_cast<LinkChains>(i), type);
   }
   //! Convert the center of mass jacobian in global base frame
@@ -1436,7 +1436,7 @@ KinematicsModule<Scalar>::computeLimbComJ(
     Matrix<Scalar, 3, 1> pos = JOINT_STATE(chainStart + j, type)->posInBase;
     for (int m = j; m < size; ++m) { // Update the jth row of the jacobian
       jacobian.col(j) +=
-        z.cross(JOINT_STATE(chainStart + m, type)->comInBase - pos) * 
+        z.cross(JOINT_STATE(chainStart + m, type)->comInBase - pos) *
         joints[chainStart + m]->link->mass;/// joints[chainStart + m]->link->chain->mass;
     }
   }*/
@@ -1485,7 +1485,7 @@ Matrix<Scalar, Dynamic, 1>
 KinematicsModule<Scalar>::solveComIkTwoVar(
   const Matrix<Scalar, 3, 1>& desCom,
   const LinkChains& baseLimb,
-  const unsigned& eeIndex, 
+  const unsigned& eeIndex,
   const JointStateType& type)
 {
   Matrix<Scalar, 3, 1> com;
@@ -1500,10 +1500,10 @@ KinematicsModule<Scalar>::solveComIkTwoVar(
   joints[toUType(Joints::rAnkleRoll)] = aY;
   return joints;
   //Scalar aX = atan2(diff[0], diff[2]);
-  //Matrix<Scalar, 4, 4> baseTokickFoot = 
+  //Matrix<Scalar, 4, 4> baseTokickFoot =
   //  MathsUtils::getTInverse(getForwardEffector(baseLimb, eeIndex, type)) * getForwardEffector(baseLimb, eeIndex, type);
   //
-  //Scalar lDiff = 
+  //Scalar lDiff =
 }
 
 /**
@@ -1533,7 +1533,7 @@ KinematicsModule<Scalar>::solveComIkTwoVar(
  * eeIndices[toUType(LinkChains::rArm)] = 0; // default
  * eeIndices[CHAIN_L_LEG] = toUType(LegEEs::footBase);
  * eeIndices[CHAIN_R_LEG] = toUType(LegEEs::footBase);
- * Matrix<Scalar, Dynamic, 1> jointsD = 
+ * Matrix<Scalar, Dynamic, 1> jointsD =
  *   solveComIK(
  *     CHAIN_L_LEG,
  *     comVelocityD,
@@ -1626,7 +1626,7 @@ KinematicsModule<Scalar>::solveComIK(const LinkChains& baseLimb,
   for (size_t i = 0; i < toUType(LinkChains::count); ++i) {
     if (i != toUType(baseLimb)) {
       jointVD[i].resize(linkChains[i]->size);
-      jointVD[i].setZero(); 
+      jointVD[i].setZero();
       if (limbMotionSpace[i]) {
         Matrix<Scalar, Dynamic, Dynamic> rhs = limbVelocitiesD[i] + XiWithBaseJacobian[i] * jointVD[toUType(baseLimb)];
         jointVD[i] = limbJsInv[i] * rhs;
@@ -1660,7 +1660,7 @@ KinematicsModule<Scalar>::computeMassMatrix(
   for (size_t j = 0; j < size; ++j) {
     computeLinkComJ(static_cast<Links>(chainStart + j), jacobianCV, jacobianCW, type);
     massMatrix +=
-      links[chainStart + j]->mass * jacobianCV.transpose() *jacobianCV + 
+      links[chainStart + j]->mass * jacobianCV.transpose() *jacobianCV +
       jacobianCW.transpose() * links[chainStart + j]->inertia * jacobianCW;
   }
   return massMatrix;
@@ -1725,7 +1725,7 @@ template <typename Scalar>
 Matrix<Scalar, Dynamic, 1>
 KinematicsModule<Scalar>::newtonEulerForces(
   const LinkChains& chainIndex, const Matrix<Scalar, 3, 1>& extForces,
-  const Matrix<Scalar, 3, 1>& extMoments, Matrix<Scalar, 3, 1>& totalForces, Matrix<Scalar, 3, 1>& totalMoments, 
+  const Matrix<Scalar, 3, 1>& extMoments, Matrix<Scalar, 3, 1>& totalForces, Matrix<Scalar, 3, 1>& totalMoments,
   const LinkChains& supportLeg, const JointStateType& type)
 {
   //cout << "Solving newton euler equation : " << endl;
@@ -1740,7 +1740,7 @@ KinematicsModule<Scalar>::newtonEulerForces(
   vector<Matrix<Scalar, 3, 1> > comForces(chainSize);
   vector<Matrix<Scalar, 3, 1> > comMoments(chainSize);
 
-  //! Rotating torso forces and moments to inertial frame situated at 
+  //! Rotating torso forces and moments to inertial frame situated at
   //! the base support leg
   Matrix<Scalar, 4, 4> supportT = getForwardEffector(supportLeg, toUType(LegEEs::footBase), type);
   linAcc = MathsUtils::transformVector(supportT, linAcc);
@@ -1808,11 +1808,11 @@ KinematicsModule<Scalar>::newtonEulerForces(
   cout << "moments" << n(0,0) << endl;
   cout << "moments" << n(1,0) << endl;
   cout << "moments" << n(2,0) << endl;*/
-  
+
   //! Relocating moments to torso origin frame
   n = n + Matrix<Scalar, 3, 1>(linkChains[toUType(chainIndex)]->startT.block(0, 3, 3, 1)).cross(f);
   // f remains the same
-      
+
   totalMoments = n;
   totalForces = f;
   return jointTorques;
@@ -2119,7 +2119,7 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeZmp(
     size_t chainStart = linkChains[i]->start;
     Matrix<Scalar, 3, 1> chainForces;
     Matrix<Scalar, 3, 1> chainMoments;
-    Matrix<Scalar, Dynamic, 1> torque = 
+    Matrix<Scalar, Dynamic, 1> torque =
       newtonEulerForces(
         static_cast<LinkChains>(i), extForces, extMoments, chainForces, chainMoments, supportLeg, type);
     torsoForces += chainForces;
@@ -2128,47 +2128,47 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeZmp(
   }
   //cout << "torsoForces:" << torsoForces << endl;
   //cout << "torsoMoments:" << torsoMoments << endl;
-  //! Rotating torso forces and moments to inertial frame situated at 
+  //! Rotating torso forces and moments to inertial frame situated at
   //! the base support leg
   Matrix<Scalar, 4, 4> supportT;
   supportT =
     MathsUtils::getTInverse(
       getForwardEffector(supportLeg, toUType(LegEEs::footBase), type)
     );
-    
+
   Matrix<Scalar, 3, 3> supportR = supportT.block(0, 0, 3, 3);
   torsoForces = supportR * torsoForces;
-  torsoMoments = supportR * torsoMoments;  
-  
+  torsoMoments = supportR * torsoMoments;
+
   //! Torso weight and vector
   Matrix<Scalar, 3, 1> torsoCog, batteryCog;
   torsoCog = (supportT * links[toUType(Links::torso)]->com).block(0, 0, 3, 1); // Torso center of mass
   //batteryCog = (supportT * Matrix<Scalar, 4, 1>(batteryX, batteryY, batteryZ, 1.f)).block(0, 0, 3, 1); // Battery center of mass
   Matrix<Scalar, 3, 1> torsoWeight(0.f, 0.f, links[toUType(Links::torso)]->mass * -Constants::gravity);
   //auto batteryWeight = Matrix<Scalar, 3, 1>(0.f, 0.f, batteryMass * -Constants::gravity);
-  
+
   //! Resulatant moments and forces at the base frame
-  torsoMoments = 
-    torsoMoments + 
+  torsoMoments =
+    torsoMoments +
     Matrix<Scalar, 3, 1>(supportT.block(0, 3, 3, 1)).cross(torsoForces) +
     torsoCog.cross(torsoWeight);//
     //batteryCog.cross(batteryWeight);
-  
+
   Matrix<Scalar, 3, 1> rForce = -torsoForces - torsoWeight;// - batteryWeight;
-  
+
   // zmp_y * R_z - zmp_z * R_y + M_x = 0
   // zmp_z * R_x - zmp_x * R_z + M_y = 0
   // zmp_x * R_y - zmp_y * R_x + M_z = 0
-  
+
   Matrix<Scalar, 2, 1> zmp;
   zmp[0] = torsoMoments[1] / rForce[2]; // M_y / R_z
-  zmp[1] = - torsoMoments[0] / rForce[2]; // - M_x / R_z  
-  
+  zmp[1] = - torsoMoments[0] / rForce[2]; // - M_x / R_z
+
   Matrix<Scalar, 2, 1> com;
   computeComWrtBase(supportLeg, toUType(LegEEs::footBase), com, type);
   //cout << "Center of mass: " << endl;
   //cout << com << endl;
-  
+
   //cout << "Zmp: " << endl;
   //cout << zmp << endl;
   return zmp;
@@ -2269,11 +2269,11 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeFsrZmp(const RobotFeet& re
   Matrix<Scalar, 4, 4> tl = getForwardEffector(LinkChains::lLeg, toUType(LegEEs::ankle));
   Matrix<Scalar, 4, 4> tr = getForwardEffector(LinkChains::rLeg, toUType(LegEEs::ankle));
   Matrix<Scalar, 2, 1> cop;
-  cop[0] = 
+  cop[0] =
     ((tl(0, 3) + fsrSensors[toUType(FsrSensors::lFootCopX)]) * fsrSensors[toUType(FsrSensors::lFootTotalWeight)] +
     (tr(0, 3) + fsrSensors[toUType(FsrSensors::rFootCopX)]) * fsrSensors[toUType(FsrSensors::rFootTotalWeight)]) /
     (fsrSensors[toUType(FsrSensors::lFootTotalWeight)] + fsrSensors[toUType(FsrSensors::rFootTotalWeight)]);
-  cop[1] = 
+  cop[1] =
     ((tl(1, 3) + fsrSensors[toUType(FsrSensors::lFootCopY)]) * fsrSensors[toUType(FsrSensors::lFootTotalWeight)] +
     (tr(1, 3) + fsrSensors[toUType(FsrSensors::rFootCopY)]) * fsrSensors[toUType(FsrSensors::rFootTotalWeight)]) /
     (fsrSensors[toUType(FsrSensors::lFootTotalWeight)] + fsrSensors[toUType(FsrSensors::rFootTotalWeight)]);
@@ -2309,7 +2309,7 @@ void KinematicsModule<Scalar>::updateTorsoToFeet()
 {
   L_FOOT_TRANS_OUT(MotionModule) =
     getForwardEffector(LinkChains::lLeg, toUType(LegEEs::footBase)).template cast <float> ();
-  R_FOOT_TRANS_OUT(MotionModule) = 
+  R_FOOT_TRANS_OUT(MotionModule) =
     getForwardEffector(LinkChains::rLeg, toUType(LegEEs::footBase)).template cast <float> ();
   footSpacing =
     L_FOOT_TRANS_OUT(MotionModule)(1, 3) -
@@ -2344,7 +2344,7 @@ KinematicsModule<Scalar>::updateFootToCamT()
         LinkChains::head, linkChains[toUType(LinkChains::head)]->endEffectors[toUType(CameraId::headTop)])
      ) * torsoToFeet
     ).template cast <float> ();
-  LOWER_CAM_TRANS_OUT(MotionModule) = 
+  LOWER_CAM_TRANS_OUT(MotionModule) =
     (MathsUtils::getTInverse(
       getForwardEffector(
         LinkChains::head, linkChains[toUType(LinkChains::head)]->endEffectors[toUType(CameraId::headBottom)])
@@ -2632,7 +2632,7 @@ KinematicsModule<Scalar>::solveJacobianIK(
   Scalar kP = 0.85, kO = 1.0;
   if (startType != type)
     setStateFromTo(startType, type);
-  Matrix<Scalar, 4, 4> initT = 
+  Matrix<Scalar, 4, 4> initT =
     getForwardEffector(chainIndex, endEffector, type);
   Matrix<Scalar, 3, 1> initPos = initT.block(0, 3, 3, 1);
   Matrix<Scalar, 3, 1> targetPos = targetT.block(0, 3, 3, 1);
@@ -2905,7 +2905,7 @@ KinematicsModule<Scalar>::inverseRightLeg(const Matrix<Scalar, 4, 4>& endEffecto
 
 template <typename Scalar>
 void KinematicsModule<Scalar>::setStateFromTo(
-  const JointStateType& from, 
+  const JointStateType& from,
   const JointStateType& to)
 {
   for (size_t i = 0; i < joints.size(); ++i) {
@@ -2923,7 +2923,7 @@ void KinematicsModule<Scalar>::setStateFromTo(
 template <typename Scalar>
 void KinematicsModule<Scalar>::setJointPositions(
   const Joints& startIndex,
-  const Matrix<Scalar, Dynamic, 1>& simPosition, 
+  const Matrix<Scalar, Dynamic, 1>& simPosition,
   const JointStateType& type,
   const bool& solveFk)
 {
@@ -3013,7 +3013,7 @@ void KinematicsModule<Scalar>::setChainAccelerations(
 template <typename Scalar>
 void KinematicsModule<Scalar>::setJointState(
   const Joints& startIndex,
-  const Matrix<Scalar, Dynamic, 1>& simPosition, 
+  const Matrix<Scalar, Dynamic, 1>& simPosition,
   const Matrix<Scalar, Dynamic, 1>& simVelocity,
   const Matrix<Scalar, Dynamic, 1>& simAcceleration,
   const JointStateType& type,
@@ -3021,7 +3021,7 @@ void KinematicsModule<Scalar>::setJointState(
 {
   ASSERT(toUType(startIndex) + simPosition.size() <= toUType(Joints::count));
   ASSERT(
-    simPosition.size() == simVelocity.size() && 
+    simPosition.size() == simVelocity.size() &&
     simPosition.size() == simAcceleration.size());
   for (size_t i = 0; i < simPosition.size(); ++i) {
     joints[toUType(startIndex) + i]->states[toUType(type)]->setPosition(simPosition[i]);
@@ -3034,7 +3034,7 @@ void KinematicsModule<Scalar>::setJointState(
 template <typename Scalar>
 void KinematicsModule<Scalar>::setChainState(
   const LinkChains& chainIndex,
-  const Matrix<Scalar, Dynamic, 1>& simPosition, 
+  const Matrix<Scalar, Dynamic, 1>& simPosition,
   const Matrix<Scalar, Dynamic, 1>& simVelocity,
   const Matrix<Scalar, Dynamic, 1>& simAcceleration,
   const JointStateType& type,
@@ -3043,7 +3043,7 @@ void KinematicsModule<Scalar>::setChainState(
   unsigned size = linkChains[toUType(chainIndex)]->size;
   ASSERT(simPosition.size() == size);
   ASSERT(
-    simPosition.size() == simVelocity.size() && 
+    simPosition.size() == simVelocity.size() &&
     simPosition.size() == simAcceleration.size());
   for (size_t i = 0; i < simPosition.size(); ++i) {
     joints[linkChains[toUType(chainIndex)]->start + i]->
@@ -3089,14 +3089,14 @@ void KinematicsModule<Scalar>::setJointPositionCmd(
 }
 
 template <typename Scalar>
-boost::shared_ptr<Joint<Scalar> > 
+boost::shared_ptr<Joint<Scalar> >
 KinematicsModule<Scalar>::getJoint(const Joints& index)
 {
   return joints[toUType(index)];
 }
-  
+
 template <typename Scalar>
-boost::shared_ptr<JointState<Scalar> > 
+boost::shared_ptr<JointState<Scalar> >
 KinematicsModule<Scalar>::getJointState(
   const Joints& index,
   const JointStateType& type)
@@ -3105,13 +3105,13 @@ KinematicsModule<Scalar>::getJointState(
 }
 
 template <typename Scalar>
-vector<boost::shared_ptr<Joint<Scalar> > > 
+vector<boost::shared_ptr<Joint<Scalar> > >
 KinematicsModule<Scalar>::getJoints(
   const Joints& startIndex,
   const unsigned& nElements)
 {
   ASSERT(toUType(startIndex) + nElements <= toUType(Joints::count));
-  return 
+  return
     vector<boost::shared_ptr<Joint<Scalar> > >(
       joints.begin() + toUType(startIndex),
       joints.begin() + toUType(startIndex) + nElements
@@ -3119,7 +3119,7 @@ KinematicsModule<Scalar>::getJoints(
 }
 
 template <typename Scalar>
-vector<boost::shared_ptr<JointState<Scalar> > > 
+vector<boost::shared_ptr<JointState<Scalar> > >
 KinematicsModule<Scalar>::getJointStates(
   const Joints& startIndex,
   const unsigned& nElements,
@@ -3133,7 +3133,7 @@ KinematicsModule<Scalar>::getJointStates(
 }
 
 template <typename Scalar>
-vector<boost::shared_ptr<JointState<Scalar> > > 
+vector<boost::shared_ptr<JointState<Scalar> > >
 KinematicsModule<Scalar>::getChainStates(
   const LinkChains& chainIndex,
   const JointStateType& type)
@@ -3182,14 +3182,14 @@ Matrix<Scalar, Dynamic, 1> KinematicsModule<Scalar>::getJointVelocities(
 }
 
 template <typename Scalar>
-boost::shared_ptr<LinkInfo<Scalar> > 
+boost::shared_ptr<LinkInfo<Scalar> >
 KinematicsModule<Scalar>::getLink(const Links& index)
 {
   return links[toUType(index)];
 }
 
 template <typename Scalar>
-boost::shared_ptr<LinkChain<Scalar> > 
+boost::shared_ptr<LinkChain<Scalar> >
 KinematicsModule<Scalar>::getLinkChain(const LinkChains& index)
 {
   return linkChains[toUType(index)];
@@ -3216,10 +3216,10 @@ Matrix<Scalar, 4, 4>  KinematicsModule<Scalar>::getEndEffector(
 }
 
 template <typename Scalar>
-boost::shared_ptr<TorsoState<Scalar> > 
-KinematicsModule<Scalar>::getTorsoState() 
-{ 
-  return torsoState; 
+boost::shared_ptr<TorsoState<Scalar> >
+KinematicsModule<Scalar>::getTorsoState()
+{
+  return torsoState;
 }
 
 template <typename Scalar> Matrix<Scalar, 4, 4>

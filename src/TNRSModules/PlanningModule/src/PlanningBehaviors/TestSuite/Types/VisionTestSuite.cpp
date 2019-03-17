@@ -37,6 +37,7 @@ bool VisionTestSuite::initiate()
 
   //! Switch on the vision and localization modules
   BaseModule::publishModuleRequest(boost::make_shared<SwitchVision>(true));
+  BaseModule::publishModuleRequest(boost::make_shared<SwitchFieldProjection>(true));
   BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(true));
 
   //! Initiate the localizer with given initial robot pose
@@ -96,41 +97,18 @@ void VisionTestSuite::testSegmentation()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::field));
-  /*BaseModule::publishModuleRequest(
-    boost::make_shared<SwitchFeatureExtModule>(
-          true, FeatureExtractionIds::robot));
-  BaseModule::publishModuleRequest(
-    boost::make_shared<SwitchFeatureExtModule>(
-          true, FeatureExtractionIds::ball));
-  BaseModule::publishModuleRequest(
-    boost::make_shared<SwitchFeatureExtModule>(
-          true, FeatureExtractionIds::goal));
-  BaseModule::publishModuleRequest(
-    boost::make_shared<SwitchFeatureExtModule>(
-          true, FeatureExtractionIds::lines));*/
-  static float wait = -5.f;
-  static bool stop = false;
-  if (wait > 1.f)
-    DebugBase::processDebugMsg("RegionSegmentation:drawHorizontalLines:1");
-  if (wait > 2.f)
-    DebugBase::processDebugMsg("RegionSegmentation:drawVerticalLines:1");
-  if (wait > 3.f) {
-    DebugBase::processDebugMsg("RegionSegmentation:drawPoints:1");
-    stop = true;
-  }
-
-  if (!stop) {
-    wait += this->cycleTime;
-  } else {
-    if (!mbInProgress()) {
-      auto mConfig =
-        boost::make_shared <HeadScanConfig> ();
-      mConfig->scanMaxYaw = 45 * M_PI / 180;
-      setupMBRequest(0, mConfig);
-    }
-  }
-  //DebugBase::processDebugMsg("RegionSegmentation:displayInfo:1");
-  DebugBase::processDebugMsg("RegionSegmentation:displayOutput:1");
+  Json::Value value;
+  value["RegionSegmentation"]["drawHorizontalLines"] = 1;
+  value["RegionSegmentation"]["drawVerticalLines"] = 1;
+  value["RegionSegmentation"]["drawPoints"] = 1;
+  value["RegionSegmentation"]["displayOutput"] = 1;
+  DebugBase::processDebugMsg(value);
+  /*if (!mbInProgress()) {
+    auto mConfig =
+      boost::make_shared <HeadScanConfig> ();
+    mConfig->scanMaxYaw = 45 * M_PI / 180;
+    setupMBRequest(0, mConfig);
+  }*/
   BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(false));
 }
 
@@ -143,37 +121,20 @@ void VisionTestSuite::testFieldExtraction()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::field));
-  /*static float wait = 0;
-  static bool stop = false;
-  if (wait > 1.f)
-    DebugBase::processDebugMsg("RegionSegmentation:drawPoints:1");
-  if (wait > 2.f)
-    DebugBase::processDebugMsg("FieldExtraction:drawFiltPoints:1");
-  if (wait > 3.f)
-    DebugBase::processDebugMsg("FieldExtraction:drawBorder:1");
-  if (wait > 4.f) {
-    DebugBase::processDebugMsg("FieldExtraction:drawBorderLines:1");
-    stop = true;
-  }
 
-  if (!stop) {
-    wait += this->cycleTime;
-  } else {
-    if (!mbInProgress()) {
-      auto mConfig =
-        boost::make_shared <HeadScanConfig> ();
-      mConfig->scanMaxYaw = 75 * M_PI / 180;
-      setupMBRequest(0, mConfig);
-    }
-  }*/
-  DebugBase::processDebugMsg("RegionSegmentation:drawPoints:1");
-  DebugBase::processDebugMsg("FieldExtraction:drawFiltPoints:1");
-  DebugBase::processDebugMsg("FieldExtraction:drawBorder:1");
-  DebugBase::processDebugMsg("FieldExtraction:drawBorderLines:1");
-  //DebugBase::processDebugMsg("FieldExtraction:drawBorder:1");
-  //DebugBase::processDebugMsg("FieldExtraction:drawBorderLines:1");
-  //DebugBase::processDebugMsg("FieldExtraction:displayInfo:1");
-  DebugBase::processDebugMsg("FieldExtraction:displayOutput:1");
+  if (!mbInProgress()) {
+    auto mConfig =
+      boost::make_shared <HeadScanConfig> ();
+    mConfig->scanMaxYaw = 75 * M_PI / 180;
+    setupMBRequest(0, mConfig);
+  }
+  Json::Value value;
+  value["RegionSegmentation"]["drawPoints"] = 1;
+  value["FieldExtraction"]["drawFiltPoints"] = 1;
+  value["FieldExtraction"]["drawBorder"] = 1;
+  value["FieldExtraction"]["drawBorderLines"] = 1;
+  value["FieldExtraction"]["displayOutput"] = 1;
+  DebugBase::processDebugMsg(value);
 }
 
 void VisionTestSuite::testGoalExtraction()
@@ -185,99 +146,85 @@ void VisionTestSuite::testGoalExtraction()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::field));
-  //BaseModule::publishModuleRequest(
-//    boost::make_shared<SwitchFeatureExtModule>(
-//          true, FeatureExtractionIds::robot));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::robot));
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::goal));
-  /*static float wait = -5;
-  static bool stop = false;
-  if (wait > 1.f)
-    DebugBase::processDebugMsg("FieldExtraction:drawBorder:1");
-  if (wait > 2.f)
-    DebugBase::processDebugMsg("GoalExtraction:drawScannedLines:1");
-  if (wait > 3.f)
-    DebugBase::processDebugMsg("GoalExtraction:drawScannedRegions:1");
-  if (wait > 4.f)
-    DebugBase::processDebugMsg("GoalExtraction:drawGoalBaseWindows:1");
-  if (wait > 5.f) {
-    DebugBase::processDebugMsg("GoalExtraction:drawGoalPostBases:1");
-    stop = true;
+  if (!mbInProgress()) {
+    auto mConfig =
+      boost::make_shared <HeadScanConfig> ();
+    mConfig->scanMaxYaw = 45 * M_PI / 180;
+    setupMBRequest(0, mConfig);
   }
-
-  if (!stop) {
-    wait += this->cycleTime;
-  } else {
-    if (!mbInProgress()) {
-      auto mConfig =
-        boost::make_shared <HeadScanConfig> ();
-      mConfig->scanMaxYaw = 45 * M_PI / 180;
-      setupMBRequest(0, mConfig);
-    }
-  }*/
-  //DebugBase::processDebugMsg("GoalExtraction:drawScannedLines:1");
-  //DebugBase::processDebugMsg("GoalExtraction:drawScannedRegions:1");
-  //DebugBase::processDebugMsg("GoalExtraction:drawGoalBaseWindows:1");
-  //DebugBase::processDebugMsg("GoalExtraction:drawGoalPostBases:1");
-  //DebugBase::processDebugMsg("GoalExtraction:displayInfo:1");
-  DebugBase::processDebugMsg("FieldExtraction:drawBorder:1");
-  DebugBase::processDebugMsg("GoalExtraction:drawScannedLines:1");
-  DebugBase::processDebugMsg("GoalExtraction:drawScannedRegions:1");
-  DebugBase::processDebugMsg("GoalExtraction:drawGoalBaseWindows:1");
-  DebugBase::processDebugMsg("GoalExtraction:drawGoalPostBases:1");
-  DebugBase::processDebugMsg("GoalExtraction:displayOutput:1");
+  Json::Value value;
+  value["FieldExtraction"]["drawBorder"] = 1;
+  value["GoalExtraction"]["drawScannedLines"] = 1;
+  value["GoalExtraction"]["drawScannedRegions"] = 1;
+  value["GoalExtraction"]["drawGoalBaseWindows"] = 1;
+  value["GoalExtraction"]["drawGoalPostBases"] = 1;
+  value["GoalExtraction"]["displayOutput"] = 1;
+  DebugBase::processDebugMsg(value);
 }
 
 void VisionTestSuite::testBallExtraction()
 {
+  //! Switch on field extraction modules
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::segmentation));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::field));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::robot));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::goal));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::ball));
   if (!mbInProgress()) {
     auto mConfig =
       boost::make_shared <HeadTargetTrackConfig> ();
     mConfig->headTargetType = HeadTargetTypes::ball;
     setupMBRequest(0, mConfig);
   }
-
-  DebugBase::processDebugMsg("BallExtraction:drawPredictionState:1");
-  DebugBase::processDebugMsg("BallExtraction:drawScannedRegions:1");
-  DebugBase::processDebugMsg("BallExtraction:drawBallContour:1");
-  //DebugBase::processDebugMsg("BallExtraction:displayInfo:1");
-  DebugBase::processDebugMsg("BallExtraction:displayOutput:1");
+  Json::Value value;
+  value["BallExtraction"]["drawPredictionState"] = 1;
+  value["BallExtraction"]["drawScannedRegions"] = 1;
+  value["BallExtraction"]["drawBallContour"] = 1;
+  value["BallExtraction"]["displayOutput"] = 1;
+  DebugBase::processDebugMsg(value);
 }
 
 void VisionTestSuite::testRobotExtraction()
 {
-  static float wait = -5.f;
-  static bool stop = false;
-  if (wait > 1.f)
-    DebugBase::processDebugMsg("FieldExtraction:drawBorder:1");
-  if (wait > 2.f)
-    DebugBase::processDebugMsg("RegionSegmentation:drawVerticalLines:1");
-  if (wait > 3.f)
-    DebugBase::processDebugMsg("RegionSegmentation:drawHorizontalLines:1");
-  if (wait > 4.f)
-    DebugBase::processDebugMsg("RobotExtraction:drawJerseyRegions:1");
-  if (wait > 5.f) {
-    DebugBase::processDebugMsg("RobotExtraction:drawRobotRegions:1");
-    stop = true;
+  //! Switch on field extraction modules
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::segmentation));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::field));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::robot));
+  if (!mbInProgress()) {
+    auto mConfig =
+      boost::make_shared <HeadScanConfig> ();
+    mConfig->scanMaxYaw = 45 * M_PI / 180;
+    setupMBRequest(0, mConfig);
   }
-
-  if (!stop) {
-    wait += this->cycleTime;
-  } else {
-    if (!mbInProgress()) {
-      auto mConfig =
-        boost::make_shared <HeadScanConfig> ();
-      mConfig->scanMaxYaw = 45 * M_PI / 180;
-      setupMBRequest(0, mConfig);
-    }
-  }
-  //DebugBase::processDebugMsg("RobotExtraction:drawScannedLines:1");
-  //DebugBase::processDebugMsg("RobotExtraction:drawJerseyRegions:1");
-  //DebugBase::processDebugMsg("RobotExtraction:drawRobotRegions:1");
-  //DebugBase::processDebugMsg("RobotExtraction:drawStrayRegions:1");
-  //DebugBase::processDebugMsg("RobotExtraction:displayInfo:1");
-  DebugBase::processDebugMsg("RobotExtraction:displayOutput:1");
+  Json::Value value;
+  value["RobotExtraction"]["drawScannedLines"] = 1;
+  value["RobotExtraction"]["drawJerseyRegions"] = 1;
+  value["RobotExtraction"]["drawRobotRegions"] = 1;
+  value["RobotExtraction"]["drawStrayRegions"] = 1;
+  value["RobotExtraction"]["displayOutput"] = 1;
+  DebugBase::processDebugMsg(value);
 }
 
 void VisionTestSuite::testLinesExtraction()
@@ -289,70 +236,37 @@ void VisionTestSuite::testLinesExtraction()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::field));
-  //BaseModule::publishModuleRequest(
-//    boost::make_shared<SwitchFeatureExtModule>(
-//          true, FeatureExtractionIds::robot));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::robot));
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::lines));
-  /*static float wait = 0;
-  static bool stop = false;
-  if (wait > 1.f)
-    DebugBase::processDebugMsg("FieldExtraction:drawBorderLines:1");
-  if (wait > 2.f)
-    DebugBase::processDebugMsg("LinesExtraction:drawScannedEdges:1");
-  if (wait > 3.f)
-    DebugBase::processDebugMsg("LinesExtraction:drawBorderLines:1");
-  if (wait > 4.f)
-    DebugBase::processDebugMsg("LinesExtraction:drawFiltWorldLines:1");
-  if (wait > 5.f) {
-    DebugBase::processDebugMsg("LinesExtraction:drawCorners:1");
-    DebugBase::processDebugMsg("LinesExtraction:drawCircle:1");
+  if (!mbInProgress()) {
+    auto mConfig =
+      boost::make_shared <HeadScanConfig> ();
+    mConfig->scanMaxYaw = 90 * M_PI / 180;
+    setupMBRequest(0, mConfig);
   }
-  if (wait > 6.f) {
-    DebugBase::processDebugMsg("LinesExtraction:drawUnknownLandmarks:1");
-    stop = true;
-  }
-  //DebugBase::processDebugMsg("LinesExtraction:drawScannedEdges:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawBorderLines:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawWorldLines:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawFiltWorldLines:1");
-
-  //DebugBase::processDebugMsg("LinesExtraction:drawCorners:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawUnknownLandmarks:1");
-  //DebugBase::processDebugMsg("LinesExtraction:displayInfo:1");
-  if (!stop) {
-    wait += this->cycleTime;
-  } else {
-    if (!mbInProgress()) {
-      auto mConfig =
-        boost::make_shared <HeadScanConfig> ();
-      mConfig->scanMaxYaw = 90 * M_PI / 180;
-      setupMBRequest(0, mConfig);
-    }
-  }*/
-  DebugBase::processDebugMsg("FieldExtraction:drawBorderLines:1");
-  DebugBase::processDebugMsg("LinesExtraction:drawScannedEdges:1");
-  DebugBase::processDebugMsg("LinesExtraction:drawBorderLines:1");
-  DebugBase::processDebugMsg("LinesExtraction:drawWorldLines:1");
-  DebugBase::processDebugMsg("LinesExtraction:drawFiltWorldLines:1");
-  DebugBase::processDebugMsg("LinesExtraction:drawCorners:1");
-  DebugBase::processDebugMsg("LinesExtraction:drawCircle:1");
-  DebugBase::processDebugMsg("LinesExtraction:drawUnknownLandmarks:1");
-  //DebugBase::processDebugMsg("LinesExtraction:displayInfo:1");
-  DebugBase::processDebugMsg("LinesExtraction:displayOutput:1");
-  //BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(true));
+  Json::Value value;
+  value["FieldExtraction"]["drawBorderLines"] = 1;
+  value["LinesExtraction"]["drawScannedEdges"] = 1;
+  value["LinesExtraction"]["drawBorderLines"] = 1;
+  value["LinesExtraction"]["drawWorldLines"] = 1;
+  value["LinesExtraction"]["drawFiltWorldLines"] = 1;
+  value["LinesExtraction"]["drawCorners"] = 1;
+  value["LinesExtraction"]["drawCircle"] = 1;
+  value["LinesExtraction"]["drawUnknownLandmarks"] = 1;
+  value["LinesExtraction"]["displayOutput"] = 1;
+  DebugBase::processDebugMsg(value);
 }
 
 void VisionTestSuite::testAll()
 {
-  //DebugBase::processDebugMsg("LinesExtraction:drawScannedEdges:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawBorderLines:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawWorldLines:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawFiltWorldLines:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawCircle:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawCorners:1");
-  //DebugBase::processDebugMsg("LinesExtraction:drawUnknownLandmarks:1");
-  //DebugBase::processDebugMsg("LinesExtraction:displayInfo:1");
-  //DebugBase::processDebugMsg("LinesExtraction:displayOutput:1");
+  testSegmentation();
+  testFieldExtraction();
+  testGoalExtraction();
+  testRobotExtraction();
+  testBallExtraction();
+  testLinesExtraction();
 }

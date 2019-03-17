@@ -15,7 +15,7 @@
 #include "Utils/include/EnumUtils.h"
 
 BConfigException::BConfigException(
-  BehaviorConfig* config, 
+  BehaviorConfig* config,
   const string& message,
   const bool& bSysMsg) throw () :
   TNRSException(message, bSysMsg),
@@ -24,13 +24,13 @@ BConfigException::BConfigException(
 }
 
 string BConfigException::getExcPrefix()
-{ 
-  return 
-    string("Exception caught in behavior config \n\tType: ") + 
+{
+  return
+    string("Exception caught in behavior config \n\tType: ") +
     DataUtils::varToString(static_cast<unsigned>(config->baseType)) +
-    string(", Id: ") + 
-    DataUtils::varToString(config->id) + 
-    string(";\t"); 
+    string(", Id: ") +
+    DataUtils::varToString(config->id) +
+    string(";\t");
 }
 
 boost::shared_ptr<BehaviorConfig>
@@ -50,7 +50,7 @@ boost::shared_ptr<BehaviorConfig>
       }
     }
   } catch (Json::Exception& e) {
-    cout 
+    cout
       << "Exception caught making a behavior config from json object.";
     LOG_EXCEPTION(e.what());
     config.reset();
@@ -64,19 +64,20 @@ boost::shared_ptr<BehaviorConfig>
 bool BehaviorConfig::assignFromJson(const Json::Value& obj)
 {
   //LOG_INFO("BehaviorConfig::assignFromJson() called")
-  ASSIGN_CONFIG_FROM_JSON(
-    (float, maxRuntime, maxRuntime),
+  ASSIGN_CONFIG_FROM_JSON(BehaviorConfig,
     (bool, logData, logData),
+    (float, maxRuntime, maxRuntime),
   )
+  return true;
 }
 
 Json::Value BehaviorConfig::getJson() {
   //LOG_INFO("BehaviorConfig::getJson()")
   Json::Value obj;
   GET_BEHAVIOR_CONFIG_JSON(
-    (int, id), 
-    (int, type), 
-    (unsigned, baseType), 
+    (int, id),
+    (int, type),
+    (unsigned, baseType),
     (float, maxRuntime),
     (bool, logData),
   );

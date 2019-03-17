@@ -42,6 +42,8 @@ bool HeadScan<Scalar>::initiate()
 template <typename Scalar>
 void HeadScan<Scalar>::update()
 {
+  LOG_INFO("Runtiem:"  << this->runTime);
+  LOG_INFO("FsmState:"  << fsm->state->name);
   if (fsm->update())
     return;
 }
@@ -60,7 +62,10 @@ void HeadScan<Scalar>::setScanTarget(
   this->targetAngles[toUType(Joints::headYaw)] = yaw;
   this->targetAngles[toUType(Joints::headPitch)] = pitch;
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  this->naoqiSetAngles(this->naoqiNames, this->targetAngles, this->fractionMaxSpeed);
+  for (size_t i = 0; i < this->targetAngles.size(); ++i) {
+    if (this->targetAngles[i] == this->targetAngles[i])
+      this->naoqiSetAngles(this->naoqiNames[i], this->targetAngles[i], this->fractionMaxSpeed);
+  }
   #endif
 }
 
@@ -68,21 +73,22 @@ template <typename Scalar>
 bool HeadScan<Scalar>::waitOnTargetReached()
 {
   static Scalar scanTime = 0.0;
-  auto& headYaw = this->kM->getJointState(Joints::headYaw)->position();
+  auto headYaw = this->kM->getJointState(Joints::headYaw)->position();
   if (getBehaviorCast()->scanLowerArea) {
     auto& headPitch = this->kM->getJointState(Joints::headPitch)->position();
     if (fabsf(headYaw - this->targetAngles[toUType(Joints::headYaw)]) < Angle::DEG_2 &&
         fabsf(headPitch - this->targetAngles[toUType(Joints::headPitch)]) < Angle::DEG_2)
     {
       if (scanTime >= this->getBehaviorCast()->totalWaitTime) {
+        scanTime = 0.0;
         return false;
       }
       scanTime += this->cycleTime;
     }
   } else {
     if (fabsf(headYaw - this->targetAngles[toUType(Joints::headYaw)]) < Angle::DEG_2) {
-      scanTime += this->cycleTime;
       if (scanTime >= this->getBehaviorCast()->totalWaitTime) {
+        scanTime = 0.0;
         return false;
       }
       scanTime += this->cycleTime;

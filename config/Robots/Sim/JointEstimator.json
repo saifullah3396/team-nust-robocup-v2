@@ -3,13 +3,13 @@
     "pid" : [5000, 0.0, 50],
     "procVariance" : [0.001, 0.001],
     "measVariance" : 0.005,
-    "useInput" : true
+    "useInput" : false
   },
   "HeadPitch" : {
     "pid" : [5000, 0.0, 50],
     "procVariance" : [0.001, 0.001],
     "measVariance" : 0.005,
-    "useInput" : true
+    "useInput" : false
   },
   "LShoulderPitch" : {
     "pid" : [5000, 0.0, 50],

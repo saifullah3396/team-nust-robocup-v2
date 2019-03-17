@@ -85,6 +85,7 @@ void JointEstimator<Scalar>::setPidGains(const Matrix<Scalar, 3, 1>& pid) {
 template <typename Scalar>
 void JointEstimator<Scalar>::updateModel()
 {
+  #ifndef NAOQI_MOTION_PROXY_AVAILABLE
   if (useInput) {
     auto error = (lastCmd - model->getState()[0]);
     auto input = prevInput + pidC[0] * error + pidC[1] * prevError1 + pidC[2] * prevError2;
@@ -93,6 +94,7 @@ void JointEstimator<Scalar>::updateModel()
     prevError1 = error;
     prevInput = input;
   }
+  #endif
   filter->predict();
 }
 

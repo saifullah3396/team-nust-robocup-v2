@@ -69,6 +69,26 @@ void MotionGenerator<Scalar>::stopMove() {
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+vector<vector<string> > MotionGenerator<Scalar>::getNaoqiTaskList() {
+  #ifndef V6_CROSS_BUILD
+    auto value = motionProxy->getTaskList();
+    auto size = value.getSize();
+    vector<vector<string> > tasks;
+    if (size != 0) {
+      tasks.resize(size);
+      for (int i = 0; i < size; ++i) {
+        value.ToStringArray(tasks[i]);
+      }
+    }
+    return tasks;
+  #else
+    return motionProxy.call<vector<vector<string>>>("getNaoqiTaskList");
+  #endif
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
 #ifndef V6_CROSS_BUILD
 AL::ALValue MotionGenerator<Scalar>::getFootsteps()
 #else

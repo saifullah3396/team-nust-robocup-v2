@@ -45,7 +45,7 @@ public:
    * @param name: Name of the behavior
    */
   MotionBehavior(
-		MotionModule* motionModule,
+    MotionModule* motionModule,
     const boost::shared_ptr<MBConfig>& config,
     const string& name = "MotionBehavior");
 
@@ -73,6 +73,14 @@ public:
    */
   void stopMove();
   #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
+   * @brief getNaoqiTaskList Wrapper for MotionGenerator::getNaoqiTaskList()
+   */
+  vector<vector<string> > getNaoqiTaskList();
+  #endif
+
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
@@ -139,7 +147,7 @@ public:
       const float& fractionMaxSpeed);
   #endif
   #endif
-  
+
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
    * @brief naoqiMoveToward Wrapper for MotionGenerator::naoqiMoveToward()
@@ -167,7 +175,7 @@ public:
       const vector<string>& timeList,
       const bool& clearExisting);
   #endif
-  #endif  
+  #endif
 
   /**
    * @brief setJointCmds Wrapper for MotionGenerator::setJointsCmds
@@ -242,7 +250,7 @@ protected:
 
   //! Motion generator module object
   boost::shared_ptr<MotionGenerator<Scalar> > mG;
-  
+
   //! Base MotionModule object pointer
   MotionModule* motionModule;
 };

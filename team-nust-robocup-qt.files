@@ -1008,7 +1008,6 @@ src/TNRSModules/MotionModule/include/HeadControl/Types/HeadScan.h
 src/TNRSModules/MotionModule/src/HeadControl/Types/HeadScan.cpp
 config/BehaviorConfigs/PBConfigs/Robocup/GoalKeeper.json
 config/BehaviorConfigs/PBConfigs/TestSuite/MotionTestSuite.json
-config/BehaviorConfigs/MBConfigs/HeadControl/HeadTargetSearch.json
 config/BehaviorConfigs/MBConfigs/HeadControl/HeadTargetTrack.json
 src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/Defender.cpp
 config/BehaviorConfigs/PBConfigs/Robocup/Defender.json
@@ -1545,3 +1544,5 @@ src/Utils/include/TNRSFootstep.h
 src/Utils/include/DataHolders/TNRSFootstep.h
 src/Utils/src/DataHolders/TNRSFootstep.cpp
 config/BehaviorConfigs/MBConfigs/BalanceModule/PIDComControl.json
+config/BehaviorConfigs/MBConfigs/HeadControl/HeadTargetSearch.json
+config/BehaviorConfigs/MBConfigs/HeadControl/HeadScan.json

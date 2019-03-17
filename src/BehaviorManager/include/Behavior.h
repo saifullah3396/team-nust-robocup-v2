@@ -103,7 +103,7 @@ public:
    * @param runInParallel To run the child alongside this behavior or not
    */
   void setupChildRequest(
-    const BehaviorConfigPtr& config, 
+    const BehaviorConfigPtr& config,
     const bool& runInParallel = false);
 
   /**
@@ -116,11 +116,31 @@ public:
    * @brief kill Kills the behavior with last child killed first
    */
   void kill();
-  
+
   /**
    * @brief killChild Kills the child
    */
   void killChild();
+
+  /**
+   * @brief pause Pauses the behavior until next unpause call
+   */
+  void pause();
+
+  /**
+   * @brief un pause Unpauses the behavior
+   */
+  void unpause();
+
+  /**
+   * @brief pauseChild Pauses the child until next unpause call
+   */
+  void pauseChild();
+
+  /**
+   * @brief unPauseChild Unpauses the child
+   */
+  void unpauseChild();
 
   /**
    * @brief setLoggerFromParent Sets the data logger of this behavior
@@ -134,6 +154,7 @@ public:
     return "Finite state machine not implemented for this behavior."; }
   const bool& isInitiated() { return initiated; }
   const bool& isRunning() const { return inBehavior; }
+  const bool& isPaused() const { return paused; }
   bool getChildInParallel() { return childInParallel; }
   JsonLoggerPtr getDataLogger() { return dataLogger; }
   const BehaviorConfigPtr& getBehaviorConfig() { return config; }
@@ -219,6 +240,9 @@ private:
 
   //! Whether behavior has been initiated
   bool initiated = {false};
+
+  //! Whether the behavior is currently paused
+  bool paused = {false};
 
   //! Whether the child should run in parallel or not
   bool childInParallel = {false};

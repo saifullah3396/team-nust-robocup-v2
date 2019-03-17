@@ -60,6 +60,14 @@ void MotionBehavior<Scalar>::stopMove()
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+vector<vector<string> > MotionBehavior<Scalar>::getNaoqiTaskList()
+{
+  return mG->getNaoqiTaskList();
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
 #ifndef V6_CROSS_BUILD
 AL::ALValue MotionBehavior<Scalar>::getFootsteps()
 #else

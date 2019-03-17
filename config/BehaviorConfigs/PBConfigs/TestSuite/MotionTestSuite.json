@@ -3,6 +3,6 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 2,
-  "requestedBehavior" : "DiveModule/KFMDive.json",
+  "requestedBehavior" : "HeadControl/HeadTargetTrack.json",
   "logData" : false
 }

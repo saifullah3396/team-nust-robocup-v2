@@ -55,12 +55,14 @@ void Behavior::manage()
     //! Warning: initiated is not the same as inBehavior
     initiated = true;
   } else {
-    update();
-    runTime += cycleTime;
-    if (dataLogger) {
-      updateDataLogger();
-      if (!this->inBehavior) {
-        dataLogger->save();
+    if (!paused) {
+      update();
+      runTime += cycleTime;
+      if (dataLogger) {
+        updateDataLogger();
+        if (!this->inBehavior) {
+          dataLogger->save();
+        }
       }
     }
   }
@@ -92,6 +94,34 @@ void Behavior::killChild()
 {
   if (child)
     child->kill();
+}
+
+void Behavior::pause()
+{
+  //! Pause all the behaviors recursively from child to parent
+  if (child)
+    child->pause();
+  paused = true;
+}
+
+void Behavior::pauseChild()
+{
+  if (child)
+    child->pause();
+}
+
+void Behavior::unpause()
+{
+  //! Pause all the behaviors recursively from child to parent
+  if (child)
+    child->unpause();
+  paused = false;
+}
+
+void Behavior::unpauseChild()
+{
+  if (child)
+    child->unpause();
 }
 
 void Behavior::setLoggerFromParent()

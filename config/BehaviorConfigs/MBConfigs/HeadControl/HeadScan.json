@@ -1,0 +1,12 @@
+{
+    "baseType" : 0,
+    "headTargetType" : 0,
+    "id" : 5,
+    "maxRuntime" : 100.0,
+    "type" : 0,
+    "scanLowerArea" : false,
+    "totalWaitTime" : 1,
+    "scanMaxYaw" : 0.785,
+    "scanMaxPitch" : 0.279111111,
+    "logData" : false
+}

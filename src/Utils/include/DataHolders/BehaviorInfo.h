@@ -33,6 +33,7 @@ struct BehaviorInfo : public DataHolder
       (fsmState, fsmState),
       (initiated, initiated),
       (running, running),
+      (paused, paused),
       (finished, finished),
     );
     Json::Value cfg;
@@ -56,6 +57,7 @@ struct BehaviorInfo : public DataHolder
     JSON_ASSIGN_(val, name, name);
     JSON_ASSIGN_(val, fsmState, fsmState);
     JSON_ASSIGN_(val, initiated, initiated);
+    JSON_ASSIGN_(val, paused, paused);
     JSON_ASSIGN_(val, running, running);
     JSON_ASSIGN_(val, finished, finished);
     return val;
@@ -65,17 +67,22 @@ struct BehaviorInfo : public DataHolder
   {
     return initiated;
   }
-  
+
   const bool& isRunning() const
   {
     return running;
+  }
+
+  const bool& isPaused() const
+  {
+    return paused;
   }
 
   const bool& isFinished() const
   {
     return finished;
   }
-  
+
   const BehaviorConfigPtr& getConfig() const
   {
     return config;
@@ -100,7 +107,7 @@ private:
   void setConfig(const BehaviorConfigPtr& config) {
     this->config = config;
   }
-  
+
   void resetConfig() {
     config.reset();
   }
@@ -121,6 +128,10 @@ private:
     this->running = running;
   }
 
+  void setPaused(const bool& paused) {
+    this->paused = paused;
+  }
+
   void setFinished(const bool& finished) {
     this->finished = finished;
   }
@@ -129,11 +140,12 @@ private:
   std::string fsmState = {"FSM not implemented for this behavior."};
   bool initiated = {false};
   bool running = {false};
+  bool paused = {false};
   bool finished = {false};
-  
+
   BehaviorConfigPtr config;
   vector<BehaviorConfigPtr> configs;
-  
+
   //! Behavior manager can access its private members
   friend class BehaviorManager;
 };
