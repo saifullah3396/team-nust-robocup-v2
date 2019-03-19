@@ -92,10 +92,10 @@ public:
   void updateImage(
     const unsigned& index);
 #endif
-  void 
+  void
   recordVideo(const unsigned& index);
-  
-  void 
+
+  void
   stopRecording();
 
   /**
@@ -150,7 +150,9 @@ private:
   #endif
   //! Vector of cameras
   vector<CameraPtr> cams;
-  
+
   //! Opencv video writer objects for top and bottom cams
+  #ifndef V6_CROSS_BUILD
   vector<cv::VideoWriter*> videoWriter;
+  #endif
 };

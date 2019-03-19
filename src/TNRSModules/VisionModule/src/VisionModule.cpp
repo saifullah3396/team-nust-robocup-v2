@@ -10,7 +10,7 @@
  * @date 04 Feb 2017
  */
 
-#include <boost/exception/diagnostic_information.hpp> 
+#include <boost/exception/diagnostic_information.hpp>
 #include <Eigen/Dense>
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
@@ -95,9 +95,9 @@ void VisionModule::setThreadPeriod()
 
 void VisionModule::initMemoryConn()
 {
-  inputConnector = 
+  inputConnector =
     new InputConnector(this, getModuleName() + "InputConnector");
-  outputConnector = 
+  outputConnector =
     new OutputConnector(this, getModuleName() + "OutputConnector");
   inputConnector->initConnector();
   outputConnector->initConnector();
@@ -132,7 +132,7 @@ void VisionModule::init()
   int tempSendUnknownLandmarks;
   GET_CONFIG(
     "VisionConfig",
-    (int, VisionModule.debug, tempDebug), 
+    (int, VisionModule.debug, tempDebug),
     (int, VisionModule.debugImageIndex, tempDebugImageIndex),
     (int, VisionModule.sendKnownLandmarks, tempSendKnownLandmarks),
     (int, VisionModule.sendUnknownLandmarks, tempSendUnknownLandmarks),
@@ -188,7 +188,6 @@ void VisionModule::mainRoutine()
 {
   OBSTACLES_OBS_OUT(VisionModule).data.clear();
   // Execution of this module is decided by planning module.
-  runVision = true;
   if (runVision) {
     // update cameras and get images
     cameraUpdate();
@@ -245,7 +244,6 @@ void VisionModule::handleVideoWriting()
 bool VisionModule::featureExtractionUpdate()
 {
   FeatureExtraction::setupImagesAndHists();
-  VisionUtils::displayImage("Image", FeatureExtraction::getBgrMat(toUType(CameraId::headTop)));
   FeatureExtraction::clearLandmarks();
   //colorHandler->update();
   /*Mat blue, yellow, green, yuv;

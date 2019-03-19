@@ -66,8 +66,9 @@ else
   # wpa_supplicant
   cp ${baseDir}/Robot/wired /etc/init.d
   cp ${baseDir}/Robot/wireless /etc/init.d
-  rc-update add wired boot
-  rc-update add wireless boot
+  system
+  #rc-update add wired boot
+  #rc-update add wireless boot
 
   # Do not verify remote hostname via DNS
   if [ ! -f "/etc/ssh.conf/sshd_config" -o -z "$(grep "UseDNS no" "/etc/ssh.conf/sshd_config" 2>/dev/null)" ]; then
@@ -86,13 +87,13 @@ else
   /home/nao/bin/toteamnust
 
   # Remove all services not needed
-  rc-update >${baseDir}/temp
-  for i in crash-report-uploader proxydaemon vsftpd nginx naopathe laser bootprogress_0 bootprogress_25 bootprogress_50 bootprogress_75 bootprogress_100 avahi-daemon lircd bluetooth hwclock sysctl local urandom termencoding netmount mtab sysklogd savecache firewall_mode ofono pulseaudio qimessaging-json udev-postmount
-  do
-    if [ ! -z "$(grep "$i |" ${baseDir}/temp)" ]; then
-      rc-update del $(echo "$(grep "$i |" ${baseDir}/temp)" | sed "s%[ ]*\([^ ]*\) |[ ]*\([^ ]*\).*%\1 \2%")
-    fi
-  done
+  #rc-update >${baseDir}/temp
+  #for i in crash-report-uploader proxydaemon vsftpd nginx naopathe laser bootprogress_0 bootprogress_25 bootprogress_50 bootprogress_75 bootprogress_100 avahi-daemon lircd bluetooth hwclock sysctl local urandom termencoding netmount mtab sysklogd savecache firewall_mode ofono pulseaudio qimessaging-json udev-postmount
+  #do
+  #  if [ ! -z "$(grep "$i |" ${baseDir}/temp)" ]; then
+  #    rc-update del $(echo "$(grep "$i |" ${baseDir}/temp)" | sed "s%[ ]*\([^ ]*\) |[ ]*\([^ ]*\).*%\1 \2%")
+  #  fi
+  #done
 
   # Load sshd later
   #rc-update add sshd

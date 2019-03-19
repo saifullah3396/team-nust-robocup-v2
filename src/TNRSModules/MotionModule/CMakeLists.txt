@@ -11,7 +11,7 @@ if (EIGEN3_INCLUDE_DIRS)
   include_directories ("${EIGEN3_INCLUDE_DIRS}")
 endif (EIGEN3_INCLUDE_DIRS)
 
-file (GLOB TNRS_MOTION_MODULE_SRC 
+file (GLOB TNRS_MOTION_MODULE_SRC
       "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/KinematicsModule/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/FallDetector/*.cpp"
@@ -40,7 +40,7 @@ file (GLOB TNRS_MOTION_MODULE_SRC
 
 # Building the code for remote usage.
 if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
-  add_library (tnrs-motion-module SHARED ${TNRS_MOTION_MODULE_SRC}) 
+  add_library (tnrs-motion-module SHARED ${TNRS_MOTION_MODULE_SRC})
   # Linking libraries from the sdk.
   qi_use_lib(tnrs-motion-module
     ALCOMMON
@@ -49,15 +49,15 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
 
   # Linking external libraries installed as pre-requisites.
   # For remote usage the libraries can just be installed on the local pc.
-  target_link_libraries(tnrs-motion-module 
+  target_link_libraries(tnrs-motion-module
     libtnrs-utils.so
     libtnrs-base.so
     libtnrs-user-comm-module.so
     libtnrs-control-module.so
     libtnrs-behavior-manager.so
-    -lnlopt 
-    -ljsoncpp 
-    -lqpOASES 
+    -lnlopt
+    -ljsoncpp
+    -lqpOASES
     -lsymengine
     -lteuchos
     -lbfd
@@ -78,7 +78,8 @@ else()
       libtnrs-behavior-manager.so
       -lnlopt
       -ljsoncpp
-      libqpOASES.so)
+      libqpOASES.so
+      -lalvalue)
   else()
       qi_use_lib(
         tnrs-motion-module
@@ -100,7 +101,7 @@ else()
       libqpOASES.so)
   endif()
 endif()
-    
+
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
     file (GLOB test_SRC "${CMAKE_CURRENT_SOURCE_DIR}/tests/src/*.cpp")

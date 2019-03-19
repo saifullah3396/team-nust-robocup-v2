@@ -2,8 +2,7 @@
 
 set -eu
 
-scriptPath=$(echo $0 | sed "s|^\.\./|`pwd`/../|" | sed "s|^\./|`pwd`/|")
-baseDir=$(dirname "${scriptPath}")
+baseDir=$(cd "$(dirname "$(which "$0")")" && pwd)
 bhDir=$(dirname "${baseDir}")
 includeDir="${baseDir}/Include/"
 
@@ -34,21 +33,21 @@ usage() {
 parseOptions() {
   if [ $# -eq 4 ]; then
     if [ ${1} == "-ids" ]; then
-	  headId=${2}
-	  bodyId=${3}
-	  name=${4}
-	  return 0
-	else
-	  usage
-	fi
+      headId=${2}
+      bodyId=${3}
+      name=${4}
+      return 0
+    else
+      usage
+    fi
   elif [ $# -eq 3 ]; then
     if [ ${1} == "-ip" ]; then
-	  remoteIp=${2}
-	  name=${3}
-	  return 1
-	else
-	  usage
-	fi
+      remoteIp=${2}
+      name=${3}
+      return 1
+    else
+      usage
+    fi
   else
     usage
   fi
@@ -56,20 +55,20 @@ parseOptions() {
 
 getIdsFromRobot() {
   message "Loading ids from Robot"
-  
+
   # copy python scripts
   tmpPath="/tmp/NaoInstall"
-  ssh -i "${privateKey}" ${sshOptions} nao@${remoteIp} "rm -Rf ${tmpPath}"
-  ssh -i "${privateKey}" ${sshOptions} nao@${remoteIp} "mkdir -p ${tmpPath}"
-  rsync ${rsyncOptions} -e "${sshCommand}" "${fileDir}/bin/getHeadId.py" nao@${remoteIp}:${tmpPath}/getHeadId.py
-  rsync ${rsyncOptions} -e "${sshCommand}" "${fileDir}/bin/getBodyId.py" nao@${remoteIp}:${tmpPath}/getBodyId.py
-  
+  ssh -i "${privateKey}" ${sshOptions} nao@${remoteIp} "rm -Rf ${tmpPath}" || fatal "Can't remove '${tmpPath}' on NAO"
+  ssh -i "${privateKey}" ${sshOptions} nao@${remoteIp} "mkdir -p ${tmpPath}" || fatal "Can't create '${tmpPath}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" "${fileDir}/bin/getHeadId-V6.py" nao@${remoteIp}:${tmpPath}/getHeadId.py || fatal "Can't copy 'getHeadId.py' to NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" "${fileDir}/bin/getBodyId-V6.py" nao@${remoteIp}:${tmpPath}/getBodyId.py || fatal "Can't copy 'getBodyId.py' to NAO"
+
   # get headId
-  headId=$(ssh -i "${privateKey}" ${sshOptions} nao@${remoteIp} "python /tmp/NaoInstall/getHeadId.py | grep -v '[I]'")
+  headId=$(ssh -i "${privateKey}" ${sshOptions} nao@${remoteIp} "bash -l -c 'python /tmp/NaoInstall/getHeadId.py' | grep -vE '\[(W|I)\]'")
   if [ ${headId} == "Fail" ]; then
     fatal "Failed reading the headId!"
   fi
-  bodyId=$(ssh -i "${privateKey}" ${sshOptions} nao@${remoteIp} "python /tmp/NaoInstall/getBodyId.py | grep -v '[I]'")
+  bodyId=$(ssh -i "${privateKey}" ${sshOptions} nao@${remoteIp} "bash -l -c 'python /tmp/NaoInstall/getBodyId.py' | grep -vE '\[(W|I)\]'")
   if [ ${bodyId} == "Fail" ]; then
     fatal "Failed reading the bodyId!"
   fi
@@ -83,14 +82,19 @@ addIds() {
   elif [[ $(grep "bodyId = \"${bodyId}\"" "${robotsFile}") ]]; then
     fatal "The bodyId ${bodyId} is already in use!"
   else
-    line="\ \ { name = \"${name}\"; headId = \"${headId}\"; bodyId = \"${bodyId}\"; }"
-    if [[ $(grep -Pz '\[\n\]' "${robotsFile}") ]]; then
-	  sed -i "/\[/ a ${line}" "${robotsFile}"
-	elif [[ $(grep -Pz '}\n\];' "${robotsFile}") ]]; then
-	  sed -i "/}$/,/\];/ s/}/},\n${line}/" "${robotsFile}"
-	else
-	  fatal "Could not parse ${robotsFile}"
-	fi
+    line="{ name = \"${name}\"; headId = \"${headId}\"; bodyId = \"${bodyId}\"; }"
+    if [[ $(tr '\n' '|' <"${robotsFile}" | grep '\[|\]') ]]; then
+      sed "s%\[%[|  ${line}%" <"${robotsFile}" \
+      | tr '|' '\n' >/tmp/addRobotIds.tmp \
+      && mv /tmp/addRobotIds.tmp "${robotsFile}"
+    elif [[ $(tr '\n' '|' <"${robotsFile}" | grep '}|\];') ]]; then
+      tr <"${robotsFile}" '\n' '|' \
+      | sed "s%},*|\];%},|  ${line}|];%" \
+      | tr '|' '\n' >/tmp/addRobotIds.tmp \
+      && mv /tmp/addRobotIds.tmp "${robotsFile}"
+    else
+      fatal "Could not parse ${robotsFile}"
+    fi
   fi
 }
 

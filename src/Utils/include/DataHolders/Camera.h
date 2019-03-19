@@ -23,11 +23,17 @@
 #include <libv4l2.h>
 #include <pthread.h>
 #else
+#ifndef VISUALIZER_BUILD
 #include "Utils/include/alvisiondefinitions.h"
 #endif
+#endif
+#ifndef VISUALIZER_BUILD
 #include <opencv2/core/core.hpp>
+#endif
 #include "Utils/include/DataHolders/DataHolder.h"
 #include "Utils/include/EnumUtils.h"
+
+using namespace std;
 
 namespace Json {
   class Value;
@@ -53,6 +59,9 @@ namespace Json {
     #define V4L2_CID_EXPOSURE_ALGORITHM (V4L2_CID_PRIVATE_BASE+8)
   #endif
 #endif
+#ifdef VISUALIZER_BUILD
+  #define V4L2_CID_EXPOSURE_ALGORITHM (V4L2_CID_PRIVATE_BASE+8)
+#endif
 
 struct buffer
 {
@@ -68,7 +77,9 @@ static void xioctl(int fh, unsigned long int request, void *arg)
   } while (r == -1 && ((errno == EINTR) || (errno == EAGAIN)));
 
   if (r == -1) {
+    #ifndef VISUALIZER_BUILD
     LOG_EXCEPTION("Exception caught while setting camera control.")
+    #endif
     fprintf(stderr, "%s(%lu): error %d, %s\n", __func__,
       _IOC_NR(request), errno, strerror(errno));
     exit(EXIT_FAILURE);
@@ -218,7 +229,9 @@ struct Camera : public DataHolder
   T focalY = {0};//! Camera focal length Y
   T centerOffX = {0}; //! Camera center offset X
   T centerOffY = {0}; //! Camera center offset Y
+  #ifndef VISUALIZER_BUILD
   cv::Mat distCoeffs = {cv::Mat_<float>(1, 5)}; //! Distortion coefficients
+  #endif
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
     CameraSettings settings;
   #else

@@ -2,7 +2,7 @@
  * @file ControlModule/include/HardwareLayer.h
  *
  * This file declares classes SensorLayer and ActuatorLayers,
- * and defines their child classes for each type of sensors and 
+ * and defines their child classes for each type of sensors and
  * actuators
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
@@ -138,47 +138,13 @@ protected:
   /**
    * @brief setSensorPtr Updates sensor pointers from naoqi memory
    */
-  void setSensorPtr()
-  {
-    if (memoryProxy) {
-      #ifndef MODULE_IS_REMOTE
-      sensorPtrs.resize(size);
-      for (size_t i = 0; i < size; ++i)
-        #ifndef V6_CROSS_BUILD
-          sensorPtrs[i] = (float*) memoryProxy->getDataPtr(keys[i]);
-        #else
-          sensorPtrs[i] = (float*) memoryProxy.call<float*>("getDataPtr", keys[i]);
-        #endif
-      #endif
-    } else {
-      LOG_ERROR("Cannot access Naoqi motion proxy at SensorLayer::setSensorPtrs().");
-    }
-  }
+  void setSensorPtr();
 
   /**
    * @brief init Initializes the sensor class for given
    *   sensors based on their keys
    */
-  void init(const string& jsonFile) {
-    try {
-      auto path =
-        ConfigManager::getCommonConfigDirPath() + "/Sensors/" + jsonFile + ".json";
-      Json::Value json;
-      ifstream config(path, ifstream::binary);
-      config >> json;
-      if (json["keys"].size() > 0) {
-        auto keysObj = json["keys"];
-        size = keysObj.size();
-        keys.resize(size);
-        for (int i = 0; i < size; ++i) {
-          keys[i] = keysObj[i].asString();
-        }
-      }
-    } catch (Json::Exception& e) {
-      LOG_EXCEPTION("Error reading hardware layer ids from json file:\t" << jsonFile << "\n\t" << e.what());
-    }
-    setSensorPtr();
-  }
+  void init(const string& jsonFile);
 
 private:
   vector<string> keys; //! Vector of sensor keys

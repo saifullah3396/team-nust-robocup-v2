@@ -11,6 +11,8 @@
 
 #ifndef V6_CROSS_BUILD
 #include <alvalue/alvalue.h>
+#else
+#include <qi/alvalue.h>
 #endif
 #include <chrono>
 #include "MotionModule/include/MTypeHeader.h"
@@ -33,24 +35,24 @@ public:
 
   /**
    * @brief MotionLogger constructor.
-   * 
+   *
    * @param path: Path to json file
    * @param root: Root of json object
    * @param reftime: Reference start time for motion data logs
    */
   MotionLogger(
     MotionModule* motionModule,
-    const string& path, 
+    const string& path,
     const Json::Value& root = Json::Value(),
     const high_resolution_clock::time_point& refTime = high_resolution_clock::now());
-  
+
   /**
    * @brief recordJointCmds Logs the joint commands sent by naoqi-based methods
    * @param cmds Joint commands
    * @param time Joint command times
    * @param ids Ids of joints updated
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   void recordJointCmds(
      const AL::ALValue& cmds, const AL::ALValue& time, const vector<unsigned>& ids);
   #else
@@ -66,7 +68,7 @@ public:
    * @param time Joint command times
    * @param activeJoints Active joints
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   void recordJointCmds(
     const AL::ALValue& cmds,
     const AL::ALValue& time,
@@ -83,9 +85,9 @@ public:
    * @param time Time of logging
    */
   void logJointStates(const Scalar& time);
-  
+
   //! Setters
-  void setRefTime(const high_resolution_clock::time_point& refTime) 
+  void setRefTime(const high_resolution_clock::time_point& refTime)
     { this->refTime = refTime; }
 
 private:

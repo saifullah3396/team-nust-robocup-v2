@@ -36,31 +36,37 @@ public:
 
 #ifndef MODULE_IS_REMOTE
   #define LOG_INFO(msg) \
-    if (PrintUtils::mainLog.is_open()) \
+    if (PrintUtils::mainLog.is_open()) { \
       PrintUtils::mainLog << "[Info] " << msg << endl;\
-    else\
+    } else {\
       PrintUtils::mainLog.open(\
         ConfigManager::getLogsDirPath() + "Output.txt",\
         std::ofstream::out | std::ofstream::trunc\
-      );
+      ); \
+      PrintUtils::mainLog << "[Info] " << msg << endl; \
+    }
 
   #define LOG_ERROR(msg) \
-    if (PrintUtils::mainLog.is_open()) \
+    if (PrintUtils::mainLog.is_open()) { \
       PrintUtils::mainLog << "[Error] " << msg << endl;\
-    else\
+    } else { \
       PrintUtils::mainLog.open(\
         ConfigManager::getLogsDirPath() + "Output.txt",\
         std::ofstream::out | std::ofstream::trunc\
-      );
+      ); \
+      PrintUtils::mainLog << "[Error] " << msg << endl;\
+    }
 
   #define LOG_EXCEPTION(msg) \
-    if (PrintUtils::mainLog.is_open()) \
+    if (PrintUtils::mainLog.is_open()) { \
       PrintUtils::mainLog << "[Exception] " << msg;\
-    else\
+    } else { \
       PrintUtils::mainLog.open(\
         ConfigManager::getLogsDirPath() + "Output.txt",\
         std::ofstream::out | std::ofstream::trunc\
-      );
+      ); \
+      PrintUtils::mainLog << "[Exception] " << msg;\
+    }
 #else
   #define LOG_INFO(msg) \
     cout << "[Info] " << msg << endl;
@@ -70,5 +76,4 @@ public:
 
   #define LOG_EXCEPTION(msg) \
     cout << "[Exception] " << msg << endl;
-
 #endif

@@ -69,27 +69,18 @@ void MotionGenerator<Scalar>::stopMove() {
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-vector<vector<string> > MotionGenerator<Scalar>::getNaoqiTaskList() {
+AL::ALValue MotionGenerator<Scalar>::getNaoqiTaskList() {
   #ifndef V6_CROSS_BUILD
-    auto value = motionProxy->getTaskList();
-    auto size = value.getSize();
-    vector<vector<string> > tasks;
-    if (size != 0) {
-      tasks.resize(size);
-      for (int i = 0; i < size; ++i) {
-        value.ToStringArray(tasks[i]);
-      }
-    }
-    return tasks;
+    return motionProxy->getTaskList();
   #else
-    return motionProxy.call<vector<vector<string>>>("getNaoqiTaskList");
+    return motionProxy.call<AL::ALValue>("getNaoqiTaskList");
   #endif
 }
 #endif
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 AL::ALValue MotionGenerator<Scalar>::getFootsteps()
 #else
 vector<vector<float> > MotionGenerator<Scalar>::getFootsteps()
@@ -98,7 +89,7 @@ vector<vector<float> > MotionGenerator<Scalar>::getFootsteps()
   #ifndef V6_CROSS_BUILD
     return motionProxy->getFootSteps();
   #else
-    return vector<vector<float>>();//motionProxy.call<void>("getFootSteps");
+    return motionProxy.call<AL::ALValue>("getFootSteps");
   #endif
 }
 #endif
@@ -139,7 +130,7 @@ void MotionGenerator<Scalar>::closeHand(const RobotHands& handIndex) {
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionGenerator<Scalar>::naoqiSetAngles(
   const AL::ALValue& names,
   const AL::ALValue& angles,
@@ -161,7 +152,7 @@ void MotionGenerator<Scalar>::naoqiSetAngles(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionGenerator<Scalar>::naoqiChangeAngles(
   const AL::ALValue& names,
   const AL::ALValue& angles,
@@ -206,7 +197,7 @@ void MotionGenerator<Scalar>::naoqiMoveToward(const float& vx, const float& vy, 
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionGenerator<Scalar>::naoqiSetFootsteps(
   const AL::ALValue& footName,
   const AL::ALValue& footSteps,
@@ -230,7 +221,7 @@ void MotionGenerator<Scalar>::naoqiSetFootsteps(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionGenerator<Scalar>::naoqiJointInterpolation(
   const vector<unsigned>& ids,
   const AL::ALValue& timesList,
@@ -246,7 +237,7 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
   const MotionLoggerPtr& logger)
 #endif
 {
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
     ASSERT(
       ids.size() == timesList.getSize() &&
       timesList.getSize() == positionLists.getSize()
@@ -300,7 +291,7 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
   const bool& postCommand,
   const MotionLoggerPtr& logger)
 {
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   AL::ALValue names;
   AL::ALValue positionLists;
   AL::ALValue timesList;
@@ -325,7 +316,7 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
     int k = 0;
     for (size_t j = 0; j < joints[i].size(); ++j) {
       if (activeJoints[j]) {
-        #ifndef V6_CROSS_BUILD
+        #ifndef V6_CROSS_BUILD_REMOVED
         positionLists[k].arrayPush(joints[i][j]);
         timesList[k].arrayPush(times[i]);
         #else
@@ -392,7 +383,7 @@ template <typename Scalar>
 Scalar MotionGenerator<Scalar>::runKeyFrameMotion(
   const vector<Matrix<Scalar, Dynamic, 1>>& targetJoints, const Matrix<Scalar, Dynamic, 1>& times)
 {
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   AL::ALValue jointTimes;
   AL::ALValue jointPositions;
   jointTimes.clear();
@@ -412,7 +403,7 @@ Scalar MotionGenerator<Scalar>::runKeyFrameMotion(
   vector<unsigned> jointIds;
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     jointIds.push_back(i);
-    #ifndef V6_CROSS_BUILD
+    #ifndef V6_CROSS_BUILD_REMOVED
     jointPositions[i].arraySetSize(targetJoints.size());
     jointTimes[i].arraySetSize(targetJoints.size());
     #else

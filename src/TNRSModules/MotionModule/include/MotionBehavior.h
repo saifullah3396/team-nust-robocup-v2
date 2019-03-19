@@ -12,6 +12,7 @@
 #ifndef V6_CROSS_BUILD
 #include <alvalue/alvalue.h>
 #else
+#include <qi/alvalue.h>
 #include <qi/anyobject.hpp>
 #endif
 #include <boost/filesystem.hpp>
@@ -78,7 +79,7 @@ public:
   /**
    * @brief getNaoqiTaskList Wrapper for MotionGenerator::getNaoqiTaskList()
    */
-  vector<vector<string> > getNaoqiTaskList();
+  AL::ALValue getNaoqiTaskList();
   #endif
 
 
@@ -86,7 +87,7 @@ public:
   /**
    * @brief getFootsteps Wrapper for MotionGenerator::stopMove()
    */
-    #ifndef V6_CROSS_BUILD
+    #ifndef V6_CROSS_BUILD_REMOVED
     AL::ALValue getFootsteps();
     #else
     vector<vector<float> > getFootsteps();
@@ -118,7 +119,7 @@ public:
   /**
    * @brief naoqiSetAngles Wrapper for MotionGenerator::naoqiSetAngles()
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
     void naoqiSetAngles(
       const AL::ALValue& names,
       const AL::ALValue& angles,
@@ -135,7 +136,7 @@ public:
   /**
    * @brief naoqiChangeAngles Wrapper for MotionGenerator::naoqiChangeAngles()
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   void naoqiChangeAngles(
     const AL::ALValue& names,
     const AL::ALValue& angles,
@@ -162,7 +163,7 @@ public:
   /**
    * @brief naoqiSetFootsteps Wrapper for MotionGenerator::naoqiSetFootsteps()
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
     void naoqiSetFootsteps(
       const AL::ALValue& footName,
       const AL::ALValue& footSteps,
@@ -221,7 +222,7 @@ protected:
   /**
    * Wrapper for MotionGenerator::naoqiJointInterpolation()
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   void naoqiJointInterpolation(
     const vector<unsigned>& ids,
     const AL::ALValue& timeLists,

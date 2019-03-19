@@ -9,6 +9,11 @@
 
 #pragma once
 
+#ifndef V6_CROSS_BUILD
+#include <alvalue/alvalue.h>
+#else
+#include <qi/alvalue.h>
+#endif
 #include <boost/filesystem.hpp>
 #include "BehaviorManager/include/Behavior.h"
 #include "MotionModule/include/MotionModule.h"
@@ -84,7 +89,7 @@ public:
    *   separate thread or as a blocking call
    * @param Pointer to logger if present
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   void naoqiJointInterpolation(
     const vector<unsigned>& ids,
     const AL::ALValue& timesList,
@@ -134,14 +139,14 @@ public:
   /**
    * @brief getNaoqiTaskList Gets the list of currently running tasks in a thread
    */
-  vector<vector<string> > getNaoqiTaskList();
+  AL::ALValue getNaoqiTaskList();
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
     /**
      * Uses naoqi api to get the list of current footsteps in queue
      */
-    #ifndef V6_CROSS_BUILD
+    #ifndef V6_CROSS_BUILD_REMOVED
     AL::ALValue getFootsteps();
     #else
     vector<vector<float> > getFootsteps();
@@ -181,7 +186,7 @@ public:
    * @param angles: Joint angles as requested
    * @param fractionMaxSpeed: Maximum speed limit
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   void naoqiSetAngles(
     const AL::ALValue& names,
     const AL::ALValue& angles,
@@ -202,7 +207,7 @@ public:
    * @param angles: Joint angles as requested
    * @param fractionMaxSpeed: Maximum speed limit
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   void naoqiChangeAngles(
     const AL::ALValue& names,
     const AL::ALValue& angles,
@@ -234,7 +239,7 @@ public:
    * @param timeList: Times at which feet are to be placed
    * @param clearExisting: Whether to clear existing commanded footsteps
    */
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
     void naoqiSetFootsteps(
       const AL::ALValue& footName,
       const AL::ALValue& footSteps,

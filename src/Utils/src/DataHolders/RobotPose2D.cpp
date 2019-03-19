@@ -12,6 +12,7 @@
 #include "Utils/include/DataHolders/RobotPose2D.h"
 #include "Utils/include/MathsUtils.h"
 #include "Utils/include/JsonUtils.h"
+#include "Utils/include/PrintUtils.h"
 
 using namespace std;
 

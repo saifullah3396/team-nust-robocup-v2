@@ -37,11 +37,11 @@ TeamNUSTSPL::TeamNUSTSPL(qi::SessionPtr session) :
 {
   TeamNUSTSPL::self = this;
 }
-
 #endif
 
 void TeamNUSTSPL::init()
 {
+  LOG_INFO("Initializing TeamNUSTSPL Module...");
   struct sigaction act;
   memset (&act, '\0', sizeof(act));
   act.sa_sigaction = &TeamNUSTSPL::signal_handler;
@@ -52,27 +52,22 @@ void TeamNUSTSPL::init()
     LOG_EXCEPTION("Problem in signal handler creation...");
     return;
   }
-  LOG_INFO("Initializing TeamNUSTSPL Module...");
   #ifdef MODULE_IS_LOCAL_SIMULATED
   LOG_INFO("The module is built for local simulations...");
   ConfigManager::setDirPaths("Robots/Sim/");
   ConfigManager::createDirs();
   #else
-  #ifndef MODULE_IS_REMOTE
-  ConfigManager::createDirs();
-  ConfigManager::setDirPaths("");
+    #ifndef MODULE_IS_REMOTE
+      ConfigManager::createDirs();
+      ConfigManager::setDirPaths("");
+    #endif
   #endif
-  #endif
-  LOG_INFO("Config directory path:\n\t" << ConfigManager::getConfigDirPath());
-  LOG_INFO("Logs directory path:\n\t" << ConfigManager::getLogsDirPath());
-
-
   LOG_INFO("Getting Naoqi ALMemoryProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/almemoryproxy.h");
   #ifndef V6_CROSS_BUILD
     try {
       memoryProxy = getParentBroker()->getMemoryProxy();
-    } catch (const AL::ALError& e) {
+    } catch (const exception& e) {
       LOG_EXCEPTION(e.what()); return;
     }
   #else
@@ -84,7 +79,7 @@ void TeamNUSTSPL::init()
   #ifndef V6_CROSS_BUILD
     try {
       motionProxy = getParentBroker()->getMotionProxy();
-    } catch (const AL::ALError& e) {
+    } catch (const exception& e) {
       LOG_EXCEPTION(e.what()); return;
     }
   #else
@@ -99,7 +94,7 @@ void TeamNUSTSPL::init()
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/aldcmproxy.h");
   try {
     dcmProxy = getParentBroker()->getDcmProxy();
-  } catch (const AL::ALError& e) {
+  } catch (const exception& e) {
     LOG_EXCEPTION(e.what()); return;
   }
   #endif
@@ -113,7 +108,7 @@ void TeamNUSTSPL::init()
     #else
       camProxy = session->service("ALVideoDevice");
     #endif
-  } catch (const AL::ALError& e) {
+  } catch (const exception& e) {
     LOG_EXCEPTION(e.what()); return;
   }
   #endif
@@ -127,7 +122,6 @@ void TeamNUSTSPL::init()
            "The modules are located at src/TNRSModules");
   setupTNRSModules();
   join();
-  LOG_INFO("Exiting TeamNUSTSPL...")
 }
 
 void TeamNUSTSPL::signal_handler(
@@ -157,7 +151,7 @@ void TeamNUSTSPL::setupTNRSModules()
     childModules[toUType(TNSPLModules::planning)] =
       boost::make_shared<PlanningModule>(this, memoryProxy);
   }
-  
+
   if (modulesToRun[toUType(TNSPLModules::motion)]) {
     LOG_INFO("Constructing MotionModule... See src/TNRSModules/MotionModule.")
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
@@ -216,7 +210,7 @@ void TeamNUSTSPL::setupTNRSModules()
         boost::make_shared<VisionModule>(this);
     #endif
   }
-  
+
   #ifdef MODULE_IS_REMOTE
   if (SAVE_IMAGES != -1) {
     auto vRequest = boost::make_shared<SwitchVision>(true);
@@ -237,7 +231,7 @@ void TeamNUSTSPL::setupTNRSModules()
     BaseModule::publishModuleRequest(uliRequest);
   }
   #endif
-  
+
   if (modulesToRun[toUType(TNSPLModules::userComm)]) {
     LOG_INFO("Constructing UserCommModule... See src/TNRSModules/UserCommModule.")
     childModules[toUType(TNSPLModules::userComm)] =

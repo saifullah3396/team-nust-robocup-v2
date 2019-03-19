@@ -69,9 +69,8 @@ target_link_libraries(tnrs-module
   -ljsoncpp
 )
 else()
-add_library (tnrs-module SHARED ${TNRS_SRC})
-
 if(${ROBOT_VERSION} STREQUAL "V6")
+add_executable (tnrs-module ${TNRS_SRC})
 qi_use_lib(
   tnrs-module
   QI
@@ -81,19 +80,28 @@ qi_use_lib(
   BOOST_IOSTREAMS
 )
 target_link_libraries(tnrs-module
-  libtnrs-utils.so
-  libtnrs-base.so
-  libtnrs-control-module.so
-  libtnrs-planning-module.so
-  libtnrs-motion-module.so
-  libtnrs-gb-module.so
-  libtnrs-localization-module.so
-  libtnrs-vision-module.so
-  libtnrs-game-comm-module.so
-  libtnrs-user-comm-module.so
+  -lfftw3f
+  -lqpOASES
+  -lnlopt
   -ljsoncpp
+  -lalvalue
+  -lalerror
+  -ltnrs-sbpl-lib
+  -ltnrs-random-lib
+  -ltnrs-utils
+  -ltnrs-base
+  -ltnrs-control-module
+  -ltnrs-behavior-manager
+  -ltnrs-planning-module
+  -ltnrs-motion-module
+  -ltnrs-gb-module
+  -ltnrs-localization-module
+  -ltnrs-vision-module
+  -ltnrs-game-comm-module
+  -ltnrs-user-comm-module
 )
 else()
+add_library (tnrs-module SHARED ${TNRS_SRC})
 qi_use_lib(
   tnrs-module
   ALCOMMON

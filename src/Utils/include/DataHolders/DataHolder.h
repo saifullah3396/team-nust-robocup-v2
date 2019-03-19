@@ -9,9 +9,14 @@
 
 #pragma once
 
-#include "Utils/include/JsonUtils.h"
-#include "Utils/include/PrintUtils.h"
 #include "Utils/include/VariadicMacros.h"
+#ifndef VISUALIZER_BUILD
+#include "Utils/include/PrintUtils.h"
+#include "Utils/include/JsonUtils.h"
+#else
+#include <json/json.h>
+#endif
+
 
 #define PRINT_VAR(NAME, VALUE) TO_STRING(NAME) << ": " << VALUE <<
 #define PRINT_VARS__(NAME, VALUE) ",\n\t" << TO_STRING(NAME) << ": " << VALUE <<

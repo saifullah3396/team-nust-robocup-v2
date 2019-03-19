@@ -72,9 +72,9 @@ else()
     )
   target_link_libraries(tnrs-utils
     libtnrs-sbpl-lib.so -lnlopt -ljsoncpp)
-
 endif()
-#if (BUILD_TNRS_TESTS)
+
+if (BUILD_TNRS_TESTS)
     set (test_DIR "${TNRS_UTILS_DIR}/tests/")
     file (GLOB TESTS RELATIVE "${test_DIR}" "${TNRS_UTILS_DIR}/tests/*.cpp")
     foreach (testname ${TESTS})
@@ -82,4 +82,4 @@ endif()
         add_executable (${targetname} "${test_DIR}/${testname}")
         target_link_libraries (${targetname} tnrs-utils)
     endforeach (testname ${TESTS})
-#endif (BUILD_TNRS_TESTS)
+endif (BUILD_TNRS_TESTS)

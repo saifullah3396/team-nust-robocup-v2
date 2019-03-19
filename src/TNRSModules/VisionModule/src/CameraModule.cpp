@@ -67,7 +67,9 @@ bool CameraModule::setupCameras()
     cams = vector<CameraPtr>(toUType(CameraId::count));
     cams[(int)CameraId::headTop] = boost::shared_ptr<Camera<float> >(new Camera<float>("UpperCamera"));
     cams[(int)CameraId::headBottom] = boost::shared_ptr<Camera<float> >(new Camera<float>("LowerCamera"));
+    #ifndef V6_CROSS_BUILD
     videoWriter = vector<cv::VideoWriter*> (toUType(CameraId::count));
+    #endif
     #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
       #ifndef V6_CROSS_BUILD
         camProxy->unsubscribe("visionTop_0");
@@ -324,55 +326,61 @@ void CameraModule::releaseImage(const unsigned& index)
 
 void CameraModule::recordVideo(const unsigned& index)
 {
+  #ifndef V6_CROSS_BUILD
   static string logsDir = ConfigManager::getLogsDirPath();
   //! VideoWriter object;
   if (!videoWriter[index]) {
-		try {
-			string vidName;
+    try {
+      string vidName;
       if (index == toUType(CameraId::headTop)) {
-				vidName = logsDir + "Video/Top/";
+        vidName = logsDir + "Video/Top/";
       } else {
-				vidName = logsDir + "Video/Bottom/";
-			}
-			int cnt = FileUtils::getFileCnt(vidName);
-			vidName += "vid-";
-			vidName += DataUtils::varToString(cnt+1);
-			vidName += ".avi";
-			videoWriter[index] = new VideoWriter();
-			videoWriter[index]->open(
-				vidName, 
-				CV_FOURCC('M', 'P', 'E', 'G'), 
-				(int)cams[index]->fps, 
-				Size((int)cams[index]->width, (int)cams[index]->height)
-			);
-			if (!videoWriter[index]->isOpened()) {
-				delete videoWriter[index];
-				throw "Unable to open video: \n\t" + vidName + " for write.";
-			}
-		} catch (exception &e) {
+        vidName = logsDir + "Video/Bottom/";
+      }
+      int cnt = FileUtils::getFileCnt(vidName);
+      vidName += "vid-";
+      vidName += DataUtils::varToString(cnt+1);
+      vidName += ".avi";
+      videoWriter[index] = new VideoWriter();
+      videoWriter[index]->open(
+        vidName,
+        CV_FOURCC('M', 'P', 'E', 'G'),
+        (int)cams[index]->fps,
+        Size((int)cams[index]->width, (int)cams[index]->height)
+      );
+      if (!videoWriter[index]->isOpened()) {
+        delete videoWriter[index];
+        throw "Unable to open video: \n\t" + vidName + " for write.";
+      }
+    } catch (exception &e) {
       LOG_EXCEPTION(e.what());
-		}
+    }
   } else {
     cv::Mat yuv422 =
       cv::Mat(
-				Size((int)cams[index]->width, (int)cams[index]->height), 
-				CV_8UC2
-			);
-		yuv422.data = cams[index]->image;
+        Size((int)cams[index]->width, (int)cams[index]->height),
+        CV_8UC2
+      );
+    yuv422.data = cams[index]->image;
     cv::Mat bgr;
-		cvtColor(yuv422, bgr, COLOR_YUV2BGR_YUY2);
-		videoWriter[index]->write(bgr);
-	}
+    cvtColor(yuv422, bgr, COLOR_YUV2BGR_YUY2);
+    videoWriter[index]->write(bgr);
+  }
+  #else
+  LOG_INFO("Video writer not yet support for V6 robots.")
+  #endif
 }
 
 void CameraModule::stopRecording()
 {
-	for (int i = 0; i < videoWriter.size(); ++i) {
-		if (videoWriter[i]) {
-			videoWriter[i]->release();
-			delete videoWriter[i];
-		}
-	}
+  #ifndef V6_CROSS_BUILD
+  for (int i = 0; i < videoWriter.size(); ++i) {
+    if (videoWriter[i]) {
+      videoWriter[i]->release();
+      delete videoWriter[i];
+    }
+  }
+  #endif
 }
 
 void CameraModule::bgrToYuv422(uint8_t* out, const cv::Mat& in, const int& width, const int& height)

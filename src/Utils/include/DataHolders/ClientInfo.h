@@ -23,6 +23,8 @@
 #include <ifaddrs.h>
 #include <string>
 #include "Utils/include/DataHolders/DataHolder.h"
+#include "Utils/include/PrintUtils.h"
+#include "Utils/include/JsonUtils.h"
 
 using namespace std;
 
@@ -52,7 +54,7 @@ struct ClientInfo : public DataHolder
     address(address), type(type)
   {
   }
-  
+
   /**
    * @brief ClientInfo Constructor
    * @param address Socket address at which the client is connected
@@ -81,7 +83,7 @@ struct ClientInfo : public DataHolder
     JSON_ASSIGN_(val, type, (int)type);
     return val;
   }
-  
+
   string address; //! The socket address
   TcpClientType type; //! Type of TcpClient
 };

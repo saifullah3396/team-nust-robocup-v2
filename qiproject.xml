@@ -1,2 +1,5 @@
-<project name="team-nust-robocup">	
+<project version="3">
+  <qibuild name="team-nust-robocup">
+    <depends runtime="true" buildtime="true" names="libnaoqi" />
+  </qibuild>
 </project>

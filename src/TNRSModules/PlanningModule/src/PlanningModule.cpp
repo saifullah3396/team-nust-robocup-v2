@@ -95,7 +95,7 @@ DEFINE_OUTPUT_CONNECTOR(PlanningModule,
 #ifndef V6_CROSS_BUILD
 PlanningModule::PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy) :
   BaseModule(
-    parent, 
+    parent,
     toUType(TNSPLModules::planning),
     "PlanningModule"
   ), memoryProxy(memoryProxy)
@@ -211,7 +211,7 @@ void PlanningModule::handleRequests()
   if (boost::static_pointer_cast <PlanningRequest>(request)) {
     auto reqId = request->getId();
     if (reqId == toUType(PlanningRequestIds::behaviorRequest)) {
-      auto rpb = 
+      auto rpb =
         boost::static_pointer_cast<RequestPlanningBehavior>(request);
       pbManager->manageRequest(rpb);
     } else if (reqId == toUType(PlanningRequestIds::killBehavior)) {
@@ -222,7 +222,7 @@ void PlanningModule::handleRequests()
 }
 
 void PlanningModule::mainRoutine()
-{    
+{
   sensorsUpdate();
   updateWorldBallInfo();
   pbManager->update();

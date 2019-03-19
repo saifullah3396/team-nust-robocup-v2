@@ -9,13 +9,12 @@
 
 #pragma once
 
-#include <boost/exception/diagnostic_information.hpp> 
+#include <boost/exception/diagnostic_information.hpp>
 #include <boost/exception/all.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/filesystem.hpp>
 #include <string>
-#include "Utils/include/PrintUtils.h"
 #include "Utils/include/VariadicMacros.h"
 
 using namespace std;
@@ -58,10 +57,9 @@ public:
   valueType	getValueOfKey(const string& key) const;
 
   //! Getters
-  static string getConfigDirPath() { return configDirPath; }
+  static string getConfigDirPath() { return robotDirPath; }
   static string getCommonConfigDirPath() { return commonConfigDirPath; }
   static string getLogsDirPath() { return logsDirPath; }
-  static string getRobotDirPath() { return robotDirPath; }
   static string getPBConfigsPath() { return pbConfigsDirPath; }
   static string getMBConfigsPath() { return mbConfigsDirPath; }
   static string getGBConfigsPath() { return gbConfigsDirPath; }

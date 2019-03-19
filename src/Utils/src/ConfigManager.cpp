@@ -8,30 +8,34 @@
  */
 
 #include "Utils/include/ConfigManager.h"
+#ifndef VISUALIZER_BUILD
+#include "Utils/include/PrintUtils.h"
+#endif
 
 string ConfigManager::pbConfigsDirPath;
 string ConfigManager::mbConfigsDirPath;
 string ConfigManager::gbConfigsDirPath;
-#if defined(MODULE_IS_REMOTE) || defined(MODULE_IS_LOCAL_SIMULATED)
+#if defined(MODULE_IS_REMOTE) || defined(MODULE_IS_LOCAL_SIMULATED) || defined(VISUALIZER_BUILD)
 string ConfigManager::configDirPath = GET_STRINGS(ROOT_DIR "/../config/");
 string ConfigManager::commonConfigDirPath = GET_STRINGS(ROOT_DIR "/../config/Common/");
 string ConfigManager::logsDirPath = GET_STRINGS(ROOT_DIR "/../logs/");
 string ConfigManager::robotDirPath = "";
 #else
-string ConfigManager::configDirPath = GET_STRINGS("/home/nao/config/");
-string ConfigManager::commonConfigDirPath = GET_STRINGS("/home/nao/config/Common/");
-string ConfigManager::logsDirPath = GET_STRINGS("/home/nao/logs/");
+string ConfigManager::configDirPath = "/home/nao/config/";
+string ConfigManager::commonConfigDirPath = "/home/nao/config/Common/";
+string ConfigManager::logsDirPath = "/home/nao/logs/";
 string ConfigManager::robotDirPath = "";
 #endif
 
-void
-ConfigManager::parseFile(const string& cfgFile)
+void ConfigManager::parseFile(const string& cfgFile)
 {
   try {
     this->cfgFile = cfgFile;
     boost::property_tree::ini_parser::read_ini(cfgFile, iniConfig);
   } catch (boost::exception &e) {
+    #ifndef VISUALIZER_BUILD
     LOG_EXCEPTION("Error while reading file: " << cfgFile);
+    #endif
   }
 }
 
@@ -40,7 +44,7 @@ void ConfigManager::createDirs()
   if (!boost::filesystem::exists(configDirPath)) {
     boost::filesystem::create_directory(configDirPath);
   }
-  
+
   if (!boost::filesystem::exists(logsDirPath)) {
     boost::filesystem::create_directory(logsDirPath);
   }
@@ -49,14 +53,16 @@ void ConfigManager::createDirs()
 template<typename valueType>
 valueType ConfigManager::getValueOfKey(const string& key) const
 {
-	valueType var = valueType();
-	try {
+  valueType var = valueType();
+  try {
     var = iniConfig.get < valueType > (key);
-	} catch (boost::exception &e) {
+  } catch (boost::exception &e) {
+    #ifndef VISUALIZER_BUILD
     LOG_EXCEPTION(
       "Error while reading the key: " << key << " from file: " << cfgFile);
-	}
-	return var;
+    #endif
+  }
+  return var;
 }
 
 void ConfigManager::setDirPaths(const string& robotDir)
@@ -64,11 +70,8 @@ void ConfigManager::setDirPaths(const string& robotDir)
   pbConfigsDirPath = configDirPath + "BehaviorConfigs/PBConfigs/";
   mbConfigsDirPath = configDirPath + "BehaviorConfigs/MBConfigs/";
   gbConfigsDirPath = configDirPath + "BehaviorConfigs/GBConfigs/";
-  #if defined(MODULE_IS_REMOTE) || defined(MODULE_IS_LOCAL_SIMULATED)
-      robotDirPath = robotDir;
-      logsDirPath = logsDirPath + robotDir;
-      configDirPath = configDirPath + robotDir;
-  #endif
+  robotDirPath = configDirPath + robotDir;
+  logsDirPath = logsDirPath + robotDir;
 }
 
 template bool ConfigManager::getValueOfKey<bool>(const string& key) const;

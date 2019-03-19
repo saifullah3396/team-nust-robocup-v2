@@ -1546,3 +1546,17 @@ src/Utils/src/DataHolders/TNRSFootstep.cpp
 config/BehaviorConfigs/MBConfigs/BalanceModule/PIDComControl.json
 config/BehaviorConfigs/MBConfigs/HeadControl/HeadTargetSearch.json
 config/BehaviorConfigs/MBConfigs/HeadControl/HeadScan.json
+config/Common/Sensors/BatterySensors.json
+config/Common/Sensors/FsrSensors.json
+config/Common/Sensors/InertialSensors.json
+config/Common/Sensors/JointCurrentSensors.json
+config/Common/Sensors/JointHardnessSensors.json
+config/Common/Sensors/JointPositionSensors.json
+config/Common/Sensors/JointTemperatureSensors.json
+config/Common/Sensors/LedSensors.json
+config/Common/Sensors/SonarSensors.json
+config/Common/Sensors/SwitchSensors.json
+config/Common/Sensors/TouchSensors.json
+config/Common/Actuators/HardnessActuators.json
+config/Common/Actuators/LedActuators.json
+config/Common/Actuators/PositionActuators.json

@@ -11,6 +11,8 @@
 #include "Utils/include/DataHolders/TNRSFootstep.h"
 #include "Utils/include/HardwareIds.h"
 #include "Utils/include/MathsUtils.h"
+#include "Utils/include/PrintUtils.h"
+#include "Utils/include/JsonUtils.h"
 
 template <typename Scalar>
 TNRSFootstep<Scalar>::TNRSFootstep(

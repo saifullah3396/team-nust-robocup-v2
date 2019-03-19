@@ -1,0 +1,8 @@
+[Unit]
+Description=Wired profile service
+
+[Service]
+ExecStart=/etc/init.d/wired
+
+[Install]
+WantedBy=multi-user.target

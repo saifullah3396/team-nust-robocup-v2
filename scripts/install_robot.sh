@@ -2,7 +2,7 @@
 
 FILES=""
 BUILD=""
-ROBOTS="Nu-11/Nu-12/Nu-13/Nu-14/Nu-15"
+ROBOTS="Nu-11/Nu-12/Nu-13/Nu-14/Nu-15/Nu-16"
 ROBOT=""
 IP_PREFIX="192.168.30"
 WLAN_PREFIX="10.0.30"
@@ -62,7 +62,8 @@ if [ "$ROBOT" != "Nu-11" ] &&
    [ "$ROBOT" != "Nu-12" ] && 
    [ "$ROBOT" != "Nu-13" ] && 
    [ "$ROBOT" != "Nu-14" ] && 
-   [ "$ROBOT" != "Nu-15" ]; then
+   [ "$ROBOT" != "Nu-15" ] &&
+   [ "$ROBOT" != "Nu-16" ]; then
     echo "Invalid robot name: $ROBOT . Options are: ( $ROBOTS )."
     exit 1;
 fi
@@ -91,14 +92,17 @@ elif [ "$ROBOT" = "Nu-14" ]; then
   ROBOT_NUM=4
 elif [ "$ROBOT" = "Nu-15" ]; then
   ROBOT_NUM=5
+elif [ "$ROBOT" = "Nu-16" ]; then
+  ROBOT_NUM=6
 fi
 
 ROBOT_DIR=$PATH_TO_TEAM_NUST_DIR/config/Robots/Nu-1$ROBOT_NUM
 CROSS_DEPENDS_DIR=$PATH_TO_TEAM_NUST_DIR/cross-depends
-BUILD_DIR=$PATH_TO_TEAM_NUST_DIR/build/$BUILD/$TOOLCHAIN/lib
+BUILD_DIR=$PATH_TO_TEAM_NUST_DIR/build-$ROBOT_VERSION/$BUILD/$TOOLCHAIN/lib
+echo $BUILD_DIR
 if [ "$FILES" = "ALL" ]; then
   # Copy naoqi config over to the robot
-  rsync -r ./autoload.tnust nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/bin -v
+  rsync -r ./Files/autoload.tnust nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/bin -v
   # Copy configuration files to the robot 
   rsync -r $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
   rsync -r $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
@@ -123,9 +127,23 @@ elif [ "$FILES" = "CONFIG" ]; then
   rsync -r $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
   rsync -r $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
   rsync -r $ROBOT_DIR/../../Common nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
+elif [ "$FILES" = "BIN" ]; then
+  if [ "$ROBOT_VERSION" = "V6" ]; then
+    # Copy camera driver if it is V5 robot
+    rsync -r $BUILD_DIR/../bin/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/bin -v
+  fi
 elif [ "$FILES" = "LIBS" ]; then
   # Copy cross-compiled libraries to the robot
-  rsync -r $BUILD_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync -r $BUILD_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v --links
+  if [ "$ROBOT_VERSION" = "V6" ]; then
+    # Copy camera driver if it is V5 robot
+    rsync -r $BUILD_DIR/../bin/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/bin -v
+  fi
+elif [ "$FILES" = "LIB_RESOURCES" ]; then
+  rsync -r $BUILD_DIR/libfftw* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync -r $BUILD_DIR/libnlopt* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync -r $BUILD_DIR/libjsoncpp* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync -r $BUILD_DIR/libqpOASES* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
 elif [ "$FILES" = "LIB_UTILS" ]; then
   rsync -r $BUILD_DIR/libtnrs-utils.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
 elif [ "$FILES" = "LIB_BASE" ]; then
@@ -149,6 +167,6 @@ elif [ "$FILES" = "LIB_VISION" ]; then
 elif [ "$FILES" = "LIB_LOCALIZATION" ]; then
   rsync -r $BUILD_DIR/libtnrs-localization-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
 elif [ "$FILES" = "LIB_TNRS" ]; then
-  rsync -r $BUILD_DIR/libtnrs-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync -r $BUILD_DIR/libtnrs-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v 
 fi
   

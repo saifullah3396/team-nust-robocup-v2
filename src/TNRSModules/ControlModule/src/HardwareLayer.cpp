@@ -2,7 +2,7 @@
  * @file ControlModule/HardwareLayer.cpp
  *
  * This file implements classes SensorLayer and ActuatorLayers,
- * and defines their child classes fir each type of sensors and 
+ * and defines their child classes fir each type of sensors and
  * actuators
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
@@ -13,10 +13,34 @@
 #include "Utils/include/DataUtils.h"
 #include "ControlModule/include/HardwareLayer.h"
 
+/**
+ * @brief init Initializes the sensor class for given
+ *   sensors based on their keys
+ */
+void SensorLayer::init(const string& jsonFile) {
+  try {
+    auto path =
+      ConfigManager::getCommonConfigDirPath() + "/Sensors/" + jsonFile + ".json";    Json::Value json;
+    ifstream config(path, ifstream::binary);
+    config >> json;
+    if (json["keys"].size() > 0) {
+      auto keysObj = json["keys"];
+      size = keysObj.size();
+      keys.resize(size);
+      for (int i = 0; i < size; ++i) {
+        keys[i] = keysObj[i].asString();
+      }
+    }
+  } catch (Json::Exception& e) {
+    LOG_EXCEPTION("Error reading hardware layer ids from json file:\t" << jsonFile << "\n\t" << e.what());
+  }
+  setSensorPtr();
+}
+
 void SensorLayer::update()
 {
   try {
-#ifdef MODULE_IS_REMOTE
+#if defined(MODULE_IS_REMOTE) || defined(V6_CROSS_BUILD)
     #ifndef V6_CROSS_BUILD
       *sensorHandle = memoryProxy->getListData(keys);
     #else
@@ -29,6 +53,28 @@ void SensorLayer::update()
 #endif
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what())
+  }
+}
+
+void SensorLayer::setSensorPtr()
+{
+  if (memoryProxy) {
+    #ifndef MODULE_IS_REMOTE
+    sensorPtrs.resize(size);
+    for (size_t i = 0; i < size; ++i) {
+      #ifndef V6_CROSS_BUILD
+        sensorPtrs[i] = (float*) memoryProxy->getDataPtr(keys[i]);
+      #else
+      //try {
+      //  sensorPtrs[i] = (float*) memoryProxy.call<float*>("getDataPtr", keys[i]);
+      //} catch (const exception& e) {
+      //  LOG_EXCEPTION(e.what());
+      //}
+      #endif
+    }
+    #endif
+  } else {
+    LOG_ERROR("Cannot access Naoqi motion proxy at SensorLayer::setSensorPtrs().");
   }
 }
 

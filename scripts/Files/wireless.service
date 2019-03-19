@@ -1,0 +1,8 @@
+[Unit]
+Description=Wireless profile service
+
+[Service]
+ExecStart=/etc/init.d/wireless
+
+[Install]
+WantedBy=multi-user.target

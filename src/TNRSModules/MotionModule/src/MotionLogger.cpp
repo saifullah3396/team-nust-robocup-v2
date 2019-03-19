@@ -34,7 +34,7 @@ MotionLogger<Scalar>::MotionLogger(
 }
 
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionLogger<Scalar>::recordJointCmds(
   const AL::ALValue& cmds, const AL::ALValue& time, const vector<unsigned>& ids)
 #else
@@ -44,37 +44,37 @@ void MotionLogger<Scalar>::recordJointCmds(
   const vector<unsigned>& ids)
 #endif
 {
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   ASSERT(cmds.getSize() != 0);
   #else
   ASSERT(cmds.size() != 0);
   #endif
   high_resolution_clock::time_point timeNow = high_resolution_clock::now();
-  double timeStart = (duration<double>(timeNow - refTime)).count();  
+  double timeStart = (duration<double>(timeNow - refTime)).count();
   vector<int> jointIndices(toUType(Joints::count), -1);
   for (size_t i = 0; i < ids.size(); ++i) {
     jointIndices[ids[i]] = i;
   }
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   for (size_t i = 0; i < time[0].getSize(); ++i) {
   #else
   for (size_t i = 0; i < time[0].size(); ++i) {
   #endif
     JSON_APPEND(
-      root["jointCommands"], 
-      "time", 
+      root["jointCommands"],
+      "time",
       double(time[0][i]) + timeStart
     );
     for (size_t j = 0; j < jointIndices.size(); ++j) {
       if (jointIndices[j] < 0) {
         JSON_APPEND(
-          root["jointCommands"], 
+          root["jointCommands"],
           Constants::jointNames[j] + "Cmd",
           "NAN"
         );
       } else {
         JSON_APPEND(
-          root["jointCommands"], 
+          root["jointCommands"],
           Constants::jointNames[j] + "Cmd",
           (MType)cmds[jointIndices[j]][i]
         );
@@ -84,7 +84,7 @@ void MotionLogger<Scalar>::recordJointCmds(
 }
 
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionLogger<Scalar>::recordJointCmds(
   const AL::ALValue& cmds,
   const AL::ALValue& time,
@@ -96,14 +96,14 @@ void MotionLogger<Scalar>::recordJointCmds(
   const Matrix<bool, Dynamic, 1> activeJoints)
 #endif
 {
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   ASSERT(cmds.getSize() != 0);
   #else
   ASSERT(cmds.size() != 0);
   #endif
   high_resolution_clock::time_point timeNow = high_resolution_clock::now();
   double timeStart = (duration<double>(timeNow - refTime)).count();
-  #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD_REMOVED
   for (size_t i = 0; i < time[0].getSize(); ++i) {
   #else
   for (size_t i = 0; i < time[0].size(); ++i) {
@@ -139,6 +139,6 @@ void MotionLogger<Scalar>::logJointStates(const Scalar& time)
   auto joints = this->kM->getJoints();
   for (const auto& joint : joints)
     joint->logJointState(this->root, time);
-}  
+}
 
 template class MotionLogger<MType>;

@@ -11,7 +11,8 @@
 #include <iostream>
 #include "Utils/include/DataHolders/Camera.h"
 #include "Utils/include/ConfigMacros.h"
-#include "Utils/include/PrintUtils.h"
+
+#define JSON_ASSIGN_(logRoot, key, value) logRoot[#key] = value;
 
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
 template <typename T>
@@ -39,7 +40,7 @@ Camera<T>::Camera(const string& name) :
   settings[toUType(CameraSettings::exposure)] =
     V4L2Settings("exposure", V4L2_CID_EXPOSURE, 175, 1, 1000);
   settings[toUType(CameraSettings::exposureAlgorithm)] =
-     V4L2Settings("exposureAlgorithm", V4L2_CID_EXPOSURE_ALGORITHM, 0, 0, 3);
+    V4L2Settings("exposureAlgorithm", V4L2_CID_EXPOSURE_ALGORITHM, 0, 0, 3);
   settings[toUType(CameraSettings::gain)] =
     V4L2Settings("gain", V4L2_CID_GAIN, 255, 0, 255);
   settings[toUType(CameraSettings::gamma)] =
@@ -98,6 +99,7 @@ Camera<T>::~Camera() {
 template <typename T>
 void Camera<T>::print() const
 {
+  #ifndef VISUALIZER_BUILD
   PRINT_DATA(
     Camera,
     (name, name),
@@ -114,6 +116,7 @@ void Camera<T>::print() const
     (centerOffX, centerOffX),
     (centerOffY, centerOffY),
   );
+  #endif
 }
 
 template <typename T>
@@ -196,11 +199,13 @@ void Camera<T>::getSettings(const string& configFile) {
     //(int, Calibration.maxDigAnalogGain, settings[toUType(CameraSettings::maxDigAnalogGain)].ctrl.value),
     #endif
   );
+  #ifndef VISUALIZER_BUILD
   distCoeffs.at<float>(0, 0) = da;
   distCoeffs.at<float>(0, 1) = db;
   distCoeffs.at<float>(0, 2) = dc;
   distCoeffs.at<float>(0, 3) = dd;
   distCoeffs.at<float>(0, 4) = de;
+  #endif
 }
 
 #ifndef NAOQI_VIDEO_PROXY_AVAILABLE
@@ -250,7 +255,9 @@ template <typename T>
 bool Camera<T>::setupDevice() {
   fd = v4l2_open(name.c_str(), O_RDWR | O_NONBLOCK, 0);
   if (fd < 0) {
+    #ifndef VISUALIZER_BUILD
     LOG_ERROR("Cannot open video device: " << name);
+    #endif
     return false;
   }
   CLEAR(fmt);
@@ -277,9 +284,11 @@ bool Camera<T>::setupDevice() {
 
   //! Check if accepted pixel format is the requested pixel format
   if (fmt.fmt.pix.pixelformat != V4L2_PIX_FMT_YUYV) {
+    #ifndef VISUALIZER_BUILD
     LOG_ERROR(
       "Libv4l didn't accept YUY2 format." <<
       "Failed to proceed to camera subscription.");
+    #endif
     return false;
   }
 
@@ -288,11 +297,13 @@ bool Camera<T>::setupDevice() {
     (fmt.fmt.pix.width != width) ||
     (fmt.fmt.pix.height != height))
   {
+    #ifndef VISUALIZER_BUILD
     LOG_ERROR(
       "Unable to subscribe at requested resolution. Driver is sending " <<
       "image at resolution: " <<
       fmt.fmt.pix.width << "x" <<
       fmt.fmt.pix.height);
+    #endif
     return false;
   }
 
@@ -327,8 +338,10 @@ bool Camera<T>::setupDevice() {
         fd,
         buf.m.offset);
     if (MAP_FAILED == buffers[nBuffers].start) {
+      #ifndef VISUALIZER_BUILD
       LOG_ERROR("Unable to allocate buffers for video capture.");
       return false;
+      #endif
     }
   }
   //! Enqueue all requested buffers
@@ -346,7 +359,9 @@ bool Camera<T>::setupDevice() {
 
   //! Start streaming the video
   xioctl(fd, VIDIOC_STREAMON, &bufferType);
+  #ifndef VISUALIZER_BUILD
   LOG_INFO("Camera " << name << " streaming is ON");
+  #endif
   return true;
 }
 
@@ -362,7 +377,9 @@ bool Camera<T>::getImageFromDevice()
     r = select(fd + 1, &fds, NULL, NULL, &tv);
   } while ((r == -1 && (errno == EINTR)));
   if (r == -1) {
+    #ifndef VISUALIZER_BUILD
     LOG_ERROR("Unable to access image.")
+    #endif
     return false;
   }
 

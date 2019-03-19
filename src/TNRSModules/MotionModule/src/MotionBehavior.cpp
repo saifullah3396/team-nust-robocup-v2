@@ -60,7 +60,7 @@ void MotionBehavior<Scalar>::stopMove()
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-vector<vector<string> > MotionBehavior<Scalar>::getNaoqiTaskList()
+AL::ALValue MotionBehavior<Scalar>::getNaoqiTaskList()
 {
   return mG->getNaoqiTaskList();
 }
@@ -68,7 +68,7 @@ vector<vector<string> > MotionBehavior<Scalar>::getNaoqiTaskList()
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 AL::ALValue MotionBehavior<Scalar>::getFootsteps()
 #else
 vector<vector<float> > MotionBehavior<Scalar>::getFootsteps()
@@ -104,7 +104,7 @@ bool MotionBehavior<Scalar>::naoqiMoveIsActive()
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionBehavior<Scalar>::naoqiSetAngles(
   const AL::ALValue& names,
   const AL::ALValue& angles,
@@ -122,7 +122,7 @@ void MotionBehavior<Scalar>::naoqiSetAngles(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionBehavior<Scalar>::naoqiChangeAngles(
   const AL::ALValue& names,
   const AL::ALValue& angles,
@@ -151,7 +151,7 @@ void MotionBehavior<Scalar>::naoqiMoveToward(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionBehavior<Scalar>::naoqiSetFootsteps(
   const AL::ALValue& footName,
   const AL::ALValue& footSteps,
@@ -182,7 +182,7 @@ void MotionBehavior<Scalar>::addMotionTask(const boost::shared_ptr<MotionTask<Sc
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
-#ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD_REMOVED
 void MotionBehavior<Scalar>::naoqiJointInterpolation(
   const vector<unsigned>& ids,
   const AL::ALValue& timeLists,

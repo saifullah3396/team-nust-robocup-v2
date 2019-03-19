@@ -11,6 +11,11 @@
 #define _CONFIG_MACROS_H_
 
 #include "ConfigManager.h"
+#ifndef VISUALIZER_BUILD
+#include "Utils/include/PrintUtils.h"
+#else
+#include <iostream>
+#endif
 
 /**
  * \def GET_VAR_3(TYPE, VAR_NAME, VAR)
@@ -56,21 +61,42 @@
  * @param ... : Paranthesis enclosed array of variables to be
  *   defined (type, variableNameInFile, variable), ...
  */
-#define GET_CONFIG(configFile, ...) \
-{ \
-  ConfigManager configManager; \
-  string cDirPath = string(ConfigManager::getConfigDirPath() + configFile + string(".ini")); \
-  if (boost::filesystem::exists(cDirPath)) { \
-    configManager.parseFile(cDirPath); \
-    FOR_EACH(GET_VAR_1, __VA_ARGS__) \
-  } else { \
-    cDirPath = string(ConfigManager::getCommonConfigDirPath() + configFile + string(".ini")); \
+#ifndef VISUALIZER_BUILD
+  #define GET_CONFIG(configFile, ...) \
+  { \
+    ConfigManager configManager; \
+    string cDirPath = string(ConfigManager::getConfigDirPath() + configFile + string(".ini")); \
     if (boost::filesystem::exists(cDirPath)) { \
       configManager.parseFile(cDirPath); \
       FOR_EACH(GET_VAR_1, __VA_ARGS__) \
     } else { \
-      LOG_ERROR("Configuration file: " << cDirPath <<" does not exist."); \
+      cDirPath = string(ConfigManager::getCommonConfigDirPath() + configFile + string(".ini")); \
+      if (boost::filesystem::exists(cDirPath)) { \
+        configManager.parseFile(cDirPath); \
+        FOR_EACH(GET_VAR_1, __VA_ARGS__) \
+      } else { \
+        LOG_ERROR("Configuration file: " << cDirPath <<" does not exist."); \
+      } \
     } \
-  } \
-}
+  }
+#else
+  #define GET_CONFIG(configFile, ...) \
+  { \
+    ConfigManager configManager; \
+    string cDirPath = string(ConfigManager::getConfigDirPath() + configFile + string(".ini")); \
+    std::cout << cDirPath << std::endl; \
+    if (boost::filesystem::exists(cDirPath)) { \
+      configManager.parseFile(cDirPath); \
+      FOR_EACH(GET_VAR_1, __VA_ARGS__) \
+    } else { \
+      cDirPath = string(ConfigManager::getCommonConfigDirPath() + configFile + string(".ini")); \
+      if (boost::filesystem::exists(cDirPath)) { \
+        configManager.parseFile(cDirPath); \
+        FOR_EACH(GET_VAR_1, __VA_ARGS__) \
+      } else { \
+        std::cout << "Configuration file: " << cDirPath <<" does not exist." << std::endl; \
+      } \
+    } \
+  }
+#endif
 #endif //!_CONFIGMACROS_H_

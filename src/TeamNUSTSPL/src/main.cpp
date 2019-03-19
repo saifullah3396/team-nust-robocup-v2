@@ -15,6 +15,7 @@
 #endif
 #include <string>
 #include "Utils/include/ConfigManager.h"
+#include "Utils/include/PrintUtils.h"
 #include "TeamNUSTSPL.h"
 
 #ifndef V6_CROSS_BUILD
@@ -206,6 +207,8 @@
     app.start();
     qi::SessionPtr session = app.session();
     session->registerService("TeamNUSTSPL", qi::AnyObject(boost::make_shared<TeamNUSTSPL>(session)));
+    //auto teamNUSTSPL = boost::make_shared<TeamNUSTSPL>(session);
+    //teamNUSTSPL->init();
     app.run();
     return 0;
   }

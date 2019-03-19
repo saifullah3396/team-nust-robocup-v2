@@ -7,6 +7,7 @@
  * @date 21 Jul 2018
  */
 
+#include <qi/alvalue.h>
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/MovementModule/Types/NaoqiFootsteps.h"
