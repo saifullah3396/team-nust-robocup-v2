@@ -41,7 +41,7 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
   # Linking external libraries installed as pre-requisites.
   # For remote usage the libraries can just be installed on the local pc.
   link_directories($ENV{PATH_TO_TEAM_NUST_DIR}/remote-depends/lib)
-  target_link_libraries(tnrs-vision-module -lfftw3 -lfftw3f -lm -llapack -lpthread -ldl)
+  target_link_libraries(tnrs-vision-module -lfftw3f -lm -llapack -lpthread -ldl)
 else()
   add_library (tnrs-vision-module SHARED ${TNRS_VISION_MODULE_SRC})
   # Linking libraries from the sdk.
