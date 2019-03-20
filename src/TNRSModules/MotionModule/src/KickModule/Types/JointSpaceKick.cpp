@@ -7,7 +7,11 @@
  * @date 23 Jul 2018
  */
 
+#ifndef V6_CROSS_BUILD
+#include <alvalue/alvalue.h>
+#else
 #include <qi/alvalue.h>
+#endif
 #include "BehaviorManager/include/StateMachine.h"
 #include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/KinematicsModule/ComState.h"

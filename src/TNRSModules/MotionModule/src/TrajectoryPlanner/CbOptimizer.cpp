@@ -4,7 +4,7 @@
  * This file implements the class to CbOptimizer
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 Jul 2018  
+ * @date 17 Jul 2018
  */
 
 #include "MotionModule/include/TrajectoryPlanner/CbOptimizer.h"
@@ -16,7 +16,7 @@ using namespace GnuPlotEnv;
 
 template<typename Scalar>
 double CbOptimizer<Scalar>::costFunction(
-  const vector<double>& knots, 
+  const vector<double>& knots,
   vector<double>& grad,
   void *data)
 {
@@ -55,8 +55,8 @@ void CbOptimizer<Scalar>::ineqConstraints(unsigned nCons, double *result, unsign
   auto coeffs = cb->getCoeffs();
   auto knotsRep = cb->getRepKnots();
   auto bAccelsL = cb->getBAccelsL();
-  auto bAccelsU = cb->getBAccelsU();  
-  
+  auto bAccelsU = cb->getBAccelsU();
+
   Matrix<Scalar, Dynamic, Dynamic> epVels =
     (-3 * coeffs[0].cwiseProduct(knotsRep.cwiseProduct(knotsRep)) + coeffs[2] - coeffs[3]).cwiseAbs() - this->velLimits.replicate(
       nKnots,
@@ -293,7 +293,7 @@ void CbOptimizer<Scalar>::optDef()
   auto cpDiff = cb->getCpDiff();
   nlopt::opt opt(nlopt::LN_COBYLA, nKnots);
   Matrix<Scalar, Dynamic, 1> lbEigen = (cpDiff.cwiseQuotient(
-    this->velLimits.replicate(nKnots, 1) * 0.25)).cwiseAbs().rowwise().maxCoeff();
+    this->velLimits.replicate(nKnots, 1) * 0.80)).cwiseAbs().rowwise().maxCoeff();
   vector<double> lb, ub, knots0, constraintTols;
   for (int i = 0; i < nKnots; ++i) {
     lb.push_back(lbEigen[i]);

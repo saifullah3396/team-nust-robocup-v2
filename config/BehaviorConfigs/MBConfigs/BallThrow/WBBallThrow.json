@@ -4,8 +4,8 @@
     "maxRuntime" : 999,
     "type" : 0,
     "timeToThrow" : 2.0,
-    "throwVelocity" : 1.0,
-    "throwAngle" : 0.0,
+    "throwVelocity" : 0.25,
+    "throwAngle" : 45.0,
     "headTapToStart" : false,
     "logData" : true
 }

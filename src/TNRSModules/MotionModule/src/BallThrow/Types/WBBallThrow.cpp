@@ -127,11 +127,11 @@ void WBBallThrow<Scalar>::Retract::onStart()
   desiredJoints(0, 2) = -44.0 * M_PI / 180.0,
   desiredJoints(0, 3) = -55.0 * M_PI / 180.0,
   desiredJoints(0, 4) = 0.0 * M_PI / 180.0;
-  desiredJoints(1, 0) =  -118 * M_PI / 180.0;
-  desiredJoints(1, 1) =  0.0 * M_PI / 180.0,
-  desiredJoints(1, 2) = -44.0 * M_PI / 180.0,
-  desiredJoints(1, 3) = -55.0 * M_PI / 180.0,
-  desiredJoints(1, 4) = 0.0 * M_PI / 180.0;
+  desiredJoints(1, 0) =  -119 * M_PI / 180.0;
+  desiredJoints(1, 1) =  12.5 * M_PI / 180.0,
+  desiredJoints(1, 2) = -40.0 * M_PI / 180.0,
+  desiredJoints(1, 3) = -75.0 * M_PI / 180.0,
+  desiredJoints(1, 4) = 29 * M_PI / 180.0;
   knots.resize(desiredJoints.rows() - 1);
   for (int i = 0; i < knots.size(); ++i)
     knots[i] = this->bPtr->timeToRetract;
@@ -166,7 +166,7 @@ void WBBallThrow<Scalar>::ThrowBall::onStart()
 {
   auto chainStart = this->bPtr->kM->getLinkChain(LinkChains::lArm)->start;
   auto chainSize = this->bPtr->kM->getLinkChain(LinkChains::lArm)->size;
-  auto nPoses = 3;
+  auto nPoses = 2;
   Matrix<Scalar, Dynamic, 1> knots;
   Matrix<Scalar, Dynamic, Dynamic> desiredJoints;
   Matrix<Scalar, Dynamic, Dynamic> desiredBoundVels;
@@ -187,22 +187,22 @@ void WBBallThrow<Scalar>::ThrowBall::onStart()
   desCartesianVel.setZero();
   desCartesianVel.block(0, 0, 3, 1) = desThrowVel; // x-y-z velocity
 
-  Scalar circleMidTheta = 25.0 * M_PI / 180.0;
-  desiredJoints(0, 0) =  -118 * M_PI / 180.0;
-  desiredJoints(0, 1) =  0 * M_PI / 180.0,
-  desiredJoints(0, 2) = -44.0 * M_PI / 180.0,
-  desiredJoints(0, 3) = -55.0 * M_PI / 180.0,
-  desiredJoints(0, 4) = 0.0 * M_PI / 180.0;
-  desiredJoints(1, 0) =  circleMidTheta - 100.0 * M_PI / 180.0;
-  desiredJoints(1, 1) =  0.0 * M_PI / 180.0,
-  desiredJoints(1, 2) = -44.0 * M_PI / 180.0,
-  desiredJoints(1, 3) = -55.0 * M_PI / 180.0,
-  desiredJoints(1, 4) = 0.0 * M_PI / 180.0;
-  desiredJoints(2, 0) =  circleMidTheta - 90.0 * M_PI / 180.0;
+  //Scalar circleMidTheta = 25.0 * M_PI / 180.0;
+  desiredJoints(0, 0) = -119 * M_PI / 180.0;
+  desiredJoints(0, 1) = 12.5 * M_PI / 180.0,
+  desiredJoints(0, 2) = -40.0 * M_PI / 180.0,
+  desiredJoints(0, 3) = -75.0 * M_PI / 180.0,
+  desiredJoints(0, 4) = 29 * M_PI / 180.0;
+  desiredJoints(1, 0) = -119 * M_PI / 180.0;
+  desiredJoints(1, 1) = 12.5 * M_PI / 180.0,
+  desiredJoints(1, 2) = 40.0 * M_PI / 180.0,
+  desiredJoints(1, 3) = -75.0 * M_PI / 180.0,
+  desiredJoints(1, 4) = 29 * M_PI / 180.0;
+  /*desiredJoints(2, 0) =  circleMidTheta - 90.0 * M_PI / 180.0;
   desiredJoints(2, 1) =  10.0 * M_PI / 180.0,
   desiredJoints(2, 2) = -44.0 * M_PI / 180.0,
   desiredJoints(2, 3) = -55.0 * M_PI / 180.0,
-  desiredJoints(2, 4) = 0.0 * M_PI / 180.0;
+  desiredJoints(2, 4) = 0.0 * M_PI / 180.0;*/
 
   //! Cartesian velocities in torso frame.
   //cout << "desCartesianVel: " << desCartesianVel << endl;
@@ -210,18 +210,20 @@ void WBBallThrow<Scalar>::ThrowBall::onStart()
   Matrix<Scalar, Dynamic, Dynamic> jacobian =
     this->bPtr->kM->computeLimbJ(LinkChains::lArm, 0, JointStateType::sim).block(0, 0, 3, 5);
   //cout << "computeLimbJ : " << jacobian <<endl;
+  jacobian.col(0).setZero();
   jacobian.col(1).setZero();
-  jacobian.col(2).setZero();
+  //jacobian.col(2).setZero();
   jacobian.col(3).setZero();
   jacobian.col(4).setZero();
+  cout << "desCartesianVel.block(0, 0, 3, 1)): " << desCartesianVel.block(0, 0, 3, 1) << endl;
   Matrix<Scalar, Dynamic, 1> preThrowJVel = MathsUtils::pseudoInverseSolve(
     jacobian,
     Matrix<Scalar, Dynamic, 1>(desCartesianVel.block(0, 0, 3, 1)));
-  //cout << "preThrowJVel: " << preThrowJVel << endl;
+  cout << "preThrowJVel: " << preThrowJVel << endl;
   desiredBoundVels.row(1) = preThrowJVel.transpose(); // Second row
   knots.resize(desiredJoints.rows() - 1);
   for (int i = 0; i < knots.size(); ++i)
-    knots[i] = 0.5;
+    knots[i] = 0.3;
   vector < vector<Scalar> > jointTrajectories;
   auto cb1 =
     CubicSpline<Scalar>(
@@ -249,11 +251,12 @@ void WBBallThrow<Scalar>::ThrowBall::onStart()
   boost::shared_ptr<TorqueConstraint<Scalar>> torqueConstraint =
     boost::make_shared<TorqueConstraint<Scalar>>(
       this->bPtr->motionModule, LinkChains::lLeg, JointStateType::sim, activeJoints);
-  cbopt.addConstraint(zmpConstraint);
+  //cbopt.addConstraint(zmpConstraint);
   //cbopt.addConstraint(torqueConstraint);
   cbopt.optDef();
   vector<Scalar> trajTime;
   cb1.evaluateSpline(jointTrajectories, trajTime, 0);
+  cout << "trajTime:" << trajTime.back() << endl;
   this->bPtr->timeToThrow = trajTime.back();
   this->bPtr->executeArmsTrajs(jointTrajectories, this->bPtr->cycleTime);
   this->bPtr->execTime = 0.0;

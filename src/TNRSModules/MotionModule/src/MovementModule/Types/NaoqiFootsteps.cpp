@@ -7,7 +7,11 @@
  * @date 21 Jul 2018
  */
 
+#ifndef V6_CROSS_BUILD
+#include <alvalue/alvalue.h>
+#else
 #include <qi/alvalue.h>
+#endif
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/MovementModule/Types/NaoqiFootsteps.h"
