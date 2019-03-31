@@ -1,0 +1,16 @@
+(cl:in-package team_nust_msgs-msg)
+(cl:export '(HEADER-VAL
+          HEADER
+          ROBOT_LOCALIZED-VAL
+          ROBOT_LOCALIZED
+          POSITION_CONFIDENCE-VAL
+          POSITION_CONFIDENCE
+          SIDE_CONFIDENCE-VAL
+          SIDE_CONFIDENCE
+          ROBOT_ON_SIDE_LINE-VAL
+          ROBOT_ON_SIDE_LINE
+          LOCALIZE_WITH_LAST_KNOWN-VAL
+          LOCALIZE_WITH_LAST_KNOWN
+          LANDMARKS_FOUND-VAL
+          LANDMARKS_FOUND
+))

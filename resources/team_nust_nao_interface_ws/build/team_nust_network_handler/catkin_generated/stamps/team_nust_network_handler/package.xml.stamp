@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>team_nust_network_handler</name>
+  <version>0.0.0</version>
+  <description>The team_nust_network_handler package</description>
+  <author email="saifullah3396@gmail.com">Saifullah</author>
+  <maintainer email="saifullah3396@gmail.com">Saifullah</maintainer>
+  <license>BSD</license>  
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>team_nust_msgs</exec_depend>
+</package>

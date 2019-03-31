@@ -1,0 +1,8 @@
+prefix=/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/install
+
+Name: team_nust_network_handler
+Description: Description of team_nust_network_handler
+Version: 0.0.0
+Cflags: -I/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/install/include
+Libs: -L/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/install/lib 
+Requires: 

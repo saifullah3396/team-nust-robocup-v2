@@ -1,5 +1,4 @@
 include $(PATH_TO_TEAM_NUST_DIR)/make/common.mk
-
 .PHONY: configure-examples examples clean configure install
 
 configure-examples:
@@ -21,3 +20,6 @@ configure:
 
 install:
 	qibuild make $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) -j3
+
+interface:
+	cd $(PATH_TO_TEAM_NUST_DIR)/resources/team_nust_nao_interface_ws; catkin_make -j1
