@@ -1,0 +1,24 @@
+h=simGetObjectAssociatedWithScript(sim_handle_self)
+file = io.open("/home/sensei/team-nust-robocup/Logs/Robots/Sim/KickModule/FootState.txt", "w")
+file:write("# t Vx Vy\n")
+prev_p = simGetObjectPosition(h,-1)
+
+while simGetSimulationState()~=sim_simulation_advancing_abouttostop do
+    p = simGetObjectPosition(h,-1)
+    timestep = simGetSimulationTime()
+    file:write(timestep)
+    file:write("\t\t")
+    v = {(p[1] - prev_p[1]) / 0.05, (p[2] - prev_p[2]) / 0.05}
+    file:write(p[1])
+    file:write("\t\t")
+    file:write(p[2])
+    file:write("\t\t")
+    file:write(v[1])
+    file:write("\t\t")
+    file:write(v[2])
+    file:write("\t\t")
+    file:write("\n")
+    prev_p = p
+    simSwitchThread() -- resume in next simulation step
+end
+file:close()

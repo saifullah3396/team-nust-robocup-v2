@@ -1,0 +1,30 @@
+Determining if the C compiler works failed with the following output:
+Change Dir: /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp
+
+Run Build Command:"/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/make" "cmTC_47f25/fast"
+/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/make: 1: cd: can't cd to ../build
+CMake Error: The source directory "/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles" does not appear to contain CMakeLists.txt.
+Specify --help for usage, or press the help button on the CMake GUI.
+/usr/bin/cmake -H/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp -B/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp/CMakeFiles /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp/CMakeFiles/progress.marks
+make -f CMakeFiles/Makefile2 all
+make[1]: Entering directory `/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp'
+make -f CMakeFiles/cmTC_47f25.dir/build.make CMakeFiles/cmTC_47f25.dir/depend
+make[2]: Entering directory `/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp'
+cd /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_47f25.dir/DependInfo.cmake
+Scanning dependencies of target cmTC_47f25
+make[2]: Leaving directory `/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp'
+make -f CMakeFiles/cmTC_47f25.dir/build.make CMakeFiles/cmTC_47f25.dir/build
+make[2]: Entering directory `/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp'
+[ 50%] Building C object CMakeFiles/cmTC_47f25.dir/testCCompiler.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_47f25.dir/testCCompiler.c.o   -c /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp/testCCompiler.c
+[100%] Linking C executable cmTC_47f25
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_47f25.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_47f25.dir/testCCompiler.c.o  -o cmTC_47f25 -rdynamic 
+make[2]: Leaving directory `/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp'
+[100%] Built target cmTC_47f25
+make[1]: Leaving directory `/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_start /home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/CMakeFiles/CMakeTmp/CMakeFiles 0
+/home/sensei/team-nust-robocup/resources/vrep-naoqi-simulation-priv/scripts/make: 4: cd: can't cd to ../scripts
+
+
