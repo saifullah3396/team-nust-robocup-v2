@@ -1,25 +1,31 @@
 include $(PATH_TO_TEAM_NUST_DIR)/make/common.mk
-.PHONY: configure-examples examples clean configure install
+.PHONY: clean configure install
 
-configure-examples:
-	qibuild configure  $(CONFFLAGS) $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)
+interface:
+	catkin_make -C $(PATH_TO_TEAM_NUST_DIR)/resources/team_nust_nao_interface_ws -j4
 
-examples:
-	qibuild make $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)
+configure:
+	@if [ "$(strip $(CONFFLAGS))" = "" ]; then\
+		echo "Please define either CROSS=<cross toolchain name>, REMOTE=<remote toolchain name> or SIMULATION=<sim toolchain name> to continue)";\
+		exit 1; \
+	fi
+	qibuild configure $(CMAKE_FLAGS) $(CONFFLAGS) $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) $(MOTION_PROXY_FLAG) $(VIDEO_PROXY_FLAG)
+
+install:
+	@if [ "$(strip $(CONFFLAGS))" = "" ]; then\
+		echo "Please define either CROSS=<cross toolchain name>, REMOTE=<remote toolchain name> or SIMULATION=<sim toolchain name> to continue)";\
+		exit 1; \
+	fi
+	qibuild make $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) -j3
 
 clean:
 	ifdef CROSS
 		rm -rf $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)/cross
+		rm -rf $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)/build-cross
 	endif
 	ifdef REMOTE
 		rm -rf $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)/remote
+		rm -rf $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)/build-remote
 	endif
 
-configure:
-	qibuild configure $(BUILD_TESTS_FLAG) $(BUILD_EXAMPLES_FLAG) $(CONFFLAGS) $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) $(MOTION_PROXY_FLAG) $(VIDEO_PROXY_FLAG) -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-
-install:
-	qibuild make $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) -j3
-
-interface:
-	cd $(PATH_TO_TEAM_NUST_DIR)/resources/team_nust_nao_interface_ws; catkin_make -j1
+all: configure install interface
