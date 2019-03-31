@@ -15,6 +15,7 @@
 #include <boost/make_shared.hpp>
 #include <chrono>
 #include "UserCommModule/include/UserCommRequest.h"
+#include "VisionModule/include/VisionModule.h"
 #include "VisionModule/include/FeatureExtraction/ScannedCurve.h"
 #include "VisionModule/include/FeatureExtraction/ScannedEdge.h"
 #include "VisionModule/include/FeatureExtraction/ScannedLine.h"
@@ -33,7 +34,7 @@
 using namespace std::chrono;
 
 #define GET_FEATURE_EXT_CLASS(name, index) \
-	boost::static_pointer_cast<name>(visionModule->getFeatureExtClass(index));
+  boost::static_pointer_cast<name>(visionModule->getFeatureExtClass(index));
 
 class VisionModule;
 
@@ -188,9 +189,9 @@ protected:
       for (int x = 0; x < getImageWidth() * 3; x = x + 3) {
         p = yuv.ptr < uchar > (y);
         auto yuvp = getYUV(x / 3, y);
-        p[x] = yuvp.y;
-        p[x + 1] = yuvp.u;
-        p[x + 2] = yuvp.v;
+        p[x] = yuvp.y();
+        p[x + 1] = yuvp.u();
+        p[x + 2] = yuvp.v();
       }
     }
     return yuv;
@@ -405,10 +406,10 @@ protected:
 
   //! Vector for storing known landmarks observation
   static vector<boost::shared_ptr<KnownLandmark<float> >> knownLandmarks;
-  
+
   //! Vector for storing unknown landmarks observation
   static vector<boost::shared_ptr<UnknownLandmark<float> >> unknownLandmarks;
-  
+
   /**
    * Current image index
    */

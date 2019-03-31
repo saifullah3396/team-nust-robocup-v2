@@ -12,6 +12,7 @@
 #include <opencv2/core/core.hpp>
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "TNRSBase/include/ModuleRequest.h"
+#include "TNRSBase/include/ModuleRequestMacros.h"
 #include "Utils/include/EnumUtils.h"
 
 using namespace cv;
@@ -25,20 +26,15 @@ enum class GameCommRequestIds {
 };
 
 /**
- * @class GameCommRequest
- * @brief A module request that can be handled by GameCommModule
+ * @class UserCommRequest
+ * @brief Base for all requests handled by UserCommModule
  */
-class GameCommRequest : public ModuleRequest
-{
-public:
-  /**
-   * Constructor
-   *
-   * @param id: Id of the control request
-   */
-  GameCommRequest(const GameCommRequestIds& id) :
-    ModuleRequest(TNSPLModules::gameComm, toUType(id))
-  {
-  }
-};
-typedef boost::shared_ptr<GameCommRequest> GameCommRequestPtr;
+DECLARE_MODULE_REQUEST(
+  GameCommRequest,
+  GameCommRequestPtr,
+  ModuleRequest,
+  TNSPLModules,
+  gameComm,
+  GameCommRequestIds
+)
+

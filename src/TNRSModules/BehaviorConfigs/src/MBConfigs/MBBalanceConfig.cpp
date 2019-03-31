@@ -25,27 +25,27 @@ void MPComControlConfig::validate()
     supportLeg != LinkChains::lLeg &&
     supportLeg != LinkChains::rLeg ||
     timeToReachB < 0.5)
-  { 
-    throw 
+  {
+    throw
       BConfigException(
-        this, 
-        "Invalid behavior configuration parameters passed.", 
+        this,
+        "Invalid behavior configuration parameters passed.",
         false
       );
   }
 }
 
 void PIDComControlConfig::init() {}
-void PIDComControlConfig::validate() 
+void PIDComControlConfig::validate()
 {
   if (
     supportLeg != LinkChains::lLeg &&
     supportLeg != LinkChains::rLeg)
-  { 
-    throw 
+  {
+    throw
       BConfigException(
-        this, 
-        "Invalid behavior configuration parameters passed.", 
+        this,
+        "Invalid behavior configuration parameters passed.",
         false
       );
   }

@@ -7,18 +7,26 @@
  * @date 06 Oct 2017
  */
 
-#include "TNRSBase/include/MemoryIOMacros.h"
+#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
+#include "LocalizationModule/include/LocalizationRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/NavigationBehavior.h"
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.h"
+#include "TNRSBase/include/MemoryIOMacros.h"
+#include "UserCommModule/include/UserCommRequest.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
+#include "Utils/include/DataHolders/PostureState.h"
+#include "Utils/include/DataHolders/PositionInput.h"
+#include "Utils/include/PathPlanner/PathPlanner.h"
 #include "Utils/include/VisionUtils.h"
+
+using namespace PathPlannerSpace;
 
 int NavigationBehavior::planMaxTries = 3;
 int NavigationBehavior::replanMaxTries = 3;
 
 NavigationBehavior::NavigationBehavior(
   PlanningModule* planningModule,
-  const BehaviorConfigPtr& config,
+  const boost::shared_ptr<PBNavigationConfig>& config,
   const string& name) :
   PlanningBehavior(planningModule, config, name),
   DebugBase(name, this),
@@ -43,18 +51,16 @@ NavigationBehavior::NavigationBehavior(
 
 boost::shared_ptr<PBNavigationConfig> NavigationBehavior::getBehaviorCast()
 {
-  return boost::static_pointer_cast <PBNavigationConfig> (this->config);
+  return SPC(PBNavigationConfig, this->config);
 }
 
 boost::shared_ptr<NavigationBehavior> NavigationBehavior::getType(
-  PlanningModule* planningModule, const BehaviorConfigPtr& cfg) 
-{ 
+  PlanningModule* planningModule, const BehaviorConfigPtr& cfg)
+{
   NavigationBehavior* nb;
   switch (cfg->type) {
-    case toUType(PBNavigationTypes::GO_TO_TARGET):
-      nb = new GoToTarget(planningModule, cfg); break;
-    default:
-      nb = new GoToTarget(planningModule, cfg); break;
+    case toUType(PBNavigationTypes::goToTarget):
+      nb = new GoToTarget(planningModule, SPC(GoToTargetConfig, cfg)); break;
   }
   return boost::shared_ptr<NavigationBehavior >(nb);
 }
@@ -78,13 +84,13 @@ void NavigationBehavior::loadExternalConfig()
     //! read parameters from config file:
     GET_CONFIG(
       "PathPlanner",
-      (bool, PathPlanner.forwardSearch, forwardSearch), 
+      (bool, PathPlanner.forwardSearch, forwardSearch),
     );
     loaded = true;
   }
 }
 
-void NavigationBehavior::initiate()
+bool NavigationBehavior::initiate()
 {
   LOG_INFO("NavigationBehavior.initiate() called...")
   planFailCount = 0;
@@ -98,23 +104,20 @@ void NavigationBehavior::initiate()
         //LOG_INFO("NavigationBehavior.setGoal() successful. Continuing...")
       } else {
         LOG_ERROR("NavigationBehavior.setGoal() failed. Exiting...")
-        this->inBehavior = false;
-        return;
+        return false;
       }
     } else {
-      this->inBehavior = false;
-      return;
+      return false;
       LOG_ERROR("NavigationBehavior.setGoal() failed. Exiting...")
     }
   }
   if (!setStart()) {
     LOG_ERROR("NavigationBehavior.setStart() failed. Exiting...")
-    this->inBehavior = false;
-    return;
+    return false;
   }
   pathPlanned = false;
   behaviorState = planPath;
-  this->inBehavior = true;
+  return true;
 }
 
 void NavigationBehavior::reinitiate(const BehaviorConfigPtr& cfg)
@@ -195,17 +198,13 @@ void NavigationBehavior::update()
 {
   if (ROBOT_FALLEN_IN(PlanningModule))
   {
-    //cout << "finsih" << endl;
     finish();
   }
   if (behaviorState == planPath) {
-    //cout << "planPath" << endl;
     planPathAction();
   } else if (behaviorState == executeMotion) {
-    //cout << "executeMotion" << endl;
     executeMotionAction();
   } else if (behaviorState == validatePath) {
-    //cout << "validatePath" << endl;
     validatePathAction();
   }
 }
@@ -312,15 +311,15 @@ bool NavigationBehavior::setStart()
 {
   Matrix<float, 4, 4> lFootT, rFootT;
   //! get real placement of the feet
-  if (!getFootTransform(lFootT, LEFT) || 
+  if (!getFootTransform(lFootT, LEFT) ||
       !getFootTransform(rFootT, RIGHT))
     return false;
-  auto lTheta = 
+  auto lTheta =
     MathsUtils::matToEuler(
       (Matrix<float, 3, 3>) lFootT.block(0, 0, 3, 3)
     )[2];
   State left(lFootT(0, 3), lFootT(1, 3), lTheta, LEFT);
-  auto rTheta = 
+  auto rTheta =
     MathsUtils::matToEuler(
       (Matrix<float, 3, 3>) rFootT.block(0, 0, 3, 3)
     )[2];
@@ -372,7 +371,7 @@ bool NavigationBehavior::getFootTransform(
     auto pose = ROBOT_POSE_2D_IN(PlanningModule);
     Matrix<float, 3, 3> rotation;
     MathsUtils::makeRotationZ(rotation, pose.getTheta());
-    torsoFrameT = 
+    torsoFrameT =
       MathsUtils::makeTransformation(
         rotation,
         pose.getX(),
@@ -519,13 +518,13 @@ void NavigationBehavior::drawFootstepsData()
          << plannedPath[i].getY() << ", "
          << plannedPath[i].getTheta()  * 180.0 / M_PI
          << endl;*/
-    RotatedRect footRect = 
+    RotatedRect footRect =
       RotatedRect(
         Point2f(250 + plannedPath[i].getX() * 50, 350/2 - plannedPath[i].getY() * 50),
         Size2f(0.16 * 50, 0.06 * 50),
         -plannedPath[i].getTheta() * 180 / M_PI
       );
-    if (i == 0) 
+    if (i == 0)
       VisionUtils::drawRotatedRect(image, footRect, cv::Scalar(255, 0, 0));
     else if (i == pathPlanner->getPathSize() - 2)
       VisionUtils::drawRotatedRect(image, footRect, cv::Scalar(0, 0, 255));
@@ -551,11 +550,11 @@ void NavigationBehavior::sendFootstepsData()
       footRectsData(i, 2) = -plannedPath[i].getTheta();
       footRectsData(i, 3) = plannedPath[i].getLeg();
     }
-    const unsigned char* ptr = footRectsData.data;
+    unsigned char* ptr = footRectsData.data;
     int count = plannedPath.size() * 16;
     string footstepsStr = DataUtils::bytesToHexString(ptr, count);
-    CommMessage msg(footstepsStr, CommMsgTypes::FOOTSTEPS);
-    SendMsgRequestPtr smr = 
+    CommMessage msg(footstepsStr, CommMsgTypes::footsteps);
+    SendMsgRequestPtr smr =
       boost::make_shared<SendMsgRequest>(msg);
     BaseModule::publishModuleRequest(smr);
     //cout << "footRectsData:\n" << footRectsData << endl;

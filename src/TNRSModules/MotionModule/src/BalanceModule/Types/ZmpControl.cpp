@@ -84,13 +84,14 @@ bool ZmpControl<Scalar>::initiate()
   this->kM->getTaskSolver()->setMaxVelocityLimitGain(1.0);
 
   //! Set up the reference generator based on given zmp targets
-  refGenerator = boost::make_shared<BalanceZmpRefGen<Scalar>>(
+  refGenerator =
+    boost::shared_ptr<BalanceZmpRefGen<Scalar>>(new BalanceZmpRefGen<Scalar>(
         this->motionModule,
         static_cast<RobotFeet>(getBehaviorCast()->supportLeg),
         nPreviews,
         (Scalar)getBehaviorCast()->timeToReachB,
         getBehaviorCast()->target
-    );
+    ));
   refGenerator->initiate();
 
   //! Setup the center of mass desired position
@@ -115,44 +116,56 @@ bool ZmpControl<Scalar>::initiate()
     getBehaviorCast()->supportLeg == LinkChains::lLeg ? LinkChains::rLeg : LinkChains::lLeg;
   activeJoints = vector<bool>(getBehaviorCast()->activeJoints.begin(), getBehaviorCast()->activeJoints.end());
 
-  tasks.resize(static_cast<int>(IkTasks::count));
+  tasks.resize(toUType(IkTasks::count));
   //! Make a center of mass task to control its desired trajectory
   auto comResidual = vector<bool>(3, true);
 
   //! Remove center of mass z-axis tracking
   comResidual[2] = false;
-  tasks[static_cast<int>(IkTasks::com)] =
+  tasks[toUType(IkTasks::com)] =
     this->kM->makeComTask(
       static_cast<RobotFeet>(supportLeg),
       LegEEs::footCenter,
       comState.position,
       activeJoints,
-      taskWeights[static_cast<int>(IkTasks::com)],
-      taskGains[static_cast<int>(IkTasks::com)],
+      taskWeights[toUType(IkTasks::com)],
+      taskGains[toUType(IkTasks::com)],
       comResidual
     );
 
   if (getBehaviorCast()->keepOtherLegContact) {
     //! keep the other leg on ground contact with high priority
-    tasks[static_cast<int>(IkTasks::contact)] =
+    tasks[toUType(IkTasks::contact)] =
       this->kM->makeContactTask(
         otherLeg,
         toUType(LegEEs::footBase),
         activeJoints,
-        taskWeights[static_cast<int>(IkTasks::contact)],
-        taskGains[static_cast<int>(IkTasks::contact)]
+        taskWeights[toUType(IkTasks::contact)],
+        taskGains[toUType(IkTasks::contact)]
       );
   }
 
-  if (getBehaviorCast()->regularizePosture) {
+  if (getBehaviorCast()->regularizeIk) {
     //! Use predefined joints as target for end posture after balance
     //! This is necessary for convergence towards a feasible posture
-    tasks[static_cast<int>(IkTasks::posture)] =
+    tasks[toUType(IkTasks::regularization)] =
       this->kM->makePostureTask(
         postureTarget,
         activeJoints,
-        taskWeights[static_cast<int>(IkTasks::posture)],
-        taskGains[static_cast<int>(IkTasks::posture)]
+        taskWeights[toUType(IkTasks::regularization)],
+        taskGains[toUType(IkTasks::regularization)]
+      );
+  }
+
+  if (getBehaviorCast()->useTargetPosture) {
+    //! Use predefined joints as target for end posture after balance
+    //! This is necessary for convergence towards a feasible posture
+    tasks[toUType(IkTasks::posture)] =
+      this->kM->makePostureTask(
+        postureTarget,
+        activeJoints,
+        taskWeights[toUType(IkTasks::posture)],
+        taskGains[toUType(IkTasks::posture)]
       );
   }
 
@@ -163,14 +176,14 @@ bool ZmpControl<Scalar>::initiate()
     auto activeResidual = vector<bool>(6, false); //! X-Y-Z, Roll-Pitch-Yaw
     //! Only use Pitch tracking
     activeResidual[4] = true;
-    tasks[static_cast<int>(IkTasks::torso)] =
+    tasks[toUType(IkTasks::torso)] =
       this->kM->makeTorsoTask(
         static_cast<RobotFeet>(supportLeg),
         LegEEs::footBase,
         target,
         activeJoints,
-        taskWeights[static_cast<int>(IkTasks::torso)],
-        taskGains[static_cast<int>(IkTasks::torso)],
+        taskWeights[toUType(IkTasks::torso)],
+        taskGains[toUType(IkTasks::torso)],
         activeResidual
       );
   }
@@ -178,28 +191,30 @@ bool ZmpControl<Scalar>::initiate()
   //! In case motion proxy is turned on, we cannot use real-time updates.
   //! We can then simply find ik for all center of mass states and interpolate
   //! between them.
+  LOG_ERROR("ZmpControl is undefined with USE_NAOQI_MOTION_PROXY=ON");
+  return false;
 
   //! Make a task solver
   TaskIkSolver<Scalar> tis =
     TaskIkSolver<Scalar>(
-      this->motionModule->getKinematicsModule(), 20, activeJoints, true, this->cycleTime);
+      this->motionModule->getKinematicsModule(), 1, activeJoints, true, this->cycleTime);
   tis.init();
   tis.setActiveJoints(activeJoints);
   unsigned timeStep = 1;
-  static bool contactTargetUpdated = false;
+  static bool contactTargetUpdated = true;
   vector<Matrix<Scalar, Dynamic, 1> > joints;
   vector<Scalar> times;
   while(true) {
     if (timeStep * this->cycleTime >= (Scalar)getBehaviorCast()->timeToReachB)
       break;
     if (!contactTargetUpdated && timeStep * this->cycleTime >= (Scalar)getBehaviorCast()->timeToReachB / 2) {
-      Matrix<Scalar, 4, 4> target = boost::static_pointer_cast<CartesianTask<Scalar> >(tasks[static_cast<int>(IkTasks::contact)])->getTarget();
+      Matrix<Scalar, 4, 4> target = boost::static_pointer_cast<CartesianTask<Scalar> >(tasks[toUType(IkTasks::contact)])->getTarget();
       target(2, 3) += 0.01;
-      boost::static_pointer_cast<CartesianTask<Scalar> >(tasks[static_cast<int>(IkTasks::contact)])->setTarget(target);
-      tasks[static_cast<int>(IkTasks::contact)]->setGain(0.05);
-      tasks[static_cast<int>(IkTasks::posture)] =
+      boost::static_pointer_cast<CartesianTask<Scalar> >(tasks[toUType(IkTasks::contact)])->setTarget(target);
+      tasks[toUType(IkTasks::contact)]->setGain(0.05);
+      tasks[toUType(IkTasks::posture)] =
         this->kM->makePostureTask(
-          postureTarget, activeJoints, taskWeights[static_cast<int>(IkTasks::posture)], taskGains[static_cast<int>(IkTasks::posture)]);
+          postureTarget, activeJoints, taskWeights[toUType(IkTasks::posture)], taskGains[toUType(IkTasks::posture)]);
       contactTargetUpdated = true;
     }
     tis.reset(false);
@@ -231,8 +246,8 @@ bool ZmpControl<Scalar>::initiate()
            << simComState[1]
            << endl;
     comLog.close();
-    boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setTargetCom(desComPosition);
-    boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setFirstStep(false);
+    boost::static_pointer_cast<ComTask<Scalar> >(tasks[toUType(IkTasks::com)])->setTargetCom(desComPosition);
+    boost::static_pointer_cast<ComTask<Scalar> >(tasks[toUType(IkTasks::com)])->setFirstStep(false);
     for (auto& task : tasks) {
       if (task) tis.addTask(task);
     }
@@ -254,7 +269,8 @@ void ZmpControl<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
   #ifndef NAOQI_MOTION_PROXY_AVAILABLE
   auto casted = boost::static_pointer_cast <ZmpControlConfig> (cfg);
   getBehaviorCast()->keepOtherLegContact = casted->keepOtherLegContact;
-  getBehaviorCast()->regularizePosture = casted->regularizePosture;
+  getBehaviorCast()->useTargetPosture = casted->useTargetPosture;
+  getBehaviorCast()->regularizeIk = casted->regularizeIk;
   getBehaviorCast()->keepTorsoUpright = casted->keepTorsoUpright;
   getBehaviorCast()->activeJoints = casted->activeJoints;
   activeJoints = vector<bool>(getBehaviorCast()->activeJoints.begin(), getBehaviorCast()->activeJoints.end());
@@ -264,45 +280,61 @@ void ZmpControl<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
   comTarget.setZero();
   auto comResidual = vector<bool>(3, true);
   comResidual[2] = false;
-  tasks[static_cast<int>(IkTasks::com)] =
+  tasks[toUType(IkTasks::com)] =
     this->kM->makeComTask(
       static_cast<RobotFeet>(getBehaviorCast()->supportLeg),
       LegEEs::footCenter,
       comTarget,
       activeJoints,
-      taskWeights[static_cast<int>(IkTasks::com)],
-      taskGains[static_cast<int>(IkTasks::com)],
+      taskWeights[toUType(IkTasks::com)],
+      taskGains[toUType(IkTasks::com)],
       comResidual);
   // Reassign all tasks
   if (getBehaviorCast()->keepOtherLegContact) {
     //LOG_INFO("Adding new contact task")
     // keep the other leg on ground contact with high priority
-    tasks[static_cast<int>(IkTasks::contact)] =
+    tasks[toUType(IkTasks::contact)] =
       this->kM->makeContactTask(
         otherLeg,
         toUType(LegEEs::footBase),
         activeJoints,
-        taskWeights[static_cast<int>(IkTasks::contact)],
-        taskGains[static_cast<int>(IkTasks::contact)]);
+        taskWeights[toUType(IkTasks::contact)],
+        taskGains[toUType(IkTasks::contact)]);
   } else {
     //LOG_INFO("Removing contact task")
-    tasks[static_cast<int>(IkTasks::contact)].reset();
+    tasks[toUType(IkTasks::contact)].reset();
   }
 
-  if (getBehaviorCast()->regularizePosture) {
+  if (getBehaviorCast()->useTargetPosture) {
     //LOG_INFO("Adding new posture task")
     // Use predefined joints as target for end posture after balance
     // This is necessary to get a good posture
     // Add a posture task to be reached during balance
-    tasks[static_cast<int>(IkTasks::posture)] =
+    tasks[toUType(IkTasks::posture)] =
       this->kM->makePostureTask(
         postureTarget,
         activeJoints,
-        taskWeights[static_cast<int>(IkTasks::posture)],
-        taskGains[static_cast<int>(IkTasks::posture)]);
+        taskWeights[toUType(IkTasks::posture)],
+        taskGains[toUType(IkTasks::posture)]);
   } else {
     //LOG_INFO("Removing posture task")
-    tasks[static_cast<int>(IkTasks::posture)].reset();
+    tasks[toUType(IkTasks::posture)].reset();
+  }
+
+  if (getBehaviorCast()->regularizeIk) {
+    //LOG_INFO("Adding new posture task")
+    // Use predefined joints as target for end posture after balance
+    // This is necessary to get a good posture
+    // Add a posture task to be reached during balance
+    tasks[toUType(IkTasks::regularization)] =
+      this->kM->makePostureTask(
+        postureTarget,
+        activeJoints,
+        taskWeights[toUType(IkTasks::regularization)],
+        taskGains[toUType(IkTasks::regularization)]);
+  } else {
+    //LOG_INFO("Removing posture task")
+    tasks[toUType(IkTasks::regularization)].reset();
   }
 
   if (getBehaviorCast()->keepTorsoUpright) {
@@ -314,21 +346,21 @@ void ZmpControl<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
     vector<bool> activeJointsTorso = vector<bool>(toUType(Joints::count), false);
     for (int i = 1; i < this->kM->getLinkChain(supportLeg)->size; ++i)
       activeJointsTorso[this->kM->getLinkChain(supportLeg)->start + i] = true;
-    tasks[static_cast<int>(IkTasks::torso)] =  this->kM->makeTorsoTask(supportLeg, toUType(LegEEs::footBase), target, activeJointsTorso, taskWeights[static_cast<int>(IkTasks::torso)], taskGains[static_cast<int>(IkTasks::torso)]);*/
+    tasks[toUType(IkTasks::torso)] =  this->kM->makeTorsoTask(supportLeg, toUType(LegEEs::footBase), target, activeJointsTorso, taskWeights[toUType(IkTasks::torso)], taskGains[toUType(IkTasks::torso)]);*/
     Matrix<Scalar, 4, 4> target = this->kM->getGlobalToBody();
     auto activeResidual = vector<bool>(6, false); // X-Y-Z, Roll-Pitch-Yaw
-    tasks[static_cast<int>(IkTasks::torso)] =
+    tasks[toUType(IkTasks::torso)] =
       this->kM->makeTorsoTask(
       static_cast<RobotFeet>(supportLeg),
       LegEEs::footBase,
       target,
       activeJoints,
-      taskWeights[static_cast<int>(IkTasks::torso)],
-      taskGains[static_cast<int>(IkTasks::torso)],
+      taskWeights[toUType(IkTasks::torso)],
+      taskGains[toUType(IkTasks::torso)],
       activeResidual);
   } else {
     //LOG_INFO("Removing torso task")
-    tasks[static_cast<int>(IkTasks::torso)].reset();
+    tasks[toUType(IkTasks::torso)].reset();
   }
   LOG_INFO("ZmpControl.reinitiate() finished...")
   #endif
@@ -361,10 +393,11 @@ void ZmpControl<Scalar>::loadExternalConfig()
 {
   static bool loaded = false;
   if (!loaded) {
-    taskGains.resize(static_cast<int>(IkTasks::count));
-    taskWeights.resize(static_cast<int>(IkTasks::count));
+    taskGains.resize(toUType(IkTasks::count));
+    taskWeights.resize(toUType(IkTasks::count));
     Scalar comTWeight, comTGain;
     Scalar posTWeight, posTGain;
+    Scalar regTWeight, regTGain;
     Scalar conTWeight, conTGain;
     Scalar torsoTWeight, torsoTGain;
     GET_CONFIG(
@@ -374,20 +407,24 @@ void ZmpControl<Scalar>::loadExternalConfig()
       (Scalar, ZmpControl.comTGain, comTGain),
       (Scalar, ZmpControl.posTWeight, posTWeight),
       (Scalar, ZmpControl.posTGain, posTGain),
+      (Scalar, ZmpControl.regTWeight, regTWeight),
+      (Scalar, ZmpControl.regTGain, regTGain),
       (Scalar, ZmpControl.conTWeight, conTWeight),
       (Scalar, ZmpControl.conTGain, conTGain),
       (Scalar, ZmpControl.torsoTWeight, torsoTWeight),
       (Scalar, ZmpControl.torsoTGain, torsoTGain),
       (Scalar, ZmpControl.maxTime, maxTime),
     )
-    taskWeights[static_cast<int>(IkTasks::com)] = comTWeight;
-    taskGains[static_cast<int>(IkTasks::com)] = comTGain;
-    taskWeights[static_cast<int>(IkTasks::contact)] = conTWeight;
-    taskGains[static_cast<int>(IkTasks::contact)] = conTGain;
-    taskWeights[static_cast<int>(IkTasks::posture)] = posTWeight;
-    taskGains[static_cast<int>(IkTasks::posture)] = posTGain;
-    taskWeights[static_cast<int>(IkTasks::torso)] = torsoTWeight;
-    taskGains[static_cast<int>(IkTasks::torso)] = torsoTGain;
+    taskWeights[toUType(IkTasks::com)] = comTWeight;
+    taskGains[toUType(IkTasks::com)] = comTGain;
+    taskWeights[toUType(IkTasks::contact)] = conTWeight;
+    taskGains[toUType(IkTasks::contact)] = conTGain;
+    taskWeights[toUType(IkTasks::posture)] = posTWeight;
+    taskGains[toUType(IkTasks::posture)] = posTGain;
+    taskWeights[toUType(IkTasks::regularization)] = regTWeight;
+    taskGains[toUType(IkTasks::regularization)] = regTGain;
+    taskWeights[toUType(IkTasks::torso)] = torsoTWeight;
+    taskGains[toUType(IkTasks::torso)] = torsoTGain;
     loaded = true;
   }
 }
@@ -447,23 +484,15 @@ void ZmpControl<Scalar>::trackZmp()
          << simComState[1]
          << endl;
   comLog.close();
-  boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setTargetCom(desComPosition);
-  boost::static_pointer_cast<ComTask<Scalar> >(tasks[static_cast<int>(IkTasks::com)])->setFirstStep(true);
-  //if (getBehaviorCast()->regularizePosture) {
-//    boost::static_pointer_cast<PostureTask<Scalar> >(tasks[static_cast<int>(IkTasks::posture)])->setTargetPosture();
-//  }
-  auto regTask = this->kM->makePostureTask(
-    this->kM->getJointPositions(),
-    activeJoints,
-    1e-2,
-    0.95
-  );
+  boost::static_pointer_cast<ComTask<Scalar> >(tasks[toUType(IkTasks::com)])->setTargetCom(desComPosition);
+  boost::static_pointer_cast<ComTask<Scalar> >(tasks[toUType(IkTasks::com)])->setFirstStep(true);
+  if (tasks[toUType(IkTasks::regularization)])
+    boost::static_pointer_cast<PostureTask<Scalar> >(tasks[toUType(IkTasks::regularization)])->setTargetPosture(this->kM->getJointPositions());
   for (auto& task : tasks) {
     if (task) {
       this->addMotionTask(task);
     }
   }
-  this->addMotionTask(regTask);
 }
 
 template class ZmpControl<MType>;

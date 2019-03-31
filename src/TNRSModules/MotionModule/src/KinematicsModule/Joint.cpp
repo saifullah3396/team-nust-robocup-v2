@@ -41,7 +41,7 @@ ActualJointState<Scalar>::ActualJointState(
 {
   Matrix<Scalar, 2, 1> initState;
   initState << initPosition, 0.0;
-  _estimator = boost::make_shared<JointEstimator<Scalar>>();
+  _estimator = boost::shared_ptr<JointEstimator<Scalar>>(new JointEstimator<Scalar>());
   _estimator->init(jointIndex, initState, cycleTime);
 }
 
@@ -135,10 +135,12 @@ Joint<Scalar>::Joint(
 {
   states.resize(static_cast<int>(JointStateType::count));
   states[static_cast<int>(JointStateType::actual)] =
-    boost::make_shared<ActualJointState<Scalar> >(jointIndex, initPosition, cycleTime);
+    boost::shared_ptr<ActualJointState<Scalar> >(
+      new ActualJointState<Scalar>(jointIndex, initPosition, cycleTime));
   makeDHMatrix(states[static_cast<int>(JointStateType::actual)]->trans);
   states[static_cast<int>(JointStateType::sim)] =
-    boost::make_shared<SimJointState<Scalar> >(initPosition);
+    boost::shared_ptr<SimJointState<Scalar> >(
+      new SimJointState<Scalar>(initPosition));
   makeDHMatrix(states[static_cast<int>(JointStateType::sim)]->trans);
 }
 

@@ -77,6 +77,11 @@ enum class MemoryVariableIds : unsigned int
   //! Output: ControlModule
   //! Variable Type: vector<float>
   jointCurrentSensors,
+  //! Hand sensor values
+  //! Input: PlanningModule/MotionModule
+  //! Output: ControlModule
+  //! Variable Type: vector<float>
+  handSensors,
   //! Touch sensor values
   //! Input: PlanningModule/MotionModule
   //! Output: ControlModule
@@ -313,7 +318,7 @@ enum class MemoryVariableIds : unsigned int
   //! Input: Any module
   //! Output: GBModule
   //! Variable Type: bool
-  sBehaviorInfo,
+  gBehaviorInfo,
   //! Currently running motion behavior info
   //! Input: Any module
   //! Output: MotionModule

@@ -14,13 +14,13 @@ export robotsFile="${configDir}/Robots/robots.cfg"
 export privateKeySource="${configDir}/Keys/id_rsa_nao"
 export privateKey=/tmp/id_rsa_nao
 cipher=`( ssh -Q cipher | grep "aes128-ctr"; echo "arcfour" ) | head -1`
-export sshOptions="-c ${cipher} -o PreferredAuthentications=publickey,keyboard-interactive -o NumberOfPasswordPrompts=1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=debug"
+export sshOptions="-c ${cipher} -o PreferredAuthentications=publickey,keyboard-interactive -o NumberOfPasswordPrompts=1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=verbose"
 if [ `uname` = Darwin ]; then
   export rsyncOptions="-qzPha --delete"
 else
   export rsyncOptions="-qzPEha --delete"
 fi
-export sshCommand="ssh -i \"${privateKey}\" ${sshOptions}"
+export sshCommand="ssh -i \"${privateKeySource}\" ${sshOptions}"
 
 stdout="/dev/null"
 stderr="/dev/null"

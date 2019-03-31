@@ -62,7 +62,7 @@ struct BallInfo : public DataHolder, DataHeader
   }
 
   CameraId camera = {CameraId::headTop}; //! Camera in which ball is observed
-  CameraId cameraNext = {CameraId::headTop};//! Camera in which ball would be observed in next frame
+  CameraId cameraNext = {CameraId::headBottom};//! Camera in which ball would be observed in next frame
   unsigned bboxWidth = {0}; //! Ball bounding box width in image
   unsigned bboxHeight = {0}; //! Ball bounding box height in image
   bool found = {false}; //! Ball is found or not

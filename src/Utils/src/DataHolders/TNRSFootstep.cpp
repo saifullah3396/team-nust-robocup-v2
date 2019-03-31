@@ -11,6 +11,7 @@
 #include "Utils/include/DataHolders/TNRSFootstep.h"
 #include "Utils/include/HardwareIds.h"
 #include "Utils/include/MathsUtils.h"
+#include "Utils/include/PathPlanner/State.h"
 #include "Utils/include/PrintUtils.h"
 #include "Utils/include/JsonUtils.h"
 
@@ -54,6 +55,25 @@ cv::RotatedRect TNRSFootstep<Scalar>::getFootRect(
   auto center = cv::Point2f(pose2D.getX() * multiplier + offset.x, pose2D.getY() * multiplier + offset.y);
   auto size = cv::Size2f(Constants::footSizeX * multiplier, Constants::footSizeY * multiplier);
   return cv::RotatedRect(center, size, pose2D.getTheta() * MathsUtils::RAD_TO_DEG);
+}
+
+template <typename Scalar>
+TNRSFootstep<Scalar> TNRSFootstep<Scalar>::fromPathPlannerState(const PathPlannerSpace::State& state)
+{
+  TNRSFootstep<Scalar> step;
+  step.pose2D = RobotPose2D<Scalar>(state.getX(), state.getY(), state.getTheta());
+  step.foot = state.getLeg() == PathPlannerSpace::Leg::LEFT ? RobotFeet::lFoot : RobotFeet::rFoot;
+  return step;
+}
+
+template <typename Scalar>
+vector<TNRSFootstep<Scalar>> TNRSFootstep<Scalar>::fromPathPlannerStates(const std::vector<PathPlannerSpace::State>& states)
+{
+  vector<TNRSFootstep> steps;
+  for (const auto& state : states) {
+    steps.push_back(fromPathPlannerState(state));
+  }
+  return steps;
 }
 
 template class TNRSFootstep<float>;

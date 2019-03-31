@@ -10,6 +10,7 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
+#include <opencv2/core/core.hpp>
 
 /**
  * @struct TNRSLine

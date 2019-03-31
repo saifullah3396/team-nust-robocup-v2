@@ -11,6 +11,7 @@
 #include "VisionModule/include/FeatureExtraction/FieldExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
 #include "VisionModule/include/FeatureExtraction/FittedLine.h"
+#include "Utils/include/ConfigMacros.h"
 #include "Utils/include/DataUtils.h"
 
 FieldExtraction::FieldExtraction(VisionModule* visionModule) :

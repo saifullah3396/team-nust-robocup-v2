@@ -4,18 +4,18 @@
  * This file declares the class Robocup.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 16 Nov 2017 
+ * @date 16 Nov 2017
  */
 
 #pragma once
 
 #include "BehaviorManager/include/StateMachineMacros.h"
 #include "PlanningModule/include/PlanningBehavior.h"
-#include "TNRSBase/include/MemoryIOMacros.h"
-#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
 
 enum class KeyFrameGetupTypes : unsigned int;
 struct MBHeadControlConfig;
+struct PBRobocupConfig;
+struct InterpToPostureConfig;
 
 class Robocup : public PlanningBehavior
 {
@@ -29,26 +29,14 @@ public:
    */
   Robocup(
     PlanningModule* planningModule,
-    const BehaviorConfigPtr& config,
-    const string& name = "Robocup") :
-    PlanningBehavior(planningModule, config, name),
-    inFallRecovery(false),
-    readyToGetup(false),
-    waitForUnpenalise(false),
-    penaliseMotion(false),
-    moveTarget(RobotPose2D<float>(100, 100, 100)),
-    ballMotionModel(BallMotionModel::DAMPED)
-  {
-  }
+    const boost::shared_ptr<PBRobocupConfig>& config,
+    const string& name = "Robocup");
 
   /**
    * Default destructor for this class.
    */
-  virtual
-  ~Robocup()
-  {
-  }
-  
+  virtual ~Robocup() override {}
+
   static boost::shared_ptr<Robocup> getType(
     PlanningModule* planningModule, const BehaviorConfigPtr& cfg);
 

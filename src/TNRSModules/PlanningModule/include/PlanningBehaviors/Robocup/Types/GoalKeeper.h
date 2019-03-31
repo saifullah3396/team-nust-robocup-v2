@@ -4,14 +4,16 @@
  * This file declares the class GoalKeeper.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 May 2017 
+ * @date 17 May 2017
  */
 
 #pragma once
 
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Soccer.h"
 
-/** 
+struct GoalKeeperConfig;
+
+/**
  * @class GoalKeeper
  * @brief Class for defining the goal keeper behavior.
  */
@@ -26,16 +28,7 @@ public:
    */
   GoalKeeper(
     PlanningModule* planningModule,
-    const BehaviorConfigPtr& config) :
-    Soccer(planningModule, config, "GoalKeeper"),
-    interceptTarget(RobotPose2D<float>(NAN, NAN, NAN)),
-    lastDiveTargetType(-1)
-  {
-    DEFINE_FSM_STATE(Soccer, ReactGoalKeeper, react)
-    DEFINE_FSM_STATE(Soccer, Dive, dive)
-    DEFINE_FSM_STATE(Soccer, PostDive, postDive)
-    DEFINE_FSM_STATE(Soccer, InterceptBall, interceptBall)
-  }
+    const boost::shared_ptr<GoalKeeperConfig>& config);
 
   /**
    * Default destructor for this class.

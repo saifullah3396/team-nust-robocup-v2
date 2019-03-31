@@ -1,3 +1,4 @@
+
 # General parameters
 cmake_minimum_required(VERSION 2.8.12)
 project (team-nust-spl)
@@ -12,11 +13,11 @@ include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources/fftw3/api)
 include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources/qpOASES/include)
 
 #add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/fftw3)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/jsoncpp)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/nlopt)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/qpOASES)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/RandomLib)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/SbplLib)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/jsoncpp)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/nlopt)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/qpOASES)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/RandomLib)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/SbplLib)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/Utils)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSBase)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/BehaviorManager)

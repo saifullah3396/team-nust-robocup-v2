@@ -43,7 +43,7 @@ bool PlanningBehavior::shutdownCallBack()
 }
 
 bool PlanningBehavior::setPostureAndStiffness(
-  const PostureState& desPosture, 
+  const PostureState& desPosture,
   const StiffnessState& desStiffness,
   const unsigned& mbManagerId,
   const float& postureTime)
@@ -53,7 +53,7 @@ bool PlanningBehavior::setPostureAndStiffness(
   {
     return true;
   } else if (STIFFNESS_STATE_IN(PlanningModule) != desStiffness) {
-    if (!sbInProgress()) {
+    if (!gbInProgress()) {
       auto sConfig =
         boost::make_shared <GBStiffnessConfig> (
           desStiffness);
@@ -62,7 +62,7 @@ bool PlanningBehavior::setPostureAndStiffness(
     return false;
   } else if (POSTURE_STATE_IN(PlanningModule) != desPosture) {
     if (!mbInProgress()) {
-      auto pConfig = 
+      auto pConfig =
         boost::make_shared<InterpToPostureConfig>();
       pConfig->targetPosture = desPosture;
       pConfig->timeToReachP = postureTime;
@@ -106,22 +106,22 @@ bool PlanningBehavior::matchLastMotionRequest(
     lastMBConfig->type == mbType;
 }
 
-bool PlanningBehavior::matchLastStaticRequest(
-  const unsigned& sbId, const unsigned& sbType)
+bool PlanningBehavior::matchLastGeneralRequest(
+  const unsigned& gbId, const unsigned& gbType)
 {
   return
     lastGBConfig &&
-    lastGBConfig->id == sbId &&
-    lastGBConfig->type == sbType;
+    lastGBConfig->id == gbId &&
+    lastGBConfig->type == gbType;
 }
 
 
 void PlanningBehavior::setupGBRequest(const GBConfigPtr& config)
 {
-  auto rsb = boost::make_shared<RequestGeneralBehavior>(config);
-  lastStaticRequest = rsb;
-  BaseModule::publishModuleRequest(rsb);
-  sRequestTime = pModule->getModuleTime();
+  auto rgb = boost::make_shared<RequestGeneralBehavior>(config);
+  lastGeneralRequest = rgb;
+  BaseModule::publishModuleRequest(rgb);
+  gRequestTime = pModule->getModuleTime();
 }
 
 void PlanningBehavior::setupMBRequest(
@@ -137,9 +137,9 @@ void PlanningBehavior::setupMBRequest(
   }
 }
 
-bool PlanningBehavior::sbInProgress()
+bool PlanningBehavior::gbInProgress()
 {
-  return behaviorInProgress(SB_INFO_IN(PlanningModule));
+  return behaviorInProgress(GB_INFO_IN(PlanningModule));
 }
 
 bool PlanningBehavior::mbInProgress()
@@ -159,7 +159,7 @@ bool PlanningBehavior::behaviorInProgress(const BehaviorInfo& info)
 {
   if(info.isInitiated())
   {
-    if (info.isRunning()) 
+    if (info.isRunning())
       return true;
   }
   return false;
@@ -168,7 +168,7 @@ bool PlanningBehavior::behaviorInProgress(const BehaviorInfo& info)
 bool PlanningBehavior::requestInProgress()
 {
   bool inProgress = false;
-  if(requestInProgress(lastStaticRequest, lastGBConfig, SB_INFO_IN(PlanningModule), sRequestTime))
+  if(requestInProgress(lastGeneralRequest, lastGBConfig, GB_INFO_IN(PlanningModule), gRequestTime))
     inProgress = true;
   auto mbInfo = MB_INFO_IN(PlanningModule);
   for (size_t i = 0; i < mbManagerIds.size(); ++i)
@@ -193,7 +193,7 @@ bool PlanningBehavior::requestInProgress(
 {
   if (!req)
     return false;
-    
+
   if (
     pModule->getModuleTime() - requestStartTime >
     maxRequestTimeout)
@@ -201,13 +201,13 @@ bool PlanningBehavior::requestInProgress(
     req.reset();
     return false;
   }
-    
+
   if (req->isReceived()) {
     //! Request received on the other end
     if (req->getAccepted()) {
       //cout << "Accepted request" << endl;
-      if (feedback.isInitiated() && 
-          req->getReqConfig()->id == feedback.getConfig()->id) 
+      if (feedback.isInitiated() &&
+          req->getReqConfig()->id == feedback.getConfig()->id)
       {
         //cout << "Behavior initiated on request" << endl;
         acceptedBehavior = feedback.getConfig();

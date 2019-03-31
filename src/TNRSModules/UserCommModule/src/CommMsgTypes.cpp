@@ -7,6 +7,6 @@
  * @date 12 Sep 2017
  */
 
-#include "UserCommModule/include/CommMsgTypes.h"
+#include "Utils/include/DataHolders/CommMsgTypes.h"
 
 DEFINE_SPECIALIZED_ENUM(CommMsgTypes)

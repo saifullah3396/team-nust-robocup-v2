@@ -39,9 +39,9 @@ bool InterpToPosture<Scalar>::initiate()
   auto& jointsToReach = this->getBehaviorCast()->jointsToReach;
   jointsToReach *= MathsUtils::DEG_TO_RAD;
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  jointsI = this->kM->getJointPositions();
-  jointsDelta = jointsToReach - jointsI;
-  Matrix<bool, Dynamic, 1> activeJoints = jointsDelta.cwiseAbs().array() > Angle::DEG_1;
+  this->jointsI = this->kM->getJointPositions();
+  this->jointsDelta = jointsToReach - this->jointsI;
+  Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
   if (!activeJoints.any()) { //! Posture already reached
     POSTURE_STATE_OUT(MotionModule) = this->getBehaviorCast()->targetPosture;
     return false;
@@ -51,9 +51,7 @@ bool InterpToPosture<Scalar>::initiate()
     vector<Scalar> times;
     while (timeStep <= this->getBehaviorCast()->timeToReachP) {
       auto timeParam = timeStep / this->getBehaviorCast()->timeToReachP;
-      auto multiplier =
-        6 * pow(timeParam, 5) - 15 * pow(timeParam, 4) + 10 * pow(timeParam, 3);
-      joints.push_back(jointsI + jointsDelta * multiplier);
+      joints.push_back(this->interpolate(timeParam));
       times.push_back(timeStep);
       timeStep += this->cycleTime;
     }
@@ -61,9 +59,9 @@ bool InterpToPosture<Scalar>::initiate()
     return true;
   }
   #else
-  jointsI = this->kM->getJointPositions();
-  jointsDelta = jointsToReach - jointsI;
-  Matrix<bool, Dynamic, 1> activeJoints = jointsDelta.cwiseAbs().array() > Angle::DEG_1;
+  this->jointsI = this->kM->getJointPositions();
+  this->jointsDelta = jointsToReach - this->jointsI;
+  Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
   if (!activeJoints.any()) { //! Posture already reached
     POSTURE_STATE_OUT(MotionModule) = this->getBehaviorCast()->targetPosture;
     return false;
@@ -87,10 +85,8 @@ void InterpToPosture<Scalar>::update()
       this->getBehaviorCast()->targetPosture;
     finish();
   } else {
-    auto timeParam = this->runTime / this->getBehaviorCast()->timeToReachP;
-    auto multiplier =
-      6 * pow(timeParam, 5) - 15 * pow(timeParam, 4) + 10 * pow(timeParam, 3);
-    this->setJointCmds(this->jointsI + this->jointsDelta * multiplier);
+    auto step = this->runTime / this->getBehaviorCast()->timeToReachP;
+    this->setJointCmds(this->interpolate(step));
   }
   #endif
 }

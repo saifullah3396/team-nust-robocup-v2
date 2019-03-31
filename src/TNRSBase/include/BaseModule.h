@@ -85,7 +85,7 @@ public:
    */
   BaseModule(
     void* parent,
-    const unsigned& moduleId,
+    const TNSPLModules& moduleId,
     const string& moduleName,
     const size_t& inRequestsMax = 20);
 
@@ -146,9 +146,9 @@ public:
 
   /**
    * @brief addRequest Pushes a module request to the module request queue
-   * 
+   *
    * @param request: The request object
-   */ 
+   */
   void addRequest(const ModuleRequestPtr& request) {
     if (inRequests.getSize() >= inRequestsMax)
       return;
@@ -158,9 +158,9 @@ public:
   /**
    * @brief  publishModuleRequest Can be called from any BaseModule to publish
    *   a module request to another BaseModule based on its id.
-   * 
+   *
    * @param request: The request to be published
-   * @param moduleId: Id of the module to which the request is to be 
+   * @param moduleId: Id of the module to which the request is to be
    *   published
    */
   static void publishModuleRequest(const ModuleRequestPtr& request)
@@ -174,12 +174,12 @@ public:
 
   /**
    * @brief getModule Returns a base module that matches the given id
-   * 
+   *
    * @param moduleId: Id of requested module
    *
    * @return BaseModule*
    */
-  static BaseModule* getModule(const unsigned& moduleId)
+  static BaseModule* getModule(const TNSPLModules& moduleId)
   {
     for (size_t i = 0; i < runningModules.size(); ++i) {
       if (moduleId == runningModules[i]->getModuleId()) {
@@ -191,7 +191,7 @@ public:
 
   //! Getters
   const string& getModuleName() const { return moduleName; }
-  const unsigned& getModuleId() const { return moduleId; }
+  const TNSPLModules& getModuleId() const { return moduleId; }
   void* getParent() const { return parent; }
   const int& getPeriodMinMS() const { return periodMinMS; }
   const double& getModuleTime() const { return moduleTime; }
@@ -222,7 +222,7 @@ private:
    * @brief Defines the input and output memory connections to shared memory
    */
   virtual void initMemoryConn() = 0;
-  
+
   /**
    * @brief init Initializes the module and its variables
    */
@@ -264,7 +264,7 @@ private:
   {
     iterationStartTime = high_resolution_clock::now();
   }
-  
+
   /**
    * @brief createThread Creates the module thread
    */
@@ -282,7 +282,7 @@ private:
   high_resolution_clock::time_point iterationStartTime; //! Time at the start of iteration
   int periodMinMS = {0}; //! Time period of the module in milliseconds
   void* parent; //! Pointer to parent
-  unsigned moduleId; //! Module identity
+  TNSPLModules moduleId; //! Module identity
   string moduleName; //! Module name
   double moduleTime = {0.0}; //! Module time
   size_t inRequestsMax; //! Max requests possible in the queue

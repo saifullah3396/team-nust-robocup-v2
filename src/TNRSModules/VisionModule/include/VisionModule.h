@@ -27,6 +27,7 @@ class CameraModule;
 class CameraTransform;
 class ColorHandler;
 class FeatureExtraction;
+enum class TNColors : unsigned int;
 typedef boost::shared_ptr<CameraModule> CameraModulePtr;
 typedef boost::shared_ptr<CameraTransform> CameraTransformPtr;
 typedef boost::shared_ptr<ColorHandler> ColorHandlerPtr;
@@ -47,12 +48,14 @@ class VisionModule : public BaseModule, public DebugBase
 {
   /**
    * Debug variables for this module
-   */ 
+   */
   INIT_DEBUG_BASE_(
-    //! Option to choose which output image should be sent for debugging.
-    (int, debug, 1),
     //! Option to enable any kind of debugging.
+    (int, debug, 1),
+    //! Option to choose which output image should be sent for debugging.
     (int, debugImageIndex, 2),
+    //! Option to send a binarized image for a given color
+    (int, sendBinaryImage, -1),
     //! Option to enable known landmark info to be sent
     (int, sendKnownLandmarks, 1),
     //! Option to enable unknown landmark info to be sent
@@ -255,11 +258,11 @@ private:
 
   /**
    * Sets up the field points and projects them on the field
-   */ 
+   */
   void setupFieldProjection();
 
   //! Runs the vision module if true
-  bool runVision = {false};
+  bool runVision = {true};
 
   //! Flag to use logged images or realtime images
   bool useLoggedImages = {false};

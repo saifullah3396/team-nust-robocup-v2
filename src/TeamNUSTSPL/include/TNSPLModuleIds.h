@@ -18,7 +18,7 @@ enum class TNSPLModules
 : unsigned int {
   planning,
   motion,
-  sb,
+  gb,
   vision,
   localization,
   gameComm,

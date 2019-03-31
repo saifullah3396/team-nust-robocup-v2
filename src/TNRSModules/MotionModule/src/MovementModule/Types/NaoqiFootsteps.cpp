@@ -56,7 +56,6 @@ bool NaoqiFootsteps<Scalar>::initiate()
     behaviorState = setPosture;
   else
     behaviorState = setupWalk;
-  plannedPath = getBehaviorCast()->plannedPath;
   STEP_LEG_OUT(MotionModule) = RobotFeet::unknown;
   return true;
 }
@@ -66,7 +65,6 @@ void NaoqiFootsteps<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
 {
   LOG_INFO("NaoqiFootsteps.reinitiate() called...")
   this->config = cfg;
-  plannedPath = getBehaviorCast()->plannedPath;
   behaviorState = setupWalk;
 }
 
@@ -114,6 +112,7 @@ void NaoqiFootsteps<Scalar>::setupWalkAction() {
     ROBOT_IN_MOTION_OUT(MotionModule) = true;
     behaviorState = updateWalk;
   } else {
+    LOG_ERROR("Walk initiation failed...");
     // Walk initiation failed we stop
     behaviorState = stopWalk;
   }
@@ -124,7 +123,8 @@ template <typename Scalar>
 bool NaoqiFootsteps<Scalar>::initWalk()
 {
   try {
-    auto pathIter = this->plannedPath.begin();
+    auto& plannedPath = getBehaviorCast()->plannedPath;
+    auto pathIter = plannedPath.begin();
     const TNRSFootstep<float>* fromPlanned = pathIter.base();
     pathIter++;
     int unchangeable = 0;
@@ -152,27 +152,26 @@ bool NaoqiFootsteps<Scalar>::initWalk()
         if (((string)naoqiFs[i][0]) != "LLeg")
           stepFoot = RobotFeet::rFoot;
         auto s =
-          boost::make_shared<TNRSFootstep<Scalar> >(
+          boost::shared_ptr<TNRSFootstep<Scalar> >(new TNRSFootstep<Scalar>(
             RobotPose2D<Scalar>(
               naoqiFs[i][2][0], naoqiFs[i][2][1], naoqiFs[i][2][2]),
-            stepFoot, stepTrans);
+            stepFoot, stepTrans));
         steps.push(s);
       }
     }
-    unsigned nSteps = this->plannedPath.size() - 1 - unchangeable;
+    unsigned nSteps = plannedPath.size() - 1 - unchangeable;
     if (nSteps < 1)
       return false;
     AL::ALValue footName;
     AL::ALValue footSteps;
     AL::ALValue timeList;
-    footName.arraySetSize(this->plannedPath.size() - 1 - unchangeable);
-    footSteps.arraySetSize(this->plannedPath.size() - 1 - unchangeable);
-    timeList.arraySetSize(this->plannedPath.size() - 1 - unchangeable);
+    footName.arraySetSize(nSteps);
+    footSteps.arraySetSize(nSteps);
+    timeList.arraySetSize(nSteps);
     int stepIndex = 0;
-    while (pathIter != this->plannedPath.end()) {
+    while (pathIter != plannedPath.end()) {
       // Get a step from the planned path
-      Matrix<Scalar, 4, 4> stepTrans;
-      TNRSFootstep<float> step = this->getFootstep(*fromPlanned, *pathIter, stepTrans);
+      TNRSFootstep<float> step = this->getFootstep(*fromPlanned, *pathIter);
       // Generate a NaoQi footstep array
       footSteps[stepIndex].arraySetSize(3);
       // Foot type
@@ -182,23 +181,16 @@ bool NaoqiFootsteps<Scalar>::initWalk()
       footSteps[stepIndex][0] = step.pose2D.getX();
       footSteps[stepIndex][1] = step.pose2D.getY();
       footSteps[stepIndex][2] = step.pose2D.getTheta();
-      steps.push(boost::make_shared<TNRSFootstep<Scalar> >(step));
+      steps.push(boost::shared_ptr<TNRSFootstep<Scalar> >(new TNRSFootstep<Scalar>(step)));
       // Time taken by footstep
       timeList[stepIndex] = (stepIndex + 1) * this->footstepTime;
       ++stepIndex;
-      /*cout << "state:" << endl;
-        cout << "sX: " << (*pathIter).getX() << endl;
-        cout << "sY: " << (*pathIter).getY() << endl;
-        cout << "sT: " << (*pathIter).getTheta() << endl;
-        cout << "sT: " << (*pathIter).getLeg() << endl;*/
+      step.print();
       fromPlanned = pathIter.base();
       pathIter++;
     }
     startStep = N_FOOTSTEPS_OUT(MotionModule);
     // clears existing steps and starts new ones
-    //cout << footName << endl;
-    //cout << footSteps << endl;
-    //cout << timeList << endl;
     this->naoqiSetFootsteps(footName, footSteps, timeList, true);
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what())
@@ -273,7 +265,7 @@ void NaoqiFootsteps<Scalar>::updateWalkAction()
             MathsUtils::matToEuler((Matrix<Scalar, 3, 3>) newPosition.block(0, 0, 3, 3))[2]
           );
         PositionUpdatePtr pu =
-          boost::make_shared<PositionUpdate>(input);
+          boost::shared_ptr<PositionUpdate>(new PositionUpdate(input));
         BaseModule::publishModuleRequest(pu);
         steps.pop();
       }
@@ -352,15 +344,16 @@ void NaoqiFootsteps<Scalar>::postStopWalkAction()
 template <typename Scalar>
 TNRSFootstep<float> NaoqiFootsteps<Scalar>::getFootstep(
   const TNRSFootstep<float>& from,
-  const TNRSFootstep<float>& to,
-  Matrix<Scalar, 4, 4>& stepTrans)
+  const TNRSFootstep<float>& to)
 {
   Matrix<Scalar, 3, 3> toRotation;
   MathsUtils::makeRotationZ(toRotation, to.pose2D.getTheta());
   Matrix<Scalar, 3, 3> fromRotation;
   MathsUtils::makeRotationZ(fromRotation, from.pose2D.getTheta());
 
-  stepTrans =
+  TNRSFootstep<float> footstep;
+  footstep.foot = to.foot;
+  footstep.trans =
     MathsUtils::getTInverse(
       MathsUtils::makeTransformation(
         fromRotation,
@@ -371,12 +364,11 @@ TNRSFootstep<float> NaoqiFootsteps<Scalar>::getFootstep(
       to.pose2D.getX(),
       to.pose2D.getY(),
       0.0);
-  TNRSFootstep<float> footstep;
-  footstep.pose2D.x() = stepTrans(0, 3);
-  footstep.pose2D.y() = stepTrans(1, 3);
+
+  footstep.pose2D.x() = footstep.trans(0, 3);
+  footstep.pose2D.y() = footstep.trans(1, 3);
   footstep.pose2D.theta() =
-    MathsUtils::matToEuler((Matrix<Scalar, 3, 3>) stepTrans.block(0, 0, 3, 3))[2];
-  footstep.foot = to.foot;
+    MathsUtils::matToEuler((Matrix<Scalar, 3, 3>) footstep.trans.block(0, 0, 3, 3))[2];
   return footstep;
 }
 

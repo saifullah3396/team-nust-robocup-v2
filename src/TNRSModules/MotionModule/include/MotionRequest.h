@@ -12,16 +12,18 @@
 #include <opencv2/core/core.hpp>
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "TNRSBase/include/ModuleRequest.h"
+#include "TNRSBase/include/ModuleRequestMacros.h"
 #include "BehaviorConfigs/include/MBConfigs/MBConfig.h"
 #include "BehaviorManager/include/BehaviorRequest.h"
 
 /**
  * Types of request valid for MotionModule
- * 
+ *
  * @enum MotionRequestIds
- */ 
+ */
 enum class MotionRequestIds {
   jointRequest,
+  handsRequest,
   behaviorRequest,
   killBehavior,
   killBehaviors
@@ -30,72 +32,88 @@ enum class MotionRequestIds {
 /**
  * @class MotionRequest
  * @brief A module request that can be handled by MotionModule
- */ 
-class MotionRequest : public ModuleRequest 
-{
-public:
-  /**
-   * Constructor
-   * 
-   * @param id: Id of the control request
-   */ 
-  MotionRequest(const MotionRequestIds& id) :
-    ModuleRequest((unsigned)TNSPLModules::motion, (unsigned)id)
-  {
-  }
-};
-typedef boost::shared_ptr<MotionRequest> MotionRequestPtr;
+ */
+DECLARE_MODULE_REQUEST(
+  MotionRequest,
+  MotionRequestPtr,
+  ModuleRequest,
+  TNSPLModules,
+  motion,
+  MotionRequestIds
+)
 
-/**
- * @class RequestMotionBehavior
- * @brief A request to start a motion behavior
- */ 
 struct RequestMotionBehavior : public MotionRequest, BehaviorRequest
 {
   /**
    * Constructor
-   */ 
-  RequestMotionBehavior(const unsigned& mbManagerId, const MBConfigPtr& config) :
+   */
+  RequestMotionBehavior(const unsigned& mbManagerId = 0, const MBConfigPtr& config = MBConfigPtr()) :
     MotionRequest(MotionRequestIds::behaviorRequest),
     BehaviorRequest(config), mbManagerId(mbManagerId)
   {
   }
 
+  /**
+   * @brief assignFromJson Assigns requesturation parameters from json
+   * @param obj Json requesturation
+   * @return true if successful
+   */
+  virtual bool assignFromJson(const Json::Value& obj) {
+    if (!MotionRequest::assignFromJson(obj))
+      return false;
+    try {
+      FOR_EACH(ASSIGN_FROM_JSON_VAR_1, (unsigned, mbManagerId, 0))
+    } catch (Json::Exception& e) {
+      LOG_EXCEPTION("Exception caught in RequestMotionBehavior: ");
+      LOG_EXCEPTION(e.what());
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * @brief getJson Makes a json object from request paramters
+   * @return Json object
+   */
+  virtual Json::Value getJson() {
+    Json::Value obj = MotionRequest::getJson();
+    try {
+      FOR_EACH(GET_JSON_VAR_1, (unsigned, mbManagerId, 0));
+    } catch (Json::Exception& e) {
+     LOG_EXCEPTION(
+       "Exception caught in module request ModuleRequest::RequestMotionBehavior: ")
+      LOG_EXCEPTION(e.what());
+    }
+    return obj;
+  }
   unsigned mbManagerId;
+
+  public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef boost::shared_ptr<RequestMotionBehavior> RequestMotionBehaviorPtr;
 
 /**
  * @class KillMotionBehavior
  * @brief A request to kill a motion behavior
- */ 
-struct KillMotionBehavior : public MotionRequest
-{
-  /**
-   * Constructor
-   */ 
-  KillMotionBehavior(const unsigned& mbManagerId) :
-    MotionRequest(MotionRequestIds::killBehavior),
-    mbManagerId(mbManagerId)
-  {
-  }
-
-  unsigned mbManagerId;
-};
-typedef boost::shared_ptr<KillMotionBehavior> KillMotionBehaviorPtr;
+ */
+DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
+  KillMotionBehavior,
+  KillMotionBehaviorPtr,
+  MotionRequest,
+  MotionRequestIds,
+  killBehavior,
+  (unsigned, mbManagerId, 0),
+)
 
 /**
  * @class KillMotionBehaviors
  * @brief A request to kill all motion behaviors
  */
-struct KillMotionBehaviors : public MotionRequest
-{
-  /**
-   * Constructor
-   */
-  KillMotionBehaviors() :
-    MotionRequest(MotionRequestIds::killBehavior)
-  {
-  }
-};
-typedef boost::shared_ptr<KillMotionBehaviors> KillMotionBehaviorsPtr;
+DECLARE_MODULE_REQUEST_TYPE(
+  KillMotionBehaviors,
+  KillMotionBehaviorsPtr,
+  MotionRequest,
+  MotionRequestIds,
+  killBehaviors
+)

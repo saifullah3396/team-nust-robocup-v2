@@ -48,152 +48,95 @@ namespace PathPlannerSpace
   class GridMap2D
   {
   public:
-    GridMap2D();
-    ///@brief Create from OccupancyGrid
-    GridMap2D(const OccupancyMap<float>& occMap, bool unknownAsObstacle = false);
-    ///@brief Copy constructor, performs a deep copy of underlying data structures
-    GridMap2D(const GridMap2D& other);
-    virtual
-    ~GridMap2D();
+    GridMap2D() = default;
+    GridMap2D(OccupancyMap<float>* occMap, bool unknownAsObstacle = false);
+    virtual ~GridMap2D();
 
-    void
-    mapToWorld(unsigned int mx, unsigned int my, double& wx, double& wy) const;
-    bool
-    worldToMap(double wx, double wy, unsigned int& mx, unsigned int& my) const;
-    void
-    worldToMapNoBounds(double wx, double wy, unsigned int& mx,
-      unsigned int& my) const;
+    void mapToWorld(unsigned int mx, unsigned int my, double& wx, double& wy) const;
+    bool worldToMap(double wx, double wy, unsigned int& mx, unsigned int& my) const;
+    void worldToMapNoBounds(double wx, double wy, unsigned int& mx, unsigned int& my) const;
 
     /// check if a coordinate is covered by the map extent (same as worldToMap)
-    bool
-    inMapBounds(double wx, double wy) const;
+    bool inMapBounds(double wx, double wy) const;
 
     /**
      * Inflate occupancy map by inflationRadius
      */
-    void
-    inflateMap(double inflationRaduis);
+    void inflateMap(double inflationRaduis);
 
     /// Distance (in m) between two map coordinates (indices)
-    inline double
-    worldDist(unsigned x1, unsigned y1, unsigned x2, unsigned y2)
+    inline double worldDist(unsigned x1, unsigned y1, unsigned x2, unsigned y2)
     {
       return worldDist(Point(x1, y1), Point(x2, y2));
     }
 
-    inline double
-    worldDist(const Point& p1, const Point& p2)
+    inline double worldDist(const Point& p1, const Point& p2)
     {
-      return GridMap2D::pointDist(p1, p2) * resolution;
+      return GridMap2D::pointDist(p1, p2) * occMap->resolution;
     }
 
     /// Euclidean distance between two points:
-    static inline double
-    pointDist(const Point& p1, const Point& p2)
+    static inline double pointDist(const Point& p1, const Point& p2)
     {
       return sqrt(pointDist2(p1, p2));
     }
 
     /// Squared distance between two points:
-    static inline double
-    pointDist2(const Point& p1, const Point& p2)
+    static inline double pointDist2(const Point& p1, const Point& p2)
     {
       return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
     }
 
     /// Returns distance (in m) at world coordinates <wx,wy> in m; -1 if out of bounds!
-    float
-    distanceMapAt(double wx, double wy) const;
+    float distanceMapAt(double wx, double wy) const;
 
     /// Returns distance (in m) at map cell <mx, my> in m; -1 if out of bounds!
-    float
-    distanceMapAtCell(unsigned int mx, unsigned int my) const;
+    float distanceMapAtCell(unsigned int mx, unsigned int my) const;
 
     /// Returns map value at world coordinates <wx, wy>; out of bounds will be returned as 0!
-    uchar
-    binaryMapAt(double wx, double wy) const;
+    uchar binaryMapAt(double wx, double wy) const;
 
     /// Returns map value at map cell <mx, my>; out of bounds will be returned as 0!
-    uchar
-    binaryMapAtCell(unsigned int mx, unsigned int my) const;
+    uchar binaryMapAtCell(unsigned int mx, unsigned int my) const;
 
     /// Returns map value at map cell <mx, my>; out of bounds will be returned as 0!
-    uchar&
-    binaryMapAtCell(unsigned int mx, unsigned int my);
+    uchar& binaryMapAtCell(unsigned int mx, unsigned int my);
 
     /// @return true if map is occupied at world coordinate <wx, wy>. Out of bounds
     ///     will be returned as occupied.
-    bool
-    isOccupiedAt(double wx, double wy) const;
+    bool isOccupiedAt(double wx, double wy) const;
 
     /// @return true if map is occupied at cell <mx, my>
-    bool
-    isOccupiedAtCell(unsigned int mx, unsigned int my) const;
+    bool isOccupiedAtCell(unsigned int mx, unsigned int my) const;
 
     ///@brief Initialize map from a ROS OccupancyGrid message
-    void
-    setMap(const OccupancyMap<float>& gridMap, bool unknownAsObstacle = false);
-
-    ///@brief Initialize from an existing Map. mapInfo (in particular resolution) remains the same!
-    void
-    setMap(const Mat& binaryMap);
+    void setMap(const OccupancyMap<float>& gridMap, bool unknownAsObstacle = false);
 
     ///@brief Recalculate the internal distance map. Required after manual changes to the grid map data.
-    void
-    updateDistanceMap();
+    void updateDistanceMap();
 
-    inline cv::Point3_<float>
-    getMapOriginPose() const
-    {
-      return mapOriginPose;
-    }
-
-    inline float
-    getResolution() const
-    {
-      return resolution;
-    }
-    /// @return the Mat distance image.
-    const Mat&
-    getDistanceMap() const
-    {
-      return distMap;
-    }
-    /// @return the Mat binary image.
-    const Mat&
-    getBinaryMap() const
-    {
-      return binaryMap;
-    }
-    /// @return the Mat distance image.
-    const int&
-    getWidth() const
-    {
-      return width;
-    }
-    /// @return the Mat binary image.
-    const int&
-    getHeight() const
-    {
-      return height;
-    }
-    /// @return the size of the Mat binary image. Note that x/y are swapped wrt. height/width
-    inline const Size
-    size() const
-    {
-      return binaryMap.size();
-    }
+    const Mat& getDistanceMap() const
+      { return distMap; }
+    const Mat& getBinaryMap() const
+      { return occMap->data; }
+    cv::Point3_<float> getMapOriginPose() const
+      { return occMap->originPose;  }
+    float getResolution() const
+      { return occMap->resolution; }
+    Size size() const
+      { return occMap->data.size(); }
+    int getWidth() const
+      { return (occMap->data.size().width); }
+    int getHeight() const
+      { return (occMap->data.size().height); }
 
     const static uchar FREE = 255; ///< char value for "free": 255
     const static uchar OCCUPIED = 0; ///< char value for "free": 0
 
   protected:
-    Mat binaryMap; ///< binary occupancy map. 255: free, 0 occupied.
-    Mat distMap; ///< distance map (in meter)
-    float resolution;
-    cv::Point3_<float> mapOriginPose;
-    int width;
-    int height;
+    Mat distMap;
+    Mat distMapR;
+    OccupancyMap<float>* occMap;
   };
 
   typedef boost::shared_ptr<GridMap2D> GridMap2DPtr;

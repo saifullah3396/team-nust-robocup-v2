@@ -38,14 +38,14 @@ SpeedWalk<Scalar>::SpeedWalk(
   const boost::shared_ptr<SpeedWalkConfig>& config) :
   MovementModule<Scalar>(motionModule, config, "SpeedWalk")
 {
-  params = boost::make_shared<WalkParameters<Scalar> >();
+  params = boost::shared_ptr<WalkParameters<Scalar> >(new WalkParameters<Scalar>());
   params->loadConfig();
   walkZmpRefGen =
-    boost::make_shared<WalkZmpRefGen<Scalar> >(
+    boost::shared_ptr<WalkZmpRefGen<Scalar> >(new WalkZmpRefGen<Scalar>(
       this->motionModule,
       this->kM->getGlobalBaseIndex(),
       params->nPreviews,
-      &stepsQueue);
+      &stepsQueue));
 }
 template <typename Scalar>
 SpeedWalk<Scalar>::~SpeedWalk()
@@ -63,7 +63,6 @@ boost::shared_ptr<SpeedWalkConfig> SpeedWalk<Scalar>::getBehaviorCast()
 template <typename Scalar>
 bool SpeedWalk<Scalar>::initiate()
 {
-  LOG_INFO("SpeedWalk.initiate() called...")
   //! Set robotInMotion memory parameter
   ROBOT_IN_MOTION_OUT(MotionModule) = false;
 
@@ -86,6 +85,7 @@ bool SpeedWalk<Scalar>::initiate()
   while (!walkZmpRefGen->previewsAvailable(this->runTime)) {
     genNextStep();
   }
+
   //for(int i = 0; i  <10; ++i)
   //  genNextStep();
   //drawSteps();
@@ -106,10 +106,15 @@ bool SpeedWalk<Scalar>::initiate()
   }
 
   //! Set shoulder pitch roll joint limits so it does not self collide if used
-  //this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(12.0), L_SHOULDER_ROLL);
-  //this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(22.0), L_SHOULDER_ROLL);
-  //this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(-12.0), R_SHOULDER_ROLL);
-  //this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(-22.0), R_SHOULDER_ROLL);
+  this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(7.0), toUType(Joints::lShoulderRoll));
+  this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(12.0), toUType(Joints::lShoulderRoll));
+  this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(-7.0), toUType(Joints::rShoulderRoll));
+  this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(-12.0), toUType(Joints::rShoulderRoll));
+
+  this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(85.0), toUType(Joints::lShoulderPitch));
+  this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(95.0), toUType(Joints::lShoulderPitch));
+  this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(95.0), toUType(Joints::rShoulderPitch));
+  this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(85.0), toUType(Joints::rShoulderPitch));
   //params->comHeight = this->kM->getComStateWrtFrame(
    // static_cast<LinkChains>(this->kM->getGlobalBaseIndex()), toUType(LegEEs::footBase)).position[2];
 
@@ -121,22 +126,7 @@ bool SpeedWalk<Scalar>::initiate()
     activeJoints[i] = true;
   for (size_t i = otherChain->start; i < otherChain->end; ++i)
     activeJoints[i] = true;
-
   tasks.resize(toUType(IkTasks::count));
-  //! Make a center of mass task to control its desired trajectory
-  auto comResidual = vector<bool>(3, true);
-
-  //! Initiate a center of mass tracking task
-  tasks[toUType(IkTasks::com)] =
-    this->kM->makeComTask(
-      globalBase,
-      LegEEs::footCenter,
-      Matrix<Scalar, 3, 1>(),
-      activeJoints,
-      taskWeights[toUType(IkTasks::com)],
-      taskGains[toUType(IkTasks::com)],
-      comResidual
-    );
 
   //! Initiate a step task
   Matrix<Scalar, 4, 4> target = this->kM->getGlobalToOther();
@@ -149,17 +139,6 @@ bool SpeedWalk<Scalar>::initiate()
       taskWeights[toUType(IkTasks::step)],
       taskGains[toUType(IkTasks::step)]
     );
-  Matrix<Scalar, Dynamic, 1> joints = this->kM->getJointPositions();
-  if (getBehaviorCast()->minimizeJointVels) {
-    //! Initiate a task to minimize the joint velocities
-    tasks[toUType(IkTasks::minJointVel)] =
-      this->kM->makePostureTask(
-        joints,
-        activeJoints,
-        taskWeights[toUType(IkTasks::minJointVel)],
-        taskGains[toUType(IkTasks::minJointVel)]
-      );
-  }
 
   if (getBehaviorCast()->keepTorsoUpright) {
     //! Torso task to keep torso orientation to the initial orientation
@@ -181,6 +160,35 @@ bool SpeedWalk<Scalar>::initiate()
       );
   }
 
+  //! Make a center of mass task to control its desired trajectory
+  auto comResidual = vector<bool>(3, true);
+  //! Initiate a center of mass tracking task
+  /*for (size_t i = toUType(HardwareIds::lArmStart); i < toUType(HardwareIds::lArmStart) + 2; ++i)
+    activeJoints[i] = true;
+  for (size_t i = toUType(HardwareIds::rArmStart); i < toUType(HardwareIds::rArmStart) + 2; ++i)
+    activeJoints[i] = true;*/
+  tasks[toUType(IkTasks::com)] =
+    this->kM->makeComTask(
+      globalBase,
+      LegEEs::footCenter,
+      Matrix<Scalar, 3, 1>(),
+      activeJoints,
+      taskWeights[toUType(IkTasks::com)],
+      taskGains[toUType(IkTasks::com)],
+      comResidual
+    );
+
+  Matrix<Scalar, Dynamic, 1> joints = this->kM->getJointPositions();
+  if (getBehaviorCast()->minimizeJointVels) {
+    //! Initiate a task to minimize the joint velocities
+    tasks[toUType(IkTasks::minJointVel)] =
+      this->kM->makePostureTask(
+        joints,
+        activeJoints,
+        taskWeights[toUType(IkTasks::minJointVel)],
+        taskGains[toUType(IkTasks::minJointVel)]
+      );
+  }
   //! Set up center of mass and zmp reference logs
   comLog.open(
     (ConfigManager::getLogsDirPath() + string("SpeedWalk/Com.txt")).c_str(),
@@ -278,8 +286,10 @@ void SpeedWalk<Scalar>::update()
       //! Create the trajectory for the next step relative to new support
       //! foot frame
       this->genStepTrajectory();
-      if (nSteps >= 999)
+      if (nSteps >= getBehaviorCast()->maxNSteps) {
+        nSteps = 0;
         finish();
+      }
       break;
     }
   }
@@ -300,6 +310,16 @@ void SpeedWalk<Scalar>::update()
   if (getBehaviorCast()->minimizeJointVels) {
     //! Initiate a task to minimize the joint velocities
     boost::static_pointer_cast<PostureTask<Scalar> >(tasks[toUType(IkTasks::minJointVel)])->setTargetPosture(targetJoints);
+  }
+
+  if (getBehaviorCast()->keepTorsoUpright) {
+    //! Initiate a task to minimize the joint velocities
+    Matrix<Scalar, 4, 4> torsoTarget;
+    if (stepsQueue.front()->foot == RobotFeet::lFoot)
+      MathsUtils::makeRotationXYZ(torsoTarget, -this->kM->getJointPosition(Joints::lAnkleRoll), 0.0, 0.0);
+    else
+      MathsUtils::makeRotationXYZ(torsoTarget, -this->kM->getJointPosition(Joints::rAnkleRoll), 0.0, 0.0);
+    boost::static_pointer_cast<TorsoTask<Scalar> >(tasks[toUType(IkTasks::torso)])->setTarget(torsoTarget);
   }
 
   if (stepTraj.rows() > 0) {
@@ -357,7 +377,6 @@ void SpeedWalk<Scalar>::finish()
 {
   LOG_INFO("SpeedWalk.finish() called...")
   this->inBehavior = false;
-  while(true);
 }
 
 template<typename Scalar>
@@ -412,13 +431,13 @@ void SpeedWalk<Scalar>::genStepTrajectory()
   //controlPoints.block(3, 3, 1, 3) = controlPoints.block(2, 3, 1, 3);
   controlPoints(3, 2) = params->stepHeight;
 
-  LOG_INFO("Control points: " << controlPoints);
+  //LOG_INFO("Control points: " << controPoints);
   boost::shared_ptr<BSpline<Scalar> > bSpline =
-    boost::make_shared<BSpline<Scalar> >(
-      bSplineDegree, nDim, controlPoints, knots, this->cycleTime);
+    boost::shared_ptr<BSpline<Scalar> >(
+      new BSpline<Scalar>(bSplineDegree, nDim, controlPoints, knots, this->cycleTime));
   bSpline->setup();
   stepTraj = bSpline->getSpline(0);
-  LOG_INFO("stepTraj: " << stepTraj)
+  //LOG_INFO("stepTraj: " << stepTraj)
   //! Plotting
   /*GnuPlotEnv::PlotEnv<Scalar>
     plotEnv(
@@ -471,14 +490,15 @@ void SpeedWalk<Scalar>::addFirstStep()
 {
   auto foot = this->kM->getGlobalBaseIndex() == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
   Matrix<Scalar, 4 ,4> transFromTo = this->kM->getGlobalToOther();
-  addStep(boost::make_shared<TNRSFootstep<Scalar> >(
-    RobotPose2D<Scalar>(
-      transFromTo(0, 3),
-      transFromTo(1, 3),
-      atan2(transFromTo(1, 0), transFromTo(0, 0))),
-      foot,
-      transFromTo,
-      params->firstStepTime));
+  addStep(boost::shared_ptr<TNRSFootstep<Scalar> >(
+    new TNRSFootstep<Scalar>(
+      RobotPose2D<Scalar>(
+        transFromTo(0, 3),
+        transFromTo(1, 3),
+        atan2(transFromTo(1, 0), transFromTo(0, 0))),
+        foot,
+        transFromTo,
+        params->firstStepTime)));
 }
 
 
@@ -496,12 +516,12 @@ void SpeedWalk<Scalar>::genNextStep()
     //! Get current foot position
     auto foot = this->kM->getGlobalBaseIndex() == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
     Matrix<Scalar, 4 ,4> transFromTo = this->kM->getGlobalToOther() * diffTrans;
-    addStep(boost::make_shared<TNRSFootstep<Scalar> >(
+    addStep(boost::shared_ptr<TNRSFootstep<Scalar> >(new TNRSFootstep<Scalar>(
       RobotPose2D<Scalar>(
         transFromTo(0, 3), transFromTo(1, 3), atan2(transFromTo(1, 0), transFromTo(0, 0))),
         foot,
         transFromTo,
-        prevStep->timeAtFinish + params->totalStepTime));
+        prevStep->timeAtFinish + params->totalStepTime)));
   } else {
     //! Get current foot position
     auto foot = prevStep->foot == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
@@ -521,11 +541,11 @@ void SpeedWalk<Scalar>::genNextStep()
     MathsUtils::makeRotationZ(rot, pose.getTheta());
     Matrix<Scalar, 4 ,4> transFromTo =
       MathsUtils::makeTransformation(rot, pose.getX(), pose.getY(), 0.0);
-    addStep(boost::make_shared<TNRSFootstep<Scalar> >(
+    addStep(boost::shared_ptr<TNRSFootstep<Scalar> >(new TNRSFootstep<Scalar>(
         pose,
         foot,
         transFromTo,
-        prevStep->timeAtFinish + params->totalStepTime));
+        prevStep->timeAtFinish + params->totalStepTime)));
   }
 }
 

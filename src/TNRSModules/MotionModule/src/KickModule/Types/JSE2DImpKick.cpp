@@ -25,7 +25,9 @@ JSE2DImpKick<Scalar>::JSE2DImpKick(
 {
   DEFINE_FSM_STATE(JointSpaceKick<Scalar>, JSE2DPlanKick, this->planKick)
   DEFINE_FSM_STATE(JointSpaceKick<Scalar>, WaitForExecution, waitForExecution)
-  kickImpact2DSolver = boost::make_shared<KickImpact2DSolver<Scalar>>(this);
+  kickImpact2DSolver =
+    boost::shared_ptr<KickImpact2DSolver<Scalar>>(
+      new KickImpact2DSolver<Scalar>(this));
 }
 
 template <typename Scalar>

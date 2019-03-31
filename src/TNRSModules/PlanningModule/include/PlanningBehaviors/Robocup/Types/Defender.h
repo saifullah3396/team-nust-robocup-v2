@@ -4,14 +4,16 @@
  * This file declares the class Defender.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 May 2017 
+ * @date 17 May 2017
  */
 
 #pragma once
 
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Soccer.h"
 
-/** 
+struct DefenderConfig;
+
+/**
  * @class Defender
  * @brief Class for defining the robocup defender behavior.
  */
@@ -26,11 +28,7 @@ public:
    */
   Defender(
     PlanningModule* planningModule,
-    const BehaviorConfigPtr& config) :
-    Soccer(planningModule, config, "Defender")
-  {
-    DEFINE_FSM_STATE(Soccer, ReactDefender, react)
-  }
+    const boost::shared_ptr<DefenderConfig>& config);
 
   /**
    * Default destructor for this class.

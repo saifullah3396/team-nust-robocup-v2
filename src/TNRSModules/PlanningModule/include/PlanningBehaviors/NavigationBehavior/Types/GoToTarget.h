@@ -11,6 +11,8 @@
 
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/NavigationBehavior.h"
 
+struct GoToTargetConfig;
+
 /**
  * @class GoToTarget
  * @brief The behavior for going to a target spot in field
@@ -19,36 +21,30 @@ class GoToTarget : public NavigationBehavior
 {
 public:
   /**
-   * Constructor
-   * 
-   * @param planningModule: pointer to parent planning module
-   * @param config: Configuration of this behavior
+   * @brief GoToTarget Constructor
+   * @param planningModule Pointer to base planning module
+   * @param config Configuration of this behavior
    */
   GoToTarget(
-    PlanningModule* planningModule, 
-    const BehaviorConfigPtr& config) :
-    NavigationBehavior(planningModule, config, "GoToTarget")
-  {
-  }
+    PlanningModule* planningModule,
+    const boost::shared_ptr<GoToTargetConfig>& config);
 
   /**
-   * Destructor
+   * @brief ~GoToTaget Destructor
    */
-  ~GoToTarget()
-  {
-  }
- 
+  ~GoToTarget() final {}
+
 protected:
   /**
-   * Derived from NavigationBehavior
+   * @brief executeMotionAction See NavigationBehavior::executeMotionAction()
    */
-  void executeMotionAction();
+  void executeMotionAction() final;
 
 private:
   /**
    * * Returns the config casted as GoToTargetConfigPtr
-   */ 
-  GoToTargetConfigPtr getBehaviorCast();
+   */
+  boost::shared_ptr<GoToTargetConfig> getBehaviorCast();
 };
 
 typedef boost::shared_ptr<GoToTarget> GoToTargetPtr;

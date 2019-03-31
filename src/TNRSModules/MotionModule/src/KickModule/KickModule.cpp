@@ -61,8 +61,8 @@ KickModule<Scalar>::KickModule(
 
 template <typename Scalar>
 boost::shared_ptr<KickModule<Scalar> > KickModule<Scalar>::getType(
-  MotionModule* motionModule, const BehaviorConfigPtr& cfg) 
-{ 
+  MotionModule* motionModule, const BehaviorConfigPtr& cfg)
+{
   KickModule<Scalar>* km;
   switch (cfg->type) {
     case toUType(MBKickTypes::jsoImpKick):
@@ -80,17 +80,17 @@ void KickModule<Scalar>::loadExternalConfig()
 {
   static bool loaded = false;
   if (!loaded) {
-    GET_CONFIG("EnvProperties", 
-      (Scalar, ballRadius, ballRadius), 
-      (Scalar, ballMass, ballMass), 
+    GET_CONFIG("EnvProperties",
+      (Scalar, ballRadius, ballRadius),
+      (Scalar, ballMass, ballMass),
       (Scalar, coeffSF, sf),
       (Scalar, coeffRF, rf),
       (Scalar, coeffDamping, coeffDamping),
     )
-    lFootContour = 
+    lFootContour =
       new BSpline<Scalar>(
         ConfigManager::getCommonConfigDirPath() + "left_foot_contour.xml");
-    rFootContour = 
+    rFootContour =
       new BSpline<Scalar>(
         ConfigManager::getCommonConfigDirPath() + "right_foot_contour.xml");
     Matrix<Scalar, 3, 1> tl, tr, bl ,br;
@@ -149,7 +149,7 @@ template <typename Scalar>
 bool KickModule<Scalar>::setTransformFrames(const JointStateType& type)
 {
   try {
-    if (kickLeg != supportLeg && 
+    if (kickLeg != supportLeg &&
         (kickLeg == LinkChains::lLeg ||
         kickLeg == LinkChains::rLeg) &&
         (supportLeg == LinkChains::lLeg ||
@@ -158,7 +158,7 @@ bool KickModule<Scalar>::setTransformFrames(const JointStateType& type)
       torsoToSupport = this->kM->getForwardEffector(supportLeg, toUType(LegEEs::footCenter), type);
       supportToTorso =
         MathsUtils::getTInverse(torsoToSupport);
-      supportToKick = 
+      supportToKick =
         supportToTorso *
         this->kM->getForwardEffector(kickLeg, toUType(LegEEs::ankle), type);
       return true;
@@ -175,7 +175,7 @@ bool KickModule<Scalar>::setTransformFrames(const JointStateType& type)
   }
 }
 
-template <typename Scalar> 
+template <typename Scalar>
 bool KickModule<Scalar>::setEndEffectorXY(const Scalar& angle)
 {
   try {
@@ -190,7 +190,7 @@ bool KickModule<Scalar>::setEndEffectorXY(const Scalar& angle)
     LOG_EXCEPTION(e.what());
     return false;
   }
-  
+
   bool success;
   Matrix<Scalar, 3, 1> contourPoint;
   auto normal = Matrix<Scalar, 3, 1>(cos(angle), sin(angle), 0.f);
@@ -253,7 +253,7 @@ void KickModule<Scalar>::setEndEffectorZX(const Scalar& t)
   Matrix<Scalar, 3, 1> contourPoint;
   fstream footCurveLog;
   footCurveLog.open(
-	(ConfigManager::getLogsDirPath() + string("KickModule/FootCurveZX.txt")).c_str(),
+  (ConfigManager::getLogsDirPath() + string("KickModule/FootCurveZX.txt")).c_str(),
     std::ofstream::out | std::ofstream::trunc);
   footCurveLog << "# t     X     Y    Z" << endl;
   footCurveLog.close();
@@ -264,7 +264,7 @@ void KickModule<Scalar>::setEndEffectorZX(const Scalar& t)
   endEffector(0, 3) = contourPoint[0];
   endEffector(2, 3) = contourPoint[2];
   footCurveLog.open(
-	(ConfigManager::getConfigDirPath() + string("KickModule/FootCurveZX.txt")).c_str(),
+  (ConfigManager::getConfigDirPath() + string("KickModule/FootCurveZX.txt")).c_str(),
     std::ofstream::out | std::ofstream::trunc);
   for (Scalar ti = 0.0; ti <= 1.0; ti = ti + 0.01) {
     tVector(0, 0) = 1;
@@ -327,7 +327,8 @@ void KickModule<Scalar>::setupPosture()
   if (this->getBehaviorCast()->postureConfig) {
     this->setupChildRequest(this->getBehaviorCast()->postureConfig);
   } else {
-    auto postureConfig = boost::make_shared<InterpToPostureConfig>();
+    auto postureConfig =
+      boost::shared_ptr<InterpToPostureConfig>(new InterpToPostureConfig());
     postureConfig->targetPosture = PostureState::stand;
     postureConfig->timeToReachP = 1.0;
     this->setupChildRequest(postureConfig);
@@ -432,7 +433,7 @@ void KickModule<Scalar>::logFootContours()
   for (int i = 0; i < spline.rows(); ++i) {
       logL << spline(i, 0) << " " << spline(i, 1) + 0.05 << " " << spline(i, 2) + footHeight << endl;
   }
-  
+
   spline = rFootContour->getSpline(0);
   logR.open(logRPath, std::fstream::out | std::fstream::trunc);
   for (int i = 0; i < spline.rows(); ++i) {

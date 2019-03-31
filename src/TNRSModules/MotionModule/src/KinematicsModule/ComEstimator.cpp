@@ -32,7 +32,9 @@ void ComEstimator<Scalar, MeasSize>::init(
   //! [ dT ]
   B << dT * dT * dT/ 6, dT * dT / 2, dT;
   C << 1, 0, -comHeight / Constants::gravity;
-  model = boost::make_shared<ProcessModel<Scalar, 3, 1, 1> >(A, B, C);
+  model =
+    boost::shared_ptr<ProcessModel<Scalar, 3, 1, 1> >(
+      new ProcessModel<Scalar, 3, 1, 1> (A, B, C));
   //! Process Noise Covariance Matrix Q
   //! [ eX   0     0   ]
   //! [ 0    eVX   0   ]
@@ -57,7 +59,9 @@ void ComEstimator<Scalar, MeasSize>::init(
   //! [ xddot] [ 0 0    1 ] [ xdot ]
   //! [ zmp  ] [ 1 0 -z/g ] [ xddot]
   H << 1, 0, 0, 0, 0, 1, 1, 0, -comHeight / Constants::gravity;
-  filter = boost::make_shared<KalmanFilter<Scalar, 3, 3, 1, 1> >(model, H);
+  filter =
+    boost::shared_ptr<KalmanFilter<Scalar, 3, 3, 1, 1> >(
+      new KalmanFilter<Scalar, 3, 3, 1, 1>(model, H));
   filter->setMeasMatrix(H);
   Scalar measVar1, measVar2, measVar3;
   GET_CONFIG(
@@ -66,9 +70,11 @@ void ComEstimator<Scalar, MeasSize>::init(
     (Scalar, ComEstimator.measAccVar, measVar2),
     (Scalar, ComEstimator.measZmpVar, measVar3),
   );
+  //LOG_INFO("Q:\n: " << Q);
   this->R(0, 0) = measVar1;
   this->R(1, 1) = measVar2;
   this->R(2, 2) = measVar3;
+  //LOG_INFO("this->R:\n: " << this->R);
   filter->setMeasNoiseCov(R);
   initiated = true;
 }
@@ -86,6 +92,7 @@ void ComEstimator<Scalar, MeasSize>::update(const Matrix<Scalar, MeasSize, 1>& m
       filter->setMeasNoiseCov(R(i, i), i, i);
     }
   }
+  //cout << "Updating com estimator..." << endl;
   filter->predict();
   filter->correct(measFixed);
   lastMeas = meas;

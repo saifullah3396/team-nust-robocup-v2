@@ -2,7 +2,7 @@
  * @file MotionModule/include/KinematicsModule/Joint.h
  *
  * This file defines the structs JointState and Joint
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date Jul 22 2018
  */
@@ -49,33 +49,33 @@ struct DHParams
 {
 /**
    * Constructor
-   * 
+   *
    * @param a: Link length
    * @param alpha: Link twist
    * @param d: Joint offset
    * @param theta: Joint angle offset
-   */ 
+   */
   DHParams(
-    const Scalar& a, 
+    const Scalar& a,
     const Scalar& alpha,
     const Scalar& d,
     const Scalar& theta);
-  
+
   //! Link length
   Scalar a;
-  
+
   //! Link twist
   Scalar alpha;
-  
+
   //! Joint offset
   Scalar d;
-  
+
   //! Joint angle offset
   Scalar theta;
-  
+
   //! Cosine of alpha
   Scalar calpha;
-  
+
   //! Sine of alpha
   Scalar salpha;
 };
@@ -104,16 +104,16 @@ struct JointState
   //! Transformation matrix for this joint
   Eigen::Matrix<Scalar, 4, 4> trans = {Eigen::Matrix<Scalar, 4, 4>::Identity()};
 
-  //! Transformation matrix of the current joint in base frame of 
+  //! Transformation matrix of the current joint in base frame of
   //! the chain
   Eigen::Matrix<Scalar, 4, 4> transInBase = {Eigen::Matrix<Scalar, 4, 4>::Identity()};
-  
+
   //! Joint position in base;
   Eigen::Matrix<Scalar, 3, 1> posInBase = {Eigen::Matrix<Scalar, 3, 1>::Zero()};
-  
+
   //! A vector representing the joint rotation axis in base frame;
   Eigen::Matrix<Scalar, 3, 1> zInBase = {Eigen::Matrix<Scalar, 3, 1>::Zero()};
-  
+
   //! A vector representing the center of mass of this link in base frame;
   Eigen::Matrix<Scalar, 3, 1> comInBase = {Eigen::Matrix<Scalar, 3, 1>::Zero()};
 
@@ -123,6 +123,9 @@ struct JointState
   virtual const Scalar& position() = 0;
   virtual const Scalar& velocity() = 0;
   virtual const Scalar& accel() = 0;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 /**
@@ -168,6 +171,9 @@ private:
 
   //! Joint state estimator
   boost::shared_ptr<JointEstimator<Scalar> > _estimator;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 /**
@@ -193,10 +199,13 @@ struct SimJointState : public JointState<Scalar>
   const Scalar& velocity() final;
   const Scalar& accel() final;
 
-private:  
+private:
   Scalar _position = {0.0}; //! Joint position
   Scalar _velocity = {0.0}; //! Joint velocity
   Scalar _accel = {0.0}; //! Joint acceleration
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 /**
@@ -208,7 +217,7 @@ struct Joint
 {
   /**
    * Constructor
-   */ 
+   */
   Joint(
     const Joints& jointIndex,
     const Scalar& maxPosition,
@@ -217,25 +226,25 @@ struct Joint
     DHParams<Scalar>* dhParams,
     const Scalar& initPosition,
     const Scalar& cycleTime);
-  
+
   /**
    * Destructor
-   */ 
+   */
   ~Joint();
-  
+
   /**
-   * Sets up the link transformation matrix as a dh matrix with 
+   * Sets up the link transformation matrix as a dh matrix with
    * unchanging variables set up on start
-   * 
+   *
    * @param mat: The matrix to be updated
    */
   void makeDHMatrix(Eigen::Matrix<Scalar, 4, 4>& mat);
 
   void makeDHMatrixSym();
-  
+
   /**
    * Updates the link transformation matrix for the given angle
-   * 
+   *
    * @param mat: The matrix to be updated
    * @param theta: The given angle
    */
@@ -244,7 +253,7 @@ struct Joint
     const Scalar& theta);
 
   const Eigen::Matrix<Scalar, 4, 4>& computeLinkTrans(const JointStateType& type);
-  
+
   void setTransInBase(
     const Eigen::Matrix<Scalar, 4, 4> T,
     const JointStateType& type);
@@ -256,13 +265,13 @@ struct Joint
 
   //! Upper limit of joint position
   Scalar maxPosition;
-  
+
   //! Upper limit of joint position
   Scalar minPosition;
-  
+
   //! Joint velocity limit
   Scalar maxVelocity;
-  
+
   #ifdef ALLOW_SYMBOLIC_COMPUTATIONS
   //! Symbolic transformation matrix for this joint
   SymEngine::DenseMatrix symTrans;
@@ -273,10 +282,13 @@ struct Joint
 
   //! Dh parameters
   DHParams<Scalar>* dhParams;
-  
+
   //! Joint state vectors
   std::vector<boost::shared_ptr<JointState<Scalar> > > states;
-  
+
   //! Associated link
   boost::shared_ptr<LinkInfo<Scalar> > link;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

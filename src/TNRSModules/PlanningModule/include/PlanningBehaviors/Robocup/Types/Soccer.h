@@ -28,31 +28,12 @@ public:
    */
   Soccer(
     PlanningModule* planningModule,
-    const BehaviorConfigPtr& config,
-    const string& name = "Soccer") :
-    Robocup(planningModule, config, name),
-    lastKickTarget(Point2f(0.f, 0.f)),
-    goingToTarget(GoingToTarget::NONE),
-    goalPosTol(0.25f), //! 0.25 meters
-    goalAngleTol(0.261666667), //! 15 degrees in radians
-    ballKickDist(0.25f), //! 0.25 meters
-    ballMovedVelMin(0.5f)//! 0.5 meters
-  {
-    DEFINE_FSM_STATE(Soccer, SetPosture, setPosture)
-    DEFINE_FSM_STATE(Soccer, Localize, localize)
-    DEFINE_FSM_STATE(Soccer, GoToPosition, goToPosition)
-    DEFINE_FSM_STATE(Soccer, PlayBall, playBall)
-    DEFINE_FSM_STATE(Soccer, AlignToKick, alignToKick)
-    DEFINE_FSM_STATE(Soccer, KickBall, kickBall)
-    DEFINE_FSM_STATE(Soccer, FallRecovery, fallRecovery)
-    DEFINE_FSM_STATE(Soccer, Getup, getup)
-    DEFINE_FSM_STATE(Soccer, WaitForPenalty, waitForPenalty)
-    DEFINE_FSM(fsm, Soccer, setPosture)
-  }
+    const boost::shared_ptr<PBRobocupConfig>& config,
+    const string& name = "Soccer");
 
   virtual ~Soccer() {}
 
-  bool initiate();
+  bool initiate() override;
   void update() final;
   void finish() final;
   void loadExternalConfig() final;
@@ -60,9 +41,10 @@ protected:
   DECLARE_FSM(fsm, Soccer)
   DECLARE_FSM_STATE(Soccer, Localize, localize, onStart, onRun, onStop,)
   DECLARE_FSM_STATE(Soccer, SetPosture, setPosture, onRun)
+  //DECLARE_FSM_STATE(Soccer, React, react, onRun)
   struct React : public FSMState<Soccer>
   {
-    React(Soccer* bPtr) : FSMState<Soccer>(bPtr) {}
+    React(Soccer* bPtr) : FSMState<Soccer>(bPtr, string("React")) {}
     virtual void onRun() = 0;
   };
   unique_ptr<React> react;

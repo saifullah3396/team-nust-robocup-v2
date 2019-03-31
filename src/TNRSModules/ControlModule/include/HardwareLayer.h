@@ -188,6 +188,7 @@ public:
   }
 };
 
+DEFINE_SENSOR_LAYER(HandSensorsLayer, "HandSensors")
 DEFINE_SENSOR_LAYER(TouchSensorsLayer, "TouchSensors")
 DEFINE_SENSOR_LAYER(SwitchSensorsLayer, "SwitchSensors")
 DEFINE_SENSOR_LAYER(BatterySensorsLayer, "BatterySensors")
@@ -346,4 +347,5 @@ public:
   }
 };
 
+DEFINE_ACTUATOR_LAYER(HandActuatorsLayer, "HandActuators")
 DEFINE_ACTUATOR_LAYER(LedActuatorsLayer, "LedActuators")

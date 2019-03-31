@@ -48,8 +48,8 @@ class GBModule : public BaseModule
     ledSensors,
     stiffnessState,
     whistleDetected,
-    sBehaviorInfo
-	)
+    gBehaviorInfo
+  )
 
 public:
   #ifndef V6_CROSS_BUILD
@@ -110,8 +110,8 @@ public:
    * @brief ~GBModule Destructor
    */
   ~GBModule()
-  {    
-		delete inputConnector;
+  {
+    delete inputConnector;
     delete outputConnector;
   }
 
@@ -181,20 +181,20 @@ private:
   #endif
 
   /**
-   * @enum SBSensors
+   * @enum GBSensors
    * @brief Enumeration for the sensors handled by this class
    */
-  enum class SBSensors : unsigned {
+  enum class GBSensors : unsigned {
     jointStiffnesses,
     led,
     count
   };
 
   /**
-   * @enum SBSensors
+   * @enum GBSensors
    * @brief Enumeration for the actuators handled by this class
    */
-  enum class SBActuators : unsigned {
+  enum class GBActuators : unsigned {
     jointStiffnesses,
     led,
     count

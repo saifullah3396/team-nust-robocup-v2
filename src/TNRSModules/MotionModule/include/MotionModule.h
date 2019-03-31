@@ -44,7 +44,7 @@ typedef map<unsigned, BehaviorInfo> BehaviorInfoMap;
 
 /**
  * @class MotionModule
- * @brief A class for handling all activities related to the robot 
+ * @brief A class for handling all activities related to the robot
  *   kinematics, dynamics, motion.
  */
 class MotionModule : public BaseModule
@@ -60,6 +60,7 @@ class MotionModule : public BaseModule
   )
   DECLARE_OUTPUT_CONNECTOR(
     jointPositionSensors,
+    handSensors,
     inertialSensors,
     fsrSensors,
     nFootsteps,
@@ -180,7 +181,7 @@ public:
    * @return TrajectoryPlannerPtr
    */
   TrajectoryPlannerPtr getTrajectoryPlanner();
-  
+
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
    * Gets the motion proxy module
@@ -216,7 +217,7 @@ private:
    */
   void actuatorsUpdate();
 
-	//! Motion behaviors manager shared object
+  //! Motion behaviors manager shared object
   map<unsigned, MBManagerPtr> mbManagers;
 
   //! Fall detector module object
@@ -257,6 +258,7 @@ private:
 
   enum class MotionSensors : unsigned {
     jointPosition,
+    handSensors,
     inertial,
     fsr,
     count
@@ -264,6 +266,7 @@ private:
 
   enum class MotionActuators : unsigned {
     jointActuators,
+    handActuators,
     count
   };
 };

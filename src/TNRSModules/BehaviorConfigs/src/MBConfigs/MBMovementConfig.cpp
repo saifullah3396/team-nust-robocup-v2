@@ -2,7 +2,7 @@
  * @file MotionModule/src/MotionConfigs/MBMovementConfig.cpp
  *
  * This file implements the structs MBMovementConfig
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 3 April 2018
  */

@@ -7,15 +7,18 @@
  * @date 16 Nov 2017
  */
 
-#include "LocalizationModule/include/LocalizationRequest.h"
-#include "LocalizationModule/include/LandmarkDefinitions.h"
-#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/GoalKeeper.h"
-#include "TNRSBase/include/DebugBase.h"
+
+#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
 #include "BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h"
+#include "LocalizationModule/include/LocalizationRequest.h"
+#include "LocalizationModule/include/LandmarkDefinitions.h"
+#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/GoalKeeper.h"
+#include "TNRSBase/include/DebugBase.h"
+#include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/TeamPositions.h"
 #include "Utils/include/VisionUtils.h"
 #include "Utils/include/DataHolders/BallInfo.h"
@@ -28,17 +31,29 @@
 
 #define GOAL_KEEPER_PTR static_cast<GoalKeeper*>(bPtr)
 
+GoalKeeper::GoalKeeper(
+  PlanningModule* planningModule,
+  const boost::shared_ptr<GoalKeeperConfig>& config) :
+  Soccer(planningModule, config, "GoalKeeper"),
+  interceptTarget(RobotPose2D<float>(NAN, NAN, NAN)),
+  lastDiveTargetType(-1)
+{
+  DEFINE_FSM_STATE(Soccer, ReactGoalKeeper, react)
+  DEFINE_FSM_STATE(Soccer, Dive, dive)
+  DEFINE_FSM_STATE(Soccer, PostDive, postDive)
+  DEFINE_FSM_STATE(Soccer, InterceptBall, interceptBall)
+}
+
 boost::shared_ptr<GoalKeeperConfig> GoalKeeper::getBehaviorCast()
 {
   return boost::static_pointer_cast<GoalKeeperConfig>(config);
 }
 
-void GoalKeeper::initiate()
+bool GoalKeeper::initiate()
 {
   LOG_INFO("GoalKeeper.initiated() called...")
-  Soccer::initiate();
-  ROBOCUP_ROLE_OUT(PlanningModule) = (int)RobocupRole::GOALKEEPER;
-  inBehavior = true;
+  ROBOCUP_ROLE_OUT(PlanningModule) = (int)RobocupRole::goalKeeper;
+  return Soccer::initiate();
 }
 
 bool GoalKeeper::ballInRange()
@@ -134,7 +149,7 @@ bool GoalKeeper::ballIncoming(Vector2f& endPosition, float& timeToReach)
   auto& ballWorld = WORLD_BALL_INFO_OUT(PlanningModule).posWorld;
   auto& ballWorldVel = WORLD_BALL_INFO_OUT(PlanningModule).velWorld;
   MotionEquationSolver* meSolver;
-  if (ballMotionModel == BallMotionModel::DAMPED) {
+  if (ballMotionModel == BallMotionModel::damped) {
     meSolver = new DampedMESolver(
       Vector2f (-penaltyBoxMaxX, 0.0),
       Vector2f (ballWorld.x, ballWorld.y),
@@ -168,8 +183,8 @@ bool GoalKeeper::ballIncoming(Vector2f& endPosition, float& timeToReach)
 void GoalKeeper::InterceptBall::onStart()
 {
   cout << "Soccer::InterceptBall::onStart()" << endl;
-  if (GOAL_KEEPER_PTR->goingToTarget != GoingToTarget::NONE &&
-      GOAL_KEEPER_PTR->goingToTarget != GoingToTarget::INTERCEPT_BALL)
+  if (GOAL_KEEPER_PTR->goingToTarget != GoingToTarget::none &&
+      GOAL_KEEPER_PTR->goingToTarget != GoingToTarget::interceptBall)
     GOAL_KEEPER_PTR->killChild();
 }
 
@@ -181,14 +196,14 @@ void GoalKeeper::InterceptBall::onRun()
   } else if (GOAL_KEEPER_PTR->robotIsPenalised()) {
     nextState = GOAL_KEEPER_PTR->waitForPenalty.get();
   } else {
-    if (GOAL_KEEPER_PTR->goingToTarget != GoingToTarget::INTERCEPT_BALL) {
+    if (GOAL_KEEPER_PTR->goingToTarget != GoingToTarget::interceptBall) {
       if (
           (ROBOT_POSE_2D_IN_REL(PlanningModule, GOAL_KEEPER_PTR) - GOAL_KEEPER_PTR->interceptTarget).get().norm() >
           GOAL_KEEPER_PTR->interceptBallPosTol)
       {
         cout << "Setting navigation config..." << endl;
         GOAL_KEEPER_PTR->setNavigationConfig(GOAL_KEEPER_PTR->interceptTarget);
-        GOAL_KEEPER_PTR->goingToTarget = GoingToTarget::INTERCEPT_BALL;
+        GOAL_KEEPER_PTR->goingToTarget = GoingToTarget::interceptBall;
         ROBOT_INTENTION_OUT_REL(PlanningModule, GOAL_KEEPER_PTR) = 1;
       }
     } else {
@@ -196,7 +211,7 @@ void GoalKeeper::InterceptBall::onRun()
           (GOAL_KEEPER_PTR->moveTarget.get() - GOAL_KEEPER_PTR->interceptTarget.get()).norm() >
           GOAL_KEEPER_PTR->interceptBallPosTol || !GOAL_KEEPER_PTR->getChild())
       {
-        GOAL_KEEPER_PTR->goingToTarget = GoingToTarget::NONE;
+        GOAL_KEEPER_PTR->goingToTarget = GoingToTarget::none;
       }
     }
     nextState = GOAL_KEEPER_PTR->react.get();
@@ -223,7 +238,7 @@ bool GoalKeeper::divePossible()
     //  lastDiveTargetType = toUType(KeyFrameDiveTypes::IN_PLACE);
     //  return true;
     //} else if (ssInRobot.y > 0.1 && ssInRobot.y <= 0.2) {
-    lastDiveTargetType = toUType(KeyFrameDiveTypes::LEFT);
+    lastDiveTargetType = toUType(KeyFrameDiveTypes::left);
     return true;
     //}
   } else {
@@ -231,7 +246,7 @@ bool GoalKeeper::divePossible()
      // lastDiveTargetType = toUType(KeyFrameDiveTypes::IN_PLACE);
     //  return true;
     //} else if (ssInRobot.y < -0.1 && ssInRobot.y <= -0.2) {
-    lastDiveTargetType = toUType(KeyFrameDiveTypes::RIGHT);
+    lastDiveTargetType = toUType(KeyFrameDiveTypes::right);
     return true;
     //}
   }
@@ -276,8 +291,9 @@ void GoalKeeper::PostDive::onRun()
   } else {
     if (!GOAL_KEEPER_PTR->mbInProgress()) {
       auto pConfig =
-        boost::make_shared<InterpToPostureConfig>(
-          PostureState::STAND_HANDS_BEHIND, 2.f);
+        boost::make_shared<InterpToPostureConfig>();
+      pConfig->targetPosture = PostureState::standHandsBehind;
+      pConfig->timeToReachP = 2.f;
       GOAL_KEEPER_PTR->setupMBRequest(MOTION_1, pConfig);
       nextState = GOAL_KEEPER_PTR->react.get();
     }

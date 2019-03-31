@@ -113,8 +113,7 @@ bool BehaviorManager::setupBehavior(
   return true;
 }
 
-void
-BehaviorManager::update()
+void BehaviorManager::update()
 {
   //! Kill the behavior if requested
   if (killRequested) {

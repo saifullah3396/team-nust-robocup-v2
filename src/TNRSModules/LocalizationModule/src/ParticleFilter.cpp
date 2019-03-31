@@ -426,22 +426,16 @@ Point2f ParticleFilter::worldToVoronoiMap(const Point2f& p) {
 
 void ParticleFilter::setupViewVectors()
 {
-  vector<float> fovX(toUType(CameraId::count));
-  vector<float> fovY(toUType(CameraId::count));
-  GET_CONFIG(
-    "UpperCamera",
-    (float, Intrinsic.fovX, fovX[static_cast<int>(CameraId::headTop)]),
-    (float, Intrinsic.fovY, fovY[static_cast<int>(CameraId::headTop)]),
-  );
-  GET_CONFIG(
-    "LowerCamera",
-    (float, Intrinsic.fovX, fovX[static_cast<int>(CameraId::headBottom)]),
-    (float, Intrinsic.fovY, fovY[static_cast<int>(CameraId::headBottom)]),
-  );
-  fovX[0] *= M_PI / 180;
-  fovY[0] *= M_PI / 180;
-  fovX[1] *= M_PI / 180;
-  fovY[1] *= M_PI / 180;
+  Vector2f fovX(toUType(CameraId::count));
+  Vector2f fovY(toUType(CameraId::count));
+  auto settings =
+    JsonUtils::readJson(ConfigManager::getConfigDirPath() + "CameraSettings.json");
+  JsonUtils::jsonToType(fovX[toUType(CameraId::headTop)], settings["visionTop"]["intrinsic"]["fovX"], 0.0);
+  JsonUtils::jsonToType(fovY[toUType(CameraId::headTop)], settings["visionTop"]["intrinsic"]["fovY"], 0.0);
+  JsonUtils::jsonToType(fovX[toUType(CameraId::headBottom)], settings["visionTop"]["intrinsic"]["fovX"], 0.0);
+  JsonUtils::jsonToType(fovY[toUType(CameraId::headBottom)], settings["visionTop"]["intrinsic"]["fovY"], 0.0);
+  fovX *= MathsUtils::DEG_TO_RAD;
+  fovY *= MathsUtils::DEG_TO_RAD;
   for (size_t i = 0; i < toUType(CameraId::count); ++i) {
     unitVecY[i][0] = 0;
     if (i == static_cast<int>(CameraId::headTop))
@@ -573,7 +567,7 @@ void ParticleFilter::estimateForSideLines()
         wPose.y() = lPose.getY() + rPose.getX() * sin(lPose.getTheta()) + rPose.getY() * cos(lPose.getTheta());
         wPose.theta() = MathsUtils::rangeToPi(rPose.getTheta() + lPose.getTheta());
         // Should be in our own half which is in -ve x and not too close to the goal line.
-        // Should be either closer to upper line or lower line which is 3 
+        // Should be either closer to upper line or lower line which is 3
         // meters from center
         //float rangeT = MathsUtils::rangeToPi(wPose.theta);
         bool positive = false;

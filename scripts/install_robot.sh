@@ -1,4 +1,10 @@
-#!/bin/sh
+#!/bin/bash
+
+baseDir="$(cd "$(dirname "$(which "$0")")" && pwd)"
+bhDir="$(dirname "${baseDir}")"
+includeDir="${baseDir}/Include/"
+
+source "${includeDir}/bhumanBase"
 
 FILES=""
 BUILD=""
@@ -96,77 +102,84 @@ elif [ "$ROBOT" = "Nu-16" ]; then
   ROBOT_NUM=6
 fi
 
+rsyncOptions="${rsyncOptions} --links -v -r"
+echo ${rsyncOptions} 
+echo ${sshCommand}
+
+DEPENDS_TARGET=/home/nao/depends
+BIN_TARGET=/home/nao/depends/bin
+LIB_TARGET=/home/nao/depends/lib
+TARGET_CONFIG_FOLDER=/home/nao/config
 ROBOT_DIR=$PATH_TO_TEAM_NUST_DIR/config/Robots/Nu-1$ROBOT_NUM
 CROSS_DEPENDS_DIR=$PATH_TO_TEAM_NUST_DIR/cross-depends
 BUILD_DIR=$PATH_TO_TEAM_NUST_DIR/build-$ROBOT_VERSION/$BUILD/$TOOLCHAIN/lib
 echo $BUILD_DIR
 if [ "$FILES" = "ALL" ]; then
   # Copy naoqi config over to the robot
-  rsync -r ./Files/autoload.tnust nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/bin -v
+  rsync ${rsyncOptions} -e "${sshCommand}" ./Files/autoload.tnust nao@$IP_PREFIX.$ROBOT_NUM:${BIN_TARGET} || fatal "Can't copy to '${BIN_TARGET}' on NAO"
   # Copy configuration files to the robot 
-  rsync -r $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
-  rsync -r $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
-  rsync -r $ROBOT_DIR/../../Common nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
-  # Copy cross compiled dependencies to the robot
-  rsync -r $CROSS_DEPENDS_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:${TARGET_CONFIG_FOLDER} || fatal "Can't copy to '${TARGET_CONFIG_FOLDER}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:${TARGET_CONFIG_FOLDER} || fatal "Can't copy to '${TARGET_CONFIG_FOLDER}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../Common/* nao@$IP_PREFIX.$ROBOT_NUM:${TARGET_CONFIG_FOLDER} || fatal "Can't copy to '${TARGET_CONFIG_FOLDER}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../Keys nao@$IP_PREFIX.$ROBOT_NUM:${TARGET_CONFIG_FOLDER} || fatal "Can't copy to '${TARGET_CONFIG_FOLDER}' on NAO"
   if [ "$ROBOT_VERSION" = "V5" ]; then
   # Copy camera driver if it is V5 robot
-  rsync -r $PATH_TO_TEAM_NUST_DIR/bkernel-modules/mt9m114.ko
+  rsync ${rsyncOptions} -e "${sshCommand}" $PATH_TO_TEAM_NUST_DIR/bkernel-modules/mt9m114.ko
   fi
   # Copy cross-compiled libraries to the robot
-  rsync -r $BUILD_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "DEPENDS" ]; then
   # Copy cross-compiled dependencies to the robot
-  rsync -r $CROSS_DEPENDS_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $CROSS_DEPENDS_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:${DEPENDS_TARGET} || fatal "Can't copy to '${DEPENDS_TARGET}' on NAO"
   if [ "$ROBOT_VERSION" = "V5" ]; then
     # Copy camera driver if it is V5 robot
-    rsync -r $PATH_TO_TEAM_NUST_DIR/bkernel-modules/mt9m114.ko
+    rsync ${rsyncOptions} -e "${sshCommand}" $PATH_TO_TEAM_NUST_DIR/bkernel-modules/mt9m114.ko
   fi
 elif [ "$FILES" = "CONFIG" ]; then
   # Copy configuration files to the robot 
-  rsync -r $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
-  rsync -r $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
-  rsync -r $ROBOT_DIR/../../Common nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/config -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:${TARGET_CONFIG_FOLDER} || fatal "Can't copy to '${TARGET_CONFIG_FOLDER}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:${TARGET_CONFIG_FOLDER} || fatal "Can't copy to '${TARGET_CONFIG_FOLDER}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../Common/* nao@$IP_PREFIX.$ROBOT_NUM:${TARGET_CONFIG_FOLDER} || fatal "Can't copy to '${TARGET_CONFIG_FOLDER}' on NAO"
 elif [ "$FILES" = "BIN" ]; then
   if [ "$ROBOT_VERSION" = "V6" ]; then
     # Copy camera driver if it is V5 robot
-    rsync -r $BUILD_DIR/../bin/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/bin -v
+    rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/../bin/* nao@$IP_PREFIX.$ROBOT_NUM:${BIN_TARGET} || fatal "Can't copy to '${BIN_TARGET}' on NAO"
   fi
 elif [ "$FILES" = "LIBS" ]; then
   # Copy cross-compiled libraries to the robot
-  rsync -r $BUILD_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v --links
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
   if [ "$ROBOT_VERSION" = "V6" ]; then
     # Copy camera driver if it is V5 robot
-    rsync -r $BUILD_DIR/../bin/* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/bin -v
+    rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/../bin/* nao@$IP_PREFIX.$ROBOT_NUM:${BIN_TARGET} || fatal "Can't copy to '${BIN_TARGET}' on NAO"
   fi
 elif [ "$FILES" = "LIB_RESOURCES" ]; then
-  rsync -r $BUILD_DIR/libfftw* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
-  rsync -r $BUILD_DIR/libnlopt* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
-  rsync -r $BUILD_DIR/libjsoncpp* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
-  rsync -r $BUILD_DIR/libqpOASES* nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libfftw* nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libnlopt* nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libjsoncpp* nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libqpOASES* nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_UTILS" ]; then
-  rsync -r $BUILD_DIR/libtnrs-utils.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-utils.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_BASE" ]; then
-  rsync -r $BUILD_DIR/libtnrs-base.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-base.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_BM" ]; then
-  rsync -r $BUILD_DIR/libtnrs-behavior-manager.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-behavior-manager.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_GAME_COMM" ]; then
-  rsync -r $BUILD_DIR/libtnrs-game-comm-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-game-comm-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_USER_COMM" ]; then
-  rsync -r $BUILD_DIR/libtnrs-user-comm-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-user-comm-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_CONTROL" ]; then
-  rsync -r $BUILD_DIR/libtnrs-control-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-control-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_GENERAL" ]; then
-  rsync -r $BUILD_DIR/libtnrs-gb-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-gb-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_MOTION" ]; then
-  rsync -r $BUILD_DIR/libtnrs-motion-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-motion-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_PLANNING" ]; then
-  rsync -r $BUILD_DIR/libtnrs-planning-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-planning-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_VISION" ]; then
-  rsync -r $BUILD_DIR/libtnrs-vision-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-vision-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_LOCALIZATION" ]; then
-  rsync -r $BUILD_DIR/libtnrs-localization-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-localization-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 elif [ "$FILES" = "LIB_TNRS" ]; then
-  rsync -r $BUILD_DIR/libtnrs-module.so nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/depends/lib -v 
+  rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/libtnrs-module.so nao@$IP_PREFIX.$ROBOT_NUM:${LIB_TARGET} || fatal "Can't copy to '${LIB_TARGET}' on NAO"
 fi
   

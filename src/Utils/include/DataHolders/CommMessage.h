@@ -11,18 +11,20 @@
 
 #include <string>
 #include "Utils/include/DataHolders/CommMsgTypes.h"
+#include "Utils/include/DataHolders/DataHolder.h"
+#ifndef VISUALIZER_BUILD
 #include "Utils/include/JsonUtils.h"
-
-using namespace std;
+#endif
 
 /**
  * @class CommMessage
  * @brief Defines a message that can be sent through a CommRequest
  */
-class CommMessage
+struct CommMessage : public DataHolder
 {
-public:
   CommMessage() = default;
+  CommMessage(const CommMessage&) = default;
+  virtual ~CommMessage() {}
 
   /**
    * Constructor
@@ -52,19 +54,34 @@ public:
   {
   }
 
+  #ifndef VISUALIZER_BUILD
+  /**
+   * Self-explanatory
+   */
+  void print() const final
+  {
+    PRINT_DATA(
+      CommMessage,
+      (CommMsgTypes, toUType(type)),
+      (Json::Value, json),
+    );
+  }
+
+  Json::Value getJson() const final
+  {
+    Json::Value val;
+    JSON_ASSIGN_(val, type, toUType(type));
+    JSON_ASSIGN_(val, json, json);
+    return val;
+  }
+
   static CommMessage jsonToType(const Json::Value& json) {
     CommMessage msg;
     msg.type = static_cast<CommMsgTypes>(json["type"].asUInt());
     msg.json = json["json"];
     return msg;
   }
-
-  static CommMessage getJson(const Json::Value& json) {
-    CommMessage msg;
-    msg.type = static_cast<CommMsgTypes>(json["type"].asUInt());
-    msg.json = json["json"];
-    return msg;
-  }
+  #endif
 
   //! Message in json format
   Json::Value json;

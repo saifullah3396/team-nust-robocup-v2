@@ -166,4 +166,7 @@ private:
 
   //! Whether to use generate control input for this joint
   bool useInput = {false};
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

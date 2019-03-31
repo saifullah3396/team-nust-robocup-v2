@@ -33,6 +33,7 @@ public:
 
   Scalar norm() { return p.norm(); }
   Eigen::Matrix<Scalar, U, 1> get() const { return this->p; }
+  void set(const Eigen::Matrix<Scalar, U, 1>& p) { this->p = p; }
 protected:
   Eigen::Matrix<Scalar, U, 1> p = {Eigen::Matrix<Scalar, U, 1>::Zero()};
 };

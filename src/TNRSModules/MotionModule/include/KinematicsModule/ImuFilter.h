@@ -53,4 +53,7 @@ private:
   Scalar gyrMeasError = {Angle::DEG_1};
   Scalar cycleTime;
   size_t maxIterations = {10};
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

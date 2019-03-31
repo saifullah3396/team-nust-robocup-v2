@@ -33,93 +33,52 @@
 namespace PathPlannerSpace
 {
 
-  GridMap2D::GridMap2D()
+  GridMap2D::GridMap2D(OccupancyMap<float>* occMap, bool unknownAsObstacle) :
+    occMap(occMap)
   {
+    distMap = Mat(occMap->data.size(), CV_32FC1);
+    distMapR = Mat(occMap->data.size() * (1 / 8), CV_32FC1);
   }
 
-  GridMap2D::GridMap2D(const OccupancyMap<float>& occMap, bool unknownAsObstacle)
-  {
-    setMap(occMap, unknownAsObstacle);
-  }
+  GridMap2D::~GridMap2D() {}
 
-  GridMap2D::GridMap2D(const GridMap2D& other) :
-    binaryMap(other.getBinaryMap().clone()),
-      distMap(other.getDistanceMap().clone()),
-      resolution(other.getResolution()), mapOriginPose(other.getMapOriginPose())
+  void GridMap2D::updateDistanceMap()
   {
-    width = other.getWidth();
-    height = other.getHeight();
-  }
-
-  GridMap2D::~GridMap2D()
-  {
-  }
-
-  void
-  GridMap2D::updateDistanceMap()
-  {
-    //high_resolution_clock::time_point tStart = high_resolution_clock::now();
-    //cout << "performing distnace transform" << endl;
-    //VisionUtils::displayImage(binaryMap, "binaryMap");
     Mat binaryMapR;
-    Size fSize(width / 8, height / 8);
-    resize(binaryMap, binaryMapR, fSize);
-    Mat distMapR = Mat(binaryMapR.size(), CV_32FC1);
+    resize(
+      occMap->data,
+      binaryMapR,
+      Size(
+        occMap->data.size().width / 4,
+        occMap->data.size().height / 4
+      ));
     distanceTransform(binaryMapR, distMapR, CV_DIST_L2, 3);
+
     //! distance map now contains distance in meters:
-    resize(distMapR, distMap, Size(width, height));
-    distMap = distMap * resolution * 8;
-    //high_resolution_clock::time_point t1 = 
-    high_resolution_clock::now();
+    resize(distMapR, distMap, occMap->data.size());
+    distMap = distMap * occMap->resolution * 4;
+    //high_resolution_clock::time_point t1 =
+    //high_resolution_clock::now();
     //duration<double> time_span = t1 - tStart;
     //cout << "distTransform: " << time_span.count() << "secs." << endl;
   }
 
-  void
-  GridMap2D::setMap(const OccupancyMap<float>& occMap, bool unknownAsObstacle)
+  void GridMap2D::inflateMap(double inflationRadius)
   {
-    //! allocate map structs so that x/y in the world correspond to x/y in the image
-    //! (=> Mat is rotated by 90 deg, because it's row-major!)
-    resolution = occMap.resolution;
-    mapOriginPose = occMap.originPose;
-    binaryMap = occMap.data;
-    width = occMap.data.cols;
-    height = occMap.data.rows;
-    distMap = Mat(binaryMap.size(), CV_32FC1);
-    //updateDistanceMap();
-    /*cout << "GridMap2D created with "
-     << width
-     << "x"
-     << height
-     << " cells at "
-     << resolution
-     << " resolution."
-     << endl;*/
-  }
-
-  void
-  GridMap2D::inflateMap(double inflationRadius)
-  {
-    binaryMap = (distMap > inflationRadius);
+    occMap->data = (distMap > inflationRadius);
     //! recompute distance map with new binary map:
-    distanceTransform(binaryMap, distMap, CV_DIST_L2, CV_DIST_MASK_PRECISE);
-    distMap = distMap * resolution;
+    distanceTransform(occMap->data, distMap, CV_DIST_L2, CV_DIST_MASK_PRECISE);
+    distMap = distMap * occMap->resolution;
   }
 
-//! See Costmap2D for mapToWorld / worldToMap implementations:
-  void
-  GridMap2D::mapToWorld(unsigned int mx, unsigned int my, double& wx,
+  //! See Costmap2D for mapToWorld / worldToMap implementations:
+  void GridMap2D::mapToWorld(unsigned int mx, unsigned int my, double& wx,
     double& wy) const
   {
     //wx = (mx + mapOriginPose.x + 0.5) * resolution;
     //wy = (mapOriginPose.y - my - 0.5) * resolution;
-    wx = (mx + 0.5) * resolution;
-    wy = (-my - 0.5) * resolution;
-    cout << "maptoWorld:" << endl;
-    cout << "mx " << mx << endl;
-    cout << "my " << my << endl;
-    cout << "wx " << wx << endl;
-    cout << "wy " << wy << endl;
+    wx = (mx + 0.5) * occMap->resolution;
+    wy = (-my - 0.5) * occMap->resolution;
 
   }
 
@@ -127,8 +86,8 @@ namespace PathPlannerSpace
   GridMap2D::worldToMapNoBounds(double wx, double wy, unsigned int& mx,
     unsigned int& my) const
   {
-    mx = (int) (wx / resolution + mapOriginPose.x);
-    my = (int) (mapOriginPose.y - wy / resolution);
+    mx = (int) (wx / occMap->resolution + occMap->originPose.x);
+    my = (int) (occMap->originPose.y - wy / occMap->resolution);
   }
 
   bool
@@ -137,57 +96,51 @@ namespace PathPlannerSpace
   {
     //if(wx  mapOriginPose.x || wy < mapOriginPose.y)
     //  return false;
-    mx = (int) (wx / resolution + mapOriginPose.x);
-    my = (int) (mapOriginPose.y - wy / resolution);
-    if (mx < width && my < height) return true;
+    mx = (int) (wx / occMap->resolution + occMap->originPose.x);
+    my = (int) (occMap->originPose.y - wy / occMap->resolution);
+    if (mx < occMap->data.size().width && my < occMap->data.size().height) return true;
     return false;
   }
 
-  bool
-  GridMap2D::inMapBounds(double wx, double wy) const
+  bool GridMap2D::inMapBounds(double wx, double wy) const
   {
     unsigned mx, my;
     return worldToMap(wx, wy, mx, my);
   }
 
-  float
-  GridMap2D::distanceMapAt(double wx, double wy) const
+  float GridMap2D::distanceMapAt(double wx, double wy) const
   {
     unsigned mx, my;
     if (worldToMap(wx, wy, mx, my)) return distMap.at<float>(my, mx);
     else return -1.0f;
   }
 
-  uchar
-  GridMap2D::binaryMapAt(double wx, double wy) const
+  uchar GridMap2D::binaryMapAt(double wx, double wy) const
   {
     unsigned mx, my;
-    if (worldToMap(wx, wy, mx, my)) return binaryMap.at < uchar > (my, mx);
+    if (worldToMap(wx, wy, mx, my)) return occMap->data.at < uchar > (my, mx);
     else return 0;
   }
 
-  float
-  GridMap2D::distanceMapAtCell(unsigned int mx, unsigned int my) const
+  float GridMap2D::distanceMapAtCell(unsigned int mx, unsigned int my) const
   {
     return distMap.at<float>(my, mx);
   }
 
-  uchar
-  GridMap2D::binaryMapAtCell(unsigned int mx, unsigned int my) const
+  uchar GridMap2D::binaryMapAtCell(unsigned int mx, unsigned int my) const
   {
-    return binaryMap.at < uchar > (my, mx);
+    return occMap->data.at < uchar > (my, mx);
   }
 
-  uchar&
-  GridMap2D::binaryMapAtCell(unsigned int mx, unsigned int my)
+  uchar& GridMap2D::binaryMapAtCell(unsigned int mx, unsigned int my)
   {
-    return binaryMap.at < uchar > (my, mx);
+    return occMap->data.at < uchar > (my, mx);
   }
 
   bool
   GridMap2D::isOccupiedAtCell(unsigned int mx, unsigned int my) const
   {
-    return (binaryMap.at < uchar > (my, mx) < 255);
+    return (occMap->data.at < uchar > (my, mx) < 255);
   }
 
   bool
@@ -199,4 +152,3 @@ namespace PathPlannerSpace
   }
 
 }
-;

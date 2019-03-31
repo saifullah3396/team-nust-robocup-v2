@@ -293,7 +293,7 @@ void CbOptimizer<Scalar>::optDef()
   auto cpDiff = cb->getCpDiff();
   nlopt::opt opt(nlopt::LN_COBYLA, nKnots);
   Matrix<Scalar, Dynamic, 1> lbEigen = (cpDiff.cwiseQuotient(
-    this->velLimits.replicate(nKnots, 1) * 0.80)).cwiseAbs().rowwise().maxCoeff();
+    this->velLimits.replicate(nKnots, 1))).cwiseAbs().rowwise().maxCoeff();
   vector<double> lb, ub, knots0, constraintTols;
   for (int i = 0; i < nKnots; ++i) {
     lb.push_back(lbEigen[i]);
@@ -325,10 +325,10 @@ void CbOptimizer<Scalar>::optDef()
   timesSeqL.resize(nInnerPoints);
   timesSeqL2.resize(nInnerPoints);
   timesSeqL3.resize(nInnerPoints);
-  //opt.add_inequality_mconstraint(
-//    CbOptimizer<Scalar>::ineqWrapper,
-//    this,
-//    constraintTols);
+  opt.add_inequality_mconstraint(
+    CbOptimizer<Scalar>::ineqWrapper,
+    this,
+    constraintTols);
   opt.set_lower_bounds(lb);
   opt.set_upper_bounds(ub);
   opt.set_min_objective(CbOptimizer<Scalar>::objWrapper, this);

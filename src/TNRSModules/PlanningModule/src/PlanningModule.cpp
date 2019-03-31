@@ -62,7 +62,7 @@ DEFINE_INPUT_CONNECTOR(PlanningModule,
   (GoalInfo<float>, goalInfo),
   (vector<TeamRobot<float> >, teamRobots),
   (ObsObstacles<float>, obstaclesObs),
-  (BehaviorInfo, sBehaviorInfo),
+  (BehaviorInfo, gBehaviorInfo),
   (BehaviorInfoMap, mBehaviorInfo),
   (OccupancyMap<float>, occupancyMap),
   (int, nFootsteps),
@@ -96,7 +96,7 @@ DEFINE_OUTPUT_CONNECTOR(PlanningModule,
 PlanningModule::PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy) :
   BaseModule(
     parent,
-    toUType(TNSPLModules::planning),
+    TNSPLModules::planning,
     "PlanningModule"
   ), memoryProxy(memoryProxy)
 {
@@ -105,7 +105,7 @@ PlanningModule::PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy
 PlanningModule::PlanningModule(void* parent, const qi::AnyObject& memoryProxy) :
   BaseModule(
     parent,
-    toUType(TNSPLModules::planning),
+    TNSPLModules::planning,
     "PlanningModule"
   ), memoryProxy(memoryProxy)
 {
@@ -168,24 +168,14 @@ void PlanningModule::init()
   LOG_INFO("Initializing PathPlanner...")
   pathPlanner = PathPlannerPtr(new PathPlanner());
   pathPlanner->setMapPtr(
-    boost::make_shared <GridMap2D>(OCCUPANCY_MAP_IN(PlanningModule))
+    boost::make_shared <GridMap2D>(IVAR_PTR(OccupancyMap<float>, PlanningModule::Input::occupancyMap))
   );
   LOG_INFO("Setting request for RobotStartup behavior...")
-  Json::Value json;
-  try {
-    using namespace std;
-    string jsonConfigPath;
-    jsonConfigPath = ConfigManager::getPBConfigsPath() + "RobotStartup/RequestBehavior.json";
-    LOG_INFO("Loading json config: " << jsonConfigPath)
-    ifstream config(jsonConfigPath, ifstream::binary);
-    config >> json;
-  } catch (Json::Exception& e) {
-    LOG_EXCEPTION(e.what())
-  }
+  auto json = JsonUtils::readJson(ConfigManager::getPBConfigsPath() + "RobotStartup/RequestBehavior.json");
   PBConfigPtr planningConfig = boost::static_pointer_cast<PBConfig>(BehaviorConfig::makeFromJson(json));
   PlanningRequestPtr planningRequest =
     boost::make_shared<RequestPlanningBehavior>(planningConfig);
-  addRequest(planningRequest); // publish to itself
+  //addRequest(planningRequest); // publish to itself
   LOG_INFO("Initializing PlanningModule Output Variables...")
   PLANNING_STATE_OUT(PlanningModule) = PlanningState::startup;
   ROBOCUP_ROLE_OUT(PlanningModule) = -1;
@@ -209,7 +199,7 @@ void PlanningModule::handleRequests()
     return;
   auto request = inRequests.queueFront();
   if (boost::static_pointer_cast <PlanningRequest>(request)) {
-    auto reqId = request->getId();
+    auto reqId = request->getRequestId();
     if (reqId == toUType(PlanningRequestIds::behaviorRequest)) {
       auto rpb =
         boost::static_pointer_cast<RequestPlanningBehavior>(request);
@@ -223,6 +213,7 @@ void PlanningModule::handleRequests()
 
 void PlanningModule::mainRoutine()
 {
+  pathPlanner->updateMap();
   sensorsUpdate();
   updateWorldBallInfo();
   pbManager->update();

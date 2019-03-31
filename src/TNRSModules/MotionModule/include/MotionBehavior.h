@@ -94,19 +94,15 @@ public:
     #endif
   #endif
 
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
    * @brief openHand Wrapper for MotionGenerator::openHand()
    */
   void openHand(const RobotHands& handIndex);
-  #endif
 
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
    * @brief closeHand Wrapper for MotionGenerator::closeHand()
    */
   void closeHand(const RobotHands& handIndex);
-  #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**

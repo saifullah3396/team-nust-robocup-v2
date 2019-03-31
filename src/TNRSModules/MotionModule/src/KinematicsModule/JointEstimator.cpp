@@ -41,7 +41,9 @@ void JointEstimator<Scalar>::init(
   A << 1.0, dt, 0, 1.0;
   //! Control Input Matrix B
   B << dt * dt / 2, dt;
-  model = boost::make_shared<ProcessModel<Scalar, 2, 1, 1> >(A, B);
+  model =
+    boost::shared_ptr<ProcessModel<Scalar, 2, 1, 1> >(
+      new ProcessModel<Scalar, 2, 1, 1>(A, B));
   //! Process Noise Covariance Matrix Q
   Q.setZero();
   Q(0, 0) = jointConfig["procVariance"][0].asFloat();
@@ -54,7 +56,9 @@ void JointEstimator<Scalar>::init(
   Matrix<Scalar, 1, 2> H;
   //! Measure Matrix H
   H << 1.0, 0.0;
-  filter = boost::make_shared<KalmanFilter<Scalar, 2, 1, 1, 1> >(model, H);
+  filter =
+    boost::shared_ptr<KalmanFilter<Scalar, 2, 1, 1, 1> >(
+      new KalmanFilter<Scalar, 2, 1, 1, 1>(model, H));
   filter->setMeasMatrix(H);
   R(0, 0) = jointConfig["measVariance"].asFloat();;
   filter->setMeasNoiseCov(R);

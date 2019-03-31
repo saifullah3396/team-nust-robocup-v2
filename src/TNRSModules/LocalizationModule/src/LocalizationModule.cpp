@@ -1,7 +1,7 @@
 /**
  * @file LocalizationModule/src/LocalizationModule.cpp
  *
- * This file declares a class for the complete robot localization. 
+ * This file declares a class for the complete robot localization.
  * All the functions and algorithms for robot state estimation and
  * pose determination will be defined under this module.
  *
@@ -29,8 +29,6 @@
 
 DEFINE_INPUT_CONNECTOR(LocalizationModule,
   (int, localizationThreadPeriod),
-  (float, fieldWidth),
-  (float, fieldHeight),
   (RoboCupGameControlData, gameData),
   (Matrix4f, upperCamInFeet),
   (Matrix4f, lowerCamInFeet),
@@ -50,16 +48,15 @@ DEFINE_OUTPUT_CONNECTOR(LocalizationModule,
   (bool, robotLocalized),
   (int, positionConfidence),
   (int, sideConfidence),
+  (float, fieldWidth),
+  (float, fieldHeight),
 )
 
 LocalizationModule::LocalizationModule(void* processingModule) :
   BaseModule(
     processingModule,
-    (unsigned) TNSPLModules::localization,
-    "LocalizationModule"),
-  runLocalization(false),
-  updateFilter(true),
-  updateMap(true)
+    TNSPLModules::localization,
+    "LocalizationModule")
 {
 }
 
@@ -70,9 +67,9 @@ void LocalizationModule::setThreadPeriod()
 
 void LocalizationModule::initMemoryConn()
 {
-  inputConnector = 
+  inputConnector =
     new InputConnector(this, getModuleName() + "InputConnector");
-  outputConnector = 
+  outputConnector =
     new OutputConnector(this, getModuleName() + "OutputConnector");
   inputConnector->initConnector();
   outputConnector->initConnector();
@@ -80,19 +77,38 @@ void LocalizationModule::initMemoryConn()
 
 void LocalizationModule::init()
 {
+  LOG_INFO("Initializing LocalizationModule Output variables...")
+  OccupancyMap<float> defMap;
+  float fW, fH;
+  GET_CONFIG(
+    "EnvProperties",
+    (float, Map.cellSize, defMap.resolution),
+    (float, Map.fieldWidth, fW),
+    (float, Map.fieldHeight, fH),
+  );
+  defMap.data = Mat(
+    Size(fW / defMap.resolution, fH / defMap.resolution),
+    CV_8UC1,
+    Scalar(0));
+  defMap.originPose = cv::Point3_<float>(
+    fW / 2.0 / defMap.resolution,
+    fH / 2.0 / defMap.resolution,
+    0.0);
+  FIELD_WIDTH_OUT(LocalizationModule) = fW;
+  FIELD_HEIGHT_OUT(LocalizationModule) = fH;
+  OCCUPANCY_MAP_OUT(LocalizationModule) = defMap;
+  ROBOT_POSE_2D_OUT(LocalizationModule) = RobotPose2D<float>(0.0, 0.0, 0.0);
+  LAST_POSE_2D_OUT(LocalizationModule) = RobotPose2D<float>(0.0, 0.0, 0.0);
+  ROBOT_LOCALIZED_OUT(LocalizationModule) = false;
+  POSITION_CONFIDENCE_OUT(LocalizationModule) = 0;
+  SIDE_CONFIDENCE_OUT(LocalizationModule) = 0;
+
   LOG_INFO("Initializing ParticleFilter...")
-  particleFilter = 
+  particleFilter =
     boost::shared_ptr<ParticleFilter>(new ParticleFilter(this));
   LOG_INFO("Initializing FieldMap...")
   fieldMap = boost::make_shared<FieldMap>(this);
   //particleFilter->init(RobotPose2D<float>(0.f, 0.f, 0.f));
-  LOG_INFO("Initializing LocalizationModule Output variables...")
-  ROBOT_POSE_2D_OUT(LocalizationModule) = RobotPose2D<float>(0.0, 0.0, 0.0);
-  LAST_POSE_2D_OUT(LocalizationModule) = RobotPose2D<float>(0.0, 0.0, 0.0);
-  OCCUPANCY_MAP_OUT(LocalizationModule) = OccupancyMap<float>();
-  ROBOT_LOCALIZED_OUT(LocalizationModule) = false;
-  POSITION_CONFIDENCE_OUT(LocalizationModule) = 0;
-  SIDE_CONFIDENCE_OUT(LocalizationModule) = 0;
 }
 
 void LocalizationModule::handleRequests()
@@ -100,7 +116,7 @@ void LocalizationModule::handleRequests()
   while (!inRequests.isEmpty()) {
     auto request = inRequests.queueFront();
     if (boost::static_pointer_cast <LocalizationRequest>(request)) {
-      auto reqId = request->getId();
+      auto reqId = request->getRequestId();
       if (reqId == (unsigned)LocalizationRequestIds::switchLocalization) {
         auto sl = boost::static_pointer_cast <SwitchLocalization>(request);
         runLocalization = sl->state;
@@ -113,9 +129,9 @@ void LocalizationModule::handleRequests()
       } else if (reqId == (unsigned)LocalizationRequestIds::switchBallObstacle) {
         auto sbo = boost::static_pointer_cast <SwitchBallObstacle>(request);
         fieldMap->setBallObstacle(sbo->state);
-      } else if (reqId == (unsigned)LocalizationRequestIds::initLocalizer) {
+      } else if (reqId == (unsigned)LocalizationRequestIds::initiateLocalizer) {
         auto il = boost::static_pointer_cast <InitiateLocalizer>(request);
-        particleFilter->init(il->state);
+        particleFilter->init(il->pose2D);
         fieldMap->updateRobotPose2D();
       } else if (reqId == (unsigned)LocalizationRequestIds::resetLocalizer) {
         particleFilter->reset();

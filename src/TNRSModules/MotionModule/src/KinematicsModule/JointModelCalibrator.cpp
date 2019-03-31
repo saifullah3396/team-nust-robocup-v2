@@ -37,7 +37,9 @@ JointModelCalibrator::JointModelCalibrator(const Joints& jointIndex, const strin
   }
   Matrix<double, 2, 1> initState;
   initState << sensedPosition[0], 0.0;
-  estimator = boost::make_shared<JointEstimator<double>>();
+  estimator =
+    boost::shared_ptr<JointEstimator<double>>(
+      new JointEstimator<double>());
   estimator->init(jointIndex, initState, 0.01);
 }
 

@@ -12,14 +12,16 @@
 #include <opencv2/core/core.hpp>
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "TNRSBase/include/ModuleRequest.h"
+#include "TNRSBase/include/ModuleRequestMacros.h"
 #include "Utils/include/SwitchRequest.h"
+#include "Utils/include/HardwareIds.h"
 #include "VisionModule/include/FeatureExtractionIds.h"
 
 /**
  * Types of request valid for VisionModule
- * 
+ *
  * @enum VisionRequestIds
- */ 
+ */
 enum class VisionRequestIds {
   switchVision,
   switchVideoWriter,
@@ -32,129 +34,88 @@ enum class VisionRequestIds {
 /**
  * @class VisionRequest
  * @brief A module request that can be handled by VisionModule
- */ 
-class VisionRequest : public ModuleRequest 
-{
-public:
-  /**
-   * Constructor
-   * 
-   * @param id: Id of the control request
-   */ 
-  VisionRequest(const VisionRequestIds& id) :
-    ModuleRequest(toUType(TNSPLModules::vision), toUType(id))
-  {
-  }
-};
-typedef boost::shared_ptr<VisionRequest> VisionRequestPtr;
+ */
+DECLARE_MODULE_REQUEST(
+  VisionRequest,
+  VisionRequestPtr,
+  ModuleRequest,
+  TNSPLModules,
+  vision,
+  VisionRequestIds
+)
 
 /**
  * @class SwitchVision
- * @brief A request to switch on and off the vision module
- */ 
-struct SwitchVision : public VisionRequest, SwitchRequest
-{
-  /**
-   * Constructor
-   */ 
-  SwitchVision(const bool& state) :
-    VisionRequest(VisionRequestIds::switchVision),
-    SwitchRequest(state)
-  {
-  }
-};
-typedef boost::shared_ptr<SwitchVision> SwitchVisionPtr;
-
-/**
- * @class SwitchVideoWriter
- * @brief A request to switch on and off the video writing process
- */ 
-struct SwitchVideoWriter : public VisionRequest, SwitchRequest
-{
-  /**
-   * Constructor
-   */ 
-  SwitchVideoWriter(const bool& state) :
-    VisionRequest(VisionRequestIds::switchVideoWriter),
-    SwitchRequest(state), camIndex(camIndex)
-  {
-  }
-    
-  unsigned camIndex;
-};
-typedef boost::shared_ptr<SwitchVideoWriter> SwitchVideoWriterPtr;
+ * @brief A request to switch on or  off the vision module
+ */
+DECLARE_SWITCH_REQUEST_TYPE(
+  SwitchVision,
+  SwitchVisionPtr,
+  VisionRequest,
+  VisionRequestIds,
+  switchVision
+)
 
 /**
  * @class SwitchFieldProjection
- * @brief A request to switch on and off the field projection
- */ 
-struct SwitchFieldProjection : public VisionRequest, SwitchRequest
-{
-  /**
-   * Constructor
-   */ 
-  SwitchFieldProjection(const bool& state) :
-    VisionRequest(VisionRequestIds::switchFieldProjection),
-    SwitchRequest(state)
-  {
-  }
-};
-typedef boost::shared_ptr<SwitchFieldProjection> SwitchFieldProjectionPtr;
+ * @brief A request to switch on or  off the video writer
+ */
+DECLARE_SWITCH_REQUEST_TYPE_WITH_VARS(
+  SwitchVideoWriter,
+  SwitchVideoWriterPtr,
+  VisionRequest,
+  VisionRequestIds,
+  switchVideoWriter,
+  (CameraId, camIndex, CameraId::headTop)
+)
+
+/**
+ * @class SwitchFieldProjection
+ * @brief A request to switch on or off the field projection
+ */
+DECLARE_SWITCH_REQUEST_TYPE(
+  SwitchFieldProjection,
+  SwitchFieldProjectionPtr,
+  VisionRequest,
+  VisionRequestIds,
+  switchFieldProjection
+)
 
 /**
  * @class SwitchLogImages
- * @brief A request to switch on and off the images logging
- */ 
-struct SwitchLogImages : public VisionRequest, SwitchRequest
-{
-  /**
-   * Constructor
-   */ 
-  SwitchLogImages(const bool& state, const unsigned& camIndex) :
-    VisionRequest(VisionRequestIds::switchLogImages),
-    SwitchRequest(state), camIndex(camIndex)
-  {
-  }
-  
-  unsigned camIndex;
-};
-typedef boost::shared_ptr<SwitchLogImages> SwitchLogImagesPtr;
+ * @brief A request to switch on or  off the image logging
+ */
+DECLARE_SWITCH_REQUEST_TYPE_WITH_VARS(
+  SwitchLogImages,
+  SwitchLogImagesPtr,
+  VisionRequest,
+  VisionRequestIds,
+  switchLogImages,
+  (CameraId, camIndex, CameraId::headTop)
+)
 
 /**
- * @class SwitchUseLoggedImages
- * @brief A request to switch on and off the usage of logged images
- */ 
-struct SwitchUseLoggedImages : public VisionRequest, SwitchRequest
-{
-  /**
-   * Constructor
-   */ 
-  SwitchUseLoggedImages(const bool& state) :
-    VisionRequest(VisionRequestIds::switchUseLoggedImages),
-    SwitchRequest(state)
-  {
-  }
-};
-typedef boost::shared_ptr<SwitchUseLoggedImages> SwitchUseLoggedImagesPtr;
+ * @class SwitchLogImages
+ * @brief A request to switch on or  off the image logging
+ */
+DECLARE_SWITCH_REQUEST_TYPE(
+  SwitchUseLoggedImages,
+  SwitchUseLoggedImagesPtr,
+  VisionRequest,
+  VisionRequestIds,
+  switchUseLoggedImages
+)
+
 
 /**
  * @class SwitchFeatureExtModule
  * @brief A request to switch on and off the usage of feature extraction modules
  */
-struct SwitchFeatureExtModule : public VisionRequest, SwitchRequest
-{
-  /**
-   * Constructor
-   */
-  SwitchFeatureExtModule(const bool& state, const FeatureExtractionIds& id, const unsigned& camIndex = 0) :
-    VisionRequest(VisionRequestIds::switchFeatureExtModule),
-    SwitchRequest(state),
-    id(id),
-    camIndex(camIndex)
-  {
-  }
-
-  unsigned camIndex;
-  FeatureExtractionIds id;
-};
-typedef boost::shared_ptr<SwitchFeatureExtModule> SwitchFeatureExtModulePtr;
+DECLARE_SWITCH_REQUEST_TYPE_WITH_VARS(
+  SwitchFeatureExtModule,
+  SwitchFeatureExtModulePtr,
+  VisionRequest,
+  VisionRequestIds,
+  switchFeatureExtModule,
+  (FeatureExtractionIds, id, FeatureExtractionIds::segmentation),
+)

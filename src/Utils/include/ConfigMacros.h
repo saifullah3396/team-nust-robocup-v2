@@ -84,7 +84,6 @@
   { \
     ConfigManager configManager; \
     string cDirPath = string(ConfigManager::getConfigDirPath() + configFile + string(".ini")); \
-    std::cout << cDirPath << std::endl; \
     if (boost::filesystem::exists(cDirPath)) { \
       configManager.parseFile(cDirPath); \
       FOR_EACH(GET_VAR_1, __VA_ARGS__) \
@@ -94,7 +93,7 @@
         configManager.parseFile(cDirPath); \
         FOR_EACH(GET_VAR_1, __VA_ARGS__) \
       } else { \
-        std::cout << "Configuration file: " << cDirPath <<" does not exist." << std::endl; \
+        LOG_ERROR("Configuration file: " << cDirPath << " not found."); \
       } \
     } \
   }

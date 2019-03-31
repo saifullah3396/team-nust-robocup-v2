@@ -8,20 +8,14 @@
  */
 
 #include "GBModule/include/GBRequest.h"
-#include "BehaviorConfigs/include/GBConfigs/GBConfig.h"
+#include "GBModule/include/StiffnessRequest.h"
+#include "GBModule/include/LedRequest.h"
 
-GBRequest::GBRequest(const GBRequestIds& id) :
-  ModuleRequest(toUType(TNSPLModules::sb), toUType(id))
-{
-}
+DEFINE_MODULE_REQUEST(
+  GBRequest, ModuleRequest, GBRequestPtr,
+  (GBRequestIds, stiffnessRequest, StiffnessRequest),
+  (GBRequestIds, ledRequest, LedRequest),
+  (GBRequestIds, behaviorRequest, RequestGeneralBehavior),
+  (GBRequestIds, killBehavior, KillGeneralBehavior),
+)
 
-RequestGeneralBehavior::RequestGeneralBehavior(const GBConfigPtr& config) :
-  GBRequest(GBRequestIds::behaviorRequest),
-  BehaviorRequest(config)
-{
-}
-
-KillGeneralBehavior::KillGeneralBehavior() :
-  GBRequest(GBRequestIds::killBehavior)
-{
-}

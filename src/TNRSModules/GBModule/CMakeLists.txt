@@ -10,9 +10,8 @@ if (EIGEN3_INCLUDE_DIRS)
   include_directories ("${EIGEN3_INCLUDE_DIRS}")
 endif (EIGEN3_INCLUDE_DIRS)
 
-file (GLOB SRC 
+file (GLOB SRC
       "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-      "${CMAKE_CURRENT_SOURCE_DIR}/src/GBConfigs/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/StiffnessModule/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/StiffnessModule/Types/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/LedsModule/*.cpp"
@@ -35,9 +34,9 @@ else()
   # Alsa sound package for whisle detector usage.
   find_package(alsa)
   include_directories(${ALSA_INCLUDE_DIRS})
-  
+
   add_library (tnrs-gb-module SHARED ${SRC})
-  
+
   if(${ROBOT_VERSION} STREQUAL "V6")
     qi_use_lib(tnrs-gb-module
       QI
@@ -70,7 +69,7 @@ target_link_libraries(tnrs-gb-module
   libtnrs-control-module.so
   libtnrs-behavior-manager.so
 )
-    
+
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
     file (GLOB TESTS RELATIVE "${test_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")

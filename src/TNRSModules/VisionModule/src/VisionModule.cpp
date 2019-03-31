@@ -14,6 +14,8 @@
 #include <Eigen/Dense>
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "Utils/include/DebugUtils.h"
+#include "Utils/include/ConfigMacros.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/Camera.h"
 #include "Utils/include/DataHolders/GoalInfo.h"
@@ -57,7 +59,7 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
   #ifndef V6_CROSS_BUILD
     VisionModule::VisionModule(void* teamNUSTSPL,
       const ALVideoDeviceProxyPtr& camProxy) :
-      BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
+      BaseModule(teamNUSTSPL, TNSPLModules::vision, "VisionModule"),
       DebugBase("VisionModule", this),
       camProxy(camProxy),
       logImages(vector<bool>(toUType(CameraId::count), false)),
@@ -68,7 +70,7 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
   #else
     VisionModule::VisionModule(void* teamNUSTSPL,
       const qi::AnyObject& camProxy) :
-      BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
+      BaseModule(teamNUSTSPL, TNSPLModules::vision, "VisionModule"),
       DebugBase("VisionModule", this),
       camProxy(camProxy),
       logImages(vector<bool>(toUType(CameraId::count), false)),
@@ -79,7 +81,7 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
   #endif
 #else
   VisionModule::VisionModule(void* teamNUSTSPL) :
-    BaseModule(teamNUSTSPL, toUType(TNSPLModules::vision), "VisionModule"),
+    BaseModule(teamNUSTSPL, TNSPLModules::vision, "VisionModule"),
     DebugBase("VisionModule", this),
     logImages(vector<bool>(toUType(CameraId::count), false)),
     writeVideo(vector<bool>(toUType(CameraId::count), false)),
@@ -151,19 +153,19 @@ void VisionModule::handleRequests()
   while (!inRequests.isEmpty()) {
     auto request = inRequests.queueFront();
     if (boost::static_pointer_cast <VisionRequest>(request)) {
-      auto reqId = request->getId();
+      auto reqId = request->getRequestId();
       if (reqId == toUType(VisionRequestIds::switchVision)) {
         auto sv = boost::static_pointer_cast <SwitchVision>(request);
         runVision = sv->state;
       } else if (reqId == toUType(VisionRequestIds::switchVideoWriter)) {
         auto svw = boost::static_pointer_cast <SwitchVideoWriter>(request);
-        writeVideo[svw->camIndex] = svw->state;
+        writeVideo[toUType(svw->camIndex)] = svw->state;
       } else if (reqId == toUType(VisionRequestIds::switchFieldProjection)) {
         auto sfp = boost::static_pointer_cast <SwitchFieldProjection>(request);
         projectField = sfp->state;
       } else if (reqId == toUType(VisionRequestIds::switchLogImages)) {
         auto sli = boost::static_pointer_cast <SwitchLogImages>(request);
-        logImages[sli->camIndex] = sli->state;
+        logImages[toUType(sli->camIndex)] = sli->state;
       } else if (reqId == toUType(VisionRequestIds::switchUseLoggedImages)) {
         auto uli = boost::static_pointer_cast <SwitchUseLoggedImages>(request);
         useLoggedImages = uli->state;
@@ -171,11 +173,9 @@ void VisionModule::handleRequests()
         auto uli = boost::static_pointer_cast <SwitchFeatureExtModule>(request);
         if (uli->id != FeatureExtractionIds::count) {
           featureExtToRun[toUType(uli->id)] = uli->state;
-          featureExt[toUType(uli->id)]->setCurrentImage(uli->camIndex);
         } else {
           for (size_t i = 0; i < toUType(FeatureExtractionIds::count); ++i) {
             featureExtToRun[i] = uli->state;
-            featureExt[i]->setCurrentImage(uli->camIndex);
           }
         }
       }
@@ -245,17 +245,7 @@ bool VisionModule::featureExtractionUpdate()
 {
   FeatureExtraction::setupImagesAndHists();
   FeatureExtraction::clearLandmarks();
-  //colorHandler->update();
-  /*Mat blue, yellow, green, yuv;
-  cvtColor(FeatureExtraction::getBgrMat(0), yuv, COLOR_BGR2YUV);
-  colorHandler->getBinary(yuv, blue, Colors::BLUE);
-  colorHandler->getBinary(yuv, yellow, Colors::YELLOW);
-  colorHandler->getBinary(yuv, green, Colors::GREEN);
-  imshow("blue", blue);
-  imshow("hellow", yellow);
-  imshow("hreen", green);
-  imshow("image", FeatureExtraction::getBgrMat(0));
-  waitKey(1);*/
+  colorHandler->update();
   if (colorHandler->fieldHistFormed()) {
     for (size_t i = 0; i < toUType(FeatureExtractionIds::count); ++i) {
       if (featureExtToRun[i]) {
@@ -326,21 +316,21 @@ void VisionModule::setupFeatureExtraction()
 {
   auto& ourTeam = GAME_DATA_IN(VisionModule).teams[0].teamColour;
   auto& oppTeam = GAME_DATA_IN(VisionModule).teams[1].teamColour;
-  TNColors ourColor = TNColors::YELLOW, oppColor = TNColors::BLUE;
-  if (ourTeam == TEAM_BLACK) ourColor = TNColors::BLACK;
-  else if (ourTeam == TEAM_BLUE) ourColor = TNColors::BLUE;
-  else if (ourTeam == TEAM_RED) ourColor = TNColors::RED;
-  else if (ourTeam == TEAM_YELLOW) ourColor = TNColors::YELLOW;
+  TNColors ourColor = TNColors::yellow, oppColor = TNColors::blue;
+  if (ourTeam == TEAM_BLACK) ourColor = TNColors::black;
+  else if (ourTeam == TEAM_BLUE) ourColor = TNColors::blue;
+  else if (ourTeam == TEAM_RED) ourColor = TNColors::red;
+  else if (ourTeam == TEAM_YELLOW) ourColor = TNColors::yellow;
 
-  if (oppTeam == TEAM_BLACK) oppColor = TNColors::BLACK;
-  else if (oppTeam == TEAM_BLUE) oppColor = TNColors::BLUE;
-  else if (oppTeam == TEAM_RED) oppColor = TNColors::RED;
-  else if (oppTeam == TEAM_YELLOW) oppColor = TNColors::YELLOW;
+  if (oppTeam == TEAM_BLACK) oppColor = TNColors::black;
+  else if (oppTeam == TEAM_BLUE) oppColor = TNColors::blue;
+  else if (oppTeam == TEAM_RED) oppColor = TNColors::red;
+  else if (oppTeam == TEAM_YELLOW) oppColor = TNColors::yellow;
   auto blackJerseyExists =
-    ourColor == TNColors::BLACK || oppColor == TNColors::BLACK;
+    ourColor == TNColors::black || oppColor == TNColors::black;
   FeatureExtraction::setup(this);
-  ourColor = TNColors::YELLOW;
-  oppColor = TNColors::BLUE;
+  ourColor = TNColors::yellow;
+  oppColor = TNColors::blue;
   FeatureExtraction::updateColorInfo(ourColor, oppColor, blackJerseyExists);
 
   featureExt.resize(toUType(FeatureExtractionIds::count));
@@ -372,7 +362,7 @@ void VisionModule::setupFeatureExtraction()
 void VisionModule::sendKnownLandmarksInfo()
 {
   if (GET_DVAR(int, sendKnownLandmarks)) {
-    vector<KnownLandmarkPtr> kl = FeatureExtraction::getKnownLandmarks();
+    vector<boost::shared_ptr<KnownLandmark<float>>> kl = FeatureExtraction::getKnownLandmarks();
     //sample data
     //kl.push_back(boost::make_shared<KnownLandmark>(FL_TYPE_GOAL_POST, Point2f(4.5, -0.9)));
     //kl.push_back(boost::make_shared<KnownLandmark>(FL_TYPE_PENALTY_MARK, Point2f(3.7, 0)));
@@ -399,7 +389,7 @@ void VisionModule::sendKnownLandmarksInfo()
 void VisionModule::sendUnknownLandmarksInfo()
 {
   if (GET_DVAR(int, sendUnknownLandmarks)) {
-    vector<UnknownLandmarkPtr> ukl = FeatureExtraction::getUnknownLandmarks();
+    vector<boost::shared_ptr<UnknownLandmark<float>>> ukl = FeatureExtraction::getUnknownLandmarks();
     //sample data
     //ukl.push_back(boost::make_shared<UnknownLandmark>(0, Point2f(1.0, 0)));
     //ukl.push_back(boost::make_shared<UnknownLandmark>(0, Point2f(2.0, 0)));
@@ -423,7 +413,15 @@ void VisionModule::sendUnknownLandmarksInfo()
 
 void VisionModule::sendImages()
 {
+  auto image = FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex));
+  if (GET_DVAR(int, sendBinaryImage) >= 0) {
+    ASSERT(GET_DVAR(int, sendBinaryImage) < toUType(TNColors::count));
+    colorHandler->getBinary(image, image, static_cast<TNColors>(GET_DVAR(int, sendBinaryImage)));
+    UserCommRequestPtr request =
+      boost::make_shared<SendImageRequest>(FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex)));
+    BaseModule::publishModuleRequest(request);
+  }
   UserCommRequestPtr request =
-    boost::make_shared<SendImageRequest>(FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex)));
+    boost::make_shared<SendImageRequest>(image);
   BaseModule::publishModuleRequest(request);
 }

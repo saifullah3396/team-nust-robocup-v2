@@ -4,7 +4,7 @@
  * This file defines the structs Landmark and ObsLandmarks
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 22 Aug 2017 
+ * @date 22 Aug 2017
  */
 
 #pragma once
@@ -26,7 +26,9 @@ struct Landmark : public DataHolder
    * @param type Obstacle type
    * @param pos Obstacle position
    */
-  Landmark(const unsigned& type, const cv::Point_<T>& pos) :
+  Landmark(
+    const unsigned& type = 0,
+    const cv::Point_<T>& pos = cv::Point_<T>()) :
     type(type), pos(pos)
   {
   }
@@ -52,17 +54,24 @@ struct Landmark : public DataHolder
     return val;
   }
 
+  static Landmark<T> jsonToType(const Json::Value& json) {
+    auto l = Landmark<T>();
+    JsonUtils::jsonToType(l.id, json["id"], l.id);
+    JsonUtils::jsonToType(l.type, json["type"], l.type);
+    JsonUtils::jsonToType(l.pos, json["pos"], l.pos);
+    return l;
+  }
+
   int id = {-1}; //! Id of this landmark
   unsigned type = {0}; //! Type of this landmark
   cv::Point_<T> pos;//! Position of the landmark in field
 };
-
 template struct Landmark<float>;
 template struct Landmark<double>;
 
 /**
  * @struct UnknownLandmark
- * @brief The struct for defining the landmarks for which a match in 
+ * @brief The struct for defining the landmarks for which a match in
  *   the actual field is not known
  */
 template <typename T = float>
@@ -72,7 +81,8 @@ struct UnknownLandmark : Landmark<T>
    * @brief UnknownLandmark Constructor
    * @param pos Obstacle position
    */
-  UnknownLandmark(const cv::Point_<T>& pos) :
+  UnknownLandmark(
+    const cv::Point_<T>& pos = cv::Point_<T>()) :
     Landmark<T>(0, pos) // Change 0 to LandmarkTypes::UNKNOWN
   {
   }
@@ -88,14 +98,21 @@ struct UnknownLandmark : Landmark<T>
       (pos, this->pos),
     );
   }
-};
 
+  static UnknownLandmark<T> jsonToType(const Json::Value& json) {
+    auto l = UnknownLandmark<T>();
+    JsonUtils::jsonToType(l.id, json["id"], l.id);
+    JsonUtils::jsonToType(l.type, json["type"], l.type);
+    JsonUtils::jsonToType(l.pos, json["pos"], l.pos);
+    return l;
+  }
+};
 template struct UnknownLandmark<float>;
 template struct UnknownLandmark<double>;
 
 /**
  * @struct UnknownLandmark
- * @brief The struct for defining the landmarks for which a match in 
+ * @brief The struct for defining the landmarks for which a match in
  *   the actual field is known such as T, L corners, or center circle
  */
 template <typename T = float>
@@ -108,9 +125,9 @@ struct KnownLandmark : Landmark<T>
    * @param poseFromLandmark Robot pose from landmark
    */
   KnownLandmark(
-    const unsigned& type,
-    const cv::Point_<T>& pos,
-    const RobotPose2D<T>& poseFromLandmark) :
+    const unsigned& type = 0,
+    const cv::Point_<T>& pos = cv::Point_<T>(),
+    const RobotPose2D<T>& poseFromLandmark = RobotPose2D<T>(0.0, 0.0, 0.0)) :
     Landmark<T>(type, pos),
     poseFromLandmark(poseFromLandmark)
   {
@@ -139,5 +156,16 @@ struct KnownLandmark : Landmark<T>
     return val;
   }
 
+  static KnownLandmark<T> jsonToType(const Json::Value& json) {
+    auto l = KnownLandmark<T>();
+    JsonUtils::jsonToType(l.id, json["id"], l.id);
+    JsonUtils::jsonToType(l.type, json["type"], l.type);
+    JsonUtils::jsonToType(l.pos, json["pos"], l.pos);
+    JsonUtils::jsonToType(l.poseFromLandmark, json["poseFromLandmark"], l.poseFromLandmark);
+    return l;
+  }
+
   RobotPose2D<T> poseFromLandmark; //! Pose of the landmark from robot
 };
+template struct KnownLandmark<float>;
+template struct KnownLandmark<double>;

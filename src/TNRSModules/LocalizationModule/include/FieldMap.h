@@ -82,7 +82,7 @@ private:
   boost::shared_ptr<ParticleFilter> localizer;
 
   //! Base matrix for generating occupancy map
-  Mat_<float> occupancyMapBase;
+  Mat occupancyMapBase;
 
   //Mat worldImage;
   //Mat mapDrawing;
@@ -94,5 +94,5 @@ private:
   bool addBallObstacle = {false};
 
   //! Radius of the ball used for obstacle generation
-  float ballRadius;
+  float ballRadius = {0.05};
 };

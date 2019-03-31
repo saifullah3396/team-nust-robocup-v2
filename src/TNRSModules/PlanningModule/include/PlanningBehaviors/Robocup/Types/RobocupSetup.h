@@ -11,6 +11,8 @@
 
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Robocup.h"
 
+struct RobocupSetupConfig;
+
 /**
  * @class RobocupSetup
  * @brief The class for defining the robocup startup sequence
@@ -26,13 +28,7 @@ public:
    */
   RobocupSetup(
     PlanningModule* planningModule,
-    const BehaviorConfigPtr& config) :
-    Robocup(planningModule, config, "RobocupSetup"),
-    behaviorState(startup),
-    setSequenceFinished(false)
-  {
-  }
-
+    const boost::shared_ptr<RobocupSetupConfig>& config);
   /**
    * Destructor
    */
@@ -52,8 +48,8 @@ private:
   /**
    * Returns the config casted as RobocupSetupConfigPtr
    */
-  RobocupSetupConfigPtr getBehaviorCast();
-  
+  boost::shared_ptr<RobocupSetupConfig> getBehaviorCast();
+
   void startupAction();
   void cfgHandlingAction();
   void readySequenceAction();

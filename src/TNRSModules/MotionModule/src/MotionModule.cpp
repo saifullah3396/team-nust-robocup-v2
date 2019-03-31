@@ -15,6 +15,7 @@
 #include "MotionModule/include/MotionModule.h"
 #include "MotionModule/include/MotionRequest.h"
 #include "MotionModule/include/JointRequest.h"
+#include "MotionModule/include/HandsRequest.h"
 #include "MotionModule/include/TrajectoryPlanner/TrajectoryPlanner.h"
 #include "TeamNUSTSPL/include/TeamNUSTSPL.h"
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
@@ -44,6 +45,7 @@ DEFINE_INPUT_CONNECTOR(MotionModule,
 )
 DEFINE_OUTPUT_CONNECTOR(MotionModule,
   (vector<float>, jointPositionSensors),
+  (vector<float>, handSensors),
   (vector<float>, inertialSensors),
   (vector<float>, fsrSensors),
   (int, nFootsteps),
@@ -67,7 +69,7 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
         const ALMemoryProxyPtr& memoryProxy,
         const ALDCMProxyPtr& dcmProxy,
         const ALMotionProxyPtr& motionProxy) :
-        BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
+        BaseModule(parent, TNSPLModules::motion, "MotionModule"),
         memoryProxy(memoryProxy),
         dcmProxy(dcmProxy),
         motionProxy(motionProxy)
@@ -78,7 +80,7 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
       void* parent,
       const qi::AnyObject& memoryProxy,
       const qi::AnyObject& motionProxy) :
-      BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
+      BaseModule(parent, TNSPLModules::motion, "MotionModule"),
       memoryProxy(memoryProxy),
       motionProxy(motionProxy)
     {
@@ -90,7 +92,7 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
       void* parent,
       const ALMemoryProxyPtr& memoryProxy,
       const ALDCMProxyPtr& dcmProxy) :
-      BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
+      BaseModule(parent, TNSPLModules::motion, "MotionModule"),
       memoryProxy(memoryProxy),
       dcmProxy(dcmProxy)
     {
@@ -99,7 +101,7 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
     MotionModule::MotionModule(
       void* parent,
       const qi::AnyObject& memoryProxy) :
-      BaseModule(parent, toUType(TNSPLModules::motion), "MotionModule"),
+      BaseModule(parent, TNSPLModules::motion, "MotionModule"),
       memoryProxy(memoryProxy)
     {
     }
@@ -146,16 +148,16 @@ void MotionModule::init()
     #endif
     LOG_INFO("Waking Robot Up...")
     #ifndef V6_CROSS_BUILD
-    //motionProxy->wakeUp();
+    motionProxy->wakeUp();
     motionProxy->setMoveArmsEnabled(false, false);
     #else
-    //motionProxy.call<void>("wakeUp");
+    motionProxy.call<void>("wakeUp");
     motionProxy.call<void>("setMoveArmsEnabled", false, false);
     #endif
   #endif
   //! Create kinematics module
   LOG_INFO("Initializing KinematicsModule...")
-  kinematicsModule = boost::make_shared<KinematicsModule<MType> >(this);
+  kinematicsModule = boost::shared_ptr<KinematicsModule<MType>>(new KinematicsModule<MType>(this));
   kinematicsModule->init();
   //! Create motion generator module
   LOG_INFO("Initializing MotionGenerator...")
@@ -169,6 +171,7 @@ void MotionModule::init()
   //! Reset output variables
   LOG_INFO("Initializing MotionModule Output Variables...")
   JOINT_POSITIONS_OUT(MotionModule) = vector<float>(toUType(Joints::count), 0.f);
+  HAND_SENSORS_OUT(MotionModule) = vector<float>(toUType(RobotHands::count), 0.f);
   INERTIAL_SENSORS_OUT(MotionModule) = vector<float>(toUType(InertialSensors::count), 0.f);
   INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerX)] = 0.0;
   INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerY)] = 0.0;
@@ -195,6 +198,11 @@ void MotionModule::setupSensors()
       toUType(SensorTypes::joints) + toUType(JointSensorTypes::position),
       OVAR_PTR(vector<float>, MotionModule::Output::jointPositionSensors),
       memoryProxy);
+  sensorLayers[toUType(MotionSensors::handSensors)] =
+    SensorLayer::makeSensorLayer(
+      toUType(SensorTypes::handSensors),
+      OVAR_PTR(vector<float>, MotionModule::Output::handSensors),
+      memoryProxy);
   sensorLayers[toUType(MotionSensors::inertial)] =
     SensorLayer::makeSensorLayer(
       toUType(SensorTypes::inertialSensors),
@@ -216,14 +224,23 @@ void MotionModule::setupSensors()
 void MotionModule::setupActuators()
 {
   actuatorLayers.resize(toUType(MotionActuators::count));
-  actuatorLayers[toUType(MotionActuators::jointActuators)] =
     #ifndef V6_CROSS_BUILD
+    actuatorLayers[toUType(MotionActuators::jointActuators)] =
       ActuatorLayer::makeActuatorLayer(
         toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::angles),
         dcmProxy);
+    actuatorLayers[toUType(MotionActuators::handActuators)] =
+      ActuatorLayer::makeActuatorLayer(
+        toUType(ActuatorTypes::handActuators),
+        dcmProxy);
     #else
+    actuatorLayers[toUType(MotionActuators::jointActuators)] =
       ActuatorLayer::makeActuatorLayer(
         toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::angles));
+    actuatorLayers[toUType(MotionActuators::handActuators] =
+      ActuatorLayer::makeActuatorLayer(
+        toUType(ActuatorTypes::handActuators),
+        dcmProxy);
     #endif
   #ifndef MODULE_IS_REMOTE
     #ifndef V6_CROSS_BUILD
@@ -238,19 +255,27 @@ void MotionModule::handleRequests()
     return;
   auto request = inRequests.queueFront();
   if (boost::static_pointer_cast <MotionRequest>(request)) {
-    auto reqId = request->getId();
+    auto reqId = request->getRequestId();
     if (reqId == toUType(MotionRequestIds::jointRequest)) {
       actuatorLayers[toUType(MotionActuators::jointActuators)]->addRequest(
         boost::static_pointer_cast<JointRequest>(request)
       );
+    } else if (reqId == toUType(MotionRequestIds::handsRequest)) {
+      actuatorLayers[toUType(MotionActuators::handActuators)]->addRequest(
+        boost::static_pointer_cast<HandsRequest>(request)
+      );
     } else if (reqId == toUType(MotionRequestIds::behaviorRequest)) {
-      auto rmb = 
+      auto rmb =
         boost::static_pointer_cast<RequestMotionBehavior>(request);
       if (mbManagers.find(rmb->mbManagerId) != mbManagers.end()) {
         mbManagers[rmb->mbManagerId]->manageRequest(rmb);
       } else {
         //! Create motion behavior manager
-        mbManagers.insert(pair<unsigned, MBManagerPtr>(rmb->mbManagerId, boost::make_shared<MBManager<MType> >(this)));
+        mbManagers.insert(
+          pair<unsigned, MBManagerPtr>(
+            rmb->mbManagerId,
+            boost::shared_ptr<MBManager<MType> >(new MBManager<MType>(this))
+          ));
         mbManagers[rmb->mbManagerId]->manageRequest(rmb);
       }
     } else if (reqId == toUType(MotionRequestIds::killBehavior)) {
@@ -309,9 +334,8 @@ void MotionModule::mainRoutine()
 
 void MotionModule::sensorsUpdate()
 {
-  for (size_t i = 0; i < sensorLayers.size(); ++i) {
-    sensorLayers[i]->update();
-  }
+  for (const auto& sl : sensorLayers)
+    if (sl) sl->update();
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
     #ifndef V6_CROSS_BUILD
       float steps = memoryProxy->getData("Motion/Walk/NbStep");
@@ -324,14 +348,13 @@ void MotionModule::sensorsUpdate()
 
 void MotionModule::actuatorsUpdate()
 {
-  for (size_t i = 0; i < actuatorLayers.size(); ++i) {
-    actuatorLayers[i]->update();
-  }
+  for (const auto& al : actuatorLayers)
+    if (al) al->update();
 }
 
-KinematicsModulePtr MotionModule::getKinematicsModule() 
-{ 
-  return kinematicsModule; 
+KinematicsModulePtr MotionModule::getKinematicsModule()
+{
+  return kinematicsModule;
 }
 
 MotionGeneratorPtr MotionModule::getMotionGenerator()
@@ -339,9 +362,9 @@ MotionGeneratorPtr MotionModule::getMotionGenerator()
   return motionGenerator;
 }
 
-TrajectoryPlannerPtr MotionModule::getTrajectoryPlanner() 
-{ 
-  return trajectoryPlanner; 
+TrajectoryPlannerPtr MotionModule::getTrajectoryPlanner()
+{
+  return trajectoryPlanner;
 }
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE

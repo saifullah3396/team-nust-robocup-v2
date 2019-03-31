@@ -22,8 +22,8 @@ PostureModule<Scalar>::PostureModule(
 
 template <typename Scalar>
 boost::shared_ptr<PostureModule<Scalar> > PostureModule<Scalar>::getType(
-  MotionModule* motionModule, const BehaviorConfigPtr& cfg) 
-{ 
+  MotionModule* motionModule, const BehaviorConfigPtr& cfg)
+{
   PostureModule<Scalar>* pm;
   switch (cfg->type) {
       case toUType(MBPostureTypes::interpToPosture):

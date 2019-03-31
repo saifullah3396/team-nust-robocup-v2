@@ -11,6 +11,7 @@
 
 #include "BehaviorManager/include/StateMachineMacros.h"
 #include "MotionModule/include/BallThrow/BallThrow.h"
+#include "MotionModule/include/TrajectoryPlanner/JointInterpolator.h"
 
 struct WBBallThrowConfig;
 
@@ -20,7 +21,7 @@ struct WBBallThrowConfig;
  *   of the robot
  */
 template <typename Scalar>
-class   WBBallThrow : public BallThrow<Scalar>
+class   WBBallThrow : public BallThrow<Scalar>, public JointInterpolator<Scalar>
 {
 public:
   /**
@@ -39,7 +40,7 @@ public:
   ~WBBallThrow()
   {
   }
-  
+
   /**
    * @brief initiate See Behavior::initiate()
    */
@@ -67,7 +68,7 @@ private:
    * @param stepTime Time step of update
    */
   void executeArmsTrajs(
-    const vector<vector<Scalar> >& jointTrajectories, 
+    const vector<vector<Scalar> >& jointTrajectories,
     const Scalar& stepTime);
 
   //! Finite state machine for this behavior
@@ -82,6 +83,9 @@ private:
   //! ThrowBall: Throw ball action
   DECLARE_FSM_STATE(WBBallThrow<Scalar>, ThrowBall, throwBall, onStart, onRun,)
 
+  //! Joint trajectories from cubic spline
+  vector < vector<Scalar> > jointTrajectories;
+
   //! Time to grab the ball
   Scalar timeToGrab = {1.0};
 
@@ -93,6 +97,9 @@ private:
 
   //! Time of execution of a state
   Scalar execTime = {0.0};
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 typedef boost::shared_ptr<WBBallThrow<MType> > WBBallThrowPtr;

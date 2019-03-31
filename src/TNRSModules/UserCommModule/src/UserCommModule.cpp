@@ -10,14 +10,14 @@
 #include <boost/make_shared.hpp>
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
-#include "Utils/include/ConfigMacros.h"
-#include "Utils/include/JsonUtils.h"
-#include "UserCommModule/include/CommMsgTypes.h"
 #include "UserCommModule/include/UserCommModule.h"
 #include "UserCommModule/include/UserCommRequest.h"
 #include "UserCommModule/include/UserCommTypes.h"
 #include "UserCommModule/include/TcpServer.h"
+#include "Utils/include/ConfigMacros.h"
+#include "Utils/include/DataHolders/CommMsgTypes.h"
 #include "Utils/include/EnumUtils.h"
+#include "Utils/include/JsonUtils.h"
 
 DEFINE_INPUT_CONNECTOR(UserCommModule,
   (int, userCommThreadPeriod),
@@ -28,7 +28,7 @@ DEFINE_OUTPUT_CONNECTOR(UserCommModule,
 )
 
 UserCommModule::UserCommModule(void* teamNUSTSPL) :
-  BaseModule(teamNUSTSPL, toUType(TNSPLModules::userComm), "UserCommModule")
+  BaseModule(teamNUSTSPL, TNSPLModules::userComm, "UserCommModule")
 {
   connPorts.resize(toUType(UserCommTypes::count));
   GET_CONFIG("UserComm",
@@ -80,11 +80,11 @@ void UserCommModule::handleRequests()
     return;
   auto request = inRequests.queueFront();
   if (boost::static_pointer_cast <UserCommRequest>(request)) {
-    auto reqId = request->getId();
-    if (reqId == toUType(UserCommRequestIds::SEND_MSG_REQUEST)) {
+    auto reqId = request->getRequestId();
+    if (reqId == toUType(UserCommRequestIds::sendMsgRequest)) {
       auto smr = boost::static_pointer_cast<SendMsgRequest>(request);
       addCommMessageToQueue(smr->cMsg);
-    } else if (reqId == toUType(UserCommRequestIds::SEND_IMAGE_REQUEST)) {
+    } else if (reqId == toUType(UserCommRequestIds::sendImageRequest)) {
       auto smr = boost::static_pointer_cast<SendImageRequest>(request);
       addImageToQueue(smr->image);
     }

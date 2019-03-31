@@ -7,18 +7,19 @@
  * @date 16 Nov 2017
  */
 
-#include "UserCommModule/include/UserCommRequest.h"
-#include "PlanningModule/include/PlanningBehaviors/ExternalInterface/Types/UserRequestsHandler.h"
-#include "VisionModule/include/VisionRequest.h"
-#include "Utils/include/VisionUtils.h"
 #include "BehaviorConfigs/include/MBConfigs/MBTeleopConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/PBExternalInterfaceConfig.h"
+#include "PlanningModule/include/PlanningBehaviors/ExternalInterface/Types/UserRequestsHandler.h"
+#include "UserCommModule/include/UserCommRequest.h"
+#include "Utils/include/VisionUtils.h"
+#include "VisionModule/include/VisionRequest.h"
 
-UserRequestsHandlerConfigPtr UserRequestsHandler::getBehaviorCast()
+boost::shared_ptr<UserRequestsHandlerConfig> UserRequestsHandler::getBehaviorCast()
 {
-  return boost::static_pointer_cast <UserRequestsHandlerConfig> (config);
+  return SPC(UserRequestsHandlerConfig, config);
 }
 
-void UserRequestsHandler::initiate()
+bool UserRequestsHandler::initiate()
 {
   LOG_INFO("UserRequestsHandler.initiate()...")
   inBehavior = true;
@@ -39,12 +40,4 @@ void UserRequestsHandler::update()
 void UserRequestsHandler::finish()
 {
   inBehavior = false;
-}
-
-void UserRequestsHandler::waitForConnAction()
-{
-}
-
-void UserRequestsHandler::onRequestAction()
-{
 }

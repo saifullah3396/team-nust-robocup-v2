@@ -29,8 +29,8 @@ ThreadException::~ThreadException() throw ()
 }
 
 BaseModule::BaseModule(
-  void* parent, 
-  const unsigned& moduleId,
+  void* parent,
+  const TNSPLModules& moduleId,
   const string& moduleName,
   const size_t& inRequestsMax) :
   MemoryBase(),
@@ -69,6 +69,7 @@ void BaseModule::start()
 void BaseModule::join()
 {
   int rc = pthread_join(threadId, NULL);
+  LOG_INFO(getModuleName() << " thread joined.");
   if (rc != 0) {
     throw ThreadException("Error in thread join... +(pthread_join())", true);
   }
@@ -96,8 +97,13 @@ bool BaseModule::upperRoutine()
   pthread_mutex_unlock(&terminateMutex);
   if (!t) {
     setIterationStartTime();
+    if (inputConnector) {
+      inputConnector->syncFromMemory();
+    }
     handleRequests();
     mainRoutine();
+    if (outputConnector)
+      outputConnector->syncToMemory();
     onIterationComplete();
     return true;
   } else {
@@ -182,7 +188,6 @@ void BaseModule::startupInputSync()
 
 void BaseModule::onIterationComplete()
 {
-  if (outputConnector != 0) outputConnector->syncToMemory();
   auto timeNow = high_resolution_clock::now();
   auto lastIterationTimeMS =
     duration_cast < milliseconds > (timeNow - iterationStartTime).count();
@@ -196,6 +201,4 @@ void BaseModule::onIterationComplete()
     moduleTime = moduleTime + lastIterationTimeMS * 1e-3;
   }
   checkSuspend();
-  if (inputConnector != 0) inputConnector->syncFromMemory();
-  setThreadPeriod();
 }

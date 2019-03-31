@@ -4,14 +4,16 @@
  * This file declares the class Attacker.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 May 2017 
+ * @date 17 May 2017
  */
 
 #pragma once
 
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Soccer.h"
 
-/** 
+struct AttackerConfig;
+
+/**
  * @class Attacker
  * @brief Class for defining the robocup attacker behavior.
  */
@@ -26,11 +28,7 @@ public:
    */
   Attacker(
     PlanningModule* planningModule,
-    const BehaviorConfigPtr& config) :
-    Soccer(planningModule, config, "Attacker")
-  {
-    DEFINE_FSM_STATE(Soccer, ReactAttacker, react)
-  }
+    const boost::shared_ptr<AttackerConfig>& config);
 
   /**
    * Default destructor for this class.

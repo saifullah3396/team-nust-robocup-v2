@@ -7,15 +7,17 @@
  * @date 16 Nov 2017
  */
 
-#include "LocalizationModule/include/LocalizationRequest.h"
-#include "LocalizationModule/include/LandmarkDefinitions.h"
-#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Defender.h"
-#include "TNRSBase/include/DebugBase.h"
+#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
 #include "BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h"
+#include "LocalizationModule/include/LocalizationRequest.h"
+#include "LocalizationModule/include/LandmarkDefinitions.h"
+#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Defender.h"
+#include "TNRSBase/include/DebugBase.h"
+#include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/TeamPositions.h"
 #include "Utils/include/VisionUtils.h"
 #include "Utils/include/DataHolders/BallInfo.h"
@@ -27,17 +29,24 @@
 
 #define DEFENDER_PTR static_cast<Defender*>(bPtr)
 
+Defender::Defender(
+  PlanningModule* planningModule,
+  const boost::shared_ptr<DefenderConfig>& config) :
+  Soccer(planningModule, config, "Defender")
+{
+  DEFINE_FSM_STATE(Soccer, ReactDefender, react)
+}
+
 boost::shared_ptr<DefenderConfig> Defender::getBehaviorCast()
 {
   return boost::static_pointer_cast<DefenderConfig>(config);
 }
 
-void Defender::initiate()
+bool Defender::initiate()
 {
   LOG_INFO("Defender.initiated() called...")
-  Soccer::initiate();
-  ROBOCUP_ROLE_OUT(PlanningModule) = (int)RobocupRole::DEFENDER;
-  inBehavior = true;
+  ROBOCUP_ROLE_OUT(PlanningModule) = (int)RobocupRole::defender;
+  return Soccer::initiate();
 }
 
 void Defender::ReactDefender::onRun()

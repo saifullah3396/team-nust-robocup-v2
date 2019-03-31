@@ -77,10 +77,20 @@ public:
    * @brief correct Performs the filter correction step
    * @param meas Input measurement
    */
-  void correct(const Matrix<Scalar, MeasSize, 1>& meas) {
+  void correct(const Matrix<Scalar, MeasSize, 1>& meas, const bool& printInfo = false) {
     if (model) {
       Matrix<Scalar, StateSize, 1> state = model->getState();
       Matrix<Scalar, StateSize, MeasSize> K = P * Ht * (R + H * P * Ht).inverse();
+      if (printInfo) {
+        cout << "updated state:" << state << endl;
+        cout << "R:" << R << endl;
+        cout << "P:" << P << endl;
+        cout << "new P : " << model->computeErrorCov(P) << endl;
+        cout << "H P HT:" << Ht * (R + H * P * Ht).inverse() << endl;
+        cout << "K:" << K << endl;
+        cout << "meas:" << meas << endl;
+        cout << "residual:" << meas - H * state << endl;
+      }
       model->setState(state + K * (meas - H * state));
       P = P - K * H * P;
     }
@@ -136,6 +146,14 @@ public:
     this->P = P;
   }
 
+  /**
+   * @brief getErrorNoiseCov Returns the state error noise covariance matrix
+   */
+  Matrix<Scalar, StateSize, StateSize> getErrorNoiseCov()
+  {
+    return P;
+  }
+
 private:
   //! Process model for the system update
   boost::shared_ptr<ProcessModel<Scalar, StateSize, InputSize, OutputSize> > model;
@@ -151,4 +169,7 @@ private:
 
   //! State estimate error covariance
   Matrix<Scalar, StateSize, StateSize> P = {Matrix<Scalar, StateSize, StateSize>::Zero()};
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

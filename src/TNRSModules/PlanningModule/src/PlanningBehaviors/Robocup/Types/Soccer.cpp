@@ -12,12 +12,15 @@
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Soccer.h"
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
 #include "BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h"
+#include "TNRSBase/include/DebugBase.h"
+#include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/RobocupRole.h"
 #include "Utils/include/DataHolders/TeamRobot.h"
@@ -32,6 +35,30 @@
 
 float Soccer::coeffDamping;
 float Soccer::coeffFriction;
+
+Soccer::Soccer(
+  PlanningModule* planningModule,
+  const boost::shared_ptr<PBRobocupConfig>& config,
+  const string& name) :
+  Robocup(planningModule, config, name),
+  lastKickTarget(Point2f(0.f, 0.f)),
+  goingToTarget(GoingToTarget::none),
+  goalPosTol(0.25f), //! 0.25 meters
+  goalAngleTol(0.261666667), //! 15 degrees in radians
+  ballKickDist(0.25f), //! 0.25 meters
+  ballMovedVelMin(0.5f)//! 0.5 meters
+{
+  DEFINE_FSM_STATE(Soccer, SetPosture, setPosture)
+  DEFINE_FSM_STATE(Soccer, Localize, localize)
+  DEFINE_FSM_STATE(Soccer, GoToPosition, goToPosition)
+  DEFINE_FSM_STATE(Soccer, PlayBall, playBall)
+  DEFINE_FSM_STATE(Soccer, AlignToKick, alignToKick)
+  DEFINE_FSM_STATE(Soccer, KickBall, kickBall)
+  DEFINE_FSM_STATE(Soccer, FallRecovery, fallRecovery)
+  DEFINE_FSM_STATE(Soccer, Getup, getup)
+  DEFINE_FSM_STATE(Soccer, WaitForPenalty, waitForPenalty)
+  DEFINE_FSM(fsm, Soccer, setPosture)
+}
 
 boost::shared_ptr<PBRobocupConfig> Soccer::getBehaviorCast()
 {
@@ -49,7 +76,7 @@ void Soccer::loadExternalConfig() {
   }
 }
 
-void Soccer::initiate()
+bool Soccer::initiate()
 {
   LOG_INFO("Soccer.initiated() called...")
   BaseModule::publishModuleRequest(
@@ -63,7 +90,7 @@ void Soccer::initiate()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(true, FeatureExtractionIds::goal));
   BaseModule::publishModuleRequest(
-    boost::make_shared<SwitchFeatureExtModule>(true, FeatureExtractionIds::BALL));
+    boost::make_shared<SwitchFeatureExtModule>(true, FeatureExtractionIds::ball));
   if (getBehaviorCast()->startPoseKnown) {
     BaseModule::publishModuleRequest(
       boost::make_shared<InitiateLocalizer>(
@@ -75,6 +102,7 @@ void Soccer::initiate()
     getBehaviorCast()->onSideAtStart;
   BaseModule::publishModuleRequest(boost::make_shared<SwitchVision>(true));
   BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(true));
+  return true;
 }
 
 void Soccer::update()
@@ -90,7 +118,6 @@ void Soccer::update()
 
   //! Print game state
   //! printGameData();
-
   fsm->update();
 }
 
@@ -103,14 +130,13 @@ void Soccer::finish()
 
 void Soccer::SetPosture::onRun()
 {
-  cout << "SetPosture" << endl;
   if (bPtr->robotIsFalling()) {
     nextState = bPtr->fallRecovery.get();
   } else if (bPtr->robotIsPenalised()) {
     nextState = bPtr->waitForPenalty.get();
   } else {
     if (bPtr->setPostureAndStiffness(
-        PostureState::STAND_HANDS_BEHIND,
+        PostureState::standHandsBehind,
         StiffnessState::robocup, MOTION_1))
     {
       nextState = bPtr->localize.get();
@@ -127,7 +153,6 @@ void Soccer::Localize::onStart()
 
 void Soccer::Localize::onRun()
 {
-  cout << "Localize" << endl;
   //cout << "Soccer::Localize::onRun()" << endl;
   if (bPtr->robotIsFalling()) {
     nextState = bPtr->fallRecovery.get();
@@ -153,14 +178,13 @@ void Soccer::Localize::onStop()
 void Soccer::GoToPosition::onStart()
 {
   //cout << "Soccer::GoToPosition::onRun()" << endl;
-  if (bPtr->goingToTarget != GoingToTarget::NONE &&
-      bPtr->goingToTarget != GoingToTarget::INIT_POSITION)
+  if (bPtr->goingToTarget != GoingToTarget::none &&
+      bPtr->goingToTarget != GoingToTarget::initPosition)
     bPtr->killChild();
 }
 
 void Soccer::GoToPosition::onRun()
 {
-  cout << "GoToPosition" << endl;
   if (bPtr->robotIsFalling()) {
     nextState = bPtr->fallRecovery.get();
   } else if (bPtr->robotIsPenalised()) {
@@ -168,21 +192,21 @@ void Soccer::GoToPosition::onRun()
   } else {
     RobotPose2D<float> target;
     target = positionsInGame[ROBOCUP_ROLE_OUT_REL(PlanningModule, bPtr)];
-    if (bPtr->goingToTarget != GoingToTarget::INIT_POSITION) {
+    if (bPtr->goingToTarget != GoingToTarget::initPosition) {
       if ((ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr) - target).get().norm() > bPtr->goalPosTol) {
         bPtr->setNavigationConfig(target);
         ROBOT_INTENTION_OUT_REL(PlanningModule, bPtr) = 1;
-        bPtr->goingToTarget = GoingToTarget::INIT_POSITION;
+        bPtr->goingToTarget = GoingToTarget::initPosition;
       } else if (fabsf(ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr).getTheta() - target.getTheta()) > bPtr->goalAngleTol) {
         target.x() = ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr).getX();
         target.y() = ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr).getY();
         bPtr->setNavigationConfig(target);
         ROBOT_INTENTION_OUT_REL(PlanningModule, bPtr) = 1;
-        bPtr->goingToTarget = GoingToTarget::INIT_POSITION;
+        bPtr->goingToTarget = GoingToTarget::initPosition;
       }
     } else {
       if ((bPtr->moveTarget.get() - target.get()).norm() > bPtr->goalPosTol || !bPtr->getChild()) {
-        bPtr->goingToTarget = GoingToTarget::NONE;
+        bPtr->goingToTarget = GoingToTarget::none;
       }
     }
     nextState = bPtr->react.get();
@@ -191,10 +215,9 @@ void Soccer::GoToPosition::onRun()
 
 void Soccer::PlayBall::onStart()
 {
-  cout << "PlayBall" << endl;
   //cout << "Soccer::PlayBall::onStart()" << endl;
-  if (bPtr->goingToTarget != GoingToTarget::NONE &&
-      bPtr->goingToTarget != GoingToTarget::BALL) {
+  if (bPtr->goingToTarget != GoingToTarget::none &&
+      bPtr->goingToTarget != GoingToTarget::ball) {
     bPtr->killChild();
   }
   /*if (bPtr->matchLastMotionRequest(
@@ -212,7 +235,6 @@ void Soccer::PlayBall::onStart()
 
 void Soccer::PlayBall::onRun()
 {
-  cout << "PlayBall" << endl;
   if (bPtr->robotIsFalling()) {
     nextState = bPtr->fallRecovery.get();
   } else if (bPtr->robotIsPenalised()) {
@@ -230,7 +252,7 @@ void Soccer::PlayBall::onRun()
     //cout << "Soccer::PlayBall::onRun()" << endl;
     ROBOT_INTENTION_OUT_REL(PlanningModule, bPtr) = 3;
     // Send robot at distance 'ballKickDist'm from the ball and angle 'ballKickAngle'm.
-    //if (bPtr->goingToTarget != GoingToTarget::BALL) {
+    //if (bPtr->goingToTarget != GoingToTarget::ball) {
     float dist = norm(BALL_INFO_IN_REL(PlanningModule, bPtr).posRel);
     //cout << "dist: " << dist << endl;
     if (dist > bPtr->ballKickDist + 0.05) { // If ball is greater than 'ballKickDist'm far
@@ -244,7 +266,7 @@ void Soccer::PlayBall::onRun()
      // auto& velWorld = WORLD_BALL_INFO_IN_REL(PlanningModule, bPtr).velWorld;
      // cout << "norm(velWorld): " << norm(velWorld) << endl;
      // if (norm(velWorld) > bPtr->ballMovedVelMin || !bPtr->getChild()) {
-     //   bPtr->goingToTarget = GoingToTarget::NONE;
+     //   bPtr->goingToTarget = GoingToTarget::none;
     //  }
       //nextState = bPtr->react.get();
     //}
@@ -253,16 +275,14 @@ void Soccer::PlayBall::onRun()
 
 void Soccer::AlignToKick::onStart()
 {
-  cout << "AlignToKick" << endl;
   //cout << "Soccer::AlignToKick::onStart()" << endl;
-  if (bPtr->goingToTarget != GoingToTarget::NONE &&
-      bPtr->goingToTarget != GoingToTarget::KICK_ALIGNMENT)
+  if (bPtr->goingToTarget != GoingToTarget::none &&
+      bPtr->goingToTarget != GoingToTarget::kickAlignment)
     bPtr->killChild();
 }
 
 void Soccer::AlignToKick::onRun()
 {
-  cout << "AlignToKick" << endl;
   if (bPtr->robotIsFalling()) {
     nextState = bPtr->fallRecovery.get();
   } else if (bPtr->robotIsPenalised()) {
@@ -270,16 +290,16 @@ void Soccer::AlignToKick::onRun()
   } else {
     //cout << "Soccer::AlignToKick::onRun()" << endl;
     //! Align to pass the ball to best target
-    if (bPtr->goingToTarget != GoingToTarget::KICK_ALIGNMENT) {
+    if (bPtr->goingToTarget != GoingToTarget::kickAlignment) {
       RobotPose2D<float> target;
       bPtr->findBestBallAlignment(target);
       bPtr->setNavigationConfig(target);
-      bPtr->goingToTarget = GoingToTarget::KICK_ALIGNMENT;
+      bPtr->goingToTarget = GoingToTarget::kickAlignment;
     } else {
       if (!bPtr->getChild()) {
         //cout << "BALL_INFO.posRel: " << BALL_INFO_IN_REL(PlanningModule, bPtr).posRel << endl;
         //cout << "WORLD_BALL_INFO.posWorld: " << WORLD_BALL_INFO_IN_REL(PlanningModule, bPtr).posWorld << endl;
-        bPtr->goingToTarget = GoingToTarget::NONE;
+        bPtr->goingToTarget = GoingToTarget::none;
         // Add this to check whether robot is in correct position after alignment
         if (bPtr->alignedToKick()) {
           //cout << "Aligned ..." << endl;
@@ -306,7 +326,6 @@ void Soccer::KickBall::onRun()
   } else if (bPtr->robotIsPenalised()) {
     nextState = bPtr->waitForPenalty.get();
   } else {
-    cout << "Soccer::KickBall::onRun()" << endl;
     if (kickSet) {
       if (!bPtr->mbInProgress()) {
         nextState = bPtr->setPosture.get();
@@ -318,7 +337,8 @@ void Soccer::KickBall::onRun()
     if (BALL_INFO_IN_REL(PlanningModule, bPtr).found) {
       if (!bPtr->mbInProgress()) {
         auto kConfig =
-          boost::make_shared<JSOImpKickConfig>(BALL_INFO_IN_REL(PlanningModule, bPtr).posRel);
+          boost::make_shared<JSOImpKickConfig>();
+        kConfig->ball = BALL_INFO_IN_REL(PlanningModule, bPtr).posRel;
         kConfig->reqVel = Point2f(0.75, 0.0);
         bPtr->setupMBRequest(MOTION_1, kConfig);
         kickSet = true;
@@ -331,7 +351,6 @@ void Soccer::KickBall::onRun()
 
 void Soccer::FallRecovery::onStart()
 {
-  cout << "Soccer::fallRecovery::onStart()..." << endl;
   bPtr->killChild();
   bPtr->killAllMotionBehaviors();
   bPtr->killGeneralBehavior();
@@ -342,22 +361,22 @@ void Soccer::FallRecovery::onStart()
 
 void Soccer::FallRecovery::onRun()
 {
-  cout << "Soccer::fallRecovery::onRun()..." << endl;
   if (ROBOT_FALLEN_IN_REL(PlanningModule, bPtr)) {
     nextState = bPtr->getup.get();
   } else {
     auto posture = POSTURE_STATE_IN_REL(PlanningModule, bPtr);
     float postureTime = 2.f;
-    if (posture == PostureState::FALLING_FRONT) {
+    if (posture == PostureState::fallingFront) {
       postureTime = 0.5f;
-    } else if (posture == PostureState::FALLING_BACK) {
+    } else if (posture == PostureState::fallingBack) {
       postureTime = 0.5f;
     }
-    if (posture != PostureState::STAND) {
+    if (posture != PostureState::stand) {
       if (!bPtr->mbInProgress()) {
         auto pConfig =
-          boost::make_shared<InterpToPostureConfig>(
-            PostureState::STAND, postureTime);
+          boost::make_shared<InterpToPostureConfig>();
+        pConfig->targetPosture = PostureState::stand;
+        pConfig->timeToReachP = postureTime;
         bPtr->setupMBRequest(MOTION_1, pConfig);
       }
     } else {
@@ -371,7 +390,6 @@ void Soccer::FallRecovery::onRun()
 
 void Soccer::Getup::onStart()
 {
-  cout << "Soccer::Getup::onStart()..." << endl;
   bPtr->killChild();
   bPtr->killAllMotionBehaviors();
   bPtr->killGeneralBehavior();
@@ -391,14 +409,14 @@ void Soccer::Getup::onRun()
   } else {
     if (!bPtr->mbInProgress()) {
       auto posture = POSTURE_STATE_IN_REL(PlanningModule, bPtr);
-      if (posture == PostureState::FALL_FRONT) {
-        if (bPtr->getupFromGround(KeyFrameGetupTypes::FRONT, StiffnessState::GETUP, MOTION_1))
+      if (posture == PostureState::fallFront) {
+        if (bPtr->getupFromGround(KeyFrameGetupTypes::front, StiffnessState::getup, MOTION_1))
           getupCmdSent= true;
-      } else if (posture == PostureState::FALL_BACK) {
-        if (bPtr->getupFromGround(KeyFrameGetupTypes::BACK, StiffnessState::GETUP, MOTION_1))
+      } else if (posture == PostureState::fallBack) {
+        if (bPtr->getupFromGround(KeyFrameGetupTypes::back, StiffnessState::getup, MOTION_1))
           getupCmdSent= true;
-      } else if (posture == PostureState::FALL_SIT) {
-        if (bPtr->getupFromGround(KeyFrameGetupTypes::SIT, StiffnessState::GETUP, MOTION_1))
+      } else if (posture == PostureState::fallSit) {
+        if (bPtr->getupFromGround(KeyFrameGetupTypes::sit, StiffnessState::getup, MOTION_1))
           getupCmdSent= true;
       }
     }
@@ -418,7 +436,7 @@ void Soccer::WaitForPenalty::onRun()
   static bool penaliseMotionSet = false;
   if (!penaliseMotionSet) {
     if (bPtr->setPostureAndStiffness(
-          PostureState::STAND, StiffnessState::robocup, MOTION_1))
+          PostureState::stand, StiffnessState::robocup, MOTION_1))
     {
       penaliseMotionSet = true;
     }
@@ -432,12 +450,11 @@ void Soccer::WaitForPenalty::onRun()
 bool Soccer::shouldPlayBall()
 {
   static unsigned ballLostCount = 0;
-  if (goingToTarget == GoingToTarget::BALL && !ballFound()) {
+  if (goingToTarget == GoingToTarget::ball && !ballFound()) {
       ++ballLostCount;
     return ballLostCount > 20 ? false : true;
   }
   if (!ballFound()) {
-    cout << "ball not found..." << endl;
     return false;
   }
   if (!ballInRange())
@@ -462,7 +479,7 @@ void Soccer::goToBall(const float& distFromBall)
   target.y() = ballWorld.y - distFromBall * sin(0.0);
   target.theta() = 0.0;
   setNavigationConfig(target);
-  goingToTarget = GoingToTarget::BALL;
+  goingToTarget = GoingToTarget::ball;
 }
 
 Point2f Soccer::findBallKickTarget()
@@ -488,7 +505,6 @@ Point2f Soccer::findBallKickTarget()
   }
 
   if (teammateFound) {
-    LOG_INFO("Passing to teammate at:" << kickTarget)
     return kickTarget;
   } else {
     //! Assign opponent goal as the target of the robot. Opponent goal is in positive X
@@ -511,7 +527,6 @@ Point2f Soccer::findBallKickTarget()
         }
       }
     } else {
-      LOG_INFO("Kicking to:" << kickTarget)
       return kickTarget;
     }
   }
@@ -549,10 +564,10 @@ bool Soccer::alignedToKick()
 
 bool Soccer::behindObstacle(const Point2f& target)
 {
-  auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+  auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
   TNRSLine<float> targetLine;
   targetLine.p1 = Point2f(pose.getX(), pose.getY());
-  for (auto& obs : OBSTACLES_OBS_IN(PlanningModule).data) {
+  for (auto obs : OBSTACLES_OBS_IN(PlanningModule).data) {
     targetLine.p2 = target;
     Point2f inter;
     if (obs.frontT.findIntersection(targetLine, inter)) {

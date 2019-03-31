@@ -24,8 +24,6 @@ class LocalizationModule : public BaseModule
 {
   DECLARE_INPUT_CONNECTOR(
     localizationThreadPeriod,
-    fieldWidth,
-    fieldHeight,
     gameData,
     upperCamInFeet,
     lowerCamInFeet,
@@ -44,7 +42,9 @@ class LocalizationModule : public BaseModule
     occupancyMap,
     robotLocalized,
     positionConfidence,
-    sideConfidence
+    sideConfidence,
+    fieldWidth,
+    fieldHeight
   )
 public:
   /**
@@ -97,13 +97,13 @@ public:
 
 private:
   //! Whether to perform processing related to robot localization
-  bool runLocalization;
+  bool runLocalization = {true};
 
   //! Whether to update the particle filter
-  bool updateFilter;
+  bool updateFilter = {true};
 
   //! Whether to update the field map
-  bool updateMap;
+  bool updateMap = {true};
 
   //! Particle filter object
   boost::shared_ptr<ParticleFilter> particleFilter;

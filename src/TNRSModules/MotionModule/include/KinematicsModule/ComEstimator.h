@@ -30,10 +30,10 @@ public:
    * @brief ~ComEstimator Destructor
    */
   ~ComEstimator() {}
- 
+
   /**
    * @brief init Sets up the filter and initiates it with the given state vector
-   * 
+   *
    * @param initState the initial state for the filter
    * @param comHeight com height for the inverted-cart table model
    * @param dT time step for the filter
@@ -42,21 +42,21 @@ public:
     const Matrix<Scalar, 3, 1>& initState,
     const Scalar& comHeight,
     const Scalar& dT);
-  
+
   /**
    * @brief reset Resets the filter with the given state vector
-   * 
+   *
    * @param state the reset state for the filter
-   */ 
+   */
   void reset(const Matrix<Scalar, 3, 1>& state)
     { model->setState(state); filter->reset(); }
-  
+
   /**
    * @brief update Updates the filter and estimator for the given
    *   measurement input
    *
    * @param meas The new measurement
-   */ 
+   */
   void update(const Matrix<Scalar, MeasSize, 1>& meas);
 
   /**
@@ -69,14 +69,14 @@ public:
 
   /**
    * @brief getState Returns the current system state
-   */ 
+   */
   Matrix<Scalar, 3, 1> getState() { return model->getState(); }
 
   /**
    * @brief getOutput Returns the current system output
    */
   Matrix<Scalar, 1, 1> getOutput() { return model->getOutput(); }
-  
+
   /**
    * @brief getModel Returns the process model used
    */
@@ -95,9 +95,9 @@ public:
 
   /**
    * Returns true if the filter is already initiated
-   */ 
+   */
   bool isInitiated() { return initiated; }
-  
+
 private:
   //! Kalman filter
   boost::shared_ptr<KalmanFilter<Scalar, 3, 3, 1, 1> > filter;
@@ -112,7 +112,7 @@ private:
   //! Com measurement matrix
   Matrix<Scalar, MeasSize, MeasSize> H =
     {Matrix<Scalar, MeasSize, MeasSize>::Zero()};
-  
+
   //! Whether the filter has been initiated or not
   bool initiated;
 
@@ -123,4 +123,7 @@ private:
   //! Last measurement vector
   Matrix<Scalar, MeasSize, 1> lastMeas =
     {Matrix<Scalar, MeasSize, 1>::Zero()};
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

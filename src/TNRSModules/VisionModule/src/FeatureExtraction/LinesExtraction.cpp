@@ -10,6 +10,9 @@
 
 #include <chrono>
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "Utils/include/AngleDefinitions.h"
+#include "Utils/include/ConfigMacros.h"
+#include "Utils/include/TNRSLine.h"
 #include "VisionModule/include/FeatureExtraction/FieldExtraction.h"
 #include "VisionModule/include/FeatureExtraction/LinesExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
@@ -17,8 +20,6 @@
 #include "VisionModule/include/FeatureExtraction/RobotRegion.h"
 #include "VisionModule/include/FeatureExtraction/Circle.h"
 #include "VisionModule/include/FeatureExtraction/FittedLine.h"
-#include "Utils/include/AngleDefinitions.h"
-#include "Utils/include/TNRSLine.h"
 
 LinesExtraction::LinesExtraction(VisionModule* visionModule) :
   FeatureExtraction(visionModule),
@@ -233,7 +234,6 @@ bool LinesExtraction::scanForEdges(
   auto border = fieldExt->getBorder();
   auto fHeight = fieldExt->getFieldHeight();
   auto robotRegions = robotExt->getRobotRegions();
-  cout << "robotRegions.size(): " << robotRegions.size() << endl;
   if (border.empty()) {
     duration<double> timeSpan = high_resolution_clock::now() - tStart;
     edgeScanTime = timeSpan.count();
@@ -272,7 +272,7 @@ bool LinesExtraction::scanForEdges(
       if (!scan) continue;
       auto color = getYUV(x, y);
       //! Horizontal Scanning
-      if (colorHandler->isColor(color, TNColors::WHITE)) {
+      if (colorHandler->isColor(color, TNColors::white)) {
         bgrMat[currentImage].at<Vec3b>(y, x) = Vec3b(0,0,255);
         if (horStartLine == -1) {
           horStartLine = x;
@@ -314,7 +314,7 @@ bool LinesExtraction::scanForEdges(
       }
       if (!scan) continue;
       auto color = getYUV(x, y);
-      if (colorHandler->isColor(color, TNColors::WHITE)) {
+      if (colorHandler->isColor(color, TNColors::white)) {
         if (verStartLine == -1) {
           verStartLine = y;
         }/* else {
@@ -822,14 +822,14 @@ void LinesExtraction::findFeatures(vector<FittedLinePtr>& worldLines)
 {
   //cout << "Finding features..." << endl;
   auto tStart = high_resolution_clock::now();
-  for (const auto& wl : worldLines) {
-    if (!wl || wl->circleLine) continue;
-    Point2f p1 = worldToImage(wl->p1);
-    Point2f p2 = worldToImage(wl->p2);
-    line(worldImage, p1, p2, Scalar(255,0,0), 2);
-    imshow("worldImage test", worldImage);
-    waitKey(0);
-  }
+  //for (const auto& wl : worldLines) {
+  //  if (!wl || wl->circleLine) continue;
+  //  Point2f p1 = worldToImage(wl->p1);
+  //  Point2f p2 = worldToImage(wl->p2);
+    //line(worldImage, p1, p2, Scalar(255,0,0), 2);
+    //imshow("worldImage test", worldImage);
+    //waitKey(0);
+  //}
   static auto padding = 20;
   static auto interImageBox = cv::Rect(padding, padding, getImageWidth() - padding * 2, getImageHeight() - padding * 2);
   for (const auto& wl1 : worldLines) {

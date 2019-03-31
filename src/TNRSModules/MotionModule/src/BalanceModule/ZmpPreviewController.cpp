@@ -4,7 +4,7 @@
  * This file implements the class ZmpPreviewController
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date Jul 22 2018 
+ * @date Jul 22 2018
  */
 
 #include <boost/make_shared.hpp>
@@ -26,7 +26,7 @@ ZmpPreviewController<Scalar>::ZmpPreviewController(
 template<typename Scalar>
 void ZmpPreviewController<Scalar>::initController()
 {
-  aug = boost::make_shared<AugmentedStateMats<3> >(model);
+  aug = boost::shared_ptr<AugmentedStateMats<3> >(new AugmentedStateMats<3>(model));
   gGain = aug->solveDare();
   auto matBAugt = aug->matBAug.transpose();
   Scalar temp = 1 / (aug->R + (matBAugt * gGain * aug->matBAug)(0, 0));
@@ -40,6 +40,9 @@ void ZmpPreviewController<Scalar>::initController()
       prevState = matPAAug.transpose() * prevState;
   }
   trueState = model->getState();
+  trueState[1] = 0.0;
+  trueState[2] = 0.0;
+  LOG_INFO("trueState at start:" << trueState.transpose());
   model->setTrueState(trueState);
   model->setInput(0.0);
   //model->setObserver(true);

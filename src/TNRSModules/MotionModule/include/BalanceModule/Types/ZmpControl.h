@@ -40,7 +40,7 @@ public:
   ZmpControl(
     MotionModule* motionModule,
     const boost::shared_ptr<ZmpControlConfig>& config);
-  
+
   /**
    * @brief ~ZmpControl Destructor
    */
@@ -79,24 +79,24 @@ private:
 
   /**
    * @brief getBehaviorCast Returns the cast of config to ZmpControlConfigPtr
-	 */
+   */
   boost::shared_ptr<ZmpControlConfig> getBehaviorCast();
-  
+
   //! Preview controllers for x-y directions
   vector<ZmpPreviewController<Scalar>*> controllers;
-  
+
   //! Zmp reference generator for x-y directions
   boost::shared_ptr<ZmpRefGenerator<Scalar>> refGenerator;
 
   //! Desired zmp references relative to support leg in x-y directions
   boost::shared_ptr<ZmpRef<Scalar>> zmpRef;
-  
+
   //! Tasks vector for solving whole-body inverse kinematics
   vector<TaskPtr> tasks;
 
   //! Desired com position in each update
   Matrix<Scalar, 3, 1> desComPosition;
-  
+
   //! Other leg (from support) index
   LinkChains otherLeg;
 
@@ -124,6 +124,7 @@ private:
   enum IkTasks : unsigned int {
     com,
     posture,
+    regularization,
     contact,
     torso,
     count

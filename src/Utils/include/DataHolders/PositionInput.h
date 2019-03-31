@@ -25,7 +25,10 @@ struct PositionInput : public RobotPose2D<Scalar>
    * @param dY Y-coordinate of the input velocity.
    * @param dTheta Theta-coordinate of the input velocity.
    */
-  PositionInput(const Scalar& x, const Scalar& y, const Scalar& theta) :
+  PositionInput(
+    const Scalar& x = 0.0,
+    const Scalar& y = 0.0,
+    const Scalar& theta = 0.0) :
     RobotPose2D<Scalar>(x, y, theta)
   {
   }

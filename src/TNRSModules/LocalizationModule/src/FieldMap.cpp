@@ -46,15 +46,15 @@ FieldMap::FieldMap(LocalizationModule* localizationModule) :
   GET_CONFIG("EnvProperties", (float, ballRadius, ballRadius),);
 
   auto& occupancyMap = OCCUPANCY_MAP_OUT(LocalizationModule);
-  const auto& fieldWidth = FIELD_WIDTH_IN(LocalizationModule);
-  const auto& fieldHeight = FIELD_HEIGHT_IN(LocalizationModule);
+  const auto& fieldWidth = FIELD_WIDTH_OUT(LocalizationModule);
+  const auto& fieldHeight = FIELD_HEIGHT_OUT(LocalizationModule);
   auto mapWidth = fieldWidth / occupancyMap.resolution;
   auto mapHeight = fieldHeight / occupancyMap.resolution;
   //worldImage = Mat(Size(mapWidth, mapHeight), CV_8UC3);
   //mapDrawing = Mat(Size(mapWidth, mapHeight), CV_8UC3);
   //drawField();
 
-  occupancyMap.data = Mat_<float>::zeros(mapHeight, mapWidth);
+  occupancyMap.data = Scalar(0);
   //! Create the boundary
   rectangle(
     occupancyMap.data,

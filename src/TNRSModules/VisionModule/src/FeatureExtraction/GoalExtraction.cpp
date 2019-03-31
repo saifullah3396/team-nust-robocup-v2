@@ -1,11 +1,11 @@
 /**
  * @file FeatureExtraction/GoalExtraction.cpp
  *
- * This file implements the class for goal extraction from 
- * the image. 
+ * This file implements the class for goal extraction from
+ * the image.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 22 Aug 2017  
+ * @date 22 Aug 2017
  */
 
 #include "TNRSBase/include/MemoryIOMacros.h"
@@ -20,6 +20,7 @@
 #include "VisionModule/include/FeatureExtraction/GoalExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RobotExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RobotRegion.h"
+#include "Utils/include/ConfigMacros.h"
 #include "Utils/include/MathsUtils.h"
 
 using namespace MathsUtils;
@@ -351,9 +352,9 @@ void GoalExtraction::classifyPosts(vector<ScannedRegionPtr>& verGoalRegions)
     for (int j = winY; j < winSizeY + winY; ++j) {
       for (int k = winX; k < winSizeX + winX; ++k) {
         auto p = getYUV(k, j);
-        if (colorHandler->isColor(p, TNColors::WHITE)) {
+        if (colorHandler->isColor(p, TNColors::white)) {
           whiteCnt++;
-        } else if (colorHandler->isColor(p, TNColors::GREEN)) {
+        } else if (colorHandler->isColor(p, TNColors::green)) {
           bgrMat[currentImage].at<Vec3b>(j, k) = Vec3b(0,255,0);
           greenCnt++;
         }
@@ -553,7 +554,7 @@ void GoalExtraction::updateGoalInfo()
   }
   float currentTime = visionModule->getModuleTime();
   for (int i = 0; i < goalPosts.size(); ++i) {
-    if (goalPosts[i]->refresh) 
+    if (goalPosts[i]->refresh)
       goalPosts[i]->timeDetected = currentTime;
   }
   if (goalInfo.found) {

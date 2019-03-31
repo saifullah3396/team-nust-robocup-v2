@@ -35,7 +35,8 @@ enum class JointSensorTypes : unsigned int
 enum class SensorTypes : unsigned int
 {
   joints = 0,
-  touchSensors = JointSensorTypes::count,
+  handSensors = JointSensorTypes::count,
+  touchSensors,
   switchSensors,
   batterySensors,
   inertialSensors,
@@ -67,6 +68,7 @@ enum class ActuatorTypes : unsigned int
 {
   jointActuators = 0,
   ledActuators = JointActuatorTypes::count,
+  handActuators,
   count
 };
 

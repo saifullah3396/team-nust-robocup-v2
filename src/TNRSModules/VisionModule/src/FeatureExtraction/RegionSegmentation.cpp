@@ -15,6 +15,7 @@
 #include "VisionModule/include/FeatureExtraction/GoalExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
 #include "VisionModule/include/ColorHandler.h"
+#include "Utils/include/ConfigMacros.h"
 
 RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
   FeatureExtraction(visionModule),
@@ -74,8 +75,8 @@ void RegionSegmentation::processImage()
   verJerseyLinesOpps.clear();
 
   borderPoints.clear();
-  ourColor = TNColors::YELLOW;
-  oppColor = TNColors::BLUE;
+  ourColor = TNColors::yellow;
+  oppColor = TNColors::blue;
 
   horizontalScan();
   verticalScan();
@@ -103,7 +104,7 @@ void RegionSegmentation::horizontalScan()
   int horPrevLen = 1000;
   //! Last field height with some margin
   auto lastHeight = fieldExt->getFieldHeight() - 50;
-  
+
   srand(time(0));
   int horStartHigh = rand() % scanStepHigh;
 
@@ -150,7 +151,7 @@ void RegionSegmentation::horizontalScan()
     for (int x = horStartLow; x < getImageWidth(); x = x + scanStepLow) {
       auto color = getYUV(x, y);
       //! Horizontal Scanning
-      if (colorHandler->isColor(color, TNColors::GREEN)) {
+      if (colorHandler->isColor(color, TNColors::green)) {
         if (scanInField) {
           //! Field Scanning
           if (horStartF == -1) {
@@ -206,8 +207,8 @@ void RegionSegmentation::horizontalScan()
         bool isOpps = colorHandler->isColor(color, oppColor);
 
         if (scanInField) {
-          bool isWhite = colorHandler->isColor(color, TNColors::WHITE);
-          //bool isBlack = colorHandler->isColor(color, TNColors::BLACK);
+          bool isWhite = colorHandler->isColor(color, TNColors::white);
+          //bool isBlack = colorHandler->isColor(color, TNColors::black);
           //! Field Scanning
           if (horStartF != -1) otherF++;
 
@@ -367,7 +368,7 @@ void RegionSegmentation::verticalScan()
       bool scanInField = y > lastHeight;
       auto color = getYUV(x, y);
       //! Vertical Scanning
-      if (colorHandler->isColor(color, TNColors::GREEN)) {
+      if (colorHandler->isColor(color, TNColors::green)) {
         if (scanInField) {
           //! Field Scanning
           if (verStartF == -1) {
@@ -409,9 +410,9 @@ void RegionSegmentation::verticalScan()
            if (
            verStartBall != -1 &&
            check &&
-           y - verStartBall < 100) 
+           y - verStartBall < 100)
            {
-           auto sl = 
+           auto sl =
            boost::make_shared<ScannedLine>(
            Point(x, verStartBall), Point(x, y - scanStepLow)
            );
@@ -455,8 +456,8 @@ void RegionSegmentation::verticalScan()
         bool isOpps = colorHandler->isColor(color, oppColor);
 
         if (scanInField) {
-          bool isWhite = colorHandler->isColor(color, TNColors::WHITE);
-          //bool isBlack = colorHandler->isColor(color, TNColors::BLACK);
+          bool isWhite = colorHandler->isColor(color, TNColors::white);
+          //bool isBlack = colorHandler->isColor(color, TNColors::black);
           //! Field Scanning
           if (verStartF != -1) otherF++;
 
@@ -550,15 +551,15 @@ void RegionSegmentation::verticalScan()
         }
       }
       /*if(colorHandler->isColor(color, TNColors::WHITE))
-       { 
+       {
        if (verStartLine == -1) {
-       verStartLine = y; 
+       verStartLine = y;
        }
-       
+
        if (verStartGoal == -1) {
        verStartGoal = y;
        }
-       
+
        } else {
        if (verStartLine != -1) {
        float diff = y - verStartLine;
@@ -571,7 +572,7 @@ void RegionSegmentation::verticalScan()
        }
        uchar* p = whiteEdges.ptr<uchar>(index);
        p[x] = 255;
-       auto se = 
+       auto se =
        boost::make_shared<ScannedEdge>(Point(x, index));
        lineEdges.push_back(se);
        //uchar* p = whiteEdges.ptr<uchar>(y - scanStepLow);
@@ -581,8 +582,8 @@ void RegionSegmentation::verticalScan()
        //whiteEdges.at<uchar>(sl->p1.y, sl->p1.x) = 255;
        //whiteEdges.at<uchar>(sl->p2.y, sl->p2.x) = 255;
        //line(yuv, sl->p1, sl->p2, Scalar(255,0,0), 1);
-       
-       //auto se2 = boost::make_shared<ScannedEdge>(Point(x, y));              
+
+       //auto se2 = boost::make_shared<ScannedEdge>(Point(x, y));
        //se1->connectedTo = se2;
        //se2->connectedTo = se1;
        //verLineEdges.push_back(se1);
@@ -595,18 +596,18 @@ void RegionSegmentation::verticalScan()
        }
        }
        verStartLine = -1;
-       
+
        if (verStartGoal != -1) {
        float width = y - verStartGoal;
        if( width >= 5 ) {
-       auto sl = 
+       auto sl =
        boost::make_shared<ScannedLine>(
        Point(x, verStartGoal), Point(x, y)
        );
        verGoalLines.push_back(sl);
        //line(yuv, sl->p1, sl->p2, Scalar(255,0,255), 1);
        }
-       }   
+       }
        verStartGoal = -1;
        }*/
     }
@@ -644,12 +645,12 @@ void RegionSegmentation::drawResults()
       VisionUtils::drawPoints(borderPoints, bgr);
   }
 
-  if (GET_DVAR(int, drawVerticalLines)) {    
+  if (GET_DVAR(int, drawVerticalLines)) {
     for (int i = 0; i < verJerseyLinesOurs.size(); ++i) {
       if (verJerseyLinesOurs[i])
       line(bgr, verJerseyLinesOurs[i]->p1, verJerseyLinesOurs[i]->p2, Scalar(0, 255, 255), 2);
     }
-  
+
     for (int i = 0; i < verJerseyLinesOpps.size(); ++i) {
       if (verJerseyLinesOpps[i])
        line(bgr, verJerseyLinesOpps[i]->p1, verJerseyLinesOpps[i]->p2, Scalar(255, 0, 0), 2);
@@ -667,7 +668,7 @@ void RegionSegmentation::drawResults()
       if (horJerseyLinesOurs[i])
         line(bgr, horJerseyLinesOurs[i]->p1, horJerseyLinesOurs[i]->p2, Scalar(0, 255, 255), 2);
     }
-    
+
     for (int i = 0; i < horJerseyLinesOpps.size(); ++i) {
       if (horJerseyLinesOpps[i])
         line(bgr, horJerseyLinesOpps[i]->p1, horJerseyLinesOpps[i]->p2, Scalar(255, 0, 0), 2);

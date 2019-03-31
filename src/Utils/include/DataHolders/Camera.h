@@ -193,7 +193,7 @@ struct Camera : public DataHolder
    */
   void print() const final;
   Json::Value getJson() const final;
-  void getSettings(const string& configFile);
+  void getSettings();
   #ifndef NAOQI_VIDEO_PROXY_AVAILABLE
   void setControl(const CameraSettings& id);
   void setCameraSetting(const CameraSettings& id, const int& value);

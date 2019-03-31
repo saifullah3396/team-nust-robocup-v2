@@ -40,7 +40,7 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
   (vector<float>, ledSensors),
   (StiffnessState, stiffnessState),
   (bool, whistleDetected),
-  (BehaviorInfo, sBehaviorInfo),
+  (BehaviorInfo, gBehaviorInfo),
 )
 
 #ifndef V6_CROSS_BUILD
@@ -50,7 +50,7 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
       const ALMemoryProxyPtr& memoryProxy,
       const ALDCMProxyPtr& dcmProxy,
       const ALMotionProxyPtr& motionProxy) :
-      BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
+      BaseModule(parent, TNSPLModules::gb, "GBModule"),
       memoryProxy(memoryProxy),
       dcmProxy(dcmProxy),
       motionProxy(motionProxy)
@@ -61,7 +61,7 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
       void* parent,
       const ALMemoryProxyPtr& memoryProxy,
       const ALDCMProxyPtr& dcmProxy) :
-      BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
+      BaseModule(parent, TNSPLModules::gb, "GBModule"),
       memoryProxy(memoryProxy),
       dcmProxy(dcmProxy)
     {
@@ -73,7 +73,7 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
       void* parent,
       const qi::AnyObject& memoryProxy,
       const qi::AnyObject& motionProxy) :
-      BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
+      BaseModule(parent, TNSPLModules::gb, "GBModule"),
       memoryProxy(memoryProxy),
       motionProxy(motionProxy)
     {
@@ -82,7 +82,7 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
     GBModule::GBModule(
       void* parent,
       const qi::AnyObject& memoryProxy) :
-      BaseModule(parent, toUType(TNSPLModules::sb), "GBModule"),
+      BaseModule(parent, TNSPLModules::gb, "GBModule"),
       memoryProxy(memoryProxy),
       motionProxy(motionProxy)
     {
@@ -92,15 +92,15 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
 
 void GBModule::setThreadPeriod()
 {
-  setPeriodMinMS(SB_PERIOD_IN(GBModule));
+  setPeriodMinMS(GB_PERIOD_IN(GBModule));
 }
 
 void GBModule::initMemoryConn()
 {
-  inputConnector = 
-		new InputConnector(this, getModuleName() + "InputConnector");
-  outputConnector = 
-		new OutputConnector(this, getModuleName() + "OutputConnector");
+  inputConnector =
+    new InputConnector(this, getModuleName() + "InputConnector");
+  outputConnector =
+    new OutputConnector(this, getModuleName() + "OutputConnector");
   inputConnector->initConnector();
   outputConnector->initConnector();
 }
@@ -111,12 +111,12 @@ void GBModule::init()
   gbManager = boost::make_shared<GBManager>(this);
   //! Make new layers for sensors directly related with gbmodule
   LOG_INFO("Initializing static behavior module sensor layers...")
-  sensorLayers.resize(toUType(SBSensors::count));
-  sensorLayers[toUType(SBSensors::jointStiffnesses)] =
+  sensorLayers.resize(toUType(GBSensors::count));
+  sensorLayers[toUType(GBSensors::jointStiffnesses)] =
     SensorLayer::makeSensorLayer(
       toUType(SensorTypes::joints) + toUType(JointSensorTypes::hardness),
       OVAR_PTR(vector<float>, GBModule::Output::jointStiffnessSensors), memoryProxy);
-  sensorLayers[toUType(SBSensors::led)] =
+  sensorLayers[toUType(GBSensors::led)] =
     SensorLayer::makeSensorLayer(
       toUType(SensorTypes::ledSensors),
       OVAR_PTR(vector<float>, GBModule::Output::ledSensors), memoryProxy);
@@ -129,19 +129,19 @@ void GBModule::init()
   #endif
   LOG_INFO("Initializing static behavior module actuator layers...")
   //! Make new layers for actuators directly related with gbmodule
-  actuatorLayers.resize(toUType(SBActuators::count));
+  actuatorLayers.resize(toUType(GBActuators::count));
   #ifndef V6_CROSS_BUILD
-    actuatorLayers[toUType(SBActuators::jointStiffnesses)] =
+    actuatorLayers[toUType(GBActuators::jointStiffnesses)] =
       ActuatorLayer::makeActuatorLayer(
         toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness),
         dcmProxy);
-    actuatorLayers[toUType(SBActuators::led)] =
+    actuatorLayers[toUType(GBActuators::led)] =
       ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators), dcmProxy);
   #else
-    actuatorLayers[toUType(SBActuators::jointStiffnesses)] =
+    actuatorLayers[toUType(GBActuators::jointStiffnesses)] =
       ActuatorLayer::makeActuatorLayer(
         toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness));
-    actuatorLayers[toUType(SBActuators::led)] =
+    actuatorLayers[toUType(GBActuators::led)] =
       ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators));
   #endif
   #ifndef MODULE_IS_REMOTE
@@ -154,7 +154,7 @@ void GBModule::init()
   LED_SENSORS_OUT(GBModule) = vector<float>(toUType(LedActuators::count), 0.f);
   STIFFNESS_STATE_OUT(GBModule) = StiffnessState::unknown;
   WHISTLE_DETECTED_OUT(GBModule) = false;
-  SB_INFO_OUT(GBModule) = BehaviorInfo();
+  GB_INFO_OUT(GBModule) = BehaviorInfo();
 }
 
 void GBModule::handleRequests()
@@ -163,17 +163,17 @@ void GBModule::handleRequests()
     return;
   auto request = inRequests.queueFront();
   if (boost::static_pointer_cast <GBRequest>(request)) {
-    auto reqId = request->getId();
+    auto reqId = request->getRequestId();
     if (reqId == toUType(GBRequestIds::stiffnessRequest)) {
-      actuatorLayers[toUType(SBActuators::jointStiffnesses)]->addRequest(
+      actuatorLayers[toUType(GBActuators::jointStiffnesses)]->addRequest(
         boost::static_pointer_cast<StiffnessRequest>(request)
       );
     } else if (reqId == toUType(GBRequestIds::ledRequest)) {
-      actuatorLayers[toUType(SBActuators::led)]->addRequest(
+      actuatorLayers[toUType(GBActuators::led)]->addRequest(
         boost::static_pointer_cast<LedRequest>(request)
       );
     } else if (reqId == toUType(GBRequestIds::behaviorRequest)) {
-      auto rsb = 
+      auto rsb =
         boost::static_pointer_cast<RequestGeneralBehavior>(request);
       gbManager->manageRequest(rsb);
     } else if (reqId == toUType(GBRequestIds::killBehavior)) {
@@ -186,7 +186,7 @@ void GBModule::handleRequests()
 void GBModule::mainRoutine()
 {
   // Update led sensors in mainRoutine()...
-  sensorLayers[toUType(SBSensors::led)]->update();
+  sensorLayers[toUType(GBSensors::led)]->update();
   #ifdef MODULE_IS_REMOTE
     sensorsUpdate();
   #else
@@ -195,7 +195,7 @@ void GBModule::mainRoutine()
     #endif
   #endif
   gbManager->update();
-  SB_INFO_OUT(GBModule) = gbManager->getBehaviorInfo();
+  GB_INFO_OUT(GBModule) = gbManager->getBehaviorInfo();
   #ifdef MODULE_IS_REMOTE
     actuatorsUpdate();
   #else
@@ -209,7 +209,7 @@ void GBModule::sensorsUpdate()
 {
   for (size_t i = 0; i < sensorLayers.size(); ++i) {
     // LEDSensors are updated in mainRoutine() because of their large number
-    if (i != toUType(SBSensors::led))
+    if (i != toUType(GBSensors::led))
       sensorLayers[i]->update();
   }
 }

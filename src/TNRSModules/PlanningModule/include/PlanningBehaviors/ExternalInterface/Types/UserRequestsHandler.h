@@ -12,6 +12,8 @@
 #include "PlanningModule/include/PlanningBehaviors/ExternalInterface/ExternalInterface.h"
 #include "TNRSBase/include/DebugBase.h"
 
+struct UserRequestsHandlerConfig;
+
 /**
  * @class UserRequestsHandler
  * @brief The class for defining a interface to interact with the NIHA
@@ -26,13 +28,13 @@ class UserRequestsHandler : public ExternalInterface, public DebugBase
 public:
   /**
    * @brief UserRequestsHandler Constructor
-   * 
+   *
    * @param planningModule: pointer to parent planning module
    * @param config: Configuration of this behavior
    */
   UserRequestsHandler(
-    PlanningModule* planningModule, 
-    const BehaviorConfigPtr& config) :
+    PlanningModule* planningModule,
+    const boost::shared_ptr<UserRequestsHandlerConfig>& config) :
     ExternalInterface(planningModule, config, "UserRequestsHandler"),
     DebugBase("UserRequestsHandler", this)
   {
@@ -45,16 +47,16 @@ public:
 
   /**
    * Derived from Behavior
-   */ 
+   */
   bool initiate() final;
   void update() final;
   void finish() final;
-  
+
 private:
   /**
    * * Returns the config casted as UserRequestsHandlerConfigPtr
-   */ 
-  UserRequestsHandlerConfigPtr getBehaviorCast();
+   */
+  boost::shared_ptr<UserRequestsHandlerConfig> getBehaviorCast();
 };
 
 typedef boost::shared_ptr<UserRequestsHandler> UserRequestsHandlerPtr;

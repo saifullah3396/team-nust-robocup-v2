@@ -65,8 +65,8 @@ bool CameraModule::setupCameras()
 {
   try {
     cams = vector<CameraPtr>(toUType(CameraId::count));
-    cams[(int)CameraId::headTop] = boost::shared_ptr<Camera<float> >(new Camera<float>("UpperCamera"));
-    cams[(int)CameraId::headBottom] = boost::shared_ptr<Camera<float> >(new Camera<float>("LowerCamera"));
+    cams[(int)CameraId::headTop] = boost::shared_ptr<Camera<float> >(new Camera<float>("visionTop"));
+    cams[(int)CameraId::headBottom] = boost::shared_ptr<Camera<float> >(new Camera<float>("visionBottom"));
     #ifndef V6_CROSS_BUILD
     videoWriter = vector<cv::VideoWriter*> (toUType(CameraId::count));
     #endif
@@ -81,7 +81,7 @@ bool CameraModule::setupCameras()
     #endif
     for (size_t i = 0; i < toUType(CameraId::count); ++i) {
       #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-      cams[i]->getSettings(cams[i]->name);
+      cams[i]->getSettings();
       #ifndef V6_CROSS_BUILD
       AL::ALValue size = camProxy->resolutionToSizes(cams[i]->resolution);
       #else
@@ -159,7 +159,9 @@ bool CameraModule::setupCameras()
             camProxy.call<void>("setCameraParameter", cams[i]->clientName, AL::kCameraBacklightCompensationID, cams[i]->settings.backlightCompensation);
         #endif
       #else
-      cams[i]->getSettings(cams[i]->name + "Cross");
+      LOG_INFO("Initializing Camera: " << i);
+      cams[i]->getSettings();
+      LOG_INFO("Setting up device for Camera: " << i);
       cams[i]->setupDevice();
       #endif
     }

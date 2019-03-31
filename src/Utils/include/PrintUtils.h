@@ -59,13 +59,13 @@ public:
 
   #define LOG_EXCEPTION(msg) \
     if (PrintUtils::mainLog.is_open()) { \
-      PrintUtils::mainLog << "[Exception] " << msg;\
+      PrintUtils::mainLog << "[Exception] " << msg << endl;\
     } else { \
       PrintUtils::mainLog.open(\
         ConfigManager::getLogsDirPath() + "Output.txt",\
         std::ofstream::out | std::ofstream::trunc\
       ); \
-      PrintUtils::mainLog << "[Exception] " << msg;\
+      PrintUtils::mainLog << "[Exception] " << msg << endl;\
     }
 #else
   #define LOG_INFO(msg) \

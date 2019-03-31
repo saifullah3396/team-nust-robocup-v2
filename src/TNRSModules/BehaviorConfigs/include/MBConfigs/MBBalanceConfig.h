@@ -65,8 +65,9 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBBalanceTypes::zmpControl,
   ZmpControlConfigPtr,
   (bool, keepOtherLegContact, true),
-  (bool, regularizePosture, true),
+  (bool, useTargetPosture, true),
   (bool, keepTorsoUpright, false),
+  (bool, regularizeIk, true),
   (vector<unsigned>, activeJoints, vector<unsigned>()),
   (Eigen::Vector2f, target, Eigen::Vector2f()),
 )

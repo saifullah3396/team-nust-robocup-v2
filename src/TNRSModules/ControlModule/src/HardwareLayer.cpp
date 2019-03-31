@@ -98,6 +98,9 @@ SensorLayerPtr SensorLayer::makeSensorLayer(
       case static_cast<unsigned>(SensorTypes::joints) + static_cast<unsigned>(JointSensorTypes::hardness):
         sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::hardness);
         break;
+      case static_cast<unsigned>(SensorTypes::handSensors):
+        sl = boost::make_shared<HandSensorsLayer>(memoryProxy);
+        break;
       case static_cast<unsigned>(SensorTypes::touchSensors):
         sl = boost::make_shared<TouchSensorsLayer>(memoryProxy);
         break;
@@ -207,6 +210,13 @@ ActuatorLayerPtr ActuatorLayer::makeActuatorLayer(
           al = boost::make_shared<JointActuatorsLayer>(dcmProxy, JointActuatorTypes::hardness);
         #else
           al = boost::make_shared<JointActuatorsLayer>(JointActuatorTypes::hardness);
+        #endif
+        break;
+      case static_cast<unsigned>(ActuatorTypes::handActuators):
+        #ifndef V6_CROSS_BUILD
+          al = boost::make_shared<HandActuatorsLayer>(dcmProxy);
+        #else
+          al = boost::make_shared<HandActuatorsLayer>(dcmProxy);
         #endif
         break;
       case static_cast<unsigned>(ActuatorTypes::ledActuators):

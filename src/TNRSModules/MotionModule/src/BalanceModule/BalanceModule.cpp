@@ -25,8 +25,8 @@ BalanceModule<Scalar>::BalanceModule(
 
 template<typename Scalar>
 boost::shared_ptr<BalanceModule<Scalar> > BalanceModule<Scalar>::getType(
-  MotionModule* motionModule, const BehaviorConfigPtr& cfg) 
-{ 
+  MotionModule* motionModule, const BehaviorConfigPtr& cfg)
+{
   BalanceModule<Scalar>* bm;
   switch (cfg->type) {
       case toUType(MBBalanceTypes::mpComControl):

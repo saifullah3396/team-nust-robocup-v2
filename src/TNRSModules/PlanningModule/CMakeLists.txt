@@ -15,22 +15,22 @@ endif (EIGEN3_INCLUDE_DIRS)
 #find_package(PythonLibs REQUIRED)
 #include_directories(${PYTHON_INCLUDE_DIRS})
 
-file (GLOB TNRS_PLANNING_MODULE_SRC 
+file (GLOB TNRS_PLANNING_MODULE_SRC
       "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/NavigationBehavior/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/NavigationBehavior/Types/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/NavigationBehavior/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/NavigationBehavior/Types/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/RobotStartup/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/RobotStartup/Types/*.cpp"
       #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/ExternalInterface/*.cpp"
       #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/ExternalInterface/Types/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/Robocup/*.cpp"
-      #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/Robocup/Types/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/Robocup/*.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/Robocup/Types/*.cpp"
       #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/KickSequence/*.cpp"
       #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/KickSequence/Types/*.cpp"
       #"${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/KickSequence/Types/*.c"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/TestSuite/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/PlanningBehaviors/TestSuite/Types/*.cpp")
-      
+
 add_library (tnrs-planning-module SHARED ${TNRS_PLANNING_MODULE_SRC})
 
 if(${ROBOT_VERSION} STREQUAL "V6")
@@ -73,7 +73,7 @@ target_link_libraries(tnrs-planning-module
   -ljsoncpp
 )
 endif()
-  
+
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
     file (GLOB TESTS RELATIVE "${test_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
@@ -96,8 +96,8 @@ endif (BUILD_TNRS_TESTS)
 #  BOOST
 #  BOOST_PYTHON
 #)
-#target_link_libraries(PyRobotStartup 
-#  ${PYTHON_LIBRARIES} 
+#target_link_libraries(PyRobotStartup
+#  ${PYTHON_LIBRARIES}
 #  libtnrs-utils.so
 #  libtnrs-config-manager.so
 #  libtnrs-base.so
@@ -110,4 +110,4 @@ endif (BUILD_TNRS_TESTS)
 #add_dependencies(PyRobotStartup Boost)
 #
 #set_target_properties(PyRobotStartup PROPERTIES SUFFIX .so)
-#set_target_properties(PyRobotStartup PROPERTIES PREFIX "")  
+#set_target_properties(PyRobotStartup PROPERTIES PREFIX "")

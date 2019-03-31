@@ -101,7 +101,6 @@ bool JointSpaceKick<Scalar>::initiate()
 template <typename Scalar>
 void JointSpaceKick<Scalar>::update()
 {
-  LOG_INFO("FsmState:" << fsm->state->name)
   if (fsm->update())
     finish();
 }
@@ -212,11 +211,12 @@ void JointSpaceKick<Scalar>::ExecuteKick::onRun()
   #else
   static unsigned step = 0;
   Matrix<Scalar, Dynamic, 1> desJoints(toUType(Joints::count));
-  desJoints.setZero();
   auto kickChain = this->bPtr->kM->getLinkChain(this->bPtr->kickLeg);
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     if (i >= kickChain->start && i < kickChain->start + kickChain->size)
-      desJoints[i] = this->bPtr->jointTrajectories[i - kickChain->start][step];;
+      desJoints[i] = this->bPtr->jointTrajectories[i - kickChain->start][step];
+    else
+      desJoints[i] = NAN;
   }
   if (this->bPtr->getBehaviorCast()->balanceConfig->type == (int)MBBalanceTypes::mpComControl) {
     this->bPtr->setJointCmds(desJoints);

@@ -39,6 +39,7 @@ public:
     const Matrix<Scalar, StateSize, 1>& B) :
     A(A), B(B)
   {
+    this->At = A.transpose();
   }
 
   /**
@@ -56,6 +57,7 @@ public:
     const Matrix<Scalar, OutputSize, StateSize>& C) :
     A(A), B(B), C(C)
   {
+    this->At = A.transpose();
   }
 
   /**
@@ -222,6 +224,12 @@ public:
     { return C; }
 
   /**
+   * @brief getNoiseCovMatrix return the process noise covariance matrix
+   */
+  Matrix<Scalar, StateSize, StateSize> getNoiseCovMatrix()
+    { return Q; }
+
+  /**
    * @brief getState returns the state
    */
   const Matrix<Scalar, StateSize, 1>& getState()
@@ -288,4 +296,7 @@ private:
   bool updated = {false};
 
   bool useObserver = {false};
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

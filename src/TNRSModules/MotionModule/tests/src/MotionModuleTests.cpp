@@ -28,7 +28,7 @@ MotionModuleTests::init()
     #endif
     dcmProxy = getParentBroker()->getDcmProxy();
     LOG_INFO("Initializing memory...")
-    sharedMemory = boost::make_shared<SharedMemory>();
+    sharedMemory = boost::shared_ptr<SharedMemory>(new SharedMemory());
     sharedMemory->init();
     LOG_INFO("SharedMemory Initialized.")
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
@@ -36,7 +36,8 @@ MotionModuleTests::init()
     #endif
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
     childModules.push_back(
-      boost::make_shared <MotionModule> (this, memoryProxy, dcmProxy, motionProxy));
+      boost::shared_ptr <MotionModule> (
+        new MotionModule(this, memoryProxy, dcmProxy, motionProxy)));
     #endif
     for (int i = 0; i < childModules.size(); ++i) {
       childModules[i]->setLocalSharedMemory(sharedMemory);

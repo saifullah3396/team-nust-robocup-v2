@@ -79,7 +79,7 @@ GetupSequence::getupBack()
   if (!initialSetup) {
     cout << "initial setup done" << endl;
     if (stiffness != StiffnessState::GETUP) {
-      if (lastSBFinished) {
+      if (lastGBFinished) {
         auto sConfig =
           boost::make_shared < GBStiffnessConfig > (GBStiffnessTypes::GETUP);
         setupGBRequest(sConfig);
@@ -110,7 +110,7 @@ GetupSequence::getupFront()
   if (!initialSetup) {
     cout << "Initial setup" << endl;
     if (stiffness != StiffnessState::GETUP) {
-      if (lastSBFinished) {
+      if (lastGBFinished) {
         auto sConfig =
           boost::make_shared < GBStiffnessConfig > (GBStiffnessTypes::GETUP);
         setupGBRequest(sConfig);

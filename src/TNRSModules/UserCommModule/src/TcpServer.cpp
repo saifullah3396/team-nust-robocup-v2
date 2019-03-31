@@ -8,8 +8,8 @@
  */
 
 #include "TNRSBase/include/DebugBase.h"
-#include "UserCommModule/include/CommMessage.h"
 #include "UserCommModule/include/TcpServer.h"
+#include "Utils/include/DataHolders/CommMessage.h"
 #include "Utils/include/PrintUtils.h"
 #include "Utils/include/ThreadSafeQueue.h"
 #include "Utils/include/VisionUtils.h"
@@ -168,22 +168,19 @@ ImageServer::~ImageServer()
 
 void ImageServer::update() {
   if (!conns.empty()) {
-    cout << "Image connections exist..." << endl;
-    cout << "outImageQueue->size(): " << outImageQueue->getSize() << endl;
-    cv::Mat outImage;
-    while (!outImageQueue->isEmpty()) {
+    if (!outImageQueue->isEmpty()) {
+      cv::Mat outImage;
       outImage = outImageQueue->queueFront();
       outImageQueue->popQueue();
+      outMessage.clear();
+      Utils::compress(VisionUtils::cvMatToString(outImage), outMessage);
+      for (auto& conn : conns) {
+        //! Write all the data to connection
+        conn->async_write(
+          outMessage,
+          boost::bind(&TcpServer::handleWrite, this, boost::asio::placeholders::error, conn));
+      }
     }
-    outMessage.clear();
-    Utils::compress(VisionUtils::cvMatToString(outImage), outMessage);
-  }
-
-  for (auto& conn : conns) {
-    //! Write all the data to connection
-    conn->async_write(
-      outMessage,
-      boost::bind(&TcpServer::handleWrite, this, boost::asio::placeholders::error, conn));
   }
 }
 

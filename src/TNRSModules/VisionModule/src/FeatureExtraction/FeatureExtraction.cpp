@@ -21,8 +21,8 @@ vector<uint8_t*> FeatureExtraction::image = vector<uint8_t*>(static_cast<size_t>
 vector<Mat> FeatureExtraction::grayImage = vector<Mat>(static_cast<size_t>(CameraId::count));
 vector<Mat> FeatureExtraction::imageMat = vector<Mat>(static_cast<size_t>(CameraId::count));
 vector<Mat> FeatureExtraction::bgrMat = vector<Mat>(static_cast<size_t>(CameraId::count));
-TNColors FeatureExtraction::ourColor = TNColors::WHITE;
-TNColors FeatureExtraction::oppColor = TNColors::WHITE;
+TNColors FeatureExtraction::ourColor = TNColors::white;
+TNColors FeatureExtraction::oppColor = TNColors::white;
 bool FeatureExtraction::blackJerseyExists = false;
 vector<CameraPtr> FeatureExtraction::cams = vector<CameraPtr>(static_cast<size_t>(CameraId::count));
 CameraModulePtr FeatureExtraction::camModule;
@@ -58,12 +58,12 @@ void FeatureExtraction::setup(VisionModule* visionModule)
     bgrMat[i] = Mat(Size(imageWidth[i], imageHeight[i]), CV_8UC3);
   }
   // For lower camera only.
-  // As defined in 
+  // As defined in
   // https://pdfs.semanticscholar.org/3742/0e2c3fc50e89e14008e7ce584ddce52cce06.pdf
   footArea.y = 0.625 * imageHeight[1];
   footArea.height = (1 - 0.625) * imageHeight[1];
   footArea.x = 0.125 * imageWidth[1] / 2;
-  // Because yuv422 when converted to uv image has half the width 
+  // Because yuv422 when converted to uv image has half the width
   footArea.width = (0.875 - 0.125) * imageWidth[1] / 2;
 }
 

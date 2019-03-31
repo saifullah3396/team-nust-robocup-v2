@@ -1,15 +1,16 @@
 /**
  * @file FeatureExtraction/RobotExtraction.h
  *
- * This file declares the class for robots extraction from 
- * the image. 
+ * This file declares the class for robots extraction from
+ * the image.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @author AbdulRehman
- * @date 22 Aug 2017  
+ * @date 22 Aug 2017
  */
 
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "Utils/include/ConfigMacros.h"
 #include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
 #include "VisionModule/include/FeatureExtraction/RobotExtraction.h"
 #include "VisionModule/include/FeatureExtraction/FieldExtraction.h"

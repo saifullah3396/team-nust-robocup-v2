@@ -17,18 +17,6 @@
 #include "Utils/include/EnumUtils.h"
 #include "Utils/include/PrintUtils.h"
 
-#define GET_JSON_VAR_3(TYPE, VAR_NAME) \
-  obj[#VAR_NAME] = JsonUtils::getJson(VAR_NAME);
-
-#define GET_JSON_VAR_2(TYPE, VAR_NAME) \
-  GET_JSON_VAR_3(TYPE, VAR_NAME)
-
-#define GET_JSON_VAR_1(TYPE_VAR) \
-  GET_JSON_VAR_2( \
-    M_GET_ELEM(0,UNPAREN(TYPE_VAR)), \
-    M_GET_ELEM(1,UNPAREN(TYPE_VAR))  \
-  )
-
 #define GET_BEHAVIOR_CONFIG_JSON(...) \
   try { \
     FOR_EACH(GET_JSON_VAR_1, __VA_ARGS__); \
@@ -63,37 +51,6 @@
     return false; \
   }
 
-#define DECLARE_CONFIG_VAR_3(TYPE, VAR_NAME) \
-  TYPE VAR_NAME;
-
-#define DECLARE_CONFIG_VAR_2(TYPE, VAR_NAME) \
-  DECLARE_CONFIG_VAR_3(TYPE, VAR_NAME)
-
-#define DECLARE_CONFIG_VAR_1(TYPE_VAR) \
-  DECLARE_CONFIG_VAR_2( \
-    M_GET_ELEM(0,UNPAREN(TYPE_VAR)), \
-    M_GET_ELEM(1,UNPAREN(TYPE_VAR)) \
-  )
-
-#define DECLARE_CONFIG_VAR_0(...) \
-  DECLARE_CONFIG_VAR_1(__VA_ARGS__)
-
-#define DEFINE_CONFIG_VAR_3(TYPE, VAR_NAME, VALUE) \
-  VAR_NAME = VALUE;
-
-#define DEFINE_CONFIG_VAR_2(TYPE, VAR_NAME, VALUE) \
-  DEFINE_CONFIG_VAR_3(TYPE, VAR_NAME, VALUE)
-
-#define DEFINE_CONFIG_VAR_1(TYPE_VAR) \
-  DEFINE_CONFIG_VAR_2( \
-    M_GET_ELEM(0,UNPAREN(TYPE_VAR)), \
-    M_GET_ELEM(1,UNPAREN(TYPE_VAR)), \
-    M_GET_ELEM(2,UNPAREN(TYPE_VAR)) \
-  )
-
-#define DEFINE_CONFIG_VAR_0(...) \
-  DEFINE_CONFIG_VAR_1(__VA_ARGS__)
-
 #define DECLARE_BEHAVIOR_CONFIG_WITH_VARS( \
   ConfigName, \
   BaseConfigName, \
@@ -104,16 +61,17 @@
   ...) \
   struct ConfigName : BaseConfigName \
   { \
-    FOR_EACH(DECLARE_CONFIG_VAR_0, __VA_ARGS__) \
+    FOR_EACH(DECLARE_VAR_0, __VA_ARGS__) \
     /** \
      * Constructor \
      * \
      * @param type: Behavior type \
      */ \
-    ConfigName(const ChildType& type = (ChildType) 0) : \
+    ConfigName(const ChildType& type = (ChildType) 0, \
+               FOR_EACH_IN_PLACE(DEFAULT_VAR_0, __VA_ARGS__)) : \
       BaseConfigName(IdEnum, Runtime, (int) type) \
     { \
-      FOR_EACH(DEFINE_CONFIG_VAR_0, __VA_ARGS__) \
+      FOR_EACH(DEFINE_VAR_0, __VA_ARGS__) \
     } \
     /** \
      * @brief makeFromJson Returns a child config of given type \
@@ -141,6 +99,8 @@
       GET_BEHAVIOR_CONFIG_JSON(__VA_ARGS__); \
       return obj; \
     } \
+    public: \
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW \
   }; \
   typedef boost::shared_ptr<ConfigName> PointerName;
 
@@ -190,6 +150,8 @@
       Json::Value obj = BaseConfigName::getJson(); \
       return obj; \
     } \
+    public: \
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW \
   }; \
   typedef boost::shared_ptr<ConfigName> PointerName;
 
@@ -237,6 +199,8 @@
       Json::Value obj = BaseConfigName::getJson(); \
       return obj; \
     } \
+    public: \
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW \
   }; \
   typedef boost::shared_ptr<TypeName> PointerName;
 
@@ -249,15 +213,16 @@
   ...) \
   struct TypeName : BaseConfigName \
   { \
-    FOR_EACH(DECLARE_CONFIG_VAR_0, __VA_ARGS__); \
+    FOR_EACH(DECLARE_VAR_0, __VA_ARGS__); \
     \
     /** \
      * Constructor \
      */ \
-    TypeName(const EnumType& id) : \
+    TypeName(const EnumType& id, \
+             FOR_EACH_IN_PLACE(DEFAULT_VAR_0, __VA_ARGS__)) : \
       BaseConfigName(id) \
     { \
-      FOR_EACH(DEFINE_CONFIG_VAR_0, __VA_ARGS__); \
+      FOR_EACH(DEFINE_VAR_0, __VA_ARGS__) \
     } \
     /** \
      * @brief assignFromJson Assigns configuration parameters from json \
@@ -279,6 +244,8 @@
       GET_BEHAVIOR_CONFIG_JSON(__VA_ARGS__); \
       return obj; \
     } \
+    public: \
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW \
   }; \
   typedef boost::shared_ptr<TypeName> PointerName;
 
@@ -290,15 +257,15 @@
   ...) \
   struct TypeName : BaseConfigName \
   { \
-    FOR_EACH(DECLARE_CONFIG_VAR_0, __VA_ARGS__); \
+    FOR_EACH(DECLARE_VAR_0, __VA_ARGS__); \
     \
     /** \
      * Constructor \
      */ \
-    TypeName() : \
+    TypeName(FOR_EACH_IN_PLACE(DEFAULT_VAR_0, __VA_ARGS__)) : \
       BaseConfigName(EnumId) \
     { \
-      FOR_EACH(DEFINE_CONFIG_VAR_0, __VA_ARGS__); \
+      FOR_EACH(DEFINE_VAR_0, __VA_ARGS__) \
     } \
     \
     /** \
@@ -329,27 +296,10 @@
       GET_BEHAVIOR_CONFIG_JSON(__VA_ARGS__); \
       return obj; \
     } \
+    public: \
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW \
   }; \
   typedef boost::shared_ptr<TypeName> PointerName;
-
-
-#define GET_CHILD_TYPE_3(ENUM, ID, NAME) \
-  case toUType(ENUM::ID): \
-    config = boost::make_shared<NAME>(); \
-    break;
-
-#define GET_CHILD_TYPE_2(ENUM, ID, NAME) \
-  GET_CHILD_TYPE_3(ENUM, ID, NAME)
-
-#define GET_CHILD_TYPE_1(ENUM_ID_NAME) \
-  GET_CHILD_TYPE_2( \
-    M_GET_ELEM(0,UNPAREN(ENUM_ID_NAME)), \
-    M_GET_ELEM(1,UNPAREN(ENUM_ID_NAME)), \
-    M_GET_ELEM(2,UNPAREN(ENUM_ID_NAME)) \
-  )
-
-#define GET_CHILD_TYPE_0(...) \
-  GET_CHILD_TYPE_1(__VA_ARGS__)
 
 #define DEFINE_BEHAVIOR_CONFIG( \
   ConfigName, \
@@ -360,9 +310,7 @@
   { \
     PointerName config; \
     try { \
-      LOG_INFO("obj: " << obj) \
       if (!obj.isNull()) { \
-        LOG_INFO("type: " << obj["type"].asUInt()) \
         switch (obj["type"].asUInt()) { \
           FOR_EACH(GET_CHILD_TYPE_1, __VA_ARGS__); \
         } \
@@ -382,6 +330,3 @@
     } \
     return config; \
   }
-
-
-

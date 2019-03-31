@@ -8,12 +8,7 @@
  */
 
 #include <boost/make_shared.hpp>
-#include "LocalizationModule/include/LocalizationRequest.h"
-#include "PlanningModule/include/PlanningBehaviors/Robocup/Robocup.h"
-#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/RobocupSetup.h"
-#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/GoalKeeper.h"
-#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Defender.h"
-#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Attacker.h"
+#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBGetupConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
@@ -21,6 +16,14 @@
 #include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
 #include "BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h"
+#include "LocalizationModule/include/LocalizationRequest.h"
+#include "PlanningModule/include/PlanningModule.h"
+#include "PlanningModule/include/PlanningBehaviors/Robocup/Robocup.h"
+#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/RobocupSetup.h"
+#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/GoalKeeper.h"
+#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Defender.h"
+#include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Attacker.h"
+#include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/RobocupRole.h"
 #include "Utils/include/DataHolders/RoboCupGameControlData.h"
@@ -31,26 +34,41 @@
 #include "Utils/include/VisionUtils.h"
 #include "VisionModule/include/VisionRequest.h"
 
+Robocup::Robocup(
+  PlanningModule* planningModule,
+  const boost::shared_ptr<PBRobocupConfig>& config,
+  const string& name) :
+  PlanningBehavior(planningModule, config, name),
+  inFallRecovery(false),
+  readyToGetup(false),
+  waitForUnpenalise(false),
+  penaliseMotion(false),
+  moveTarget(RobotPose2D<float>(100, 100, 100)),
+  ballMotionModel(BallMotionModel::damped)
+{
+}
+
 boost::shared_ptr<Robocup> Robocup::getType(
   PlanningModule* planningModule, const BehaviorConfigPtr& cfg)
-{ 
+{
   Robocup* r;
+  cout << "Config type:" << cfg->type << endl;
   switch (cfg->type) {
     case toUType(PBRobocupTypes::robocupSetup):
-      r = new RobocupSetup(planningModule, cfg); break;
+      r = new RobocupSetup(planningModule, SPC(RobocupSetupConfig, cfg)); break;
     case toUType(PBRobocupTypes::goalKeeper):
-      r = new GoalKeeper(planningModule, cfg); break;
+      r = new GoalKeeper(planningModule, SPC(GoalKeeperConfig, cfg)); break;
     case toUType(PBRobocupTypes::defender):
-      r = new Defender(planningModule, cfg); break;
+      r = new Defender(planningModule, SPC(DefenderConfig, cfg)); break;
     case toUType(PBRobocupTypes::attacker):
-      r = new Attacker(planningModule, cfg); break;
+      r = new Attacker(planningModule, SPC(AttackerConfig, cfg)); break;
   }
   return boost::shared_ptr<Robocup>(r);
 }
 
 boost::shared_ptr<PBRobocupConfig> Robocup::getBehaviorCast()
 {
-  return boost::static_pointer_cast <PBRobocupConfig> (config);
+  return SPC(PBRobocupConfig, config);
 }
 
 bool Robocup::isLocalized()
@@ -97,16 +115,16 @@ void Robocup::setRobotSuggestions()
   /*auto& teamRobots = IVAR(vector<TeamRobot>, PlanningModule::teamRobots);
    for (int i = 0; i < teamRobots.size(); ++i) {
    // Wait for team to get localized
-   if (teamRobots[i].intention == ) { 
+   if (teamRobots[i].intention == ) {
    ++teamRobotsLost;
    continue;
    }
-   float dist = 
+   float dist =
    MathsUtils::dist(
    robotState.x, robotState.y,
    teamRobots[i].pose.x, teamRobots[i].pose.y
    );
-   // Check if another team member has overlapping position 
+   // Check if another team member has overlapping position
    if (dist < 0.2) {
    resetLocalizer();
    teamRobotOverlap = true;
@@ -138,7 +156,7 @@ bool Robocup::waitForPenalty()
       }
     } else {
       // Set pose to stand due to penalty
-      if (this->setPostureAndStiffness(PostureState::STAND, StiffnessState::robocup, MOTION_1)) {
+      if (this->setPostureAndStiffness(PostureState::stand, StiffnessState::robocup, MOTION_1)) {
         penaliseMotion = false;
         waitForUnpenalise = true;
       }
@@ -159,8 +177,8 @@ bool Robocup::robotIsFalling()
 {
   return
     ROBOT_FALLEN_IN(PlanningModule) ||
-    POSTURE_STATE_IN(PlanningModule) == PostureState::FALLING_FRONT ||
-    POSTURE_STATE_IN(PlanningModule) == PostureState::FALLING_BACK;
+    POSTURE_STATE_IN(PlanningModule) == PostureState::fallFront ||
+    POSTURE_STATE_IN(PlanningModule) == PostureState::fallingBack;
 }
 
 void Robocup::fallenRobotAction()
@@ -180,27 +198,28 @@ void Robocup::fallRecoveryAction()
   cout << "Executing Robocup.inFallRecoveryAction()..." << endl;
   auto posture = POSTURE_STATE_IN(PlanningModule);
   if (ROBOT_FALLEN_IN(PlanningModule)) {
-    if (posture == PostureState::FALL_FRONT) {
-      getupFromGround(KeyFrameGetupTypes::FRONT, StiffnessState::GETUP, MOTION_1);
-    } else if (posture == PostureState::FALL_BACK) {
-      getupFromGround(KeyFrameGetupTypes::BACK, StiffnessState::GETUP, MOTION_1);
-    } else if (posture == PostureState::FALL_SIT) {
-      getupFromGround(KeyFrameGetupTypes::SIT, StiffnessState::GETUP, MOTION_1);
+    if (posture == PostureState::fallFront) {
+      getupFromGround(KeyFrameGetupTypes::front, StiffnessState::getup, MOTION_1);
+    } else if (posture == PostureState::fallBack) {
+      getupFromGround(KeyFrameGetupTypes::back, StiffnessState::getup, MOTION_1);
+    } else if (posture == PostureState::fallSit) {
+      getupFromGround(KeyFrameGetupTypes::sit, StiffnessState::getup, MOTION_1);
     }
   } else {
     float postureTime = 2.f;
-    if (posture == PostureState::FALLING_FRONT) {
+    if (posture == PostureState::fallingFront) {
       postureTime = 0.5f;
-    } else if (posture == PostureState::FALLING_BACK) {
+    } else if (posture == PostureState::fallingBack) {
       postureTime = 0.5f;
     }
-    if (posture != PostureState::STAND) {
+    if (posture != PostureState::stand) {
       cout << "posture != stand" << endl;
       if (!mbInProgress()) {
         cout << "Setting posture to stand at to help robot not fall." << endl;
-        auto pConfig = 
-          boost::make_shared<MBPostureConfig>(
-            PostureState::STAND, postureTime);
+        auto pConfig =
+          boost::make_shared<InterpToPostureConfig>();
+        pConfig->targetPosture = PostureState::stand;
+        pConfig->timeToReachP = postureTime;
         setupMBRequest(MOTION_1, pConfig);
       }
     } else {
@@ -216,11 +235,11 @@ void Robocup::setRobotIntention()
 {
   auto role = ROBOCUP_ROLE_OUT(PlanningModule);
   if (ROBOT_LOCALIZED_IN(PlanningModule) || role == -1) {
-    if (role == (int)RobocupRole::GOALKEEPER)
+    if (role == (int)RobocupRole::goalKeeper)
     ROBOT_INTENTION_OUT(PlanningModule) = 1;
-    else if (role == (int)RobocupRole::DEFENDER || role == (int)RobocupRole::DEFENSE_SUPPORT)
+    else if (role == (int)RobocupRole::defender || role == (int)RobocupRole::defenseSupport)
     ROBOT_INTENTION_OUT(PlanningModule) = 2;
-    else if (role == (int)RobocupRole::OFFENSE_SUPPORT || role == (int)RobocupRole::ATTACKER)
+    else if (role == (int)RobocupRole::offenseSupport || role == (int)RobocupRole::attacker)
     ROBOT_INTENTION_OUT(PlanningModule) = 3;
   } else {
     ROBOT_INTENTION_OUT(PlanningModule) = 4; // robot lost
@@ -233,7 +252,7 @@ bool Robocup::getupFromGround(
   const unsigned& mbManagerId)
 {
   if (STIFFNESS_STATE_IN(PlanningModule) != desStiffness) {
-    if (!sbInProgress()) {
+    if (!gbInProgress()) {
       auto sConfig =
         boost::make_shared <GBStiffnessConfig> (desStiffness);
       setupGBRequest(sConfig);

@@ -11,6 +11,8 @@
 #include <iostream>
 #include "Utils/include/DataHolders/Camera.h"
 #include "Utils/include/ConfigMacros.h"
+#include "Utils/include/JsonUtils.h"
+#include "Utils/include/PrintUtils.h"
 
 #define JSON_ASSIGN_(logRoot, key, value) logRoot[#key] = value;
 
@@ -140,71 +142,71 @@ Json::Value Camera<T>::getJson() const
 }
 
 template <typename T>
-void Camera<T>::getSettings(const string& configFile) {
-  T da, db, dc, dd, de;
-  GET_CONFIG(
-    configFile,
-    (string, Subscription.cameraName, name),
-    #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-    (int, Subscription.resolution, resolution),
-    #else
-    (int, Subscription.width, width),
-    (int, Subscription.height, height),
-    #endif
-    (int, Subscription.colorSpace, colorSpace),
-    (int, Subscription.fps, fps),
-    (T, Intrinsic.fovX, fovX),
-    (T, Intrinsic.fovY, fovY),
-    (T, Intrinsic.focalX, focalX),
-    (T, Intrinsic.focalY, focalY),
-    (T, Intrinsic.centerOffX, centerOffX),
-    (T, Intrinsic.centerOffY, centerOffY),
-    (T, Distortion.a, da),
-    (T, Distortion.b, db),
-    (T, Distortion.c, dc),
-    (T, Distortion.d, dd),
-    (T, Distortion.e, de),
-    #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-    (int, Calibration.autoExposition, settings.autoExposition),
-    (int, Calibration.autoWhiteBalance, settings.autoWhiteBalance),
-    (int, Calibration.brightness, settings.brightness),
-    (int, Calibration.contrast, settings.contrast),
-    (int, Calibration.saturation, settings.saturation),
-    (int, Calibration.exposure, settings.exposure),
-    (int, Calibration.hue, settings.hue),
-    (int, Calibration.gain, settings.gain),
-    (int, Calibration.exposureAlgorithm, settings.exposureAlgorithm),
-    (int, Calibration.sharpness, settings.sharpness),
-    (int, Calibration.whiteBalance, settings.whiteBalance),
-    (int, Calibration.backlightCompensation, settings.backlightCompensation),
-    #else
-    (int, Calibration.autoExposition, settings[toUType(CameraSettings::autoExposition)].ctrl.value),
-    (int, Calibration.autoWhiteBalance, settings[toUType(CameraSettings::autoWhiteBalance)].ctrl.value),
-    (int, Calibration.brightness, settings[toUType(CameraSettings::brightness)].ctrl.value),
-    (int, Calibration.contrast, settings[toUType(CameraSettings::contrast)].ctrl.value),
-    (int, Calibration.saturation, settings[toUType(CameraSettings::saturation)].ctrl.value),
-    (int, Calibration.exposure, settings[toUType(CameraSettings::exposure)].ctrl.value),
-    (int, Calibration.hue, settings[toUType(CameraSettings::hue)].ctrl.value),
-    (int, Calibration.gain, settings[toUType(CameraSettings::gain)].ctrl.value),
-    (int, Calibration.exposureAlgorithm, settings[toUType(CameraSettings::exposureAlgorithm)].ctrl.value),
-    (int, Calibration.sharpness, settings[toUType(CameraSettings::sharpness)].ctrl.value),
-    (int, Calibration.whiteBalance, settings[toUType(CameraSettings::whiteBalance)].ctrl.value),
-    (int, Calibration.backlightCompensation, settings[toUType(CameraSettings::backlightCompensation)].ctrl.value),
-    (int, Calibration.verticalFlip, settings[toUType(CameraSettings::verticalFlip)].ctrl.value),
-    (int, Calibration.horizontalFlip, settings[toUType(CameraSettings::horizontalFlip)].ctrl.value),
-    //(int, Calibration.aeTargetGain, settings[toUType(CameraSettings::aeTargetGain)].ctrl.value),
-    //(int, Calibration.minVirtAnalogGain, settings[toUType(CameraSettings::minVirtAnalogGain)].ctrl.value),
-    //(int, Calibration.maxVirtAnalogGain, settings[toUType(CameraSettings::maxVirtAnalogGain)].ctrl.value),
-    //(int, Calibration.minDigAnalogGain, settings[toUType(CameraSettings::minDigAnalogGain)].ctrl.value),
-    //(int, Calibration.maxDigAnalogGain, settings[toUType(CameraSettings::maxDigAnalogGain)].ctrl.value),
-    #endif
-  );
+void Camera<T>::getSettings() {
+  std::string configName;
+  #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+  configName = ConfigManager::getConfigDirPath() + "NaoqiCameraSettings.json";
+  #else
+  configName = ConfigManager::getConfigDirPath() + "CameraSettings.json";
+  #endif
+  #ifdef VISUALIZER_BUILD
+  Json::Value root;
+  try {
+    using namespace std;
+    ifstream config(configName, ifstream::binary);
+    config >> root;
+    root = root[name];
+  } catch (Json::Exception& e) {
+    LOG_EXCEPTION("Error while reading json configuration:\n\t" << configName << "\n" << e.what());
+  }
+  #else
+  LOG_INFO("Using camera config: " << configName);
+  auto root = JsonUtils::readJson(configName)[name];
+  #endif
+  #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+  resolution = root["subscription"][resolution].asInt();
+  #else
+  width = root["subscription"]["width"].asInt();
+  height = root["subscription"]["height"].asInt();
+  #endif
+  colorSpace = root["subscription"]["colorSpace"].asInt();
+  fps = root["subscription"]["fps"].asInt();
+  fovX = root["intrinsic"]["fovX"].asFloat();
+  fovY = root["intrinsic"]["fovY"].asFloat();
+  focalX = root["intrinsic"]["focalX"].asFloat();
+  focalY = root["intrinsic"]["focalY"].asFloat();
+  centerOffX = root["intrinsic"]["centerOffX"].asFloat();
+  centerOffY = root["intrinsic"]["centerOffY"].asFloat();
   #ifndef VISUALIZER_BUILD
-  distCoeffs.at<float>(0, 0) = da;
-  distCoeffs.at<float>(0, 1) = db;
-  distCoeffs.at<float>(0, 2) = dc;
-  distCoeffs.at<float>(0, 3) = dd;
-  distCoeffs.at<float>(0, 4) = de;
+  distCoeffs.at<float>(0, 0) = root["distortion"]["a"].asFloat();
+  distCoeffs.at<float>(0, 1) = root["distortion"]["b"].asFloat();
+  distCoeffs.at<float>(0, 2) = root["distortion"]["c"].asFloat();
+  distCoeffs.at<float>(0, 3) = root["distortion"]["d"].asFloat();
+  distCoeffs.at<float>(0, 4) = root["distortion"]["e"].asFloat();
+  #endif
+
+  #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+  settings.autoExposition = root["calibration"]["autoExposition"].asInt();
+  settings.autoWhiteBalance = root["calibration"]["autoWhiteBalance"].asInt();
+  settings.brightness = root["calibration"]["brightness"].asInt();
+  settings.contrast = root["calibration"]["contrast"].asInt();
+  settings.saturation = root["calibration"]["saturation"].asInt();
+  settings.exposure = root["calibration"]["exposure"].asInt();
+  settings.hue = root["calibration"]["hue"].asInt();
+  settings.gain = root["calibration"]["gain"].asInt();
+  settings.exposureAlgorithm = root["calibration"]["exposureAlgorithm"].asInt();
+  settings.sharpness = root["calibration"]["sharpness"].asInt();
+  settings.whiteBalance = root["calibration"]["whiteBalance"].asInt();
+  settings.backlightCompensation = root["calibration"]["backlightCompensation"].asInt();
+  #else
+  for (size_t i = 0; i < toUType(CameraSettings::autoExposition); ++i) {
+    settings[toUType(CameraSettings::autoExposition)].ctrl.value =
+      root["calibration"][settings[toUType(CameraSettings::autoExposition)].name].asInt();
+    cout << root["calibration"] << endl;
+    cout << settings[toUType(CameraSettings::autoExposition)].name << endl;
+    cout << "control value:" << root["calibration"][settings[toUType(CameraSettings::autoExposition)].name].asInt() << endl;
+  }
+  print();
   #endif
 }
 
@@ -253,7 +255,8 @@ void Camera<T>::setCameraControls() {
 
 template <typename T>
 bool Camera<T>::setupDevice() {
-  fd = v4l2_open(name.c_str(), O_RDWR | O_NONBLOCK, 0);
+  string devName = name == "visionTop" ? "/dev/video0" : "/dev/video1";
+  fd = v4l2_open(devName.c_str(), O_RDWR | O_NONBLOCK, 0);
   if (fd < 0) {
     #ifndef VISUALIZER_BUILD
     LOG_ERROR("Cannot open video device: " << name);

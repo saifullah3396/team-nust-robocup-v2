@@ -158,18 +158,14 @@ public:
    *
    * @handIndex: Hand index defined in Utils/Hardwareids.h
    */
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   void openHand(const RobotHands& handIndex);
-  #endif
 
   /**
    * Uses naoqi api to close the given robot hand
    *
    * @handIndex: Hand index defined in Utils/Hardwareids.h
    */
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   void closeHand(const RobotHands& handIndex);
-  #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**

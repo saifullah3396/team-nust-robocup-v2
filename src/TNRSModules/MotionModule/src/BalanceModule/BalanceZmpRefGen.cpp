@@ -10,6 +10,7 @@
 #include "MotionModule/include/KinematicsModule/ComState.h"
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
 #include "MotionModule/include/BalanceModule/BalanceZmpRefGen.h"
+#include "Utils/include/PrintUtils.h"
 
 template<typename Scalar>
 BalanceZmpRefGen<Scalar>::BalanceZmpRefGen(
@@ -29,6 +30,7 @@ bool BalanceZmpRefGen<Scalar>::initiate() {
   initZmpPosition =
     this->kM->getComStateWrtFrame(
       static_cast<LinkChains>(this->refFrame), toUType(LegEEs::footBase)).zmp;
+  LOG_INFO("initZmpPosition: " << initZmpPosition.transpose());
   auto shiftStep = this->totalTime / this->cycleTime * 0.5;
   for (size_t i = 0; i < this->nReferences; ++i) {
     if (i < shiftStep) {

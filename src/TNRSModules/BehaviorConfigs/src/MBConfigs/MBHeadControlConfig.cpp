@@ -1,7 +1,7 @@
 /**
  * @file MotionModule/src/MotionConfigs/MBHeadControlConfig.cpp
  *
- * This file implements the structs MBHeadControlConfig, 
+ * This file implements the structs MBHeadControlConfig,
  * HeadTargetSearchConfig and HeadTargetTrackConfig
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>

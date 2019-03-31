@@ -2,7 +2,7 @@
  * @file BehaviorConfigs/include/MBConfigs/MBMovementConfig.h
  *
  * This file defines the structs MBMovementConfig
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 3 April 2018
  */
@@ -85,4 +85,5 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (VelocityInput<float>, velocityInput, VelocityInput<float>()),
   (bool, minimizeJointVels, false),
   (bool, keepTorsoUpright, false),
+  (int, maxNSteps, 1),
 )

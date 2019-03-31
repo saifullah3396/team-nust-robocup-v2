@@ -10,7 +10,8 @@
 #pragma once
 
 #include "PlanningModule/include/PlanningBehavior.h"
-#include "BehaviorConfigs/include/PBConfigs/PBExternalInterfaceConfig.h"
+
+struct PBExternalInterfaceConfig;
 
 /**
  * @class ExternalInterface
@@ -22,14 +23,14 @@ class ExternalInterface : public PlanningBehavior
 public:
   /**
    * Constructor
-   * 
+   *
    * @param planningModule: pointer to parent planning module
    * @param config: Configuration of this behavior
    * @param name: Name of this behavior
    */
   ExternalInterface(
-    PlanningModule* planningModule, 
-    const BehaviorConfigPtr& config,
+    PlanningModule* planningModule,
+    const boost::shared_ptr<PBExternalInterfaceConfig>& config,
     const string& name = "ExternalInterface") :
     PlanningBehavior(planningModule, config, name)
   {
@@ -41,13 +42,13 @@ public:
   ~ExternalInterface()
   {
   }
-  
+
   /**
    * Returns its own child based on the given type
-   * 
+   *
    * @param planningModule: Pointer to base planning module
    * @param cfg: Config of the requested behavior
-   * 
+   *
    * @return BehaviorConfigPtr
    */
   static boost::shared_ptr<ExternalInterface> getType(
@@ -55,11 +56,11 @@ public:
 
   //! Child type may or may not use the same behavior config as parent
   virtual void loadExternalConfig() {}
-  
+
 private:
   /**
    * Returns the config casted as PBExternalInterfaceConfig
-   */ 
+   */
   boost::shared_ptr<PBExternalInterfaceConfig> getBehaviorCast();
 };
 

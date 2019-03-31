@@ -17,6 +17,10 @@ template <typename Scalar>
 struct RobotPose2D;
 enum class RobotFeet : unsigned int;
 
+namespace PathPlannerSpace {
+  class State;
+}
+
 template <typename Scalar>
 struct TNRSFootstep : public DataHolder
 {
@@ -49,8 +53,14 @@ struct TNRSFootstep : public DataHolder
   cv::RotatedRect getFootRect(
     const cv::Point2f& offset, const Scalar& multiplier);
 
+  static TNRSFootstep<Scalar> fromPathPlannerState(const PathPlannerSpace::State& state);
+  static vector<TNRSFootstep<Scalar>> fromPathPlannerStates(const std::vector<PathPlannerSpace::State>& states);
+
   RobotPose2D<Scalar> pose2D;
   RobotFeet foot;
   Eigen::Matrix<Scalar, 4, 4> trans;
   Scalar timeAtFinish;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

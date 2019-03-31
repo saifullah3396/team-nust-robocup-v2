@@ -7,7 +7,7 @@ namespace Constants
 {
   const double infinity = 1e12; //! Definition of infinity
   const double gravity = 9.80665; //! Gravitational acceleration
-  
+
   const double shoulderOffsetY = 0.098;
   const double elbowOffsetY = 0.015;
   const double upperArmLength = 0.105;
@@ -189,7 +189,7 @@ namespace Constants
   const double rKneePitchVelLimit = 6.40239;
   const double rAnklePitchVelLimit = 6.40239;
   const double rAnkleRollVelLimit = 4.16174;
-   
+
   const double lFsrFLX = 0.07025;
   const double LFsrFLY = 0.0299;
   const double LFsrFRX = 0.07025;
@@ -209,35 +209,35 @@ namespace Constants
   const double RFsrRRY = -0.0299;
 
   const std::string jointNames[24] =
-  { 
-    "HeadYaw", 
-    "HeadPitch", 
-    "LShoulderPitch", 
-    "LShoulderRoll", 
-    "LElbowYaw", 
-    "LElbowRoll", 
-    "LWristYaw", 
-    "RShoulderPitch", 
-    "RShoulderRoll", 
-    "RElbowYaw", 
-    "RElbowRoll", 
-    "RWristYaw", 
-    "LHipYawPitch", 
-    "LHipRoll", 
-    "LHipPitch", 
-    "LKneePitch", 
-    "LAnklePitch", 
-    "LAnkleRoll", 
-    "RHipYawPitch", 
-    "RHipRoll", 
-    "RHipPitch", 
-    "RKneePitch", 
-    "RAnklePitch", 
+  {
+    "HeadYaw",
+    "HeadPitch",
+    "LShoulderPitch",
+    "LShoulderRoll",
+    "LElbowYaw",
+    "LElbowRoll",
+    "LWristYaw",
+    "RShoulderPitch",
+    "RShoulderRoll",
+    "RElbowYaw",
+    "RElbowRoll",
+    "RWristYaw",
+    "LHipYawPitch",
+    "LHipRoll",
+    "LHipPitch",
+    "LKneePitch",
+    "LAnklePitch",
+    "LAnkleRoll",
+    "RHipYawPitch",
+    "RHipRoll",
+    "RHipPitch",
+    "RKneePitch",
+    "RAnklePitch",
     "RAnkleRoll"
   };
 
   const double jointMaxPositions[24] =
-  { 
+  {
     headYawHigh,
     headPitchHigh,
     lShoulderPitchHigh,
@@ -265,7 +265,7 @@ namespace Constants
   };
 
   const double jointMinPositions[24] =
-  { 
+  {
     headYawLow,
     headPitchLow,
     lShoulderPitchLow,
@@ -293,7 +293,7 @@ namespace Constants
   };
 
   const double jointMaxVelocities[24] =
-  { 
+  {
     headYawVelLimit,
     headPitchVelLimit,
     lShoulderPitchVelLimit,
@@ -321,7 +321,7 @@ namespace Constants
   };
 
   const double jointDHParams[24][4] =
-  { 
+  {
     {0.0,            0.0,        0.0,            0.0},
     {0.0,           -M_PI_2,     0.0,           -M_PI_2},
     {0.0,           -M_PI_2,     0.0,            0.0},
@@ -349,7 +349,7 @@ namespace Constants
   };
 
   const double jointMaxTorques[24] =  // N-m
-  { 
+  {
     0.93167,
     1.0740,
     0.93167,

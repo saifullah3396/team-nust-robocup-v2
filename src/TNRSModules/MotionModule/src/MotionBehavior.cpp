@@ -36,8 +36,8 @@ template <typename Scalar>
 JsonLoggerPtr MotionBehavior<Scalar>::makeLogger()
 {
   auto logger =
-    boost::make_shared<MotionLogger<Scalar> >(
-      motionModule, this->logsDirPath + "/" + this->name + ".json");
+    boost::shared_ptr<MotionLogger<Scalar> >(new MotionLogger<Scalar>(
+      motionModule, this->logsDirPath + "/" + this->name + ".json"));
   mG->setMotionLogger(logger);
   return logger;
 }
@@ -78,21 +78,17 @@ vector<vector<float> > MotionBehavior<Scalar>::getFootsteps()
 }
 #endif
 
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 void MotionBehavior<Scalar>::openHand(const RobotHands& handIndex)
 {
   mG->openHand(handIndex);
 }
-#endif
 
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 void MotionBehavior<Scalar>::closeHand(const RobotHands& handIndex)
 {
   mG->closeHand(handIndex);
 }
-#endif
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>

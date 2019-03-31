@@ -42,24 +42,14 @@ TeamNUSTSPL::TeamNUSTSPL(qi::SessionPtr session) :
 void TeamNUSTSPL::init()
 {
   LOG_INFO("Initializing TeamNUSTSPL Module...");
-  struct sigaction act;
-  memset (&act, '\0', sizeof(act));
-  act.sa_sigaction = &TeamNUSTSPL::signal_handler;
-  act.sa_flags = SA_SIGINFO;
-  if (
-    sigaction(SIGINT, &act, NULL) < 0)
-  {
-    LOG_EXCEPTION("Problem in signal handler creation...");
-    return;
-  }
   #ifdef MODULE_IS_LOCAL_SIMULATED
   LOG_INFO("The module is built for local simulations...");
   ConfigManager::setDirPaths("Robots/Sim/");
   ConfigManager::createDirs();
   #else
     #ifndef MODULE_IS_REMOTE
-      ConfigManager::createDirs();
       ConfigManager::setDirPaths("");
+      ConfigManager::createDirs();
     #endif
   #endif
   LOG_INFO("Getting Naoqi ALMemoryProxy handle...");
@@ -122,6 +112,17 @@ void TeamNUSTSPL::init()
            "The modules are located at src/TNRSModules");
   setupTNRSModules();
   join();
+  /*struct sigaction act;
+  memset (&act, '\0', sizeof(act));
+  act.sa_sigaction = &TeamNUSTSPL::signal_handler;
+  act.sa_flags = SA_SIGINFO;
+  if (
+    sigaction(SIGINT, &act, NULL) < 0)
+  {
+    LOG_EXCEPTION("Problem in signal handler creation...");
+    return;
+  }*/
+  LOG_INFO("Terminating TeamNUSTSPL Module...");
 }
 
 void TeamNUSTSPL::signal_handler(
@@ -138,7 +139,7 @@ void TeamNUSTSPL::setupTNRSModules()
   GET_CONFIG("TeamNUSTSPL",
     (bool, startPlanningModule, modulesToRun[toUType(TNSPLModules::planning)]),
     (bool, startMotionModule, modulesToRun[toUType(TNSPLModules::motion)]),
-    (bool, startGBModule, modulesToRun[toUType(TNSPLModules::sb)]),
+    (bool, startGBModule, modulesToRun[toUType(TNSPLModules::gb)]),
     (bool, startLocalizationModule, modulesToRun[toUType(TNSPLModules::localization)]),
     (bool, startVisionModule, modulesToRun[toUType(TNSPLModules::vision)]),
     (bool, startGameCommModule, modulesToRun[toUType(TNSPLModules::gameComm)]),
@@ -173,22 +174,22 @@ void TeamNUSTSPL::setupTNRSModules()
     #endif
   }
 
-  if (modulesToRun[toUType(TNSPLModules::sb)]) {
+  if (modulesToRun[toUType(TNSPLModules::gb)]) {
     LOG_INFO("Constructing GBModule... See src/TNRSModules/GBModule.")
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
       #ifndef V6_CROSS_BUILD
-        childModules[toUType(TNSPLModules::sb)] =
+        childModules[toUType(TNSPLModules::gb)] =
           boost::make_shared<GBModule>(this, memoryProxy, dcmProxy, motionProxy);
       #else
-        childModules[toUType(TNSPLModules::sb)] =
+        childModules[toUType(TNSPLModules::gb)] =
           boost::make_shared<GBModule>(this, memoryProxy, motionProxy);
       #endif
     #else
       #ifndef V6_CROSS_BUILD
-        childModules[toUType(TNSPLModules::sb)] =
+        childModules[toUType(TNSPLModules::gb)] =
           boost::make_shared<GBModule>(this, memoryProxy, dcmProxy);
       #else
-        childModules[toUType(TNSPLModules::sb)] =
+        childModules[toUType(TNSPLModules::gb)] =
           boost::make_shared<GBModule>(this, memoryProxy);
       #endif
     #endif
@@ -215,7 +216,7 @@ void TeamNUSTSPL::setupTNRSModules()
   if (SAVE_IMAGES != -1) {
     auto vRequest = boost::make_shared<SwitchVision>(true);
     BaseModule::publishModuleRequest(vRequest);
-    auto sliRequest = boost::make_shared<SwitchLogImages>(true, SAVE_IMAGES);
+    auto sliRequest = boost::make_shared<SwitchLogImages>(true, static_cast<CameraId>(SAVE_IMAGES));
     BaseModule::publishModuleRequest(sliRequest);
   }
   if (PROJECT_FIELD == 1) {
@@ -271,8 +272,7 @@ void TeamNUSTSPL::setupTNRSModules()
 
   auto vRequest = boost::make_shared<SwitchVision>(true);
   BaseModule::publishModuleRequest(vRequest);
-
-  cout << DebugBase::processDebugMsg(output);*/
+  */
 }
 
 #ifdef V6_CROSS_BUILD

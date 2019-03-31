@@ -2,7 +2,7 @@
  * @file PlanningModule/include/PlanningModule.h
  *
  * This file declares the class PlanningModule
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 04 Feb 2017
  */
@@ -57,7 +57,7 @@ class PlanningModule : public BaseModule
     goalInfo,
     teamRobots,
     obstaclesObs,
-    sBehaviorInfo,
+    gBehaviorInfo,
     mBehaviorInfo,
     occupancyMap,
     nFootsteps,

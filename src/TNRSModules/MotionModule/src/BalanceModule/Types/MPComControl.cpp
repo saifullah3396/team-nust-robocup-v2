@@ -38,9 +38,10 @@ bool MPComControl<Scalar>::initiate()
       &balanceDefs[1][0],
       sizeof(balanceDefs[1]) / sizeof(balanceDefs[1][0]));
   }
+  cout << "jointsToReach: " << jointsToReach * MathsUtils::RAD_TO_DEG << endl;
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   this->jointsI = this->kM->getJointPositions();
-  this->jointsDelta = jointsToReach - jointsI;
+  this->jointsDelta = jointsToReach - this->jointsI;
   Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
   if (!activeJoints.any()) { //! Posture already reached
     return false;
@@ -50,9 +51,7 @@ bool MPComControl<Scalar>::initiate()
     vector<Scalar> times;
     while (timeStep <= this->getBehaviorCast()->timeToReachB) {
       auto timeParam = timeStep / this->getBehaviorCast()->timeToReachB;
-      auto multiplier =
-        6 * pow(timeParam, 5) - 15 * pow(timeParam, 4) + 10 * pow(timeParam, 3);
-      joints.push_back(jointsI + this->jointsDelta * multiplier);
+      joints.push_back(this->interpolate(timeParam));
       times.push_back(timeStep);
       timeStep += this->cycleTime;
     }
@@ -62,7 +61,7 @@ bool MPComControl<Scalar>::initiate()
   #else
   this->jointsI = this->kM->getJointPositions();
   this->jointsDelta = jointsToReach - this->jointsI;
-  Matrix<bool, Dynamic, 1> activeJoints = jointsDelta.cwiseAbs().array() > Angle::DEG_1;
+  Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
   if (!activeJoints.any()) { //! Posture already reached
     return false;
   } else {
@@ -82,10 +81,8 @@ void MPComControl<Scalar>::update()
   if (this->runTime > timeToReachB) {
     finish();
   } else {
-    auto timeParam = this->runTime / timeToReachB;
-    auto multiplier =
-      6 * pow(timeParam, 5) - 15 * pow(timeParam, 4) + 10 * pow(timeParam, 3);
-    this->setJointCmds(jointsI + jointsDelta * multiplier);
+    auto step = this->runTime / timeToReachB;
+    this->setJointCmds(this->interpolate(step));
   }
   #endif
 }

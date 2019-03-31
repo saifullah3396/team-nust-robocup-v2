@@ -20,7 +20,7 @@ Interface::Interface(const bool& useCameras) :
   modelType(ROBOT_MODEL),
   naoqiPort(ROBOT_PORT),
   actuatorsUpdatePeriod(5),
-  sensorsUpdatePeriod(40),
+  sensorsUpdatePeriod(20),
   useCameras(useCameras),
   camClientIds(NUM_CAMERA_SENSORS),
   fsrHandles(NUM_FSR_SENSORS)

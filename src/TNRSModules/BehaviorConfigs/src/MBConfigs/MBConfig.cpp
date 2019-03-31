@@ -21,9 +21,9 @@
 #include "BehaviorConfigs/include/MBConfigs/MBTeleopConfig.h"
 
 MBConfig::MBConfig(
-  const MBIds& id, 
+  const MBIds& id,
   const float& maxRunTime,
-  const int& childType) : 
+  const int& childType) :
 BehaviorConfig(toUType(id), BaseBehaviorType::motion, maxRunTime, childType)
 {
 }

@@ -89,10 +89,12 @@ void CSpaceBSplineKick<Scalar>::update()
     if (this->getBehaviorCast()->balanceConfig->type == (int)MBBalanceTypes::zmpControl) {
       if (!kickSetup) {
         if (!this->kickFailed) {
-          auto zmpConfig = boost::make_shared <ZmpControlConfig> ();
+          auto zmpConfig =
+            boost::shared_ptr <ZmpControlConfig> (new ZmpControlConfig());
           zmpConfig->supportLeg = this->supportLeg;
           zmpConfig->keepOtherLegContact = false;
-          zmpConfig->regularizePosture = true;
+          zmpConfig->useTargetPosture = true;
+          zmpConfig->regularizeIk = true;
           zmpConfig->keepTorsoUpright = false;
           zmpConfig->activeJoints = vector<unsigned>(activeJoints.begin(), activeJoints.end());
           //for (size_t i = 2; i < 12; ++i)
@@ -331,8 +333,8 @@ void CSpaceBSplineKick<Scalar>::defineTrajectory()
   cout << "Knots vector:\n" << knots.transpose() << endl;
   cout << "controlPoints:\n" << controlPoints << endl;
   bSpline =
-    boost::make_shared<BSpline<Scalar> >(
-      bSplineDegree, 3, controlPoints, knots, this->cycleTime);
+    boost::shared_ptr<BSpline<Scalar> >(new BSpline<Scalar>(
+      bSplineDegree, 3, controlPoints, knots, this->cycleTime));
   bSpline->setup();
   cartTraj = bSpline->getSpline(0);
   /*auto cTraj = bSpline->getSpline(0);

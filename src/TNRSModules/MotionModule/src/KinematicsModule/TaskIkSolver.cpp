@@ -98,7 +98,8 @@ void TaskIkSolver<Scalar>::init()
       JointStateType::actual);
   if (addFinalCheck) {
     finalPostureTask =
-      boost::make_shared<PostureTask<Scalar> >(targetJoints, 1.0, 0.99, activeJoints, km);
+      boost::shared_ptr<PostureTask<Scalar> >(
+        new PostureTask<Scalar>(targetJoints, 1.0, 0.99, activeJoints, km));
     finalPostureTask->setJSType(JointStateType::sim);
   }
 }

@@ -4,9 +4,9 @@
  * This file declares the class TrajOptimizer
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 Jul 2018  
+ * @date 17 Jul 2018
  */
- 
+
 #pragma once
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
 #include "MotionModule/include/MTypeHeader.h"
@@ -28,15 +28,22 @@ public:
     MotionModule* motionModule,
     const LinkChains& chainIndex,
     const LinkChains& baseLeg);
-  
+
   /**
    * Default destructor for this class.
    */
   virtual ~TrajOptimizer();
-  
+
+  /**
+   * @brief setMaxVelocityCutoff Changes the max velocity cutoff and limits
+   *   according to that
+   * @param cutoff Cutoff ratio from 0.0 to 1.0
+   */
+  void setMaxVelocityCutoff(const Scalar& cutoff);
+
 protected:
   //! Taken as either left leg or right leg. Used for zmp constraints
-  //! The base leg is considered as the inertial frame of reference for 
+  //! The base leg is considered as the inertial frame of reference for
   //! whole body motion.
   LinkChains baseLeg;
   LinkChains chainIndex;

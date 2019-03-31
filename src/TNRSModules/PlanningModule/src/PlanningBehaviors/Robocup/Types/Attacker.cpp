@@ -10,11 +10,13 @@
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "LocalizationModule/include/LandmarkDefinitions.h"
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Types/Attacker.h"
+#include "BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBDiveConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h"
 #include "BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h"
+#include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/TeamPositions.h"
 #include "Utils/include/VisionUtils.h"
 #include "Utils/include/DataHolders/BallInfo.h"
@@ -26,18 +28,25 @@
 
 #define ATTACKER_PTR static_cast<Attacker*>(bPtr)
 
+Attacker::Attacker(
+  PlanningModule* planningModule,
+  const boost::shared_ptr<AttackerConfig>& config) :
+  Soccer(planningModule, config, "Attacker")
+{
+  DEFINE_FSM_STATE(Soccer, ReactAttacker, react)
+}
+
 boost::shared_ptr<AttackerConfig> Attacker::getBehaviorCast()
 {
   return boost::static_pointer_cast<AttackerConfig>(config);
 }
 
-void Attacker::initiate()
+bool Attacker::initiate()
 {
   LOG_INFO("Attacker.initiated() called...")
   BaseModule::publishModuleRequest(boost::make_shared<SwitchBallObstacle>(true));
-  Soccer::initiate();
-  ROBOCUP_ROLE_OUT(PlanningModule) = (int)RobocupRole::ATTACKER;
-  inBehavior = true;
+  ROBOCUP_ROLE_OUT(PlanningModule) = (int)RobocupRole::attacker;
+  return Soccer::initiate();
 }
 
 void Attacker::ReactAttacker::onRun()

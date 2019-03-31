@@ -10,6 +10,7 @@
 #pragma once
 
 #include "MotionModule/include/BalanceModule/BalanceModule.h"
+#include "MotionModule/include/TrajectoryPlanner/JointInterpolator.h"
 
 struct MPComControlConfig;
 
@@ -18,7 +19,7 @@ struct MPComControlConfig;
  * @brief The class for sending the robot to a predefined balanced posture
  */
 template <typename Scalar>
-class MPComControl : public BalanceModule<Scalar>
+class MPComControl : public BalanceModule<Scalar>, public JointInterpolator<Scalar>
 {
 public:
   /**
@@ -33,7 +34,7 @@ public:
   /**
    * @brief ~MPComControl Destructor
    */
-  ~MPComControl() final {}
+  ~MPComControl() {}
 
   /**
    * @brief initiate See Behavior::initiate()
@@ -54,15 +55,15 @@ public:
    * @brief loadExternalConfig See Behavior::loadExternalConfig()
    */
   void loadExternalConfig() final {}
-  
+
 private:
   /**
    * @brief getBehaviorCast Returns the cast of config to MPComControlConfigPtr
-	 */
+   */
   boost::shared_ptr<MPComControlConfig> getBehaviorCast();
 
-  Matrix<Scalar, Dynamic, 1> jointsI;
-  Matrix<Scalar, Dynamic, 1> jointsDelta;
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 typedef boost::shared_ptr<MPComControl<MType> > MPComControlPtr;

@@ -1,5 +1,5 @@
 /**
- * @file TeamNUSTSPL/include/ModuleRequests.h
+ * @file TNRSBase/include/ModuleRequests.h
  *
  * This file declares the struct ModuleRequest
  *
@@ -10,7 +10,9 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
-#include "TeamNUSTSPL/include/TNSPLModuleIds.h"
+
+namespace Json { class Value; }
+enum class TNSPLModules : unsigned int;
 
 /**
  * @class ModuleRequest
@@ -21,36 +23,45 @@ class ModuleRequest
 {
 public:
   /**
-   * Constructor
+   * @brief ModuleRequest Constructor
+   * @param moduleId Module id
+   * @param requestId Request id
    */
   ModuleRequest(
-    const unsigned& moduleId,
-    const unsigned& id) :
-    moduleId(moduleId),
-    id(id)
-  {
-  }
+    const TNSPLModules& moduleId,
+    const unsigned& requestId);
+
+  //! Getters
+  TNSPLModules getModuleId() { return moduleId; }
+  unsigned getRequestId() { return requestId; }
+
+  //! Setters
+  void setRequestId(const unsigned& requestId)
+    { this->requestId = requestId; }
 
   /**
-   * Gets the module id
-   */ 
-  unsigned getModuleId() { return moduleId; }
+   * Makes an object of type this and returns it if valid
+   */
+  static boost::shared_ptr<ModuleRequest> makeFromJson(const Json::Value& obj);
 
   /**
-   * Sets the id
-   */ 
-  unsigned setId(const unsigned& id) { this->id = id; }
-  
+   * Assigns the request parameters using json object
+   *
+   * @param obj: Input json object with info regarding the configuration
+   *
+   * @return false if an exception is raised
+   */
+  virtual bool assignFromJson(const Json::Value& obj);
+
   /**
-   * Gets the id
-   */ 
-  unsigned getId() { return id; }
+   * Makes a json object from the configuration parameters
+   *
+   * @return Json::Value
+   */
+  virtual Json::Value getJson();
 
 private:
-  //! Id of the module for which this request is valid
-  unsigned moduleId;
-
-  //! Id of the request
-  unsigned id;
+  TNSPLModules moduleId; //! Module id
+  unsigned requestId; //! Request id
 };
 typedef boost::shared_ptr<ModuleRequest> ModuleRequestPtr;

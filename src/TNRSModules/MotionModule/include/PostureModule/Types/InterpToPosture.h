@@ -10,6 +10,7 @@
 #pragma once
 
 #include "MotionModule/include/PostureModule/PostureModule.h"
+#include "MotionModule/include/TrajectoryPlanner/JointInterpolator.h"
 
 struct InterpToPostureConfig;
 
@@ -18,9 +19,9 @@ struct InterpToPostureConfig;
  * @brief A class that interpolates the joints from initial state to
  *   final state based on quintic splines with zero initial and final
  *   velocities and accelerations
- */ 
+ */
 template <typename Scalar>
-class InterpToPosture : public PostureModule<Scalar>
+class InterpToPosture : public PostureModule<Scalar>, public JointInterpolator<Scalar>
 {
 public:
   /**
@@ -36,7 +37,7 @@ public:
    * @brief ~InterpToPosture Destructor
    */
   ~InterpToPosture() final {}
-  
+
   /**
    * @brief initiate See Behavior::initiate()
    */
@@ -63,10 +64,7 @@ private:
    */
   boost::shared_ptr<InterpToPostureConfig> getBehaviorCast();
 
-  //! Joint configuration initial
-  Matrix<Scalar, Dynamic, 1> jointsI;
-
-  //! Joint configuration difference
-  Matrix<Scalar, Dynamic, 1> jointsDelta;
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef boost::shared_ptr<InterpToPosture<MType> > InterpToPosturePtr;

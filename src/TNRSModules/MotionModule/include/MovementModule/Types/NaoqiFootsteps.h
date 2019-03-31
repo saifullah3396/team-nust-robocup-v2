@@ -98,20 +98,16 @@ private:
    * @brief Gets the step transformation from 'from' to 'to' foot
    * @param from state of the support foot
    * @param to final state of the stepping foot
-   * @param stepTrans transformation from support foot to step foot
    * @return State
    */
   TNRSFootstep<float> getFootstep(
-    const TNRSFootstep<float>& from, const TNRSFootstep<float>& to, Matrix<Scalar, 4, 4>& stepTrans);
+    const TNRSFootstep<float>& from, const TNRSFootstep<float>& to);
 
   void setPostureAction();
   void setupWalkAction();
   void updateWalkAction();
   void stopWalkAction();
   void postStopWalkAction();
-
-  //! Planned footsteps
-  vector<TNRSFootstep<float>> plannedPath;
 
   //! Time taken by one step
   static Scalar footstepTime;

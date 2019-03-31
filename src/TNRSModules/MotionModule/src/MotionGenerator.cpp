@@ -12,6 +12,7 @@
 #include "MotionModule/include/KinematicsModule/Joint.h"
 #include "MotionModule/include/KinematicsModule/MotionTask.h"
 #include "MotionModule/include/JointRequest.h"
+#include "MotionModule/include/HandsRequest.h"
 #include "Utils/include/HardwareIds.h"
 #include "Utils/include/Constants.h"
 
@@ -30,7 +31,7 @@ void MotionGenerator<Scalar>::update()
     jointCmds = this->kM->solveTasksIK(motionTasks, 1);
     motionTasks.clear();
   }
-  auto jr = boost::make_shared<JointRequest>();
+  auto jr = boost::shared_ptr<JointRequest>(new JointRequest());
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     jr->setValue(jointCmds[i], i);
   }
@@ -94,39 +95,51 @@ vector<vector<float> > MotionGenerator<Scalar>::getFootsteps()
 }
 #endif
 
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 void MotionGenerator<Scalar>::openHand(const RobotHands& handIndex) {
-  #ifndef V6_CROSS_BUILD
-    if (handIndex == RobotHands::lHand)
-      motionProxy->post.openHand("LHand");
-    else if (handIndex == RobotHands::rHand)
-      motionProxy->post.openHand("RHand");
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+    #ifndef V6_CROSS_BUILD
+      if (handIndex == RobotHands::lHand)
+        motionProxy->post.openHand("LHand");
+      else if (handIndex == RobotHands::rHand)
+        motionProxy->post.openHand("RHand");
+    #else
+      if (handIndex == RobotHands::lHand)
+        motionProxy.async<void>("openHand", "LHand");
+      else if (handIndex == RobotHands::rHand)
+        motionProxy.async<void>("openHand", "RHand");
+    #endif
   #else
-    if (handIndex == RobotHands::lHand)
-      motionProxy.async<void>("openHand", "LHand");
-    else if (handIndex == RobotHands::rHand)
-      motionProxy.async<void>("openHand", "RHand");
+    auto hr = boost::shared_ptr<HandsRequest>(new HandsRequest());
+    for (size_t i = 0; i < toUType(RobotHands::count); ++i) {
+      hr->setValue(1.0, i);
+    }
+    BaseModule::publishModuleRequest(hr);
   #endif
 }
-#endif
 
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 void MotionGenerator<Scalar>::closeHand(const RobotHands& handIndex) {
-  #ifndef V6_CROSS_BUILD
-    if (handIndex == RobotHands::lHand)
-      motionProxy->post.closeHand("LHand");
-    else if (handIndex == RobotHands::rHand)
-      motionProxy->post.closeHand("RHand");
-  #else
-    if (handIndex == RobotHands::lHand)
-      motionProxy.async<void>("closeHand", "LHand");
-    else if (handIndex == RobotHands::rHand)
-      motionProxy.async<void>("closeHand", "RHand");
-  #endif
-}
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+    #ifndef V6_CROSS_BUILD
+      if (handIndex == RobotHands::lHand)
+        motionProxy->post.closeHand("LHand");
+      else if (handIndex == RobotHands::rHand)
+        motionProxy->post.closeHand("RHand");
+    #else
+      if (handIndex == RobotHands::lHand)
+        motionProxy.async<void>("closeHand", "LHand");
+      else if (handIndex == RobotHands::rHand)
+        motionProxy.async<void>("closeHand", "RHand");
+    #endif
+#else
+  auto hr = boost::shared_ptr<HandsRequest>(new HandsRequest());
+  for (size_t i = 0; i < toUType(RobotHands::count); ++i) {
+    hr->setValue(0.0, i);
+  }
+  BaseModule::publishModuleRequest(hr);
 #endif
+}
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>

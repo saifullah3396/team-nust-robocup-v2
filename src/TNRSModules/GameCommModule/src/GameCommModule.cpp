@@ -43,7 +43,7 @@ DEFINE_OUTPUT_CONNECTOR(GameCommModule,
 GameCommModule::GameCommModule(void* teamNUSTSPL) :
   BaseModule(
     teamNUSTSPL,
-    static_cast<unsigned>(TNSPLModules::gameComm),
+    TNSPLModules::gameComm,
     "GameCommModule"
   )
 {

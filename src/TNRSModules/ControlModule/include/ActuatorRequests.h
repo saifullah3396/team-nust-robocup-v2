@@ -68,10 +68,10 @@ public:
     return value;
   }
 
-private:
+protected:
   //! Vector of actuator request values
   vector<float> value;
-  
+
   //! Total number of actuators in this request
   size_t size;
 };

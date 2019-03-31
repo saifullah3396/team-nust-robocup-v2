@@ -2,12 +2,13 @@
  * @file FeatureExtraction/BallExtraction.cpp
  *
  * This file implements the class for ball extraction from the image.
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 05 Feb 2017  
+ * @date 05 Feb 2017
  */
 
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "Utils/include/ConfigMacros.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "UserCommModule/include/UserCommModule.h"
 #include "VisionModule/include/FeatureExtraction/BallExtraction.h"
@@ -119,7 +120,7 @@ BallExtraction::BallExtraction(VisionModule* visionModule) :
 void BallExtraction::loadBallClassifier()
 {
   string classifierFile =
-    ConfigManager::getConfigDirPath() +
+    ConfigManager::getCommonConfigDirPath() +
     "/Classifiers/BallClassifier.xml";
 
   if (!cascade.load(classifierFile)) {
@@ -527,7 +528,7 @@ void BallExtraction::scanRandom(
     cropped.convertTo(cropped, -1, 1.25, 0);
     Mat black;
     //threshold(cropped, black, 50, 255, CV_THRESH_BINARY|CV_THRESH_OTSU);
-    colorHandler->getBinary(cropped, black, TNColors::BLACK);
+    colorHandler->getBinary(cropped, black, TNColors::black);
     //VisionUtils::displayImage(cropped, "cropped2");
     //for (int i = 0; i < 100; ++i) {
     //int subC = currentImage == static_cast<unsigned>(CameraId::headTop) ? 15 : 15;
@@ -569,11 +570,11 @@ void BallExtraction::scanRandom(
 void BallExtraction::scanRoi(vector<RectPtr>& boundRects, const Rect& roi)
 {
   auto tStart = high_resolution_clock::now();
-	Rect scaled = roi;
+  Rect scaled = roi;
   int factor = 1.5;
-	scaled = scaled - Point((scaled.width * factor) / 2, (scaled.height * factor) / 2);
-	scaled += Size(scaled.width * factor, scaled.height * factor);
-	scaled = scaled & Rect(0, 0, getImageWidth(), getImageHeight());
+  scaled = scaled - Point((scaled.width * factor) / 2, (scaled.height * factor) / 2);
+  scaled += Size(scaled.width * factor, scaled.height * factor);
+  scaled = scaled & Rect(0, 0, getImageWidth(), getImageHeight());
   Mat cropped = getGrayImage()(scaled);
   Mat black;
   threshold(cropped, black, 50, 255, 1);
@@ -702,7 +703,7 @@ void BallExtraction::applyClassifier(const Rect& origRect, Mat& croppedImage)
   //for (int i = 0; i < 32*32; ++i) {
   //  *input++ = *inputMat++;
   //}
-    
+
   // Fill `input`.
   //auto start = high_resolution_clock::now();
   //interpreter->Invoke();

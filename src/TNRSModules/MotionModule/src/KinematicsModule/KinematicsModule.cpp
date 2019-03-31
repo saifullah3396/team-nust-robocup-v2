@@ -131,7 +131,7 @@ KinematicsModule<Scalar>::KinematicsModule(MotionModule* motionModule) :
     (bool, logKinData, logKinData),
   )
   string kinDataLog = ConfigManager::getLogsDirPath() + "KinematicsModule/KinData.json";
-  kinDataLogger = boost::make_shared<Utils::JsonLogger>(kinDataLog);
+  kinDataLogger = boost::shared_ptr<Utils::JsonLogger>(new Utils::JsonLogger(kinDataLog));
 }
 
 template <typename Scalar>
@@ -148,8 +148,9 @@ void KinematicsModule<Scalar>::init()
   setupWBStates();
   feetForcesBuffer.set_capacity(ffBufferSize);
   updateJointStates();
-  tis = boost::shared_ptr<TaskIkSolver<Scalar> >( new
-          TaskIkSolver<Scalar>(motionModule->getKinematicsModule(), 100, vector<bool>(), false, 2e-2)
+  tis = boost::shared_ptr<TaskIkSolver<Scalar> >(
+          new TaskIkSolver<Scalar>(
+            motionModule->getKinematicsModule(), 100, vector<bool>(), false, 2e-2)
         );
   tis->init();
   prepareDHTransforms();
@@ -203,7 +204,7 @@ void KinematicsModule<Scalar>::setupLinksAndInertias()
   }
   //! Torso mass and center of mass definitions
   links[toUType(Links::torso)]->com =
-    Matrix<Scalar, 4, 1>(torsoX, torsoY, torsoZ, 1.0f);
+    Matrix<Scalar, 4, 1>(torsoX, torsoY, torsoZ, 1.0);
   links[toUType(Links::torso)]->mass = torsoMass;
 }
 
@@ -2365,14 +2366,14 @@ KinematicsModule<Scalar>::makePostureTask(
     for (size_t i = 0; i < toUType(Joints::count); ++i)
       activeJoints[i] = true;
   }
-  return boost::make_shared<PostureTask<Scalar> >(
+  return boost::shared_ptr<PostureTask<Scalar> >(new PostureTask<Scalar>(
     targetJoints,
     weight,
     gain,
     activeJoints,
     motionModule->getKinematicsModule(),
     activeResidual
-  );
+  ));
 }
 
 template <typename Scalar> boost::shared_ptr<ContactTask<Scalar> >
@@ -2389,7 +2390,7 @@ KinematicsModule<Scalar>::makeContactTask(
     for (size_t i = 0; i < linkChains[toUType(chainIndex)]->size; ++i)
       activeJoints[linkChains[toUType(chainIndex)]->start + i] = true;
   }
-  return boost::make_shared<ContactTask<Scalar> >(
+  return boost::shared_ptr<ContactTask<Scalar> >(new ContactTask<Scalar>(
     chainIndex,
     linkChains[toUType(chainIndex)]->endEffectors[eeIndex],
     weight,
@@ -2397,7 +2398,7 @@ KinematicsModule<Scalar>::makeContactTask(
     activeJoints,
     motionModule->getKinematicsModule(),
     activeResidual
-  );
+  ));
 }
 
 template <typename Scalar> boost::shared_ptr<CartesianTask<Scalar> >
@@ -2415,7 +2416,7 @@ KinematicsModule<Scalar>::makeCartesianTask(
     for (size_t i = 0; i < linkChains[toUType(chainIndex)]->size; ++i)
       activeJoints[linkChains[toUType(chainIndex)]->start + i] = true;
   }
-  return boost::make_shared<CartesianTask<Scalar> >(
+  return boost::shared_ptr<CartesianTask<Scalar> >(new CartesianTask<Scalar>(
     chainIndex,
     ee,
     targetT,
@@ -2424,7 +2425,7 @@ KinematicsModule<Scalar>::makeCartesianTask(
     activeJoints,
     motionModule->getKinematicsModule(),
     activeResidual
-  );
+  ));
 }
 
 template <typename Scalar> boost::shared_ptr<CartesianTask<Scalar> >
@@ -2461,7 +2462,7 @@ KinematicsModule<Scalar>::makeComTask(
   if (activeJoints.empty()) {
     activeJoints.resize(toUType(Joints::count), true);
   }
-  return boost::make_shared<ComTask<Scalar> >(
+  return boost::shared_ptr<ComTask<Scalar> >(new ComTask<Scalar>(
     baseFrame,
     baseEE,
     comTarget,
@@ -2470,7 +2471,7 @@ KinematicsModule<Scalar>::makeComTask(
     activeJoints,
     motionModule->getKinematicsModule(),
     activeResidual
-  );
+  ));
 }
 
 template <typename Scalar> boost::shared_ptr<TorsoTask<Scalar> >
@@ -2487,7 +2488,7 @@ KinematicsModule<Scalar>::makeTorsoTask(
   if (activeJoints.empty()) {
     activeJoints.resize(toUType(Joints::count), true);
   }
-  return boost::make_shared<TorsoTask<Scalar> >(
+  return boost::shared_ptr<TorsoTask<Scalar> >(new TorsoTask<Scalar>(
     baseFrame,
     baseEE,
     target,
@@ -2496,7 +2497,7 @@ KinematicsModule<Scalar>::makeTorsoTask(
     activeJoints,
     motionModule->getKinematicsModule(),
     activeResidual
-  );
+  ));
 }
 
 template <typename Scalar> Matrix<Scalar, Dynamic, 1>
@@ -2539,7 +2540,7 @@ KinematicsModule<Scalar>::solveCartesianIK(
     TaskIkSolver<Scalar>(
       motionModule->getKinematicsModule(), maxIterations, activeJoints, false, 1e-2);
   CartesianTaskPtr ctp =
-    boost::make_shared<CartesianTask<Scalar> >(
+    boost::shared_ptr<CartesianTask<Scalar> >(new CartesianTask<Scalar>(
       chainIndex,
       linkChains[toUType(chainIndex)]->endEffectors[eeIndex],
       targetT,
@@ -2547,7 +2548,8 @@ KinematicsModule<Scalar>::solveCartesianIK(
       0.9,
       activeJoints,
       motionModule->getKinematicsModule()
-    );  if (activeJoints.empty()) {
+    ));
+  if (activeJoints.empty()) {
     activeJoints.resize(toUType(Joints::count), false);
     for (size_t i = 0; i < linkChains[toUType(chainIndex)]->size; ++i)
       activeJoints[linkChains[toUType(chainIndex)]->start + i] = true;
@@ -3239,6 +3241,7 @@ void KinematicsModule<Scalar>::setGlobalBase(
   const RobotFeet& globalBase, const LegEEs& globalEnd)
 {
   if (globalBase != this->globalBase) {
+    LOG_INFO("Setting new global base...");
     //! Get the transformation from new globalBase to previous globalBase
     Matrix<Scalar, 4, 4> trans =
       MathsUtils::getTInverse(
@@ -3252,10 +3255,12 @@ void KinematicsModule<Scalar>::setGlobalBase(
     comState->velocity = trans.block(0, 0, 3, 3) * comState->velocity;
     comState->accel = trans.block(0, 0, 3, 3) * comState->accel;
     Matrix<Scalar, 3, 1> xState, yState;
-    xState << comState->position[0],comState->velocity[0], comState->accel[0];
-    yState << comState->position[1],comState->velocity[1], comState->accel[1];
+    xState << comState->position[0], comState->velocity[0], comState->accel[0];
+    yState << comState->position[1], comState->velocity[1], comState->accel[1];
     comEstimator[0]->setState(xState);
     comEstimator[1]->setState(yState);
+    comState->zmp[0] = comEstimator[0]->getOutput()[0];
+    comState->zmp[1] = comEstimator[1]->getOutput()[0];
     comState->baseFrame = globalBase;
     comState->eeIndex = toUType(globalEnd);
   }

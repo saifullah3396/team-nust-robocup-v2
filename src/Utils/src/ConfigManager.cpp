@@ -22,7 +22,7 @@ string ConfigManager::logsDirPath = GET_STRINGS(ROOT_DIR "/../logs/");
 string ConfigManager::robotDirPath = "";
 #else
 string ConfigManager::configDirPath = "/home/nao/config/";
-string ConfigManager::commonConfigDirPath = "/home/nao/config/Common/";
+string ConfigManager::commonConfigDirPath = "/home/nao/config/";
 string ConfigManager::logsDirPath = "/home/nao/logs/";
 string ConfigManager::robotDirPath = "";
 #endif

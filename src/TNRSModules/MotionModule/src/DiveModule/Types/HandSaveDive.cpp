@@ -47,10 +47,11 @@ bool HandSaveDive<Scalar>::initiate()
 {
   LOG_INFO("HandSaveDive.initiate() called...")
   auto zmpControlCfg =
-    boost::make_shared<ZmpControlConfig>();
+    boost::shared_ptr<ZmpControlConfig>(new ZmpControlConfig());
   zmpControlCfg->supportLeg = getBehaviorCast()->supportLeg,
   zmpControlCfg->keepOtherLegContact = true;
-  zmpControlCfg->regularizePosture = false;
+  zmpControlCfg->regularizeIk = true;
+  zmpControlCfg->useTargetPosture = false;
   zmpControlCfg->keepTorsoUpright = false;
 
   Matrix<Scalar, Dynamic, 1> targetJoints(toUType(Joints::count));

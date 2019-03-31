@@ -21,12 +21,12 @@ class NIHACognition : public ExternalInterface
 public:
   /**
    * Constructor
-   * 
+   *
    * @param planningModule: pointer to parent planning module
    * @param config: Configuration of this behavior
    */
   NIHACognition(
-    PlanningModule* planningModule, 
+    PlanningModule* planningModule,
     const BehaviorConfigPtr& config) :
     ExternalInterface(planningModule, config, "NIHACognition"),
     behaviorState(waitForConn)
@@ -42,45 +42,45 @@ public:
 
   /**
    * Derived from Behavior
-   */ 
-  void initiate();
+   */
+  bool initiate();
   void update();
   void finish();
-  
+
 private:
   /**
    * * Returns the config casted as NIHACognitionConfigPtr
-   */ 
+   */
   NIHACognitionConfigPtr getBehaviorCast();
 
   /**
    * Wait for connection state action
-   */ 
+   */
   void waitForConnAction();
-  
+
   /**
    * Send header state action
-   */ 
+   */
   void sendHeaderAction();
 
   /**
    * Send data state action
-   */ 
+   */
   void sendDataAction();
 
   /**
    * Data generator
-   */ 
+   */
   void dataToString(string& data);
 
   //! Behavior state
   unsigned behaviorState;
-  
+
   /**
    * All the possible states of this behavior
-   * 
+   *
    * @enum BehaviorState
-   */ 
+   */
   enum BehaviorState
   {
     waitForConn,

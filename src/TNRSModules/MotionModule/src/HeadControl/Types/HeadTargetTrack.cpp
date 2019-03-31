@@ -38,13 +38,16 @@ bool HeadTargetTrack<Scalar>::initiate()
   LOG_INFO("HeadTargetTrack.initiate() called...");
   trackersXY.resize(2);
   for (size_t i = 0; i < trackersXY.size(); ++i) {
-    trackersXY[i] = boost::make_shared<PIDController<Scalar>>(this->cycleTime);
+    trackersXY[i] =
+      boost::shared_ptr<PIDController<Scalar>>(
+        new PIDController<Scalar>(this->cycleTime));
     trackersXY[i]->setPidGains(HeadTargetTrack::pidGains[i]);
   }
   if (this->getBehaviorCast()->scanConfig) {
     this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
   } else {
-    this->getBehaviorCast()->scanConfig = boost::make_shared<HeadScanConfig>();
+    this->getBehaviorCast()->scanConfig =
+      boost::shared_ptr<HeadScanConfig>(new HeadScanConfig());
     this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
   }
   return true;

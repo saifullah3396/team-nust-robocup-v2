@@ -42,8 +42,6 @@ bool HeadScan<Scalar>::initiate()
 template <typename Scalar>
 void HeadScan<Scalar>::update()
 {
-  LOG_INFO("Runtiem:"  << this->runTime);
-  LOG_INFO("FsmState:"  << fsm->state->name);
   if (fsm->update())
     return;
 }

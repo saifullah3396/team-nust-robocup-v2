@@ -12,77 +12,57 @@
 #include <opencv2/core/core.hpp>
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "TNRSBase/include/ModuleRequest.h"
-#include "UserCommModule/include/CommMessage.h"
+#include "TNRSBase/include/ModuleRequestMacros.h"
+#include "Utils/include/DataHolders/CommMessage.h"
 #include "Utils/include/EnumUtils.h"
 
 using namespace cv;
 
 /**
  * Types of request valid for UserCommModule
- * 
+ *
  * @enum UserCommRequestIds
- */ 
+ */
 enum class UserCommRequestIds {
-  SEND_MSG_REQUEST,
-  SEND_IMAGE_REQUEST
+  sendMsgRequest,
+  sendImageRequest
 };
 
 /**
  * @class UserCommRequest
- * @brief A module request that can be handled by UserCommModule
- */ 
-class UserCommRequest : public ModuleRequest
-{
-public:
-  /**
-   * Constructor
-   * 
-   * @param id: Id of the control request
-   */ 
-  UserCommRequest(const UserCommRequestIds& id) :
-    ModuleRequest(toUType(TNSPLModules::userComm), toUType(id))
-  {
-  }
-};
-typedef boost::shared_ptr<UserCommRequest> UserCommRequestPtr;
+ * @brief Base for all requests handled by UserCommModule
+ */
+DECLARE_MODULE_REQUEST(
+  UserCommRequest,
+  UserCommRequestPtr,
+  ModuleRequest,
+  TNSPLModules,
+  userComm,
+  UserCommRequestIds
+)
 
 /**
  * @class SendMsgRequest
  * @brief A request that holds a message to be sent over the network
- */ 
-struct SendMsgRequest : public UserCommRequest
-{
-  /**
-   * Constructor
-   * 
-   * @param cMsg: The comm message associated with this request
-   */ 
-  SendMsgRequest(const CommMessage& cMsg) :
-    UserCommRequest(UserCommRequestIds::SEND_MSG_REQUEST),
-    cMsg(cMsg)
-  {
-  }
-
-  CommMessage cMsg;
-};
+ */
+DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
+  SendMsgRequest,
+  SendMsgRequestPtr,
+  UserCommRequest,
+  UserCommRequestIds,
+  sendMsgRequest,
+  (CommMessage, cMsg, CommMessage()),
+)
 
 /**
  * @class SendImageRequest
  * @brief A request that holds an image to be sent over the network
  */
-struct SendImageRequest : public UserCommRequest
-{
-  /**
-   * Constructor
-   *
-   * @param cMsg: The comm message associated with this request
-   */
-  SendImageRequest(const cv::Mat& image) :
-    UserCommRequest(UserCommRequestIds::SEND_IMAGE_REQUEST),
-    image(image)
-  {
-  }
-
-  cv::Mat image;
-};
-typedef boost::shared_ptr<SendMsgRequest> SendMsgRequestPtr;
+DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
+  SendImageRequest,
+  SendImageRequestPtr,
+  UserCommRequest,
+  UserCommRequestIds,
+  sendImageRequest,
+  (cv::Mat, image, cv::Mat()),
+)

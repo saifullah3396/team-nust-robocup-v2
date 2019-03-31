@@ -73,6 +73,10 @@ SharedMemory::init()
     vector<float>(toUType(Joints::count)));
   DEFINE_VARIABLE(
     vector<float>,
+    handSensors,
+    vector<float>(toUType(RobotHands::count)));
+  DEFINE_VARIABLE(
+    vector<float>,
     touchSensors,
     vector<float>(toUType(TouchSensors::count)));
   DEFINE_VARIABLE(
@@ -124,26 +128,9 @@ SharedMemory::init()
     RobotPose2D<float>,
     lastKnownPose2D,
     RobotPose2D<float>(-1e3, -1e3, -1e3));
-  OccupancyMap<float> defMap;
-  float fW, fH;
-  GET_CONFIG(
-    "PathPlanner",
-    (float, Map.cellSize, defMap.resolution),
-    (float, Map.fieldWidth, fW),
-    (float, Map.fieldHeight, fH),
-  );
-
-  defMap.data = Mat(
-    Size(fW / defMap.resolution, fH / defMap.resolution),
-    CV_8UC1,
-    Scalar(0));
-  defMap.originPose = cv::Point3_<float>(
-    fW / 2 / defMap.resolution,
-    fH / 2 / defMap.resolution,
-    0.0);
-  DEFINE_VARIABLE(float, fieldWidth, fW);
-  DEFINE_VARIABLE(float, fieldHeight, fH);
-  DEFINE_VARIABLE(OccupancyMap<float>, occupancyMap, defMap);
+  DECLARE_VARIABLE(float, fieldWidth);
+  DECLARE_VARIABLE(float, fieldHeight);
+  DECLARE_VARIABLE(OccupancyMap<float>, occupancyMap);
   DEFINE_VARIABLE(StiffnessState, stiffnessState, StiffnessState::unknown);
   DEFINE_VARIABLE(PostureState, postureState, PostureState::unknown);
   DEFINE_VARIABLE(PlanningState, planningState, PlanningState::unknown);
@@ -183,7 +170,7 @@ SharedMemory::init()
     teamRobots,
     vector<TeamRobot<float> >(SPL_STANDARD_MESSAGE_MAX_NUM_OF_PLAYERS));
   DEFINE_VARIABLE(bool, whistleDetected, false);
-  DEFINE_VARIABLE(BehaviorInfo, sBehaviorInfo, BehaviorInfo());
+  DEFINE_VARIABLE(BehaviorInfo, gBehaviorInfo, BehaviorInfo());
   DEFINE_VARIABLE(BehaviorInfoMap, mBehaviorInfo, BehaviorInfoMap());
   DEFINE_VARIABLE(BehaviorInfo, pBehaviorInfo, BehaviorInfo());
 }

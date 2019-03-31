@@ -29,7 +29,9 @@ JSOImpKick<Scalar>::JSOImpKick(
   const boost::shared_ptr<JSOImpKickConfig>& config) :
   JointSpaceKick<Scalar>(motionModule, config, "JSOImpKick")
 {
-  maxMomentumEEOpt = boost::make_shared<MaxMomentumEEOpt<Scalar> >(this);
+  maxMomentumEEOpt =
+    boost::shared_ptr<MaxMomentumEEOpt<Scalar> >(
+      new MaxMomentumEEOpt<Scalar>(this));
 }
 
 template <typename Scalar>
@@ -112,10 +114,12 @@ void JSOImpKick<Scalar>::setupKickBase()
     auto rArmChain = this->kM->getLinkChain(LinkChains::rArm);
     for (size_t i = 0; i < rArmChain->size; ++i)
       this->armsTaskJoints[rArmChain->start + i] = true;
-    this->zmpControlCfgInKick = boost::make_shared <ZmpControlConfig> ();
+    this->zmpControlCfgInKick =
+      boost::shared_ptr <ZmpControlConfig> (new ZmpControlConfig());
     this->zmpControlCfgInKick->supportLeg = this->supportLeg;
     this->zmpControlCfgInKick->keepOtherLegContact = false;
-    this->zmpControlCfgInKick->regularizePosture = true;
+    this->zmpControlCfgInKick->useTargetPosture = true;
+    this->zmpControlCfgInKick->regularizeIk = true;
     this->zmpControlCfgInKick->keepTorsoUpright = false;
     auto activeJoints = vector<bool>(toUType(Joints::count), false);
     activeJoints[toUType(Joints::lShoulderPitch)] = true;

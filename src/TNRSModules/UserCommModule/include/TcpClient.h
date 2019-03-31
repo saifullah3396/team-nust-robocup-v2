@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Utils/include/DataHolders/ClientInfo.h"
-#include "UserCommModule/include/CommMessage.h"
+#include "Utils/include/DataHolders/CommMessage.h"
 #include "Utils/include/DataUtils.h"
 #include "Utils/include/ThreadSafeQueue.h"
 
@@ -39,8 +39,8 @@ struct TcpMessage : CommMessage
    */
   TcpMessage(
     const string& msg,
-    const CommMsgTypes& type, 
-    const TcpClientType& targetClientType, 
+    const CommMsgTypes& type,
+    const TcpClientType& targetClientType,
     const int& relatedClientId) :
     CommMessage(msg, type),
     targetClientType(targetClientType),
@@ -287,7 +287,7 @@ private:
 
   //! Client ready to deleted
   bool deleteClient;
-  
+
   //! ClientInfo
   ClientInfo clientInfo;
 };

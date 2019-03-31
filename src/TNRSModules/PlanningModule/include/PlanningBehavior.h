@@ -45,17 +45,17 @@ public:
     const BehaviorConfigPtr& config,
     const string& name = "Not assigned.") :
       Behavior(config, name),
-      MemoryBase(pModule), 
-      pModule(pModule), 
-      sRequestTime(0.f),
-      mRequestTime(0.f) 
-    //penaliseMotion(false), 
+      MemoryBase(pModule),
+      pModule(pModule),
+      gRequestTime(0.f),
+      mRequestTime(0.f)
+    //penaliseMotion(false),
     //waitForUnpenalise(false)
   {
     cycleTime = pModule->getPeriodMinMS() / 1000.f;
     mbIdOffset = 0;
   }
-  
+
   /**
    * Destructor
    */
@@ -63,7 +63,7 @@ public:
   ~PlanningBehavior()
   {
   }
-  
+
   void setMBIdOffset(const int& mbIdOffset) {
     this->mbIdOffset = mbIdOffset;
   }
@@ -72,30 +72,30 @@ protected:
   /**
    * Sends the requests to change robot posture and stiffness states to
    * the given ones
-   * 
+   *
    * @param desPosture: Desired posture
    * @param desStiffness: Desired stiffness
    * @param mbManagerId: Motion behavior id
-   * 
+   *
    * @return true if both are set successfully else false
    */
   bool setPostureAndStiffness(
-    const PostureState& desPosture, 
+    const PostureState& desPosture,
     const StiffnessState& desStiffness,
     const unsigned& mbManagerId,
     const float& postureTime = 2.f);
-  
+
   /**
-   * Sends the request to kill the running static behavior
-   */ 
+   * Sends the request to kill the running general behavior
+   */
   void killGeneralBehavior();
-  
+
   /**
    * Sends the request to kill the running motion behavior
    *
    * @param mbManagerId: Id of the motion behavior manager responsible
    *   for the motion behavior
-   */ 
+   */
   void killMotionBehavior(const unsigned& mbManagerId);
 
   /**
@@ -123,50 +123,50 @@ protected:
     const unsigned& mbId, const unsigned& mbType);
 
   /**
-   * @brief matchLastStaticRequest Returns true if the last static request matches
+   * @brief matchLastGeneralRequest Returns true if the last general request matches
    *   the given behavior id and type
-   * @param sbId Static behavior id
-   * @param sbType Static behavior sub-type type id
+   * @param gbId General behavior id
+   * @param gbType General behavior sub-type type id
    * @return bool
    */
-  bool matchLastStaticRequest(
-    const unsigned& sbId, const unsigned& sbType);
+  bool matchLastGeneralRequest(
+    const unsigned& gbId, const unsigned& gbType);
 
   /**
-   * Returns true if a static behavior is running
-   * 
+   * Returns true if a general behavior is running
+   *
    * @return bool
-   */ 
-  bool sbInProgress();
-  
+   */
+  bool gbInProgress();
+
   /**
    * Returns true if a motion behavior is running
-   * 
+   *
    * @return bool
-   */ 
+   */
   bool mbInProgress();
-  
+
   /**
-   * Sets up a request to call a static behavior
-   * 
-   * @param config: Configuration of the required static behavior
-   */ 
+   * Sets up a request to call a general behavior
+   *
+   * @param config: Configuration of the required general behavior
+   */
   void setupGBRequest(const GBConfigPtr& config);
-  
+
   /**
    * Sets up a request to call a motion behavior
-   * 
+   *
    * @param config: Configuration of the required motion behavior
-   */ 
+   */
   void setupMBRequest(
     const unsigned& mbManagerId, const MBConfigPtr& config);
 
   /**
-   * Returns true if a static or motion behavior requests has been
+   * Returns true if a general or motion behavior requests has been
    * sent but not accepted
-   * 
+   *
    * @return bool
-   */ 
+   */
   bool requestInProgress();
 
   /**
@@ -189,45 +189,45 @@ protected:
 
   //! Ids of the motion behavior managers running
   vector<unsigned> mbManagerIds;
-  
+
   //! Offset for motion behavior ids to be used
   int mbIdOffset;
 
   //! Configuration of the currently running motion behavior
   BehaviorConfigPtr lastMBConfig;
 
-  //! Configuratoin of the currently running static behavior
+  //! Configuratoin of the currently running general behavior
   BehaviorConfigPtr lastGBConfig;
 
   //! Last motion behaviors requested
   BehaviorRequestPtr lastMotionRequest;
 
-  //! Last static behaviors requested
-  BehaviorRequestPtr lastStaticRequest;
+  //! Last general behaviors requested
+  BehaviorRequestPtr lastGeneralRequest;
 
 private:
   /**
    * Checks whether the behavior is still in progress based on incoming
    * info
-   * 
+   *
    * @param info: The behavior info
-   * 
+   *
    * @return true if behavior is still running
-   */ 
+   */
   bool behaviorInProgress(const BehaviorInfo& info);
 
   /**
-   * Returns true if the given request has not been received. If 
-   * received and accepted, the acceptedBehavior is assigned the config 
+   * Returns true if the given request has not been received. If
+   * received and accepted, the acceptedBehavior is assigned the config
    * of the given request. In case of rejection, the request is deleted
-   * 
+   *
    * @param req: Request to be checked
    * @param acceptedBehavior: The configuration of the accepted behavior
    * @param info: The feed back information about behavior
    * @param requestStartTime: The time this request was sent at
-   * 
+   *
    * @return bools
-   */ 
+   */
   bool requestInProgress(
     BehaviorRequestPtr& req,
     BehaviorConfigPtr& acceptedBehavior,
@@ -237,10 +237,10 @@ private:
   //! Time taken by the motion request in progress
   float mRequestTime;
 
-  //! Time taken by the static behavior request in progress
-  float sRequestTime;
-  
-  //! Maximum allowed time for a motion or behavior request to be 
+  //! Time taken by the general behavior request in progress
+  float gRequestTime;
+
+  //! Maximum allowed time for a motion or behavior request to be
   //! processed
   static constexpr float maxRequestTimeout = 2.f;
 };

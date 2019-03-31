@@ -2,7 +2,7 @@
  * @file MotionModule/include/KinematicsModule/MotionTask.h
  *
  * This file defines the struct MotionTask
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date Jul 22 2018
  */
@@ -42,7 +42,7 @@ public:
 
   /**
    * Constructor
-   * 
+   *
    * @param weight: MotionTask priority weight
    * @param gain: MotionTask gain
    * @param nResidual: Number of residual outputs
@@ -53,31 +53,31 @@ public:
    * @param taskType: Type of task
    */
   MotionTask(
-    const Scalar& weight, 
-    const Scalar& gain, 
+    const Scalar& weight,
+    const Scalar& gain,
     const unsigned& nResidual,
     const vector<bool>& activeJoints,
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
     const JointStateType& jsType,
     const MotionTaskType& taskType,
     const vector<bool>& activeResidual = vector<bool>());
-  
+
   virtual ~MotionTask() {}
-  
+
   /**
    * Computes the jacobian matrix for the given task
-   * 
+   *
    * @returns task jacobian
    */
   virtual Matrix<Scalar, Dynamic, Dynamic>
     computeJacobian() = 0;
-  
+
   /**
    * Computes the residual for the given task
    */
   virtual Matrix<Scalar, Dynamic, Dynamic>
     computeResidual(const Scalar& dt) = 0;
-  
+
   /**
    * Computes the current cost based on residual
    * @param dt Time step for residual
@@ -90,7 +90,7 @@ public:
    * @return task cost
    */
   Scalar computeCost();
-  
+
   /**
    * Checks whether the given task has any conflict with this task
    * @return true if the conflict exists
@@ -103,7 +103,7 @@ public:
   void setWeight(const Scalar& weight) { this->weight = weight; }
   void setActiveJoints(const vector<bool>& activeJoints) { this->activeJoints = activeJoints; }
   void setActiveResidual(const vector<bool>& activeResidual) { this->activeResidual = activeResidual; }
-  
+
   //! Getters
   Scalar getGain() const { return gain; }
   Scalar getWeight() const { return weight; }
@@ -113,11 +113,11 @@ public:
   Matrix<Scalar, Dynamic, Dynamic> getJacobian();
   Matrix<Scalar, Dynamic, Dynamic> getResidual(const Scalar& dt);
   Matrix<Scalar, Dynamic, Dynamic> getResidual();
- 
-protected:  
+
+protected:
   //! A pointer to robot kinematics
   boost::shared_ptr<KinematicsModule<Scalar> > km;
-  
+
   //! Type of joint state to be used for kinematic computation
   JointStateType jsType;
 
@@ -138,12 +138,15 @@ protected:
 
   //! Active residual components
   vector<bool> activeResidual;
-  
+
   //! MotionTask gain
   Scalar gain;
-  
+
   //! MotionTask priority weight
   Scalar weight;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef boost::shared_ptr<MotionTask<MType> > MotionTaskPtr;
 
@@ -193,6 +196,9 @@ public:
 private:
   //! Target joints for the required posture
   Matrix<Scalar, Dynamic, 1> targetJoints;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef boost::shared_ptr<PostureTask<MType> > PostureTaskPtr;
 
@@ -221,17 +227,17 @@ public:
     const RobotFeet& baseFrame,
     const LegEEs& baseEE,
     const Matrix<Scalar, 3, 1>& targetCom,
-    const Scalar& weight, 
+    const Scalar& weight,
     const Scalar& gain,
     const vector<bool>& activeJoints,
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
     const vector<bool>& activeResidual = vector<bool>(),
     const JointStateType& jsType = JointStateType::sim);
-  
+
   Matrix<Scalar, Dynamic, Dynamic> computeJacobian();
-  
+
   Matrix<Scalar, Dynamic, Dynamic> computeResidual(const Scalar& dt);
-  
+
   /**
    * Checks whether the given task has any conflict with this com task
    * @return true if the given task is also a com task
@@ -241,7 +247,7 @@ public:
 
   //! Setters
   void setTargetCom(
-    const Matrix<Scalar, 3, 1>& targetCom) 
+    const Matrix<Scalar, 3, 1>& targetCom)
     { this->targetCom = targetCom; }
 
   void setFirstStep(const bool& firstStep)
@@ -262,6 +268,9 @@ private:
 
   //! First step uses com estimate
   bool firstStep;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef boost::shared_ptr<ComTask<MType> > ComTaskPtr;
 
@@ -276,12 +285,12 @@ class CartesianTask : public MotionTask<Scalar>
 public:
   /**
    * Constructor
-   * 
-   * @param chainIndex: Index of the chain for which this task is 
+   *
+   * @param chainIndex: Index of the chain for which this task is
    *   defined
-   * @param endEffector: Transformation frame of the end-effector to be 
+   * @param endEffector: Transformation frame of the end-effector to be
    *   moved
-   * @param target: Target transformation to be reached by the 
+   * @param target: Target transformation to be reached by the
    *   end-effector
    * @param weight: MotionTask priority weight
    * @param gain: MotionTask gain
@@ -294,26 +303,26 @@ public:
     const LinkChains& chainIndex,
     const Matrix<Scalar, 4, 4> endEffector,
     const Matrix<Scalar, 4, 4> target,
-    const Scalar& weight, 
+    const Scalar& weight,
     const Scalar& gain,
     const vector<bool>& activeJoints,
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
     const vector<bool>& activeResidual = vector<bool>(),
     const JointStateType& jsType = JointStateType::sim,
     const MotionTaskType& taskType = MotionTaskType::cartesian);
-  
+
   Matrix<Scalar, Dynamic, Dynamic> computeJacobian();
-  
+
   Matrix<Scalar, Dynamic, Dynamic> computeResidual(const Scalar& dt);
   /**
    * Checks whether the given task has any conflict with this cartesian task
    * @return true if the given task is also a cartesian task for the same chain
    */
   bool checkConflict(const boost::shared_ptr<MotionTask<Scalar> >& task);
-  
+
   //! Setters
   void setTargetRel(
-    const Matrix<Scalar, 4, 4>& target) 
+    const Matrix<Scalar, 4, 4>& target)
     { this->target = this->km->getGlobalToBody() * target; }
 
   //! Setters
@@ -328,7 +337,7 @@ public:
 
   //! Getters
   Matrix<Scalar, 4, 4> getTarget() { return target; }
-  
+
 protected:
   //! Index of the chain for which this task is defined
   LinkChains chainIndex;
@@ -338,6 +347,9 @@ protected:
 
   //! Target end-effector position
   Matrix<Scalar, 4, 4> target;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef boost::shared_ptr<CartesianTask<MType> > CartesianTaskPtr;
 
@@ -374,6 +386,9 @@ public:
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
     const vector<bool>& activeResidual = vector<bool>(),
     const JointStateType& jsType = JointStateType::sim);
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef boost::shared_ptr<ContactTask<MType> > ContactTaskPtr;
 
@@ -446,5 +461,8 @@ protected:
 
   //! Target transformation to be reached by the torso
   Matrix<Scalar, 4, 4> target;
+
+public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef boost::shared_ptr<TorsoTask<MType> > TorsoTaskPtr;

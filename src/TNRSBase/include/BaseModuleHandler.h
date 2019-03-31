@@ -11,6 +11,7 @@
 #pragma once
 
 #include "TNRSBase/include/BaseModule.h"
+#include "Utils/include/PrintUtils.h"
 
 /**
  * @class BaseModuleHandler
@@ -76,6 +77,7 @@ protected:
     for (const auto& cm : childModules) {
       if (cm) cm->join();
     }
+    LOG_INFO("All BaseModules successfully joined...");
   }
 
   /**

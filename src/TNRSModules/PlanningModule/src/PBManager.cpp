@@ -10,8 +10,8 @@
 #include "PlanningModule/include/PlanningModule.h"
 #include "PlanningModule/include/PBManager.h"
 #include "PlanningModule/include/PlanningBehaviors/RobotStartup/RobotStartup.h"
-//#include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/NavigationBehavior.h"
-//#include "PlanningModule/include/PlanningBehaviors/Robocup/Robocup.h"
+#include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/NavigationBehavior.h"
+#include "PlanningModule/include/PlanningBehaviors/Robocup/Robocup.h"
 //#include "PlanningModule/include/PlanningBehaviors/KickSequence/KickSequence.h"
 //#include "PlanningModule/include/PlanningBehaviors/ExternalInterface/ExternalInterface.h"
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/TestSuite.h"
@@ -28,22 +28,22 @@ bool PBManager::makeBehavior(
   if (cfg->baseType != BaseBehaviorType::planning)
     return false;
   if (cfg->id == toUType(PBIds::startup)) {
-    behavior = 
+    behavior =
       BehaviorPtr(RobotStartup::getType(planningModule, cfg));
-  //} else if (cfg->id == toUType(PBIds::NAVIGATION)) {
-//    behavior =
-//      BehaviorPtr(NavigationBehavior::getType(planningModule, cfg));
-//  } else if (cfg->id == toUType(PBIds::ROBOCUP)) {
-//    behavior =
-//      BehaviorPtr(Robocup::getType(planningModule, cfg));
-//  } else if (cfg->id == toUType(PBIds::KICK_SEQUENCE)) {
+  } else if (cfg->id == toUType(PBIds::navigation)) {
+    behavior =
+      BehaviorPtr(NavigationBehavior::getType(planningModule, cfg));
+  } else if (cfg->id == toUType(PBIds::robocup)) {
+    behavior =
+      BehaviorPtr(Robocup::getType(planningModule, cfg));
+//  } else if (cfg->id == toUType(PBIds::kickSequence)) {
 //    behavior =
 //      BehaviorPtr(KickSequence::getType(planningModule, cfg));
-//  } else if (cfg->id == toUType(PBIds::EXTERNAL_INTERFACE)) {
+//  } else if (cfg->id == toUType(PBIds::externalInterface)) {
 //    behavior =
 //      BehaviorPtr(ExternalInterface::getType(planningModule, cfg));
   } else if (cfg->id == toUType(PBIds::testSuite)) {
-    behavior = 
+    behavior =
       BehaviorPtr(TestSuite::getType(planningModule, cfg));
   } else {
     return false;

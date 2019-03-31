@@ -1,12 +1,12 @@
 /**
  * @file MotionModule/src/MotionConfigs/MBPostureConfig.cpp
  *
- * This file implements the structs MBPostureConfig 
+ * This file implements the structs MBPostureConfig
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 3 April 2018
  */
- 
+
 #include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "MotionModule/include/PostureModule/PostureDefinitions.h"
 #include "Utils/include/DataUtils.h"
