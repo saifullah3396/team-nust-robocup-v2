@@ -1,0 +1,6 @@
+{
+  "keys" : [
+    "Device/SubDeviceList/LHand/Position/Sensor/Value",
+    "Device/SubDeviceList/RHand/Position/Sensor/Value"
+  ]
+}

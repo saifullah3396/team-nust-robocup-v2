@@ -1,0 +1,7 @@
+{
+  "keys" : [
+    "Device/SubDeviceList/LHand/Position/Actuator/Value",
+    "Device/SubDeviceList/RHand/Position/Actuator/Value"
+  ],
+  "alias" : "HandActuator"
+}
