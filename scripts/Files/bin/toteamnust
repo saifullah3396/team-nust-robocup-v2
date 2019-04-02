@@ -5,4 +5,4 @@ if [ $(whoami) != root ]; then
   exit 0
 fi
 
-cp /etc/naoqi/autoload.tnust /etc/naoqi/autoload.ini
+cp /home/nao/team_nust/bin/autoload.tnust /etc/naoqi/autoload.ini
