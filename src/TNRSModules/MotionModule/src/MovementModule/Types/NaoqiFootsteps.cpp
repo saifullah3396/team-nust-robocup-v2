@@ -7,10 +7,10 @@
  * @date 21 Jul 2018
  */
 
-#ifndef V6_CROSS_BUILD
-#include <alvalue/alvalue.h>
-#else
+#ifdef V6_CROSS_BUILD
 #include <qi/alvalue.h>
+#else
+#include <alvalue/alvalue.h>
 #endif
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "MotionModule/include/MotionModule.h"
