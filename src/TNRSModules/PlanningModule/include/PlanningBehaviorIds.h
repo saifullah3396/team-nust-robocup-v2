@@ -44,7 +44,8 @@ enum class PBStartupTypes
 enum class PBNavigationTypes
 : unsigned int
 {
-  goToTarget = 0
+  goToTarget = 0,
+  PlanTowards
 };
 
 /**

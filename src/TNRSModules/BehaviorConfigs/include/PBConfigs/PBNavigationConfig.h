@@ -34,3 +34,10 @@ DECLARE_BEHAVIOR_CONFIG_TYPE(
   PBNavigationTypes::goToTarget,
   GoToTargetConfigPtr
 )
+
+DECLARE_BEHAVIOR_CONFIG_TYPE(
+  PlanTowardsConfig,
+  PBNavigationConfig,
+  PBNavigationTypes::PlanTowards,
+  PlanTowardsConfigPtr
+)

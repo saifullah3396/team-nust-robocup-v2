@@ -11,6 +11,7 @@
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/NavigationBehavior.h"
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.h"
+#include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "UserCommModule/include/UserCommRequest.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
@@ -61,6 +62,8 @@ boost::shared_ptr<NavigationBehavior> NavigationBehavior::getType(
   switch (cfg->type) {
     case toUType(PBNavigationTypes::goToTarget):
       nb = new GoToTarget(planningModule, SPC(GoToTargetConfig, cfg)); break;
+    case toUType(PBNavigationTypes::PlanTowards):
+      nb = new PlanTowards(planningModule, SPC(PlanTowardsConfig, cfg)); break;
   }
   return boost::shared_ptr<NavigationBehavior >(nb);
 }

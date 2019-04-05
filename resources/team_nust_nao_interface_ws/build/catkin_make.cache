@@ -1,2 +1,2 @@
-team_nust_msgs:team_nust_nao_interface:team_nust_network_handler:team_nust_visualizer:team_nust_visualizer_plugins
--DCATKIN_DEVEL_PREFIX=/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/devel -DCMAKE_INSTALL_PREFIX=/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/install -G Unix Makefiles
+
+-DCATKIN_DEVEL_PREFIX=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/resources/team_nust_nao_interface_ws/devel -DCMAKE_INSTALL_PREFIX=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/resources/team_nust_nao_interface_ws/install -G Unix Makefiles

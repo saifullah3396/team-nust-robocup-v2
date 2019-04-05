@@ -1,0 +1,2475 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fc715/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_fc715.dir/build.make CMakeFiles/cmTC_fc715.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fc715.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_fc715.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_fc715
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fc715.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_fc715.dir/CheckSymbolExists.c.o  -o cmTC_fc715 -rdynamic 
+CMakeFiles/cmTC_fc715.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_fc715] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_fc715/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_df6f2/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_df6f2.dir/build.make CMakeFiles/cmTC_df6f2.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_df6f2.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_df6f2.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_df6f2
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_df6f2.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_df6f2.dir/CheckFunctionExists.c.o  -o cmTC_df6f2 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_df6f2] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_df6f2/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f0187/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f0187.dir/build.make CMakeFiles/cmTC_f0187.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f0187.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_f0187.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_f0187
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f0187.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_f0187.dir/CheckSymbolExists.c.o  -o cmTC_f0187 -rdynamic 
+CMakeFiles/cmTC_f0187.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_f0187] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f0187/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b6223/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b6223.dir/build.make CMakeFiles/cmTC_b6223.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b6223.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_b6223.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_b6223
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b6223.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_b6223.dir/CheckFunctionExists.c.o  -o cmTC_b6223 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_b6223] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b6223/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_167a9/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_167a9.dir/build.make CMakeFiles/cmTC_167a9.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_167a9.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_167a9.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_167a9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_167a9.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_167a9.dir/CheckSymbolExists.c.o  -o cmTC_167a9 -rdynamic 
+CMakeFiles/cmTC_167a9.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_167a9] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_167a9/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e1602/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e1602.dir/build.make CMakeFiles/cmTC_e1602.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e1602.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_e1602.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_e1602
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e1602.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_e1602.dir/CheckFunctionExists.c.o  -o cmTC_e1602 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_e1602] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_e1602/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c7b28/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_c7b28.dir/build.make CMakeFiles/cmTC_c7b28.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c7b28.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_c7b28.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_c7b28
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c7b28.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_c7b28.dir/CheckSymbolExists.c.o  -o cmTC_c7b28 -rdynamic 
+CMakeFiles/cmTC_c7b28.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_c7b28] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_c7b28/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b4b80/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b4b80.dir/build.make CMakeFiles/cmTC_b4b80.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b4b80.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_b4b80.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_b4b80
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b4b80.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_b4b80.dir/CheckFunctionExists.c.o  -o cmTC_b4b80 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_b4b80] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b4b80/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_74813/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_74813.dir/build.make CMakeFiles/cmTC_74813.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_74813.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_74813.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_74813
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_74813.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_74813.dir/CheckSymbolExists.c.o  -o cmTC_74813 -rdynamic 
+CMakeFiles/cmTC_74813.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_74813] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_74813/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_2cf54/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_2cf54.dir/build.make CMakeFiles/cmTC_2cf54.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2cf54.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_2cf54.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_2cf54
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2cf54.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_2cf54.dir/CheckFunctionExists.c.o  -o cmTC_2cf54 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_2cf54] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_2cf54/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_70864/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_70864.dir/build.make CMakeFiles/cmTC_70864.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_70864.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_70864.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_70864
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_70864.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_70864.dir/CheckSymbolExists.c.o  -o cmTC_70864 -rdynamic 
+CMakeFiles/cmTC_70864.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_70864] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_70864/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ba3e8/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_ba3e8.dir/build.make CMakeFiles/cmTC_ba3e8.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ba3e8.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_ba3e8.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_ba3e8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ba3e8.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_ba3e8.dir/CheckFunctionExists.c.o  -o cmTC_ba3e8 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_ba3e8] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_ba3e8/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_6065b/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_6065b.dir/build.make CMakeFiles/cmTC_6065b.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_6065b.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_6065b.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_6065b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6065b.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_6065b.dir/CheckSymbolExists.c.o  -o cmTC_6065b -rdynamic 
+CMakeFiles/cmTC_6065b.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_6065b] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_6065b/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_cb141/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_cb141.dir/build.make CMakeFiles/cmTC_cb141.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cb141.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_cb141.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_cb141
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cb141.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_cb141.dir/CheckFunctionExists.c.o  -o cmTC_cb141 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_cb141] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_cb141/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_0c05d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_0c05d.dir/build.make CMakeFiles/cmTC_0c05d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0c05d.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_0c05d.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_0c05d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0c05d.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_0c05d.dir/CheckSymbolExists.c.o  -o cmTC_0c05d -rdynamic 
+CMakeFiles/cmTC_0c05d.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_0c05d] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_0c05d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_312f5/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_312f5.dir/build.make CMakeFiles/cmTC_312f5.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_312f5.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_312f5.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_312f5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_312f5.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_312f5.dir/CheckFunctionExists.c.o  -o cmTC_312f5 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_312f5] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_312f5/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_333f5/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_333f5.dir/build.make CMakeFiles/cmTC_333f5.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_333f5.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_333f5.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_333f5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_333f5.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_333f5.dir/CheckSymbolExists.c.o  -o cmTC_333f5 -rdynamic 
+CMakeFiles/cmTC_333f5.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_333f5] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_333f5/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5373b/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_5373b.dir/build.make CMakeFiles/cmTC_5373b.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5373b.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_5373b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_5373b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5373b.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_5373b.dir/CheckFunctionExists.c.o  -o cmTC_5373b -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_5373b] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_5373b/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1cdb5/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_1cdb5.dir/build.make CMakeFiles/cmTC_1cdb5.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1cdb5.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_1cdb5.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_1cdb5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1cdb5.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_1cdb5.dir/CheckSymbolExists.c.o  -o cmTC_1cdb5 -rdynamic 
+CMakeFiles/cmTC_1cdb5.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_1cdb5] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_1cdb5/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_24cb6/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_24cb6.dir/build.make CMakeFiles/cmTC_24cb6.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_24cb6.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_24cb6.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_24cb6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_24cb6.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_24cb6.dir/CheckFunctionExists.c.o  -o cmTC_24cb6 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_24cb6] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_24cb6/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c9f0e/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_c9f0e.dir/build.make CMakeFiles/cmTC_c9f0e.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c9f0e.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_c9f0e.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_c9f0e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c9f0e.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_c9f0e.dir/CheckSymbolExists.c.o  -o cmTC_c9f0e -rdynamic 
+CMakeFiles/cmTC_c9f0e.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_c9f0e] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_c9f0e/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_20a79/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_20a79.dir/build.make CMakeFiles/cmTC_20a79.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_20a79.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_20a79.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_20a79
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_20a79.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_20a79.dir/CheckFunctionExists.c.o  -o cmTC_20a79 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_20a79] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_20a79/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_58b2e/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_58b2e.dir/build.make CMakeFiles/cmTC_58b2e.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_58b2e.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_58b2e.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_58b2e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_58b2e.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_58b2e.dir/CheckSymbolExists.c.o  -o cmTC_58b2e -rdynamic 
+CMakeFiles/cmTC_58b2e.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_58b2e] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_58b2e/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3f17c/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_3f17c.dir/build.make CMakeFiles/cmTC_3f17c.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3f17c.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_3f17c.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_3f17c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3f17c.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_3f17c.dir/CheckFunctionExists.c.o  -o cmTC_3f17c -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_3f17c] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_3f17c/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3dbda/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_3dbda.dir/build.make CMakeFiles/cmTC_3dbda.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3dbda.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_3dbda.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_3dbda
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3dbda.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_3dbda.dir/CheckSymbolExists.c.o  -o cmTC_3dbda -rdynamic 
+CMakeFiles/cmTC_3dbda.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_3dbda] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_3dbda/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_6cb26/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_6cb26.dir/build.make CMakeFiles/cmTC_6cb26.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_6cb26.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_6cb26.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_6cb26
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6cb26.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_6cb26.dir/CheckFunctionExists.c.o  -o cmTC_6cb26 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_6cb26] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_6cb26/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_58a47/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_58a47.dir/build.make CMakeFiles/cmTC_58a47.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_58a47.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_58a47.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_58a47
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_58a47.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_58a47.dir/CheckSymbolExists.c.o  -o cmTC_58a47 -rdynamic 
+CMakeFiles/cmTC_58a47.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_58a47] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_58a47/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_24aa4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_24aa4.dir/build.make CMakeFiles/cmTC_24aa4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_24aa4.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_24aa4.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_24aa4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_24aa4.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_24aa4.dir/CheckFunctionExists.c.o  -o cmTC_24aa4 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_24aa4] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_24aa4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_33495/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_33495.dir/build.make CMakeFiles/cmTC_33495.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_33495.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_33495.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_33495
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_33495.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_33495.dir/CheckSymbolExists.c.o  -o cmTC_33495 -rdynamic 
+CMakeFiles/cmTC_33495.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_33495] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_33495/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7b20f/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_7b20f.dir/build.make CMakeFiles/cmTC_7b20f.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7b20f.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_7b20f.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_7b20f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7b20f.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_7b20f.dir/CheckFunctionExists.c.o  -o cmTC_7b20f -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_7b20f] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_7b20f/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_85e15/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_85e15.dir/build.make CMakeFiles/cmTC_85e15.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_85e15.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_85e15.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_85e15
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_85e15.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_85e15.dir/CheckSymbolExists.c.o  -o cmTC_85e15 -rdynamic 
+CMakeFiles/cmTC_85e15.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_85e15] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_85e15/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_0e115/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_0e115.dir/build.make CMakeFiles/cmTC_0e115.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0e115.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_0e115.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_0e115
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0e115.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_0e115.dir/CheckFunctionExists.c.o  -o cmTC_0e115 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_0e115] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_0e115/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ae02d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_ae02d.dir/build.make CMakeFiles/cmTC_ae02d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ae02d.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_ae02d.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_ae02d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ae02d.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_ae02d.dir/CheckSymbolExists.c.o  -o cmTC_ae02d -rdynamic 
+CMakeFiles/cmTC_ae02d.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_ae02d] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_ae02d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_80ac6/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_80ac6.dir/build.make CMakeFiles/cmTC_80ac6.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_80ac6.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_80ac6.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_80ac6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_80ac6.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_80ac6.dir/CheckFunctionExists.c.o  -o cmTC_80ac6 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_80ac6] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_80ac6/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e5c80/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e5c80.dir/build.make CMakeFiles/cmTC_e5c80.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e5c80.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_e5c80.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_e5c80
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e5c80.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_e5c80.dir/CheckSymbolExists.c.o  -o cmTC_e5c80 -rdynamic 
+CMakeFiles/cmTC_e5c80.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_e5c80] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_e5c80/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_373cf/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_373cf.dir/build.make CMakeFiles/cmTC_373cf.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_373cf.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_373cf.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_373cf
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_373cf.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_373cf.dir/CheckFunctionExists.c.o  -o cmTC_373cf -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_373cf] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_373cf/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_59ba4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_59ba4.dir/build.make CMakeFiles/cmTC_59ba4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_59ba4.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_59ba4.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_59ba4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_59ba4.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_59ba4.dir/CheckSymbolExists.c.o  -o cmTC_59ba4 -rdynamic 
+CMakeFiles/cmTC_59ba4.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_59ba4] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_59ba4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_69311/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_69311.dir/build.make CMakeFiles/cmTC_69311.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_69311.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_69311.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_69311
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_69311.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_69311.dir/CheckFunctionExists.c.o  -o cmTC_69311 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_69311] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_69311/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e034a/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e034a.dir/build.make CMakeFiles/cmTC_e034a.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e034a.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_e034a.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_e034a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e034a.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_e034a.dir/CheckSymbolExists.c.o  -o cmTC_e034a -rdynamic 
+CMakeFiles/cmTC_e034a.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_e034a] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_e034a/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_41994/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_41994.dir/build.make CMakeFiles/cmTC_41994.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_41994.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_41994.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_41994
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_41994.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_41994.dir/CheckFunctionExists.c.o  -o cmTC_41994 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_41994] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_41994/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5c8a4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_5c8a4.dir/build.make CMakeFiles/cmTC_5c8a4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5c8a4.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_5c8a4.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_5c8a4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5c8a4.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_5c8a4.dir/CheckSymbolExists.c.o  -o cmTC_5c8a4 -rdynamic 
+CMakeFiles/cmTC_5c8a4.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_5c8a4] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_5c8a4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d0c08/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_d0c08.dir/build.make CMakeFiles/cmTC_d0c08.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d0c08.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_d0c08.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d0c08
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d0c08.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_d0c08.dir/CheckFunctionExists.c.o  -o cmTC_d0c08 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_d0c08] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_d0c08/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b4196/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b4196.dir/build.make CMakeFiles/cmTC_b4196.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b4196.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_b4196.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_b4196
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b4196.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_b4196.dir/CheckSymbolExists.c.o  -o cmTC_b4196 -rdynamic 
+CMakeFiles/cmTC_b4196.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_b4196] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b4196/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_32b57/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_32b57.dir/build.make CMakeFiles/cmTC_32b57.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_32b57.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_32b57.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_32b57
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_32b57.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_32b57.dir/CheckFunctionExists.c.o  -o cmTC_32b57 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_32b57] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_32b57/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_70c13/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_70c13.dir/build.make CMakeFiles/cmTC_70c13.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_70c13.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_70c13.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_70c13
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_70c13.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_70c13.dir/CheckSymbolExists.c.o  -o cmTC_70c13 -rdynamic 
+CMakeFiles/cmTC_70c13.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_70c13] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_70c13/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f0486/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f0486.dir/build.make CMakeFiles/cmTC_f0486.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f0486.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_f0486.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_f0486
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f0486.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_f0486.dir/CheckFunctionExists.c.o  -o cmTC_f0486 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_f0486] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f0486/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f8c9f/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f8c9f.dir/build.make CMakeFiles/cmTC_f8c9f.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f8c9f.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_f8c9f.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_f8c9f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f8c9f.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_f8c9f.dir/CheckSymbolExists.c.o  -o cmTC_f8c9f -rdynamic 
+CMakeFiles/cmTC_f8c9f.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_f8c9f] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f8c9f/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e4b04/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e4b04.dir/build.make CMakeFiles/cmTC_e4b04.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e4b04.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_e4b04.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_e4b04
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e4b04.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_e4b04.dir/CheckFunctionExists.c.o  -o cmTC_e4b04 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_e4b04] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_e4b04/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_714f4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_714f4.dir/build.make CMakeFiles/cmTC_714f4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_714f4.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_714f4.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_714f4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_714f4.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_714f4.dir/CheckSymbolExists.c.o  -o cmTC_714f4 -rdynamic 
+CMakeFiles/cmTC_714f4.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_714f4] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_714f4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_87f2b/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_87f2b.dir/build.make CMakeFiles/cmTC_87f2b.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_87f2b.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_87f2b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_87f2b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_87f2b.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_87f2b.dir/CheckFunctionExists.c.o  -o cmTC_87f2b -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_87f2b] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_87f2b/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_35b49/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_35b49.dir/build.make CMakeFiles/cmTC_35b49.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_35b49.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_35b49.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_35b49
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_35b49.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_35b49.dir/CheckSymbolExists.c.o  -o cmTC_35b49 -rdynamic 
+CMakeFiles/cmTC_35b49.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_35b49] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_35b49/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_df3c0/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_df3c0.dir/build.make CMakeFiles/cmTC_df3c0.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_df3c0.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_df3c0.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_df3c0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_df3c0.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_df3c0.dir/CheckFunctionExists.c.o  -o cmTC_df3c0 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_df3c0] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_df3c0/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f5c41/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f5c41.dir/build.make CMakeFiles/cmTC_f5c41.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f5c41.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_f5c41.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_f5c41
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f5c41.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_f5c41.dir/CheckSymbolExists.c.o  -o cmTC_f5c41 -rdynamic 
+CMakeFiles/cmTC_f5c41.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_f5c41] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f5c41/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d5f8a/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_d5f8a.dir/build.make CMakeFiles/cmTC_d5f8a.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d5f8a.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_d5f8a.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d5f8a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d5f8a.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_d5f8a.dir/CheckFunctionExists.c.o  -o cmTC_d5f8a -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_d5f8a] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_d5f8a/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b6755/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b6755.dir/build.make CMakeFiles/cmTC_b6755.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b6755.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_b6755.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_b6755
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b6755.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_b6755.dir/CheckSymbolExists.c.o  -o cmTC_b6755 -rdynamic 
+CMakeFiles/cmTC_b6755.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_b6755] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b6755/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_425a6/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_425a6.dir/build.make CMakeFiles/cmTC_425a6.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_425a6.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_425a6.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_425a6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_425a6.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_425a6.dir/CheckFunctionExists.c.o  -o cmTC_425a6 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_425a6] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_425a6/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_46446/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_46446.dir/build.make CMakeFiles/cmTC_46446.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_46446.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_46446.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_46446
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_46446.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_46446.dir/CheckSymbolExists.c.o  -o cmTC_46446 -rdynamic 
+CMakeFiles/cmTC_46446.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_46446] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_46446/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_78a77/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_78a77.dir/build.make CMakeFiles/cmTC_78a77.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_78a77.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_78a77.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_78a77
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_78a77.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_78a77.dir/CheckFunctionExists.c.o  -o cmTC_78a77 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_78a77] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_78a77/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_12eeb/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_12eeb.dir/build.make CMakeFiles/cmTC_12eeb.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_12eeb.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_12eeb.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_12eeb
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_12eeb.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_12eeb.dir/CheckSymbolExists.c.o  -o cmTC_12eeb -rdynamic 
+CMakeFiles/cmTC_12eeb.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_12eeb] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_12eeb/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_16746/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_16746.dir/build.make CMakeFiles/cmTC_16746.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_16746.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_16746.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_16746
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_16746.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_16746.dir/CheckFunctionExists.c.o  -o cmTC_16746 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_16746] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_16746/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_77e6d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_77e6d.dir/build.make CMakeFiles/cmTC_77e6d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_77e6d.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_77e6d.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_77e6d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_77e6d.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_77e6d.dir/CheckSymbolExists.c.o  -o cmTC_77e6d -rdynamic 
+CMakeFiles/cmTC_77e6d.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_77e6d] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_77e6d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b2adb/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b2adb.dir/build.make CMakeFiles/cmTC_b2adb.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b2adb.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_b2adb.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_b2adb
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b2adb.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_b2adb.dir/CheckFunctionExists.c.o  -o cmTC_b2adb -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_b2adb] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b2adb/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7b01f/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_7b01f.dir/build.make CMakeFiles/cmTC_7b01f.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7b01f.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_7b01f.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_7b01f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7b01f.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_7b01f.dir/CheckSymbolExists.c.o  -o cmTC_7b01f -rdynamic 
+CMakeFiles/cmTC_7b01f.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_7b01f] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_7b01f/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5c14d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_5c14d.dir/build.make CMakeFiles/cmTC_5c14d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5c14d.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_5c14d.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_5c14d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5c14d.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_5c14d.dir/CheckFunctionExists.c.o  -o cmTC_5c14d -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_5c14d] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_5c14d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_334e6/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_334e6.dir/build.make CMakeFiles/cmTC_334e6.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_334e6.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_334e6.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_334e6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_334e6.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_334e6.dir/CheckSymbolExists.c.o  -o cmTC_334e6 -rdynamic 
+CMakeFiles/cmTC_334e6.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_334e6] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_334e6/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_91d56/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_91d56.dir/build.make CMakeFiles/cmTC_91d56.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_91d56.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_91d56.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_91d56
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_91d56.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_91d56.dir/CheckFunctionExists.c.o  -o cmTC_91d56 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_91d56] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_91d56/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e5b31/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e5b31.dir/build.make CMakeFiles/cmTC_e5b31.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e5b31.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_e5b31.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_e5b31
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e5b31.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_e5b31.dir/CheckSymbolExists.c.o  -o cmTC_e5b31 -rdynamic 
+CMakeFiles/cmTC_e5b31.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_e5b31] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_e5b31/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_79212/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_79212.dir/build.make CMakeFiles/cmTC_79212.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_79212.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_79212.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_79212
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_79212.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_79212.dir/CheckFunctionExists.c.o  -o cmTC_79212 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_79212] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_79212/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_92bcf/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_92bcf.dir/build.make CMakeFiles/cmTC_92bcf.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_92bcf.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_92bcf.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_92bcf
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_92bcf.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_92bcf.dir/CheckSymbolExists.c.o  -o cmTC_92bcf -rdynamic 
+CMakeFiles/cmTC_92bcf.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_92bcf] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_92bcf/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_62eb6/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_62eb6.dir/build.make CMakeFiles/cmTC_62eb6.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_62eb6.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_62eb6.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_62eb6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_62eb6.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_62eb6.dir/CheckFunctionExists.c.o  -o cmTC_62eb6 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_62eb6] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_62eb6/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c7295/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_c7295.dir/build.make CMakeFiles/cmTC_c7295.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c7295.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_c7295.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_c7295
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c7295.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_c7295.dir/CheckSymbolExists.c.o  -o cmTC_c7295 -rdynamic 
+CMakeFiles/cmTC_c7295.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_c7295] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_c7295/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_0a833/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_0a833.dir/build.make CMakeFiles/cmTC_0a833.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0a833.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_0a833.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_0a833
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0a833.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_0a833.dir/CheckFunctionExists.c.o  -o cmTC_0a833 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_0a833] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_0a833/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_26376/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_26376.dir/build.make CMakeFiles/cmTC_26376.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_26376.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_26376.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_26376
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_26376.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_26376.dir/CheckSymbolExists.c.o  -o cmTC_26376 -rdynamic 
+CMakeFiles/cmTC_26376.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_26376] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_26376/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_23e95/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_23e95.dir/build.make CMakeFiles/cmTC_23e95.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_23e95.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_23e95.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_23e95
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_23e95.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_23e95.dir/CheckFunctionExists.c.o  -o cmTC_23e95 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_23e95] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_23e95/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_2da73/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_2da73.dir/build.make CMakeFiles/cmTC_2da73.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2da73.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_2da73.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_2da73
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2da73.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_2da73.dir/CheckSymbolExists.c.o  -o cmTC_2da73 -rdynamic 
+CMakeFiles/cmTC_2da73.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_2da73] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_2da73/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_bd951/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_bd951.dir/build.make CMakeFiles/cmTC_bd951.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bd951.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_bd951.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_bd951
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bd951.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_bd951.dir/CheckFunctionExists.c.o  -o cmTC_bd951 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_bd951] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_bd951/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e2d77/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e2d77.dir/build.make CMakeFiles/cmTC_e2d77.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e2d77.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_e2d77.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_e2d77
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e2d77.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_e2d77.dir/CheckSymbolExists.c.o  -o cmTC_e2d77 -rdynamic 
+CMakeFiles/cmTC_e2d77.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_e2d77] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_e2d77/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d3eac/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_d3eac.dir/build.make CMakeFiles/cmTC_d3eac.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d3eac.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_d3eac.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d3eac
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d3eac.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_d3eac.dir/CheckFunctionExists.c.o  -o cmTC_d3eac -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_d3eac] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_d3eac/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_944a8/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_944a8.dir/build.make CMakeFiles/cmTC_944a8.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_944a8.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_944a8.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_944a8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_944a8.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_944a8.dir/CheckSymbolExists.c.o  -o cmTC_944a8 -rdynamic 
+CMakeFiles/cmTC_944a8.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_944a8] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_944a8/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a3b67/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_a3b67.dir/build.make CMakeFiles/cmTC_a3b67.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a3b67.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_a3b67.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_a3b67
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a3b67.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_a3b67.dir/CheckFunctionExists.c.o  -o cmTC_a3b67 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_a3b67] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_a3b67/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4046d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_4046d.dir/build.make CMakeFiles/cmTC_4046d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4046d.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_4046d.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_4046d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4046d.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_4046d.dir/CheckSymbolExists.c.o  -o cmTC_4046d -rdynamic 
+CMakeFiles/cmTC_4046d.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_4046d] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_4046d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_06a5b/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_06a5b.dir/build.make CMakeFiles/cmTC_06a5b.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_06a5b.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_06a5b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_06a5b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06a5b.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_06a5b.dir/CheckFunctionExists.c.o  -o cmTC_06a5b -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_06a5b] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_06a5b/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ccae4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_ccae4.dir/build.make CMakeFiles/cmTC_ccae4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ccae4.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_ccae4.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_ccae4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ccae4.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_ccae4.dir/CheckSymbolExists.c.o  -o cmTC_ccae4 -rdynamic 
+CMakeFiles/cmTC_ccae4.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_ccae4] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_ccae4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_deb8c/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_deb8c.dir/build.make CMakeFiles/cmTC_deb8c.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_deb8c.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_deb8c.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_deb8c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_deb8c.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_deb8c.dir/CheckFunctionExists.c.o  -o cmTC_deb8c -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_deb8c] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_deb8c/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_74443/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_74443.dir/build.make CMakeFiles/cmTC_74443.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_74443.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_74443.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_74443
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_74443.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_74443.dir/CheckSymbolExists.c.o  -o cmTC_74443 -rdynamic 
+CMakeFiles/cmTC_74443.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_74443] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_74443/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e14f0/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e14f0.dir/build.make CMakeFiles/cmTC_e14f0.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e14f0.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_e14f0.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_e14f0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e14f0.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_e14f0.dir/CheckFunctionExists.c.o  -o cmTC_e14f0 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_e14f0] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_e14f0/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a2ad9/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_a2ad9.dir/build.make CMakeFiles/cmTC_a2ad9.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a2ad9.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_a2ad9.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_a2ad9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a2ad9.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_a2ad9.dir/CheckSymbolExists.c.o  -o cmTC_a2ad9 -rdynamic 
+CMakeFiles/cmTC_a2ad9.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_a2ad9] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_a2ad9/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_2a447/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_2a447.dir/build.make CMakeFiles/cmTC_2a447.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2a447.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_2a447.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_2a447
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2a447.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_2a447.dir/CheckFunctionExists.c.o  -o cmTC_2a447 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_2a447] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_2a447/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b49b7/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b49b7.dir/build.make CMakeFiles/cmTC_b49b7.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b49b7.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_b49b7.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_b49b7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b49b7.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_b49b7.dir/CheckSymbolExists.c.o  -o cmTC_b49b7 -rdynamic 
+CMakeFiles/cmTC_b49b7.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_b49b7] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b49b7/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_89b59/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_89b59.dir/build.make CMakeFiles/cmTC_89b59.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_89b59.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_89b59.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_89b59
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_89b59.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_89b59.dir/CheckFunctionExists.c.o  -o cmTC_89b59 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTC_89b59] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_89b59/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build/Release/build-remote/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+

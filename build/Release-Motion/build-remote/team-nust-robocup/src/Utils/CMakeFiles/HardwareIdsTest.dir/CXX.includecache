@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../../../../src/Utils/include/EnumUtils.h
+type_traits
+-
+
+../../../../src/Utils/include/HardwareIds.h
+Utils/include/EnumUtils.h
+../../../../src/Utils/include/Utils/include/EnumUtils.h
+
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/Utils/tests/HardwareIdsTest.cpp
+iostream
+-
+Utils/include/HardwareIds.h
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/Utils/tests/Utils/include/HardwareIds.h
+

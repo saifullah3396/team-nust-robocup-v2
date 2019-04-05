@@ -1,8 +1,0 @@
-prefix=/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/install
-
-Name: team_nust_msgs
-Description: Description of team_nust_msgs
-Version: 0.0.0
-Cflags: -I/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/install/include
-Libs: -L/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/install/lib -lteam_nust_msgs
-Requires: message_runtime

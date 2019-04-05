@@ -263,7 +263,7 @@ if __name__ == '__main__':
             sys.exit(1)
 
         # environment at generation time
-        CMAKE_PREFIX_PATH = '/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/build/sdk;/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/devel;/opt/ros/indigo;/usr/local/share/cmake/qibuild/modules/'.split(';')
+        CMAKE_PREFIX_PATH = '/opt/ros/indigo'.split(';')
         # prepend current workspace if not already part of CPP
         base_path = os.path.dirname(__file__)
         if base_path not in CMAKE_PREFIX_PATH:
