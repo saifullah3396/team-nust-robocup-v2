@@ -2,7 +2,7 @@
  * A footstep planner for humanoid robots
  *
  * Copyright 2010-2011 Johannes Garimort, Armin Hornung, University of Freiburg
- * http://!www.ros.org/wiki/footstepPlanner
+ * http:///<www.ros.org/wiki/footstepPlanner
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://!www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http:///<www.gnu.org/licenses/>.
  */
 
 #include "Utils/include/PathPlanner/PathPlannerEnvironment.h"
@@ -59,8 +59,8 @@ namespace PathPlannerSpace
 
     int numX = footMaxStepX - footMaxStepInvX + 1;
     stepRange = new bool[numX * (footMaxStepY - footMaxStepInvY + 1)];
-    //! determine whether a (x,y) translation can be performed by the robot by
-    //! checking if it is within a certain area of performable steps
+    ///< determine whether a (x,y) translation can be performed by the robot by
+    ///< checking if it is within a certain area of performable steps
     for (int j = footMaxStepInvY; j <= footMaxStepY; ++j) {
       for (int i = footMaxStepInvX; i <= footMaxStepX; ++i) {
         stepRange[(j - footMaxStepInvY) * numX + (i - footMaxStepInvX)] =
@@ -86,11 +86,11 @@ namespace PathPlannerSpace
   PathPlannerEnvironment::updateGoal(const State& footLeft,
     const State& footRight)
   {
-    //! keep the old Ids
+    ///< keep the old Ids
     int goalFootIdLeft = idGoalFootLeft;
     int goalFootIdRight = idGoalFootRight;
 
-    //! update the states for both feet (if necessary)
+    ///< update the states for both feet (if necessary)
     const DiscreteState* pFootLeft = getHashEntry(footLeft);
     if (pFootLeft == NULL) pFootLeft = createNewHashEntry(footLeft);
     const DiscreteState* pFootRight = getHashEntry(footRight);
@@ -98,14 +98,14 @@ namespace PathPlannerSpace
     idGoalFootLeft = pFootLeft->getId();
     idGoalFootRight = pFootRight->getId();
 
-    //! check if everything has been set correctly
+    ///< check if everything has been set correctly
     ASSERT(idGoalFootLeft != -1);
     ASSERT(idGoalFootRight != -1);
 
-    //! if using the forward search a change of the goal states involves an
-    //! update of the heuristic
+    ///< if using the forward search a change of the goal states involves an
+    ///< update of the heuristic
     if (forwardSearch) {
-      //! check if the goal states have been changed
+      ///< check if the goal states have been changed
       if (goalFootIdLeft != idGoalFootLeft && goalFootIdRight != idGoalFootRight) {
         heuristicExpired = true;
         setStateArea(*pFootLeft, *pFootRight);
@@ -118,26 +118,26 @@ namespace PathPlannerSpace
   PathPlannerEnvironment::updateStart(const State& footLeft,
     const State& footRight)
   {
-    //! keep the old Ids
+    ///< keep the old Ids
     int startFootIdLeft = idStartFootLeft;
     int startFootIdRight = idStartFootRight;
 
-    //! update the states for both feet (if necessary)
+    ///< update the states for both feet (if necessary)
     const DiscreteState* pFootLeft = getHashEntry(footLeft);
     if (pFootLeft == NULL) pFootLeft = createNewHashEntry(footLeft);
     const DiscreteState* pFootRight = getHashEntry(footRight);
     if (pFootRight == NULL) pFootRight = createNewHashEntry(footRight);
     idStartFootLeft = pFootLeft->getId();
     idStartFootRight = pFootRight->getId();
-    //! check if everything has been set correctly
+    ///< check if everything has been set correctly
     ASSERT(idStartFootLeft != -1);
     ASSERT(idStartFootRight != -1);
 
     //auto t1 = high_resolution_clock::now();
-    //! if using the backward search a change of the start states involves an
-    //! update of the heuristic
+    ///< if using the backward search a change of the start states involves an
+    ///< update of the heuristic
     if (!forwardSearch) {
-      //! check if the start states have been changed
+      ///< check if the start states have been changed
       if (startFootIdLeft != idStartFootLeft || startFootIdRight != idStartFootRight) {
         heuristicExpired = true;
         setStateArea(*pFootLeft, *pFootRight);
@@ -164,11 +164,11 @@ namespace PathPlannerSpace
     size_t stateId = stateId2State.size();
     ASSERT(stateId < (size_t)numeric_limits<int>::max());
 
-    //! insert the Id of the new state into the corresponding map
+    ///< insert the Id of the new state into the corresponding map
     newState->setId(stateId);
     stateId2State.push_back(newState);
 
-    //! insert the new state into the hash map at the corresponding position
+    ///< insert the new state into the hash map at the corresponding position
     stateHash2State[stateHash].push_back(newState);
 
     int* entry = new int[NUMOFINDICES_STATEID2IND];
@@ -214,8 +214,8 @@ namespace PathPlannerSpace
   {
     if (a == b) return 0;
 
-    //! NOTE: instead of using contVal() the calculation is done directly
-    //! here because contVal() truncates the input length to int
+    ///< NOTE: instead of using contVal() the calculation is done directly
+    ///< here because contVal() truncates the input length to int
     double dist =
       euclideanDistance(a.getX(), a.getY(), b.getX(), b.getY()) * cellSize;
     return int(cvMmScale * dist) + stepCost;
@@ -242,7 +242,7 @@ namespace PathPlannerSpace
   {
     double x = cell2State(s.getX(), cellSize);
     double y = cell2State(s.getY(), cellSize);
-    //! collision check for the planning state
+    ///< collision check for the planning state
     if (mapPtr->isOccupiedAt(x, y)) {
       return true;
     }
@@ -252,14 +252,14 @@ namespace PathPlannerSpace
       double thetaCos = cos(theta);
       double thetaSin = sin(theta);
 
-      //! transform the planning state to the foot center
+      ///< transform the planning state to the foot center
       x += thetaCos * originFootShiftX - thetaSin * originFootShiftY;
       if (s.getLeg() == LEFT) y +=
         thetaSin * originFootShiftX + thetaCos * originFootShiftY;
-      else //! leg == RLEG
+      else ///< leg == RLEG
       y += thetaSin * originFootShiftX - thetaCos * originFootShiftY;
 
-      //! collision check for the foot center
+      ///< collision check for the foot center
       return collisionCheck(
         x,
         y,
@@ -315,7 +315,7 @@ namespace PathPlannerSpace
   void
   PathPlannerEnvironment::updateHeuristicValues()
   {
-    //! check if start and goal have been set
+    ///< check if start and goal have been set
     ASSERT(idGoalFootLeft != -1 && idGoalFootRight != -1);
     ASSERT(idStartFootLeft != -1 && idStartFootRight != -1);
     if (!heuristicExpired) return;
@@ -328,7 +328,7 @@ namespace PathPlannerSpace
       const DiscreteState* start = stateId2State[mdpCfg.startstateid];
       const DiscreteState* goal = stateId2State[mdpCfg.goalstateid];
 
-      //! NOTE: start/goal state are set to left leg
+      ///< NOTE: start/goal state are set to left leg
       bool success;
       if (forwardSearch) success = h->calculateDistances(*start, *goal);
       else success = h->calculateDistances(*goal, *start);
@@ -369,7 +369,7 @@ namespace PathPlannerSpace
   bool
   PathPlannerEnvironment::closeToStart(const DiscreteState& from)
   {
-    //! NOTE: "goal check" for backward planning
+    ///< NOTE: "goal check" for backward planning
     const DiscreteState* start;
     if (from.getLeg() == RIGHT) start = stateId2State[idStartFootLeft];
     else start = stateId2State[idStartFootRight];
@@ -379,11 +379,11 @@ namespace PathPlannerSpace
   bool
   PathPlannerEnvironment::closeToGoal(const DiscreteState& from)
   {
-    //! NOTE: "goal check" for forward planning
+    ///< NOTE: "goal check" for forward planning
     const DiscreteState* goal;
     if (from.getLeg() == RIGHT) goal = stateId2State[idGoalFootLeft];
     else goal = stateId2State[idGoalFootRight];
-    //! TODO: check step if reachable == True
+    ///< TODO: check step if reachable == True
     return reachable(from, *goal);
   }
 
@@ -411,64 +411,64 @@ namespace PathPlannerSpace
     int footstepX = discVal(step(0, 3), cellSize);
     int footstepY = discVal(step(1, 3), cellSize);
 
-    //! calculate the footstep rotation
+    ///< calculate the footstep rotation
     int footstepTheta = to.getTheta() - from.getTheta();
 
-    //! transform the value into [-numAngleBins/2..numAngleBins/2)
+    ///< transform the value into [-numAngleBins/2..numAngleBins/2)
     int numAngleBinsHalf = numAngleBins / 2;
     if (footstepTheta >= numAngleBinsHalf) footstepTheta -= numAngleBins;
     else if (footstepTheta < -numAngleBinsHalf) footstepTheta += numAngleBins;
 
-    //! adjust for the left foot
+    ///< adjust for the left foot
     if (from.getLeg() == LEFT) {
       footstepY = -footstepY;
       footstepTheta = -footstepTheta;
     }
 
-    //! check if footstepX is not within the executable range
+    ///< check if footstepX is not within the executable range
     if (footstepX > footMaxStepX || footstepX < footMaxStepInvX) return false;
-    //! check if footstepY is not within the executable range
+    ///< check if footstepY is not within the executable range
     if (footstepY > footMaxStepY || footstepY < footMaxStepInvY) return false;
-    //! check if footstepTheta is not within the executable range
+    ///< check if footstepTheta is not within the executable range
     if (footstepTheta > footMaxStepTheta || footstepTheta < footMaxStepInvTheta) return false;
     return stepRange[(footstepY - footMaxStepInvY) * (footMaxStepX - footMaxStepInvX + 1) + (footstepX - footMaxStepInvX)];
 
-//!  //! get the (continuous) orientation of state 'from'
-//!  double orient = -(angleCell2State(from.getTheta(), numAngleBins));
-//!  double orientCos = cos(orient);
-//!  double orientSin = sin(orient);
-//!
-//!  //! calculate the footstep shift and rotate it into the 'from'-view
-//!  int footstepX = to.getX() - from.getX();
-//!  int footstepY = to.getY() - from.getY();
-//!  double shiftX = footstepX * orientCos - footstepY * orientSin;
-//!  double shiftY = footstepX * orientSin + footstepY * orientCos;
-//!  footstepX = round(shift_x);
-//!  footstepY = round(shift_y);
-//!
-//!  //! calculate the footstep rotation
-//!  int footstepTheta = to.getTheta() - from.getTheta();
-//!
-//!  //! transform the value into [-numAngleBins/2..numAngleBins/2)
-//!  int numAngleBinsHalf = numAngleBins / 2;
-//!  if (footstepTheta >= numAngleBinsHalf)
-//!    footstepTheta -= numAngleBins;
-//!  else if (footstepTheta < -numAngleBinsHalf)
-//!    footstepTheta += numAngleBins;
-//!
-//!  //! adjust for the left foot
-//!  if (from.getLeg() == LEFT)
-//!  {
-//!    footstepY = -footstepY;
-//!    footstepTheta = -footstepTheta;
-//!  }
-//!
-//!  return (footstepX <= footMaxStepX &&
-//!          footstepX >= footMaxStepInvX &&
-//!          footstepY <= footMaxStepY &&
-//!          footstepY >= footMaxStepInvY &&
-//!          footstepTheta <= footMaxStepTheta &&
-//!          footstepTheta >= footMaxStepInvTheta);
+///<  ///< get the (continuous) orientation of state 'from'
+///<  double orient = -(angleCell2State(from.getTheta(), numAngleBins));
+///<  double orientCos = cos(orient);
+///<  double orientSin = sin(orient);
+///<
+///<  ///< calculate the footstep shift and rotate it into the 'from'-view
+///<  int footstepX = to.getX() - from.getX();
+///<  int footstepY = to.getY() - from.getY();
+///<  double shiftX = footstepX * orientCos - footstepY * orientSin;
+///<  double shiftY = footstepX * orientSin + footstepY * orientCos;
+///<  footstepX = round(shift_x);
+///<  footstepY = round(shift_y);
+///<
+///<  ///< calculate the footstep rotation
+///<  int footstepTheta = to.getTheta() - from.getTheta();
+///<
+///<  ///< transform the value into [-numAngleBins/2..numAngleBins/2)
+///<  int numAngleBinsHalf = numAngleBins / 2;
+///<  if (footstepTheta >= numAngleBinsHalf)
+///<    footstepTheta -= numAngleBins;
+///<  else if (footstepTheta < -numAngleBinsHalf)
+///<    footstepTheta += numAngleBins;
+///<
+///<  ///< adjust for the left foot
+///<  if (from.getLeg() == LEFT)
+///<  {
+///<    footstepY = -footstepY;
+///<    footstepTheta = -footstepTheta;
+///<  }
+///<
+///<  return (footstepX <= footMaxStepX &&
+///<          footstepX >= footMaxStepInvX &&
+///<          footstepY <= footMaxStepY &&
+///<          footstepY >= footMaxStepInvY &&
+///<          footstepTheta <= footMaxStepTheta &&
+///<          footstepTheta >= footMaxStepInvTheta);
   }
 
   void
@@ -481,12 +481,12 @@ namespace PathPlannerSpace
     for (state_iter = changedStates.begin(); state_iter != changedStates.end();
       ++state_iter) {
       DiscreteState s(*state_iter, cellSize, numAngleBins, hashTableSize);
-      //! generate predecessor planning states
+      ///< generate predecessor planning states
       vector<Footstep>::const_iterator footstepSet_iter;
       for (footstepSet_iter = footstepSet.begin();
         footstepSet_iter != footstepSet.end(); ++footstepSet_iter) {
         DiscreteState pred = footstepSet_iter->reverseMeOnThisState(s);
-        //! check if predecessor exists
+        ///< check if predecessor exists
         const DiscreteState* predHashEntry = getHashEntry(pred);
         if (predHashEntry == NULL) continue;
         predIds->push_back(predHashEntry->getId());
@@ -503,12 +503,12 @@ namespace PathPlannerSpace
     for (state_iter = changedStates.begin(); state_iter != changedStates.end();
       ++state_iter) {
       DiscreteState s(*state_iter, cellSize, numAngleBins, hashTableSize);
-      //! generate successors
+      ///< generate successors
       vector<Footstep>::const_iterator footstepSet_iter;
       for (footstepSet_iter = footstepSet.begin();
         footstepSet_iter != footstepSet.end(); ++footstepSet_iter) {
         DiscreteState succ = footstepSet_iter->performMeOnThisState(s);
-        //! check if successor exists
+        ///< check if successor exists
         const DiscreteState* succHashEntry = getHashEntry(succ);
         if (succHashEntry == NULL) continue;
         succIds->push_back(succHashEntry->getId());
@@ -527,10 +527,10 @@ namespace PathPlannerSpace
     }
     const DiscreteState* from = stateId2State[FromStateID];
     const DiscreteState* to = stateId2State[ToStateID];
-    //!      if (myHeuristicConstPtr->getMyHeuristicType() == MyHeuristic::PATHCOST){
-    //!        boost::shared_ptr<PathCostHeuristic> pathCostHeuristic = boost::dynamic_pointer_cast<PathCostHeuristic>(myHeuristicConstPtr);
-    //!        pathCostHeuristic->calculateDistances(*from, *to);
-    //!      }
+    ///<      if (myHeuristicConstPtr->getMyHeuristicType() == MyHeuristic::PATHCOST){
+    ///<        boost::shared_ptr<PathCostHeuristic> pathCostHeuristic = boost::dynamic_pointer_cast<PathCostHeuristic>(myHeuristicConstPtr);
+    ///<        pathCostHeuristic->calculateDistances(*from, *to);
+    ///<      }
     return getFromToHeuristic(*from, *to);
   }
 
@@ -555,19 +555,19 @@ namespace PathPlannerSpace
     CostV->clear();
     ASSERT(
       targetStateId >= 0 && (unsigned int) targetStateId < stateId2State.size());
-    //! make goal state absorbing (only left!)
+    ///< make goal state absorbing (only left!)
     if (targetStateId == idStartFootLeft) return;
-    //! add cheap transition from right to left, so right becomes an equivalent
-    //! goal
+    ///< add cheap transition from right to left, so right becomes an equivalent
+    ///< goal
     if (targetStateId == idStartFootRight) {
       PredIDV->push_back(idStartFootLeft);
       CostV->push_back(0.0);
       return;
     }
     const DiscreteState* current = stateId2State[targetStateId];
-    //! make sure goal state transitions are consistent with
-    //! getSuccs(someState, goal_state) where goal_state is reachable by an
-    //! arbitrary step from someState
+    ///< make sure goal state transitions are consistent with
+    ///< getSuccs(someState, goal_state) where goal_state is reachable by an
+    ///< arbitrary step from someState
     if (forwardSearch) {
       if (targetStateId == idGoalFootLeft || targetStateId == idGoalFootRight) {
         const DiscreteState* s;
@@ -590,9 +590,9 @@ namespace PathPlannerSpace
      cout << "expandedStates Theta: " << current->getTheta() << endl;*/
     ++numExpandedStates;
     if (closeToStart(*current)) {
-      //! map to the start state id
+      ///< map to the start state id
       PredIDV->push_back(idStartFootLeft);
-      //! get actual costs (dependent on whether the start foot is left or right)
+      ///< get actual costs (dependent on whether the start foot is left or right)
       int startId;
       if (current->getLeg() == RIGHT) startId = idStartFootLeft;
       else startId = idStartFootRight;
@@ -630,19 +630,19 @@ namespace PathPlannerSpace
     CostV->clear();
     ASSERT(
       sourceStateId >= 0 && unsigned(sourceStateId) < stateId2State.size());
-    //! make goal state absorbing (only left!)
+    ///< make goal state absorbing (only left!)
     if (sourceStateId == idGoalFootLeft) return;
-    //! add cheap transition from right to left, so right becomes an
-    //! equivalent goal
+    ///< add cheap transition from right to left, so right becomes an
+    ///< equivalent goal
     if (sourceStateId == idGoalFootRight) {
       SuccIDV->push_back(idGoalFootLeft);
       CostV->push_back(0.0);
       return;
     }
     const DiscreteState* current = stateId2State[sourceStateId];
-    //! make sure start state transitions are consistent with
-    //! getPreds(someState, start_state) where some_state is reachable by an
-    //! arbitrary step from startState
+    ///< make sure start state transitions are consistent with
+    ///< getPreds(someState, start_state) where some_state is reachable by an
+    ///< arbitrary step from startState
     if (!forwardSearch) {
       if (sourceStateId == idStartFootLeft || sourceStateId == idStartFootRight) {
         const DiscreteState* s;
@@ -691,18 +691,18 @@ namespace PathPlannerSpace
   PathPlannerEnvironment::getSuccsTo(int sourceStateId, int goalStateId,
     vector<int> *SuccIDV, vector<int> *CostV)
   {
-    //!return getSuccs(sourceStateId, SuccIDV, CostV);
+    ///<return getSuccs(sourceStateId, SuccIDV, CostV);
     SuccIDV->clear();
     CostV->clear();
     ASSERT(
       sourceStateId >= 0 && unsigned(sourceStateId) < stateId2State.size());
-    //! make goal state absorbing
+    ///< make goal state absorbing
     if (sourceStateId == idGoalFootLeft) return;
 
     const DiscreteState* current = stateId2State[sourceStateId];
     expandedStates.insert(pair<int, int>(current->getX(), current->getY()));
     ++numExpandedStates;
-    //! add cheap transition from right to left, so right becomes an equivalent goal
+    ///< add cheap transition from right to left, so right becomes an equivalent goal
     if (goalStateId == idGoalFootLeft && sourceStateId == idGoalFootRight && current->getLeg() == RIGHT) {
       SuccIDV->push_back(idGoalFootLeft);
       CostV->push_back(stepCost);
@@ -722,7 +722,7 @@ namespace PathPlannerSpace
       CostV->push_back(cost);
       return;
     }
-    //! intermediate goal reachable (R*)?
+    ///< intermediate goal reachable (R*)?
     ASSERT(goalStateId >= 0 && unsigned(goalStateId) < stateId2State.size());
     const DiscreteState* randomGoal = stateId2State[goalStateId];
     if (randomGoal->getLeg() != current->getLeg() && reachable(
@@ -754,15 +754,15 @@ namespace PathPlannerSpace
   {
     ASSERT(
       sourceStateId >= 0 && unsigned(sourceStateId) < stateId2State.size());
-    //!goal state should be absorbing
+    ///<goal state should be absorbing
     if (sourceStateId == idGoalFootLeft || sourceStateId == idGoalFootRight) return;
     const DiscreteState* currentState = stateId2State[sourceStateId];
-    //! TODO: closeToGoal?
-    //!
-    //!      if (closeToGoal(*currentState))
-    //!        return;
+    ///< TODO: closeToGoal?
+    ///<
+    ///<      if (closeToGoal(*currentState))
+    ///<        return;
 
-    //!get the successors
+    ///<get the successors
     getRandomNeighs(
       currentState,
       SuccIDV,
@@ -778,14 +778,14 @@ namespace PathPlannerSpace
   {
     ASSERT(
       targetStateId >= 0 && unsigned(targetStateId) < stateId2State.size());
-    //! start state should be absorbing
+    ///< start state should be absorbing
     if (targetStateId == idStartFootLeft || targetStateId == idStartFootRight) return;
     const DiscreteState* currentState = stateId2State[targetStateId];
-    //! TODO: ???
-    //!      if(closeToStart(*currentState))
-    //!        return;
+    ///< TODO: ???
+    ///<      if(closeToStart(*currentState))
+    ///<        return;
 
-    //!get the predecessors
+    ///<get the predecessors
     getRandomNeighs(
       currentState,
       PredIDV,
@@ -795,24 +795,24 @@ namespace PathPlannerSpace
       false);
   }
 
-//!generates nNumofNeighs random neighbors of cell <X,Y> at distance nDistC (measured in cells)
-//!it will also generate goal if within this distance as an additional neighbor
-//!bSuccs is set to true if we are computing successor states, otherwise it is Preds
-//! (see fct. implemented in environmentNav2D)
+///<generates nNumofNeighs random neighbors of cell <X,Y> at distance nDistC (measured in cells)
+///<it will also generate goal if within this distance as an additional neighbor
+///<bSuccs is set to true if we are computing successor states, otherwise it is Preds
+///< (see fct. implemented in environmentNav2D)
   void
   PathPlannerEnvironment::getRandomNeighs(const DiscreteState* currentState,
     vector<int>* neighIDV, vector<int>* cLowV, int nNumofNeighs, int nDistC,
     bool bSuccs)
   {
-    //!clear the successor array
+    ///<clear the successor array
     neighIDV->clear();
     cLowV->clear();
-    //!get X, Y for the states
+    ///<get X, Y for the states
     int X = currentState->getX();
     int Y = currentState->getY();
-    //!int theta = currentState->getTheta();
-    //!see if the goal/start belongs to the inside area and if yes then add it to Neighs as well
-    //! NOTE: "goal check" for backward planning
+    ///<int theta = currentState->getTheta();
+    ///<see if the goal/start belongs to the inside area and if yes then add it to Neighs as well
+    ///< NOTE: "goal check" for backward planning
     const DiscreteState* goalLeft = NULL;
     const DiscreteState* goalRight = NULL;
     if (bSuccs) {
@@ -823,9 +823,9 @@ namespace PathPlannerSpace
       goalRight = stateId2State[idStartFootRight];
     }
     int nDistSq = nDistC * nDistC;
-    //!add left if within the distance
+    ///<add left if within the distance
     if (euclideanDistanceSq(X, Y, goalLeft->getX(), goalLeft->getY()) <= nDistSq) {
-      //!compute clow
+      ///<compute clow
       int clow;
       if (bSuccs) clow = getFromToHeuristic(*currentState, *goalLeft);
       else clow = getFromToHeuristic(*goalLeft, *currentState);
@@ -834,9 +834,9 @@ namespace PathPlannerSpace
       cLowV->push_back(clow);
       randomStates.push_back(goalLeft->getId());
     }
-    //!add right if within the distance
+    ///<add right if within the distance
     if (euclideanDistanceSq(X, Y, goalRight->getX(), goalRight->getY()) <= nDistSq) {
-      //!compute clow
+      ///<compute clow
       int clow;
       if (bSuccs) clow = getFromToHeuristic(*currentState, *goalRight);
       else clow = getFromToHeuristic(*goalRight, *currentState);
@@ -844,36 +844,36 @@ namespace PathPlannerSpace
       cLowV->push_back(clow);
       randomStates.push_back(goalRight->getId());
     }
-    //!iterate through random actions
+    ///<iterate through random actions
     int nAttempts = 0;
     for (int i = 0; i < nNumofNeighs && nAttempts < 5 * nNumofNeighs;
       ++i, ++nAttempts) {
-      //! pick goal in random direction
+      ///< pick goal in random direction
       float fDir = (float) (TWO_PI * (((double) rand()) / RAND_MAX));
       int dX = (int) (nDistC * cos(fDir));
       int dY = (int) (nDistC * sin(fDir));
-      //!get the coords of the state
+      ///<get the coords of the state
       int newX = X + dX;
       int newY = Y + dY;
-      //! TODO / FIXME x,y, can be negative! need offset
-      //! check if outside of map:
-      //!        if (newX < 0 || newY < 0 || unsigned(newX) >= mapPtr->getInfo().width || unsigned(newY) >= mapPtr->getInfo().height){
-      //!          i--;
-      //!          ROS_INFO("Outside of map: %d %d", newX, newY);
-      //!          continue;
-      //!        }
-      //! direction of random exploration (facing forward):
+      ///< TODO / FIXME x,y, can be negative! need offset
+      ///< check if outside of map:
+      ///<        if (newX < 0 || newY < 0 || unsigned(newX) >= mapPtr->getInfo().width || unsigned(newY) >= mapPtr->getInfo().height){
+      ///<          i--;
+      ///<          ROS_INFO("Outside of map: %d %d", newX, newY);
+      ///<          continue;
+      ///<        }
+      ///< direction of random exploration (facing forward):
       int newTheta = angleState2Cell(fDir, numAngleBins);
-      //! random left/right
+      ///< random left/right
       Leg newLeg = Leg(rand() % 2);
       DiscreteState randomState(newX, newY, newTheta, newLeg, hashTableSize);
-      //! add both left and right if available:
-      //!        int sep = discVal(0.07, cellSize);
-      //!        int ddX = int(-sin(fDir) * sep);
-      //!        int ddY = int(cos(fDir) * sep);
-      //!        DiscreteState randomState(newX+ddX, newY+ddY, newTheta, LEFT, hashTableSize);
-      //!
-      //!        DiscreteState randomStateR(newX-ddX, newY-ddY, newTheta, RIGHT, hashTableSize);
+      ///< add both left and right if available:
+      ///<        int sep = discVal(0.07, cellSize);
+      ///<        int ddX = int(-sin(fDir) * sep);
+      ///<        int ddY = int(cos(fDir) * sep);
+      ///<        DiscreteState randomState(newX+ddX, newY+ddY, newTheta, LEFT, hashTableSize);
+      ///<
+      ///<        DiscreteState randomStateR(newX-ddX, newY-ddY, newTheta, RIGHT, hashTableSize);
       if (!occupied(randomState, false)) {
         const DiscreteState* randomHashEntry = getHashEntry(randomState);
         if (randomHashEntry == NULL) {
@@ -881,7 +881,7 @@ namespace PathPlannerSpace
           randomStates.push_back(randomHashEntry->getId());
         }
 
-        //!compute clow
+        ///<compute clow
         int clow;
         if (bSuccs) clow = GetFromToHeuristic(
           currentState->getId(),
@@ -894,27 +894,27 @@ namespace PathPlannerSpace
       } else {
         i--;
       }
-      //!        if(!occupied(randomStateR))
-      //!        {
-      //!          const DiscreteState* randomHashEntry = getHashEntry(randomStateR);
-      //!          if (randomHashEntry == NULL){
-      //!            randomHashEntry = createNewHashEntry(randomStateR);
-      //!            randomStates.push_back(randomHashEntry->getId());
-      //!          }
-      //!
-      //!          //!compute clow
-      //!          int clow;
-      //!          if(bSuccs)
-      //!            clow = getFromToHeuristic(currentState->getId(), randomHashEntry->getId());
-      //!          else
-      //!            clow = getFromToHeuristic(randomHashEntry->getId(), currentState->getId());
-      //!
-      //!          neighIDV->push_back(randomHashEntry->getId());
-      //!          CLowV->push_back(clow);
-      //!
-      //!        }else{
-      //!          i--;
-      //!        }
+      ///<        if(!occupied(randomStateR))
+      ///<        {
+      ///<          const DiscreteState* randomHashEntry = getHashEntry(randomStateR);
+      ///<          if (randomHashEntry == NULL){
+      ///<            randomHashEntry = createNewHashEntry(randomStateR);
+      ///<            randomStates.push_back(randomHashEntry->getId());
+      ///<          }
+      ///<
+      ///<          ///<compute clow
+      ///<          int clow;
+      ///<          if(bSuccs)
+      ///<            clow = getFromToHeuristic(currentState->getId(), randomHashEntry->getId());
+      ///<          else
+      ///<            clow = getFromToHeuristic(randomHashEntry->getId(), currentState->getId());
+      ///<
+      ///<          neighIDV->push_back(randomHashEntry->getId());
+      ///<          CLowV->push_back(clow);
+      ///<
+      ///<        }else{
+      ///<          i--;
+      ///<        }
     }
     if (neighIDV->size() == 0) {
       cout << "Could not create any random neighbor nodes." << " Attempts: " << nAttempts << " from id: " << currentState->getId() << " (" << X << ", " << Y << ")" << endl;
@@ -929,12 +929,12 @@ namespace PathPlannerSpace
     if (stateId1 == stateId2) return true;
     const DiscreteState* s1 = stateId2State[stateId1];
     const DiscreteState* s2 = stateId2State[stateId2];
-    //!    //! approximately compare, ignore theta:
+    ///<    ///< approximately compare, ignore theta:
     return (abs(s1->getX() - s2->getX()) < 1 && abs(s1->getY() - s2->getY()) < 1
-    //!                      && abs(s1->getTheta() - s2->getTheta()) < 3
+    ///<                      && abs(s1->getTheta() - s2->getTheta()) < 3
     && s1->getLeg() == s2->getLeg());
-//!  compare the actual values (exact comparison)
-//!  return (*s1 == *s2);
+///<  compare the actual values (exact comparison)
+///<  return (*s1 == *s2);
   }
 
   bool
@@ -946,8 +946,8 @@ namespace PathPlannerSpace
   bool
   PathPlannerEnvironment::InitializeMDPCfg(MDPConfig *MDPCfg)
   {
-    //! NOTE: The internal start and goal ids are set here to the left foot
-    //! (this affects the calculation of the heuristic values)
+    ///< NOTE: The internal start and goal ids are set here to the left foot
+    ///< (this affects the calculation of the heuristic values)
     MDPCfg->goalstateid = idGoalFootLeft;
     MDPCfg->startstateid = idStartFootLeft;
     ASSERT(idGoalFootLeft != -1);
@@ -958,7 +958,7 @@ namespace PathPlannerSpace
   void
   PathPlannerEnvironment::PrintEnv_Config(FILE *fOut)
   {
-    //! NOTE: implement this if the planner needs to print out configurations
+    ///< NOTE: implement this if the planner needs to print out configurations
     cout << "PathPlanerEnvironment::PrintEnvConfig: Hit "
       "unimplemented function. Check this!" << endl;
   }

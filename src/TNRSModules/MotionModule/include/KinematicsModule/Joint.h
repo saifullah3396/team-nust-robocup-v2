@@ -61,22 +61,22 @@ struct DHParams
     const Scalar& d,
     const Scalar& theta);
 
-  //! Link length
+  ///< Link length
   Scalar a;
 
-  //! Link twist
+  ///< Link twist
   Scalar alpha;
 
-  //! Joint offset
+  ///< Joint offset
   Scalar d;
 
-  //! Joint angle offset
+  ///< Joint angle offset
   Scalar theta;
 
-  //! Cosine of alpha
+  ///< Cosine of alpha
   Scalar calpha;
 
-  //! Sine of alpha
+  ///< Sine of alpha
   Scalar salpha;
 };
 
@@ -101,20 +101,20 @@ struct JointState
    */
   virtual ~JointState() {}
 
-  //! Transformation matrix for this joint
+  ///< Transformation matrix for this joint
   Eigen::Matrix<Scalar, 4, 4> trans = {Eigen::Matrix<Scalar, 4, 4>::Identity()};
 
-  //! Transformation matrix of the current joint in base frame of
-  //! the chain
+  ///< Transformation matrix of the current joint in base frame of
+  ///< the chain
   Eigen::Matrix<Scalar, 4, 4> transInBase = {Eigen::Matrix<Scalar, 4, 4>::Identity()};
 
-  //! Joint position in base;
+  ///< Joint position in base;
   Eigen::Matrix<Scalar, 3, 1> posInBase = {Eigen::Matrix<Scalar, 3, 1>::Zero()};
 
-  //! A vector representing the joint rotation axis in base frame;
+  ///< A vector representing the joint rotation axis in base frame;
   Eigen::Matrix<Scalar, 3, 1> zInBase = {Eigen::Matrix<Scalar, 3, 1>::Zero()};
 
-  //! A vector representing the center of mass of this link in base frame;
+  ///< A vector representing the center of mass of this link in base frame;
   Eigen::Matrix<Scalar, 3, 1> comInBase = {Eigen::Matrix<Scalar, 3, 1>::Zero()};
 
   virtual void setPosition(const Scalar& position) = 0;
@@ -153,12 +153,12 @@ struct ActualJointState : public JointState<Scalar>
    */
   void update(const Scalar& sensedPosition);
 
-  //! Setters
+  ///< Setters
   void setPosition(const Scalar& position) final;
   void setVelocity(const Scalar& velocity) final;
   void setAccel(const Scalar& accel) final;
 
-  //! Getters
+  ///< Getters
   const Scalar& position() final;
   const Scalar& velocity() final;
   const Scalar& accel() final;
@@ -166,10 +166,10 @@ struct ActualJointState : public JointState<Scalar>
   const boost::shared_ptr<JointEstimator<Scalar> >& estimator();
 
 private:
-  //! Sensor position
+  ///< Sensor position
   Scalar _sensedPosition;
 
-  //! Joint state estimator
+  ///< Joint state estimator
   boost::shared_ptr<JointEstimator<Scalar> > _estimator;
 
 public:
@@ -189,20 +189,20 @@ struct SimJointState : public JointState<Scalar>
    */
   SimJointState(const Scalar& initPosition);
 
-  //! Setters
+  ///< Setters
   void setPosition(const Scalar& position) final;
   void setVelocity(const Scalar& velocity) final;
   void setAccel(const Scalar& accel) final;
 
-  //! Getters
+  ///< Getters
   const Scalar& position() final;
   const Scalar& velocity() final;
   const Scalar& accel() final;
 
 private:
-  Scalar _position = {0.0}; //! Joint position
-  Scalar _velocity = {0.0}; //! Joint velocity
-  Scalar _accel = {0.0}; //! Joint acceleration
+  Scalar _position = {0.0}; ///< Joint position
+  Scalar _velocity = {0.0}; ///< Joint velocity
+  Scalar _accel = {0.0}; ///< Joint acceleration
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -260,33 +260,33 @@ struct Joint
 
   void logJointState(Json::Value& root, const Scalar& time);
 
-  //! Joint name
+  ///< Joint name
   std::string name;
 
-  //! Upper limit of joint position
+  ///< Upper limit of joint position
   Scalar maxPosition;
 
-  //! Upper limit of joint position
+  ///< Upper limit of joint position
   Scalar minPosition;
 
-  //! Joint velocity limit
+  ///< Joint velocity limit
   Scalar maxVelocity;
 
   #ifdef ALLOW_SYMBOLIC_COMPUTATIONS
-  //! Symbolic transformation matrix for this joint
+  ///< Symbolic transformation matrix for this joint
   SymEngine::DenseMatrix symTrans;
   RCP<const Symbol> symPos;
   RCP<const Symbol> symVel;
   RCP<const Symbol> symAcc;
   #endif
 
-  //! Dh parameters
+  ///< Dh parameters
   DHParams<Scalar>* dhParams;
 
-  //! Joint state vectors
+  ///< Joint state vectors
   std::vector<boost::shared_ptr<JointState<Scalar> > > states;
 
-  //! Associated link
+  ///< Associated link
   boost::shared_ptr<LinkInfo<Scalar> > link;
 
 public:

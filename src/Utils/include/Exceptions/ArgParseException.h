@@ -1,5 +1,5 @@
 /**
- * @file Utils/include/ArgParseException.h
+ * @file Utils/include/Exceptions/ArgParseException.h
  *
  * This file defines the class ArgParseException
  *
@@ -12,9 +12,9 @@
 #pragma once
 
 DEFINE_ENUM_WITH_STRING_CONVERSIONS(
-	APExceptionType, 
-	(EXC_NO_ARG_SPECIFIED)
-	(EXC_INVALID_ARG_VALUE)
+  APExceptionType,
+  (EXC_NO_ARG_SPECIFIED)
+  (EXC_INVALID_ARG_VALUE)
 )
 
 /**
@@ -33,11 +33,11 @@ public:
    * @param type Argument parser exception type
    */
   ArgParseException(
-		const string& message,
-		const bool& bSysMsg, 
-		const APExceptionType& type) throw () :
-		TNRSException(message, bSysMsg),
-		type(type)
+    const string& message,
+    const bool& bSysMsg,
+    const APExceptionType& type) throw () :
+    TNRSException(message, bSysMsg),
+    type(type)
   {
   }
 
@@ -45,10 +45,10 @@ public:
    * Destructor
    */
   ~ArgParseException() throw () {}
-  
+
   string getExcPrefix()
-		{ return "Exception caught while parsing an argument: "; }
+    { return "Exception caught while parsing an argument: "; }
 
 private:
-	APExceptionType type;
+  APExceptionType type;
 };

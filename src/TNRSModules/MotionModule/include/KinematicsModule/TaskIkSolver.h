@@ -152,63 +152,63 @@ public:
   void resetJointLimits();
 
 private:
-  //! Pointer to SQP problem
+  ///< Pointer to SQP problem
   qpOASES::SQProblem* qp;
   
-  //! QP Problem matrices
+  ///< QP Problem matrices
   Eigen::Matrix<Scalar, Dynamic, Dynamic, RowMajor> P; // 1/2 x' P x
   Eigen::Matrix<Scalar, Dynamic, 1> v; // -K x'v
   
-  //! QP Constraint matrices
+  ///< QP Constraint matrices
   Eigen::Matrix<Scalar, Dynamic, Dynamic, RowMajor> G; // Gx <= h
   Eigen::Matrix<Scalar, Dynamic, 1> h; // Gx <= h
 
-  //! Velocity constraints for each dof
+  ///< Velocity constraints for each dof
   Eigen::Matrix<Scalar, Dynamic, 1> maxV, minV, maxP, minP, maxVIter, minVIter;
 
-  //! Type of joints to be used for dof computations
+  ///< Type of joints to be used for dof computations
   JointStateType type;
 
-  //! Number of active joints
+  ///< Number of active joints
   unsigned nDof;
   
-  //! Contains a list of booleans telling if the joint of given index is active or not
+  ///< Contains a list of booleans telling if the joint of given index is active or not
   vector<bool> activeJoints;
 
-  //! Minmax dof positional limit gain
+  ///< Minmax dof positional limit gain
   double dofPLimitGain;
 
-  //! Ratio of maximum velocity to be used
+  ///< Ratio of maximum velocity to be used
   double maxVelocityLimitGain;
 
-  //! Division of dofPLimitGain to dt
+  ///< Division of dofPLimitGain to dt
   Scalar dofPLimitGainOverdt;
 
-  //! Time step size for solving the ik
+  ///< Time step size for solving the ik
   Scalar dt;
 
-  //! Maximum number of iterations to solve ik
+  ///< Maximum number of iterations to solve ik
   unsigned maxIterations;
   
-  //! Whether the solver has been initiated once
+  ///< Whether the solver has been initiated once
   bool initiated;
 
-  //! If cost is below this value then stop
+  ///< If cost is below this value then stop
   Scalar costThres;
   
-  //! Threshold for checking if cost variation is below this then stop
+  ///< Threshold for checking if cost variation is below this then stop
   Scalar costVarThres;
   
-  //! A vector of tasks to be solved
+  ///< A vector of tasks to be solved
   vector<MotionTaskPtr> tasks;
 
-  //! Final task
+  ///< Final task
   boost::shared_ptr<PostureTask<Scalar> > finalPostureTask;
 
-  //! Whether to use the final posture task
+  ///< Whether to use the final posture task
   bool addFinalCheck;
   
-  //! Kinematics module
+  ///< Kinematics module
   boost::shared_ptr<KinematicsModule<Scalar> > km;
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

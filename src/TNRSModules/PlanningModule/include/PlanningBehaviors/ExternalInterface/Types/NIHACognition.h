@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/ExternalInterface/Types/NIHACognition.h
+ * @file PlanningBehaviors/ExternalInterface/Types/NIHACognition.h
  *
  * This file declares the class NIHACognition
  *

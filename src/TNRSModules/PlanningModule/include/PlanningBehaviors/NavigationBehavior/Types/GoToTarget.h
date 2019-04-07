@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/NavigationBehavior/GoToTarget.h
+ * @file PlanningBehaviors/NavigationBehavior/Types/GoToTarget.h
  *
  * This file declares the class GoToTarget
  *

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/TrajectoryPlanner/CbOptimizer.h
+ * @file MotionModule/src/TrajectoryPlanner/CbOptimizer.cpp
  *
  * This file implements the class to CbOptimizer
  *
@@ -286,9 +286,9 @@ void CbOptimizer<Scalar>::optDef()
   for (size_t i = 0; i < constraints.size(); ++i)
     constraints[i]->init();
 
-  //!Objective function to minimize is sum_0^n{knots}
-  //!Hessian for this objective function is zero matrix.
-  //!Gradient for this function is matrix with each element equal to one.
+  ///<Objective function to minimize is sum_0^n{knots}
+  ///<Hessian for this objective function is zero matrix.
+  ///<Gradient for this function is matrix with each element equal to one.
   auto nKnots = cb->getNKnots();
   auto cpDiff = cb->getCpDiff();
   nlopt::opt opt(nlopt::LN_COBYLA, nKnots);
@@ -315,7 +315,7 @@ void CbOptimizer<Scalar>::optDef()
     }
   }
 
-  //! Used in finding trajectories fast
+  ///< Used in finding trajectories fast
   pos.resize(nInnerPoints, this->chainSize);
   vel.resize(nInnerPoints, this->chainSize);
   acc.resize(nInnerPoints, this->chainSize);

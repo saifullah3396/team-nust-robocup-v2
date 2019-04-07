@@ -1,0 +1,26 @@
+<launch>
+  <arg name="version" default="V50" />
+  <include file="$(find nao_description)/launch/robot_state_publisher.launch">
+    <arg name="version" value="$(arg version)" />
+  </include>  
+  
+  <arg name="robot_ip" default="127.0.0.1" />
+  <include file="$(find team_nust_network_handler)/launch/team_nust_network_handler.launch">
+    <arg name="robot_ip" value="$(arg robot_ip)" />
+  </include>
+  
+  <!-- Start the robot transformation publisher node -->
+  <node pkg="team_nust_visualizer" name="robot_transform_publisher" type="robot_transform_publisher.py" output="screen" />
+  
+  <!-- Start the world transformation publisher node -->
+  <node pkg="tf" type="static_transform_publisher" name="world_frame" args="0 0 0 0 0 0 map world_frame 100"/>
+  
+  <!-- Start the world publisher node -->
+  <node pkg="team_nust_visualizer" name="world_handler" type="world_handler.py" output="screen" />
+  
+  <!-- Start the visualization node -->
+  <node pkg="team_nust_visualizer" name="visualization_handler" type="visualization_handler.py" output="screen" />
+  
+  <arg name="config_file" value="$(find team_nust_visualizer)/config/world.rviz"/>
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />-->
+</launch>

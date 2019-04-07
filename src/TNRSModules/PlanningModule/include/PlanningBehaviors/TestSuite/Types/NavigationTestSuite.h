@@ -61,16 +61,16 @@ protected:
    */
   boost::shared_ptr<NavigationTestSuiteConfig> getBehaviorCast();
 
-  //! Finite state machine for this behavior
+  ///< Finite state machine for this behavior
   DECLARE_FSM(fsm, NavigationTestSuite)
 
-  //! GoToTarget: Tests sending the robot to a specified target
+  ///< GoToTarget: Tests sending the robot to a specified target
   DECLARE_FSM_STATE(NavigationTestSuite, GoToTarget, goToTarget, onStart, onRun,)
 
-  //! GoalChangedReplan: Tests replanning of path on goal change
+  ///< GoalChangedReplan: Tests replanning of path on goal change
   DECLARE_FSM_STATE(NavigationTestSuite, GoalChangedReplan, goalChangedReplan, onStart, onRun,)
 
-  //! InvalidPathReplan: Tests replanning of path on invalidity of path
+  ///< InvalidPathReplan: Tests replanning of path on invalidity of path
   DECLARE_FSM_STATE(NavigationTestSuite, InvalidPathReplan, invalidPathReplan, onStart, onRun,)
 
   enum MBManagerIds {

@@ -17,4 +17,4 @@ DEFINE_MODULE_REQUEST(
   (VisionRequestIds, switchLogImages, SwitchLogImages),
   (VisionRequestIds, switchUseLoggedImages, SwitchUseLoggedImages),
   (VisionRequestIds, switchFeatureExtModule, SwitchFeatureExtModule),
-)
+);

@@ -83,17 +83,17 @@ Camera<T>::Camera(const string& name) :
 template <typename T>
 Camera<T>::~Camera() {
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  //! Here we copy data to image
+  ///< Here we copy data to image
   delete image;
-  #else //! While in this case, image is only pointing to v4l buffer
-  //! Stop streaming the video
+  #else ///< While in this case, image is only pointing to v4l buffer
+  ///< Stop streaming the video
   xioctl(fd, VIDIOC_STREAMOFF, &bufferType);
 
-  //! Remove all video buffers from memory
+  ///< Remove all video buffers from memory
   for (size_t i = 0; i < nBuffers; ++i)
     v4l2_munmap(buffers[i].start, buffers[i].length);
 
-  //! Close the video device access
+  ///< Close the video device access
   v4l2_close(fd);
   #endif
 }
@@ -164,7 +164,7 @@ void Camera<T>::getSettings() {
   auto root = JsonUtils::readJson(configName)[name];
   #endif
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  resolution = root["subscription"][resolution].asInt();
+  resolution = root["subscription"]["resolution"].asInt();
   #else
   width = root["subscription"]["width"].asInt();
   height = root["subscription"]["height"].asInt();
@@ -199,14 +199,9 @@ void Camera<T>::getSettings() {
   settings.whiteBalance = root["calibration"]["whiteBalance"].asInt();
   settings.backlightCompensation = root["calibration"]["backlightCompensation"].asInt();
   #else
-  for (size_t i = 0; i < toUType(CameraSettings::autoExposition); ++i) {
-    settings[toUType(CameraSettings::autoExposition)].ctrl.value =
-      root["calibration"][settings[toUType(CameraSettings::autoExposition)].name].asInt();
-    cout << root["calibration"] << endl;
-    cout << settings[toUType(CameraSettings::autoExposition)].name << endl;
-    cout << "control value:" << root["calibration"][settings[toUType(CameraSettings::autoExposition)].name].asInt() << endl;
+  for (size_t i = 0; i < toUType(CameraSettings::count); ++i) {
+    settings[i].ctrl.value = root["calibration"][settings[i].name].asInt();
   }
-  print();
   #endif
 }
 
@@ -215,24 +210,24 @@ template <typename T>
 void Camera<T>::setControl(const CameraSettings& id) {
   if (settings[toUType(id)].ctrl.value == -1000)
     return;
-  //LOG_INFO(
-  //  "Setting control:" <<
-  //  settings[toUType(id)].name <<
-  //  ": " <<
-  //  settings[toUType(id)].ctrl.value);
+  cout <<
+    "Setting control:" <<
+    settings[toUType(id)].name <<
+    ": " <<
+    settings[toUType(id)].ctrl.value << endl;
   if (id == CameraSettings::whiteBalance) {
-    //! Only changeable when wb is disabled
+    ///< Only changeable when wb is disabled
     if (settings[toUType(CameraSettings::autoWhiteBalance)].ctrl.value == 0)
       xioctl(fd, VIDIOC_S_CTRL, &settings[toUType(id)].ctrl);
   } else if (
     id == CameraSettings::exposure ||
     id == CameraSettings::gain)
   {
-    //! Only changeable when ae is disabled
+    ///< Only changeable when ae is disabled
       if (settings[toUType(CameraSettings::autoExposition)].ctrl.value == 0)
         xioctl(fd, VIDIOC_S_CTRL, &settings[toUType(id)].ctrl);
   } else if (id == CameraSettings::backlightCompensation) {
-    //! Only changeable when ae is enabled
+    ///< Only changeable when ae is enabled
       if (settings[toUType(CameraSettings::autoExposition)].ctrl.value != 0)
         xioctl(fd, VIDIOC_S_CTRL, &settings[toUType(id)].ctrl);
   } else {
@@ -265,7 +260,7 @@ bool Camera<T>::setupDevice() {
   }
   CLEAR(fmt);
   bufferType = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-  //! Set up the video capture settings
+  ///< Set up the video capture settings
   fmt.type = bufferType;
   fmt.fmt.pix.width       = width;
   fmt.fmt.pix.height      = height;
@@ -276,16 +271,16 @@ bool Camera<T>::setupDevice() {
   parm.parm.capture.timeperframe.numerator = 1;
   parm.parm.capture.timeperframe.denominator = fps;
 
-  //! VIDIOC_S_FMT -> Sets the FMT in camera driver
+  ///< VIDIOC_S_FMT -> Sets the FMT in camera driver
   xioctl(fd, VIDIOC_S_FMT, &fmt);
 
-  //! VIDIOC_S_PARM -> Sets stream parameter including video capture frame rate
+  ///< VIDIOC_S_PARM -> Sets stream parameter including video capture frame rate
   xioctl(fd, VIDIOC_S_PARM, &parm);
 
-  //! Set additional video capture settings
+  ///< Set additional video capture settings
   setCameraControls();
 
-  //! Check if accepted pixel format is the requested pixel format
+  ///< Check if accepted pixel format is the requested pixel format
   if (fmt.fmt.pix.pixelformat != V4L2_PIX_FMT_YUYV) {
     #ifndef VISUALIZER_BUILD
     LOG_ERROR(
@@ -295,7 +290,7 @@ bool Camera<T>::setupDevice() {
     return false;
   }
 
-  //! Check if accepted resolution is the requested resolution
+  ///< Check if accepted resolution is the requested resolution
   if (
     (fmt.fmt.pix.width != width) ||
     (fmt.fmt.pix.height != height))
@@ -310,29 +305,29 @@ bool Camera<T>::setupDevice() {
     return false;
   }
 
-  //! Request 2xbuffers for video capture
+  ///< Request 2xbuffers for video capture
   CLEAR(req);
   req.count = nBuffers;
   req.type = bufferType;
   req.memory = V4L2_MEMORY_MMAP;
   xioctl(fd, VIDIOC_REQBUFS, &req);
 
-  //! Allocate memory for buffers
+  ///< Allocate memory for buffers
   buffers =  static_cast<buffer*>(calloc(req.count, sizeof(*buffers)));
   for (size_t i = 0; i < nBuffers; ++i) {
-    //! Clear the buffer
+    ///< Clear the buffer
     CLEAR(buf);
 
-    //! Set up the buffer for memory capture
+    ///< Set up the buffer for memory capture
     buf.type = bufferType;
     buf.memory = V4L2_MEMORY_MMAP;
     buf.index = i;
-    //! Send buffer request
+    ///< Send buffer request
     xioctl(fd, VIDIOC_QUERYBUF, &buf);
 
-    //! Get the length of buffer assigned in memory
+    ///< Get the length of buffer assigned in memory
     buffers[i].length = buf.length;
-    //! Get the start location of buffer in memory
+    ///< Get the start location of buffer in memory
     buffers[i].start =
       v4l2_mmap(
         NULL,
@@ -347,7 +342,7 @@ bool Camera<T>::setupDevice() {
       #endif
     }
   }
-  //! Enqueue all requested buffers
+  ///< Enqueue all requested buffers
   for (size_t i = 0; i < nBuffers; ++i) {
     CLEAR(buf);
     buf.type = bufferType;
@@ -356,11 +351,11 @@ bool Camera<T>::setupDevice() {
     xioctl(fd, VIDIOC_QBUF, &buf);
   }
 
-  //! Set timeout value
+  ///< Set timeout value
   tv.tv_sec = 2;
   tv.tv_usec = 0;
 
-  //! Start streaming the video
+  ///< Start streaming the video
   xioctl(fd, VIDIOC_STREAMON, &bufferType);
   #ifndef VISUALIZER_BUILD
   LOG_INFO("Camera " << name << " streaming is ON");
@@ -386,18 +381,18 @@ bool Camera<T>::getImageFromDevice()
     return false;
   }
 
-  //! Clear the buffer
+  ///< Clear the buffer
   CLEAR(buf);
   buf.type = bufferType;
   buf.memory = V4L2_MEMORY_MMAP;
 
-  //! Dequeue the video buffer from driver to this buffer
+  ///< Dequeue the video buffer from driver to this buffer
   xioctl(fd, VIDIOC_DQBUF, &buf);
 
-  //! Get the buffer index and obtain its location in memory
+  ///< Get the buffer index and obtain its location in memory
   image = reinterpret_cast<uint8_t*>(buffers[buf.index].start);
 
-  //! Enqueue the buffer for next frame
+  ///< Enqueue the buffer for next frame
   xioctl(fd, VIDIOC_QBUF, &buf);
   return true;
 }

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/DiveModule/Types/KeyFrameMotionDive.h
+ * @file MotionModule/include/DiveModule/Types/KeyFrameMotionDive.h
  *
  * This file declares the class KeyFrameMotionDive
  *
@@ -59,7 +59,7 @@ private:
    */
   void setupDive(const Scalar dive[][25]);
 
-  //! Total time to dive
+  ///< Total time to dive
   Scalar diveTime = {0.0};
 };
 

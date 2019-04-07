@@ -29,7 +29,7 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
 
   # Linking external libraries installed as pre-requisites.
   # For remote usage the libraries can just be installed on the local pc.
-  target_link_libraries(tnrs-gb-module -lfftw3f -lm -lasound -ljsoncpp)
+  target_link_libraries(tnrs-gb-module -lfftw3 -lfftw3f -lm -lasound -ljsoncpp)
 else()
   # Alsa sound package for whisle detector usage.
   find_package(alsa)
@@ -59,7 +59,7 @@ else()
     # Linking external libraries installed as pre-requisites in the toolchain
     # These libraries are compiled on the virtual-nao in virtualbox robot env
     # and placed in the folder cross-toolchain/cross/i686-aldebaran-linux-gnu/lib
-    target_link_libraries(tnrs-gb-module -lfftw3f -lm -ljsoncpp)
+    target_link_libraries(tnrs-gb-module -lfftw3 -lfftw3f -lm -ljsoncpp)
   endif()
 endif()
 

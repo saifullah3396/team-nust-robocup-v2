@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceZmpRefGen/BalanceZmpRefGen.h
+ * @file MotionModule/src/BalanceModule/BalanceZmpRefGen.cpp
  *
  * This file implements the class BalanceZmpRefGen
  *

@@ -1,7 +1,7 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBHeadControlConfig.h
  *
- * This file defines the structs MBHeadControlConfig, 
+ * This file defines the structs MBHeadControlConfig,
  * HeadTargetSearchConfig and HeadTargetTrackConfig
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
@@ -25,7 +25,7 @@ DECLARE_BEHAVIOR_CONFIG(
   MBIds::headControl,
   15.0,
   MBHeadControlTypes
-)
+);
 
 /**
  * @struct HeadScanConfig
@@ -44,7 +44,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (float, totalWaitTime, 1.0),
   (float, scanMaxYaw, Angle::DEG_100),
   (float, scanMaxPitch, Angle::DEG_16),
-)
+);
 
 /**
  * @struct HeadTargetTrackConfig
@@ -59,4 +59,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   HeadTargetTrackConfigPtr,
   (HeadScanConfigPtr, scanConfig, HeadScanConfigPtr()),
   (HeadTargetTypes, headTargetType, HeadTargetTypes::ball),
-)
+);

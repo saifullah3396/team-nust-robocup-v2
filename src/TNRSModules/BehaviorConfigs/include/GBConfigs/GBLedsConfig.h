@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/GBConfigs/GBLedsConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/GBConfigs/GBLedsConfig.h
  *
  * This file defines the class GBLedsConfig and its childs
  *
@@ -20,14 +20,14 @@
  */
 struct GBLedsConfig : GBConfig
 {
-	/**
-	 * Constructor
-	 * 
-	 * @param inToReach: Required values of intensities to reach
-	 * @param timeToReacIn: Time in which intensities are required to reach
-	 *   the given values
-	 * @param type: Type of the led behavior
-	 */
+  /**
+   * Constructor
+   *
+   * @param inToReach: Required values of intensities to reach
+   * @param timeToReacIn: Time in which intensities are required to reach
+   *   the given values
+   * @param type: Type of the led behavior
+   */
   GBLedsConfig(
     const vector<float>& inToReach,
     const float& timeToReachIn,
@@ -38,15 +38,15 @@ struct GBLedsConfig : GBConfig
   {
   }
 
-	/**
-	 * Constructor
-	 * 
-	 * @param groupId: Led group whose intensity is to be changed
-	 * @param requiredIn: Required value of intensity
-	 * @param timeToReacIn: Time in which intensities are required to reach
-	 *   the given values
-	 * @param type: Type of the led behavior
-	 */
+  /**
+   * Constructor
+   *
+   * @param groupId: Led group whose intensity is to be changed
+   * @param requiredIn: Required value of intensity
+   * @param timeToReacIn: Time in which intensities are required to reach
+   *   the given values
+   * @param type: Type of the led behavior
+   */
   GBLedsConfig(
     const LedGroups& groupId,
     const float& requiredIn,
@@ -67,16 +67,16 @@ struct GBLedsConfig : GBConfig
     }
   }
 
-	/**
-	 * Constructor
-	 * 
-	 * @param groupId: Led group whose intensity is to be changed
-	 * @param requiredIn: Required value of intensity
-	 * @param timeToReacIn: Time in which intensities are required to reach
-	 *   the given values
-	 * @param bgr: The bgr values required for the given group
-	 * @param type: Type of the led behavior
-	 */
+  /**
+   * Constructor
+   *
+   * @param groupId: Led group whose intensity is to be changed
+   * @param requiredIn: Required value of intensity
+   * @param timeToReacIn: Time in which intensities are required to reach
+   *   the given values
+   * @param bgr: The bgr values required for the given group
+   * @param type: Type of the led behavior
+   */
   GBLedsConfig(
     const LedGroups& groupId,
     const float& requiredIn,
@@ -111,13 +111,13 @@ struct GBLedsConfig : GBConfig
     }
   }
 
-	/**
-	 * Sets the start and size of the group of leds based on its id.
-	 * 
-	 * @param groupStart: Start index
-	 * @param groupSize: Number of leds in the group
-	 * @param groupId: Id of the group
-	 */
+  /**
+   * Sets the start and size of the group of leds based on its id.
+   *
+   * @param groupStart: Start index
+   * @param groupSize: Number of leds in the group
+   * @param groupId: Id of the group
+   */
   void getGroup(
     LedActuators& groupStart,
     LedActuators& groupSize,
@@ -150,9 +150,9 @@ struct GBLedsConfig : GBConfig
     }
   }
 
-	/**
-	 * Validates the given configuration parameters
-	 */ 
+  /**
+   * Validates the given configuration parameters
+   */
   void validate() {
     if (timeToReachIn <= 0.f || // Undefined time given
         inToReach.size() != static_cast<int>(LedActuators::count))
@@ -166,10 +166,10 @@ struct GBLedsConfig : GBConfig
     }
   }
 
-	//! Time to reach the given led intensities
+  ///< Time to reach the given led intensities
   float timeToReachIn;
-  
-  //! Intensities to reach for each led
+
+  ///< Intensities to reach for each led
   vector<float> inToReach;
 };
 

@@ -26,7 +26,7 @@ enum class GameCommRequestIds {
 };
 
 /**
- * @class UserCommRequest
+ * @class GameCommRequest
  * @brief Base for all requests handled by UserCommModule
  */
 DECLARE_MODULE_REQUEST(
@@ -36,5 +36,5 @@ DECLARE_MODULE_REQUEST(
   TNSPLModules,
   gameComm,
   GameCommRequestIds
-)
+);
 

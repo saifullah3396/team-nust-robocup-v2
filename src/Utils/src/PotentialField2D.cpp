@@ -38,7 +38,7 @@ VelocityInput<Scalar> PotentialField2D<Scalar>::update(
   const RobotPose2D<Scalar>& goalPose,
   const vector<Obstacle<Scalar>>& obstacles)
 {
-  //! Attractive potential
+  ///< Attractive potential
   Matrix<Scalar, 3, 1> goalDiff = robotPose.get() - goalPose.get();
   Scalar goalDist = goalDiff.norm();
   Matrix<Scalar, 3, 1> fAtt;
@@ -113,7 +113,7 @@ VelocityInput<Scalar> PotentialField2D<Scalar>::update(
   cout << "totalFRep: " << totalFRep.norm() << endl;
   fAtt[0] += totalFRep[0];
   fAtt[1] += totalFRep[1];
-  //! Transform back to robot coordinates
+  ///< Transform back to robot coordinates
   VelocityInput<Scalar> cmd;
   //cmd.mat[0] = fAtt[0] * cTheta + fAtt[1] * sTheta;
   //cmd.mat[1] = -fAtt[0] * sTheta + fAtt[1] * cTheta;

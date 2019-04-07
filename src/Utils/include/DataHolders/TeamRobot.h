@@ -62,17 +62,17 @@ struct TeamRobot : public DataHolder
     return val;
   }
 
-  int id = {-1}; //! Robot id
-  bool dataReceived = {false}; //! Whether the data for this robot is recieved
-  int8_t fallen = {0}; //! Robot is fallen or not
-  int8_t intention = {4}; //! Current robot intention
-  int8_t suggestionToMe = {0}; //! Suggestion of this robot to me
-  int8_t positionConfidence = {0}; //! Position confidence
-  int8_t sideConfidence = {0}; //! Side confidence
-  T ballAge = {-1}; //! Time until ball last in seconds
-  cv::Point_<T> ballPos; //! Ball position in robot frame
-  cv::Point_<T> ballVel; //! Ball velocity in robot frame
-  cv::Point_<T> walkingTo; //! Current walking target in world
-  cv::Point_<T> shootingTo; //! Current shooting target in world
-  RobotPose2D<T> pose; //! Robot pose in world
+  int id = {-1}; ///< Robot id
+  bool dataReceived = {false}; ///< Whether the data for this robot is recieved
+  int8_t fallen = {0}; ///< Robot is fallen or not
+  int8_t intention = {4}; ///< Current robot intention
+  int8_t suggestionToMe = {0}; ///< Suggestion of this robot to me
+  int8_t positionConfidence = {0}; ///< Position confidence
+  int8_t sideConfidence = {0}; ///< Side confidence
+  T ballAge = {-1}; ///< Time until ball last in seconds
+  cv::Point_<T> ballPos; ///< Ball position in robot frame
+  cv::Point_<T> ballVel; ///< Ball velocity in robot frame
+  cv::Point_<T> walkingTo; ///< Current walking target in world
+  cv::Point_<T> shootingTo; ///< Current shooting target in world
+  RobotPose2D<T> pose; ///< Robot pose in world
 };

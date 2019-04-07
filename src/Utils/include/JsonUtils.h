@@ -207,7 +207,7 @@ namespace JsonUtils
   template<typename T> Json::Value getJson(const KnownLandmark<T>& l);
   template<typename T> Json::Value getJson(const UnknownLandmark<T>& l);
   Json::Value getJson(const RoboCupGameControlData& data);
-  //! Eigen matrix conversions
+  ///< Eigen matrix conversions
   template<typename Derived> Json::Value getJson(const MatrixBase<Derived>& mat);
   template<typename Scalar, size_t Cols> Json::Value getJson(const Matrix<Scalar, Dynamic, Cols>& mat);
   template<typename Scalar, size_t Rows, size_t Cols> Json::Value getJson(const Matrix<Scalar, Rows, Cols>& mat);
@@ -245,7 +245,7 @@ namespace JsonUtils
   DECLARE_JSON_TO_TYPE(KnownLandmark<float>)
   DECLARE_JSON_TO_TYPE(UnknownLandmark<float>)
 
-  //! Unimplemented conversions for memory variables. Not needed atm
+  ///< Unimplemented conversions for memory variables. Not needed atm
   DECLARE_JSON_TO_TYPE(BallInfo<float>)
   DECLARE_JSON_TO_TYPE(WorldBallInfo<float>)
   DECLARE_JSON_TO_TYPE(GoalInfo<float>)
@@ -263,7 +263,7 @@ namespace JsonUtils
   DECLARE_JSON_TO_TYPE(TeamRobot<float>)
   DECLARE_JSON_TO_TYPE(CommMessage)
 
-  //! Behavior configuration conversions
+  ///< Behavior configuration conversions
   DECLARE_JSON_TO_TYPE_CONFIG(MBBalanceConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBBallThrowConfig)
   DECLARE_JSON_TO_TYPE_CONFIG(MBDiveConfig)

@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/KickSequences/FindAndKick.h
+ * @file PlanningBehaviors/KickSequence/Types/FindAndKick.h
  *
  * This file declares the class FindAndKick
  *
@@ -15,7 +15,7 @@
 
 /**
  * @class FindAndKick
- * @brief The class for defining a behavior sequence to find and kick a 
+ * @brief The class for defining a behavior sequence to find and kick a
  *   ball
  */
 class FindAndKick : public KickSequence
@@ -23,12 +23,12 @@ class FindAndKick : public KickSequence
 public:
   /**
    * Constructor
-   * 
+   *
    * @param planningModule: pointer to parent planning module
    * @param config: Configuration of this behavior
    */
   FindAndKick(
-    PlanningModule* planningModule, 
+    PlanningModule* planningModule,
     const BehaviorConfigPtr& config) :
     KickSequence(planningModule, config, "FindAndKick"),
     behaviorState(headTapWait)
@@ -45,57 +45,57 @@ public:
 
   /**
    * Derived from Behavior
-   */ 
+   */
   void initiate();
   void update();
   void finish();
   void loadExternalConfig();
-  
+
 private:
   /**
    * * Returns the config casted as FindAndKickConfigPtr
-   */ 
+   */
   FindAndKickConfigPtr getBehaviorCast();
-  
+
   /**
    * Head tap wait state action
-   */ 
+   */
   void headTapWaitAction();
-  
+
   /**
    * Startup state action
-   */ 
+   */
   void startupAction();
-  
+
     /**
    * Search ball state action
-   */ 
+   */
   void searchBallAction();
-  
+
   /**
    * Kick state action
-   */ 
+   */
   void kickAction();
-  
+
 
   //! Current behavior state
   unsigned behaviorState;
-  
-  #ifdef SIMULATION  
+
+  #ifdef SIMULATION
   //! Ball damping coefficient
   static float coeffDamping;
   #else
   static float rollingFriction;
   #endif
-  
-  //! Kicking velocity desired 
+
+  //! Kicking velocity desired
   Point2f desKickVel;
-  
+
   /**
    * All the possible states of this behavior
-   * 
+   *
    * @enum BehaviorState
-   */ 
+   */
   enum BehaviorState
   {
     headTapWait = 0,

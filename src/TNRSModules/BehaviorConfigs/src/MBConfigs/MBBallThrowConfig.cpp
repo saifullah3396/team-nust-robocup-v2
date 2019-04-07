@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MotionConfigs/MBBallThrowConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBBallThrowConfig.cpp
  *
  * This file implements the struct MBBallThrowConfig
  *
@@ -13,7 +13,7 @@
 DEFINE_BEHAVIOR_CONFIG(
   MBBallThrowConfig, MBConfig, MBBallThrowConfigPtr,
   (MBBallThrowTypes, wbBallThrow, WBBallThrowConfig),
-)
+);
 
 void WBBallThrowConfig::init() {}
 void WBBallThrowConfig::validate()

@@ -1,5 +1,5 @@
 /**
- * @file GameCommModule/GameCommModule.h
+ * @file GameCommModule/src/GameCommModule.cpp
  *
  * This file implements the class GameCommModule
  *
@@ -34,11 +34,11 @@ DEFINE_INPUT_CONNECTOR(GameCommModule,
   (bool, robotLocalized),
   (int, positionConfidence),
   (int, sideConfidence),
-)
+);
 
 DEFINE_OUTPUT_CONNECTOR(GameCommModule,
   (vector<TeamRobot<float> >, teamRobots),
-)
+);
 
 GameCommModule::GameCommModule(void* teamNUSTSPL) :
   BaseModule(

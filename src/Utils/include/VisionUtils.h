@@ -206,29 +206,29 @@ namespace VisionUtils
   /*template<typename T>
    bool isInside(const vector<Point_<T> >& polygon, const Point_<T>& p)
    {
-   //! There must be at least 3 vertices in polygon
+   ///< There must be at least 3 vertices in polygon
    if (polygon.size() < 3)  return false;
-   //! Create a point for line segment from p to infinite
+   ///< Create a point for line segment from p to infinite
    auto extreme = Point_<T>(INF, p.y);
-   //! Count intersections of the above line with sides of polygon
+   ///< Count intersections of the above line with sides of polygon
    auto count = 0, i = 0;
    do
    {
    auto next = (i+1)%n;
-   //! Check if the line segment from 'p' to 'extreme' intersects
-   //! with the line segment from 'polygon[i]' to 'polygon[next]'
+   ///< Check if the line segment from 'p' to 'extreme' intersects
+   ///< with the line segment from 'polygon[i]' to 'polygon[next]'
    if (doIntersect(polygon[i], polygon[next], p, extreme))
    {
-   //! If the point 'p' is colinear with line segment 'i-next',
-   //! then check if it lies on segment. If it lies, return true,
-   //! otherwise false
+   ///< If the point 'p' is colinear with line segment 'i-next',
+   ///< then check if it lies on segment. If it lies, return true,
+   ///< otherwise false
    if (orientation(polygon[i], p, polygon[next]) == 0)
    return onSegment(polygon[i], p, polygon[next]);
    count++;
    }
    i = next;
    } while (i != 0);
-   //! Return true if count is odd, false otherwise
+   ///< Return true if count is odd, false otherwise
    return count&1;
    }*/
 
@@ -282,7 +282,7 @@ namespace VisionUtils
             point.x = x2;
             point.y = y2;
             comp.push_back(point);
-            //! 4 connected
+            ///< 4 connected
             if (x2 > 0 && (src(y2, x2 - 1) != 0)) {
               stack2.push(i - 1);
               src(y2, x2 - 1) = 0;
@@ -300,7 +300,7 @@ namespace VisionUtils
               src(y2, x2 + 1) = 0;
             }
 
-            //! 8 connected
+            ///< 8 connected
             if (x2 > 0 && y2 > 0 && (src(y2 - 1, x2 - 1) != 0)) {
               stack2.push(i - w - 1);
               src(y2 - 1, x2 - 1) = 0;
@@ -448,4 +448,4 @@ namespace VisionUtils
 
    return ellipse;
    }*/
-} //! VisionUtils
+} ///< VisionUtils

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MotionConfigs/MBPostureConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBPostureConfig.cpp
  *
  * This file implements the structs MBPostureConfig
  *
@@ -16,7 +16,7 @@
 DEFINE_BEHAVIOR_CONFIG(
   MBPostureConfig, MBConfig, MBPostureConfigPtr,
   (MBPostureTypes, interpToPosture, InterpToPostureConfig),
-)
+);
 
 void InterpToPostureConfig::init()
 {

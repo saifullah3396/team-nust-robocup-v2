@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBGetupConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBGetupConfig.h
  *
  * This file defines the structs MBGetupConfig and KFMGetupConfig
  *
@@ -23,7 +23,7 @@ DECLARE_BEHAVIOR_CONFIG(
   MBIds::getup,
   20.0,
   MBGetupTypes
-)
+);
 
 /**
  * @struct KFMGetupConfig
@@ -36,4 +36,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBGetupTypes::kfmGetup,
   KFMGetupConfigPtr,
   (KeyFrameGetupTypes, keyFrameGetupType, KeyFrameGetupTypes::back),
-)
+);

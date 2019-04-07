@@ -14,7 +14,7 @@
 #include "Utils/include/DataHolders/BehaviorInfo.h"
 #include "Utils/include/Exceptions/TNRSException.h"
 
-//! Forward declaration
+///< Forward declaration
 class BehaviorManager;
 class Behavior;
 typedef boost::shared_ptr<Behavior> BehaviorPtr;
@@ -24,16 +24,6 @@ class BehaviorConfig;
 typedef boost::shared_ptr<BehaviorConfig> BehaviorConfigPtr;
 
 /**
- * Enumeration for possible types of behavior manager exceptions
- *
- * @enum BManagerExceptionType
- */
-DEFINE_ENUM_WITH_STRING_CONVERSIONS(
-  BManagerExceptionType,
-  (EXC_BEHAVIOR_SETUP_FAILED)
-)
-
-/**
  * @class BManagerException
  * @brief BehaviorManager exception management class
  */
@@ -41,22 +31,23 @@ class BManagerException : public TNRSException
 {
 public:
   /**
-   * Constructor
+   * BManagerException Constructor
    *
    * @param behaviorManager: In which the exception is raised
    * @param message: Explanatory message
    * @param bSysMsg: True if the system message (from strerror(errno))
    *   should be postfixed to the user provided message
    * @param type: Argument parser exception type
+   * @throw Error
    */
   BManagerException(
     BehaviorManager* behaviorManager,
     const string& message,
-    const bool& bSysMsg,
-    const BManagerExceptionType& type) throw ();
+    const bool& bSysMsg) throw ();
 
   /**
-   * Destructor
+   * @brief ~BManagerException Destructor
+   * @throw Error
    */
   ~BManagerException() throw () {}
 
@@ -65,7 +56,6 @@ public:
 
 private:
   string name;
-  BManagerExceptionType type;
 };
 
 /**
@@ -103,7 +93,7 @@ public:
    */
   void manageRequest(
     const BehaviorRequestPtr& req);
-    
+
   /**
    * Manages a behavior request and updates the given behavior with it
    *
@@ -123,9 +113,9 @@ public:
 
   /**
    * Sets the current behavior info from the given input behavior
-   * 
+   *
    * @param bPtr: The behavior whose info is to be shown
-   */ 
+   */
   void setBehaviorInfo(const BehaviorPtr& bPtr);
 
   /**
@@ -137,7 +127,7 @@ public:
 
   /**
    * Sets killing the behavior in progress
-   */ 
+   */
   void killBehavior() { killRequested = true; }
 protected:
   /**
@@ -174,15 +164,15 @@ private:
    */
   void updateBehavior(BehaviorPtr& bPtr);
 
-  //! Name of this behavior manager
+  ///< Name of this behavior manager
   string name;
 
-  //! If a kill request is received
+  ///< If a kill request is received
   bool killRequested;
 
-  //! Pointer to the current running behavior
+  ///< Pointer to the current running behavior
   BehaviorPtr currBehavior;
 
-  //! Information about the current running behavior
+  ///< Information about the current running behavior
   BehaviorInfoPtr behaviorInfo;
 };

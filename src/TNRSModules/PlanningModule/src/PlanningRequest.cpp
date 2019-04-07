@@ -13,5 +13,5 @@ DEFINE_MODULE_REQUEST(
   PlanningRequest, ModuleRequest, PlanningRequestPtr,
   (PlanningRequestIds, behaviorRequest, RequestPlanningBehavior),
   (PlanningRequestIds, killBehavior, KillPlanningBehavior),
-)
+);
 

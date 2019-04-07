@@ -53,7 +53,7 @@ public:
   }
 
 protected:
-  string sMsg; //! Error message.
+  string sMsg; ///< Error message.
 };
 
 /**
@@ -189,7 +189,7 @@ public:
     return NULL;
   }
 
-  //! Getters
+  ///< Getters
   const string& getModuleName() const { return moduleName; }
   const TNSPLModules& getModuleId() const { return moduleId; }
   void* getParent() const { return parent; }
@@ -197,7 +197,7 @@ public:
   const double& getModuleTime() const { return moduleTime; }
   SharedMemoryPtr getLocalSharedMemory() const { return sharedMemory; }
 
-  //! Setters
+  ///< Setters
   void setPeriodMinMS(const int& periodMinMS) { this->periodMinMS = periodMinMS; }
   void setLocalSharedMemory(const SharedMemoryPtr& sharedMemory)
   {
@@ -205,7 +205,7 @@ public:
   }
 
 protected:
-  ThreadSafeQueue<ModuleRequestPtr> inRequests; //! A queue for receiving requests
+  ThreadSafeQueue<ModuleRequestPtr> inRequests; ///< A queue for receiving requests
 
 private:
   /**
@@ -278,23 +278,23 @@ private:
    */
   static void* threadFunc(void* pTr);
 
-  static vector<BaseModule*> runningModules; //! A vector of all the constructed modules
-  high_resolution_clock::time_point iterationStartTime; //! Time at the start of iteration
-  int periodMinMS = {0}; //! Time period of the module in milliseconds
-  void* parent; //! Pointer to parent
-  TNSPLModules moduleId; //! Module identity
-  string moduleName; //! Module name
-  double moduleTime = {0.0}; //! Module time
-  size_t inRequestsMax; //! Max requests possible in the queue
-  SharedMemoryPtr sharedMemory; //! Pointer to local data memory object
-  bool parentSuspendFlag = {false}; //! Module suspension ordered by parent
-  bool suspendFlag = {false}; //! Module suspension ordered by itself
-  bool terminateThread = {false}; //! Whether to stop the thread
-  pthread_mutex_t terminateMutex; //! Module thread mutex
-  pthread_mutex_t suspendMutex; //! Module thread mutex
-  pthread_cond_t resumeCond; //! Module thread condition variable
-  pthread_mutex_t condWaitMutex; //! Mutex conditional wait
-  pthread_t threadId; //! Module thread id defined by pthread_t
+  static vector<BaseModule*> runningModules; ///< A vector of all the constructed modules
+  high_resolution_clock::time_point iterationStartTime; ///< Time at the start of iteration
+  int periodMinMS = {0}; ///< Time period of the module in milliseconds
+  void* parent; ///< Pointer to parent
+  TNSPLModules moduleId; ///< Module identity
+  string moduleName; ///< Module name
+  double moduleTime = {0.0}; ///< Module time
+  size_t inRequestsMax; ///< Max requests possible in the queue
+  SharedMemoryPtr sharedMemory; ///< Pointer to local data memory object
+  bool parentSuspendFlag = {false}; ///< Module suspension ordered by parent
+  bool suspendFlag = {false}; ///< Module suspension ordered by itself
+  bool terminateThread = {false}; ///< Whether to stop the thread
+  pthread_mutex_t terminateMutex; ///< Module thread mutex
+  pthread_mutex_t suspendMutex; ///< Module thread mutex
+  pthread_cond_t resumeCond; ///< Module thread condition variable
+  pthread_mutex_t condWaitMutex; ///< Mutex conditional wait
+  pthread_t threadId; ///< Module thread id defined by pthread_t
 };
 
 typedef boost::shared_ptr<BaseModule> BaseModulePtr;

@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/Circle.h
+ * @file VisionModule/include/FeatureExtraction/Circle.h
  *
  * This file defines the struct Circle.
  *
@@ -7,7 +7,7 @@
  * @date 12 Mar 2018
  */
 
-#pragma once 
+#pragma once
 
 #include <vector>
 #include <opencv2/core/core.hpp>
@@ -50,6 +50,6 @@ struct Circle
     return cs;
   }
 
-  Point2f center; //! Circle center
-  float radius; //! Circle radius
+  Point2f center; ///< Circle center
+  float radius; ///< Circle radius
 };

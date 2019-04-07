@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/NavigationBehavior/NavigationBehavior.h
+ * @file PlanningBehaviors/NavigationBehavior/NavigationBehavior.cpp
  *
  * This file declares the class for the robot navigation.
  *
@@ -81,7 +81,7 @@ void NavigationBehavior::loadExternalConfig()
     //SET_DVAR(int, sendFootsteps, tempSendFootsteps);
     //SET_DVAR(int, drawFootsteps, tempDrawFootsteps);
 
-    //! read parameters from config file:
+    ///< read parameters from config file:
     GET_CONFIG(
       "PathPlanner",
       (bool, PathPlanner.forwardSearch, forwardSearch),
@@ -125,21 +125,21 @@ void NavigationBehavior::reinitiate(const BehaviorConfigPtr& cfg)
   LOG_INFO("NavigationBehavior reinitiation...")
   int currentStep = N_FOOTSTEPS_IN(PlanningModule) - startStep;
   if (currentStep < 6 || plannedPath[currentStep].getLeg() != RIGHT) {
-    //! Don't reinitiate unless the current step is right foot since the planner
-    //! always returns the solution with first step as right foot
-    //! Also gives reasonable time between reinitiation calls
+    ///< Don't reinitiate unless the current step is right foot since the planner
+    ///< always returns the solution with first step as right foot
+    ///< Also gives reasonable time between reinitiation calls
     return;
   }
 
   this->config = cfg;
   if (!pathPlanned || currentStep >= plannedPath.size() - 1) {
-    //! If the path is not already planned, we just call initiate
+    ///< If the path is not already planned, we just call initiate
     initiate();
   } else {
-    //! Update the map
+    ///< Update the map
     pathPlanner->updateMap();
 
-    //! Set new goal position
+    ///< Set new goal position
     bool goalSet = false;
     goal = getBehaviorCast()->goal;
     if (setGoal(goal)) {
@@ -152,7 +152,7 @@ void NavigationBehavior::reinitiate(const BehaviorConfigPtr& cfg)
       }
     }
 
-    //! If a goal position is set successfully
+    ///< If a goal position is set successfully
     if (goalSet) {
       auto right = plannedPath[currentStep];
       auto left = plannedPath[currentStep - 1];
@@ -310,7 +310,7 @@ void NavigationBehavior::validatePathAction()
 bool NavigationBehavior::setStart()
 {
   Matrix<float, 4, 4> lFootT, rFootT;
-  //! get real placement of the feet
+  ///< get real placement of the feet
   if (!getFootTransform(lFootT, LEFT) ||
       !getFootTransform(rFootT, RIGHT))
     return false;
@@ -473,8 +473,8 @@ bool NavigationBehavior::plan(const bool& removeFirstStep)
 bool NavigationBehavior::replan()
 {
   //bool pathExisted = pathPlanner->pathExists();
-  //! calculate path by replanning (if no planning information exists
-  //! this call is equal to pathPlanner->plan())
+  ///< calculate path by replanning (if no planning information exists
+  ///< this call is equal to pathPlanner->plan())
   if (pathPlanner->replan()) {
     LOG_INFO("PathPlanner.replan() successful.")
     if (pathPlanner->getPathSize() <= 1) {
@@ -482,7 +482,7 @@ bool NavigationBehavior::replan()
     } else {
       //cout << "start step: " << startStep << endl;
       startStep = N_FOOTSTEPS_IN(PlanningModule);
-      ////! First step is the initial step state and does not count as a step
+      /////< First step is the initial step state and does not count as a step
       plannedPath = pathPlanner->getPath();
       //plannedPath.erase(plannedPath.begin());
       return true;

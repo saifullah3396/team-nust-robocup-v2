@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/KinematicsModule/KinematicsModule.cpp
+ * @file MotionModule/src/KinematicsModule/KinematicsModule.cpp
  *
  * this file implements the class for solving the kinematics
  * of the robot.cout
@@ -202,7 +202,7 @@ void KinematicsModule<Scalar>::setupLinksAndInertias()
       }
     }
   }
-  //! Torso mass and center of mass definitions
+  ///< Torso mass and center of mass definitions
   links[toUType(Links::torso)]->com =
     Matrix<Scalar, 4, 1>(torsoX, torsoY, torsoZ, 1.0);
   links[toUType(Links::torso)]->mass = torsoMass;
@@ -245,31 +245,31 @@ template <typename Scalar>
 void KinematicsModule<Scalar>::setupChains()
 {
   linkChains.resize(toUType(LinkChains::count));
-  //! Make head chain
+  ///< Make head chain
   linkChains[toUType(LinkChains::head)] =
     boost::shared_ptr<LinkChain<Scalar> > (
       new LinkChain<Scalar>(LinkChains::head, HardwareIds::headStart, HardwareIds::nHead)
     );
 
-  //! Make larm chain
+  ///< Make larm chain
   linkChains[toUType(LinkChains::lArm)] =
     boost::shared_ptr<LinkChain<Scalar> > (
       new LinkChain<Scalar>(LinkChains::lArm, HardwareIds::lArmStart, HardwareIds::nLArm)
     );
 
-  //! Make rarm chain
+  ///< Make rarm chain
   linkChains[toUType(LinkChains::rArm)] =
     boost::shared_ptr<LinkChain<Scalar> > (
       new LinkChain<Scalar>(LinkChains::rArm, HardwareIds::rArmStart, HardwareIds::nRArm)
     );
 
-  //! Make lleg chain
+  ///< Make lleg chain
   linkChains[toUType(LinkChains::lLeg)] =
     boost::shared_ptr<LinkChain<Scalar> > (
       new LinkChain<Scalar>(LinkChains::lLeg, HardwareIds::lLegStart, HardwareIds::nLLeg)
     );
 
-  //! Make rleg chain
+  ///< Make rleg chain
   linkChains[toUType(LinkChains::rLeg)] =
     boost::shared_ptr<LinkChain<Scalar> > (
       new LinkChain<Scalar>(LinkChains::rLeg, HardwareIds::rLegStart, HardwareIds::nRLeg)
@@ -282,7 +282,7 @@ void KinematicsModule<Scalar>::setupChains()
       links[j]->chain = linkChains[i];
     }
   }
-  //! Set global body rotation matrix to identity()
+  ///< Set global body rotation matrix to identity()
   for (size_t i = 0; i < toUType(JointStateType::count); ++i) {
     globalToBodyRotX.push_back(Matrix<Scalar, 6, 6>::Identity());
     bodyToGlobal.push_back(Matrix<Scalar, 4, 4>::Identity());
@@ -295,7 +295,7 @@ void KinematicsModule<Scalar>::setupChains()
   setupEndEffectors();
 
   Matrix<Scalar, 3, 3> iMat = Matrix<Scalar, 3, 3>::Identity();
-  //!Moving Inertias of all joints to to center of mass
+  ///<Moving Inertias of all joints to to center of mass
   for (size_t i = 0; i < toUType(Links::count); ++i) {
     links[i]->inertia =
       links[i]->inertia - links[i]->mass * ((links[i]->com.segment(0, 3).transpose() * links[i]->com.segment(
@@ -313,7 +313,7 @@ void KinematicsModule<Scalar>::setupChains()
   }
   LinkChain<Scalar>::totalChainsMass = totalChainsMass;
 
-  //! Update links partial masses used in determining com jacobian
+  ///< Update links partial masses used in determining com jacobian
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     joints[i]->link->partialMass = joints[i]->link->mass / totalChainsMass;
   }
@@ -383,49 +383,49 @@ template <typename Scalar>
 void KinematicsModule<Scalar>::setupHeadChain()
 {
   Matrix<Scalar, 4, 4> t1;
-  //! Chain start transformation
+  ///< Chain start transformation
   MathsUtils::makeTranslation(
     linkChains[toUType(LinkChains::head)]->startT,
     (Scalar) 0.0,
     (Scalar) 0.0,
     (Scalar) neckOffsetZ);
-  //! Chain end transformation
+  ///< Chain end transformation
   MathsUtils::makeRotationXYZ(
     linkChains[toUType(LinkChains::head)]->endT,
     (Scalar) M_PI_2,
     (Scalar) M_PI_2,
     (Scalar) 0.0);
-  //!Masses
+  ///<Masses
   links[toUType(Links::headYaw)]->mass = headYawMass;
   links[toUType(Links::headPitch)]->mass = headPitchMass;
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   links[toUType(Links::headYaw)]->com = Matrix<Scalar, 4, 1>(headYawX, headYawY, headYawZ, 1.0f);
   links[toUType(Links::headPitch)]->com = Matrix<Scalar, 4, 1>(headPitchX, headPitchY, headPitchZ, 1.0f);
 
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::headPitch)]->inertiaTrans = linkChains[toUType(LinkChains::head)]->endT.block(0, 0, 3, 3);
   links[toUType(Links::headPitch)]->com = linkChains[toUType(LinkChains::head)]->endT * links[toUType(Links::headPitch)]->com;
 
-  //!Transforming inertia tensor from the given frame to the joint frame.
+  ///<Transforming inertia tensor from the given frame to the joint frame.
   links[toUType(Links::headPitch)]->inertia =
     links[toUType(Links::headPitch)]->inertiaTrans *
     links[toUType(Links::headPitch)]->inertia *
     links[toUType(Links::headPitch)]->inertiaTrans.transpose();
-  //!----------------------Head End------------------------!//
+  ///<----------------------Head End------------------------!//
 }
 
 template <typename Scalar>
 void KinematicsModule<Scalar>::setupArmChains()
 {
   Matrix<Scalar, 4, 4> t1;
-  //! Chain start transformation
+  ///< Chain start transformation
   MathsUtils::makeTranslation(
     linkChains[toUType(LinkChains::rArm)]->startT,
     (Scalar) 0.0,
     (Scalar) -(shoulderOffsetY),
     (Scalar) shoulderOffsetZ);
 
-  //! Chain end transformation
+  ///< Chain end transformation
   MathsUtils::makeRotationXYZ(
     linkChains[toUType(LinkChains::rArm)]->endT,
     (Scalar) -M_PI_2,
@@ -435,14 +435,14 @@ void KinematicsModule<Scalar>::setupArmChains()
   linkChains[toUType(LinkChains::rArm)]->endT(1, 3) = -handOffsetZ;
   linkChains[toUType(LinkChains::rArm)]->endT(2, 3) = handOffsetX;
 
-  //! Masses
+  ///< Masses
   links[toUType(Links::rShoulderPitch)]->mass = rShoulderPitchMass;
   links[toUType(Links::rShoulderRoll)]->mass = rShoulderRollMass;
   links[toUType(Links::rElbowYaw)]->mass = rElbowYawMass;
   links[toUType(Links::rElbowRoll)]->mass = rElbowRollMass;
   links[toUType(Links::rWristYaw)]->mass = rWristYawMass;
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI_2, (Scalar) 0.0, (Scalar) 0.0);
   links[toUType(Links::rShoulderPitch)]->com = Matrix<Scalar, 4, 1>(
     rShoulderPitchX,
@@ -450,13 +450,13 @@ void KinematicsModule<Scalar>::setupArmChains()
     rShoulderPitchZ,
     1.0f);
 
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rShoulderPitch)]->com = t1 * links[toUType(Links::rShoulderPitch)]->com;
 
   links[toUType(Links::rShoulderPitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Links::lShoulderPitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rShoulderPitch)]->inertia =
     links[toUType(Links::rShoulderPitch)]->inertiaTrans *
     links[toUType(Links::rShoulderPitch)]->inertia *
@@ -471,7 +471,7 @@ void KinematicsModule<Scalar>::setupArmChains()
     links[toUType(Links::lShoulderPitch)]->inertia *
     links[toUType(Links::lShoulderPitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) 0.0, (Scalar) 0.0, (Scalar) -M_PI_2);
   links[toUType(Links::rShoulderRoll)]->com = Matrix<Scalar, 4, 1>(
     rShoulderRollX,
@@ -481,10 +481,10 @@ void KinematicsModule<Scalar>::setupArmChains()
 
   links[toUType(Links::rShoulderRoll)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Links::lShoulderRoll)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rShoulderRoll)]->com = t1 * links[toUType(Links::rShoulderRoll)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rShoulderRoll)]->inertia =
     links[toUType(Links::rShoulderRoll)]->inertiaTrans *
     links[toUType(Links::rShoulderRoll)]->inertia *
@@ -499,7 +499,7 @@ void KinematicsModule<Scalar>::setupArmChains()
     links[toUType(Links::lShoulderRoll)]->inertia *
     links[toUType(Links::lShoulderRoll)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(
     t1,
     (Scalar) -M_PI_2,
@@ -510,10 +510,10 @@ void KinematicsModule<Scalar>::setupArmChains()
 
   links[toUType(Links::rElbowYaw)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Links::lElbowYaw)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rElbowYaw)]->com = t1 * links[toUType(Links::rElbowYaw)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rElbowYaw)]->inertia =
     links[toUType(Links::rElbowYaw)]->inertiaTrans *
     links[toUType(Links::rElbowYaw)]->inertia *
@@ -528,7 +528,7 @@ void KinematicsModule<Scalar>::setupArmChains()
     links[toUType(Links::lElbowYaw)]->inertia *
     links[toUType(Links::lElbowYaw)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) 0.0, (Scalar) 0.0, (Scalar) -M_PI_2);
   links[toUType(Links::rElbowRoll)]->com = Matrix<Scalar, 4, 1>(
     rElbowRollX,
@@ -539,10 +539,10 @@ void KinematicsModule<Scalar>::setupArmChains()
 
   links[toUType(Links::rElbowRoll)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Links::lElbowRoll)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rElbowRoll)]->com = t1 * links[toUType(Links::rElbowRoll)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rElbowRoll)]->inertia =
     links[toUType(Links::rElbowRoll)]->inertiaTrans *
     links[toUType(Links::rElbowRoll)]->inertia *
@@ -557,17 +557,17 @@ void KinematicsModule<Scalar>::setupArmChains()
     links[toUType(Links::lElbowRoll)]->inertia *
     links[toUType(Links::rElbowRoll)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) -M_PI_2, (Scalar) 0.0, (Scalar) -M_PI_2);
   links[toUType(Links::rWristYaw)]->com = Matrix<Scalar, 4, 1>(rWristYawX, rWristYawY, rWristYawZ, 1.0f);
 
   links[toUType(Links::rWristYaw)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Links::lWristYaw)]->inertiaTrans = t1.block(0, 0, 3, 3);
 
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rWristYaw)]->com = t1 * links[toUType(Links::rWristYaw)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rWristYaw)]->inertia =
     links[toUType(Links::rWristYaw)]->inertiaTrans *
     links[toUType(Links::rWristYaw)]->inertia *
@@ -581,11 +581,11 @@ void KinematicsModule<Scalar>::setupArmChains()
     links[toUType(Links::lWristYaw)]->inertiaTrans *
     links[toUType(Links::lWristYaw)]->inertia *
     links[toUType(Links::lWristYaw)]->inertiaTrans.transpose();
-  //!-------------------Right Arm End----------------------!//
+  ///<-------------------Right Arm End----------------------!//
 
-    //!-------------------Left Arm Start--------------------!//
+    ///<-------------------Left Arm Start--------------------!//
 
-  //!End and base transformations.
+  ///<End and base transformations.
   MathsUtils::makeTranslation(
     linkChains[toUType(LinkChains::lArm)]->startT,
     (Scalar) 0.0,
@@ -593,7 +593,7 @@ void KinematicsModule<Scalar>::setupArmChains()
     (Scalar) shoulderOffsetZ);
   linkChains[toUType(LinkChains::lArm)]->endT = linkChains[toUType(LinkChains::rArm)]->endT;
 
-  //!Masses and center of mass vectors
+  ///<Masses and center of mass vectors
   for (size_t i = 0; i < linkChains[toUType(LinkChains::lArm)]->size; i++) {
     links[linkChains[toUType(LinkChains::lArm)]->start + i]->com =
       links[linkChains[toUType(LinkChains::rArm)]->start + i]->com;
@@ -601,22 +601,22 @@ void KinematicsModule<Scalar>::setupArmChains()
       links[linkChains[toUType(LinkChains::rArm)]->start + i]->mass;
   }
 
-  //!Fixing the center of mass coordinates
+  ///<Fixing the center of mass coordinates
   links[toUType(Links::lShoulderPitch)]->com(2) = -links[toUType(Links::lShoulderPitch)]->com(2);
   links[toUType(Links::lShoulderRoll)]->com(0) = -links[toUType(Links::lShoulderRoll)]->com(0);
   links[toUType(Links::lElbowYaw)]->com(0) = -links[toUType(Links::lElbowYaw)]->com(0);
   links[toUType(Links::lElbowRoll)]->com(0) = -links[toUType(Links::lElbowRoll)]->com(0);
   links[toUType(Links::lWristYaw)]->com(0) = -links[toUType(Links::lWristYaw)]->com(0);
 
-  //!-------------------Left Arm End--------------------!//
+  ///<-------------------Left Arm End--------------------!//
 }
 
 template <typename Scalar>
 void KinematicsModule<Scalar>::setupLegChains()
 {
   Matrix<Scalar, 4, 4> t1;
-  //!------------------Right Leg Start------------------!//
-  //!End and base transformations.
+  ///<------------------Right Leg Start------------------!//
+  ///<End and base transformations.
   MathsUtils::makeTranslation(
     linkChains[toUType(LinkChains::rLeg)]->startT,
     (Scalar) 0.0,
@@ -629,7 +629,7 @@ void KinematicsModule<Scalar>::setupLegChains()
     (Scalar) 0.0);
   rotRLeg = linkChains[toUType(LinkChains::rLeg)]->endT;
 
-  //!Masses
+  ///<Masses
   links[toUType(Joints::rHipYawPitch)]->mass = rHipYawPitchMass;
   links[toUType(Links::rHipRoll)]->mass = rHipRollMass;
   links[toUType(Links::rHipPitch)]->mass = rHipPitchMass;
@@ -637,7 +637,7 @@ void KinematicsModule<Scalar>::setupLegChains()
   links[toUType(Links::rAnklePitch)]->mass = rAnklePitchMass;
   links[toUType(Links::rAnkleRoll)]->mass = rAnkleRollMass;
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(
     t1,
     (Scalar) -M_PI_2 / 2,
@@ -649,47 +649,47 @@ void KinematicsModule<Scalar>::setupLegChains()
     rHipYawPitchZ,
     1.0f);
 
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   t1 = MathsUtils::getTInverse(t1);
 
   links[toUType(Joints::rHipYawPitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Joints::rHipYawPitch)]->com = t1 * links[toUType(Joints::rHipYawPitch)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Joints::rHipYawPitch)]->inertia =
     links[toUType(Joints::rHipYawPitch)]->inertiaTrans *
     links[toUType(Joints::rHipYawPitch)]->inertia *
     links[toUType(Joints::rHipYawPitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::rHipRoll)]->com = Matrix<Scalar, 4, 1>(rHipRollX, rHipRollY, rHipRollZ, 1.0f);
 
   links[toUType(Links::rHipRoll)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rHipRoll)]->com = t1 * links[toUType(Links::rHipRoll)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rHipRoll)]->inertia =
    links[toUType(Links::rHipRoll)]->inertiaTrans *
    links[toUType(Links::rHipRoll)]->inertia *
    links[toUType(Links::rHipRoll)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI_2, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::rHipPitch)]->com = Matrix<Scalar, 4, 1>(rHipPitchX, rHipPitchY, rHipPitchZ, 1.0f);
 
   links[toUType(Links::rHipPitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rHipPitch)]->com = t1 * links[toUType(Links::rHipPitch)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rHipPitch)]->inertia =
     links[toUType(Links::rHipPitch)]->inertiaTrans *
     links[toUType(Links::rHipPitch)]->inertia *
     links[toUType(Links::rHipPitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI_2, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::rKneePitch)]->com = Matrix<Scalar, 4, 1>(
     rKneePitchX,
@@ -698,16 +698,16 @@ void KinematicsModule<Scalar>::setupLegChains()
     1.0f);
 
   links[toUType(Links::rKneePitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rKneePitch)]->com = t1 * links[toUType(Links::rKneePitch)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rKneePitch)]->inertia =
     links[toUType(Links::rKneePitch)]->inertiaTrans *
     links[toUType(Links::rKneePitch)]->inertia *
     links[toUType(Links::rKneePitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI_2, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::rAnklePitch)]->com = Matrix<Scalar, 4, 1>(
     rAnklePitchX,
@@ -716,16 +716,16 @@ void KinematicsModule<Scalar>::setupLegChains()
     1.0f);
 
   links[toUType(Links::rAnklePitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rAnklePitch)]->com = t1 * links[toUType(Links::rAnklePitch)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rAnklePitch)]->inertia =
     links[toUType(Links::rAnklePitch)]->inertiaTrans *
     links[toUType(Links::rAnklePitch)]->inertia *
     links[toUType(Links::rAnklePitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   links[toUType(Links::rAnkleRoll)]->com = Matrix<Scalar, 4, 1>(
     rAnkleRollX,
     rAnkleRollY,
@@ -733,18 +733,18 @@ void KinematicsModule<Scalar>::setupLegChains()
     1.0f);
 
   links[toUType(Links::rAnkleRoll)]->inertiaTrans = linkChains[toUType(LinkChains::rLeg)]->endT.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::rAnkleRoll)]->com = linkChains[toUType(LinkChains::rLeg)]->endT * links[toUType(Links::rAnkleRoll)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::rAnkleRoll)]->inertia =
     links[toUType(Links::rAnkleRoll)]->inertiaTrans *
     links[toUType(Links::rAnkleRoll)]->inertia *
     links[toUType(Links::rAnkleRoll)]->inertiaTrans.transpose();
-  //!------------------Right Leg Start------------------!//
+  ///<------------------Right Leg Start------------------!//
 
-  //!------------------Left Leg Start-------------------!//
-  //!End and base transformations.
+  ///<------------------Left Leg Start-------------------!//
+  ///<End and base transformations.
   MathsUtils::makeTranslation(
     linkChains[toUType(LinkChains::lLeg)]->startT,
     (Scalar) 0.0,
@@ -765,7 +765,7 @@ void KinematicsModule<Scalar>::setupLegChains()
   tEndLLegInv = t1;
   tEndLLegInv = MathsUtils::getTInverse(tEndLLegInv);
 
-  //!Masses
+  ///<Masses
   links[toUType(Joints::lHipYawPitch)]->mass = rHipYawPitchMass;
   links[toUType(Links::lHipRoll)]->mass = rHipRollMass;
   links[toUType(Links::lHipPitch)]->mass = rHipPitchMass;
@@ -773,7 +773,7 @@ void KinematicsModule<Scalar>::setupLegChains()
   links[toUType(Links::lAnklePitch)]->mass = rAnklePitchMass;
   links[toUType(Links::lAnkleRoll)]->mass = rAnkleRollMass;
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(
     t1,
     (Scalar) -(3 * M_PI) / 4,
@@ -785,47 +785,47 @@ void KinematicsModule<Scalar>::setupLegChains()
     rHipYawPitchZ,
     1.0f);
 
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   t1 = MathsUtils::getTInverse(t1);
 
   links[toUType(Joints::lHipYawPitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
   links[toUType(Joints::lHipYawPitch)]->com = t1 * links[toUType(Joints::lHipYawPitch)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Joints::lHipYawPitch)]->inertia =
     links[toUType(Joints::lHipYawPitch)]->inertiaTrans *
     links[toUType(Joints::lHipYawPitch)]->inertia *
     links[toUType(Joints::lHipYawPitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::lHipRoll)]->com = Matrix<Scalar, 4, 1>(rHipRollX, -rHipRollY, rHipRollZ, 1.0f);
 
   links[toUType(Links::lHipRoll)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::lHipRoll)]->com = t1 * links[toUType(Links::lHipRoll)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::lHipRoll)]->inertia =
     links[toUType(Links::lHipRoll)]->inertiaTrans *
     links[toUType(Links::lHipRoll)]->inertia *
     links[toUType(Links::lHipRoll)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI_2, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::lHipPitch)]->com = Matrix<Scalar, 4, 1>(rHipPitchX, -rHipPitchY, rHipPitchZ, 1.0f);
 
   links[toUType(Links::lHipPitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::lHipPitch)]->com = t1 * links[toUType(Links::lHipPitch)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::lHipPitch)]->inertia =
     links[toUType(Links::lHipPitch)]->inertiaTrans *
     links[toUType(Links::lHipPitch)]->inertia *
     links[toUType(Links::lHipPitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI_2, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::lKneePitch)]->com = Matrix<Scalar, 4, 1>(
     rKneePitchX,
@@ -834,16 +834,16 @@ void KinematicsModule<Scalar>::setupLegChains()
     1.0f);
 
   links[toUType(Links::lKneePitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::lKneePitch)]->com = t1 * links[toUType(Links::lKneePitch)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::lKneePitch)]->inertia =
     links[toUType(Links::lKneePitch)]->inertiaTrans *
     links[toUType(Links::lKneePitch)]->inertia *
     links[toUType(Links::lKneePitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   MathsUtils::makeRotationXYZ(t1, (Scalar) M_PI_2, (Scalar) M_PI_2, (Scalar) 0.0);
   links[toUType(Links::lAnklePitch)]->com = Matrix<Scalar, 4, 1>(
     rAnklePitchX,
@@ -852,16 +852,16 @@ void KinematicsModule<Scalar>::setupLegChains()
     1.0f);
 
   links[toUType(Links::lAnklePitch)]->inertiaTrans = t1.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::lAnklePitch)]->com = t1 * links[toUType(Links::lAnklePitch)]->com;
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::lAnklePitch)]->inertia =
     links[toUType(Links::lAnklePitch)]->inertiaTrans *
     links[toUType(Links::lAnklePitch)]->inertia *
     links[toUType(Links::lAnklePitch)]->inertiaTrans.transpose();
 
-  //!Center of mass vectors.
+  ///<Center of mass vectors.
   links[toUType(Links::lAnkleRoll)]->com = Matrix<Scalar, 4, 1>(
     rAnkleRollX,
     -rAnkleRollY,
@@ -869,17 +869,17 @@ void KinematicsModule<Scalar>::setupLegChains()
     1.0f);
 
   links[toUType(Links::lAnkleRoll)]->inertiaTrans = linkChains[toUType(LinkChains::lLeg)]->endT.block(0, 0, 3, 3);
-  //!Fixing the coordinate system of center of mass.
+  ///<Fixing the coordinate system of center of mass.
   links[toUType(Links::lAnkleRoll)]->com = linkChains[toUType(LinkChains::lLeg)]->endT * links[toUType(Links::lAnkleRoll)]->com;
 
 
-  //!Fixing the Inertia tensor rotation.
+  ///<Fixing the Inertia tensor rotation.
   links[toUType(Links::lAnkleRoll)]->inertia =
     links[toUType(Links::lAnkleRoll)]->inertiaTrans *
     links[toUType(Links::lAnkleRoll)]->inertia *
     links[toUType(Links::lAnkleRoll)]->inertiaTrans.transpose();
 
-  //!------------------Left Leg End-------------------!//
+  ///<------------------Left Leg End-------------------!//
 }
 
 template <typename Scalar>
@@ -1349,7 +1349,7 @@ KinematicsModule<Scalar>::computeLimbJ(
   jacobian.resize(6, size);
   jacobian << jacobianV, jacobianW;
   if (relGlobalBase) {
-    //! Get body center frame rotation in support foot frame
+    ///< Get body center frame rotation in support foot frame
     jacobian = globalToBodyRotX[toUType(type)] * jacobian;
     linkChains[toUType(chainIndex)]->jacobianInfo[toUType(type)]->setJacobian(jacobian, eeIndex);
   }
@@ -1391,7 +1391,7 @@ KinematicsModule<Scalar>::computeLimbJ(
   jacobian.resize(6, size);
   jacobian << jacobianV, jacobianW;
   if (relGlobalBase) {
-    //! Get body center frame rotation in support foot frame
+    ///< Get body center frame rotation in support foot frame
     jacobian = globalToBodyRotX[toUType(type)] * jacobian;
   }
   return jacobian;
@@ -1403,12 +1403,12 @@ KinematicsModule<Scalar>::computeComJacobian(const JointStateType& type)
 {
   Matrix<Scalar, 3, Dynamic> jacobian;//, jv, jw;
   jacobian.resize(3, toUType(Joints::count));
-  //! Get the center of mass jacobian in body center frame
+  ///< Get the center of mass jacobian in body center frame
   for (size_t i = 0; i < toUType(LinkChains::count); ++i) { // FIXME LATER CHANGING i=0 to i=3 for testing computation speed
     jacobian.block(0, linkChains[i]->start, 3, linkChains[i]->size) =
       computeLimbComJ(static_cast<LinkChains>(i), type);
   }
-  //! Convert the center of mass jacobian in global base frame
+  ///< Convert the center of mass jacobian in global base frame
   jacobian = globalToBody[unsigned(type)].block(0, 0, 3, 3) * jacobian;
 
   Matrix<Scalar, 6, Dynamic> baseJ = computeGlobalBaseJ(type);
@@ -1674,36 +1674,36 @@ KinematicsModule<Scalar>::computeVirtualMass(
   const Matrix<Scalar, 4, 4>& endEffector, Scalar& virtualMass, const JointStateType& type)
 {
   //Matrix<Scalar, Dynamic, 1> joints = getJointPositions(chainStart, size, type);
-  ////! center of mass of final link
+  /////< center of mass of final link
   //Matrix<Scalar, Dynamic, Dynamic> T = MathsUtils::getTInverse(linkChains[chainIndex]->endT);
   //Matrix<Scalar, 4, 1> lastCom = T * linkComs[chainStart + size - 1];
   //cout << "lastCom: " << lastCom << endl;
 
-  //! Inertia matrix (size x size) at given joint configuration
+  ///< Inertia matrix (size x size) at given joint configuration
   Matrix<Scalar, Dynamic, Dynamic> massMatrix = computeMassMatrix(chainIndex, type);
   //cout << "Mass matrix: " << endl << massMatrix << endl;
 
   //Matrix<Scalar, Dynamic, Dynamic> jacobian = computeLimbJ(chainIndex, lastCom, type);
-  //! Jacobian matrix (6 x size) at given joint configuration
+  ///< Jacobian matrix (6 x size) at given joint configuration
 
   Matrix<Scalar, Dynamic, Dynamic> jacobianEE = computeLimbJ(chainIndex, endEffector, type, false);
 
-  //! Inertia matrix inverse (size x size) at given joint configuration
+  ///< Inertia matrix inverse (size x size) at given joint configuration
   Matrix<Scalar, Dynamic, Dynamic> mmInv = massMatrix.inverse();
 
-  //! Inertial projection in cartesian space (6x6)
-  //! (G = 6x6 Symmetric) [G11, G12;G21, G22]
+  ///< Inertial projection in cartesian space (6x6)
+  ///< (G = 6x6 Symmetric) [G11, G12;G21, G22]
   //Matrix<Scalar, Dynamic, Dynamic> gMatrix = jacobian * mmInv * jacobian.transpose();
   //cout << " gMatrix: " << endl <<  gMatrix << endl;
   Matrix<Scalar, Dynamic, Dynamic> gMatrixEE = jacobianEE * mmInv * jacobianEE.transpose();
 
-  //! Position vector from center of mass to end effector
+  ///< Position vector from center of mass to end effector
   //Matrix<Scalar, 3, 1> pos =
   //  endEffector.block(0, 3, 3, 1) - lastCom.block(0, 0, 3, 1);
   //Matrix<Scalar, 3, 3> skewPosT = MathsUtils::makeSkewMat(pos);
   //Matrix<Scalar, 3, 3> skewPos = skewPosT.transpose();
-  //! Conversion of cartesian space inertia matrix from center of mass
-  //! to the contact point using skewPos
+  ///< Conversion of cartesian space inertia matrix from center of mass
+  ///< to the contact point using skewPos
   //Matrix<Scalar, 3, 3> g11 = gMatrix.block(0, 0, 3, 3);
   //Matrix<Scalar, 3, 3> g12 = gMatrix.block(0, 3, 3, 3);
   //Matrix<Scalar, 3, 3> g22 = gMatrix.block(3, 3, 3, 3);
@@ -1713,7 +1713,7 @@ KinematicsModule<Scalar>::computeVirtualMass(
   //cout << "G12: " << endl << g12 + skewPos *g22 << endl;
   //cout << "G22: " << endl << g22 << endl;
   Matrix<Scalar, Dynamic, Dynamic> g11 = gMatrixEE.block(0, 0, 3, 3);
-  //! Virtual Mass in the target direction
+  ///< Virtual Mass in the target direction
   //virtualMass = direction.transpose() * transfMassMatrix * direction;
   virtualMass = direction.transpose() * g11 * direction;
   if (virtualMass != 0) {
@@ -1732,7 +1732,7 @@ KinematicsModule<Scalar>::newtonEulerForces(
   //cout << "Solving newton euler equation : " << endl;
   unsigned chainSize = linkChains[toUType(chainIndex)]->size;
   unsigned chainStart = linkChains[toUType(chainIndex)]->start;
-  //!Forward Recursion
+  ///<Forward Recursion
   Matrix<Scalar, 3, 1> zAxis(0, 0, 1);
   Matrix<Scalar, 3, 1> linAcc(0, 0, -Constants::gravity);
   Matrix<Scalar, 3, 1> angVel(0, 0, 0);
@@ -1741,8 +1741,8 @@ KinematicsModule<Scalar>::newtonEulerForces(
   vector<Matrix<Scalar, 3, 1> > comForces(chainSize);
   vector<Matrix<Scalar, 3, 1> > comMoments(chainSize);
 
-  //! Rotating torso forces and moments to inertial frame situated at
-  //! the base support leg
+  ///< Rotating torso forces and moments to inertial frame situated at
+  ///< the base support leg
   Matrix<Scalar, 4, 4> supportT = getForwardEffector(supportLeg, toUType(LegEEs::footBase), type);
   linAcc = MathsUtils::transformVector(supportT, linAcc);
 
@@ -1778,7 +1778,7 @@ KinematicsModule<Scalar>::newtonEulerForces(
     cout<< endl;*/
   }
 
-  //!Backward Recursion
+  ///<Backward Recursion
   Matrix<Scalar, Dynamic, 1> jointTorques;
   jointTorques.resize(chainSize);
   Matrix<Scalar, 3, 1> f(0, 0, 0);
@@ -1810,7 +1810,7 @@ KinematicsModule<Scalar>::newtonEulerForces(
   cout << "moments" << n(1,0) << endl;
   cout << "moments" << n(2,0) << endl;*/
 
-  //! Relocating moments to torso origin frame
+  ///< Relocating moments to torso origin frame
   n = n + Matrix<Scalar, 3, 1>(linkChains[toUType(chainIndex)]->startT.block(0, 3, 3, 1)).cross(f);
   // f remains the same
 
@@ -1840,7 +1840,7 @@ SymEngine::DenseMatrix KinematicsModule<Scalar>::newtonEulerForcesSym(
 
   unsigned chainSize = linkChains[toUType(chainIndex)]->size;
   unsigned chainStart = linkChains[toUType(chainIndex)]->start;
-  //!Forward Recursion
+  ///<Forward Recursion
   DenseMatrix zAxis = DenseMatrix(3, 1, {number(0), number(0), number(1)});
   DenseMatrix linAcc = DenseMatrix(3, 1, {number(0), number(0), number(-Constants::gravity)});
   DenseMatrix angVel = DenseMatrix(3, 1, {number(0), number(0), number(0)});
@@ -1848,8 +1848,8 @@ SymEngine::DenseMatrix KinematicsModule<Scalar>::newtonEulerForcesSym(
   DenseMatrix linAccCom = DenseMatrix(3, 1, {number(0), number(0), number(0)});
   vector<DenseMatrix> comForces(chainSize);
   vector<DenseMatrix> comMoments(chainSize);
-  //! Rotating torso forces and moments to inertial frame situated at
-  //! the base support leg
+  ///< Rotating torso forces and moments to inertial frame situated at
+  ///< the base support leg
   DenseMatrix supportT = eigenToSym(getForwardEffector(supportLeg, toUType(LegEEs::footBase)));
   linAcc = transformVector(supportT, linAcc);
 
@@ -1909,7 +1909,7 @@ SymEngine::DenseMatrix KinematicsModule<Scalar>::newtonEulerForcesSym(
     //cout << "comMoments[i]\n" << comMoments[i] << endl;
   }
 
-  //!Backward Recursion
+  ///<Backward Recursion
   DenseMatrix jointTorques = DenseMatrix(chainSize, 1);
   DenseMatrix f = DenseMatrix(3, 1, {number(0), number(0), number(0)});
   DenseMatrix n = DenseMatrix(3, 1, {number(0), number(0), number(0)});
@@ -1949,7 +1949,7 @@ SymEngine::DenseMatrix KinematicsModule<Scalar>::newtonEulerForcesSym(
   initRot.mul_matrix(f, f);
   initRot.mul_matrix(n, n);
   //jointTorques[0] = n.transpose() * zAxis;
-  //! Relocating moments to torso origin frame
+  ///< Relocating moments to torso origin frame
   DenseMatrix initTrans = eigenToSym(Matrix<Scalar, 3, 1>(linkChains[toUType(chainIndex)]->startT.block(0, 3, 3, 1)));
   DenseMatrix temp1 = DenseMatrix(3, 1);
   SymEngine::cross(initTrans, f, temp1);
@@ -1991,8 +1991,8 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeZmpWrtForces(
 {
   //cout << "torsoForces:" << torsoForces << endl;
   //cout << "torsoMoments:" << torsoMoments << endl;
-  //! Rotating torso forces and moments to inertial frame situated at
-  //! the base support leg
+  ///< Rotating torso forces and moments to inertial frame situated at
+  ///< the base support leg
   Matrix<Scalar, 4, 4> supportT;
   supportT =
     MathsUtils::getTInverse(
@@ -2003,14 +2003,14 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeZmpWrtForces(
   torsoForces = supportR * torsoForces;
   torsoMoments = supportR * torsoMoments;
 
-  //! Torso weight and vector
+  ///< Torso weight and vector
   Matrix<Scalar, 3, 1> torsoCog, batteryCog;
   torsoCog = (supportT * links[toUType(Links::torso)]->com).block(0, 0, 3, 1); // Torso center of mass
   //batteryCog = (supportT * Matrix<Scalar, 4, 1>(batteryX, batteryY, batteryZ, 1.f)).block(0, 0, 3, 1); // Battery center of mass
   Matrix<Scalar, 3, 1> torsoWeight(0.f, 0.f, links[toUType(Links::torso)]->mass * -Constants::gravity);
   //auto batteryWeight = Matrix<Scalar, 3, 1>(0.f, 0.f, batteryMass * -Constants::gravity);
 
-  //! Resulatant moments and forces at the base frame
+  ///< Resulatant moments and forces at the base frame
   torsoMoments =
     torsoMoments +
     Matrix<Scalar, 3, 1>(supportT.block(0, 3, 3, 1)).cross(torsoForces) +
@@ -2054,8 +2054,8 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeZmpWrtChain(
   torsoForces += chainForces;
   torsoMoments += chainMoments;
   torques.block(chainStart, 0, chainSize, 1) = torque;
-  //! Rotating torso forces and moments to inertial frame situated at
-  //! the base support leg
+  ///< Rotating torso forces and moments to inertial frame situated at
+  ///< the base support leg
   Matrix<Scalar, 4, 4> supportT;
   supportT =
     MathsUtils::getTInverse(
@@ -2066,14 +2066,14 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeZmpWrtChain(
   torsoForces = supportR * torsoForces;
   torsoMoments = supportR * torsoMoments;
 
-  //! Torso weight and vector
+  ///< Torso weight and vector
   Matrix<Scalar, 3, 1> torsoCog, batteryCog;
   torsoCog = (supportT * links[toUType(Links::torso)]->com).block(0, 0, 3, 1); // Torso center of mass
   //batteryCog = (supportT * Matrix<Scalar, 4, 1>(batteryX, batteryY, batteryZ, 1.f)).block(0, 0, 3, 1); // Battery center of mass
   Matrix<Scalar, 3, 1> torsoWeight(0.f, 0.f, links[toUType(Links::torso)]->mass * -Constants::gravity);
   //auto batteryWeight = Matrix<Scalar, 3, 1>(0.f, 0.f, batteryMass * -Constants::gravity);
 
-  //! Resulatant moments and forces at the base frame
+  ///< Resulatant moments and forces at the base frame
   torsoMoments =
     torsoMoments +
     Matrix<Scalar, 3, 1>(supportT.block(0, 3, 3, 1)).cross(torsoForces) +
@@ -2129,8 +2129,8 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeZmp(
   }
   //cout << "torsoForces:" << torsoForces << endl;
   //cout << "torsoMoments:" << torsoMoments << endl;
-  //! Rotating torso forces and moments to inertial frame situated at
-  //! the base support leg
+  ///< Rotating torso forces and moments to inertial frame situated at
+  ///< the base support leg
   Matrix<Scalar, 4, 4> supportT;
   supportT =
     MathsUtils::getTInverse(
@@ -2141,14 +2141,14 @@ Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeZmp(
   torsoForces = supportR * torsoForces;
   torsoMoments = supportR * torsoMoments;
 
-  //! Torso weight and vector
+  ///< Torso weight and vector
   Matrix<Scalar, 3, 1> torsoCog, batteryCog;
   torsoCog = (supportT * links[toUType(Links::torso)]->com).block(0, 0, 3, 1); // Torso center of mass
   //batteryCog = (supportT * Matrix<Scalar, 4, 1>(batteryX, batteryY, batteryZ, 1.f)).block(0, 0, 3, 1); // Battery center of mass
   Matrix<Scalar, 3, 1> torsoWeight(0.f, 0.f, links[toUType(Links::torso)]->mass * -Constants::gravity);
   //auto batteryWeight = Matrix<Scalar, 3, 1>(0.f, 0.f, batteryMass * -Constants::gravity);
 
-  //! Resulatant moments and forces at the base frame
+  ///< Resulatant moments and forces at the base frame
   torsoMoments =
     torsoMoments +
     Matrix<Scalar, 3, 1>(supportT.block(0, 3, 3, 1)).cross(torsoForces) +
@@ -2184,7 +2184,7 @@ Matrix<Scalar, 3, 1> KinematicsModule<Scalar>::calculateCenterOfMass(
 //  cout << "Calculating center of mass ..." << endl;
   for (size_t i = 0; i < toUType(Joints::count); ++i)
   {
-    //! Get center of mass position in base frame
+    ///< Get center of mass position in base frame
     com += joints[i]->states[toUType(type)]->comInBase * joints[i]->link->mass;
     //cout << "JointCominBase: " << joints[i]->states[toUType(type)]->comInBase << endl;
     //cout << "JointMass: << joints[i]->link->mass: " << endl;
@@ -2298,7 +2298,7 @@ Matrix<Scalar, 4, 4> KinematicsModule<Scalar>::getFeetCenterT()
   if (footOnGround == RobotFeet::rFoot) {
     MathsUtils::makeTranslation(ee, 0.0, 0.05, 0.0);
     T = L_FOOT_TRANS_OUT(MotionModule) * ee;
-  } else { //! If left or unknown
+  } else { ///< If left or unknown
     MathsUtils::makeTranslation(ee, 0.0, -0.05, 0.0);
     T = R_FOOT_TRANS_OUT(MotionModule) * ee;
   }
@@ -2743,29 +2743,29 @@ KinematicsModule<Scalar>::inverseLeftLeg(
   Matrix<Scalar, 4, 4> t = targetT;
   Matrix<Scalar, 4, 4> tInit = t;
 
-  //!Move the start point to the hipyawpitch point
+  ///<Move the start point to the hipyawpitch point
   Matrix<Scalar, 4, 4> base = tBaseLLegInv;
   base *= t;
 
-  //!Move the end point to the anklePitch joint
+  ///<Move the end point to the anklePitch joint
   base *= tEndLLegInv;
 
-  //!Rotate hipyawpitch joint
+  ///<Rotate hipyawpitch joint
   Matrix<Scalar, 4, 4> rot = rotFixLLeg;
   rot *= base;
 
-  //!Invert the table, because we need the
-  //!chain from the ankle to the hip
+  ///<Invert the table, because we need the
+  ///<chain from the ankle to the hip
   Matrix<Scalar, 4, 4> tStart = rot;
   rot = MathsUtils::getTInverse(rot);
   t = rot;
 
-  //!Build the rotation table
+  ///<Build the rotation table
   Scalar side1 = thighLength;
   Scalar side2 = tibiaLength;
   Scalar distanceSqrd = pow(t.block(0, 3, 3, 1).norm(), 2);
 
-  //!Calculate Theta 4
+  ///<Calculate Theta 4
   Scalar theta4 = M_PI - MathsUtils::safeAcos(
     (pow(side1, 2) + pow(side2, 2) - distanceSqrd) / (2 * side1 * side2));
   if (theta4 != theta4) {
@@ -2864,7 +2864,7 @@ KinematicsModule<Scalar>::inverseLeftLeg(
             else if (p == 0) theta1 = temptheta1 + M_PI_2;
             else if (p == 1) theta1 = -temptheta1 + M_PI_2;
 
-            //!Forward VALID step
+            ///<Forward VALID step
             JOINT_STATE(Joints::lHipYawPitch, type)->setPosition(theta1);
             JOINT_STATE(Joints::lHipRoll, type)->setPosition(theta2);
             JOINT_STATE(Joints::lHipPitch, type)->setPosition(theta3);
@@ -3242,7 +3242,7 @@ void KinematicsModule<Scalar>::setGlobalBase(
 {
   if (globalBase != this->globalBase) {
     LOG_INFO("Setting new global base...");
-    //! Get the transformation from new globalBase to previous globalBase
+    ///< Get the transformation from new globalBase to previous globalBase
     Matrix<Scalar, 4, 4> trans =
       MathsUtils::getTInverse(
         (Matrix<Scalar, 4, 4>)(getGlobalToBody() *

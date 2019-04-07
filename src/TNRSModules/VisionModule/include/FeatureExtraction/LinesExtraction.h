@@ -11,13 +11,18 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include "TNRSBase/include/DebugBase.h"
 #include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
+
+using namespace cv;
 
 class FieldExtraction;
 class GoalExtraction;
 class RegionSegmentation;
 class RobotExtraction;
 class FittedLine;
+class ScannedEdge;
+typedef boost::shared_ptr<ScannedEdge> ScannedEdgePtr;
 typedef boost::shared_ptr<FittedLine> FittedLinePtr;
 struct Circle;
 
@@ -28,27 +33,27 @@ struct Circle;
 class LinesExtraction : public FeatureExtraction, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to send total module time.
+    ///< Option to send total module time.
     (int, sendTime, 0),
-    //! Option to draw scanned edges
+    ///< Option to draw scanned edges
     (int, drawScannedEdges, 0),
-    //! Option to draw field border lines
+    ///< Option to draw field border lines
     (int, drawBorderLines, 0),
-    //! Option to draw world lines
+    ///< Option to draw world lines
     (int, drawWorldLines, 0),
-    //! Option to draw filtered world lines
+    ///< Option to draw filtered world lines
     (int, drawFiltWorldLines, 0),
-    //! Option to draw middle circle if found
+    ///< Option to draw middle circle if found
     (int, drawCircle, 0),
-    //! Option to draw middle circle if found
+    ///< Option to draw middle circle if found
     (int, drawUnknownLandmarks, 0),
-    //! Option to draw L,T corners
+    ///< Option to draw L,T corners
     (int, drawCorners, 0),
-    //! Option to display info about extraction
+    ///< Option to display info about extraction
     (int, displayInfo, 0),
-    //! Option to display image output
+    ///< Option to display image output
     (int, displayOutput, 0),
-  )
+  );
 public:
   /**
    * Constructor
@@ -174,22 +179,22 @@ private:
    */
   Point2f worldToImage(const Point2f& point);
 
-  //! World lines output image
+  ///< World lines output image
   Mat worldImage;
 
-  //! Field Extraction module object
+  ///< Field Extraction module object
   boost::shared_ptr<FieldExtraction> fieldExt;
 
-  //! Robot Extraction module object
+  ///< Robot Extraction module object
   boost::shared_ptr<RobotExtraction> robotExt;
 
-  //! Lines Extraction module object
+  ///< Lines Extraction module object
   boost::shared_ptr<RegionSegmentation> regionSeg;
 
-  //! FittedLine iterator
+  ///< FittedLine iterator
   typedef vector<FittedLinePtr>::iterator FlIter;
 
-  //! Processing times
+  ///< Processing times
   float edgeScanTime;
   float fitLinesTime;
   float filterLinesTime;
@@ -198,7 +203,7 @@ private:
   float addLandmarksTime;
   float processTime;
 
-  //! Scanning step sizes
+  ///< Scanning step sizes
   int scanStepHighUpperCam;
   int scanStepHighLowerCam;
   int scanStepLowUpperCam;

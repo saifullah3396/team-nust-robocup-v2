@@ -70,7 +70,7 @@ private:
    */ 
   void setStartPosture();
   
-  //! Posture to reach on startup before requesting the desired behavior
+  ///< Posture to reach on startup before requesting the desired behavior
   PostureState startPosture;
 
 protected:

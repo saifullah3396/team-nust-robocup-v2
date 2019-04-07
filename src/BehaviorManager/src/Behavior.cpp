@@ -37,9 +37,9 @@ void Behavior::manage()
 {
   if (!initiated) {
     auto startTime = high_resolution_clock::now();
-    //! Setup a data logger if it is needed and not already initialized
+    ///< Setup a data logger if it is needed and not already initialized
     if (config->logData && !dataLogger) {
-      //! Setup log dirs
+      ///< Setup log dirs
       if (setupLogsDir())
         dataLogger = makeLogger();
       else {
@@ -52,7 +52,7 @@ void Behavior::manage()
       static_cast<duration<float>>(
         high_resolution_clock::now() - startTime).count();
     runTime = 0.0;
-    //! Warning: initiated is not the same as inBehavior
+    ///< Warning: initiated is not the same as inBehavior
     initiated = true;
   } else {
     if (!paused) {
@@ -84,7 +84,7 @@ void Behavior::onMaxTimeReached()
 
 void Behavior::kill()
 {
-  //! Kill all the behaviors recursively from child to parent
+  ///< Kill all the behaviors recursively from child to parent
   if (child)
     child->kill();
   finish();
@@ -98,7 +98,7 @@ void Behavior::killChild()
 
 void Behavior::pause()
 {
-  //! Pause all the behaviors recursively from child to parent
+  ///< Pause all the behaviors recursively from child to parent
   if (child)
     child->pause();
   paused = true;
@@ -112,7 +112,7 @@ void Behavior::pauseChild()
 
 void Behavior::unpause()
 {
-  //! Pause all the behaviors recursively from child to parent
+  ///< Pause all the behaviors recursively from child to parent
   if (child)
     child->unpause();
   paused = false;

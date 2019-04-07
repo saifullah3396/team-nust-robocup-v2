@@ -20,7 +20,7 @@
 #include "MotionModule/include/MTypeHeader.h"
 #include "TNRSBase/include/BaseIncludes.h"
 
-//! Forward declarations
+///< Forward declarations
 class SensorLayer;
 typedef boost::shared_ptr<SensorLayer> SensorLayerPtr;
 class ActuatorLayer;
@@ -57,7 +57,7 @@ class MotionModule : public BaseModule
     goalInfo,
     robotPose2D,
     landmarksFound
-  )
+  );
   DECLARE_OUTPUT_CONNECTOR(
     jointPositionSensors,
     handSensors,
@@ -75,7 +75,7 @@ class MotionModule : public BaseModule
     mBehaviorInfo,
     footOnGround,
     currentStepLeg
-  )
+  );
 public:
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   #ifndef V6_CROSS_BUILD
@@ -217,37 +217,37 @@ private:
    */
   void actuatorsUpdate();
 
-  //! Motion behaviors manager shared object
+  ///< Motion behaviors manager shared object
   map<unsigned, MBManagerPtr> mbManagers;
 
-  //! Fall detector module object
+  ///< Fall detector module object
   FallDetectorPtr fallDetector;
 
-  //! Kinematics module object
+  ///< Kinematics module object
   KinematicsModulePtr kinematicsModule;
 
-  //! Motion generator module object
+  ///< Motion generator module object
   MotionGeneratorPtr motionGenerator;
 
-  //! Trajectory planner module object
+  ///< Trajectory planner module object
   TrajectoryPlannerPtr trajectoryPlanner;
 
-  //! Vector of pointer to SensorLayer objects
+  ///< Vector of pointer to SensorLayer objects
   vector<SensorLayerPtr> sensorLayers;
 
-  //! Vector of pointer to ActuatorLayer objects
+  ///< Vector of pointer to ActuatorLayer objects
   vector<ActuatorLayerPtr> actuatorLayers;
 
   #ifndef V6_CROSS_BUILD
-    //! Pointer to NaoQi internal memory proxy
+    ///< Pointer to NaoQi internal memory proxy
     ALMemoryProxyPtr memoryProxy;
 
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-      //! Pointer to NaoQi internal motion class
+      ///< Pointer to NaoQi internal motion class
       ALMotionProxyPtr motionProxy;
     #endif
 
-    //! Pointer to NaoQi internal dcm proxy
+    ///< Pointer to NaoQi internal dcm proxy
     ALDCMProxyPtr dcmProxy;
   #else
     qi::AnyObject memoryProxy;

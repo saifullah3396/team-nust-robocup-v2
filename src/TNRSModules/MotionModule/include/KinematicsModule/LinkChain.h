@@ -92,34 +92,34 @@ struct LinkChain
     }
   }
 
-  //! Index of this chain
+  ///< Index of this chain
   LinkChains index;
 
-  //! LinkChain start index
+  ///< LinkChain start index
   unsigned start;
 
-  //! LinkChain size
+  ///< LinkChain size
   unsigned size;
 
-  //! LinkChain size
+  ///< LinkChain size
   unsigned end;
 
-  //! Total mass of the chain
+  ///< Total mass of the chain
   Scalar mass;
 
-  //! Total masses of all the chains
+  ///< Total masses of all the chains
   static Scalar totalChainsMass;
 
-  //! LinkChain start transformation matrix
+  ///< LinkChain start transformation matrix
   Matrix<Scalar, 4, 4> startT;
 
-  //! LinkChain end transformation matrix
+  ///< LinkChain end transformation matrix
   Matrix<Scalar, 4, 4> endT;
 
-  //! LinkChain end effector definitions
+  ///< LinkChain end effector definitions
   vector<Matrix<Scalar, 4, 4> > endEffectors;
 
-  //! Vector of structs that hold information about current link jacobian
+  ///< Vector of structs that hold information about current link jacobian
   vector<boost::shared_ptr<JacobianInfo<Scalar> > > jacobianInfo;
 
 public:

@@ -40,7 +40,7 @@ DECLARE_MODULE_REQUEST(
   TNSPLModules,
   motion,
   MotionRequestIds
-)
+);
 
 struct RequestMotionBehavior : public MotionRequest, BehaviorRequest
 {
@@ -104,7 +104,7 @@ DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
   MotionRequestIds,
   killBehavior,
   (unsigned, mbManagerId, 0),
-)
+);
 
 /**
  * @class KillMotionBehaviors
@@ -116,4 +116,4 @@ DECLARE_MODULE_REQUEST_TYPE(
   MotionRequest,
   MotionRequestIds,
   killBehaviors
-)
+);

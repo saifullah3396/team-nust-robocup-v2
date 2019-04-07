@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/src/PBConfigs/PBConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/PBConfigs/PBConfig.cpp
  *
  * This file implements the struct PBConfig
  *

@@ -1,5 +1,5 @@
 /**
- * @file UserCommModule/TcpConnection.h
+ * @file UserCommModule/src/TcpConnection.cpp
  *
  * This file implements the class TcpConnection
  *
@@ -47,8 +47,8 @@
 #endif
 
 TcpConnection::TcpConnection(
-  const int& dataPort, 
-  const int& imagePort, 
+  const int& dataPort,
+  const int& imagePort,
   const int& maxPackageSendSize,
   const int& maxPackageReceiveSize)
 {

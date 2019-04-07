@@ -49,33 +49,46 @@ void MotionGenerator<Scalar>::update()
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 void MotionGenerator<Scalar>::killAllMotions() {
-  #ifndef V6_CROSS_BUILD
-    motionProxy->killAll();
-  #else
-    motionProxy.call<void>("killAll");
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      motionProxy->killAll();
+    #else
+      motionProxy.call<void>("killAll");
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
 }
 #endif
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 void MotionGenerator<Scalar>::stopMove() {
-  #ifndef V6_CROSS_BUILD
-    motionProxy->stopMove();
-  #else
-    motionProxy.call<void>("stopMove");
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      motionProxy->stopMove();
+    #else
+      motionProxy.call<void>("stopMove");
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
 }
 #endif
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 AL::ALValue MotionGenerator<Scalar>::getNaoqiTaskList() {
-  #ifndef V6_CROSS_BUILD
-    return motionProxy->getTaskList();
-  #else
-    return motionProxy.call<AL::ALValue>("getNaoqiTaskList");
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      return motionProxy->getTaskList();
+    #else
+      return motionProxy.call<AL::ALValue>("getNaoqiTaskList");
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+    return AL::ALValue();
+  }
 }
 #endif
 
@@ -87,28 +100,37 @@ AL::ALValue MotionGenerator<Scalar>::getFootsteps()
 vector<vector<float> > MotionGenerator<Scalar>::getFootsteps()
 #endif
 {
-  #ifndef V6_CROSS_BUILD
-    return motionProxy->getFootSteps();
-  #else
-    return motionProxy.call<AL::ALValue>("getFootSteps");
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      return motionProxy->getFootSteps();
+    #else
+      return motionProxy.call<AL::ALValue>("getFootSteps");
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+    return AL::ALValue();
+  }
 }
 #endif
 
 template <typename Scalar>
 void MotionGenerator<Scalar>::openHand(const RobotHands& handIndex) {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    #ifndef V6_CROSS_BUILD
-      if (handIndex == RobotHands::lHand)
-        motionProxy->post.openHand("LHand");
-      else if (handIndex == RobotHands::rHand)
-        motionProxy->post.openHand("RHand");
-    #else
-      if (handIndex == RobotHands::lHand)
-        motionProxy.async<void>("openHand", "LHand");
-      else if (handIndex == RobotHands::rHand)
-        motionProxy.async<void>("openHand", "RHand");
-    #endif
+    try {
+      #ifndef V6_CROSS_BUILD
+        if (handIndex == RobotHands::lHand)
+          motionProxy->post.openHand("LHand");
+        else if (handIndex == RobotHands::rHand)
+          motionProxy->post.openHand("RHand");
+      #else
+        if (handIndex == RobotHands::lHand)
+          motionProxy.async<void>("openHand", "LHand");
+        else if (handIndex == RobotHands::rHand)
+          motionProxy.async<void>("openHand", "RHand");
+      #endif
+    } catch (exception& e) {
+      LOG_EXCEPTION(e.what());
+    }
   #else
     auto hr = boost::shared_ptr<HandsRequest>(new HandsRequest());
     for (size_t i = 0; i < toUType(RobotHands::count); ++i) {
@@ -121,17 +143,21 @@ void MotionGenerator<Scalar>::openHand(const RobotHands& handIndex) {
 template <typename Scalar>
 void MotionGenerator<Scalar>::closeHand(const RobotHands& handIndex) {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    #ifndef V6_CROSS_BUILD
-      if (handIndex == RobotHands::lHand)
-        motionProxy->post.closeHand("LHand");
-      else if (handIndex == RobotHands::rHand)
-        motionProxy->post.closeHand("RHand");
-    #else
-      if (handIndex == RobotHands::lHand)
-        motionProxy.async<void>("closeHand", "LHand");
-      else if (handIndex == RobotHands::rHand)
-        motionProxy.async<void>("closeHand", "RHand");
-    #endif
+    try {
+      #ifndef V6_CROSS_BUILD
+        if (handIndex == RobotHands::lHand)
+          motionProxy->post.closeHand("LHand");
+        else if (handIndex == RobotHands::rHand)
+          motionProxy->post.closeHand("RHand");
+      #else
+        if (handIndex == RobotHands::lHand)
+          motionProxy.async<void>("closeHand", "LHand");
+        else if (handIndex == RobotHands::rHand)
+          motionProxy.async<void>("closeHand", "RHand");
+      #endif
+    } catch (exception& e) {
+      LOG_EXCEPTION(e.what());
+    }
 #else
   auto hr = boost::shared_ptr<HandsRequest>(new HandsRequest());
   for (size_t i = 0; i < toUType(RobotHands::count); ++i) {
@@ -155,11 +181,15 @@ void MotionGenerator<Scalar>::naoqiSetAngles(
   const float& fractionMaxSpeed)
 #endif
 {
-  #ifndef V6_CROSS_BUILD
-    motionProxy->setAngles(names, angles, fractionMaxSpeed);
-  #else
-    motionProxy.call<void>("setAngles", names, angles, fractionMaxSpeed);
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      motionProxy->setAngles(names, angles, fractionMaxSpeed);
+    #else
+      motionProxy.call<void>("setAngles", names, angles, fractionMaxSpeed);
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
 }
 #endif
 
@@ -177,22 +207,31 @@ void MotionGenerator<Scalar>::naoqiChangeAngles(
   const float& fractionMaxSpeed)
 #endif
 {
-  #ifndef V6_CROSS_BUILD
-    motionProxy->changeAngles(names, angles, fractionMaxSpeed);
-  #else
-    motionProxy.call<void>("changeAngles", names, angles, fractionMaxSpeed);
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      motionProxy->changeAngles(names, angles, fractionMaxSpeed);
+    #else
+      motionProxy.call<void>("changeAngles", names, angles, fractionMaxSpeed);
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
 }
 #endif
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 bool MotionGenerator<Scalar>::naoqiMoveIsActive() {
-  #ifndef V6_CROSS_BUILD
-    return motionProxy->moveIsActive();
-  #else
-    motionProxy.call<void>("moveIsActive");
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      return motionProxy->moveIsActive();
+    #else
+      motionProxy.call<void>("moveIsActive");
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+    return false;
+  }
 }
 #endif
 
@@ -200,11 +239,15 @@ bool MotionGenerator<Scalar>::naoqiMoveIsActive() {
 template <typename Scalar>
 void MotionGenerator<Scalar>::naoqiMoveToward(const float& vx, const float& vy, const float& vtheta)
 {
-  #ifndef V6_CROSS_BUILD
-    motionProxy->moveToward(vx, vy, vtheta);
-  #else
-    motionProxy.call<void>("moveToward", vx, vy, vtheta);
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      motionProxy->moveToward(vx, vy, vtheta);
+    #else
+      motionProxy.call<void>("moveToward", vx, vy, vtheta);
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
 }
 #endif
 
@@ -224,11 +267,15 @@ void MotionGenerator<Scalar>::naoqiSetFootsteps(
   const bool& clearExisting)
 #endif
 {
-  #ifndef V6_CROSS_BUILD
-    motionProxy->setFootSteps(footName, footSteps, timeList, clearExisting);
-  #else
-    motionProxy.call<void>("setFootSteps", footName, footSteps, timeList, clearExisting);
-  #endif
+  try {
+    #ifndef V6_CROSS_BUILD
+      motionProxy->setFootSteps(footName, footSteps, timeList, clearExisting);
+    #else
+      motionProxy.call<void>("setFootSteps", footName, footSteps, timeList, clearExisting);
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
 }
 #endif
 
@@ -292,7 +339,7 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
       #endif
     }
   } catch (exception &e) {
-    LOG_EXCEPTION(e.what())
+    LOG_EXCEPTION(e.what());
   }
 }
 
@@ -396,42 +443,47 @@ template <typename Scalar>
 Scalar MotionGenerator<Scalar>::runKeyFrameMotion(
   const vector<Matrix<Scalar, Dynamic, 1>>& targetJoints, const Matrix<Scalar, Dynamic, 1>& times)
 {
-  #ifndef V6_CROSS_BUILD_REMOVED
-  AL::ALValue jointTimes;
-  AL::ALValue jointPositions;
-  jointTimes.clear();
-  jointPositions.clear();
-  jointTimes.arraySetSize(toUType(Joints::count));
-  jointPositions.arraySetSize(toUType(Joints::count));
-  #else
-  vector<vector<Scalar>> jointTimes;
-  vector<vector<Scalar>> jointPositions;
-  jointTimes.clear();
-  jointPositions.clear();
-  jointTimes.resize(toUType(Joints::count));
-  jointPositions.resize(toUType(Joints::count));
-  #endif
-
-  Scalar time = 0;
-  vector<unsigned> jointIds;
-  for (size_t i = 0; i < toUType(Joints::count); ++i) {
-    jointIds.push_back(i);
+  try {
     #ifndef V6_CROSS_BUILD_REMOVED
-    jointPositions[i].arraySetSize(targetJoints.size());
-    jointTimes[i].arraySetSize(targetJoints.size());
+    AL::ALValue jointTimes;
+    AL::ALValue jointPositions;
+    jointTimes.clear();
+    jointPositions.clear();
+    jointTimes.arraySetSize(toUType(Joints::count));
+    jointPositions.arraySetSize(toUType(Joints::count));
     #else
-    jointPositions[i].resize(targetJoints.size());
-    jointTimes[i].resize(targetJoints.size());
+    vector<vector<Scalar>> jointTimes;
+    vector<vector<Scalar>> jointPositions;
+    jointTimes.clear();
+    jointPositions.clear();
+    jointTimes.resize(toUType(Joints::count));
+    jointPositions.resize(toUType(Joints::count));
     #endif
-    time = 0;
-    for (size_t j = 0; j < targetJoints.size(); ++j) {
-      time += times[j];
-      jointPositions[i][j] = targetJoints[j][i] * M_PI / 180.f;
-      jointTimes[i][j] = time;
+
+    Scalar time = 0;
+    vector<unsigned> jointIds;
+    for (size_t i = 0; i < toUType(Joints::count); ++i) {
+      jointIds.push_back(i);
+      #ifndef V6_CROSS_BUILD_REMOVED
+      jointPositions[i].arraySetSize(targetJoints.size());
+      jointTimes[i].arraySetSize(targetJoints.size());
+      #else
+      jointPositions[i].resize(targetJoints.size());
+      jointTimes[i].resize(targetJoints.size());
+      #endif
+      time = 0;
+      for (size_t j = 0; j < targetJoints.size(); ++j) {
+        time += times[j];
+        jointPositions[i][j] = targetJoints[j][i] * M_PI / 180.f;
+        jointTimes[i][j] = time;
+      }
     }
+    naoqiJointInterpolation(jointIds, jointTimes, jointPositions, true);
+    return time;
+  } catch (exception &e) {
+    LOG_EXCEPTION(e.what())
+    return 0.0;
   }
-  naoqiJointInterpolation(jointIds, jointTimes, jointPositions, true);
-  return time;
 }
 #endif
 

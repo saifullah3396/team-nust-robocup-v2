@@ -63,7 +63,7 @@ private:
    */
   void solveForImpact() final;
 
-  //! Best end-effector solver
+  ///< Best end-effector solver
   boost::shared_ptr<MaxMomentumEEOpt<Scalar>> maxMomentumEEOpt;
 };
 

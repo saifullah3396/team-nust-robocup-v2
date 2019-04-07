@@ -470,5 +470,5 @@ namespace MathsUtils
   template<typename Scalar>
   cv::Point_<Scalar> operator/(const cv::Point_<Scalar>& p, const Scalar value);
 #endif
-} //! MathsUtils
-#endif //! _MATHS_UTILS_H_
+} ///< MathsUtils
+#endif ///< _MATHS_UTILS_H_

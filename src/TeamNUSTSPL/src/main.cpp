@@ -1,5 +1,5 @@
 /**
- * @file TeamNUSTSPL/main.cpp
+ * @file TeamNUSTSPL/src/main.cpp
  *
  * The start point for this software architecture.
  * Either connects to the robot of given ip and port or to
@@ -169,7 +169,7 @@
       return 0;
     }
   #else
-  //! No capability of remote access in V6 robots for now
+  ///< No capability of remote access in V6 robots for now
   #endif
 #else
   #ifndef V6_CROSS_BUILD
@@ -200,7 +200,7 @@
       }
     }
   #else
-  //! New naoqi way of starting a module
+  ///< New naoqi way of starting a module
   int main(int argc, char* argv[])
   {
     qi::ApplicationSession app(argc, argv);

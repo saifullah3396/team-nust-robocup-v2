@@ -1,5 +1,5 @@
 /**
- * @file TNRSBase/src/ModuleRequests.cpp
+ * @file TNRSBase/src/ModuleRequest.cpp
  *
  * This file implements the struct ModuleRequest
  *

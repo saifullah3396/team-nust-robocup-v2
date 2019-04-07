@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/Attacker.h
+ * @file PlanningBehaviors/Robocup/Types/Attacker.h
  *
  * This file declares the class Attacker.
  *

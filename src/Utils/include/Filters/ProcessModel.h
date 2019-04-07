@@ -1,5 +1,5 @@
 /**
- * @file Utils/inlclude/Filters/ProcessModel.h
+ * @file Utils/include/Filters/ProcessModel.h
  *
  * This file defines the class ProcessModel
  *
@@ -265,34 +265,34 @@ public:
   }
 
 private:
-  //! State transition matrix
+  ///< State transition matrix
   Matrix<Scalar, StateSize, StateSize> A = {Matrix<Scalar, StateSize, StateSize>::Zero()};
 
-  //! State transition matrix transpose
+  ///< State transition matrix transpose
   Matrix<Scalar, StateSize, StateSize> At = {Matrix<Scalar, StateSize, StateSize>::Zero()};
 
-  //! Input input matrix
+  ///< Input input matrix
   Matrix<Scalar, StateSize, 1> B = {Matrix<Scalar, StateSize, 1>::Zero()};
 
-  //! System output matrix
+  ///< System output matrix
   Matrix<Scalar, OutputSize, StateSize> C = {Matrix<Scalar, OutputSize, StateSize>::Zero()};
 
-  //! State vector
+  ///< State vector
   Matrix<Scalar, StateSize, 1> state = {Matrix<Scalar, StateSize, 1>::Zero()};
 
-  //! True state vector if known
+  ///< True state vector if known
   Matrix<Scalar, StateSize, 1> trueState = {Matrix<Scalar, StateSize, 1>::Zero()};
 
-  //! Input input vector
+  ///< Input input vector
   Matrix<Scalar, 1, InputSize> input = {Matrix<Scalar, 1, InputSize>::Zero()};
 
-  //! Process noise covariance matrix
+  ///< Process noise covariance matrix
   Matrix<Scalar, StateSize, StateSize> Q = {Matrix<Scalar, StateSize, StateSize>::Zero()};
 
-  //! Observer gain
+  ///< Observer gain
   Matrix<Scalar, StateSize, 1> obsGain;
 
-  //! Whether the update has been called already
+  ///< Whether the update has been called already
   bool updated = {false};
 
   bool useObserver = {false};

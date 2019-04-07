@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/MovementModule/Types/SpeedWalk.cpp
+ * @file MotionModule/src/MovementModule/Types/SpeedWalk.cpp
  *
  * This file implements the class SpeedWalk
  *
@@ -63,25 +63,25 @@ boost::shared_ptr<SpeedWalkConfig> SpeedWalk<Scalar>::getBehaviorCast()
 template <typename Scalar>
 bool SpeedWalk<Scalar>::initiate()
 {
-  //! Set robotInMotion memory parameter
+  ///< Set robotInMotion memory parameter
   ROBOT_IN_MOTION_OUT(MotionModule) = false;
 
-  //! Set global base
+  ///< Set global base
   RobotFeet globalBase = RobotFeet::lFoot;
 
-  //! Set the global base to be the left foot
+  ///< Set the global base to be the left foot
   this->kM->setGlobalBase(globalBase, LegEEs::footCenter);
 
-  //! Set other leg as right foot
+  ///< Set other leg as right foot
   auto otherLeg = globalBase == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
 
-  //! Set normalized walk velocity between -1 and 1
+  ///< Set normalized walk velocity between -1 and 1
   getBehaviorCast()->velocityInput.clip(-1, 1);
 
-  //! Generate first balance shift step
+  ///< Generate first balance shift step
   addFirstStep();
 
-  //! Fill the preview window
+  ///< Fill the preview window
   while (!walkZmpRefGen->previewsAvailable(this->runTime)) {
     genNextStep();
   }
@@ -90,14 +90,14 @@ bool SpeedWalk<Scalar>::initiate()
   //  genNextStep();
   //drawSteps();
 
-  //! Initiate the Zmp reference generator for walk
+  ///< Initiate the Zmp reference generator for walk
   if (!walkZmpRefGen->initiate())
     return false;
 
-  //! Set current joint estimates to simulated states
+  ///< Set current joint estimates to simulated states
   this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
 
-  //! Initiate the preview controllers for x-y directions
+  ///< Initiate the preview controllers for x-y directions
   controllers.resize(2);
   for (int i = 0; i < controllers.size(); ++i) {
     controllers[i] = new ZmpPreviewController<Scalar>(this->kM->getComModel(i));
@@ -105,7 +105,7 @@ bool SpeedWalk<Scalar>::initiate()
     controllers[i]->initController();
   }
 
-  //! Set shoulder pitch roll joint limits so it does not self collide if used
+  ///< Set shoulder pitch roll joint limits so it does not self collide if used
   this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(7.0), toUType(Joints::lShoulderRoll));
   this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(12.0), toUType(Joints::lShoulderRoll));
   this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(-7.0), toUType(Joints::rShoulderRoll));
@@ -128,7 +128,7 @@ bool SpeedWalk<Scalar>::initiate()
     activeJoints[i] = true;
   tasks.resize(toUType(IkTasks::count));
 
-  //! Initiate a step task
+  ///< Initiate a step task
   Matrix<Scalar, 4, 4> target = this->kM->getGlobalToOther();
   tasks[toUType(IkTasks::step)] =
     this->kM->makeCartesianTask(
@@ -141,11 +141,11 @@ bool SpeedWalk<Scalar>::initiate()
     );
 
   if (getBehaviorCast()->keepTorsoUpright) {
-    //! Torso task to keep torso orientation to the initial orientation
-    //! This can be useful if the torso is to be kept upright
+    ///< Torso task to keep torso orientation to the initial orientation
+    ///< This can be useful if the torso is to be kept upright
     Matrix<Scalar, 4, 4> target = Matrix<Scalar, 4, 4>::Identity();
-    auto activeResidual = vector<bool>(6, false); //! X-Y-Z, Roll-Pitch-Yaw
-    //! Only use Pitch and Yaw tracking
+    auto activeResidual = vector<bool>(6, false); ///< X-Y-Z, Roll-Pitch-Yaw
+    ///< Only use Pitch and Yaw tracking
     activeResidual[3] = true;
     activeResidual[4] = true;
     tasks[toUType(IkTasks::torso)] =
@@ -160,9 +160,9 @@ bool SpeedWalk<Scalar>::initiate()
       );
   }
 
-  //! Make a center of mass task to control its desired trajectory
+  ///< Make a center of mass task to control its desired trajectory
   auto comResidual = vector<bool>(3, true);
-  //! Initiate a center of mass tracking task
+  ///< Initiate a center of mass tracking task
   /*for (size_t i = toUType(HardwareIds::lArmStart); i < toUType(HardwareIds::lArmStart) + 2; ++i)
     activeJoints[i] = true;
   for (size_t i = toUType(HardwareIds::rArmStart); i < toUType(HardwareIds::rArmStart) + 2; ++i)
@@ -180,7 +180,7 @@ bool SpeedWalk<Scalar>::initiate()
 
   Matrix<Scalar, Dynamic, 1> joints = this->kM->getJointPositions();
   if (getBehaviorCast()->minimizeJointVels) {
-    //! Initiate a task to minimize the joint velocities
+    ///< Initiate a task to minimize the joint velocities
     tasks[toUType(IkTasks::minJointVel)] =
       this->kM->makePostureTask(
         joints,
@@ -189,7 +189,7 @@ bool SpeedWalk<Scalar>::initiate()
         taskGains[toUType(IkTasks::minJointVel)]
       );
   }
-  //! Set up center of mass and zmp reference logs
+  ///< Set up center of mass and zmp reference logs
   comLog.open(
     (ConfigManager::getLogsDirPath() + string("SpeedWalk/Com.txt")).c_str(),
     std::ofstream::out | std::ofstream::trunc
@@ -217,21 +217,21 @@ void SpeedWalk<Scalar>::update()
   static Matrix<Scalar, 4, 4> totalTransform = Matrix<Scalar, 4, 4>::Identity();
   static int nSteps = 0;
   getBehaviorCast()->velocityInput.clip(-1, 1);
-  //! If the curent total number of steps are not enough
-  //! to fill the previewable zmp references add another step
-  //! relative to the latest step available in queue
+  ///< If the curent total number of steps are not enough
+  ///< to fill the previewable zmp references add another step
+  ///< relative to the latest step available in queue
   while (!walkZmpRefGen->previewsAvailable(this->runTime)) {
     genNextStep();
   }
 
-  //! Move the zmp references one step forward
+  ///< Move the zmp references one step forward
   walkZmpRefGen->update(this->runTime);
 
   for (const auto& fs : stepsQueue) {
     if (fabsf(this->runTime - fs->timeAtFinish) <= 1e-3) {
       //LOG_INFO("fs->timeAtFinish: " << fs->timeAtFinish);
-      //! Last step is finished so change base support reference frame to
-      //! The last step foot which is at stepsQueue.front()
+      ///< Last step is finished so change base support reference frame to
+      ///< The last step foot which is at stepsQueue.front()
       totalTransform = totalTransform * stepsQueue.front()->trans;
       auto newBase = stepsQueue.front()->foot;
       auto other = newBase == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
@@ -250,7 +250,7 @@ void SpeedWalk<Scalar>::update()
           this->kM->getLinkChain(static_cast<LinkChains>(newBase))->endEffectors[toUType(LegEEs::footCenter)]);
       }
 
-      //! Retransform the zmp references to the new support foot frame
+      ///< Retransform the zmp references to the new support foot frame
       walkZmpRefGen->retransform(this->runTime);
       nSteps++;
 
@@ -280,11 +280,11 @@ void SpeedWalk<Scalar>::update()
       controllers[0]->setTrueState(xState);
       controllers[1]->setTrueState(yState);
 
-      //! Remove the last step from steps sequence
+      ///< Remove the last step from steps sequence
       popStep();
 
-      //! Create the trajectory for the next step relative to new support
-      //! foot frame
+      ///< Create the trajectory for the next step relative to new support
+      ///< foot frame
       this->genStepTrajectory();
       if (nSteps >= getBehaviorCast()->maxNSteps) {
         nSteps = 0;
@@ -308,12 +308,12 @@ void SpeedWalk<Scalar>::update()
   //Matrix<Scalar, 4, 4> target = this->kM->getGlobalToOther();
   Matrix<Scalar, Dynamic, 1> targetJoints = this->kM->getJointPositions();
   if (getBehaviorCast()->minimizeJointVels) {
-    //! Initiate a task to minimize the joint velocities
+    ///< Initiate a task to minimize the joint velocities
     boost::static_pointer_cast<PostureTask<Scalar> >(tasks[toUType(IkTasks::minJointVel)])->setTargetPosture(targetJoints);
   }
 
   if (getBehaviorCast()->keepTorsoUpright) {
-    //! Initiate a task to minimize the joint velocities
+    ///< Initiate a task to minimize the joint velocities
     Matrix<Scalar, 4, 4> torsoTarget;
     if (stepsQueue.front()->foot == RobotFeet::lFoot)
       MathsUtils::makeRotationXYZ(torsoTarget, -this->kM->getJointPosition(Joints::lAnkleRoll), 0.0, 0.0);
@@ -438,7 +438,7 @@ void SpeedWalk<Scalar>::genStepTrajectory()
   bSpline->setup();
   stepTraj = bSpline->getSpline(0);
   //LOG_INFO("stepTraj: " << stepTraj)
-  //! Plotting
+  ///< Plotting
   /*GnuPlotEnv::PlotEnv<Scalar>
     plotEnv(
       "CSpaceBSplineKick", "x", "y", "z",
@@ -469,7 +469,7 @@ TNRSFootstep<Scalar> SpeedWalk<Scalar>::computeStepFromTo(
     RobotPose2D<Scalar>(
       transFromTo(0, 3),
       transFromTo(1, 3),
-      atan2(transFromTo(1, 0), transFromTo(0, 0)) //! Euler Z angle
+      atan2(transFromTo(1, 0), transFromTo(0, 0)) ///< Euler Z angle
     );
   return TNRSFootstep<Scalar>(stepPose, to.foot, transFromTo, params->totalStepTime);
 }
@@ -512,8 +512,8 @@ void SpeedWalk<Scalar>::genNextStep()
   diffTrans = MathsUtils::makeTransformation(diffRot, poseDiff.getX(), poseDiff.getY(), 0.0);
   //LOG_INFO("diffTrans: " << diffTrans);
   auto prevStep = getBackStep();
-  if (!prevStep) { //! Robot is standing
-    //! Get current foot position
+  if (!prevStep) { ///< Robot is standing
+    ///< Get current foot position
     auto foot = this->kM->getGlobalBaseIndex() == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
     Matrix<Scalar, 4 ,4> transFromTo = this->kM->getGlobalToOther() * diffTrans;
     addStep(boost::shared_ptr<TNRSFootstep<Scalar> >(new TNRSFootstep<Scalar>(
@@ -523,13 +523,13 @@ void SpeedWalk<Scalar>::genNextStep()
         transFromTo,
         prevStep->timeAtFinish + params->totalStepTime)));
   } else {
-    //! Get current foot position
+    ///< Get current foot position
     auto foot = prevStep->foot == RobotFeet::lFoot ? RobotFeet::rFoot : RobotFeet::lFoot;
     auto pose = RobotPose2D<Scalar>(
       diffTrans(0, 3), diffTrans(1, 3), atan2(diffTrans(1, 0), diffTrans(0, 0)));
-    //! Clip foot if it is going out of max range
+    ///< Clip foot if it is going out of max range
     pose.x() = VisionUtils::clip(pose.getX(), params->minStepLengthX, params->maxStepLengthX);
-    if (foot == RobotFeet::lFoot) { //! Theta max range for right foot is inverse of left foot
+    if (foot == RobotFeet::lFoot) { ///< Theta max range for right foot is inverse of left foot
       pose.theta() = VisionUtils::clip(pose.getTheta(), params->minStepRotation, params->maxStepRotation);
       pose.y() = VisionUtils::clip(pose.getY(), params->minStepLengthY, params->maxStepLengthY);
     } else {
@@ -552,7 +552,7 @@ void SpeedWalk<Scalar>::genNextStep()
 template <typename Scalar>
 void SpeedWalk<Scalar>::drawSteps()
 {
-  //! Generate first two steps
+  ///< Generate first two steps
   Mat drawing = Mat(Size(500, 500), CV_8UC3);
   cv::Scalar color;
   Matrix<Scalar, 4, 4> trans;

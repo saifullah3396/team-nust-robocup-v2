@@ -1,11 +1,11 @@
 /**
- * @file MotionModule/TrajectoryPlanner/TrajectoryPlanner.h
+ * @file MotionModule/src/TrajectoryPlanner/TrajectoryPlanner.cpp
  *
- * This file implements a class for creating smooth trajectories for the 
+ * This file implements a class for creating smooth trajectories for the
  * joints based on requried conditions.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 16 Aug 2017  
+ * @date 16 Aug 2017
  */
 
 #include "MotionModule/include/MotionModule.h"
@@ -17,18 +17,18 @@ TrajectoryPlanner<Scalar>::TrajectoryPlanner(MotionModule* motionModule) :
 {
 }
 
-template <typename Scalar> 
+template <typename Scalar>
 bool TrajectoryPlanner<Scalar>::cartesianPlanner(
   vector<vector<Scalar> >& traj,
-  const unsigned& chainIndex, 
+  const unsigned& chainIndex,
   const Matrix<Scalar, 4, 4>& endEffector,
-  const vector<Matrix<Scalar, 4, 4>>& cPoses, 
+  const vector<Matrix<Scalar, 4, 4>>& cPoses,
   const vector<Matrix<Scalar, Dynamic, 1>>& cBoundVels,
-  const bool& solveInitPose, 
+  const bool& solveInitPose,
   const bool& timeOpt)
 {
   /* unsigned nPoses = cPoses.size();
-   if (nPoses < 2) 
+   if (nPoses < 2)
    return false;
    unsigned chainSize = kM->getChainSize(chainIndex);
    unsigned chainStart = kM->getChainStart(chainIndex);
@@ -41,7 +41,7 @@ bool TrajectoryPlanner<Scalar>::cartesianPlanner(
    jointBoundVels.setZero();
    int startPose = 1;
    if (!solveInitPose) {
-   jointPos.block(0, 0, 1, chainSize) = 
+   jointPos.block(0, 0, 1, chainSize) =
    kM->getChainPositions(KinematicsModule::ACTUAL, chainIndex).transpose();
    } else {
    startPose = 0;
@@ -111,7 +111,7 @@ bool TrajectoryPlanner<Scalar>::cartesianPlanner(
    for (int i = 0; i < knots.size(); ++i)
    knots[i] = 0.2;
    cout << "jointPos:" << jointPos << endl;
-   CubicSpline cubicSpline(this, 
+   CubicSpline cubicSpline(this,
    chainSize,
    0,
    jointPos,
@@ -133,9 +133,9 @@ bool TrajectoryPlanner<Scalar>::cartesianPlanner(
 template <typename Scalar>
 void TrajectoryPlanner<Scalar>::jointsPlanner(
   vector<vector<Scalar> >& traj,
-  const unsigned& chainIndex, 
+  const unsigned& chainIndex,
   const Matrix<Scalar, Dynamic, Dynamic>& jointPositions,
-  const Matrix<Scalar, Dynamic, Dynamic>& jointBoundVels, 
+  const Matrix<Scalar, Dynamic, Dynamic>& jointBoundVels,
   const Matrix<Scalar, Dynamic, 1>& knots)
 {
   /*unsigned chainSize = kM->getChainSize(chainIndex);
@@ -179,7 +179,7 @@ void TrajectoryPlanner<Scalar>::jointsPlanner(
  }
  else {
  }
- trajStep = trajStep + stepSize;	
+ trajStep = trajStep + stepSize;
  return true;
  }
 
@@ -218,7 +218,7 @@ void TrajectoryPlanner<Scalar>::jointsPlanner(
  for(unsigned i = 0; i < trajectoryRefPoints.size() ; i++) {
  bSpline->setControlPoint(Maths::firstThree(trajectoryRefPoints[i]).cast<double> (), 3*i);
  }
- 
+
  Vector3f controlPoint1 = Maths::firstThree(trajectoryRefPoints[0]) + (trajectoryTime/4)/(3)*(Maths::firstThree(initialVelocity));
  bSpline->setControlPoint(controlPoint1.cast<double> (), 1);
  Vector3f controlPoint2 = (0.5)*(controlPoint1  + Maths::firstThree(trajectoryRefPoints[1]));
@@ -227,7 +227,7 @@ void TrajectoryPlanner<Scalar>::jointsPlanner(
  bSpline->setControlPoint(controlPoint5.cast<double> (), 5);
  Vector3f controlPoint4 = (0.5)*(controlPoint5  + Maths::firstThree(trajectoryRefPoints[1]));
  bSpline->setControlPoint(controlPoint4.cast<double> (), 4);
- 
+
  controlPointsLog.open("/home/sensei/team-nust-robocup-v3/ProcessingModule/MotionModule/KickModule/Logs/SplinePoints.txt", fstream::app|fstream::out);
  controlPointsLog << (trajectoryRefPoints[0])[0] << "    " << (trajectoryRefPoints[0])[1] << "    " << (trajectoryRefPoints[0])[2] << endl;
  controlPointsLog << controlPoint1[0] << "    " << controlPoint1[1] << "    " << controlPoint1[2]  << endl;

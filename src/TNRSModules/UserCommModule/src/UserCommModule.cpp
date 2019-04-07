@@ -1,5 +1,5 @@
 /**
- * @file UserCommModule/UserCommModule.h
+ * @file UserCommModule/src/UserCommModule.cpp
  *
  * This file implements the class UserCommModule
  *
@@ -21,11 +21,11 @@
 
 DEFINE_INPUT_CONNECTOR(UserCommModule,
   (int, userCommThreadPeriod),
-)
+);
 
 DEFINE_OUTPUT_CONNECTOR(UserCommModule,
   (int, heartBeat),
-)
+);
 
 UserCommModule::UserCommModule(void* teamNUSTSPL) :
   BaseModule(teamNUSTSPL, TNSPLModules::userComm, "UserCommModule")
@@ -35,6 +35,7 @@ UserCommModule::UserCommModule(void* teamNUSTSPL) :
     (int, dataPort, connPorts[0]),
     (int, imagePort, connPorts[1]),
   )
+  PrintUtils::startSendingOutputOverNetwork();
 }
 
 void UserCommModule::setThreadPeriod()
@@ -96,6 +97,12 @@ void UserCommModule::mainRoutine()
 {
   CommMessage cMsg(getLocalSharedMemory()->getJson(), CommMsgTypes::memory);
   addCommMessageToQueue(cMsg);
+  auto& logMessageQueue = PrintUtils::getMessagesQueue();
+  while (!logMessageQueue.isEmpty()) {
+    CommMessage cMsg(logMessageQueue.queueFront(), CommMsgTypes::logText);
+    addCommMessageToQueue(cMsg);
+    logMessageQueue.popQueue();
+  }
   for (const auto& server : servers) {
     server->update();
   }

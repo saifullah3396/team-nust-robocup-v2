@@ -38,7 +38,7 @@ struct OccupancyMap : public DataHolder
     return val;
   }
 
-  T resolution = {0}; //! Map resolution
-  cv::Point3_<T> originPose; //! Map origin x-y-theta
-  cv::Mat  data; //! Map data stored in the form of a matrix
+  T resolution = {0}; ///< Map resolution
+  cv::Point3_<T> originPose; ///< Map origin x-y-theta
+  cv::Mat  data; ///< Map data stored in the form of a matrix
 };

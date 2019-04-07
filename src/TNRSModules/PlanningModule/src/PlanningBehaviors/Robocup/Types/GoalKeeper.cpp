@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/GoalKeeper.h
+ * @file PlanningBehaviors/Robocup/Types/GoalKeeper.h
  *
  * This file declares the class GoalKeeper.
  *
@@ -110,7 +110,7 @@ void GoalKeeper::ReactGoalKeeper::onRun()
       if (GOAL_KEEPER_PTR->ballIncoming(endPosition, timeToReach)) {
         //cout << "time to reach:" << timeToReach << endl;
         //cout << "endPosition:" << endPosition << endl;
-        //! If ball will reach within 'diveReactionTime' seconds, try to dive.
+        ///< If ball will reach within 'diveReactionTime' seconds, try to dive.
         if (timeToReach <= GOAL_KEEPER_PTR->diveReactionTime) {
           GOAL_KEEPER_PTR->interceptTarget.x() = -penaltyBoxMidX;
           GOAL_KEEPER_PTR->interceptTarget.y() = endPosition[1];
@@ -118,15 +118,15 @@ void GoalKeeper::ReactGoalKeeper::onRun()
           if (GOAL_KEEPER_PTR->divePossible()) {
             nextState = GOAL_KEEPER_PTR->dive.get();
           } else {
-            //! if ball is too far for dive, move to intercept.
+            ///< if ball is too far for dive, move to intercept.
             nextState = GOAL_KEEPER_PTR->interceptBall.get();
           }
         } else {
-          //! if ball is slow and does not need fast reaction
+          ///< if ball is slow and does not need fast reaction
           nextState = GOAL_KEEPER_PTR->interceptBall.get();
         }
       } else {
-        //! if ball is not cross the goal
+        ///< if ball is not cross the goal
         GOAL_KEEPER_PTR->interceptTarget.x() = -penaltyBoxMidX;
         GOAL_KEEPER_PTR->interceptTarget.theta() = 0.f;
         static constexpr float maxYPosition = 0.5f;
@@ -138,7 +138,7 @@ void GoalKeeper::ReactGoalKeeper::onRun()
         nextState = GOAL_KEEPER_PTR->interceptBall.get();
       }
     } else {
-      //! Go to start position if ball is not found
+      ///< Go to start position if ball is not found
       nextState = GOAL_KEEPER_PTR->goToPosition.get();
     }
   }
@@ -308,11 +308,11 @@ Point_<float> GoalKeeper::findBallKickTarget()
   Point_<float> kickTarget;
   kickTarget.x = ROBOT_POSE_2D.getX();
   kickTarget.y = ROBOT_POSE_2D.getY();
-  //! Find a teammate to pass the ball
+  ///< Find a teammate to pass the ball
   for (const auto& robot : TEAM_ROBOTS) {
-    //! Find robots
+    ///< Find robots
     if (robot.positionConfidence > 60) {
-      //! Team robot is ahead of this robot. We don't want to send the ball behind
+      ///< Team robot is ahead of this robot. We don't want to send the ball behind
       if (robot.pose.getX() > kickTarget.x) {
         if (!behindObstacle(kickTarget)) {
           kickTarget.x = robot.pose.getX();
@@ -327,9 +327,9 @@ Point_<float> GoalKeeper::findBallKickTarget()
     LOG_INFO("Passing to teammate at:" << kickTarget)
     return kickTarget;
   } else {
-    //! Assign opponent goal as the target of the robot. Opponent goal is in positive X
+    ///< Assign opponent goal as the target of the robot. Opponent goal is in positive X
     kickTarget = Point_<float>(goalPostX, MathsUtils::sign(ROBOT_POSE_2D.getY()) * goalPostY / 2);
-    if (behindObstacle(kickTarget)) { //! Whether the target is behind an obstacle
+    if (behindObstacle(kickTarget)) { ///< Whether the target is behind an obstacle
       auto lTarget = kickTarget;
       auto rTarget = kickTarget;
       lTarget.y += 0.2;

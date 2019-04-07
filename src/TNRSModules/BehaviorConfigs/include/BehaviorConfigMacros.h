@@ -1,5 +1,5 @@
 /**
- * @file BehaviorManager/include/BehaviorConfigMacros.h
+ * @file TNRSModules/BehaviorConfigs/include/BehaviorConfigMacros.h
  *
  * The file defines the macros for easier behavior config generation.
  *
@@ -171,11 +171,12 @@
     } \
    \
     /** \
-     * @derived \
+     * @brief validate Validates the configuration, must throw BConfigException on \
+     * invalid configuration \
      */ \
     void validate(); \
     /** \
-     * @derived \
+     * @brief init Initiates the configuration \
      */ \
     virtual void init();\
     \
@@ -269,11 +270,12 @@
     } \
     \
     /** \
-     * @derived \
+     * @brief validate Validates the configuration, must throw BConfigException on \
+     * invalid configuration \
      */ \
     void validate(); \
     /** \
-     * @derived \
+     * @brief init Initiates the configuration \
      */ \
     virtual void init();\
     /** \

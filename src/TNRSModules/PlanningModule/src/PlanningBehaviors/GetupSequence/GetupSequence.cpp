@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/GetupSequence.h
+ * @file PlanningBehaviors/GetupSequence/GetupSequence.cpp
  *
  * This file declares the class GetupSequence.
  *

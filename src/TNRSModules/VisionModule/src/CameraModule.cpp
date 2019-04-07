@@ -1,5 +1,5 @@
 /**
- * @file CameraModule/CameraModule.cpp
+ * @file VisionModule/src/CameraModule.cpp
  *
  * This file implements the class CameraModule
  *
@@ -9,8 +9,9 @@
 
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/DataHolders/Camera.h"
-#include "Utils/include/VisionUtils.h"
+#include "Utils/include/EnumUtils.h"
 #include "Utils/include/FileUtils.h"
+#include "Utils/include/VisionUtils.h"
 #include "VisionModule/include/CameraModule.h"
 #include "VisionModule/include/VisionModule.h"
 
@@ -42,7 +43,7 @@ CameraModule::CameraModule() :
     vector<int>,
     settingParams,
     vector<int>(toUType(CameraSettings::count) + 1, -1000)
-  ); //! First parameter is camera index
+  ); ///< First parameter is camera index
   if (setupCameras())
     LOG_INFO("Cameras setup complete.")
 }
@@ -65,8 +66,8 @@ bool CameraModule::setupCameras()
 {
   try {
     cams = vector<CameraPtr>(toUType(CameraId::count));
-    cams[(int)CameraId::headTop] = boost::shared_ptr<Camera<float> >(new Camera<float>("visionTop"));
-    cams[(int)CameraId::headBottom] = boost::shared_ptr<Camera<float> >(new Camera<float>("visionBottom"));
+    cams[toUType(CameraId::headTop)] = boost::shared_ptr<Camera<float> >(new Camera<float>("visionTop"));
+    cams[toUType(CameraId::headBottom)] = boost::shared_ptr<Camera<float> >(new Camera<float>("visionBottom"));
     #ifndef V6_CROSS_BUILD
     videoWriter = vector<cv::VideoWriter*> (toUType(CameraId::count));
     #endif
@@ -176,11 +177,11 @@ bool CameraModule::setupCameras()
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
   #ifdef MODULE_IS_REMOTE
   void CameraModule::updateImage(
-    const unsigned& index,
+    const CameraId& index,
     const int& saveImages,
     const bool& useLoggedImages)
   {
-    string cameraClient = cams[index]->clientName;
+    string cameraClient = cams[toUType(index)]->clientName;
     try {
       /**
        * This image accessing function takes too much time.
@@ -199,13 +200,13 @@ bool CameraModule::setupCameras()
         //tEnd = high_resolution_clock::now();
         //duration<double> time_span = tEnd - tStart;
         //LOG_INFO("Time cam " << cameraClient << "  " << time_span.count());
-        //!int width = (int) img[0];
-        //!int height = (int) img[1];
-        //!int nbLayers = (int) img[2];
-        //!int colorSpace = (int) img[3];
-        //!image[4] is the number of seconds, image[5] the
-        //!number of microseconds.
-        //!The pointer to the image data and its size:
+        ///<int width = (int) img[0];
+        ///<int height = (int) img[1];
+        ///<int nbLayers = (int) img[2];
+        ///<int colorSpace = (int) img[3];
+        ///<image[4] is the number of seconds, image[5] the
+        ///<number of microseconds.
+        ///<The pointer to the image data and its size:
         /*Mat bgr = Mat(Size(640,480), CV_8UC3);
          memcpy (bgr.data, (uint8_t*) img[6].GetBinary(), img[6].getSize());
          VisionUtils::displayImage(bgr, "InputBgr");
@@ -215,11 +216,11 @@ bool CameraModule::setupCameras()
         //cout << yuv.at<Vec3b>(0, 0) << endl;
         //cout << yuv.at<Vec3b>(1, 0) << endl;
         //cout << yuv.at<Vec3b>(2, 0) << endl;
-        //VisionUtils::bgrToYuv422(cams[index]->image, img, img.cols, img.rows);
-        memcpy (cams[index]->image, (uint8_t*) img[6].GetBinary(), img[6].getSize());
+        //VisionUtils::bgrToYuv422(cams[toUType(index)]->image, img, img.cols, img.rows);
+        memcpy (cams[toUType(index)]->image, (uint8_t*) img[6].GetBinary(), img[6].getSize());
         if(saveImages) {
           string imageStr;
-          if (index == toUType(CameraId::headTop)) {
+          if (index == CameraId::headTop) {
             imageStr = ConfigManager::getLogsDirPath() +
             "Images/Top/" + DataUtils::getCurrentDateTime() + ".jpg";
           } else {
@@ -228,7 +229,7 @@ bool CameraModule::setupCameras()
           }
           cout << imageStr << endl;
           cv::Mat yuv = cv::Mat(Size(img[0], img[1]), CV_8UC2);
-          yuv.data = cams[index]->image;
+          yuv.data = cams[toUType(index)]->image;
           cv::Mat bgr;
           cvtColor(yuv, bgr, COLOR_YUV2BGR_YUY2);
           imwrite(imageStr, bgr);
@@ -240,7 +241,7 @@ bool CameraModule::setupCameras()
         #endif
       } else {
         string name;
-        if (index == toUType(CameraId::headTop)) {
+        if (index == CameraId::headTop) {
           GET_CONFIG(
             "VisionConfig",
             (string, InputImage.testImageTop, name),
@@ -258,8 +259,8 @@ bool CameraModule::setupCameras()
         //cout << yuv.at<Vec3b>(0, 0) << endl;
         //cout << yuv.at<Vec3b>(1, 0) << endl;
         //cout << yuv.at<Vec3b>(2, 0) << endl;
-        bgrToYuv422(cams[index]->image, img, img.cols, img.rows);
-        //VisionUtils::displayImage(cams[index]->image, "cams[index]->image");
+        bgrToYuv422(cams[toUType(index)]->image, img, img.cols, img.rows);
+        //VisionUtils::displayImage(cams[toUType(index)]->image, "cams[toUType(index)]->image");
       }
     } catch (const exception& e) {
       LOG_EXCEPTION(e.what())
@@ -267,9 +268,9 @@ bool CameraModule::setupCameras()
   }
   #else
   void CameraModule::updateImage(
-    const unsigned& index)
+    const CameraId& index)
   {
-    string cameraClient = cams[index]->clientName;
+    string cameraClient = cams[toUType(index)]->clientName;
     try {
       AL::ALImage* img;
       #ifndef V6_CROSS_BUILD
@@ -277,7 +278,7 @@ bool CameraModule::setupCameras()
       #else
       img = (AL::ALImage*) camProxy.call<AL::ALImage*>("getImageLocal", cameraClient);
       #endif
-      memcpy(cams[index]->image, (uint8_t*) img->getData(), img->getSize());
+      memcpy(cams[toUType(index)]->image, (uint8_t*) img->getData(), img->getSize());
       #ifndef V6_CROSS_BUILD
       camProxy->releaseImage(cameraClient);
       #else
@@ -291,7 +292,7 @@ bool CameraModule::setupCameras()
 #else
   #ifdef MODULE_IS_REMOTE
   void CameraModule::updateImage(
-    const unsigned& index,
+    const CameraId& index,
     const int& saveImages,
     const bool& useLoggedImages)
   {
@@ -299,7 +300,7 @@ bool CameraModule::setupCameras()
   }
   #else
   void CameraModule::updateImage(
-    const unsigned& index)
+    const CameraId& index)
   {
     static auto prevSettings = GET_DVAR(vector<int>, settingParams);
     auto currSettings = GET_DVAR(vector<int>, settingParams);
@@ -308,16 +309,16 @@ bool CameraModule::setupCameras()
         cams[currSettings[0]]->setCameraSetting(static_cast<CameraSettings>(i), currSettings[i+1]);
       }
     }
-    cams[index]->getImageFromDevice();
+    cams[toUType(index)]->getImageFromDevice();
     prevSettings = currSettings;
   }
   #endif
 #endif
 
-void CameraModule::releaseImage(const unsigned& index)
+void CameraModule::releaseImage(const CameraId& index)
 {
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  string cameraClient = cams[index]->clientName;
+  string cameraClient = cams[toUType(index)]->clientName;
   #ifndef V6_CROSS_BUILD
   camProxy->releaseImage(cameraClient);
   #else
@@ -326,15 +327,15 @@ void CameraModule::releaseImage(const unsigned& index)
   #endif
 }
 
-void CameraModule::recordVideo(const unsigned& index)
+void CameraModule::recordVideo(const CameraId& index)
 {
   #ifndef V6_CROSS_BUILD
   static string logsDir = ConfigManager::getLogsDirPath();
-  //! VideoWriter object;
-  if (!videoWriter[index]) {
+  ///< VideoWriter object;
+  if (!videoWriter[toUType(index)]) {
     try {
       string vidName;
-      if (index == toUType(CameraId::headTop)) {
+      if (index == CameraId::headTop) {
         vidName = logsDir + "Video/Top/";
       } else {
         vidName = logsDir + "Video/Bottom/";
@@ -343,15 +344,15 @@ void CameraModule::recordVideo(const unsigned& index)
       vidName += "vid-";
       vidName += DataUtils::varToString(cnt+1);
       vidName += ".avi";
-      videoWriter[index] = new VideoWriter();
-      videoWriter[index]->open(
+      videoWriter[toUType(index)] = new VideoWriter();
+      videoWriter[toUType(index)]->open(
         vidName,
         CV_FOURCC('M', 'P', 'E', 'G'),
-        (int)cams[index]->fps,
-        Size((int)cams[index]->width, (int)cams[index]->height)
+        (int)cams[toUType(index)]->fps,
+        Size((int)cams[toUType(index)]->width, (int)cams[toUType(index)]->height)
       );
-      if (!videoWriter[index]->isOpened()) {
-        delete videoWriter[index];
+      if (!videoWriter[toUType(index)]->isOpened()) {
+        delete videoWriter[toUType(index)];
         throw "Unable to open video: \n\t" + vidName + " for write.";
       }
     } catch (exception &e) {
@@ -360,13 +361,13 @@ void CameraModule::recordVideo(const unsigned& index)
   } else {
     cv::Mat yuv422 =
       cv::Mat(
-        Size((int)cams[index]->width, (int)cams[index]->height),
+        Size((int)cams[toUType(index)]->width, (int)cams[toUType(index)]->height),
         CV_8UC2
       );
-    yuv422.data = cams[index]->image;
+    yuv422.data = cams[toUType(index)]->image;
     cv::Mat bgr;
     cvtColor(yuv422, bgr, COLOR_YUV2BGR_YUY2);
-    videoWriter[index]->write(bgr);
+    videoWriter[toUType(index)]->write(bgr);
   }
   #else
   LOG_INFO("Video writer not yet support for V6 robots.")

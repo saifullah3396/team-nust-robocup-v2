@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/GBConfigs/GBStiffnessConfig.h
  *
  * This file defines the class GBStiffnessConfig and its childs
  *
@@ -20,9 +20,9 @@
  */
 struct GBStiffnessConfig : GBConfig
 {
-	/**
-	 * Constructor
-	 */
+  /**
+   * Constructor
+   */
   GBStiffnessConfig() :
     GBConfig(GBIds::stiffnessModule, 3.f, (int)GBStiffnessTypes::stiffnessInterp),
     sToReach(vector<float>(toUType(Joints::count), 1.f)),
@@ -31,14 +31,14 @@ struct GBStiffnessConfig : GBConfig
   {
   }
 
-	/**
-	 * Constructor
-	 * 
-	 * @param sToReach: Stiffnesses to reach
-	 * @param timeToReachS: Time in which stiffness are required to reach
-	 *   the given values
-	 * @param type: Type of the stiffness behavior
-	 */
+  /**
+   * Constructor
+   *
+   * @param sToReach: Stiffnesses to reach
+   * @param timeToReachS: Time in which stiffness are required to reach
+   *   the given values
+   * @param type: Type of the stiffness behavior
+   */
   GBStiffnessConfig(
     const vector<float>& sToReach,
     const float& timeToReachS,
@@ -49,15 +49,15 @@ struct GBStiffnessConfig : GBConfig
     targetState(StiffnessState::unknown)
   {
   }
-  
-	/**
-	 * Constructor
-	 * 
-	 * @param state: Stiffness state to reach
-	 * @param timeToReachS: Time in which stiffness are required to reach
-	 *   the given values
-	 * @param type: Type of the stiffness behavior
-	 */
+
+  /**
+   * Constructor
+   *
+   * @param state: Stiffness state to reach
+   * @param timeToReachS: Time in which stiffness are required to reach
+   *   the given values
+   * @param type: Type of the stiffness behavior
+   */
   GBStiffnessConfig(
     const StiffnessState& state,
     const float& timeToReachS = 1.f,
@@ -76,16 +76,16 @@ struct GBStiffnessConfig : GBConfig
         sizeof(stiffnessDefinitions[toUType(state)][0])
       );
   }
-  
-	/**
-	 * Constructor
-	 * 
-	 * @param chainId: Robot chain whose stiffness is to be changed
-	 * @param requiredS: Required value of stiffness
-	 * @param timeToReachS: Time in which stiffness are required to reach
-	 *   the given values
-	 * @param type: Type of the stiffness behavior
-	 */
+
+  /**
+   * Constructor
+   *
+   * @param chainId: Robot chain whose stiffness is to be changed
+   * @param requiredS: Required value of stiffness
+   * @param timeToReachS: Time in which stiffness are required to reach
+   *   the given values
+   * @param type: Type of the stiffness behavior
+   */
   GBStiffnessConfig(
     const LinkChains& chainId,
     const float& requiredS,
@@ -120,9 +120,9 @@ struct GBStiffnessConfig : GBConfig
     }
   }
 
-	/**
-	 * Validates the given configuration parameters
-	 */ 
+  /**
+   * Validates the given configuration parameters
+   */
   void validate() {
     if (timeToReachS <= 0.f || // Undefined time given
         toUType(targetState) >=
@@ -138,13 +138,13 @@ struct GBStiffnessConfig : GBConfig
     }
   }
 
-  //! Time to reach the given stiffnesses
+  ///< Time to reach the given stiffnesses
   float timeToReachS;
-  
-  //! Stiffnesses to reach for each joint
+
+  ///< Stiffnesses to reach for each joint
   vector<float> sToReach;
-  
-  //! Target stiffness state
+
+  ///< Target stiffness state
   StiffnessState targetState;
 };
 

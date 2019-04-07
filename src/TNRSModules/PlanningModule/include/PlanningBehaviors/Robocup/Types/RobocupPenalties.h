@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/RobocupPenalties.h
+ * @file PlanningBehaviors/Robocup/Types/RobocupPenalties.h
  *
  * This file declares the class RobocupPenalties.
  *
@@ -11,6 +11,8 @@
 
 #include "PlanningModule/include/PlanningBehaviors/Robocup/Robocup.h"
 
+class PenaltiesConfig;
+
 /**
  * @class RobocupPenalties
  * @brief The class for defining the robocup penalties behavior
@@ -19,46 +21,49 @@ class RobocupPenalties : public Robocup
 {
 public:
   /**
-   * Default constructor for this class.
+   * @brief RobocupPenalties Constructor
    *
-   * @param planningModule: pointer to parent.
+   * @param planningModule: pointer to parent planning module
+   * @param config: Configuration of this behavior
    */
-  RobocupPenalties(PlanningModule* planningModule) :
-    Robocup(planningModule, "RobocupPenalties"),
-    behaviorState(penaltyCfg),
-    striker(false)
-  {
-  }
+  RobocupPenalties(
+    PlanningModule* planningModule,
+    const boost::shared_ptr<PenaltiesConfig>& config);
 
   /**
-   * Default destructor for this class.
+   * @brief ~RobocupPenalties Destructor
    */
   ~RobocupPenalties()
   {
   }
-  ;
 
-  bool initiate();
-  void update();
-  void finishBehaviorSafely();
-  void setBehaviorConfig(boost::shared_ptr<BehaviorConfig> behaviorConfig);
+  /**
+   * @brief initiate See Behavior::initiate()
+   */
+  bool initiate() final;
+
+  /**
+   * @brief update See Behavior::update()
+   */
+  void update() final;
+
+  /**
+   * @brief finish See Behavior::finish()
+   */
+  void finish() final;
+
+  /**
+   * @brief loadExternalConfig See Behavior::loadExternalConfig()
+   */
+  void loadExternalConfig() final {}
 
 private:
-  boost::shared_ptr<PenaltiesConfig> getBehaviorCast();
-  
   void penaltyCfgAction();
-  void startupAction();
-  void strikerAction();
-  void goalKeeperAction();
 
-  bool striker;
-
-  unsigned behaviorState;
-  enum BehaviorState { // For each behavior
-    penaltyCfg,
-    startup,
-    play
-  };
+  /**
+   * Returns the config casted as RobocupPenaltiesConfigPtr
+   */
+  boost::shared_ptr<PenaltiesConfig> getBehaviorCast();
 };
 
 typedef boost::shared_ptr<RobocupPenalties> RobocupPenaltiesPtr;

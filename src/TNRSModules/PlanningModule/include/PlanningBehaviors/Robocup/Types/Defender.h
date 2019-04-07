@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/Defender.h
+ * @file PlanningBehaviors/Robocup/Types/Defender.h
  *
  * This file declares the class Defender.
  *

@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/RobotRegion.h
+ * @file VisionModule/include/FeatureExtraction/RobotRegion.h
  *
  * This file defines the struct RobotRegion.
  *
@@ -35,13 +35,14 @@ struct RobotRegion
   {
   }
 
-  cv::Point2f world; //! Position in world
-  bool refresh = {true}; //! Refresh region
-  float timeDetected = {0.f}; //! Time of first detection
-  bool ourTeam = {false}; //! Our teammate or not
-  bool fallen = {false}; //! Fallen or not
-  bool posFromJersey = {false}; //! Position
-  float minDistValidation = {0.3f}; // 30 cms
+  cv::Point2f world; ///< Position in world
+  cv::Point2f frontLeft; ///< Position of left front in world
+  cv::Point2f frontRight; ///< Position of right front in world
+  bool refresh = {true}; ///< Refresh region
+  float timeDetected = {0.f}; ///< Time of first detection
+  bool ourTeam = {false}; ///< Our teammate or not
+  bool fallen = {false}; ///< Fallen or not
+  bool posFromJersey = {false}; ///< Position
   boost::shared_ptr<ScannedRegion> sr;
 };
 typedef boost::shared_ptr<RobotRegion> RobotRegionPtr;

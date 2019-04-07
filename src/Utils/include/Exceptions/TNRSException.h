@@ -1,5 +1,5 @@
 /**
- * @file Utils/include/TNRSException.h
+ * @file Utils/include/Exceptions/TNRSException.h
  *
  * This file defines the class TNRSException
  *
@@ -18,7 +18,7 @@ using namespace std;
 
 /**
  * @class TNRSException
- * @brief A base class for generating different kinds of 
+ * @brief A base class for generating different kinds of
  * 	child exceptions within the softwarea.
  */
 class TNRSException : public exception
@@ -32,9 +32,9 @@ public:
    *   should be postfixed to the user provided message
    */
   TNRSException(const string& message, const bool& bSysMsg = true) throw () :
-		message(message)
-	{
-	}
+    message(message)
+  {
+  }
 
   /**
    * Virtual destructor
@@ -50,16 +50,16 @@ public:
   what() throw ()
   {
     auto prefix = "[" + getExcName() + "]: " + getExcPrefix();
-		prefix.append(this->message);
+    prefix.append(this->message);
     this->message = prefix;
     this->message += "\n";
     return this->message.c_str();
   }
-  
+
   virtual string getExcName() { return "TNRSException"; }
   virtual string getExcPrefix() { return ""; }
 
 protected:
-  //! Error message.
+  ///< Error message.
   string message;
 };

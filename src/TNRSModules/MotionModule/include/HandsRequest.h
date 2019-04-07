@@ -1,5 +1,5 @@
 /**
- * @file ControlModule/include/HandsRequest.h
+ * @file MotionModule/include/HandsRequest.h
  *
  * This file defines the class HandsRequest
  *

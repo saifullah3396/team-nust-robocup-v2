@@ -90,5 +90,5 @@ protected:
     }
   }
 
-  vector<BaseModulePtr> childModules; //! A vector of child BaseModules.
+  vector<BaseModulePtr> childModules; ///< A vector of child BaseModules.
 };

@@ -57,7 +57,7 @@ public:
    */
   vector<MemoryVariable*> getVariables() { return variables; }
 
-  //! Vector of pointers to threadsafe memory variables
+  ///< Vector of pointers to threadsafe memory variables
   vector<MemoryVariable*> variables;
 
 public:

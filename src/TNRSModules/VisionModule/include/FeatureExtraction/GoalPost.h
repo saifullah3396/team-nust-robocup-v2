@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/GoalPost.h
+ * @file VisionModule/include/FeatureExtraction/GoalPost.h
  *
  * This file defines the struct GoalPost.
  *
@@ -23,7 +23,7 @@ struct GoalPost
   GoalPost& operator=(GoalPost&&) & = default;
   virtual ~GoalPost() {}
 
-  /** 
+  /**
    * @brief GoalPost Constructor
    * @param world Position in world
    * @param world Position in image
@@ -51,12 +51,12 @@ struct GoalPost
     }
   }
 
-  cv::Point2f world; //! Position in world
-  cv::Point2f image; //! Position in image
-  bool refresh = {true}; //! To refresh the data
-  float timeDetected = {0.f}; //! Time at first detection
+  cv::Point2f world; ///< Position in world
+  cv::Point2f image; ///< Position in image
+  bool refresh = {true}; ///< To refresh the data
+  float timeDetected = {0.f}; ///< Time at first detection
 
-  //! Distance between two posts to consider them duplicates
+  ///< Distance between two posts to consider them duplicates
   static constexpr float minDistValidation = 0.3f;
 };
 typedef boost::shared_ptr<GoalPost> GoalPostPtr;

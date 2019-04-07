@@ -63,7 +63,7 @@ void MotionTestSuite::update()
   if (requestInProgress()) return;
   if (shutdownCallBack()) return;
   if (!mbInProgress()) {
-    //! Repeat on finish based on chest button press
+    ///< Repeat on finish based on chest button press
     if (setPostureAndStiffness(PostureState::stand, StiffnessState::max, MOTION_1)) {
       if (SWITCH_SENSORS_OUT(PlanningModule)[toUType(SwitchSensors::chestBoardButton)] > 0.1) {
         if (motionConfig) {

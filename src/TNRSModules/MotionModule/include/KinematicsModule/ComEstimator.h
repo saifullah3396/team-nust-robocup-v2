@@ -99,28 +99,28 @@ public:
   bool isInitiated() { return initiated; }
 
 private:
-  //! Kalman filter
+  ///< Kalman filter
   boost::shared_ptr<KalmanFilter<Scalar, 3, 3, 1, 1> > filter;
 
-  //! Com state transition model
+  ///< Com state transition model
   boost::shared_ptr<ProcessModel<Scalar, 3, 1, 1> > model;
 
-  //! Com state output matrix
+  ///< Com state output matrix
   Matrix<Scalar, 1, 3> C =
    {Matrix<Scalar, 1, 3>::Zero()};
 
-  //! Com measurement matrix
+  ///< Com measurement matrix
   Matrix<Scalar, MeasSize, MeasSize> H =
     {Matrix<Scalar, MeasSize, MeasSize>::Zero()};
 
-  //! Whether the filter has been initiated or not
+  ///< Whether the filter has been initiated or not
   bool initiated;
 
-  //! Measurement noise covariance matrix which can be varied through subsequent cycles
+  ///< Measurement noise covariance matrix which can be varied through subsequent cycles
   Matrix<Scalar, MeasSize, MeasSize> R =
     {Matrix<Scalar, MeasSize, MeasSize>::Zero()};
 
-  //! Last measurement vector
+  ///< Last measurement vector
   Matrix<Scalar, MeasSize, 1> lastMeas =
     {Matrix<Scalar, MeasSize, 1>::Zero()};
 

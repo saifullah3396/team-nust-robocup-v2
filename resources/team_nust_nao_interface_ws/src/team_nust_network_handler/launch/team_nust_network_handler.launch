@@ -1,0 +1,12 @@
+<launch>
+  <arg name="robot_ip" default="127.0.0.1" />
+  
+  <!-- Start the nao communication node -->
+  <node pkg="team_nust_network_handler" name="team_nust_network_handler_node" type="team_nust_network_handler_node" output="screen">
+      <param name="robot_ip" type="string" value="$(arg robot_ip)"/>
+  </node>
+  
+  <!-- Start the data publisher node -->
+  <node pkg="team_nust_network_handler" name="data_handler_node" type="data_handler_node.py" output="screen"/>
+
+</launch>

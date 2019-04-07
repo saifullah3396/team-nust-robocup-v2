@@ -1,15 +1,13 @@
-//
-// connection.hpp
-// ~~~~~~~~~~~~~~
-//
-// Copyright (c) 2003-2008 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
+/**
+ * @file UserCommModule/include/BoostConnection.h
+ *
+ * This file defines the class Connection
+ *
+ * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
+ * @date 04 Feb 2017
+ */
 
-#ifndef SERIALIZATION_CONNECTION_HPP
-#define SERIALIZATION_CONNECTION_HPP
+#pragma once
 
 #include <boost/asio.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -22,18 +20,16 @@
 #include <sstream>
 #include <vector>
 
-/// The connection class provides serialization primitives on top of a socket.
 /**
- * Each message sent using this class consists of:
- * @li An 8-byte header containing the length of the serialized data in
- * hexadecimal.
- * @li The serialized data.
+ * @class Connection
+ * @brief Provides a definition of async connection between
+ *   server/client
  */
-class connection
+class Connection
 {
 public:
   /// Constructor.
-  connection(boost::asio::io_service& io_service)
+  Connection(boost::asio::io_service& io_service)
     : socket_(io_service)
   {
   }
@@ -81,10 +77,10 @@ public:
   void async_read(T& t, Handler handler)
   {
     // Issue a read operation to read exactly the number of bytes in a header.
-    void (connection::*f)(
+    void (Connection::*f)(
         const boost::system::error_code&,
         T&, boost::tuple<Handler>)
-      = &connection::handle_read_header<T, Handler>;
+      = &Connection::handle_read_header<T, Handler>;
     boost::asio::async_read(socket_, boost::asio::buffer(inbound_header_),
         boost::bind(f,
           this, boost::asio::placeholders::error, boost::ref(t),
@@ -117,10 +113,10 @@ public:
 
       // Start an asynchronous call to receive the data.
       inbound_data_.resize(inbound_data_size);
-      void (connection::*f)(
+      void (Connection::*f)(
           const boost::system::error_code&,
           T&, boost::tuple<Handler>)
-        = &connection::handle_read_data<T, Handler>;
+        = &Connection::handle_read_data<T, Handler>;
       boost::asio::async_read(socket_, boost::asio::buffer(inbound_data_),
         boost::bind(f, this,
           boost::asio::placeholders::error, boost::ref(t), handler));
@@ -179,5 +175,4 @@ private:
   std::vector<char> inbound_data_;
 };
 
-typedef boost::shared_ptr<connection> connection_ptr;
-#endif // SERIALIZATION_CONNECTION_HPP
+typedef boost::shared_ptr<Connection> ConnectionPtr;

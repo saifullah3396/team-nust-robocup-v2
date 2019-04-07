@@ -37,7 +37,7 @@ DECLARE_MODULE_REQUEST(
   TNSPLModules,
   planning,
   PlanningRequestIds
-)
+);
 
 struct RequestPlanningBehavior : public PlanningRequest, BehaviorRequest
 {
@@ -82,4 +82,4 @@ DECLARE_MODULE_REQUEST_TYPE(
   PlanningRequest,
   PlanningRequestIds,
   killBehavior
-)
+);

@@ -39,7 +39,7 @@ DECLARE_MODULE_REQUEST(
   TNSPLModules,
   userComm,
   UserCommRequestIds
-)
+);
 
 /**
  * @class SendMsgRequest
@@ -52,7 +52,7 @@ DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
   UserCommRequestIds,
   sendMsgRequest,
   (CommMessage, cMsg, CommMessage()),
-)
+);
 
 /**
  * @class SendImageRequest
@@ -65,4 +65,4 @@ DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
   UserCommRequestIds,
   sendImageRequest,
   (cv::Mat, image, cv::Mat()),
-)
+);

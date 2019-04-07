@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/GoalKeeper.h
+ * @file PlanningBehaviors/Robocup/Types/GoalKeeper.h
  *
  * This file declares the class GoalKeeper.
  *
@@ -65,8 +65,8 @@ protected:
   RobotPose2D<float> interceptTarget;
   int lastDiveTargetType;
 
-  const float interceptBallPosTol = 0.05f; //! 0.1 meters
-  const float diveReactionTime = 10.f; //! 5 secs
+  const float interceptBallPosTol = 0.05f; ///< 0.1 meters
+  const float diveReactionTime = 10.f; ///< 5 secs
 };
 
 typedef boost::shared_ptr<GoalKeeper> GoalKeeperPtr;

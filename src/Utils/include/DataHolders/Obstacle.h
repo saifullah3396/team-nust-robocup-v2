@@ -58,17 +58,17 @@ struct Obstacle : public DataHolder
     return val;
   }
 
-  TNRSLine<T> front; //! Obstacle front line in image
-  TNRSLine<T> back; //! Obstacle back line in image
-  TNRSLine<T> frontT; //! Obstacle front line in world
-  TNRSLine<T> backT; //! Obstacle front line in world
-  ObstacleType type = {ObstacleType::unknown}; //! Obstacle type
-  cv::Point_<T> center; //! Obstacle center
-  T depth = {0}; //! Obstacle depth
+  TNRSLine<T> front; ///< Obstacle front line in image
+  TNRSLine<T> back; ///< Obstacle back line in image
+  TNRSLine<T> frontT; ///< Obstacle front line in world
+  TNRSLine<T> backT; ///< Obstacle front line in world
+  ObstacleType type = {ObstacleType::unknown}; ///< Obstacle type
+  cv::Point_<T> center; ///< Obstacle center
+  T depth = {0}; ///< Obstacle depth
 
-  static constexpr float goalPoseObsDepth = 0.1f; //! Goal post depth
-  static constexpr float robotObsDepth = 0.2f; //! Standing robot depth
-  static constexpr float fallenRobotObsDepth = 0.2f; //! Fallen robot depth
+  static constexpr float goalPoseObsDepth = 0.1f; ///< Goal post depth
+  static constexpr float robotObsDepth = 0.2f; ///< Standing robot depth
+  static constexpr float fallenRobotObsDepth = 0.2f; ///< Fallen robot depth
 };
 
 /**
@@ -79,5 +79,5 @@ struct Obstacle : public DataHolder
 template <typename T = float>
 struct ObsObstacles : public DataHolder, public DataHeader
 {
-  vector<Obstacle<T> > data; //! The array of observed obstacles
+  vector<Obstacle<T> > data; ///< The array of observed obstacles
 };

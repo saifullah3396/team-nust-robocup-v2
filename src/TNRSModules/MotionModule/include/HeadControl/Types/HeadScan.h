@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/HeadControl/Types/HeadScan.h
+ * @file MotionModule/include/HeadControl/Types/HeadScan.h
  *
  * This file declares the class HeadScan
  *
@@ -76,16 +76,16 @@ private:
    */
   void scanEnv();
 
-  //! Finite state machine for this behavior
+  ///< Finite state machine for this behavior
   DECLARE_FSM(fsm, HeadScan<Scalar>)
 
-  //! MidScan: Look in the middle
+  ///< MidScan: Look in the middle
   DECLARE_FSM_STATE(HeadScan<Scalar>, MidScan, midScan, onStart, onRun,)
 
-  //! LeftScan: Scan left direction
+  ///< LeftScan: Scan left direction
   DECLARE_FSM_STATE(HeadScan<Scalar>, LeftScan, leftScan, onStart, onRun,)
 
-  //! RightScan: Scan right direction
+  ///< RightScan: Scan right direction
   DECLARE_FSM_STATE(HeadScan<Scalar>, RightScan, rightScan, onStart, onRun,)
 };
 

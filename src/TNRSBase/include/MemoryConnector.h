@@ -46,22 +46,22 @@ public:
    */
   virtual void initConnector() = 0;
 
-  //! Getters
+  ///< Getters
   vector<MemoryVariable*>& getVariables() { return variables; }
   vector<MemoryVariable*>& getMemoryVariables() { return memoryVariables; }
 
 protected:
-  //! Vector of pointers to memory variables
+  ///< Vector of pointers to memory variables
   vector<MemoryVariable*> variables;
 
-  //! Vector of pointers to memory variables
+  ///< Vector of pointers to memory variables
   vector<MemoryVariable*> memoryVariables;
 
-  //! Name of this memory connector
+  ///< Name of this memory connector
   string connectorName;
 
-  //! The thread that connects with the memory through this
-  //! memory connector
+  ///< The thread that connects with the memory through this
+  ///< memory connector
   BaseModule* connectingThread;
 };
 

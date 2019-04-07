@@ -1,0 +1,7 @@
+Header header
+bool robot_localized
+int32 position_confidence
+int32 side_confidence
+bool robot_on_side_line
+bool localize_with_last_known
+bool landmarks_found

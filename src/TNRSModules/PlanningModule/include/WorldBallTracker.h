@@ -74,8 +74,8 @@ public:
     } else {
       meas.at<float>(0) = measurements[0];
       meas.at<float>(1) = measurements[1];
-      if (lost) { //! First detection!
-        //! >>>> Initialization
+      if (lost) { ///< First detection!
+        ///< >>>> Initialization
         kFilter.errorCovPre.at<float>(0) = 1.0f;
         kFilter.errorCovPre.at<float>(5) = 1.0f;
         kFilter.errorCovPre.at<float>(10) = 1.0f;
@@ -85,13 +85,13 @@ public:
         state.at<float>(1) = meas.at<float>(1);
         state.at<float>(2) = 0.f;
         state.at<float>(3) = 0.f;
-        //! <<<< Initialization
+        ///< <<<< Initialization
         kFilter.statePost = state;
         lost = false;
         losingBall = false;
         timeSinceLost = 0.f;
       } else {
-        kFilter.correct(meas); //! Kalman Correction
+        kFilter.correct(meas); ///< Kalman Correction
       }
     }
     if (losingBall) timeSinceLost = planningModule->getModuleTime() - timeAtLost;
@@ -105,25 +105,25 @@ public:
     kFilter = KalmanFilter(stateSize, measSize, contrSize, type);
     state = Mat(stateSize, 1, type);
     meas = Mat(measSize, 1, type);
-    //! Transition State Matrix A
-    //! [ 1  0    dT   0]
-    //! [ 0  1    0   dT]
-    //! [ 0  0    1    0] 
-    //! [ 0  0    0    1]
+    ///< Transition State Matrix A
+    ///< [ 1  0    dT   0]
+    ///< [ 0  1    0   dT]
+    ///< [ 0  0    1    0] 
+    ///< [ 0  0    0    1]
     setIdentity(kFilter.transitionMatrix);
     kFilter.transitionMatrix.at<float>(2) = cycleTime;
     kFilter.transitionMatrix.at<float>(7) = cycleTime;
-    //! Measure Matrix H
-    //! [ 1 0 0 0 ]
-    //! [ 0 1 0 0 ]
+    ///< Measure Matrix H
+    ///< [ 1 0 0 0 ]
+    ///< [ 0 1 0 0 ]
     kFilter.measurementMatrix = cv::Mat::zeros(measSize, stateSize, type);
     kFilter.measurementMatrix.at<float>(0) = 1.0f;
     kFilter.measurementMatrix.at<float>(5) = 1.0f;
-    //! Process Noise Covariance Matrix Q
-    //! [ eX   0    0     0   ]
-    //! [ 0    eY   0     0   ]
-    //! [ 0    0    eVX   0   ]
-    //! [ 0    0    0     eVY ]
+    ///< Process Noise Covariance Matrix Q
+    ///< [ eX   0    0     0   ]
+    ///< [ 0    eY   0     0   ]
+    ///< [ 0    0    eVX   0   ]
+    ///< [ 0    0    0     eVY ]
 
     kFilter.processNoiseCov.at<float>(0) = 0.001;
     kFilter.processNoiseCov.at<float>(5) = 0.001;
@@ -131,9 +131,9 @@ public:
     kFilter.processNoiseCov.at<float>(15) = 0.001;
 
     setIdentity(kFilter.measurementNoiseCov);
-    //! Measurement Noise Covariance Matrix Q
-    //! [ eX   0  ]
-    //! [ 0    eY ]
+    ///< Measurement Noise Covariance Matrix Q
+    ///< [ eX   0  ]
+    ///< [ 0    eY ]
     kFilter.measurementNoiseCov.at<float>(0) = 0.01; // Robot movement noise + measurement noise
     kFilter.measurementNoiseCov.at<float>(3) = 0.01; // Robot movement noise + measurement noise
   }
@@ -150,41 +150,41 @@ public:
     return timeSinceLost;
   }
 private:
-  //! OpenCv based kalman filter object.
+  ///< OpenCv based kalman filter object.
   KalmanFilter kFilter;
 
-  //! Vector of state variables.
+  ///< Vector of state variables.
   Mat state;
 
-  //! Vector of measurement variables.
+  ///< Vector of measurement variables.
   Mat meas;
 
-  //! Number of state variables: 
-  //! [posX, posY, velocityX, velocityY]
+  ///< Number of state variables: 
+  ///< [posX, posY, velocityX, velocityY]
   int stateSize;
 
-  //! Number of measurement variables: 
-  //! [measPosX, measPosY]
+  ///< Number of measurement variables: 
+  ///< [measPosX, measPosY]
   int measSize;
 
-  //! Number of variables in the contr state vector. 
+  ///< Number of variables in the contr state vector. 
   int contrSize;
 
-  //! Time at which the ball was lost.
+  ///< Time at which the ball was lost.
   float timeAtLost;
 
-  //! Time since the ball was lost.
+  ///< Time since the ball was lost.
   float timeSinceLost;
 
-  //! Whether the ball is lost.
+  ///< Whether the ball is lost.
   bool lost;
 
-  //! Whether we are currently getting no ball observation.
+  ///< Whether we are currently getting no ball observation.
   bool losingBall;
 
-  //! Time step for the kalman filter updates.
+  ///< Time step for the kalman filter updates.
   float cycleTime;
 
-  //! Comm module pointer object.
+  ///< Comm module pointer object.
   PlanningModule* planningModule;
 };

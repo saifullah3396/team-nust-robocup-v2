@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/GBConfigs/GBWDConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/GBConfigs/GBWDConfig.h
  *
  * This file defines the class GBWDConfig and its childs
  *
@@ -17,12 +17,12 @@
  */
 struct GBWDConfig : GBConfig
 {
-	/**
-	 * Constructor
-	 * 
-	 * @param type: Type of the led behavior
-	 * @param timeToDetect: Max time given for whistle detection
-	 */
+  /**
+   * Constructor
+   *
+   * @param type: Type of the led behavior
+   * @param timeToDetect: Max time given for whistle detection
+   */
   GBWDConfig(
     const GBWDTypes& type = GBWDTypes::akWhistleDetector,
     const float& timeToDetect = 10.f) :
@@ -32,8 +32,8 @@ struct GBWDConfig : GBConfig
   }
 
   /**
-	 * Validates the given configuration parameters
-	 */
+   * Validates the given configuration parameters
+   */
   void validate() {
     if (timeToDetect <= 0.f) // Undefined time given
     {
@@ -45,8 +45,8 @@ struct GBWDConfig : GBConfig
         );
     }
   }
-  
-  //! Max time for whistle detection
+
+  ///< Max time for whistle detection
   float timeToDetect;
 };
 

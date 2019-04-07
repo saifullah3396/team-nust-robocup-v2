@@ -9,13 +9,14 @@
 
 #pragma once
 
+#include <opencv2/core/core.hpp>
 #include <Eigen/Dense>
 #include <boost/shared_ptr.hpp>
 #include "Utils/include/EnumUtils.h"
 
 /**
  * @enum TNColors
- * @brief Colors
+ * @brief Enumeration for Colors
  */
 enum class TNColors : unsigned int
 {
@@ -38,9 +39,19 @@ static std::string colorNames[toUType(TNColors::count)]
   "Yellow"
 };
 
+static cv::Scalar colorToBgr[toUType(TNColors::count)]
+{
+  cv::Scalar(255, 255, 255),
+  cv::Scalar(0, 0, 0),
+  cv::Scalar(0, 255, 0),
+  cv::Scalar(255, 0, 0),
+  cv::Scalar(0, 0, 255),
+  cv::Scalar(0, 255, 255),
+};
+
 /**
- * @enum TNColor
- * @brief Definition of a color
+ * @struct TNColor
+ * @brief Defines a color
  */
 struct TNColor
 {

@@ -1,4 +1,3 @@
-
 /**
  * @file Utils/src/TNRSLine.cpp
  *
@@ -22,9 +21,10 @@ TNRSLine<T>::TNRSLine(const cv::Point_<T>& p1, const cv::Point_<T>& p2) :
   diff = p2 - p1;
   d = norm(diff);
   unit = diff / d;
-  perp.x = unit.y;
-  perp.y = -unit.x;
+  perp.x = -unit.y;
+  perp.y = unit.x;
   angle = atan2(unit.y, unit.x);
+  perpDist = perp.x * p1.x + perp.y * p1.y;
 }
 
 template<typename T>
@@ -35,6 +35,7 @@ void TNRSLine<T>::setup() {
   perp.x = unit.y;
   perp.y = -unit.x;
   angle = atan2(unit.y, unit.x);
+  perpDist = perp.x * p1.x + perp.y * p1.y;
 }
 
 template<typename T>
@@ -47,7 +48,7 @@ bool TNRSLine<T>::findIntersection(const TNRSLine<U>& l, cv::Point_<T>& inter)
   auto p3p4 = p3 - p4;
   auto det = p1p2.x * p3p4.y - p1p2.y * p3p4.x;
   if (det != 0.0) {
-    //! det == 0 -> TNRSLines are parallel
+    ///< det == 0 -> TNRSLines are parallel
     auto c1 = p1.x * p2.y - p1.y * p2.x;
     auto c2 = p3.x * p4.y - p3.y * p4.x;
     inter.x = (c1 * p3p4.x - p1p2.x * c2) / det;

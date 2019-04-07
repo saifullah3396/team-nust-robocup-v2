@@ -56,7 +56,7 @@ public:
   template<typename valueType>
   valueType	getValueOfKey(const string& key) const;
 
-  //! Getters
+  ///< Getters
   static string getConfigDirPath() { return robotDirPath; }
   static string getCommonConfigDirPath() { return commonConfigDirPath; }
   static string getLogsDirPath() { return logsDirPath; }
@@ -64,16 +64,16 @@ public:
   static string getMBConfigsPath() { return mbConfigsDirPath; }
   static string getGBConfigsPath() { return gbConfigsDirPath; }
 
-  //! Sets the path to the directory of configuration/logs/robot files.
+  ///< Sets the path to the directory of configuration/logs/robot files.
   static void setDirPaths(const string& robotDir);
 private:
-  static string configDirPath; //! Path to the directory of configuration files
-  static string commonConfigDirPath; //! Path to the directory of configuration files that are common to all robots
-  static string logsDirPath; //! Path to the directory of log  files
-  static string robotDirPath; //! Path to robot directory.
-  static string pbConfigsDirPath; //! Path to planning behavior configurations
-  static string mbConfigsDirPath; //! Path to motion behavior configurations
-  static string gbConfigsDirPath; //! Path to static behavior configurations
-  boost::property_tree::ptree iniConfig; //! Property tree filled with parsed data
-  string cfgFile; //! The config file path
+  static string configDirPath; ///< Path to the directory of configuration files
+  static string commonConfigDirPath; ///< Path to the directory of configuration files that are common to all robots
+  static string logsDirPath; ///< Path to the directory of log  files
+  static string robotDirPath; ///< Path to robot directory.
+  static string pbConfigsDirPath; ///< Path to planning behavior configurations
+  static string mbConfigsDirPath; ///< Path to motion behavior configurations
+  static string gbConfigsDirPath; ///< Path to static behavior configurations
+  boost::property_tree::ptree iniConfig; ///< Property tree filled with parsed data
+  string cfgFile; ///< The config file path
 };

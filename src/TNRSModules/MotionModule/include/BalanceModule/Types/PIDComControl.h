@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceModule/Types/PIDComControl.h
+ * @file MotionModule/include/BalanceModule/Types/PIDComControl.h
  *
  * This file declares the class PIDComControl
  *

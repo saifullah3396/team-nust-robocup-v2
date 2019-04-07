@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/include/PBConfigs/PBRobocupConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h
  *
  * This file defines the struct PBRobocupConfig and its childs
  *
@@ -26,39 +26,39 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   (RobotPose2D<float>, startPose, RobotPose2D<float>(-4.25, 0.0, 0.0)),
   (MBHeadControlConfigPtr, hsConfig, HeadScanConfigPtr()),
   (MBHeadControlConfigPtr, httConfig, HeadTargetTrackConfigPtr()),
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   RobocupSetupConfig,
   PBRobocupConfig,
   PBRobocupTypes::robocupSetup,
   RobocupSetupConfigPtr
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   GoalKeeperConfig,
   PBRobocupConfig,
   PBRobocupTypes::goalKeeper,
   GoalKeeperConfigPtr
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   DefenderConfig,
   PBRobocupConfig,
   PBRobocupTypes::defender,
   DefenderConfigPtr
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   AttackerConfig,
   PBRobocupConfig,
   PBRobocupTypes::attacker,
   AttackerConfigPtr
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   PenaltiesConfig,
   PBRobocupConfig,
   PBRobocupTypes::penalties,
   PenaltiesConfigPtr
-)
+);

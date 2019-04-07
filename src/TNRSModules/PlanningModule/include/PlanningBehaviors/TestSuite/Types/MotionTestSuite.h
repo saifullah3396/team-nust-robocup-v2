@@ -64,7 +64,7 @@ private:
     MOTION_1
   };
 
-  //! Config of the motion being tested
+  ///< Config of the motion being tested
   MBConfigPtr motionConfig;
 };
 

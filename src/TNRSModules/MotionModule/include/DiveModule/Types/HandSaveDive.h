@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/DiveModule/Types/HandSaveDive.h
+ * @file MotionModule/include/DiveModule/Types/HandSaveDive.h
  *
  * This file declares the class HandSaveDive
  *
@@ -62,14 +62,14 @@ private:
    */
   boost::shared_ptr<HandSaveDiveConfig> getBehaviorCast();
 
-  //! Weights and gains
+  ///< Weights and gains
   static vector<Scalar> taskWeights;
   static vector<Scalar> taskGains;
 
-  //! Tasks for solving inverse kinematics
+  ///< Tasks for solving inverse kinematics
   vector<TaskPtr> tasks;
 
-  //! Total dive time
+  ///< Total dive time
   Scalar diveTime;
 
   enum Tasks {

@@ -1,5 +1,5 @@
 /**
- * @file Utils/include/BehaviorInfo.h
+ * @file Utils/include/DataHolders/BehaviorInfo.h
  *
  * This file declares the base struct for the configuration of all the
  * behaviors.
@@ -146,7 +146,7 @@ private:
   BehaviorConfigPtr config;
   vector<BehaviorConfigPtr> configs;
 
-  //! Behavior manager can access its private members
+  ///< Behavior manager can access its private members
   friend class BehaviorManager;
 };
 

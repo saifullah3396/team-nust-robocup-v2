@@ -1,5 +1,5 @@
 /**
- * @file Utils/include/Solvers/JointModelCalibrator.h
+ * @file MotionModule/include/KinematicsModule/JointModelCalibrator.h
  *
  * This file declares the class JointModelCalibrator
  *
@@ -58,14 +58,14 @@ protected:
    */
   double costFunction(const vector<double> &vars, vector<double> &grad, void *data);
 
-  Eigen::Matrix<double, 3, 1> pid; //! PID gains
-  double timeShift; //! Sensor measurements delay
-  Eigen::Matrix<double, Eigen::Dynamic, 1> modelledPositions; //! Modeled positions
-  Eigen::Matrix<double, Eigen::Dynamic, 1> sensedPosition; //! Input joint position
-  Eigen::Matrix<double, Eigen::Dynamic, 1> cmdPosition; //! Commanded joint positions
-  Eigen::Matrix<double, Eigen::Dynamic, 1> time; //! Time vector
+  Eigen::Matrix<double, 3, 1> pid; ///< PID gains
+  double timeShift; ///< Sensor measurements delay
+  Eigen::Matrix<double, Eigen::Dynamic, 1> modelledPositions; ///< Modeled positions
+  Eigen::Matrix<double, Eigen::Dynamic, 1> sensedPosition; ///< Input joint position
+  Eigen::Matrix<double, Eigen::Dynamic, 1> cmdPosition; ///< Commanded joint positions
+  Eigen::Matrix<double, Eigen::Dynamic, 1> time; ///< Time vector
   boost::shared_ptr<JointEstimator<double> > estimator;
-  fstream measFile; //! File containing the measurements
+  fstream measFile; ///< File containing the measurements
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

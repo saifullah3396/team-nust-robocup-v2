@@ -52,10 +52,10 @@ public:
   void loadExternalConfig() final {}
   
 private:
-  //! Initial led intensities
+  ///< Initial led intensities
   vector<float> ledsI;
 
-  //! Difference with desired light intensity
+  ///< Difference with desired light intensity
   vector<float> ledsDelta;
 };
 

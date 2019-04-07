@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/MotionConfigs/MBConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBConfig.h
  *
  * This file declares the struct MBConfig
  *
@@ -20,15 +20,15 @@
  */
 struct MBConfig : BehaviorConfig
 {
-	/**
-	 * Constructor
-	 * 
-	 * @param id: Id of the behavior
-	 * @param maxRunTime: Max running time for the behavior
-	 * @param type: Type of the behavior
-	 */
+  /**
+   * Constructor
+   *
+   * @param id: Id of the behavior
+   * @param maxRunTime: Max running time for the behavior
+   * @param type: Type of the behavior
+   */
   MBConfig(
-    const MBIds& id, 
+    const MBIds& id,
     const float& maxRunTime,
     const int& childType = -1);
 

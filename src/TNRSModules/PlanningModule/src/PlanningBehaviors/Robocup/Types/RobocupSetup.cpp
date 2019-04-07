@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/RobocupSetupSetup.h
+ * @file PlanningBehaviors/Robocup/Types/RobocupSetup.cpp
  *
  * This file implements the class RobocupSetupSetup.
  *
@@ -40,7 +40,7 @@ boost::shared_ptr<RobocupSetupConfig> RobocupSetup::getBehaviorCast()
 bool RobocupSetup::initiate()
 {
   LOG_INFO("RobocupSetup.initiate() called...");
-  //! Enable all feature extraction modules
+  ///< Enable all feature extraction modules
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(true, FeatureExtractionIds::segmentation));
   BaseModule::publishModuleRequest(
@@ -178,7 +178,7 @@ void RobocupSetup::readySequenceAction()
       auto mConfig =
         boost::make_shared <HeadTargetTrackConfig> ();
       mConfig->headTargetType = HeadTargetTypes::goal;
-      //! Robot is on sidelines with other robots so keep scan range minimum.
+      ///< Robot is on sidelines with other robots so keep scan range minimum.
       mConfig->scanConfig->scanMaxYaw = 75.0 * M_PI / 180;
       setupMBRequest(MOTION_1, mConfig);
     }
@@ -190,16 +190,16 @@ void RobocupSetup::readySequenceAction()
     LOG_INFO("RobotPosition: " << pose.get());
     for (const auto& tr : TEAM_ROBOTS_IN(PlanningModule)) {
       if (tr.id == (int) PLAYER_NUMBER_IN(PlanningModule)) {
-        //! This robot itself
+        ///< This robot itself
         continue;
       }
-      //! Wait for team to get localized
+      ///< Wait for team to get localized
       if (tr.positionConfidence < 50) {
         ++teamRobotsLost;
         continue;
       }
       auto dist = (pose.get() - tr.pose.get()).norm();
-      //! Check if another team member has overlapping position
+      ///< Check if another team member has overlapping position
       if (dist < 0.2) {
         LOG_INFO("Position overlapping with team member. Relocalizing...")
         resetLocalizer();

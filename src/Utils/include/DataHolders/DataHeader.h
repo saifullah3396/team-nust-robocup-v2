@@ -30,6 +30,6 @@ public:
   void setTimeStamp(const double& timeStamp) { this->timeStamp = timeStamp; }
   const double getTimeStamp() const { return this->timeStamp; }
 
-  unsigned id = {0}; //! Identity of current observation
-  double timeStamp = {0.0}; //! Identity of current observation
+  unsigned id = {0}; ///< Identity of current observation
+  double timeStamp = {0.0}; ///< Identity of current observation
 };

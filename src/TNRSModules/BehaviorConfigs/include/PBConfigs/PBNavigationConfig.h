@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/include/PBConfigs/PBNavigationConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h
  *
  * This file defines the struct PBNavigationConfig and its childs
  *
@@ -26,11 +26,12 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   (bool, reachClosest, true),
   (boost::shared_ptr<MBPostureConfig>, startPosture, InterpToPostureConfigPtr()),
   (boost::shared_ptr<MBPostureConfig>, endPosture, InterpToPostureConfigPtr()),
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   GoToTargetConfig,
   PBNavigationConfig,
   PBNavigationTypes::goToTarget,
   GoToTargetConfigPtr
-)
+);
+

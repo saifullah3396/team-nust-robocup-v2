@@ -1,5 +1,5 @@
 /**
- * @file CameraModule/CameraModule.h
+ * @file VisionModule/include/CameraModule.h
  *
  * This file declares the class CameraModule
  *
@@ -49,7 +49,7 @@ class CameraModule : public DebugBase
 {
   INIT_DEBUG_BASE_(
     (vector<int>, settingParams, vector<int>()),
-  )
+  );
 #endif
 public:
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
@@ -79,7 +79,7 @@ public:
    * @return void
    */
   void updateImage(
-    const unsigned& index,
+    const CameraId& index,
     const int& saveImages = false,
     const bool& useLoggedImages = false);
 #else
@@ -90,13 +90,10 @@ public:
    * @return void
    */
   void updateImage(
-    const unsigned& index);
+    const CameraId& index);
 #endif
-  void
-  recordVideo(const unsigned& index);
-
-  void
-  stopRecording();
+  void recordVideo(const CameraId& index);
+  void stopRecording();
 
   /**
    * Releases the image from the camera
@@ -104,8 +101,7 @@ public:
    * @param index the camera index
    * @return void
    */
-  void
-  releaseImage(const unsigned& index);
+  void releaseImage(const CameraId& index);
 
   /**
    * Gets the pointer to given camera.
@@ -141,17 +137,17 @@ private:
 
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
     #ifndef V6_CROSS_BUILD
-      //! Pointer to NaoQi video device proxy
+      ///< Pointer to NaoQi video device proxy
       ALVideoDeviceProxyPtr camProxy;
     #else
-      //! Pointer to NaoQi video device proxy
+      ///< Pointer to NaoQi video device proxy
       qi::AnyObject camProxy;
     #endif
   #endif
-  //! Vector of cameras
+  ///< Vector of cameras
   vector<CameraPtr> cams;
 
-  //! Opencv video writer objects for top and bottom cams
+  ///< Opencv video writer objects for top and bottom cams
   #ifndef V6_CROSS_BUILD
   vector<cv::VideoWriter*> videoWriter;
   #endif

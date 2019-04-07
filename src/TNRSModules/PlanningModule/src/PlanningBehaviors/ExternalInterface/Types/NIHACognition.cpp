@@ -1,5 +1,5 @@
 /**
- * @file PlanningBehaviors/CognitionModule/Types/NIHACognition.cpp
+ * @file PlanningBehaviors/ExternalInterface/Types/NIHACognition.cpp
  *
  * This file implements the class NIHACognition
  *

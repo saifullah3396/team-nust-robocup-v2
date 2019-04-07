@@ -1,5 +1,5 @@
 /**
- * @file TNRSBase/include/MemoryIncludes.h
+ * @file TNRSBase/include/BaseIncludes.h
  *
  * This file includes all the necessary Memory classes
  *
@@ -13,6 +13,6 @@
 #include "TNRSBase/include/MemoryBase.h"
 #include "TNRSBase/include/InoutConnectors.h"
 
-//! Forward Declarations
+///< Forward Declarations
 class InputMemoryConnector;
 class OutputMemoryConnector;

@@ -59,13 +59,13 @@ private:
   double
   costFunction(const vector<double> &vars, vector<double> &grad, void *data);
 
-  //! Associated kick module
+  ///< Associated kick module
   KickModule<Scalar>* kickModulePtr;
   
-  //! Velocity constraints
+  ///< Velocity constraints
   Matrix<Scalar, Dynamic, 1> velLimits;
   
-  //! Kinematics  module
+  ///< Kinematics  module
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

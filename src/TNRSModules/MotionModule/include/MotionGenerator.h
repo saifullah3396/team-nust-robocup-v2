@@ -22,7 +22,7 @@
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
 #include "Utils/include/MathsUtils.h"
 
-//! Forward declaration
+///< Forward declaration
 template <typename Scalar>
 class MotionTask;
 
@@ -292,14 +292,14 @@ private:
    */
   bool validateTask(const boost::shared_ptr<MotionTask<Scalar> >& task);
 
-  //! Cycle time of this motion behavior
+  ///< Cycle time of this motion behavior
   Scalar cycleTime;
 
-  //! Kinematics module object
+  ///< Kinematics module object
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    //! NaoQi's motion proxy
+    ///< NaoQi's motion proxy
     #ifndef V6_CROSS_BUILD
     ALMotionProxyPtr motionProxy;
     #else
@@ -307,20 +307,20 @@ private:
     #endif
   #endif
 
-  //! Base MotionModule object pointer
+  ///< Base MotionModule object pointer
   MotionModule* motionModule;
 
-  //! Tasks vector containing all the tasks recieved from several motion modules.
-  //! All the tasks are solved together to give a resultant joint motion for the
-  //! given motion cycle.
+  ///< Tasks vector containing all the tasks recieved from several motion modules.
+  ///< All the tasks are solved together to give a resultant joint motion for the
+  ///< given motion cycle.
   vector<boost::shared_ptr<MotionTask<Scalar> > > motionTasks;
 
-  //! Joint velocity commands for joint estimator
+  ///< Joint velocity commands for joint estimator
   Matrix<Scalar,  Dynamic, 1> jointCmds;
 
-  //! Commands are recieved in this cycle
+  ///< Commands are recieved in this cycle
   bool cmdsReceived;
 
-  //! A pointer to the logger associated with running behavior
+  ///< A pointer to the logger associated with running behavior
   MotionLoggerPtr motionLogger;
 };

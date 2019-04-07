@@ -1,5 +1,5 @@
 /**
- * @file Configuration/ConfigManager.h
+ * @file Utils/src/ConfigManager.cpp
  *
  * This file implements the class ConfigManager.
  *
@@ -21,9 +21,9 @@ string ConfigManager::commonConfigDirPath = GET_STRINGS(ROOT_DIR "/../config/Com
 string ConfigManager::logsDirPath = GET_STRINGS(ROOT_DIR "/../logs/");
 string ConfigManager::robotDirPath = "";
 #else
-string ConfigManager::configDirPath = "/home/nao/config/";
-string ConfigManager::commonConfigDirPath = "/home/nao/config/";
-string ConfigManager::logsDirPath = "/home/nao/logs/";
+string ConfigManager::configDirPath = "/home/nao/team_nust/config/";
+string ConfigManager::commonConfigDirPath = "/home/nao/team_nust/config/";
+string ConfigManager::logsDirPath = "/home/nao/team_nust/logs/";
 string ConfigManager::robotDirPath = "";
 #endif
 

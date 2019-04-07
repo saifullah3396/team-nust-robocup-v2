@@ -11,7 +11,7 @@
 
 #include "BehaviorManager/include/BehaviorManager.h"
 
-//! Forward declaration
+///< Forward declaration
 class GBModule;
 
 /**
@@ -38,7 +38,7 @@ private:
    */
   bool makeBehavior(BehaviorPtr& behavior, const BehaviorConfigPtr& cfg) final;
   
-  //! Pointer to the base static behaviors module
+  ///< Pointer to the base static behaviors module
   GBModule* gbModule;
 };
 typedef boost::shared_ptr<GBManager> GBManagerPtr;

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/PostureModule/Type/InterpToPosture.cpp
+ * @file MotionModule/src/PostureModule/Types/InterpToPosture.cpp
  *
  * This file implements the class InterpToPosture
  *
@@ -35,14 +35,14 @@ template <typename Scalar>
 bool InterpToPosture<Scalar>::initiate()
 {
   LOG_INFO("InterpToPosture.initiate() called...")
-  //! Set target joints from degrees to radians
+  ///< Set target joints from degrees to radians
   auto& jointsToReach = this->getBehaviorCast()->jointsToReach;
   jointsToReach *= MathsUtils::DEG_TO_RAD;
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   this->jointsI = this->kM->getJointPositions();
   this->jointsDelta = jointsToReach - this->jointsI;
   Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
-  if (!activeJoints.any()) { //! Posture already reached
+  if (!activeJoints.any()) { ///< Posture already reached
     POSTURE_STATE_OUT(MotionModule) = this->getBehaviorCast()->targetPosture;
     return false;
   } else {
@@ -62,7 +62,7 @@ bool InterpToPosture<Scalar>::initiate()
   this->jointsI = this->kM->getJointPositions();
   this->jointsDelta = jointsToReach - this->jointsI;
   Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
-  if (!activeJoints.any()) { //! Posture already reached
+  if (!activeJoints.any()) { ///< Posture already reached
     POSTURE_STATE_OUT(MotionModule) = this->getBehaviorCast()->targetPosture;
     return false;
   } else {

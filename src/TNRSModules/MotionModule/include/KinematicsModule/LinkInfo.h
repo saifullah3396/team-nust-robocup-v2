@@ -27,22 +27,22 @@ struct LinkInfo
   {
   }
 
-  //! Link mass
+  ///< Link mass
   Scalar mass;
 
-  //! Partial mass with respect to totalChains mass
+  ///< Partial mass with respect to totalChains mass
   Scalar partialMass;
 
-  //! Link inertia tensor matrix
+  ///< Link inertia tensor matrix
   Matrix<Scalar, 3, 3> inertia;
 
-  //! Link inertia transformation matrix
+  ///< Link inertia transformation matrix
   Matrix<Scalar, 3, 3> inertiaTrans;
 
-  //! Link center of mass vector
+  ///< Link center of mass vector
   Matrix<Scalar, 4, 1> com;
 
-  //! Associated link chain
+  ///< Associated link chain
   boost::shared_ptr<LinkChain<Scalar> > chain;
 
 public:

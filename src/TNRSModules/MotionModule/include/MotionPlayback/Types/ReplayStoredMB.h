@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/MotionPlayback/Types/ReplayStoredMB.h
+ * @file MotionModule/include/MotionPlayback/Types/ReplayStoredMB.h
  *
  * This file declares the class ReplayStoredMB
  *
@@ -60,16 +60,16 @@ private:
 	 */
   boost::shared_ptr<ReplayStoredMBConfig> getBehaviorCast();
 
-  //! Total motion playback time
+  ///< Total motion playback time
   Scalar mbTime;
 
-  //! Saved joint position commands
+  ///< Saved joint position commands
   Matrix<Scalar, Dynamic, Dynamic> jointCmds;
 
-  //! Saved joint command relative times
+  ///< Saved joint command relative times
   Matrix<Scalar, Dynamic, 1> jointTimes;
 
-  //! Recorded command step
+  ///< Recorded command step
   unsigned step;
 };
 

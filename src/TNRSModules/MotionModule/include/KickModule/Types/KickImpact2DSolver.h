@@ -56,16 +56,16 @@ private:
   double
   costFunction(const vector<double> &vars, vector<double> &grad, void *data);
   
-  //! Initial ball velocity
+  ///< Initial ball velocity
   Matrix<Scalar, 2, 1> iBallVel; // This is a vector of velocity magnitude and its angle.
   
-  //! Final desired ball velocity
+  ///< Final desired ball velocity
   Matrix<Scalar, 2, 1> fBallVelDes;
 
-  //! Associated kick for optimization 
+  ///< Associated kick for optimization 
   JSE2DImpKick<Scalar>* kickPtr;
   
-  //! Kinematics module
+  ///< Kinematics module
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

@@ -31,22 +31,22 @@ struct TorsoState
     scale.setZero();
   }
 
-  //! Torso velocity
+  ///< Torso velocity
   Matrix<Scalar, 3, 1> velocity;
 
-  //! Torso angular velocity
+  ///< Torso angular velocity
   Matrix<Scalar, 3, 1> angularVelocity;
 
-  //! Torso acceleration
+  ///< Torso acceleration
   Matrix<Scalar, 3, 1> accel;
 
-  //! Torso rotation
+  ///< Torso rotation
   Matrix<Scalar, 4, 4> rot;
 
-  //! Imu Bias
+  ///< Imu Bias
   Matrix<Scalar, 3, 1> bias;
 
-  //! Imu scale factor
+  ///< Imu scale factor
   Matrix<Scalar, 3, 3> scale;
 
 public:

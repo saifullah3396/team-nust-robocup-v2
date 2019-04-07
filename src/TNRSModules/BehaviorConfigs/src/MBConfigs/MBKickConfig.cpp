@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MotionConfigs/MBKickConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBKickConfig.cpp
  *
  * This file implements the structs MBKickConfig, JSKickConfig,
  * JSE2DImpKickConfig and JSOImpKickConfig
@@ -17,11 +17,11 @@ DEFINE_BEHAVIOR_CONFIG(
   (MBKickTypes, jsoImpKick, JSOImpKickConfig),
   (MBKickTypes, jse2DImpKick, JSE2DImpKickConfig),
   (MBKickTypes, cSpaceBSplineKick, CSpaceBSplineKickConfig),
-)
+);
 
 void JSOImpKickConfig::init()
 {
-  if (!balanceConfig) //! Default config for balancing
+  if (!balanceConfig) ///< Default config for balancing
     balanceConfig = boost::make_shared<MPComControlConfig>();
 }
 
@@ -42,7 +42,7 @@ void JSOImpKickConfig::validate()
 
 void JSE2DImpKickConfig::init()
 {
-  if (!balanceConfig) //! Default config for balancing
+  if (!balanceConfig) ///< Default config for balancing
     balanceConfig = boost::make_shared<MPComControlConfig>();
 }
 
@@ -64,11 +64,11 @@ void JSE2DImpKickConfig::validate()
 
 void CSpaceBSplineKickConfig::init()
 {
-  if (!balanceConfig) //! Default config for balancing
+  if (!balanceConfig) ///< Default config for balancing
     balanceConfig = boost::make_shared<MPComControlConfig>();
 }
 
 void CSpaceBSplineKickConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }

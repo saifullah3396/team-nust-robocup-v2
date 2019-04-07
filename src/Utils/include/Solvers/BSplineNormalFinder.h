@@ -1,12 +1,12 @@
 /**
- * @file Utils/include/BSplineNormalFinder.h
+ * @file Utils/include/Solvers/BSplineNormalFinder.h
  *
  * This file declares the class BSplineNormalFinder
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 Jul 2018  
+ * @date 17 Jul 2018
  */
- 
+
 #pragma once
 #include "Utils/include/Splines/BSpline.h"
 #include "Utils/include/Solvers/NLOptimizer.h"
@@ -30,13 +30,13 @@ public:
   BSplineNormalFinder(
     BSpline<Scalar>* bSplinePtr,
     const Matrix<Scalar, 3, 1>& normal,
-    const Matrix<Scalar, 2, 1>&tBounds) : 
+    const Matrix<Scalar, 2, 1>&tBounds) :
     bSplinePtr(bSplinePtr),
     normal(normal),
     tBounds(tBounds)
   {
   }
-  
+
   /**
    * @brief ~BSplineNormalFinder Destructor
    */
@@ -58,12 +58,12 @@ protected:
    * Evaluates the objective function
    */
   double costFunction(const vector<double> &vars, vector<double> &grad, void *data) final;
-  
-  BSpline<Scalar>* bSplinePtr; //! Pointer to associated BSpline
-  Matrix<Scalar, 3, 1> normal; //!  Normal vector
-  Matrix<Scalar, 2, 1> tBounds; //! Bounds of 't'
-  Scalar resT; //! Resulting curve paramter 't' giving the normal point
-  Matrix<Scalar, Dynamic, 1> resSplinePoint; //! Resulting point on curve
+
+  BSpline<Scalar>* bSplinePtr; ///< Pointer to associated BSpline
+  Matrix<Scalar, 3, 1> normal; ///<  Normal vector
+  Matrix<Scalar, 2, 1> tBounds; ///< Bounds of 't'
+  Scalar resT; ///< Resulting curve paramter 't' giving the normal point
+  Matrix<Scalar, Dynamic, 1> resSplinePoint; ///< Resulting point on curve
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

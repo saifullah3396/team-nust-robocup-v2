@@ -35,7 +35,7 @@ class LocalizationModule : public BaseModule
     robotOnSideLine,
     localizeWithLastKnown,
     robotInMotion
-  )
+  );
   DECLARE_OUTPUT_CONNECTOR(
     robotPose2D,
     lastKnownPose2D,
@@ -45,7 +45,7 @@ class LocalizationModule : public BaseModule
     sideConfidence,
     fieldWidth,
     fieldHeight
-  )
+  );
 public:
   /**
    * Constructor
@@ -96,18 +96,18 @@ public:
   boost::shared_ptr<ParticleFilter> getParticleFilter() { return particleFilter; }
 
 private:
-  //! Whether to perform processing related to robot localization
+  ///< Whether to perform processing related to robot localization
   bool runLocalization = {true};
 
-  //! Whether to update the particle filter
+  ///< Whether to update the particle filter
   bool updateFilter = {true};
 
-  //! Whether to update the field map
+  ///< Whether to update the field map
   bool updateMap = {true};
 
-  //! Particle filter object
+  ///< Particle filter object
   boost::shared_ptr<ParticleFilter> particleFilter;
 
-  //! Field map object
+  ///< Field map object
   boost::shared_ptr<FieldMap> fieldMap;
 };

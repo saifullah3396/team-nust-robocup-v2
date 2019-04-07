@@ -7,7 +7,7 @@ enum class KeyFrameGetupTypes : unsigned int
 {
   front,
   back,
-  //! GETUP FROM SIT NOT TESTED DO NO USE WITHOUT TESTING IN SIMULATIONS FIRST
+  ///< GETUP FROM SIT NOT TESTED DO NO USE WITHOUT TESTING IN SIMULATIONS FIRST
   sit
 };
 
@@ -108,7 +108,7 @@ static const MType getupFromBack[19][25] =
         { 0.100 * 1, 0, 30, 90, 11.5, -90, -11.5, -90, 90, -11.5, 90, 11.5, 90,
           0, -0, -45, 71.4, -35.1, -0, 0, 0, -45, 71.4, -35.1, 0 } };
 
-//! NOT TESTED DO NO USE WITHOUT TESTING IN SIMULATIONS FIRST
+///< NOT TESTED DO NO USE WITHOUT TESTING IN SIMULATIONS FIRST
 static const MType getupFromSit[10][25] =
     {
         { 0.5, 7.5, 30, 119.8, 7.8, -71.1, -31.4, -90, 121.6, -0.4, 87.5,

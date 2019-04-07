@@ -17,5 +17,5 @@ DEFINE_MODULE_REQUEST(
   (GBRequestIds, ledRequest, LedRequest),
   (GBRequestIds, behaviorRequest, RequestGeneralBehavior),
   (GBRequestIds, killBehavior, KillGeneralBehavior),
-)
+);
 

@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/include/PlanningBehaviors/KickSequence.h
+ * @file PlanningBehaviors/KickSequence/KickSequence.h
  *
  * This file declares the class KickSequence
  *
@@ -14,7 +14,7 @@
 
 /**
  * @class KickSequence
- * @brief The class for defining different kinds of kick sequences 
+ * @brief The class for defining different kinds of kick sequences
  *   possible
  */
 class KickSequence : public PlanningBehavior
@@ -22,13 +22,13 @@ class KickSequence : public PlanningBehavior
 public:
   /**
    * Constructor
-   * 
+   *
    * @param planningModule: pointer to parent planning module
    * @param config: Configuration of this behavior
    * @param name: Name of this behavior
    */
   KickSequence(
-    PlanningModule* planningModule, 
+    PlanningModule* planningModule,
     const BehaviorConfigPtr& config,
     const string& name = "KickSequence") :
     PlanningBehavior(planningModule, config, name)
@@ -41,25 +41,25 @@ public:
   ~KickSequence()
   {
   }
-  
+
   /**
    * Returns its own child based on the given type
-   * 
+   *
    * @param planningModule: Pointer to base planning module
    * @param cfg: Config of the requested behavior
-   * 
+   *
    * @return BehaviorConfigPtr
    */
   static boost::shared_ptr<KickSequence> getType(
     PlanningModule* planningModule, const BehaviorConfigPtr& type);
 
-  //! Child type may or may not use the same behavior config as parent
+  ///< Child type may or may not use the same behavior config as parent
   virtual void loadExternalConfig() {}
 
 private:
   /**
    * Returns the config casted as PBKickSequenceConfig
-   */ 
+   */
   boost::shared_ptr<PBKickSequenceConfig> getBehaviorCast();
 
 protected:

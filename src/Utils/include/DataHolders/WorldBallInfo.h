@@ -43,7 +43,7 @@ struct WorldBallInfo : public DataHolder
     return val;
   }
 
-  bool found = bool{false}; //! Whether the ball is found
-  cv::Point_<T> posWorld; //! Ball position in world frame
-  cv::Point_<T> velWorld; //! Ball velocity in world frame
+  bool found = bool{false}; ///< Whether the ball is found
+  cv::Point_<T> posWorld; ///< Ball position in world frame
+  cv::Point_<T> velWorld; ///< Ball velocity in world frame
 };

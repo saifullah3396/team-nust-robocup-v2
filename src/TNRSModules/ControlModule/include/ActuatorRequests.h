@@ -69,10 +69,10 @@ public:
   }
 
 protected:
-  //! Vector of actuator request values
+  ///< Vector of actuator request values
   vector<float> value;
 
-  //! Total number of actuators in this request
+  ///< Total number of actuators in this request
   size_t size;
 };
 typedef boost::shared_ptr<ActuatorRequest> ActuatorRequestPtr;

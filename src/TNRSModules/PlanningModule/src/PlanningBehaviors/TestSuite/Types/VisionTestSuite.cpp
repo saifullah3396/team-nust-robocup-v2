@@ -32,15 +32,16 @@ VisionTestSuiteConfigPtr VisionTestSuite::getBehaviorCast()
 bool VisionTestSuite::initiate()
 {
   LOG_INFO("VisionTestSuite.initiate() called...");
-  //! Set robot on side line as false
+  ///< Set robot on side line as false
   ON_SIDE_LINE_OUT(PlanningModule) = false;
 
-  //! Switch on the vision and localization modules
+  ///< Switch on the vision and localization modules
   BaseModule::publishModuleRequest(boost::make_shared<SwitchVision>(true));
-  BaseModule::publishModuleRequest(boost::make_shared<SwitchFieldProjection>(true));
   BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(true));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(false));
 
-  //! Initiate the localizer with given initial robot pose
+  ///< Initiate the localizer with given initial robot pose
   BaseModule::publishModuleRequest(
     boost::make_shared<InitiateLocalizer>(
       getBehaviorCast()->startPose)
@@ -64,6 +65,8 @@ void VisionTestSuite::update()
       testRobotExtraction();
     } else if (testType == "LinesExtraction") {
       testLinesExtraction();
+    } else if (testType == "FieldProjection") {
+      testFieldProjection();
     } else if (testType == "All") {
       testAll();
     } else {
@@ -90,7 +93,7 @@ void VisionTestSuite::finish()
 
 void VisionTestSuite::testSegmentation()
 {
-  //! Switch on field extraction modules
+  ///< Switch on field extraction modules
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::segmentation));
@@ -102,6 +105,7 @@ void VisionTestSuite::testSegmentation()
   value["RegionSegmentation"]["drawVerticalLines"] = 1;
   value["RegionSegmentation"]["drawPoints"] = 1;
   value["RegionSegmentation"]["displayOutput"] = 1;
+  value["RegionSegmentation"]["displayInfo"] = 1;
   DebugBase::processDebugMsg(value);
   /*if (!mbInProgress()) {
     auto mConfig =
@@ -114,7 +118,7 @@ void VisionTestSuite::testSegmentation()
 
 void VisionTestSuite::testFieldExtraction()
 {
-  //! Switch on field extraction modules
+  ///< Switch on field extraction modules
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::segmentation));
@@ -122,24 +126,25 @@ void VisionTestSuite::testFieldExtraction()
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::field));
 
-  if (!mbInProgress()) {
+  /*if (!mbInProgress()) {
     auto mConfig =
       boost::make_shared <HeadScanConfig> ();
     mConfig->scanMaxYaw = 75 * M_PI / 180;
     setupMBRequest(0, mConfig);
-  }
+  }*/
   Json::Value value;
   value["RegionSegmentation"]["drawPoints"] = 1;
   value["FieldExtraction"]["drawFiltPoints"] = 1;
   value["FieldExtraction"]["drawBorder"] = 1;
   value["FieldExtraction"]["drawBorderLines"] = 1;
   value["FieldExtraction"]["displayOutput"] = 1;
+  value["LinesExtraction"]["displayInfo"] = 1;
   DebugBase::processDebugMsg(value);
 }
 
 void VisionTestSuite::testGoalExtraction()
 {
-  //! Switch on field extraction modules
+  ///< Switch on field extraction modules
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::segmentation));
@@ -152,17 +157,17 @@ void VisionTestSuite::testGoalExtraction()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::goal));
-  if (!mbInProgress()) {
+  /*if (!mbInProgress()) {
     auto mConfig =
       boost::make_shared <HeadScanConfig> ();
     mConfig->scanMaxYaw = 45 * M_PI / 180;
     setupMBRequest(0, mConfig);
-  }
+  }*/
   Json::Value value;
-  value["FieldExtraction"]["drawBorder"] = 1;
   value["GoalExtraction"]["drawScannedLines"] = 1;
   value["GoalExtraction"]["drawScannedRegions"] = 1;
   value["GoalExtraction"]["drawGoalBaseWindows"] = 1;
+  value["GoalExtraction"]["drawShiftedBorderLines"] = 1;
   value["GoalExtraction"]["drawGoalPostBases"] = 1;
   value["GoalExtraction"]["displayOutput"] = 1;
   DebugBase::processDebugMsg(value);
@@ -170,7 +175,7 @@ void VisionTestSuite::testGoalExtraction()
 
 void VisionTestSuite::testBallExtraction()
 {
-  //! Switch on field extraction modules
+  ///< Switch on field extraction modules
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::segmentation));
@@ -179,30 +184,25 @@ void VisionTestSuite::testBallExtraction()
           true, FeatureExtractionIds::field));
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
-          true, FeatureExtractionIds::robot));
-  BaseModule::publishModuleRequest(
-    boost::make_shared<SwitchFeatureExtModule>(
-          true, FeatureExtractionIds::goal));
-  BaseModule::publishModuleRequest(
-    boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::ball));
-  if (!mbInProgress()) {
+  /*if (!mbInProgress()) {
     auto mConfig =
       boost::make_shared <HeadTargetTrackConfig> ();
     mConfig->headTargetType = HeadTargetTypes::ball;
     setupMBRequest(0, mConfig);
-  }
+  }*/
   Json::Value value;
   value["BallExtraction"]["drawPredictionState"] = 1;
   value["BallExtraction"]["drawScannedRegions"] = 1;
   value["BallExtraction"]["drawBallContour"] = 1;
   value["BallExtraction"]["displayOutput"] = 1;
+  value["BallExtraction"]["displayInfo"] = 1;
   DebugBase::processDebugMsg(value);
 }
 
 void VisionTestSuite::testRobotExtraction()
 {
-  //! Switch on field extraction modules
+  ///< Switch on field extraction modules
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::segmentation));
@@ -212,14 +212,14 @@ void VisionTestSuite::testRobotExtraction()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::robot));
-  if (!mbInProgress()) {
+  /*if (!mbInProgress()) {
     auto mConfig =
       boost::make_shared <HeadScanConfig> ();
     mConfig->scanMaxYaw = 45 * M_PI / 180;
     setupMBRequest(0, mConfig);
-  }
+  }*/
   Json::Value value;
-  value["RobotExtraction"]["drawScannedLines"] = 1;
+  //value["RobotExtraction"]["drawScannedLines"] = 1;
   value["RobotExtraction"]["drawJerseyRegions"] = 1;
   value["RobotExtraction"]["drawRobotRegions"] = 1;
   value["RobotExtraction"]["drawStrayRegions"] = 1;
@@ -229,7 +229,7 @@ void VisionTestSuite::testRobotExtraction()
 
 void VisionTestSuite::testLinesExtraction()
 {
-  //! Switch on field extraction modules
+  ///< Switch on field extraction modules
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::segmentation));
@@ -242,12 +242,12 @@ void VisionTestSuite::testLinesExtraction()
   BaseModule::publishModuleRequest(
     boost::make_shared<SwitchFeatureExtModule>(
           true, FeatureExtractionIds::lines));
-  if (!mbInProgress()) {
+  /*if (!mbInProgress()) {
     auto mConfig =
       boost::make_shared <HeadScanConfig> ();
     mConfig->scanMaxYaw = 90 * M_PI / 180;
     setupMBRequest(0, mConfig);
-  }
+  }*/
   Json::Value value;
   value["FieldExtraction"]["drawBorderLines"] = 1;
   value["LinesExtraction"]["drawScannedEdges"] = 1;
@@ -258,7 +258,21 @@ void VisionTestSuite::testLinesExtraction()
   value["LinesExtraction"]["drawCircle"] = 1;
   value["LinesExtraction"]["drawUnknownLandmarks"] = 1;
   value["LinesExtraction"]["displayOutput"] = 1;
+  value["LinesExtraction"]["displayInfo"] = 1;
   DebugBase::processDebugMsg(value);
+  BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(false));
+}
+
+void VisionTestSuite::testFieldProjection()
+{
+  ///< Switch on field extraction modules
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::segmentation));
+  BaseModule::publishModuleRequest(
+    boost::make_shared<SwitchFeatureExtModule>(
+          true, FeatureExtractionIds::field));
+  BaseModule::publishModuleRequest(boost::make_shared<SwitchFieldProjection>(true));
 }
 
 void VisionTestSuite::testAll()

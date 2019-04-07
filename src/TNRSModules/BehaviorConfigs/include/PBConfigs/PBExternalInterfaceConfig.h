@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/include/PBConfigs/PBExternalInterfaceConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/PBConfigs/PBExternalInterfaceConfig.h
  *
  * This file defines the struct PBExternalInterfaceConfig and its childs
  *
@@ -20,18 +20,18 @@ DECLARE_BEHAVIOR_CONFIG(
   PBIds::externalInterface,
   9999.f,
   PBExternalInterfaceTypes
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   NIHACognitionConfig,
   PBExternalInterfaceConfig,
   PBExternalInterfaceTypes::nihaCognition,
   NIHACognitionConfigPtr
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   UserRequestsHandlerConfig,
   PBExternalInterfaceConfig,
   PBExternalInterfaceTypes::userReqHandler,
   UserRequestsHandlerConfigPtr
-)
+);

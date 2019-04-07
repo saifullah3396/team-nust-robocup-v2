@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/TrajectoryPlanner/TrajectoryPlanner.h
+ * @file MotionModule/include/TrajectoryPlanner/TrajectoryPlanner.h
  *
  * This file declares a class for creating smooth trajectories for the 
  * joints based on requried conditions.
@@ -86,13 +86,13 @@ public:
    void defineViaPoints(Vector3f initialVelocity, Vector3f finalVelocity);
    Scalar getTrajStep() {return trajStep;}*/
 private:
-  //! Size of the timestep.
+  ///< Size of the timestep.
   Scalar stepSize;
   /*
    vector<Vector3f> trajectoryRefPoints;
    fstream controlPointsLog;*/
 
-  //! Kinematics module object.
+  ///< Kinematics module object.
   KinematicsModulePtr kM;
 
 public:

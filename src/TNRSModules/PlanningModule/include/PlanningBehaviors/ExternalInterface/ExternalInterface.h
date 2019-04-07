@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/include/PlanningBehaviors/ExternalInterface.h
+ * @file PlanningModule/include/PlanningBehaviors/ExternalInterface/ExternalInterface.h
  *
  * This file declares the class ExternalInterface
  *
@@ -54,7 +54,7 @@ public:
   static boost::shared_ptr<ExternalInterface> getType(
     PlanningModule* planningModule, const BehaviorConfigPtr& type);
 
-  //! Child type may or may not use the same behavior config as parent
+  ///< Child type may or may not use the same behavior config as parent
   virtual void loadExternalConfig() {}
 
 private:

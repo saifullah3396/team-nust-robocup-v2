@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <boost/exception/diagnostic_information.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
 #include <boost/numeric/conversion/cast.hpp>
@@ -21,23 +22,36 @@
 #include <boost/iostreams/filter/zlib.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <zlib.h>
+#include "Utils/include/PrintUtils.h"
 
 namespace Utils {
 
-  void compress(const std::string& data, std::string& buffer)
+  bool compress(const std::string& data, std::string& buffer)
   {
+    try {
       boost::iostreams::filtering_streambuf<boost::iostreams::output> out;
       out.push(boost::iostreams::zlib_compressor());
       out.push(boost::iostreams::back_inserter(buffer));
       boost::iostreams::copy(boost::make_iterator_range(data), out);
+    } catch (boost::exception& e) {
+      LOG_EXCEPTION(boost::diagnostic_information(e));
+      return false;
+    }
+    return true;
   }
 
-  void decompress(const std::string& data, std::string& buffer)
+  bool decompress(const std::string& data, std::string& buffer)
   {
+    try {
       boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
       in.push(boost::iostreams::zlib_decompressor());
       in.push(boost::make_iterator_range(data));
       boost::iostreams::copy(in, boost::iostreams::back_inserter(buffer));
+    } catch (boost::exception& e) {
+      LOG_EXCEPTION(boost::diagnostic_information(e));
+      return false;
+    }
+    return true;
   }
 
 }

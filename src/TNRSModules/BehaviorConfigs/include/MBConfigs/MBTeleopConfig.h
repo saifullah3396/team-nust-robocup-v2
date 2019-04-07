@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/MBConfigs/MBTeleopConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBTeleopConfig.h
  *
  * This file defines the struct MBTeleopConfig and its childs
  *
@@ -24,7 +24,7 @@ DECLARE_BEHAVIOR_CONFIG(
   MBIds::teleop,
   9999.f,
   MBTeleopTypes
-)
+);
 
 /**
  * @struct TeleopJointsConfig
@@ -36,4 +36,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBTeleopTypes::teleopJoints,
   TeleopJointsConfigPtr,
   (vector<float>, jointCommands, vector<float>()),
-)
+);

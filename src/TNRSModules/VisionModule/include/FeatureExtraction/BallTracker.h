@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/BallTracker.h
+ * @file VisionModule/include/FeatureExtraction/BallTracker.h
  *
  * This file declares the class BallTracker
  *
@@ -23,136 +23,105 @@ class BallTracker : public MemoryBase
 {
 public:
   /**
-   * Default constructor for this class.
-   * 
-   * @param visionModule: Pointer to parent VisionModule.
+   * @brief BallTracker Constructor
+   * @param visionModule Pointer to base vision module
    */
   BallTracker(VisionModule* visionModule) :
     MemoryBase(visionModule), visionModule(visionModule),
-      cameraTransforms(visionModule->getCameraTransforms()),
-      cycleTime(visionModule->getPeriodMinMS() / ((float) 1000)), stateSize(12),
-      measSize(6), motionStateSize(6), contrSize(0), timeSinceLost(-1.f), timeAtLost(-1.f),
-      losingBall(false)
+    cameraTransforms(visionModule->getCameraTransforms()),
+    cycleTime(visionModule->getPeriodMinMS() / ((float) 1000))
   {
   }
+
 
   /**
-   * Default destructor for this class.
+   * @brief BallTracker Destructor
    */
-  ~BallTracker()
-  {
-  }
+  ~BallTracker() {}
 
-  void
-  init(const unsigned& camIndex = 0);  
-  
-  void 
-  reset(const unsigned& camIndex = 0);
-  
-  void 
-  reset(const unsigned& camIndex, const Mat& state);
-  
-  Mat
-  predict();
-
-  Mat
-  getEstimatedState();
-
-  void
-  updateFilter(vector<Rect> ballRect);
-
-  void
-  setupKalmanFilter();
-  
-  void 
-  getBallPreview(
-	vector<Mat>& ballPreview, 
-	const unsigned& n, 
-	const float& dt);
-  
-  bool
-  getBallFound() const
-  {
-    return !lost;
-  }
-
-  float
-  getTimeSinceLost() const
-  {
-    return timeSinceLost;
-  }
-
-  void
-  setCamIndex(const unsigned& camIndex)
-  {
-    this->camIndex = camIndex;
-  }
+  void init(const CameraId& camIndex);
+  void reset(const CameraId& camIndex);
+  void reset(const CameraId& camIndex, const Mat& state);
+  Mat predict();
+  Mat getEstimatedState();
+  void updateFilter(vector<Rect> ballRect);
+  void setupKalmanFilter();
+  void getBallPreview(
+    vector<Mat>& ballPreview, const unsigned& n, const float& dt);
+  bool getBallFound() const
+    { return !lost; }
+  CameraId getCamIndex() const
+   { return camIndex; }
+  float getTimeSinceLost() const
+    { return timeSinceLost; }
+  void setCamIndex(const CameraId& camIndex)
+    { this->camIndex = camIndex; }
 
 private:
-  //! OpenCv based kalman filter object.
+  ///< OpenCv based kalman filter object.
   cv::KalmanFilter kFilter;
 
-  //! Vector of state variables.
+  ///< Vector of state variables.
   Mat state;
-  
-  //! Vector of motion state variables.
-  //! [posX, posY, velocityX, velocityY, accX, accY]
+
+  ///< Vector of motion state variables.
+  ///< [posX, posY, velocityX, velocityY, accX, accY]
   Mat motionState;
-  
-  //! State transition matrix for motion update for trajectory 
-  //! extrapolation
+
+  ///< State transition matrix for motion update for trajectory
+  ///< extrapolation
   Mat motionStateTransition;
-  
-  //! Vector of measurement variables.
+
+  ///< Vector of measurement variables.
   Mat meas;
 
-  //! A matrix defining the actual noise covariance matrix for measurements
+  ///< A matrix defining the actual noise covariance matrix for measurements
   Mat measNoiseCov;
-  
-  //! A matrix defining noise covariance matrix for when no measurement input is recieved
+
+  ///< A matrix defining noise covariance matrix for when no measurement input is recieved
   Mat infMeasNoiseCov;
 
-  //! Number of state variables: 
-  //! [posX, posY, velocityX, velocityY, accX, accY,
-  //!  posImageX, posImageY, velocityImageX, velocityImageY, 
-  //!  wImage, hImage]
-  int stateSize;
+  ///< Number of state variables:
+  ///< [posX, posY, velocityX, velocityY, accX, accY,
+  ///<  posImageX, posImageY, velocityImageX, velocityImageY,
+  ///<  wImage, hImage]
+  int stateSize = {12};
 
-  //! Number of measurement variables: 
-  //! [measPosX, measPosY, measPosImageX, measPosImageY, 
-  //!  measWImage, measHImage]
-  int measSize;
-  
-  //! Number of motion state variables
-  int motionStateSize;
+  ///< Number of measurement variables:
+  ///< [measPosX, measPosY, measPosImageX, measPosImageY,
+  ///<  measWImage, measHImage]
+  int measSize = {6};
 
-  //! Number of variables in the contr state vector. 
-  int contrSize;
+  ///< Number of motion state variables
+  int motionStateSize = {6};
 
-  //! Time at which the ball was lost.
-  float timeAtLost;
+  ///< Number of variables in the contr state vector.
+  int contrSize = {0};
 
-  //! Time since the ball was lost.
-  float timeSinceLost;
+  ///< Time at which the ball was lost.
+  float timeAtLost = {-1.f};
 
-  //! Whether the filter is to be reinitialized.
-  bool reinitialize;
+  ///< Time since the ball was lost.
+  float timeSinceLost = {-1.f};
 
-  //! Whether the ball is lost.
-  bool lost;
+  ///< Whether the filter is to be reinitialized.
+  bool reinitialize = {true};
 
-  //! Whether we are currently getting no ball observation.
-  bool losingBall;
+  ///< Whether the ball is lost.
+  bool lost = {true};
 
-  //! Time step for the kalman filter updates.
+  ///< Whether we are currently getting no ball observation.
+  bool losingBall = {false};
+
+  ///< Time step for the kalman filter updates.
   float cycleTime;
 
-  //! Image transform object.
+  ///< Image transform object.
   vector<boost::shared_ptr<CameraTransform> > cameraTransforms;
 
-  //! Cam index for ball tracker information.
-  unsigned camIndex;
+  ///< Cam index for ball tracker information.
+  CameraId camIndex;
 
-  //! Vision module pointer object.
+  ///< Vision module pointer object.
   VisionModule* visionModule;
 };

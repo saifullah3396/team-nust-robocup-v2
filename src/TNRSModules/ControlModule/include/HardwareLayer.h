@@ -60,7 +60,7 @@ typedef boost::shared_ptr<vector<float> > vectorFloatPtr;
         /** \
          * Constructor \
          * \
-         * @param memoryProxy: pointer to NaoQi's memory proxy. \
+         * @param dcmProxy: pointer to NaoQi's dcm proxy. \
          */ \
         ClassName(const ALDCMProxyPtr& dcmProxy) : \
           ActuatorLayer(dcmProxy) \
@@ -122,10 +122,11 @@ public:
   }
 
   /**
-   * @rief makeSensorLayer Constructs a sensor layer for given index
+   * @brief makeSensorLayer Constructs a sensor layer for given index
    *
-   * @param sensorIndex: index of the sensor group
-   * @param sensorHandle: pointer to the object recieving sensor values
+   * @param sensorIndex Index of the sensor group
+   * @param sensorHandle Pointer to the object recieving sensor values
+   * @param memoryProxy Pointer to Naoqi memory Proxy
    *
    * @return boost::shared_ptr<SensorLayer>
    */
@@ -147,11 +148,11 @@ protected:
   void init(const string& jsonFile);
 
 private:
-  vector<string> keys; //! Vector of sensor keys
-  size_t size; //! Size of Sensors
-  NAOQI_MEMORY_PROXY_TYPE memoryProxy; //! Pointer to NaoQi internal memory
-  vector<float>* sensorHandle; //! Extracted values of the sensors
-  vector<float*> sensorPtrs; //! Pointers to sensors of NaoQi ALMemory
+  vector<string> keys; ///< Vector of sensor keys
+  size_t size; ///< Size of Sensors
+  NAOQI_MEMORY_PROXY_TYPE memoryProxy; ///< Pointer to NaoQi internal memory
+  vector<float>* sensorHandle; ///< Extracted values of the sensors
+  vector<float*> sensorPtrs; ///< Pointers to sensors of NaoQi ALMemory
 };
 
 typedef boost::shared_ptr<SensorLayer> SensorLayerPtr;
@@ -258,7 +259,6 @@ public:
 
   /**
    * @brief update Sends the actuator requests to NaoQi DCM for execution
-   * @param request: The requested actuators
    */
   void update();
 
@@ -299,14 +299,14 @@ private:
   void setActuatorCommand();
   #endif
 
-  vector<string> keys; //! Vector to memory keys
-  unsigned size; //! Size of actuators
-  string alias; //! Unique actuation request command alias
-  ThreadSafeQueue<ActuatorRequestPtr> requests; //! Actuator requests queue
-  float dcmTime; //! NaoQi DCM architecture time
+  vector<string> keys; ///< Vector to memory keys
+  unsigned size; ///< Size of actuators
+  string alias; ///< Unique actuation request command alias
+  ThreadSafeQueue<ActuatorRequestPtr> requests; ///< Actuator requests queue
+  float dcmTime; ///< NaoQi DCM architecture time
   #ifndef V6_CROSS_BUILD
-  AL::ALValue commands; //! Commands sent to DCM
-  ALDCMProxyPtr dcmProxy; //! Pointer to NaoQi DCM
+  AL::ALValue commands; ///< Commands sent to DCM
+  ALDCMProxyPtr dcmProxy; ///< Pointer to NaoQi DCM
   #endif
 };
 

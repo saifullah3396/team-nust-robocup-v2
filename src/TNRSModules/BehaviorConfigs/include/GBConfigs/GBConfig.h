@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/GBConfigs.h
+ * @file TNRSModules/BehaviorConfigs/include/GBConfigs/GBConfig.h
  *
  * This file declares the class GBConfig
  *
@@ -19,13 +19,13 @@
  */
 struct GBConfig : BehaviorConfig
 {
-	/**
-	 * Constructor
-	 * 
-	 * @param id: Id of the behavior
-	 * @param maxRunTime: Max running time for the behavior
-	 * @param type: Type of the behavior
-	 */
+  /**
+   * Constructor
+   *
+   * @param id: Id of the behavior
+   * @param maxRunTime: Max running time for the behavior
+   * @param type: Type of the behavior
+   */
   GBConfig(
     const GBIds& id,
     const float& maxRunTime,

@@ -1,8 +1,8 @@
 /**
- * @file MotionModule/include/KinematicsModule/ZmpRef.h
+ * @file MotionModule/include/BalanceModule/ZmpRef.h
  *
  * This file defines the struct ZmpRef
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date Jul 22 2018
  */
@@ -39,10 +39,10 @@ struct ZmpRef
       return false;
     }
   }
-  
-  //! x references of fixed capacity
+
+  ///< x references of fixed capacity
   boost::circular_buffer<Scalar> x;
 
-  //! y references of fixed capacity
+  ///< y references of fixed capacity
   boost::circular_buffer<Scalar> y;
 };

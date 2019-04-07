@@ -67,6 +67,6 @@ public:
   }
 
 private:
-  //! Pointer to a vector of feature extraction classes.
+  ///< Pointer to a vector of feature extraction classes.
   vector<boost::shared_ptr<Filter> > filters;
 };

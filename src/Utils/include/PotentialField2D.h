@@ -1,5 +1,5 @@
 /**
- * @file Utils/includes/PotentialField2D.h
+ * @file Utils/include/PotentialField2D.h
  *
  * This file declares the class PotentialField2D
  *
@@ -48,7 +48,7 @@ private:
   RobotPose2D<Scalar> goalPose;
   RobotPose2D<Scalar> robotPose;
 
-  //! Attractive forces constant
+  ///< Attractive forces constant
   Scalar kAtt;
   Scalar kRep;
   Scalar kRepPerp;

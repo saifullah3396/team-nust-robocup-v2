@@ -132,39 +132,39 @@ public:
   bool isInitiated() { return initiated; }
 
 private:
-  //! Kalman filter
+  ///< Kalman filter
   boost::shared_ptr<KalmanFilter<Scalar, 2, 1, 1, 1> > filter;
 
-  //! Joint state transition model
+  ///< Joint state transition model
   boost::shared_ptr<ProcessModel<Scalar, 2, 1, 1> > model;
 
-  //! Measurment noise covariance
+  ///< Measurment noise covariance
   Matrix<Scalar, 1, 1> R;
 
-  //! Last measurement received
+  ///< Last measurement received
   Scalar lastMeas;
 
-  //! Whether the filter has been initiated or not
+  ///< Whether the filter has been initiated or not
   bool initiated;
 
-  //! PID-controller constants
+  ///< PID-controller constants
   Matrix<Scalar, 3, 1> pidC;
 
-  //! Last error
+  ///< Last error
   Scalar prevError1 = {0};
 
   Scalar prevError2 = {0};
 
-  //! Last input
+  ///< Last input
   Scalar prevInput = {0};
 
-  //! Last command
+  ///< Last command
   Scalar lastCmd = {0};
 
-  //! Time step
+  ///< Time step
   Scalar dt = {0.01};
 
-  //! Whether to use generate control input for this joint
+  ///< Whether to use generate control input for this joint
   bool useInput = {false};
 
 public:

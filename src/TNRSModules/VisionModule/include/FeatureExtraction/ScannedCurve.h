@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/ScannedCurve.h
+ * @file VisionModule/include/FeatureExtraction/ScannedCurve.h
  *
  * This file defines the struct ScannedCurve.
  *
@@ -13,7 +13,7 @@
 
 /**
  * @struct ScannedCurve
- * @brief Holds information about a curve resulting from scanning the 
+ * @brief Holds information about a curve resulting from scanning the
  *   image.
  */
 struct ScannedCurve
@@ -25,10 +25,10 @@ struct ScannedCurve
   ScannedCurve& operator=(ScannedCurve&&) & = default;
   virtual ~ScannedCurve() {}
 
-  vector<cv::Point> upper; //! Upper contour of the curve
-  vector<cv::Point> lower; //! Lower contour of the curve
-  boost::shared_ptr<ScannedCurve> succ; //! Successor curve
-  boost::shared_ptr<ScannedCurve> pred; //! Preceding curve
+  vector<cv::Point> upper; ///< Upper contour of the curve
+  vector<cv::Point> lower; ///< Lower contour of the curve
+  boost::shared_ptr<ScannedCurve> succ; ///< Successor curve
+  boost::shared_ptr<ScannedCurve> pred; ///< Preceding curve
 };
 
 typedef boost::shared_ptr<ScannedCurve> ScannedCurvePtr;

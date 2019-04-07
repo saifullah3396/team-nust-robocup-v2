@@ -20,4 +20,4 @@ DEFINE_MODULE_REQUEST(
   (LocalizationRequestIds, positionUpdate, PositionUpdate),
   (LocalizationRequestIds, knownLandmarksUpdate, KnownLandmarksUpdate),
   (LocalizationRequestIds, unknownLandmarksUpdate, UnknownLandmarksUpdate),
-)
+);

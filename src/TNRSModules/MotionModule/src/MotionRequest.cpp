@@ -18,5 +18,5 @@ DEFINE_MODULE_REQUEST(
   (MotionRequestIds, behaviorRequest, RequestMotionBehavior),
   (MotionRequestIds, killBehavior, KillMotionBehavior),
   (MotionRequestIds, killBehaviors, KillMotionBehaviors),
-)
+);
 

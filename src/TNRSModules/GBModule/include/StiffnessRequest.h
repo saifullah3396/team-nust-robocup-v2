@@ -1,5 +1,5 @@
 /**
- * @file ControlModule/include/StiffnessRequest.h
+ * @file GBModule/include/StiffnessRequest.h
  *
  * This file defines the class StiffnessRequest
  *

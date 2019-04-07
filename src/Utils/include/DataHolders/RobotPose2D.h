@@ -26,6 +26,7 @@ using namespace Eigen;
 template<typename Scalar = float>
 struct RobotPose2D : public TNRSPoint<Scalar, 3>, public DataHolder
 {
+public:
   RobotPose2D(const RobotPose2D&) = default;
   RobotPose2D(RobotPose2D&&) = default;
   RobotPose2D& operator=(const RobotPose2D&) & = default;
@@ -37,6 +38,10 @@ struct RobotPose2D : public TNRSPoint<Scalar, 3>, public DataHolder
    */
   void print() const override;
 
+  /**
+   * @brief getJson Returns the json object
+   * @return Json::Value
+   */
   Json::Value getJson() const override;
 
   /**
@@ -53,7 +58,7 @@ struct RobotPose2D : public TNRSPoint<Scalar, 3>, public DataHolder
    * @return Transformed pose
    */
   template <typename OtherScalar>
-  RobotPose2D<OtherScalar> transform(const RobotPose2D<OtherScalar>& p);
+  RobotPose2D<OtherScalar> transform(const RobotPose2D<OtherScalar>& p) const;
 
   /**
    * @brief transform Transforms the input pose with respect to this pose
@@ -61,7 +66,7 @@ struct RobotPose2D : public TNRSPoint<Scalar, 3>, public DataHolder
    * @return Transformed pose
    */
   template <typename OtherScalar>
-  Matrix<OtherScalar, 3, 1> transform(const Matrix<OtherScalar, 3, 1>& p);
+  Matrix<OtherScalar, 3, 1> transform(const Matrix<OtherScalar, 3, 1>& p) const;
 
   /**
    * @brief transform Transforms the input point with respect to this pose
@@ -69,7 +74,7 @@ struct RobotPose2D : public TNRSPoint<Scalar, 3>, public DataHolder
    * @return Transformed point
    */
   template <typename OtherScalar>
-  Matrix<OtherScalar, 2, 1> transform(const Matrix<OtherScalar, 2, 1>& p);
+  Matrix<OtherScalar, 2, 1> transform(const Matrix<OtherScalar, 2, 1>& p) const;
 
   /**
    * @brief transform Transforms the input point with respect to this pose
@@ -77,7 +82,14 @@ struct RobotPose2D : public TNRSPoint<Scalar, 3>, public DataHolder
    * @return Transformed point
    */
   template <typename OtherScalar>
-  cv::Point_<OtherScalar> transform(const cv::Point_<OtherScalar>& p);
+  cv::Point_<OtherScalar> transform(const cv::Point_<OtherScalar>& p) const;
+
+  /**
+   * @brief transform Transforms the input point with respect to this pose
+   * @param p Input point
+   * @return Transformed point
+   */
+  //cv::Point2f transform(const cv::Point2f& p);
 
   /**
    * @brief getInverse Returns the inverse pose
@@ -146,6 +158,6 @@ struct RobotPose2D : public TNRSPoint<Scalar, 3>, public DataHolder
   const Scalar& getCTheta() const { return ct; }
   const Scalar& getSTheta() const { return st; }
 
-  Scalar ct = {0}; //! Cosine of angle
-  Scalar st = {0}; //! Sine of angle
+  Scalar ct = {0}; ///< Cosine of angle
+  Scalar st = {0}; ///< Sine of angle
 };

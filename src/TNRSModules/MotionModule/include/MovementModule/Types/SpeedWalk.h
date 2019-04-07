@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/MovementModule/Types/SpeedWalk.h
+ * @file MotionModule/include/MovementModule/Types/SpeedWalk.h
  *
  * This file declares the class SpeedWalk
  *
@@ -131,32 +131,32 @@ private:
    */
   void drawSteps();
 
-  //! Foot steps queue
+  ///< Foot steps queue
   std::deque<boost::shared_ptr<TNRSFootstep<Scalar>>> stepsQueue;
 
-  //! Walk zmp reference generator
+  ///< Walk zmp reference generator
   boost::shared_ptr<WalkZmpRefGen<Scalar> > walkZmpRefGen;
 
-  //! Zmp preview controllers for x-y directions
+  ///< Zmp preview controllers for x-y directions
   vector<ZmpPreviewController<Scalar>*> controllers;
 
-  //! Latest step trajectory
+  ///< Latest step trajectory
   Matrix<Scalar, Dynamic, Dynamic> stepTraj;
 
-  //! The index of step trajectory in the cycle
+  ///< The index of step trajectory in the cycle
   unsigned stepTrajIndex = {0};
 
-  //! Tasks vector for solving whole-body inverse kinematics
+  ///< Tasks vector for solving whole-body inverse kinematics
   vector<boost::shared_ptr<MotionTask<Scalar>>> tasks;
 
-  //! Task weights and gains
+  ///< Task weights and gains
   static vector<Scalar> taskWeights;
   static vector<Scalar> taskGains;
 
-  //! Log for storing center of mass data
+  ///< Log for storing center of mass data
   fstream comLog;
 
-  //! Log for storing zmp ref data
+  ///< Log for storing zmp ref data
   fstream zmpRegLog;
 
 

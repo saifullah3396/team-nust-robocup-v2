@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBBallThrowConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBBallThrowConfig.h
  *
  * This file declares the struct MBBallThrowConfig
  *
@@ -26,7 +26,7 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   MBBallThrowTypes,
   (float, timeToThrow, 2.f),
   (bool, headTapToStart, false),
-)
+);
 
 /**
  * @struct WBBallThrowConfig
@@ -39,4 +39,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   WBBallThrowConfigPtr,
   (float, throwVelocity, 0.5),
   (float, throwAngle, 0.0),
-)
+);

@@ -1,5 +1,5 @@
 /**
- * @file ControlModule/include/LedRequest.h
+ * @file GBModule/include/LedRequest.h
  *
  * This file defines the class LedRequest
  *

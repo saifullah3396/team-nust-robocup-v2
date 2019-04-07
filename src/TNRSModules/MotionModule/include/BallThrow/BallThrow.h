@@ -61,7 +61,7 @@ protected:
 	 */
   boost::shared_ptr<MBBallThrowConfig> getBehaviorCast();
 
-  static Scalar ballRadius; //! Ball radius
+  static Scalar ballRadius; ///< Ball radius
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

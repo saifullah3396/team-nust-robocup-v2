@@ -1,5 +1,5 @@
 /**
- * @file VisionModule/VisionModuleIds.h
+ * @file VisionModule/include/FeatureExtractionIds.h
  *
  * This file declares the Enumeration Ids for all the feature extraction
  * modules under vision module.
@@ -12,16 +12,16 @@
 
 /**
  * Enumeration for the classes inheriting FeatureExtraction class
- * 
+ *
  * @enum FeatureExtractionIds
  */
 enum class FeatureExtractionIds : unsigned int
 {
   segmentation,
   field,
+  ball,
   robot,
   goal,
-  ball,
   lines,
   count
 };

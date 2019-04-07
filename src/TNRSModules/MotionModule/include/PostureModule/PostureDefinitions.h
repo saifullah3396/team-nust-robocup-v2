@@ -1,9 +1,9 @@
 #pragma once
 
-//! See Utils/include/PostureState.h
-//! WARNING: These postures are defined according to the enumeration in
-//! PostureState.h. For new postures, add the posture state in PostureState.h 
-//! in the respective sequence 
+///< See Utils/include/PostureState.h
+///< WARNING: These postures are defined according to the enumeration in
+///< PostureState.h. For new postures, add the posture state in PostureState.h 
+///< in the respective sequence 
 
 static const float postureDefinitions[7][24] =
   {

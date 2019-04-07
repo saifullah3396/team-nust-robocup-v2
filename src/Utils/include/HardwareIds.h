@@ -80,7 +80,7 @@ enum class ActuatorTypes : unsigned int
 
 enum class Joints : unsigned int
 {
-  //!Joints
+  ///<Joints
   headYaw = 0,
   headPitch,
   lShoulderPitch,
@@ -128,7 +128,7 @@ enum class HardwareIds : unsigned int
 };
 
 enum class Links : unsigned int {
-  //! Links
+  ///< Links
   headYaw = 0,
   headPitch,
   lShoulderPitch,
@@ -163,7 +163,7 @@ enum class Links : unsigned int {
 DECLARE_SPECIALIZED_ENUM(Links)
 
 enum class TouchSensors : unsigned int {
-  //!Touch Sensors
+  ///<Touch Sensors
   headTouchFront = 0,
   headTouchRear,
   headTouchMiddle,
@@ -180,7 +180,7 @@ enum class TouchSensors : unsigned int {
 DECLARE_SPECIALIZED_ENUM(TouchSensors)
 
 enum class SwitchSensors : unsigned int {
-  //!Switch Sensors
+  ///<Switch Sensors
   chestBoardButton = 0,
   lFootBumperRight,
   lFootBumperLeft,
@@ -193,7 +193,7 @@ enum class SwitchSensors : unsigned int {
 DECLARE_SPECIALIZED_ENUM(SwitchSensors)
 
 enum class BatterySensors : unsigned int {
-  ///!Battery Sensors
+  ////<Battery Sensors
   headCpuTemperature = 0,
   batteryCurrent,
   batteryCharge,
@@ -205,7 +205,7 @@ enum class BatterySensors : unsigned int {
 DECLARE_SPECIALIZED_ENUM(BatterySensors)
 
 enum class InertialSensors : unsigned int {
-  //!Inertial Sensors
+  ///<Inertial Sensors
   gyroscopeX = 0,
   gyroscopeY,
   gyroscopeZ,
@@ -222,7 +222,7 @@ enum class InertialSensors : unsigned int {
 DECLARE_SPECIALIZED_ENUM(InertialSensors)
 
 enum class SonarSensors : unsigned int {
-  //!Sonar Sensors
+  ///<Sonar Sensors
   lUsSonar = 0,
   lUsSonar1,
   lUsSonar2,
@@ -250,7 +250,7 @@ enum class SonarSensors : unsigned int {
 DECLARE_SPECIALIZED_ENUM(SonarSensors)
 
 enum class FsrSensors : unsigned int {
-  //!Fsr Sensors
+  ///<Fsr Sensors
   lFootFsrFL = 0,
   lFootFsrFR,
   lFootFsrRL,
@@ -272,7 +272,7 @@ enum class FsrSensors : unsigned int {
 DECLARE_SPECIALIZED_ENUM(FsrSensors)
 
 enum class LedActuators : unsigned int {
-  //!Led Actuators
+  ///<Led Actuators
   faceLedRedLeft_0_degActuator = 0,
   faceLedRedLeft_45_degActuator,
   faceLedRedLeft_90_degActuator,

@@ -10,7 +10,7 @@
 #pragma once
 
 #ifndef V6_CROSS_BUILD
-#include <alproxies/almemoryproxy.h> //! Not available in SDK 2.8
+#include <alproxies/almemoryproxy.h> ///< Not available in SDK 2.8
 #endif
 #include "ControlModule/include/HardwareLayer.h"
 #include "TNRSBase/include/BaseIncludes.h"
@@ -65,7 +65,7 @@ class PlanningModule : public BaseModule
     rFootOnGround,
     robotInMotion,
     footOnGround
-   )
+   );
   DECLARE_OUTPUT_CONNECTOR(
     planningState,
     robocupRole,
@@ -82,7 +82,7 @@ class PlanningModule : public BaseModule
     gameData,
     moveTarget,
     worldBallInfo
-  )
+  );
 public:
   /**
    * Constructor
@@ -92,7 +92,7 @@ public:
   #ifndef V6_CROSS_BUILD
   PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy);
   #else
-  PlanningModule(void* parent, const qi::AnyObject& memoryProxy); //! New syntax
+  PlanningModule(void* parent, const qi::AnyObject& memoryProxy); ///< New syntax
   #endif
 
   /**
@@ -159,23 +159,23 @@ private:
   void
   setupRoboCupDataHandler();
 
-  //! Planning behaviors manager
+  ///< Planning behaviors manager
   PBManagerPtr pbManager;
 
-  //! Vector of pointer to SensorLayer objects
+  ///< Vector of pointer to SensorLayer objects
   vector<SensorLayerPtr> sensorLayers;
 
-  //! Pointer to base path planner
+  ///< Pointer to base path planner
   PathPlannerSpace::PathPlannerPtr pathPlanner;
 
   #ifndef V6_CROSS_BUILD
-  //! Pointer to NaoQi internal memory proxy
+  ///< Pointer to NaoQi internal memory proxy
   ALMemoryProxyPtr memoryProxy;
   #else
   qi::AnyObject memoryProxy;
   #endif
 
-  //! Team ball tracker class object.
+  ///< Team ball tracker class object.
   boost::shared_ptr<WorldBallTracker> wbTracker;
 
   enum class PlanningSensors : unsigned {

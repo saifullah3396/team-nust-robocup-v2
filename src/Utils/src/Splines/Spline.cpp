@@ -1,10 +1,10 @@
 /**
- * @file Utils/include/Spline.h
+ * @file Utils/src/Splines/Spline.cpp
  *
  * This file implements the class Spline
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 12 Aug 2017  
+ * @date 12 Aug 2017
  */
 
 #include "Utils/include/Splines/Spline.h"
@@ -14,25 +14,23 @@ template <typename Scalar>
 SplineException<Scalar>::SplineException(
   Spline<Scalar>* spline,
   const string& message,
-  const bool& bSysMsg,
-  const SplineExceptionType& type) throw () :
-  TNRSException(message, bSysMsg),
-  type(type)
+  const bool& bSysMsg) throw () :
+  TNRSException(message, bSysMsg)
 {
 }
 
 template <typename Scalar>
 Spline<Scalar>::Spline(
-  const unsigned& degree, 
+  const unsigned& degree,
   const unsigned& dim,
   const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-  const Matrix<Scalar, Dynamic, 1>& knots, 
+  const Matrix<Scalar, Dynamic, 1>& knots,
   const Scalar& stepSize,
   const unsigned& type) :
   degree(degree),
-  dim(dim), 
+  dim(dim),
   controlPoints(controlPoints),
-  knots(knots), 
+  knots(knots),
   stepSize(stepSize),
   nKnots(knots.size())
 {
@@ -40,10 +38,10 @@ Spline<Scalar>::Spline(
 
 template <typename Scalar>
 Spline<Scalar>::Spline(
-  const unsigned& degree, 
+  const unsigned& degree,
   const unsigned& dim,
   const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-  const Scalar& splineTime, 
+  const Scalar& splineTime,
   const Scalar& stepSize,
   const unsigned& type) :
   degree(degree),
@@ -70,24 +68,23 @@ void Spline<Scalar>::splineFromXml(const string& filePath)
   fs.close();
   try {
     BOOST_FOREACH(const boost::property_tree::ptree::value_type &v, pt.get_child("spline")) {
-      //! Parsing attributes
+      ///< Parsing attributes
       if (v.first == "<xmlattr>") {
         string typeStr = v.second.get_child("type").data();
         if (typeStr == "poly") type = PIECE_WISE_POLY;
         else if (typeStr == "bspline") type = BASIS;
         else type = -1;
-        dim = boost::lexical_cast<unsigned>(v.second.get_child("dim").data()); 
+        dim = boost::lexical_cast<unsigned>(v.second.get_child("dim").data());
         degree = boost::lexical_cast<unsigned>(v.second.get_child("degree").data()); // order is degree + 1
       } else {
         if (type == -1) {
           throw SplineException<Scalar>(
-              this, 
-              "Spline type attribute not found.", 
-              false, 
-              SplineExceptionType::EXC_INVALID_XML
+              this,
+              "Spline type attribute not found.",
+              false
           );
         }
-        if (v.first == "knots") { //! Parsing knots sequence 
+        if (v.first == "knots") { ///< Parsing knots sequence
           size_t i = 0;
           BOOST_FOREACH(const boost::property_tree::ptree::value_type &v, v.second) {
             if (v.first == "<xmlattr>") {
@@ -97,10 +94,9 @@ void Spline<Scalar>::splineFromXml(const string& filePath)
                 knots.resize(nKnots);
               } else {
                 throw SplineException<Scalar>(
-                  this, 
-                  "Empty knot sequence specified", 
-                  false, 
-                  SplineExceptionType::EXC_INVALID_XML);
+                  this,
+                  "Empty knot sequence specified",
+                  false);
               }
             } else {
               if (i < knots.size()) {
@@ -111,12 +107,11 @@ void Spline<Scalar>::splineFromXml(const string& filePath)
           }
           if (i != knots.size()) {
             throw SplineException<Scalar>(
-              this, 
-              "Knots vector/value size mismatch.", 
-              false, 
-              SplineExceptionType::EXC_INVALID_XML);
+              this,
+              "Knots vector/value size mismatch.",
+              false);
           }
-        } else if (v.first == "control_points") { //! parsing coefficients
+        } else if (v.first == "control_points") { ///< parsing coefficients
           size_t j = 0;
           BOOST_FOREACH(const boost::property_tree::ptree::value_type &v, v.second) {
             if (v.first == "<xmlattr>") {
@@ -125,28 +120,25 @@ void Spline<Scalar>::splineFromXml(const string& filePath)
                 controlPoints.resize(size, dim);
               } else {
                  throw SplineException<Scalar>(
-                  this, 
-                  "Empty control points vector specified", 
-                  false, 
-                  SplineExceptionType::EXC_INVALID_XML);
+                  this,
+                  "Empty control points vector specified",
+                  false);
               }
             } else {
               if (j >= dim) {
                 throw SplineException<Scalar>(
-                  this, 
-                  "Control points matrix column size mismatch.", 
-                  false, 
-                  SplineExceptionType::EXC_INVALID_XML
+                  this,
+                  "Control points matrix column size mismatch.",
+                  false
                 );
               }
               size_t i = 0;
               BOOST_FOREACH(const boost::property_tree::ptree::value_type &v, v.second) {
                 if (i >= controlPoints.rows()) {
                   throw SplineException<Scalar>(
-                    this, 
-                    "Control points matrix row size mismatch.", 
-                    false, 
-                    SplineExceptionType::EXC_INVALID_XML);
+                    this,
+                    "Control points matrix row size mismatch.",
+                    false);
                 }
                 controlPoints(i,j) = boost::lexical_cast<Scalar>(v.second.data());
                 ++i;

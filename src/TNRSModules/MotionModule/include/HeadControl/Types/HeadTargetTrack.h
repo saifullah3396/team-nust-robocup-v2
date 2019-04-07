@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/HeadControl/Types/HeadTargetTrack.h
+ * @file MotionModule/include/HeadControl/Types/HeadTargetTrack.h
  *
  * This file declares the class HeadTargetTrack
  *
@@ -69,10 +69,10 @@ private:
    */
   bool trackTarget(const Matrix<Scalar, 4, 1>& posCam);
 
-  //! Pid controller for target tracking
+  ///< Pid controller for target tracking
   vector<boost::shared_ptr<PIDController<Scalar> > > trackersXY;
 
   static vector<Matrix<Scalar, 3, 1>> pidGains;
-  static Scalar lowerCamUsageRange; //! meters
-  static Scalar lowerCamUsageZ; //! meters
+  static Scalar lowerCamUsageRange; ///< meters
+  static Scalar lowerCamUsageZ; ///< meters
 };

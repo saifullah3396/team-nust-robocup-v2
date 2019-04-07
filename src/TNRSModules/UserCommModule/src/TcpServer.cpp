@@ -20,17 +20,17 @@ TcpServer::TcpServer(
   unsigned short port) :
   acceptor(*io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
 {
-  //! Setup a new connection
-  connection_ptr conn(new connection(acceptor.get_io_service()));
+  ///< Setup a new connection
+  ConnectionPtr conn(new Connection(acceptor.get_io_service()));
 
-  //! Start listening on the connection
+  ///< Start listening on the connection
   acceptor.async_accept(
     conn->socket(),
     boost::bind(
       &TcpServer::handleAccept, this, boost::asio::placeholders::error, conn));
 }
 
-void TcpServer::handleAccept(const boost::system::error_code& e, const connection_ptr& conn)
+void TcpServer::handleAccept(const boost::system::error_code& e, const ConnectionPtr& conn)
 {
   if (!e)
   {
@@ -39,7 +39,7 @@ void TcpServer::handleAccept(const boost::system::error_code& e, const connectio
         boost::bind(&TcpServer::handleWrite, this,
           boost::asio::placeholders::error, conn));
 
-    connection_ptr newConn(new connection(acceptor.get_io_service()));
+    ConnectionPtr newConn(new Connection(acceptor.get_io_service()));
     acceptor.async_accept(newConn->socket(),
         boost::bind(&TcpServer::handleAccept, this,
           boost::asio::placeholders::error, newConn));
@@ -71,11 +71,12 @@ void DataServer::update() {
       outDataQueue->popQueue();
     }
     outMessage.clear();
-    Utils::compress(JsonUtils::jsonToMinimalString(msg), outMessage);
+    if (!Utils::compress(JsonUtils::jsonToMinimalString(msg), outMessage))
+      outMessage.clear();;
   }
 
   for (auto& conn : conns) {
-    //! Write all the data to connection
+    ///< Write all the data to connection
     conn->async_write(
       outMessage,
       boost::bind(&TcpServer::handleWrite, this, boost::asio::placeholders::error, conn));
@@ -86,7 +87,7 @@ void DataServer::addMessage(const CommMessage& msg) {
   outDataQueue->pushToQueue(msg);
 }
 
-void DataServer::handleWrite(const boost::system::error_code& e, const connection_ptr& conn)
+void DataServer::handleWrite(const boost::system::error_code& e, const ConnectionPtr& conn)
 {
   if (!e) {
     conn->async_read(
@@ -97,7 +98,7 @@ void DataServer::handleWrite(const boost::system::error_code& e, const connectio
       (boost::asio::error::connection_reset == e) ||
       (boost::asio::error::broken_pipe == e))
     {
-      //! Disconnected from the client. Remove the associated connection
+      ///< Disconnected from the client. Remove the associated connection
       LOG_ERROR("Connection to client lost with message:\n\t" << e.message());
       for (auto it = conns.begin(); it != conns.end(); ) {
         if ((*it) == conn) {
@@ -110,28 +111,29 @@ void DataServer::handleWrite(const boost::system::error_code& e, const connectio
   }
 }
 
-void DataServer::handleRead(const boost::system::error_code& e, connection_ptr& conn)
+void DataServer::handleRead(const boost::system::error_code& e, ConnectionPtr& conn)
 {
   if (!e) {
     if (!inMessage.empty()) {
       Json::Value root;
       Json::Reader reader;
       std::string decompressed;
-      Utils::compress(inMessage, decompressed);
-      bool parsingSuccessful = reader.parse(decompressed.c_str(), root);
-      if (!parsingSuccessful)
-      {
-        //! Not a command
-        LOG_INFO("Message received: " << decompressed.c_str());
-      } else {
-        //! If the input string is a json string
-        //! Find if a user command is received
-        static const auto userCmdKey =
-          DataUtils::varToString(static_cast<int>(CommMsgTypes::userCmd));
-        if (root[userCmdKey] != Json::nullValue) {
-          Json::Value reply = DebugBase::processDebugMsg(root[userCmdKey]);
-          //! Generate a reply
-          addMessage(CommMessage(reply, CommMsgTypes::logText));
+      if (Utils::decompress(inMessage, decompressed)) {
+        bool parsingSuccessful = reader.parse(decompressed.c_str(), root);
+        if (!parsingSuccessful)
+        {
+          ///< Not a command
+          addMessage(CommMessage(string(string("Message received: ") + decompressed.c_str()), CommMsgTypes::logText));
+        } else {
+          ///< If the input string is a json string
+          ///< Find if a user command is received
+          static const auto userCmdKey =
+            DataUtils::varToString(static_cast<int>(CommMsgTypes::userCmd));
+          if (root[userCmdKey] != Json::nullValue) {
+            Json::Value reply = DebugBase::processDebugMsg(root[userCmdKey]);
+            ///< Generate a reply
+            addMessage(CommMessage(reply, CommMsgTypes::logText));
+          }
         }
       }
     }
@@ -140,7 +142,7 @@ void DataServer::handleRead(const boost::system::error_code& e, connection_ptr& 
       (boost::asio::error::eof == e) ||
       (boost::asio::error::connection_reset == e))
     {
-      //! Disconnected from the client. Remove the associated connection
+      ///< Disconnected from the client. Remove the associated connection
       LOG_ERROR("Connection to client lost with message:\n\t" << e.message());
       for (auto it = conns.begin(); it != conns.end(); ) {
         if ((*it) == conn) {
@@ -173,28 +175,29 @@ void ImageServer::update() {
       outImage = outImageQueue->queueFront();
       outImageQueue->popQueue();
       outMessage.clear();
-      Utils::compress(VisionUtils::cvMatToString(outImage), outMessage);
-      for (auto& conn : conns) {
-        //! Write all the data to connection
-        conn->async_write(
-          outMessage,
-          boost::bind(&TcpServer::handleWrite, this, boost::asio::placeholders::error, conn));
+      if (Utils::compress(VisionUtils::cvMatToString(outImage), outMessage)) {
+        for (auto& conn : conns) {
+          ///< Write all the data to connection
+          conn->async_write(
+            outMessage,
+            boost::bind(&TcpServer::handleWrite, this, boost::asio::placeholders::error, conn));
+        }
       }
+      while (!outImageQueue->isEmpty())
+        outImageQueue->popQueue();
     }
   }
 }
 
-void ImageServer::handleWrite(const boost::system::error_code& e, const connection_ptr& conn)
+void ImageServer::handleWrite(const boost::system::error_code& e, const ConnectionPtr& conn)
 {
-  if (!e) {
-    cout << "Wrote image..." << endl;
-  } else {
+  if (e) {
     if (
       (boost::asio::error::eof == e) ||
       (boost::asio::error::connection_reset == e) ||
       (boost::asio::error::broken_pipe == e))
     {
-      //! Disconnected from the client. Remove the associated connection
+      ///< Disconnected from the client. Remove the associated connection
       LOG_ERROR("Connection to client lost with message:\n\t" << e.message());
       for (auto it = conns.begin(); it != conns.end(); ) {
         if ((*it) == conn) {
@@ -207,10 +210,11 @@ void ImageServer::handleWrite(const boost::system::error_code& e, const connecti
   }
 }
 
-void ImageServer::handleRead(const boost::system::error_code& e, connection_ptr& conn)
+void ImageServer::handleRead(const boost::system::error_code& e, ConnectionPtr& conn)
 {
 }
 
 void ImageServer::addImage(const cv::Mat& image) {
-  outImageQueue->pushToQueue(image);
+  if (outImageQueue->isEmpty())
+    outImageQueue->pushToQueue(image);
 }

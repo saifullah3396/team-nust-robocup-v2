@@ -184,25 +184,25 @@ protected:
    */
   PathPlannerSpace::PathPlannerPtr getPathPlanner();
 
-  //! Base PlanningModule object pointer.
+  ///< Base PlanningModule object pointer.
   PlanningModule* pModule;
 
-  //! Ids of the motion behavior managers running
+  ///< Ids of the motion behavior managers running
   vector<unsigned> mbManagerIds;
 
-  //! Offset for motion behavior ids to be used
+  ///< Offset for motion behavior ids to be used
   int mbIdOffset;
 
-  //! Configuration of the currently running motion behavior
+  ///< Configuration of the currently running motion behavior
   BehaviorConfigPtr lastMBConfig;
 
-  //! Configuratoin of the currently running general behavior
+  ///< Configuratoin of the currently running general behavior
   BehaviorConfigPtr lastGBConfig;
 
-  //! Last motion behaviors requested
+  ///< Last motion behaviors requested
   BehaviorRequestPtr lastMotionRequest;
 
-  //! Last general behaviors requested
+  ///< Last general behaviors requested
   BehaviorRequestPtr lastGeneralRequest;
 
 private:
@@ -234,13 +234,13 @@ private:
     const BehaviorInfo& feedback,
     const float& requestStartTime);
 
-  //! Time taken by the motion request in progress
+  ///< Time taken by the motion request in progress
   float mRequestTime;
 
-  //! Time taken by the general behavior request in progress
+  ///< Time taken by the general behavior request in progress
   float gRequestTime;
 
-  //! Maximum allowed time for a motion or behavior request to be
-  //! processed
+  ///< Maximum allowed time for a motion or behavior request to be
+  ///< processed
   static constexpr float maxRequestTimeout = 2.f;
 };

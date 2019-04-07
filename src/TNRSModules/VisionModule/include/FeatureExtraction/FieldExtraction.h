@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include "TNRSBase/include/DebugBase.h"
+#include "VisionModule/include/VisionModule.h"
 #include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
 
 class FittedLine;
@@ -24,19 +26,19 @@ typedef boost::shared_ptr<RegionSegmentation> RegionSegmentationPtr;
 class FieldExtraction : public FeatureExtraction, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to send total module time.
+    ///< Option to send total module time.
     (int, sendTime, 0),
-    //! Option to draw filtered points
+    ///< Option to draw filtered points
     (int, drawFiltPoints, 0),
-    //! Option to draw border on the output image.
+    ///< Option to draw border on the output image.
     (int, drawBorder, 0),
-    //! Option to draw border lines on the output image.
+    ///< Option to draw border lines on the output image.
     (int, drawBorderLines, 0),
-    //! Option to display detailed information about the results
+    ///< Option to display detailed information about the results
     (int, displayInfo, 0),
-    //! Option to display image output
+    ///< Option to display image output
     (int, displayOutput, 0),
-  )
+  );
 
 public:
   /**
@@ -61,41 +63,41 @@ public:
    *
    * @return vector<Point>
    */
-  vector<Point>& getBorder() { return border; }
+  const vector<int>& getBorder() const { return border; }
 
   /**
    * Returns the extracted field border lines.
    *
    * @return vector<Vec4i>
    */
-  vector<Vec4f>& getBorderLines() { return borderLines; }
+  const vector<Vec4f>& getBorderLines() const { return borderLines; }
 
   /**
    * Returns the extracted field border lines in world.
    *
    * @return vector<FittedLinePtr>
    */
-  vector<FittedLinePtr>& getBorderLinesWorld() { return borderLinesWorld; }
+  const vector<FittedLinePtr>& getBorderLinesWorld() const { return borderLinesWorld; }
 
   /**
    * Returns the minimum field height.
    *
    * @return int
    */
-  int& getFieldHeight() { return fieldHeight; }
+  const int& getFieldHeight() const { return fieldHeight; }
 
   /**
    * Returns the rectangle of the extracted field.
    *
    * @return Rect
    */
-  Rect& getFieldRect() { return fieldRect; }
+  const Rect& getFieldRect() const { return fieldRect; }
 
   /**
    * @brief isFound Returns true if the field is extracted successfully
    * @return bool
    */
-  bool& isFound() { return fieldFound; }
+  const bool& isFound() const { return fieldFound; }
 
 private:
   /**
@@ -125,34 +127,34 @@ private:
    */
   void drawResults();
 
-  //! Field minimum height
+  ///< Field minimum height
   int fieldHeight;
 
-  //! Whether the field is found or not
+  ///< Whether the field is found or not
   bool fieldFound;
 
-  //! Field border.
-  vector<Point> border;
+  ///< Field border.
+  vector<int> border;
 
-  //! Field border lines in image.
+  ///< Field border lines in image.
   vector<Vec4f> borderLines;
 
-  //! Field border lines in world.
+  ///< Field border lines in world.
   vector<FittedLinePtr> borderLinesWorld;
 
-  //! Rect for the extracted field
+  ///< Rect for the extracted field
   Rect fieldRect;
 
-  //! Total number of ransac iterations for fitting lines
+  ///< Total number of ransac iterations for fitting lines
   int maxRANSACIterations;
 
-  //! Processing times
+  ///< Processing times
   float processTime;
   float pointsFilterTime;
   float fitLinesTime;
   float borderTransformTime;
 
-  //! A pointer to region segmentation class
+  ///< A pointer to region segmentation class
   RegionSegmentationPtr regionSeg;
 };
 typedef boost::shared_ptr<FieldExtraction> FieldExtractionPtr;

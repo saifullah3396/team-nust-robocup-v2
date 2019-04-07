@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/WalkZmpRefGen/WalkZmpRefGen.h
+ * @file MotionModule/include/MovementModule/WalkZmpRefGen.h
  *
  * This file declares the class WalkZmpRefGen
  *
@@ -71,7 +71,7 @@ public:
 private:
   std::deque<boost::shared_ptr<TNRSFootstep<Scalar>>>* footsteps;
 
-  //! Pose that determines total transformation
+  ///< Pose that determines total transformation
   RobotPose2D<Scalar> globalTransPose;
 
 public:

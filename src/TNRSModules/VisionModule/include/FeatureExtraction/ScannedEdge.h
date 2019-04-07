@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/ScannedEdge.h
+ * @file VisionModule/include/FeatureExtraction/ScannedEdge.h
  *
  * This file defines the struct ScannedEdge.
  *
@@ -55,13 +55,13 @@ struct ScannedEdge
     cv::Mat& img,
     const cv::Scalar& color = cv::Scalar(0, 0, 0));
 
-  cv::Point pI; //! Point defining region edge in the image
-  cv::Point2f pW; //! Point defining region edge in the world
-  float angleW = {0.f}; //! Angle of line in world
+  cv::Point pI; ///< Point defining region edge in the image
+  cv::Point2f pW; ///< Point defining region edge in the world
+  float angleW = {0.f}; ///< Angle of line in world
   bool searched = {false};
-  boost::shared_ptr<ScannedEdge> pred; //! Preceding ScannedEdge in search
-  boost::shared_ptr<ScannedEdge> bestNeighbor; //! Best neighbouring ScannedEdge
-  boost::shared_ptr<ScannedEdge> bestTo; //! The edge to which this is the best neighbor
+  boost::shared_ptr<ScannedEdge> pred; ///< Preceding ScannedEdge in search
+  boost::shared_ptr<ScannedEdge> bestNeighbor; ///< Best neighbouring ScannedEdge
+  boost::shared_ptr<ScannedEdge> bestTo; ///< The edge to which this is the best neighbor
 };
 
 typedef boost::shared_ptr<ScannedEdge> ScannedEdgePtr;

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MotionConfigs/MBHeadControlConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBHeadControlConfig.cpp
  *
  * This file implements the structs MBHeadControlConfig,
  * HeadTargetSearchConfig and HeadTargetTrackConfig
@@ -14,17 +14,17 @@ DEFINE_BEHAVIOR_CONFIG(
   MBHeadControlConfig, MBConfig, MBHeadControlConfigPtr,
   (MBHeadControlTypes, headScan, HeadScanConfig),
   (MBHeadControlTypes, headTargetTrack, HeadTargetTrackConfig),
-)
+);
 
 void HeadScanConfig::init() {}
 void HeadScanConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }
 
 void HeadTargetTrackConfig::init() {}
 void HeadTargetTrackConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }
 

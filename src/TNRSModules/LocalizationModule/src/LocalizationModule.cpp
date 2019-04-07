@@ -40,7 +40,7 @@ DEFINE_INPUT_CONNECTOR(LocalizationModule,
   (bool, robotOnSideLine),
   (bool, localizeWithLastKnown),
   (bool, robotInMotion),
-)
+);
 DEFINE_OUTPUT_CONNECTOR(LocalizationModule,
   (RobotPose2D<float>, robotPose2D),
   (RobotPose2D<float>, lastKnownPose2D),
@@ -50,7 +50,7 @@ DEFINE_OUTPUT_CONNECTOR(LocalizationModule,
   (int, sideConfidence),
   (float, fieldWidth),
   (float, fieldHeight),
-)
+);
 
 LocalizationModule::LocalizationModule(void* processingModule) :
   BaseModule(

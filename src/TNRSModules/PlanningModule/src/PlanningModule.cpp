@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningModule.h
+ * @file PlanningModule/src/PlanningModule.cpp
  *
  * This file implements the class for behavior planning.
  * All the functions and algorithms for adding intelligence to the
@@ -38,9 +38,6 @@
 
 using namespace PathPlannerSpace;
 
-/**
- * Definition of input connector and variables for this module
- */
 DEFINE_INPUT_CONNECTOR(PlanningModule,
   (int, planningThreadPeriod),
   (bool, landmarksFound),
@@ -70,10 +67,8 @@ DEFINE_INPUT_CONNECTOR(PlanningModule,
   (Matrix4f, rFootOnGround),
   (bool, robotInMotion),
   (int, footOnGround),
-)
-/**
- * Definition of output connector and variables for this module
- */
+);
+
 DEFINE_OUTPUT_CONNECTOR(PlanningModule,
   (PlanningState, planningState),
   (int, robocupRole),
@@ -90,7 +85,7 @@ DEFINE_OUTPUT_CONNECTOR(PlanningModule,
   (RoboCupGameControlData, gameData),
   (RobotPose2D<float>, moveTarget),
   (WorldBallInfo<float>, worldBallInfo),
-)
+);
 
 #ifndef V6_CROSS_BUILD
 PlanningModule::PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy) :
@@ -164,7 +159,7 @@ void PlanningModule::init()
   LOG_INFO("Initializing world ball tracker...")
   wbTracker = boost::make_shared <WorldBallTracker> (this);
   wbTracker->init();
-  //! Create path planner
+  ///< Create path planner
   LOG_INFO("Initializing PathPlanner...")
   pathPlanner = PathPlannerPtr(new PathPlanner());
   pathPlanner->setMapPtr(
@@ -175,7 +170,7 @@ void PlanningModule::init()
   PBConfigPtr planningConfig = boost::static_pointer_cast<PBConfig>(BehaviorConfig::makeFromJson(json));
   PlanningRequestPtr planningRequest =
     boost::make_shared<RequestPlanningBehavior>(planningConfig);
-  //addRequest(planningRequest); // publish to itself
+  addRequest(planningRequest); // publish to itself
   LOG_INFO("Initializing PlanningModule Output Variables...")
   PLANNING_STATE_OUT(PlanningModule) = PlanningState::startup;
   ROBOCUP_ROLE_OUT(PlanningModule) = -1;
@@ -213,7 +208,7 @@ void PlanningModule::handleRequests()
 
 void PlanningModule::mainRoutine()
 {
-  pathPlanner->updateMap();
+  //pathPlanner->updateMap();
   sensorsUpdate();
   updateWorldBallInfo();
   pbManager->update();

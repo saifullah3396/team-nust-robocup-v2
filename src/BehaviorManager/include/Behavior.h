@@ -60,7 +60,7 @@ public:
     { return "Exception caught in behavior \n\t" + name + ";\t"; }
 
 private:
-  string name; //! Behavior name
+  string name; ///< Behavior name
 };
 
 /**
@@ -148,7 +148,7 @@ public:
    */
   void setLoggerFromParent();
 
-  //! Getters
+  ///< Getters
   string getName() { return name; }
   virtual string getFsmState() {
     return "Finite state machine not implemented for this behavior."; }
@@ -162,7 +162,7 @@ public:
   BehaviorRequestPtr& getChildRequest() { return childReq; }
   unsigned& getLastChildReqId() { return lastChildReqId; }
 
-  //! Setters
+  ///< Setters
   void setLastChildCfg(const BehaviorConfigPtr& cfg) {
     lastChildCfg = cfg;
   }
@@ -192,31 +192,31 @@ protected:
    */
   virtual void loadExternalConfig() = 0;
 
-  //! Name of the behavior
+  ///< Name of the behavior
   string name = {"UnnamedBehavior"};
 
-  //! Time taken by behavior initiation
+  ///< Time taken by behavior initiation
   float initTime = {0.0};
 
-  //! Total behavior runtime
+  ///< Total behavior runtime
   float runTime = {0.0};
 
-  //! Cycle time of this behavior
+  ///< Cycle time of this behavior
   float cycleTime = {0.0};
 
-  //! Whether the behavior is running
+  ///< Whether the behavior is running
   bool inBehavior = {false};
 
-  //! Configuration of the behavior
+  ///< Configuration of the behavior
   BehaviorConfigPtr config;
 
-  //! Config of last child behavior accepted
+  ///< Config of last child behavior accepted
   BehaviorConfigPtr lastChildCfg;
 
-  //! Log directory path
+  ///< Log directory path
   string logsDirPath;
 
-  //! Data logger for this behavior
+  ///< Data logger for this behavior
   JsonLoggerPtr dataLogger;
 
 private:
@@ -238,28 +238,28 @@ private:
    */
   virtual void updateDataLogger() {}
 
-  //! Whether behavior has been initiated
+  ///< Whether behavior has been initiated
   bool initiated = {false};
 
-  //! Whether the behavior is currently paused
+  ///< Whether the behavior is currently paused
   bool paused = {false};
 
-  //! Whether the child should run in parallel or not
+  ///< Whether the child should run in parallel or not
   bool childInParallel = {false};
 
-  //! Parent of this behavior
+  ///< Parent of this behavior
   BehaviorPtr parent;
 
-  //! Child of this behavior
+  ///< Child of this behavior
   BehaviorPtr child;
 
-  //! Current child behavior request
+  ///< Current child behavior request
   BehaviorRequestPtr childReq;
 
-  //! Previous child request id
+  ///< Previous child request id
   unsigned lastChildReqId;
 
-  //! Maximum time a behavior can have to perform setup
+  ///< Maximum time a behavior can have to perform setup
   //static constexpr float maxBehaviorSetupTime = 6.f;
 };
 

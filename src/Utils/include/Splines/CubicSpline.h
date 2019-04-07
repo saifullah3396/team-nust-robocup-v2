@@ -1,5 +1,5 @@
 /**
- * @file Utils/inlclude/CubicSpline.h
+ * @file Utils/include/Splines/CubicSpline.h
  *
  * This file declares the class CubicSpline
  *
@@ -34,7 +34,7 @@ public:
     const unsigned& dim,
     const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
     const Matrix<Scalar, Dynamic, 1>& knots,
-    const Scalar& stepSize, 
+    const Scalar& stepSize,
     const Matrix<Scalar, Dynamic, Dynamic>& boundaryConds);
 
   /**
@@ -52,8 +52,8 @@ public:
   CubicSpline(
     const unsigned& dim,
     const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-    const Scalar& splineTime, 
-    const Scalar& stepSize, 
+    const Scalar& splineTime,
+    const Scalar& stepSize,
     const Matrix<Scalar, Dynamic, Dynamic>& boundaryVels);
 
   /**
@@ -72,7 +72,7 @@ public:
 
   /**
    * Derived from Spline
-   */ 
+   */
   void setup();
 
 private:
@@ -85,7 +85,7 @@ private:
    * Derived from PolySpline
    */
   virtual void genCoeffs();
-  
+
   /**
    * Derived from PolySpline
    */

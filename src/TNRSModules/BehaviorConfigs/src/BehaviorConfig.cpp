@@ -1,5 +1,5 @@
 /**
- * @file BehaviorManager/src/BehaviorConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/BehaviorConfig.cpp
  *
  * This file implements the classes BehaviorConfig and BConfigException
  *

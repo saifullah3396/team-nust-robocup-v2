@@ -62,9 +62,9 @@ struct Landmark : public DataHolder
     return l;
   }
 
-  int id = {-1}; //! Id of this landmark
-  unsigned type = {0}; //! Type of this landmark
-  cv::Point_<T> pos;//! Position of the landmark in field
+  int id = {-1}; ///< Id of this landmark
+  unsigned type = {0}; ///< Type of this landmark
+  cv::Point_<T> pos;///< Position of the landmark in field
 };
 template struct Landmark<float>;
 template struct Landmark<double>;
@@ -165,7 +165,7 @@ struct KnownLandmark : Landmark<T>
     return l;
   }
 
-  RobotPose2D<T> poseFromLandmark; //! Pose of the landmark from robot
+  RobotPose2D<T> poseFromLandmark; ///< Pose of the landmark from robot
 };
 template struct KnownLandmark<float>;
 template struct KnownLandmark<double>;

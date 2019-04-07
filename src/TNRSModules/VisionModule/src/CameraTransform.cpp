@@ -14,6 +14,7 @@
 #include "VisionModule/include/CameraTransform.h"
 #include "VisionModule/include/CameraModule.h"
 #include "Utils/include/MathsUtils.h"
+#include "Utils/include/Exceptions/TNRSException.h"
 
 CameraTransform::CameraTransform(
   VisionModule* visionModule,
@@ -23,6 +24,8 @@ CameraTransform::CameraTransform(
   camIndex(camIndex)
 {
   persFound = false;
+  prevProjMatrixInv.resize(4, 3);
+  prevProjMatrixInv.setIdentity();
   cam = camModule->getCameraPtr(camIndex);
   computeCamMatrix();
   update();
@@ -81,40 +84,51 @@ void CameraTransform::computeCamMatrix()
 
 void CameraTransform::update()
 {
-  Matrix4f T = getCamInFoot();
-  invExtMatrix = MathsUtils::getTInverse(T);
-  extMatrix = T.block(0, 0, 3, 4);
-  b[0] = -T(0, 3);
-  b[1] = -T(1, 3);
-  b[2] = -T(2, 3);
-  A(0, 0) = T(0, 0);
-  A(0, 1) = T(0, 1);
-  A(0, 2) = 1;
-  A(1, 0) = T(1, 0);
-  A(1, 1) = T(1, 1);
-  A(1, 2) = 1;
-  A(2, 0) = T(2, 0);
-  A(2, 1) = T(2, 1);
-  A(2, 2) = -1;
-  projMatrix = camMatrix * extMatrix;
-  //MatrixXf proj = projMatrix;
-  //invProjMatrix = MathsUtils::pseudoInverse(proj);
-  /*vector<Vector4f> points;
-   points.push_back(Vector4f(3.0, 0.0, 0.0, 1.0));
-   points.push_back(Vector4f(2.0, 1.0, 0.0, 1.0));
-   points.push_back(Vector4f(2.0, -1.0, 0.0, 1.0));
-   for (size_t i = 0; i < points.size(); ++i) {
-   points = T * points;
-   }
-   plane = computePlaneEquation(points);*/
-  //cout << "upper cam: " << endl;
-  //Vector4f wP1(1.0f, 0.f, 0.f, 1.f);
-  //Vector4f wP2(0.f, -4.5f, 0.f, 1.f);
-  //cout << "twp1: "<< extMatrix[0] * wP1 << endl;
-  //cout << "twp2: "<< extMatrix[0] * wP2 << endl;
-  worldHomographyPoints.clear();
-  imageHomographyPoints.clear();
-  persFound = false;
+  try {
+    Matrix4f T = getCamInFoot();
+    if ((T - Matrix4f::Identity()).norm() <= 1e-6) {
+      throw TNRSException(
+        "Camera transform found to be identity matrix. "
+        "VisionModule will not work as expected. "
+        "Turn on the MotionModule to solve this problem.");
+    }
+    invExtMatrix = MathsUtils::getTInverse(T);
+    extMatrix = T.block(0, 0, 3, 4);
+    b[0] = -T(0, 3);
+    b[1] = -T(1, 3);
+    b[2] = -T(2, 3);
+    A(0, 0) = T(0, 0);
+    A(0, 1) = T(0, 1);
+    A(0, 2) = 1;
+    A(1, 0) = T(1, 0);
+    A(1, 1) = T(1, 1);
+    A(1, 2) = 1;
+    A(2, 0) = T(2, 0);
+    A(2, 1) = T(2, 1);
+    A(2, 2) = -1;
+    prevProjMatrixInv = MathsUtils::pseudoInverse(projMatrix);
+    projMatrix = camMatrix * extMatrix;
+    //MatrixXf proj = projMatrix;
+    //invProjMatrix = MathsUtils::pseudoInverse(proj);
+    /*vector<Vector4f> points;
+     points.push_back(Vector4f(3.0, 0.0, 0.0, 1.0));
+     points.push_back(Vector4f(2.0, 1.0, 0.0, 1.0));
+     points.push_back(Vector4f(2.0, -1.0, 0.0, 1.0));
+     for (size_t i = 0; i < points.size(); ++i) {
+     points = T * points;
+     }
+     plane = computePlaneEquation(points);*/
+    //cout << "upper cam: " << endl;
+    //Vector4f wP1(1.0f, 0.f, 0.f, 1.f);
+    //Vector4f wP2(0.f, -4.5f, 0.f, 1.f);
+    //cout << "twp1: "<< extMatrix[0] * wP1 << endl;
+    //cout << "twp2: "<< extMatrix[0] * wP2 << endl;
+    worldHomographyPoints.clear();
+    imageHomographyPoints.clear();
+    persFound = false;
+  } catch (TNRSException& e) {
+    LOG_EXCEPTION("Exception caught in CameraTransform::update():\t\n" << e.what())    ;
+  }
 }
 
 const Matrix4f& CameraTransform::getCamInFoot() {
@@ -284,4 +298,8 @@ void CameraTransform::worldToImage(
   //cout << "R: " << R << endl;
   //cout << "t: " << t << endl;
   //projectPoints(worldPoints, R, t, camMatrixCv, cam->distCoeffs, imagePoints);
+}
+
+Matrix<float, 3, 1> CameraTransform::prevImageToCurrentImage(const Matrix<float, 3, 1>& prevPos) {
+  return projMatrix * prevProjMatrixInv * prevPos;
 }

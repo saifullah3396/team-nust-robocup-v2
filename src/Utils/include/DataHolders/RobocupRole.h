@@ -10,9 +10,9 @@
 #pragma once
 
 /**
- * Enumeration for all the states of the robot stiffnesses.
+ * @brief Enumeration for all the robocup roles
  *
- * @enum Stiffness
+ * @enum RobocupRole
  */
 enum class RobocupRole
 : unsigned int {

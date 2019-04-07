@@ -5,17 +5,19 @@
  * the image.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 22 Aug 2017 
+ * @date 22 Aug 2017
  */
 
 #pragma once
 
+#include "TNRSBase/include/DebugBase.h"
 #include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
 
 class ScannedRegion;
 typedef boost::shared_ptr<ScannedRegion> ScannedRegionPtr;
 class GoalPost;
 typedef boost::shared_ptr<GoalPost> GoalPostPtr;
+class RegionSegmentation;
 class FieldExtraction;
 class RobotExtraction;
 
@@ -26,21 +28,23 @@ class RobotExtraction;
 class GoalExtraction : public FeatureExtraction, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to send total module time.
+    ///< Option to send total module time.
     (int, sendTime, 0),
-    //! Option to draw goal scanned lines
+    ///< Option to draw goal scanned lines
     (int, drawScannedLines, 0),
-    //! Option to draw goal scanned regions
+    ///< Option to draw goal scanned regions
     (int, drawScannedRegions, 0),
-    //! Option to draw goal base windows
+    ///< Option to draw shifted goal base border
+    (int, drawShiftedBorderLines, 0),
+    ///< Option to draw goal base windows
     (int, drawGoalBaseWindows, 0),
-    //! Option to draw the goal posts base points.
+    ///< Option to draw the goal posts base points.
     (int, drawGoalPostBases, 0),
-    //! Option to display information about the extracted results
+    ///< Option to display information about the extracted results
     (int, displayInfo, 0),
-    //! Option to display image output
+    ///< Option to display image output
     (int, displayOutput, 0),
-  )
+  );
 
 public:
 
@@ -75,17 +79,17 @@ private:
   void refreshGoalPosts();
 
   /**
-   * @brief scanForPosts Scans the image for goal posts regions
+   * @brief filterGoalLines Filters out the scanlines of goalposts using border information
    * @param verGoalLines vertical scan lines for goal regions to be updated
-   * @return whether goal posts are successfully found
+   * @return false if unsuccessful
    */
-  bool scanForPosts(vector<ScannedLinePtr>& verGoalLines);
+  bool filterGoalLines(vector<LinearScannedLinePtr>& horGoalLines);
 
   /**
    * @brief classifyPosts Classifies a region as goal post
-   * @param verGoalRegions
+   * @param horGoalRegions Convex hulls for possible goal posts
    */
-  void classifyPosts(vector<ScannedRegionPtr>& verGoalRegions);
+  void classifyPosts(vector<vector<Point>>& horGoalHulls);
 
   /**
    * @brief findBestPosts Finds best description of the goal post based on its
@@ -127,28 +131,28 @@ private:
    */
   void drawResults();
 
-  //! Procesing times
+  ///< Procesing times
   float processTime;
   float scanTime;
   float classifyPostsTime;
   float findBestPostsTime;
   float updateGoalInfoTime;
 
-  //! Best goals extracted.
+  ///< Best goals extracted.
   //vector<vector<Point2f> > bestGoalPosts;
 
-  //! Vector of detected goal posts along with history information
+  ///< Vector of detected goal posts along with history information
   vector<GoalPostPtr> goalPosts;
 
-  //! Field Extraction module object
+  ///< Region segmentation module object
+  boost::shared_ptr<RegionSegmentation> regionSeg;
+
+  ///< Field Extraction module object
   boost::shared_ptr<FieldExtraction> fieldExt;
 
-  //! Robot Extraction module object
+  ///< Robot Extraction module object
   boost::shared_ptr<RobotExtraction> robotExt;
 
-  //! Hough lines settings
-  vector<int> houghSettings;
-
-  static constexpr float refreshTime = 0.125f;
+  static constexpr float refreshTime = 0.5;
   typedef vector<GoalPostPtr>::iterator GPIter;
 };

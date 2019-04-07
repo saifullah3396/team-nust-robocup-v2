@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/MotionPlayback/Types/ReplayStoredMB.h
+ * @file MotionModule/src/MotionPlayback/Types/ReplayStoredMB.cpp
  *
  * This file implements the class ReplayStoredMB
  *

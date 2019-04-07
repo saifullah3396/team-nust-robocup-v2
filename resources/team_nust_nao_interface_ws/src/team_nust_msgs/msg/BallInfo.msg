@@ -1,0 +1,10 @@
+Header header
+uint8 camera
+bool found
+geometry_msgs/Point pos
+geometry_msgs/Point world_pos
+geometry_msgs/Point vel
+geometry_msgs/Point world_vel
+geometry_msgs/Point image
+float32 age
+float32 radius

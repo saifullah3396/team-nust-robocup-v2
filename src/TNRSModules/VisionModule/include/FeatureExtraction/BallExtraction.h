@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/BallExtraction.h
+ * @file VisionModule/include/FeatureExtraction/BallExtraction.h
  *
  * This file declares the class for ball extraction from the image.
  *
@@ -10,6 +10,7 @@
 #pragma once
 
 #include <opencv2/objdetect/objdetect.hpp>
+#include "TNRSBase/include/DebugBase.h"
 #include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
 /*
 #include "tensorflow/lite/interpreter.h"
@@ -32,19 +33,19 @@ class BallTracker;
 class BallExtraction : public FeatureExtraction, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to send total module time
+    ///< Option to send total module time
     (int, sendTime, 0),
-    //! Option to draw ball predicted state
+    ///< Option to draw ball predicted state
     (int, drawPredictionState, 0),
-    //! Option to draw ball scanned regions
+    ///< Option to draw ball scanned regions
     (int, drawScannedRegions, 0),
-    //! Option to draw extracted ball contour
+    ///< Option to draw extracted ball contour
     (int, drawBallContour, 0),
-    //! Option to display info about the results
+    ///< Option to display info about the results
     (int, displayInfo, 0),
-    //! Option to display image output
+    ///< Option to display image output
     (int, displayOutput, 0),
-  )
+  );
 
 public:
   /**
@@ -81,20 +82,11 @@ private:
   void loadBallClassifier();
 
   /**
-   * Simple ball detector which checks whether the ball is actually
-   * present in the predicted position
-   *
-   * @param origRect: The rect defining the cropped region in original
-   *   image
-   * @param croppedImage: Image under consideration.
+   * @brief resetBallTracker Resets the ball tracker state according to
+   *   current image
+   * @return False if the current image does not match the expected ball image
    */
-  //void simpleDetect(const Rect& origRect, Mat croppedImage);
-
-  /**
-   * Sets the image (upper/lower) that should be looked at for ball
-   * in this iteration
-   */
-  void updateActiveImage();
+  bool resetBallTracker();
 
   /**
    * @brief getPredRoi Makes a roi for predicted state
@@ -129,6 +121,13 @@ private:
    * @brief findBallUpperCam Scans the ball in upper camera image
    */
   void findBall(vector<int>& pairIndices);
+
+  /**
+   * @brief findBallFromPredState Uses predicted ball state to
+   *   find the ball
+   * @param predState Predicted state
+   */
+  void findBallFromPredState(Mat& predState);
 
   /**
    * @brief findBallUpperCam Scans the ball in upper camera image
@@ -186,39 +185,36 @@ private:
    */
   void updateBallInfo();
 
-  //! Balls found in current iteration
+  ///< Balls found in current iteration
   vector<Rect> foundBall;
 
-  //! Ball radius in xyz frame
+  ///< Ball radius in xyz frame
   float ballRadius;
 
-  //! Upper radius threshold.
+  ///< Upper radius threshold.
   float ballRadiusMax;
 
-  //! Lower radius threshold.
+  ///< Lower radius threshold.
   float ballRadiusMin;
 
-  //! OpenCv Cascade classifier for ball.
+  ///< OpenCv Cascade classifier for ball.
   CascadeClassifier cascade;
 
-  //! Field Extraction module object.
+  ///< Field Extraction module object.
   boost::shared_ptr<FieldExtraction> fieldExt;
 
-  //! Field Extraction module object.
+  ///< Field Extraction module object.
   boost::shared_ptr<RegionSegmentation> regionSeg;
 
-  //! Ball tracker class object.
+  ///< Ball tracker class object.
   boost::shared_ptr<BallTracker> ballTracker;
 
-  //! Distance threshold for combining two regions
+  ///< Distance threshold for combining two regions
   vector<int> regionsDist;
 
-  //! Previous projection matrix
-  MatrixXf prevProjMatrix;
-
-  //! Processing times
+  ///< Processing times
   float processTime;
-  float updateActiveImageTime;
+  float resetBallTrackerTime;
   float ballDetectionTime;
   float scanTime;
   float regionFilterTime;
@@ -226,25 +222,25 @@ private:
   float updateBallInfoTime;
   float findBallRegionsTime;
 
-  //! Ball scan step for lower cam
+  ///< Ball scan step for lower cam
   int scanStepLow;
   int scanStepHigh;
 
-  //! Type of the ball
+  ///< Type of the ball
   unsigned ballType;
-  
-  //! Friction coefficients
+
+  ///< Friction coefficients
   float coeffSF;
   float coeffRF;
 
-  //! Ball scanning parameters
+  ///< Ball scanning parameters
   vector<Point> topXYPairs;
   vector<Point> bottomXYPairs;
   vector<int> xySeen;
   Point gridSizeTop;
   Point gridSizeBottom;
-  
-  //! Tflite mode interpreter
+
+  ///< Tflite mode interpreter
   //std::unique_ptr<FlatBufferModel> model;
   //ops::builtin::BuiltinOpResolver resolver;
   //std::unique_ptr<Interpreter> interpreter;

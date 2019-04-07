@@ -42,15 +42,15 @@ public:
   void setMaxVelocityCutoff(const Scalar& cutoff);
 
 protected:
-  //! Taken as either left leg or right leg. Used for zmp constraints
-  //! The base leg is considered as the inertial frame of reference for
-  //! whole body motion.
+  ///< Taken as either left leg or right leg. Used for zmp constraints
+  ///< The base leg is considered as the inertial frame of reference for
+  ///< whole body motion.
   LinkChains baseLeg;
   LinkChains chainIndex;
   unsigned chainStart;
   unsigned chainSize;
   Scalar stepSize;
-  //! Velocity bounds for the current chain.
+  ///< Velocity bounds for the current chain.
   Matrix<Scalar, 1, Dynamic> velLimits;
   Scalar maxVelCutoff;
 

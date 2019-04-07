@@ -91,4 +91,4 @@ namespace Utils
     }
 
 }
-#endif //! _QUATERNIONS_HELPER_H_
+#endif ///< _QUATERNIONS_HELPER_H_

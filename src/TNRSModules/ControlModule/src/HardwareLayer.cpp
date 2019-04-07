@@ -1,5 +1,5 @@
 /**
- * @file ControlModule/HardwareLayer.cpp
+ * @file ControlModule/src/HardwareLayer.cpp
  *
  * This file implements classes SensorLayer and ActuatorLayers,
  * and defines their child classes fir each type of sensors and
@@ -135,7 +135,7 @@ void ActuatorLayer::update()
  try {
     if (requests.isEmpty())
       return;
-    //! Get the earliest request in queue
+    ///< Get the earliest request in queue
     auto request = requests.queueFront();
     #ifndef V6_CROSS_BUILD
       for (size_t i = 0; i < size; ++i) {
@@ -144,9 +144,9 @@ void ActuatorLayer::update()
       commands[4][0] = dcmProxy->getTime(20);
       dcmProxy->setAlias(commands);
     #else
-    //! @todo Define lola based request handler for realtime usage
+    ///< @todo Define lola based request handler for realtime usage
     #endif
-    //! Execute in remove
+    ///< Execute in remove
     requests.popQueue();
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what())

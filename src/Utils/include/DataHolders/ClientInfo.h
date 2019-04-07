@@ -84,6 +84,6 @@ struct ClientInfo : public DataHolder
     return val;
   }
 
-  string address; //! The socket address
-  TcpClientType type; //! Type of TcpClient
+  string address; ///< The socket address
+  TcpClientType type; ///< Type of TcpClient
 };

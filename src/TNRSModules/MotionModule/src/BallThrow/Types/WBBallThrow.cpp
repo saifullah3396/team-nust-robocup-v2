@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BallThrow/Types/WBBallThrow.h
+ * @file MotionModule/src/BallThrow/Types/WBBallThrow.cpp
  *
  * This file implements the class WBBallThrow
  *
@@ -252,7 +252,7 @@ void WBBallThrow<Scalar>::ThrowBall::onStart()
   desiredJoints(2, 3) = -55.0 * MathsUtils::DEG_TO_RAD,
   desiredJoints(2, 4) = 0.0 * MathsUtils::DEG_TO_RAD;*/
 
-  //! Cartesian velocities in torso frame.
+  ///< Cartesian velocities in torso frame.
   // Find jacobian for when ball leaves
   this->bPtr->kM->setChainPositions(LinkChains::lArm, desiredJoints.row(2), JointStateType::sim); // third row
   Matrix<Scalar, Dynamic, Dynamic> jacobian =
@@ -270,7 +270,7 @@ void WBBallThrow<Scalar>::ThrowBall::onStart()
   //desiredBoundVels.row(1) = preThrowJVel.transpose(); // Second row
   cout << "DesiredBoundVels: " << preThrowJVel.transpose() << endl;
 
-  //! Set elbow yaw final position to 40.0 degrees
+  ///< Set elbow yaw final position to 40.0 degrees
   desiredJoints(1, 2) = 40.0 * MathsUtils::DEG_TO_RAD;
   knots.resize(desiredJoints.rows() - 1);
   for (int i = 0; i < knots.size(); ++i)

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/MovementModule/Types/NaoqiFootsteps.cpp
+ * @file MotionModule/src/MovementModule/Types/NaoqiFootsteps.cpp
  *
  * This file implements the class NaoqiFootsteps
  *
@@ -7,10 +7,10 @@
  * @date 21 Jul 2018
  */
 
-#ifdef V6_CROSS_BUILD
-#include <qi/alvalue.h>
-#else
+#ifndef V6_CROSS_BUILD
 #include <alvalue/alvalue.h>
+#else
+#include <qi/alvalue.h>
 #endif
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "MotionModule/include/MotionModule.h"
@@ -38,7 +38,7 @@ void NaoqiFootsteps<Scalar>::loadExternalConfig()
 {
   static bool loaded = false;
   if (!loaded) {
-    //! read parameters from config file:
+    ///< read parameters from config file:
     GET_CONFIG(
       "PathPlanner",
       (Scalar, Walk.footstepTime, footstepTime),
@@ -185,7 +185,7 @@ bool NaoqiFootsteps<Scalar>::initWalk()
       // Time taken by footstep
       timeList[stepIndex] = (stepIndex + 1) * this->footstepTime;
       ++stepIndex;
-      step.print();
+      //step.print();
       fromPlanned = pathIter.base();
       pathIter++;
     }

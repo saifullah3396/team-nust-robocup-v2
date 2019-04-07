@@ -180,7 +180,7 @@ public:
    */
   void setJointCmds(const Matrix<Scalar, Dynamic, 1>& jr);
 
-  //! Getters
+  ///< Getters
   boost::shared_ptr<KinematicsModule<Scalar> > getKinematicsModule()
     { return kM; }
 
@@ -242,12 +242,12 @@ protected:
     const bool& postCommand);
   #endif
 
-  //! Kinematics module object
+  ///< Kinematics module object
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
 
-  //! Motion generator module object
+  ///< Motion generator module object
   boost::shared_ptr<MotionGenerator<Scalar> > mG;
 
-  //! Base MotionModule object pointer
+  ///< Base MotionModule object pointer
   MotionModule* motionModule;
 };

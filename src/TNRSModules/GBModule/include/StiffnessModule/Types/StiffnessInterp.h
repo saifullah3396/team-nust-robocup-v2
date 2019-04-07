@@ -55,9 +55,9 @@ public:
   void loadExternalConfig() final {}
 
 private:
-  //! Joint configuration initial
+  ///< Joint configuration initial
   vector<float> sI = {vector<float>(toUType(Joints::count), NAN)};
 
-  //! Joint configuration difference
+  ///< Joint configuration difference
   vector<float> sDelta = {vector<float>(toUType(Joints::count), NAN)};
 };

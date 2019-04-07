@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/KickModule/JSOImpKick.cpp
+ * @file MotionModule/src/KickModule/Types/JSOImpKick.cpp
  *
  * This file implements the class JSOImpKick
  *

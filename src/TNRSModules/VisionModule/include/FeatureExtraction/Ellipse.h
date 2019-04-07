@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/Ellipse.h
+ * @file VisionModule/include/FeatureExtraction/Ellipse.h
  *
  * This file defines the struct Ellipse.
  *
@@ -81,7 +81,7 @@ struct Ellipse
   }
 
   /**
-   * Finds the contour of the ellipse with respect to the given image 
+   * Finds the contour of the ellipse with respect to the given image
    *   parameters
    */
   void
@@ -104,19 +104,19 @@ struct Ellipse
     return contour;
   }
 
-  //! Algebraic parameters as coefficients of ellipse conic section
-  vector<float> conic; //! Coeffs conic[0], conic[1], conic[2], conic[3], conic[4], conic[5]
+  ///< Algebraic parameters as coefficients of ellipse conic section
+  vector<float> conic; ///< Coeffs conic[0], conic[1], conic[2], conic[3], conic[4], conic[5]
 
-  //! Geometric parameters of the ellipse
-  float cx; //! Ellipse center in x coordinate
-  float cy; //! Ellipse center in y coordinate
-  float rl; //! Ellipse major axis radius
-  float rs; //! Ellipse minor axis radius
-  float phi; //! Ellipse angle in radians
+  ///< Geometric parameters of the ellipse
+  float cx; ///< Ellipse center in x coordinate
+  float cy; ///< Ellipse center in y coordinate
+  float rl; ///< Ellipse major axis radius
+  float rs; ///< Ellipse minor axis radius
+  float phi; ///< Ellipse angle in radians
 
-  vector<Point2f> contour; //! Ellipse contour
-  int imageWidth; //! Width of the image
-  int imageHeight; //! Height of the image
+  vector<Point2f> contour; ///< Ellipse contour
+  int imageWidth; ///< Width of the image
+  int imageHeight; ///< Height of the image
 
   Point2f cWorld;
   Point2f rlWorld;

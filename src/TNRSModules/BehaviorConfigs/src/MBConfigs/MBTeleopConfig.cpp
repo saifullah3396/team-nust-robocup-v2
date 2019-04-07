@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBTeleopConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBTeleopConfig.h
  *
  * This file defines the struct MBTeleopConfig and its childs
  *
@@ -13,7 +13,7 @@
 DEFINE_BEHAVIOR_CONFIG(
   MBTeleopConfig, MBConfig, MBTeleopConfigPtr,
   (MBTeleopTypes, teleopJoints, TeleopJointsConfig),
-)
+);
 
 void TeleopJointsConfig::init() {}
 void TeleopJointsConfig::validate()

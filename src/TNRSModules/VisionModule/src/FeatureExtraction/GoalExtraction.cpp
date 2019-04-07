@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/GoalExtraction.cpp
+ * @file VisionModule/src/FeatureExtraction/GoalExtraction.cpp
  *
  * This file implements the class for goal extraction from
  * the image.
@@ -9,18 +9,26 @@
  */
 
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "LocalizationModule/include/FieldLandmarkIds.h"
 #include "Utils/include/DataUtils.h"
 #include "Utils/include/DataHolders/GoalInfo.h"
 #include "Utils/include/DataHolders/Landmark.h"
+#include "Utils/include/DataHolders/Obstacle.h"
 #include "Utils/include/DataHolders/ObstacleType.h"
-//#include "VisionModule/include/ColorHandler.h"
+#include "VisionModule/include/CameraTransform.h"
+#include "VisionModule/include/ColorHandler.h"
+#include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
+#include "VisionModule/include/FeatureExtraction/RegionScanners.h"
 #include "VisionModule/include/FeatureExtraction/FieldExtraction.h"
 #include "VisionModule/include/FeatureExtraction/FittedLine.h"
 #include "VisionModule/include/FeatureExtraction/GoalPost.h"
 #include "VisionModule/include/FeatureExtraction/GoalExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RobotExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RobotRegion.h"
+#include "VisionModule/include/FeatureExtraction/ScannedLine.h"
+#include "VisionModule/include/FeatureExtraction/ScannedRegion.h"
 #include "Utils/include/ConfigMacros.h"
+#include "Utils/include/HardwareIds.h"
 #include "Utils/include/MathsUtils.h"
 
 using namespace MathsUtils;
@@ -33,34 +41,34 @@ GoalExtraction::GoalExtraction(VisionModule* visionModule) :
   int tempDrawScannedLines;
   int tempDrawScannedRegions;
   int tempDrawGoalBaseWindows;
+  int tempDrawShiftedBorderLines;
   int tempDrawGoalPostBases;
   int tempDisplayInfo;
   int tempDisplayOutput;
-  houghSettings.resize(3);
   GET_CONFIG(
     "VisionConfig",
     (int, GoalExtraction.sendTime, tempSendTime),
     (int, GoalExtraction.drawScannedLines, tempDrawScannedLines),
     (int, GoalExtraction.drawScannedRegions, tempDrawScannedRegions),
     (int, GoalExtraction.drawGoalBaseWindows, tempDrawGoalBaseWindows),
+    (int, GoalExtraction.drawShiftedBorderLines, tempDrawShiftedBorderLines),
     (int, GoalExtraction.drawGoalPostBases, tempDrawGoalPostBases),
     (int, GoalExtraction.displayInfo, tempDisplayInfo),
     (int, GoalExtraction.displayOutput, tempDisplayOutput),
-    (int, GoalExtraction.hltThreshold, houghSettings[0]),
-    (int, GoalExtraction.hltLineLength, houghSettings[1]),
-    (int, GoalExtraction.hltLineGap, houghSettings[2]),
   )
   SET_DVAR(int, sendTime, tempSendTime);
   SET_DVAR(int, drawScannedLines, tempDrawScannedLines);
   SET_DVAR(int, drawScannedRegions, tempDrawScannedRegions);
   SET_DVAR(int, drawGoalBaseWindows, tempDrawGoalBaseWindows);
+  SET_DVAR(int, drawShiftedBorderLines, tempDrawShiftedBorderLines);
   SET_DVAR(int, drawGoalPostBases, tempDrawGoalPostBases);
   SET_DVAR(int, displayInfo, tempDisplayInfo);
   SET_DVAR(int, displayOutput, tempDisplayOutput);
+  regionSeg = GET_FEATURE_EXT_CLASS(RegionSegmentation, FeatureExtractionIds::segmentation);
   fieldExt = GET_FEATURE_EXT_CLASS(FieldExtraction, FeatureExtractionIds::field);
   robotExt = GET_FEATURE_EXT_CLASS(RobotExtraction, FeatureExtractionIds::robot);
 
-  //! Initializing processing times
+  ///< Initializing processing times
   processTime= 0.0;
   scanTime= 0.0;
   classifyPostsTime= 0.0;
@@ -70,14 +78,26 @@ GoalExtraction::GoalExtraction(VisionModule* visionModule) :
 
 void GoalExtraction::processImage()
 {
+  if (activeCamera == CameraId::headBottom)
+    return;
   auto tStart = high_resolution_clock::now();
   if (fieldExt->isFound()) {
     refreshGoalPosts();
-    vector<ScannedLinePtr> verGoalLines;
-    if (scanForPosts(verGoalLines)) {
-      vector<ScannedRegionPtr> verGoalRegions;
-      findRegions(verGoalRegions, verGoalLines, 8, 8, false);
-      classifyPosts(verGoalRegions);
+    vector<LinearScannedLinePtr> horGoalLines;
+    if (filterGoalLines(horGoalLines)) {
+      vector<vector<Point>> horGoalHulls;
+      auto lineLinkYTol =
+        regionSeg->getHorizontalScan(ScanTypes::goal)->highStep * 2.5; // pixels
+      auto lineLinkXTol = lineLinkYTol / 2;
+      auto maxLineLengthDiffRatio = 1.25;
+      findConvexHulls(
+        horGoalHulls,
+        horGoalLines,
+        lineLinkXTol,
+        lineLinkYTol,
+        maxLineLengthDiffRatio,
+        bgrMat[toUType(activeCamera)]);
+      classifyPosts(horGoalHulls);
       findBestPosts();
       updateGoalInfo();
       drawResults();
@@ -95,7 +115,7 @@ void GoalExtraction::processImage()
     LOG_INFO("Goal posts found: " << GOAL_INFO_OUT(VisionModule).found);
   }
   if (GET_DVAR(int, displayOutput))
-    VisionUtils::displayImage("GoalExtraction", bgrMat[currentImage]);
+    VisionUtils::displayImage("GoalExtraction", bgrMat[toUType(activeCamera)]);
 }
 
 void GoalExtraction::refreshGoalPosts()
@@ -104,6 +124,13 @@ void GoalExtraction::refreshGoalPosts()
   GPIter iter = goalPosts.begin();
   while (iter != goalPosts.end()) {
     if (currentTime - (*iter)->timeDetected < refreshTime) {
+      Matrix<float, 3, 1> prevImage;
+      prevImage(0, 0) = (*iter)->image.x;
+      prevImage(1, 0) = (*iter)->image.y;
+      prevImage(2, 0) = 1.0;
+      prevImage = cameraTransforms[toUType(activeCamera)]->prevImageToCurrentImage(prevImage);
+      (*iter)->image.x = prevImage(0, 0);
+      (*iter)->image.y = prevImage(1, 0);
       ++iter;
     } else {
       iter = goalPosts.erase(iter);
@@ -111,71 +138,82 @@ void GoalExtraction::refreshGoalPosts()
   }
 }
 
-bool GoalExtraction::scanForPosts(vector<ScannedLinePtr>& verGoalLines)
+bool GoalExtraction::filterGoalLines(vector<LinearScannedLinePtr>& horGoalLines)
 {
   auto tStart = high_resolution_clock::now();
   auto border = fieldExt->getBorder();
-  auto robotRegions = robotExt->getRobotRegions();
   if (border.empty()) {
     duration<double> timeSpan = high_resolution_clock::now() - tStart;
     scanTime = timeSpan.count();
     return false;
   }
-  srand(time(0));
-  int scanStepHigh = 4, scanStepLow = 8;
-  int yWhite = 150;
-  int scanStart = rand() % scanStepHigh;
-  for (int x = scanStart; x < getImageWidth(); x = x + scanStepHigh) {
-    bool scan = true;
-    for (int j = 0; j < robotRegions.size(); ++j) {
-      if (!robotRegions[j]) continue;
-      int min = robotRegions[j]->sr->rect.x;
-      int max = robotRegions[j]->sr->rect.x + robotRegions[j]->sr->rect.width;
-      if (x > min && x < max) {
-        scan = false;
+  auto borderLines = fieldExt->getBorderLinesWorld();
+  vector<double> borderSlopes;
+  vector<double> borderCs;
+  vector<Vec4f> shiftedBorders;
+  sort(borderLines.begin(), borderLines.end(),
+    [](const FittedLinePtr& fl1, const FittedLinePtr& fl2) {
+      return (fl1->p1.x < fl1->p2.x);
+    });
+  for (const auto& borderLine : borderLines) {
+    // Distance from field to border is 70cm
+    Point2f goalBaseP1 = borderLine->p1 - borderLine->perp * 0.7;
+    Point2f goalBaseP2 = borderLine->p2 - borderLine->perp * 0.7;
+    cameraTransforms[toUType(activeCamera)]->worldToImage(
+      Point3f(goalBaseP1.x, goalBaseP1.y, 0.0), goalBaseP1);
+    cameraTransforms[toUType(activeCamera)]->worldToImage(
+          Point3f(goalBaseP2.x, goalBaseP2.y, 0.0), goalBaseP2);
+    auto slope = (goalBaseP2.y - goalBaseP1.y) / (goalBaseP2.x - goalBaseP1.x);
+    borderSlopes.push_back(slope);
+    borderCs.push_back(-slope * goalBaseP1.x + goalBaseP1.y);
+    shiftedBorders.push_back(Vec4f(goalBaseP1.x, goalBaseP1.y, goalBaseP2.x, goalBaseP2.y));
+    if (GET_DVAR(int, drawShiftedBorderLines)) {
+      line(
+        bgrMat[toUType(activeCamera)],
+        Point(goalBaseP1.x, goalBaseP1.y),
+        Point(goalBaseP2.x, goalBaseP2.y),
+        Scalar(0, 0, 255), 1);
+    }
+  }
+  Point2f intersection;
+  if (shiftedBorders.size() >= 2)
+    VisionUtils::findIntersection(shiftedBorders[0], shiftedBorders[1], intersection);
+
+  horGoalLines = regionSeg->getHorizontalScan(ScanTypes::goal)->scanLines;
+  auto robotRegions = robotExt->getRobotRegions();
+  for (auto& gl : horGoalLines) {
+    if (!gl) continue;
+    auto mean = (gl->start+gl->end)/2;
+    //VisionUtils::drawPoint(Point((gl->start+gl->end)/2, slope * (gl->start+gl->end)/2 + lineC), bgrMat[toUType(activeCamera)]);
+    if (shiftedBorders.size() >= 2) {
+      if (mean < intersection.x) {
+        if (gl->baseIndex > borderSlopes[0] * mean + borderCs[0]) {
+          gl.reset();
+          continue;
+        }
+      } else {
+        if (gl->baseIndex > borderSlopes[1] * mean + borderCs[1]) {
+          gl.reset();
+          continue;
+        }
+      }
+    } else {
+      if (gl->baseIndex > borderSlopes[0] * mean + borderCs[0]) {
+        gl.reset();
+        continue;
+      }
+    }
+    for (const auto& rr : robotRegions) {
+      if (!rr) continue;
+      if (rr->sr->rect.contains(Point(mean, gl->baseIndex))) {
+        gl.reset();
         break;
       }
     }
-    if (!scan) continue;
-    int borderY = border[x].y - 10;
-    if (borderY < 0) continue;
-    int colorY = getY(x, borderY);
-    if (colorY < yWhite) continue;
-    int end = -1;
-    int down = 0;
-    for (int j = 1; j <= 10; ++j) {
-      int yDown = borderY + j;
-      if (yDown > getImageHeight()) {
-        end = getImageHeight();
-        if (down > 5) {
-          auto sl =
-            boost::make_shared <ScannedLine> (Point(x, borderY), Point(x, end));
-          verGoalLines.push_back(sl);
-        }
-        break;
-      }
-      if (yDown > 0) {
-        colorY = getY(x, yDown);
-        if (colorY > yWhite && j != 10) {
-          down++;
-        } else {
-          end = yDown;
-        }
-      }
-    }
-    if (down > 5) {
-      while (true) {
-        int newEnd = end + scanStepLow;
-        if (getY(x, newEnd) < yWhite || newEnd > getImageHeight()) {
-          newEnd -= scanStepLow;
-          break;
-        }
-        end = newEnd;
-      }
-      auto sl = boost::make_shared<ScannedLine>(Point(x, borderY), Point(x, end));
-      verGoalLines.push_back(sl);
-      if (GET_DVAR(int, drawScannedLines))
-        line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255, 0, 255), 1);
+  }
+  if (GET_DVAR(int, drawScannedLines)) {
+    for (auto& gl : horGoalLines) {
+      if (gl) gl->draw(bgrMat[toUType(activeCamera)], Scalar(0,255,0));
     }
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
@@ -183,214 +221,66 @@ bool GoalExtraction::scanForPosts(vector<ScannedLinePtr>& verGoalLines)
   return true;
 }
 
-void GoalExtraction::classifyPosts(vector<ScannedRegionPtr>& verGoalRegions)
+void GoalExtraction::classifyPosts(vector<vector<Point>>& horGoalHulls)
 {
   auto tStart = high_resolution_clock::now();
   vector<GoalPostPtr> newPosts;
-  for (int vgr = 0; vgr < verGoalRegions.size(); ++vgr) {
-    //cout << "vgr: " << vgr << endl;
-    auto gr = verGoalRegions[vgr];
-    Rect r = gr->rect;
+  for (auto& gh : horGoalHulls) {
+    if (gh.size() < 4) continue;
+    auto r = boundingRect(gh);
     if (r.width < 5 || r.area() < 50) continue;
-    r = r - Point(r.width * 2.5 / 2, 0);
-    r += Size(r.width * 2.5, 10);
-    r = r & Rect(0, 0, getImageWidth(), getImageHeight());
+    if (r.height / (float) r.width < 1.5) continue;
     if (GET_DVAR(int, drawScannedRegions)) {
-      rectangle(bgrMat[currentImage], r, Scalar(0,255,0), 1);
+      rectangle(bgrMat[toUType(activeCamera)], r, Scalar(0,255,0), 1);
     }
-    Mat cropped = getGrayImage()(r);
-    float resizeRatio = 1.f;
-    if (cropped.cols > 40) {
-      resizeRatio = 40.f / (float) cropped.cols;
-      resize(cropped, cropped, cv::Size(), resizeRatio, resizeRatio);
-    }
-    //VisionUtils::displayImage(cropped, "cropped");
-    cropped.convertTo(cropped, -1, 1.5, 2);
-    //VisionUtils::displayImage(cropped, "cropped2");
-    Mat white;
-    threshold(cropped, white, 225, 255, 0);
-    Mat gradX;
-    Mat absGradX;
-    int scale = 1;
-    int delta = 0;
-    int ddepth = CV_16S;
-    Sobel(white, gradX, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT);
-    convertScaleAbs(gradX, absGradX);
-    //dilate(absGradX, absGradX, Mat(), Point(-1, -1), 1, 1, 1);
-    //VisionUtils::displayImage(white, "white");
-    //VisionUtils::displayImage(absGradX, "absGradX");
-    vector<int> gradHist;
-    gradHist.resize(absGradX.cols);
-    int gradRowCheck = 0;
-    int lastRowCheck = 0;
-    int maxCheck = 0.1 * absGradX.rows;
-    int height = -1;
-    uchar* p = absGradX.data;
-    for (unsigned i = 0; i < absGradX.cols * absGradX.rows; ++i) {
-      if (*p++ > 100) {
-        gradHist[i % absGradX.cols]++;
-        if (height == -1 && gradRowCheck < maxCheck) gradRowCheck++;
+    sort(
+      gh.begin(),
+      gh.end(),
+      [](const Point& p1, const Point& p2) {
+        return (p1.y > p2.y) ||
+        ((p1.y == p2.y) && (p1.x < p2.x));
+      });
+    vector<Point2f> regionBase, regionBaseWorld;
+    regionBase.push_back(Point2f(gh[0].x, gh[0].y));
+    regionBase.push_back(Point2f(gh[1].x, gh[1].y));
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(regionBaseWorld, regionBase, 0.0);
+    auto width = norm(regionBaseWorld[0] - regionBaseWorld[1]);
+    if (width > 0.075 && width < 0.20) {
+      int winX = gh[0].x;
+      int winSizeX = abs(gh[1].x - gh[0].x);
+      int winSizeY = 20;
+      int winY = gh[0].y;
+      Rect window = Rect(winX, winY, winSizeX, winSizeY);
+      window = window & Rect(0, 0, getImageWidth(), getImageHeight());
+      if (GET_DVAR(int, drawGoalBaseWindows)) {
+        rectangle(bgrMat[toUType(activeCamera)], window, Scalar(255, 255, 255), 1);
       }
-      if (height == -1 && i % absGradX.cols == 0) {
-        if (gradRowCheck < maxCheck) lastRowCheck++;
-        if (lastRowCheck >= 5) {
-          height = i / absGradX.cols - lastRowCheck;
-        }
-        gradRowCheck = 0;
-      }
-    }
-
-    if (height == -1) {
-      height = absGradX.rows;
-    }
-    height /= resizeRatio;
-    height += r.y;
-
-    vector<int> filt(gradHist.size());
-    for (int i = 1; i < gradHist.size() - 1; ++i) {
-      filt[i - 1] = (gradHist[i - 1] + gradHist[i] + gradHist[i + 1]) / 3;
-    }
-
-    gradHist = filt;
-    int maxima = 0;
-    for (unsigned i = 0; i < gradHist.size(); ++i) {
-      maxima = gradHist[i] > maxima ? gradHist[i] : maxima;
-    }
-
-    const int threshold = maxima * 0.75;
-    const int minThreshold = maxima * 0.25;
-    int grad = -1;
-    vector < pair<int, int> > peaks;
-    for (int i = 0; i < gradHist.size() - 1; i++) {
-      if (gradHist[i] - gradHist[i + 1] > 0) {
-        if (grad == 1 && gradHist[i] > threshold) {
-          peaks.push_back(make_pair(i, 1));
-        }
-        grad = -1;
-      } else if (gradHist[i + 1] - gradHist[i] > 0) {
-        if (grad == -1 && gradHist[i] < minThreshold) {
-          peaks.push_back(make_pair(i, 0));
-        }
-        grad = 1;
-      }
-    }
-
-    //for (int i = 0; i < peaks.size(); ++i)
-    //  cout << "peaks[" << peaks[i].first << "]:" << peaks[i].second << endl;
-
-    if (peaks.empty()) continue;
-    int unchangedStart = peaks[0].first;
-    int last = -1;
-    vector < pair<int, int> > peaksFilt;
-    for (int i = 0; i < peaks.size(); i++) {
-      if (peaks[i].second != last) {
-        if (last != -1) {
-          float peak = (peaks[i - 1].first + peaks[unchangedStart].first) / 2;
-          peaksFilt.push_back(make_pair(peak, last));
-        }
-        unchangedStart = i;
-      }
-      last = peaks[i].second;
-      if (i == peaks.size() - 1) {
-        float peak = (peaks[i].first + peaks[unchangedStart].first) / 2;
-        peaksFilt.push_back(make_pair(peak, last));
-      }
-    }
-
-    //for (int i = 0; i < peaksFilt.size(); ++i)
-    //  cout << "peaksFilt[" << peaksFilt[i].first << "]:" << peaksFilt[i].second << endl;
-    //waitKey(0);
-    if (peaksFilt.empty()) continue;
-    int imageCenter = absGradX.cols / 2;
-    last = peaksFilt[0].second;
-    int peak1 = -1;
-    int peak2 = -1;
-    for (int i = 1; i < peaksFilt.size(); i++) {
-      if (peaksFilt[i].second == 0) {
-        if (last == 1) {
-          if (peaksFilt[i - 1].first < imageCenter) {
-            peak1 = peaksFilt[i - 1].first;
-          }
-        }
-      } else {
-        if (last == 0) {
-          if (peak1 != -1) {
-            if (peak2 == -1 && peaksFilt[i].first > imageCenter) peak2 =
-              peaksFilt[i].first;
-          } else {
-            peak1 = peaksFilt[i].first;
+      int greenCnt = 0;
+      int totalCnt = winSizeX * winSizeY;
+      for (int j = winY; j < winSizeY + winY; ++j) {
+        for (int k = winX; k < winSizeX + winX; ++k) {
+          auto p = getYUV(k, j);
+          if (colorHandler->isColor(p, TNColors::green)) {
+            //bgrMat[toUType(activeCamera)].at<Vec3b>(j, k) = Vec3b(0,255,0);
+            greenCnt++;
           }
         }
       }
-      last = peaksFilt[i].second;
-    }
-
-    if (peak1 == -1 || peak2 == -1) continue;
-
-    peak1 /= resizeRatio;
-    peak2 /= resizeRatio;
-
-    int diff = peak2 - peak1;
-    //cout << "diff : " << diff << endl;
-    if (diff < 5) continue;
-    r.x = r.x + peak1;
-    r.y = gr->rect.y;
-    r.width = diff;
-    r.height = gr->rect.height;
-    int winX = r.x;
-    int winSizeX = r.width;
-    int winSizeY = 10;
-    int winY = r.y + r.height;
-    Rect window = Rect(winX, winY, winSizeX, winSizeY);
-    window = window & Rect(0, 0, getImageWidth(), getImageHeight());
-    if (GET_DVAR(int, drawGoalBaseWindows)) {
-      rectangle(bgrMat[currentImage], window, Scalar(255, 255, 255), 1);
-    }
-    int whiteCnt = 0;
-    int greenCnt = 0;
-    int totalCnt = winSizeX * winSizeY;
-    for (int j = winY; j < winSizeY + winY; ++j) {
-      for (int k = winX; k < winSizeX + winX; ++k) {
-        auto p = getYUV(k, j);
-        if (colorHandler->isColor(p, TNColors::white)) {
-          whiteCnt++;
-        } else if (colorHandler->isColor(p, TNColors::green)) {
-          bgrMat[currentImage].at<Vec3b>(j, k) = Vec3b(0,255,0);
-          greenCnt++;
-        }
-      }
-    }
-    if ((float) greenCnt / (float) totalCnt > 0.1) {
-      vector<Point2f> goalBases, goalBasesWorld;
-      goalBases.push_back(Point2f(r.x, winY));
-      goalBases.push_back(Point2f(r.x + r.width, winY));
-      VisionUtils::drawPoint(Point(r.x, winY), bgrMat[currentImage], Scalar(255,255,0));
-      VisionUtils::drawPoint(Point(r.x + r.width, winY), bgrMat[currentImage], Scalar(255,255,0));
-      cameraTransforms[currentImage]->imageToWorld(
-        goalBasesWorld,
-        goalBases,
-        0.0);
-      float width = norm(goalBasesWorld[0] - goalBasesWorld[1]);
-     //cout << "width: " << width << endl;
-      if (width > 0.075 && width < 0.20) {
-        auto cW = Point2f((goalBasesWorld[0].x + goalBasesWorld[1].x) / 2, // center world
-        (goalBasesWorld[0].y + goalBasesWorld[1].y) / 2);
-        auto cI = Point2f(r.x + r.width / 2, winY);
-        auto gp = boost::make_shared < GoalPost > (cW, cI);
+      static const auto windowGreenRatioMin = 0.35;
+      if (greenCnt / (float) totalCnt > windowGreenRatioMin) {
+        auto cW = (regionBaseWorld[0] + regionBaseWorld[1]) * 0.5;
+        auto cI = Point2f((gh[0].x + gh[1].x) * 0.5, gh[0].y);
+        auto newPost = boost::make_shared<GoalPost> (cW, cI);
         bool exists = false;
-        for (int i = 0; i < goalPosts.size(); ++i) {
-          if (goalPosts[i]->checkDuplicate(gp)) {
+        for (const auto& gp : goalPosts) {
+          if (gp->checkDuplicate(newPost)) {
             exists = true;
             break;
           }
         }
-        if (!exists) newPosts.push_back(gp);
+        if (!exists) newPosts.push_back(newPost);
       }
     }
-    //if (GET_DVAR(int, displayOutput))
-    //VisionUtils::displayImage(bgrMat[currentImage], "GoalExtraction");
-    //waitKey(0);
-    if (vgr >= 2) break;
   }
   goalPosts.insert(goalPosts.end(), newPosts.begin(), newPosts.end());
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
@@ -402,17 +292,15 @@ void GoalExtraction::findBestPosts()
   auto tStart = high_resolution_clock::now();
   if (!goalPosts.empty()) {
     if (goalPosts.size() > 1) {
-      for (int i = 0; i < goalPosts.size(); ++i) {
-        if (!goalPosts[i]) continue;
-        auto gp1 = goalPosts[i]->image;
-        for (int j = 0; j < goalPosts.size(); ++j) {
-          if (!goalPosts[j]) continue;
-          if (i != j) {
-            auto gp2 = goalPosts[j]->image;
-            if (norm(gp1 - gp2) < 75) {
-              if (gp1.y > gp2.y) {
-                goalPosts[j].reset();
-              }
+      for (auto& gp1 : goalPosts) {
+        if (!gp1) continue;
+        auto gp1Image = gp1->image;
+        for (auto& gp2 : goalPosts) {
+          if (!gp2) continue;
+          if (gp1 != gp2) {
+            auto gp2Image = gp2->image;
+            if (norm(gp1Image - gp2Image) < 75 && gp1Image.y > gp2Image.y) {
+                gp2.reset();
             }
           }
         }
@@ -489,48 +377,48 @@ void GoalExtraction::updateGoalInfo()
         goalInfo.type = norm(goalPosts[0]->world) < 5.889821729 ? GoalPostType::ourTeam : GoalPostType::opponentTeam;
       }
       if (goalInfo.type == GoalPostType::ourTeam) {
-        for (int i = 0; i < goalPosts.size(); ++i) {
-          if (goalPosts[i]->world.y < 0) {
-            if (goalPosts[i]->world.x > 3.5 && goalPosts[i]->world.x < 4.1) // Goal on Right - Left Post
-            {
-              leftPost = goalPosts[i]->world;
-            } else if (goalPosts[i]->world.x > 1.9 && goalPosts[i]->world.x < 2.5) // Goal on Right - Right Post
-            {
-              rightPost = goalPosts[i]->world;
+        for (const auto& gp : goalPosts) {
+          if (!gp) continue;
+          if (gp->world.y < 0) {
+            if (gp->world.x > 3.5 && gp->world.x < 4.1) { // Goal on Right - Left Post
+              leftPost = gp->world;
+              goalInfo.found = true;
+            } else if (gp->world.x > 1.9 && gp->world.x < 2.5) { // Goal on Right - Right Post
+              rightPost = gp->world;
+              goalInfo.found = true;
             }
           } else {
-            if (goalPosts[i]->world.x > 3.5 && goalPosts[i]->world.x < 4.1) // Goal on Left - Right Post
-            {
-              rightPost = goalPosts[i]->world;
-            } else if (goalPosts[i]->world.x > 1.9 && goalPosts[i]->world.x < 2.5) // Goal on Left - Left Post
-            {
-              leftPost = goalPosts[i]->world;
+            if (gp->world.x > 3.5 && gp->world.x < 4.1) { // Goal on Left - Right Post
+              rightPost = gp->world;
+              goalInfo.found = true;
+            } else if (gp->world.x > 1.9 && gp->world.x < 2.5) { // Goal on Left - Left Pos
+              leftPost = gp->world;
+              goalInfo.found = true;
             }
           }
-          //LOG_INFO("Goal post: " << goalPosts[i]->world << endl)
         }
       } else if (goalInfo.type == GoalPostType::opponentTeam) {
-        for (int i = 0; i < goalPosts.size(); ++i) {
-          if (goalPosts[i]->world.y > 0) {
-            if (goalPosts[i]->world.x > 3.5 && goalPosts[i]->world.x < 4.1) // Goal on Left - Right Post
+        for (const auto& gp : goalPosts) {
+          if (!gp) continue;
+          if (gp->world.y > 0) {
+            if (gp->world.x > 3.5 && gp->world.x < 4.1) // Goal on Left - Right Post
             {
-              rightPost = goalPosts[i]->world;
-            } else if (goalPosts[i]->world.x > 1.9 && goalPosts[i]->world.x < 2.5) // Goal on Left - Left Post
+              rightPost = gp->world;
+            } else if (gp->world.x > 1.9 && gp->world.x < 2.5) // Goal on Left - Left Post
             {
-              leftPost = goalPosts[i]->world;
+              leftPost = gp->world;
             }
           } else {
-            if (goalPosts[i]->world.x > 3.5 && goalPosts[i]->world.x < 4.1) // Goal on Left - Left Post
+            if (gp->world.x > 3.5 && gp->world.x < 4.1) // Goal on Left - Left Post
             {
-              leftPost = goalPosts[i]->world;
-            } else if (goalPosts[i]->world.x > 1.9 && goalPosts[i]->world.x < 2.5) // Goal on Left - Right Post
+              leftPost = gp->world;
+            } else if (gp->world.x > 1.9 && gp->world.x < 2.5) // Goal on Left - Right Post
             {
-              rightPost = goalPosts[i]->world;
+              rightPost = gp->world;
             }
           }
         }
       }
-      goalInfo.found = true;
     } else {
       goalInfo.found = false;
     }
@@ -539,7 +427,7 @@ void GoalExtraction::updateGoalInfo()
     goalInfo.mid = goalMid;
   } else {
     if (goalPosts.size() == 2) {
-      if (goalPosts[0]->image.x < goalPosts[1]->image.x) { //! Post at index 0 is to the left in image
+      if (goalPosts[0]->image.x < goalPosts[1]->image.x) { ///< Post at index 0 is to the left in image
         goalInfo.leftPost = goalPosts[0]->world;
         goalInfo.rightPost = goalPosts[1]->world;
       } else {
@@ -553,18 +441,11 @@ void GoalExtraction::updateGoalInfo()
     }
   }
   float currentTime = visionModule->getModuleTime();
-  for (int i = 0; i < goalPosts.size(); ++i) {
-    if (goalPosts[i]->refresh)
-      goalPosts[i]->timeDetected = currentTime;
+  for (const auto& gp : goalPosts) {
+    if (gp && gp->refresh) gp->timeDetected = currentTime;
   }
-  if (goalInfo.found) {
+  if (goalInfo.found)
     goalInfo.resetId();
-    /*cout << "goalInfo.id: " << goalInfo.id << endl;
-    cout << "goalInfo.left: " << goalInfo.leftPost << endl;
-    cout << "goalInfo.right: " << goalInfo.rightPost << endl;
-    cout << "goalInfo.mid: " << goalInfo.mid << endl;
-    cout << "goalInfo.poseFromGoal: " << goalInfo.poseFromGoal.mat << endl;*/
-  }
   GOAL_INFO_OUT(VisionModule) = goalInfo;
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   updateGoalInfoTime = timeSpan.count();
@@ -592,10 +473,10 @@ void GoalExtraction::findGoalSide(GoalInfo<float>& goalInfo)
   auto robotRegions = robotExt->getRobotRegions();
   auto closest = 1000.f;
   auto distFromCenter = -1.f;
-  int minIndex = -1;
-  for (int i = 0; i < robotRegions.size(); ++i) {
-    if (!robotRegions[i]) continue;
-    auto goalToOtherRobot = goalInfo.mid - robotRegions[i]->world;
+  RobotRegionPtr bestRobotRegion;
+  for (const auto& rr : robotRegions) {
+    if (!rr) continue;
+    auto goalToOtherRobot = goalInfo.mid - rr->world;
     auto goalToPerp = abs(
       goalToOtherRobot.x * goalUnit.x + goalToOtherRobot.y * goalUnit.y);
     auto gR = cv::norm(goalToOtherRobot);
@@ -605,17 +486,17 @@ void GoalExtraction::findGoalSide(GoalInfo<float>& goalInfo)
     if (dist < closest) {
       closest = dist;
       distFromCenter = goalToPerp;
-      minIndex = i;
+      bestRobotRegion = rr;
     }
   }
-  if (minIndex != -1) {
+  if (bestRobotRegion) {
     //cout << "Robot found between goal posts" << endl;
     //cout << "distFromCenter: " << distFromCenter << endl;
     //cout << "dist:" << closest << endl;
     // If robot is within 80cm of the goal mid along the goal posts
     // in either direction and 65cm in front of it then mark it as goal keeper
     if (closest < 0.65 && distFromCenter < 0.8) {
-      if (robotRegions[minIndex]->ourTeam) {
+      if (bestRobotRegion->ourTeam) {
         goalInfo.type = GoalPostType::ourTeam;
       } else {
         goalInfo.type = GoalPostType::opponentTeam;
@@ -664,21 +545,19 @@ void GoalExtraction::addGoalLandmark(const GoalPostPtr& goalPost)
   auto p = goalPost->world;
   auto borderLines = fieldExt->getBorderLinesWorld();
   auto minDist = 1000;
-  int index = 0;
   // Find which line intersects with the current goal post
-  for (int i = 0; i < borderLines.size(); ++i) {
-    auto bl = borderLines[i];
+  FittedLinePtr bestBorderLine;
+  for (const auto& bl : borderLines) {
     float dist = fabsf(bl->perp.x * p.x + bl->perp.y * p.y - bl->perpDist);
     if (dist < minDist) {
       minDist = dist;
-      index = i;
+      bestBorderLine = bl;
     }
   }
-  auto line = borderLines[index];
   float len = norm(p);
   Point2f robotToGoalU = Point2f(p.x / len, p.y / len);
-  float cross = robotToGoalU.x * line->unit.y - robotToGoalU.y * line->unit.x;
-  float dot = robotToGoalU.dot(line->unit);
+  float cross = robotToGoalU.x * bestBorderLine->unit.y - robotToGoalU.y * bestBorderLine->unit.x;
+  float dot = robotToGoalU.dot(bestBorderLine->unit);
   float perpAngle = atan2(cross, dot) + atan2(p.y, p.x);
   float cosa = cos(perpAngle);
   float sina = sin(perpAngle);
@@ -705,9 +584,8 @@ void GoalExtraction::drawResults()
 {
   if (GET_DVAR(int, drawGoalPostBases)) {
     if (GOAL_INFO_OUT(VisionModule).found) {
-      for (size_t i = 0; i < goalPosts.size(); ++i) {
-        VisionUtils::drawPoint(goalPosts[i]->image, bgrMat[currentImage], Scalar(0,0,0));
-      }
+      for (const auto& gp : goalPosts)
+        VisionUtils::drawPoint(gp->image, bgrMat[toUType(activeCamera)], Scalar(0,0,0));
     }
   }
 }

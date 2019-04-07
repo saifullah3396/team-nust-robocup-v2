@@ -1,5 +1,5 @@
 /**
- * @file UserCommModule/include/CommMessage.h
+ * @file Utils/include/DataHolders/CommMessage.h
  *
  * This file defines the class CommMessage
  *
@@ -83,9 +83,9 @@ struct CommMessage : public DataHolder
   }
   #endif
 
-  //! Message in json format
+  ///< Message in json format
   Json::Value json;
 
-  //! Message type
+  ///< Message type
   CommMsgTypes type;
 };

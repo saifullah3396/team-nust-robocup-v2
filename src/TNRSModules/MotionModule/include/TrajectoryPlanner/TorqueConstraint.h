@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/TrajectoryPlanner/TorqueConstraint.h
+ * @file MotionModule/include/TrajectoryPlanner/TorqueConstraint.h
  *
  * This file declares the class TorqueConstraint
  *
@@ -50,32 +50,32 @@ public:
   unsigned getNConstraints() { return nCons; }
   Matrix<Scalar, Dynamic, 1> getValue() { return torques; }
 private:
-  //! Active joints for computation
+  ///< Active joints for computation
   vector<bool> activeJoints;
 
-  //! Active chains based on active joints
+  ///< Active chains based on active joints
   vector<bool> activeChains;
 
-  //! Index of the support leg frame of reference used for finding gravity vector
+  ///< Index of the support leg frame of reference used for finding gravity vector
   LinkChains supportLeg;
 
-  //! Number of constraints
+  ///< Number of constraints
   unsigned nCons;
 
-  //! Constraint max/mins
+  ///< Constraint max/mins
   Matrix<Scalar, Dynamic, 1> minTorques;
   Matrix<Scalar, Dynamic, 1> maxTorques;
 
-  //! Constraint matrix
+  ///< Constraint matrix
   vector<Scalar> cons;
 
-  //! Joint torques
+  ///< Joint torques
   Matrix<Scalar, Dynamic, 1> torques;
 
-  //! Type of joint usage for all computations
+  ///< Type of joint usage for all computations
   JointStateType type;
 
-  //! Pointer to kinematics module
+  ///< Pointer to kinematics module
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
 
 public:

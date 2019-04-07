@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/KickModule/KickUtils.h
+ * @file MotionModule/include/KickModule/KickUtils.h
  *
  * This file declares the utility functions used in KickModule.
  *

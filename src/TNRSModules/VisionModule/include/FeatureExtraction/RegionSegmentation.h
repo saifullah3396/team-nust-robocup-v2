@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/RegionSegmentation.h
+ * @file VisionModule/include/FeatureExtraction/RegionSegmentation.h
  *
  * This file declares the class for segmenting the image into different
  * regions for further processing.
@@ -11,12 +11,23 @@
 
 #pragma once
 
+#include "TNRSBase/include/DebugBase.h"
 #include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
 
+struct Scan;
 class FieldExtraction;
 typedef boost::shared_ptr<FieldExtraction> FieldExtractionPtr;
-//class BallExtraction;
-//class GoalExtraction;
+
+enum class ScanTypes : unsigned int {
+  field,
+  robot,
+  ball,
+  oppJersey,
+  ourJersey,
+  lines,
+  goal,
+  count
+};
 
 /**
  * @class RegionSegmentation
@@ -25,19 +36,19 @@ typedef boost::shared_ptr<FieldExtraction> FieldExtractionPtr;
 class RegionSegmentation : public FeatureExtraction, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to send total module time
+    ///< Option to send total module time
     (int, sendTime, 0),
-    //! Option to draw vertical lines
+    ///< Option to draw vertical lines
     (int, drawVerticalLines, 0),
-    //! Option to draw horizontal lines
+    ///< Option to draw horizontal lines
     (int, drawHorizontalLines, 0),
-    //! Option to draw points
+    ///< Option to draw points
     (int, drawPoints, 0),
-    //! Option to display detailed info on results of this module
+    ///< Option to display detailed info on results of this module
     (int, displayInfo, 0),
-    //! Option to display image output
+    ///< Option to display image output
     (int, displayOutput, 0),
-  )
+  );
 public:
   /**
    * Constructor
@@ -59,6 +70,17 @@ public:
   void  processImage();
 
   /**
+   * @brief reset Clears up the previously extracted features
+   */
+  void reset();
+
+  /**
+   * @brief setScanSettings Sets which scanners should be used based on
+   *   current image
+   */
+  void setScanSettings();
+
+  /**
    * @brief setFieldExtraction Sets the pointer to field extraction module
    * @param fieldExt pointer to field extraction module
    */
@@ -68,78 +90,25 @@ public:
   }
 
   /**
-   * @brief setBallExtraction Sets the pointer to ball extraction module
-   * @param ballExt pointer to ball extraction module
-   */
-  //void setBallExtraction(const boost::shared_ptr<BallExtraction>& ballExt)
-  //{
-  //  this->ballExt = ballExt;
-  //}
-
-  /**
-   * @brief setGoalExtraction Sets the pointer to goal extraction module
-   * @param goalExt pointer to goal extraction module
-   */
-  //void setGoalExtraction(const boost::shared_ptr<GoalExtraction>& goalExt)
-  //{
-  //  this->goalExt = goalExt;
-  //}
-
-  /**
    * @brief getBorderPoints Returns the extracted field border points
    * @return vector<cv::Point>
    */
-  vector<Point>& getBorderPoints() { return borderPoints; }
+  const vector<Point>& getBorderPoints() const { return borderPoints; }
 
   /**
    * @brief getFieldAvgHeight Returns the field average height
    * @return int
    */
-  int& getFieldAvgHeight() { return avgHeight; }
+  const int& getFieldAvgHeight() const { return avgHeight; }
 
   /**
    * @brief getFieldMinBestHeight Returns the field mininimum best height
    * @return int
    */
-  int& getFieldMinBestHeight() { return minBestHeight; }
+  const int& getFieldMinBestHeight() const { return minBestHeight; }
 
-  //vector<ScannedLinePtr>& getVerGoalLines() { return verGoalLines; }
-  //vector<ScannedLinePtr>& getVerBallLines() { return verBallLines; }
-  //vector<ScannedLinePtr>& getHorBallLines() { return horBallLines; }
-  /**
-   * @brief getVerRobotLines Returns the vertial scanned lines for robot regions
-   * @return vector<ScannedLinePtr
-   */
-  vector<ScannedLinePtr>& getVerRobotLines() { return verRobotLines; }
-
-  /**
-   * @brief getHorRobotLines Returns the horizontal scanned lines for robot regions
-   * @return vector<ScannedLinePtr
-   */
-  vector<ScannedLinePtr>& getHorRobotLines() { return horRobotLines; }
-
-  /**
-   * @brief getVerJerseyLinesOurs Returns the vertial scanned lines for team jerseys
-   * @return
-   */
-  vector<ScannedLinePtr>& getVerJerseyLinesOurs() { return verJerseyLinesOurs; }
-
-  /**
-   * @brief getHorJerseyLinesOurs Returns the horizontal scanned lines for team jerseys
-   * @return
-   */
-  vector<ScannedLinePtr>& getHorJerseyLinesOurs() { return horJerseyLinesOurs; }
-
-  /**
-   * @brief getVerJerseyLinesOpps Returns the vertial scanned lines for opponent jerseys
-   * @return
-   */
-  vector<ScannedLinePtr>& getVerJerseyLinesOpps() { return verJerseyLinesOpps; }
-  /**
-   * @brief getHorJerseyLinesOpps Returns the horizontal scanned lines for opponent jerseys
-   * @return
-   */
-  vector<ScannedLinePtr>& getHorJerseyLinesOpps() { return horJerseyLinesOpps; }
+  Scan* getHorizontalScan(const ScanTypes& type);
+  Scan* getVerticalScan(const ScanTypes& type);
 
 private:
   /**
@@ -162,59 +131,22 @@ private:
    */
   void drawResults();
 
-  //! Step size for direction parallel to scan
-  int scanStepLow;
-
-  //! Step size for direction perpendicular to scan
-  int scanStepHigh;
-
-  //! Vertical scan limiting image index
-  int vScanLimitIdx;
-
-  //! Horizontal scan limiting image index
-  int hScanLimitIdx;
-
-  //! Horizontal and vertical scan lines for robot regions
-  vector<ScannedLinePtr> horRobotLines;
-  vector<ScannedLinePtr> verRobotLines;
-
-  //! Horizontal and vertical scan lines for teammate jerseys
-  vector<ScannedLinePtr> horJerseyLinesOurs;
-  vector<ScannedLinePtr> verJerseyLinesOurs;
-
-  //! Horizontal and vertical scan lines for opponent jerseys
-  vector<ScannedLinePtr> horJerseyLinesOpps;
-  vector<ScannedLinePtr> verJerseyLinesOpps;
-
-  //! Time taken by horizontal scan
-  double horizontalScanTime;
-
-  //! Time taken by vertical scan
-  double verticalScanTime;
-
-  //! Time taken by overall processing
-  double processTime;
-
-  //vector<ScannedLinePtr> horBallLines;
-  //vector<ScannedLinePtr> verGoalLines;
-  //vector<ScannedLinePtr> verBallLines;
-
-  //! A vector of extracted field border points
-  vector<Point> borderPoints;
-
-  //! Average field height
-  int avgHeight;
-
-  //! Minimum best field height
-  int minBestHeight;
-
-  //! Field Extraction module object
-  FieldExtractionPtr fieldExt;
-
-  //! Ball Extraction module object
-  //BallExtractionPtr ballExt;
-
-  //! Goal Extraction module object
-  //GoalExtractionPtr goalExt;
+  FieldExtractionPtr fieldExt; ///< Field Extraction module object
+  int vScanLimitIdx; ///< Vertical scan limiting image index
+  int hScanLimitIdx; ///< Horizontal scan limiting image index
+  double horizontalScanTime; ///< Time taken by horizontal scan
+  double verticalScanTime; ///< Time taken by vertical scan
+  double processTime; ///< Time taken by overall processing
+  vector<Point> borderPoints; ///< A vector of extracted field border points
+  int avgHeight; ///< Average field height
+  int minBestHeight; ///< Minimum best field height
+  vector<Scan*> vScans; ///< Horizontal scanners
+  vector<Scan*> hScans; ///< Vertical scanners
+  vector<int> hMinScanStepLow; ///< Minimum step size for direction parallel to scan
+  vector<int> vMinScanStepLow; ///< Minimum step size for direction perpendicular to scan
+  vector<int> hScanStepHigh; ///< Step size for direction perpendicular to scan
+  vector<int> vScanStepHigh; ///< Step size for direction perpendicular to scan
+  vector<vector<int> > hScanStepSizes; ///< Step size for direction parallel to scan
+  vector<vector<int> > vScanStepSizes; ///< Step size for direction parallel to scan
 };
 typedef boost::shared_ptr<RegionSegmentation> RegionSegmentationPtr;

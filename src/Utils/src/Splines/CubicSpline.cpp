@@ -1,10 +1,10 @@
 /**
- * @file Utils/include/CubicSpline.h
+ * @file Utils/src/Splines/CubicSpline.cpp
  *
  * This file implements the class CubicSpline
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 12 Aug 2017  
+ * @date 12 Aug 2017
  */
 
 #include "Utils/include/Splines/CubicSpline.h"
@@ -14,15 +14,15 @@ template <typename Scalar>
 CubicSpline<Scalar>::CubicSpline(
   const unsigned& dim,
   const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-  const Matrix<Scalar, Dynamic, 1>& knots, 
-  const Scalar& stepSize, 
+  const Matrix<Scalar, Dynamic, 1>& knots,
+  const Scalar& stepSize,
   const Matrix<Scalar, Dynamic, Dynamic>& boundaryConds) :
   PolySpline<Scalar>(
     3, // Cubic
-    dim, 
-    controlPoints, 
+    dim,
+    controlPoints,
     knots,
-    stepSize,  
+    stepSize,
     boundaryConds)
 {
 }
@@ -31,21 +31,21 @@ template <typename Scalar>
 CubicSpline<Scalar>::CubicSpline(
   const unsigned& dim,
   const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-  const Scalar& splineTime, 
-  const Scalar& stepSize, 
+  const Scalar& splineTime,
+  const Scalar& stepSize,
   const Matrix<Scalar, Dynamic, Dynamic>& boundaryConds) :
   PolySpline<Scalar>(
     3, // Cubic
-    dim, 
-    controlPoints, 
+    dim,
+    controlPoints,
     splineTime,
-    stepSize,  
+    stepSize,
     boundaryConds)
 {
 }
 
 template <typename Scalar>
-CubicSpline<Scalar>::CubicSpline(const string& filePath) : 
+CubicSpline<Scalar>::CubicSpline(const string& filePath) :
   PolySpline<Scalar>(filePath)
 {
 }
@@ -53,7 +53,7 @@ CubicSpline<Scalar>::CubicSpline(const string& filePath) :
 template <typename Scalar>
 void CubicSpline<Scalar>::setup()
 {
-  //! this is defined for clamped spline need update.
+  ///< this is defined for clamped spline need update.
   //cout << "setting up spline" << endl;
   this->coeffs.resize(4);
   this->nKnots = this->knots.size();
@@ -75,10 +75,10 @@ void CubicSpline<Scalar>::setup()
   //plotSpline(100, 0.0);
 }
 
-template <typename Scalar> 
+template <typename Scalar>
 void CubicSpline<Scalar>::genParams()
 {
-  //! this is defined for clamped spline need update.
+  ///< this is defined for clamped spline need update.
   try {
     this->knotsRep = this->knots.replicate(1, this->dim);
     //cout << "this->knots:" << this->knots << endl;
@@ -100,7 +100,7 @@ void CubicSpline<Scalar>::genParams()
 template <typename Scalar>
 void CubicSpline<Scalar>::genInvAMat()
 {
-  //! this is defined for clamped spline need update.
+  ///< this is defined for clamped spline need update.
   Matrix<Scalar, Dynamic, 1> upperLower, middle;
   upperLower.resize(this->nKnots);
   middle.resize(this->nKnots + 1);
@@ -123,7 +123,7 @@ void CubicSpline<Scalar>::genInvAMat()
 template <typename Scalar>
 void CubicSpline<Scalar>::genCoeffs()
 {
-  //! this is defined for clamped spline need update.
+  ///< this is defined for clamped spline need update.
   for (int i = 0; i < this->dim; ++i) {
     this->bAccels.block(0, i, this->nKnots + 1, 1) << this->invA * this->b.block(0, i, this->nKnots + 1, 1);
   }

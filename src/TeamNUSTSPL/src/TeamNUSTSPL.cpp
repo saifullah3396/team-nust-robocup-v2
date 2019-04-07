@@ -1,5 +1,5 @@
 /**
- * @file TeamNUSTSPL/TeamNUSTSPL.cpp
+ * @file TeamNUSTSPL/src/TeamNUSTSPL.cpp
  *
  * This file implements the class TeamNUSTSPL
  *
@@ -79,7 +79,7 @@ void TeamNUSTSPL::init()
   LOG_INFO("*** [IMPORTANT] *** The module is built without Naoqi ALMotionProxy handle...");
   LOG_INFO("Set USE_NAOQI_MOTION_PROXY to ON in make/cmake/common.cmake if this is needed");
   #endif
-  #ifndef V6_CROSS_BUILD //! DCM Replaced by LOLA in naoqi 2.8
+  #ifndef V6_CROSS_BUILD ///< DCM Replaced by LOLA in naoqi 2.8
   LOG_INFO("Getting Naoqi ALDCMProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/aldcmproxy.h");
   try {

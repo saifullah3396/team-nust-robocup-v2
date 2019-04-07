@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/MovementModule/Types/NaoqiFootsteps.h
+ * @file MotionModule/include/MovementModule/Types/NaoqiFootsteps.h
  *
  * This file declares the class NaoqiFootsteps
  *
@@ -109,28 +109,28 @@ private:
   void stopWalkAction();
   void postStopWalkAction();
 
-  //! Time taken by one step
+  ///< Time taken by one step
   static Scalar footstepTime;
 
-  //! Projected position updates if a step is executed
+  ///< Projected position updates if a step is executed
   queue<boost::shared_ptr<TNRSFootstep<Scalar>>> steps;
 
-  //! The current footstep start time
+  ///< The current footstep start time
   Scalar footStepStartTime;
 
-  //! Torso to current step
+  ///< Torso to current step
   Matrix<Scalar, 4, 4> torsoToSupportFoot = Matrix<Scalar, 4, 4>::Identity();
 
-  //! The start footstep id for tracking footsteps from Naoqi
+  ///< The start footstep id for tracking footsteps from Naoqi
   int startStep = {0};
 
-  //! Current step index in planned footsteps
+  ///< Current step index in planned footsteps
   unsigned currentStep = {0};
 
-  //! The previous footstep id for tracking footsteps
+  ///< The previous footstep id for tracking footsteps
   int prevStep = {-1};
 
-  //! Current state of this behavior
+  ///< Current state of this behavior
   unsigned behaviorState = {setPosture};
 
   /**

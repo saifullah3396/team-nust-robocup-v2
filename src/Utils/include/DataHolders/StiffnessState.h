@@ -10,9 +10,10 @@
 #pragma once
 
 /**
- * Enumeration for all the states of the robot stiffnesses.
+ * @brief Enumeration for all the states of the robot
+ *   stiffness configurations
  *
- * @enum Stiffness
+ * @enum StiffnessState
  */
 enum class StiffnessState
 : unsigned int {

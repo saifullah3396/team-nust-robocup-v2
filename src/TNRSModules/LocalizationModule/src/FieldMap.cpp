@@ -55,7 +55,7 @@ FieldMap::FieldMap(LocalizationModule* localizationModule) :
   //drawField();
 
   occupancyMap.data = Scalar(0);
-  //! Create the boundary
+  ///< Create the boundary
   rectangle(
     occupancyMap.data,
     cv::Point(
@@ -87,7 +87,7 @@ void FieldMap::updateRobotPose2D()
 
 void FieldMap::updateOccupancyMap()
 {
-  //! Check if robot is localized
+  ///< Check if robot is localized
   //if (!localizer->isLocalized()) return;
   auto& occupancyMap = OCCUPANCY_MAP_OUT(LocalizationModule);
   occupancyMap.data = occupancyMapBase.clone();
@@ -103,14 +103,14 @@ void FieldMap::updateOccupancyMap()
       obstaclePoly[1] = worldToMap(obs.backT.p1);
       obstaclePoly[2] = worldToMap(obs.backT.p2);
       obstaclePoly[3] = worldToMap(obs.frontT.p2);
-      //! Draw the obstacles on the occupancy map
+      ///< Draw the obstacles on the occupancy map
       fillConvexPoly(occupancyMap.data, obstaclePoly, 4, 0, 8, 0);
     }
   }
   prevObsId = obstaclesObs.id;
 
   if (addBallObstacle) {
-    //! Draw ball as an obstacle if required
+    ///< Draw ball as an obstacle if required
     auto wbInfo = WORLD_BALL_INFO_IN(LocalizationModule);
     if (wbInfo.found) {
       circle(

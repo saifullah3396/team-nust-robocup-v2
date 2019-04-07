@@ -1,5 +1,5 @@
 /**
- * @file Utils/include/BSpline.h
+ * @file Utils/src/Splines/BSpline.cpp
  *
  * This file implements the class BSpline
  *
@@ -19,14 +19,14 @@ BSpline<Scalar>::BSpline(
   const unsigned& degree,
   const unsigned& dim,
   const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-  const Matrix<Scalar, Dynamic, 1>& knots, 
+  const Matrix<Scalar, Dynamic, 1>& knots,
   const Scalar& stepSize) :
   Spline<Scalar>(
     degree,
-    dim, 
-    controlPoints, 
+    dim,
+    controlPoints,
     knots,
-    stepSize,  
+    stepSize,
     BASIS)
 {
 }
@@ -36,19 +36,19 @@ BSpline<Scalar>::BSpline(
   const unsigned& degree,
   const unsigned& dim,
   const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-  const Scalar& splineTime, 
+  const Scalar& splineTime,
   const Scalar& stepSize) :
   Spline<Scalar>(
     degree,
-    dim, 
-    controlPoints, 
+    dim,
+    controlPoints,
     splineTime,
-    stepSize,  
+    stepSize,
     BASIS)
 {
 }
 template <typename Scalar>
-BSpline<Scalar>::BSpline(const string& filePath) : 
+BSpline<Scalar>::BSpline(const string& filePath) :
   Spline<Scalar>(filePath)
 {
   this->splineFromXml(filePath);
@@ -63,10 +63,10 @@ void BSpline<Scalar>::validateParameters()
 template <typename Scalar>
 void BSpline<Scalar>::setup()
 {
-  //!Setting Defaults
-  //!X-Y-Z Dimension: splineDim
-  //!Order 4 for cubic B-Splines: order
-  //!Default Knot Vector for Clamped End Conditions
+  ///<Setting Defaults
+  ///<X-Y-Z Dimension: splineDim
+  ///<Order 4 for cubic B-Splines: order
+  ///<Default Knot Vector for Clamped End Conditions
   /*this->knots.push_back(0);
   this->knots.push_back(0);
   this->knots.push_back(0);
@@ -78,7 +78,7 @@ void BSpline<Scalar>::setup()
   this->knots.push_back(4);
   this->knots.push_back(4);
   this->knots.push_back(4);*/
-  
+
   order = this->degree + 1;
   minKnot = maxKnot = this->knots[0];
 
@@ -90,7 +90,7 @@ void BSpline<Scalar>::setup()
   vector<vector<Scalar> > spline;
   vector<Scalar> time;
   evaluateSpline(spline, time);
-  
+
   //cout << "Bspline:" << endl;
   //cout << "this->knots:\n" << this->knots << endl;
   //cout << "this->degree: " << this->degree << endl;
@@ -107,7 +107,7 @@ void BSpline<Scalar>::evaluateSpline(
 {
   derivativeOrder.clear();
   for (size_t i = 0; i < derivative + 1; ++i)
-    derivativeOrder.push_back(i);  
+    derivativeOrder.push_back(i);
   nDerivatives = derivativeOrder.size();
 
   bSpline.resize(nDerivatives);
@@ -121,16 +121,16 @@ void BSpline<Scalar>::evaluateSpline(
   while (timeStep <= maxKnot + 1e-6) {
     int index = round(timeStep / this->stepSize);
     generateSplineAtStep(splineAtStep, timeStep);
-    for (unsigned i = 0; i < splineAtStep.size(); ++i) {//!Derivative orders
+    for (unsigned i = 0; i < splineAtStep.size(); ++i) {///<Derivative orders
       bSpline[i].block(index, 0, 1, this->dim) = splineAtStep[i].transpose();
     }
-    splineTime.push_back(timeStep);    
+    splineTime.push_back(timeStep);
     timeStep += this->stepSize;
   }
 }
 
 template <typename Scalar>
-void BSpline<Scalar>::setKnots(const Matrix<Scalar, Dynamic, 1>& knots) 
+void BSpline<Scalar>::setKnots(const Matrix<Scalar, Dynamic, 1>& knots)
 {
   this->knots = knots;
   minKnot = maxKnot = this->knots[0];
@@ -155,12 +155,12 @@ bool BSpline<Scalar>::generateSplineAtStep(vector<Matrix<Scalar, Dynamic, 1>>& s
     return false;
   }
   bSplineTable(knotLocation, step, basisVector);
-  
+
   splineAtStep.resize(derivativeOrder.size());
   for (size_t i = 0; i < nDerivatives; ++i) {
     splineAtStep[i].resize(this->dim);
   }
-  
+
   for (size_t d = 0; d < this->dim; ++d) {
     auto res = evaluateSplineAtBasis(knotLocation, d, basisVector);
     for (size_t j = 0; j < derivativeOrder.size(); ++j) {
@@ -168,11 +168,11 @@ bool BSpline<Scalar>::generateSplineAtStep(vector<Matrix<Scalar, Dynamic, 1>>& s
     }
   }
   //cout << "basisVector: " << endl;
-  //for (unsigned i = 0; i < basisVector.size(); ++i) //!Dimensions X-Y-Z
+  //for (unsigned i = 0; i < basisVector.size(); ++i) ///<Dimensions X-Y-Z
   //  cout << basisVector[i] << "  ";
   //cout << endl;
   /*cout << knot;
-   for (unsigned i = 0; i < nDerivatives; ++i) 
+   for (unsigned i = 0; i < nDerivatives; ++i)
    cout << ' ' << resSpline[0][i];
    cout << '\n';*/
   return true;
@@ -187,7 +187,7 @@ int BSpline<Scalar>::locateKnot(Scalar step)
     step = this->knots[0] + Scalar(1e-5);
   if (step < this->knots[0]) return -1;
   if (step >= this->knots[this->nKnots-1]) return -1;
-  
+
   static int lo = 0, hi = 1;
   if (!(this->knots[lo] <= step && step < this->knots[hi])) {
     int k;
@@ -232,8 +232,8 @@ void BSpline<Scalar>::bSplineTable(
 
 template <typename Scalar>
 vector<Scalar> BSpline<Scalar>::evaluateSplineAtBasis(
-  const int& knotLocation, 
-  const int& d, 
+  const int& knotLocation,
+  const int& d,
   vector<Scalar>& basisVector)
 {
   unsigned i, maxDerivative = derivativeOrder[0], nDerivative =
@@ -299,8 +299,8 @@ bool BSpline<Scalar>::findNormalToVec(
     cout << "Normal can only be found to a 3D-spline." << endl;
     return false;
   }
-  auto normalFinder = 
-    BSplineNormalFinder<Scalar>(this, normal, tBounds);  
+  auto normalFinder =
+    BSplineNormalFinder<Scalar>(this, normal, tBounds);
   normalFinder.optDef();
   if (normalFinder.getSuccess()) {
     splinePoint = normalFinder.getResSplinePoint();
@@ -325,14 +325,14 @@ void BSpline<Scalar>::plotSpline()
   yRange[1] = 1.0;
   zRange[0] = -1.0;
   zRange[1] = 1.0;
-  
+
   for (size_t i = 0; i < bSpline.size(); ++i) {
-    auto pe = 
+    auto pe =
       PlotEnv<Scalar>(
         "B-Spline", "x-Axis", "y-Axis", "z-Axis", xRange, yRange, zRange);
     pe.plot3D(
       "Spline Position",
-      bSpline[i].block(0, 0, bSpline[i].rows(), 1), 
+      bSpline[i].block(0, 0, bSpline[i].rows(), 1),
       bSpline[i].block(0, 1, bSpline[i].rows(), 1),
       bSpline[i].block(0, 2, bSpline[i].rows(), 1)
     );

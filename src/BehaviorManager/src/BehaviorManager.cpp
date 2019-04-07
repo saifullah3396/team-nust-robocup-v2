@@ -14,11 +14,9 @@
 BManagerException::BManagerException(
   BehaviorManager* behaviorManager,
   const string& message,
-  const bool& bSysMsg,
-  const BManagerExceptionType& type) throw () :
+  const bool& bSysMsg) throw () :
   TNRSException(message, bSysMsg),
-  name(behaviorManager->getName()),
-  type(type)
+  name(behaviorManager->getName())
 {
 }
 
@@ -37,21 +35,20 @@ void BehaviorManager::manageRequest(
       throw BManagerException(
         this,
         "Requested behavior has no configuration associated with it.",
-        false,
-        EXC_BEHAVIOR_SETUP_FAILED);
+        false);
     }
     auto reqConfig = req->getReqConfig();
-    //! Requested behavior configuration is valid or not
+    ///< Requested behavior configuration is valid or not
     reqConfig->init();
     reqConfig->validate();
     req->setReceived(true);
-    //! Behavior already exists
+    ///< Behavior already exists
     if (bPtr) {
       //cout << "Behavior already exists..." << endl;
       //if (name == "PlanningBehavior")
       //  cout << "Behavior already running" << endl;
-      //! Check if the requested behavior is the same as the behavior to
-      //! be managed
+      ///< Check if the requested behavior is the same as the behavior to
+      ///< be managed
       //cout << "reqConfig->id: " << reqConfig->id << endl;
       //cout << "bPtr->getBehaviorConfig()->id: " << bPtr->getBehaviorConfig()->id << endl;
       //cout << "reqConfig->type: " << reqConfig->type << endl;
@@ -61,8 +58,8 @@ void BehaviorManager::manageRequest(
       {
         //if (name == "PlanningBehavior")
         //  cout << "Requested is same as previous" << endl;
-        //! Reinitiate the current behavior with new requested
-        //! configuration
+        ///< Reinitiate the current behavior with new requested
+        ///< configuration
         bPtr->reinitiate(reqConfig);
         req->setAccepted(true);
         //lastBehaviorAccepted.id = req->id;
@@ -71,7 +68,7 @@ void BehaviorManager::manageRequest(
         //updateBehaviorState();
       }
     } else {
-      //! Set up the current behavior with the requested configuration
+      ///< Set up the current behavior with the requested configuration
       if(setupBehavior(bPtr, reqConfig)) {
         req->setAccepted(true);
       }
@@ -97,13 +94,12 @@ bool BehaviorManager::setupBehavior(
   const BehaviorConfigPtr& cfg) throw (BManagerException)
 {
   try {
-  //! Make a behavior based on the abstract function call
+  ///< Make a behavior based on the abstract function call
     if (!makeBehavior(bPtr, cfg)) {
       throw BManagerException(
         this,
         "Unable to construct the behavior with requested configuration.",
-        false,
-        EXC_BEHAVIOR_SETUP_FAILED);
+        false);
     }
   } catch (BManagerException& e) {
     LOG_EXCEPTION(e.what())
@@ -115,7 +111,7 @@ bool BehaviorManager::setupBehavior(
 
 void BehaviorManager::update()
 {
-  //! Kill the behavior if requested
+  ///< Kill the behavior if requested
   if (killRequested) {
     if (currBehavior) {
       currBehavior->kill();
@@ -123,10 +119,10 @@ void BehaviorManager::update()
     killRequested = false;
   }
 
-  //! If a current behavior exists
+  ///< If a current behavior exists
   if (currBehavior) {
     behaviorInfo->clearConfigs();
-    //! Update the behavior
+    ///< Update the behavior
     updateBehavior(currBehavior);
     ////lastBehaviorAccepted.state->finished = true;
     ////updateBehaviorState();
@@ -137,15 +133,15 @@ void BehaviorManager::update()
 void BehaviorManager::updateBehavior(BehaviorPtr& bPtr)
 {
   behaviorInfo->addConfig(bPtr->getBehaviorConfig());
-  //! Check if top behavior time limit is reached and kill it along
-  //! with all its childs if true
+  ///< Check if top behavior time limit is reached and kill it along
+  ///< with all its childs if true
   bPtr->onMaxTimeReached();
 
-  //! Get pointer to child
+  ///< Get pointer to child
   auto& child = bPtr->getChild();
 
-  //! Setup a new child if a new child request is found
-  //! This call does nothing if there is no request
+  ///< Setup a new child if a new child request is found
+  ///< This call does nothing if there is no request
   auto& childReq = bPtr->getChildRequest();
   if (childReq) {
     manageRequest(child, bPtr->getChildRequest());
@@ -157,9 +153,9 @@ void BehaviorManager::updateBehavior(BehaviorPtr& bPtr)
     childReq.reset();
   }
 
-  //! If a child exists now
+  ///< If a child exists now
   if (child) {
-    //! Update the child
+    ///< Update the child
     updateBehavior(child);
     if (!bPtr->getChildInParallel())
       return;
@@ -167,12 +163,12 @@ void BehaviorManager::updateBehavior(BehaviorPtr& bPtr)
     bPtr->setChildInParallel(false);
   }
 
-  //! Initiate if not, update otherwise
+  ///< Initiate if not, update otherwise
   bPtr->manage();
 
-  //! If behavior is initiated but still not valid for update
+  ///< If behavior is initiated but still not valid for update
   if (bPtr->isInitiated() && !bPtr->isRunning()) {
-    bPtr.reset(); //! Behavior is finished so delete it
+    bPtr.reset(); ///< Behavior is finished so delete it
   }
 }
 

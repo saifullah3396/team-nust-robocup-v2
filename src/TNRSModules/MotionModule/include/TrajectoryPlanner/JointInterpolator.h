@@ -42,10 +42,10 @@ public:
   Matrix<Scalar, Dynamic, 1> interpolate(const Scalar& step);
 
 protected:
-  //! Joint configuration initial
+  ///< Joint configuration initial
   Matrix<Scalar, Dynamic, 1> jointsI;
 
-  //! Joint configuration difference
+  ///< Joint configuration difference
   Matrix<Scalar, Dynamic, 1> jointsDelta;
 
 public:

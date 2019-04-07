@@ -73,19 +73,19 @@ private:
    */
   void defineTrajectory();
 
-  //! Bspline trajectory object
+  ///< Bspline trajectory object
   boost::shared_ptr<BSpline<Scalar> > bSpline;
 
-  //! Bspline trajectory object
+  ///< Bspline trajectory object
   Matrix<Scalar, Dynamic, Dynamic> cartTraj;
 
-  //! Current state of this behavior
+  ///< Current state of this behavior
   unsigned behaviorState;
 
-  //! Joints to be used for kicking while balancing
+  ///< Joints to be used for kicking while balancing
   vector<bool> activeJoints;
 
-  //! Whether the requested kick is not acheivable
+  ///< Whether the requested kick is not acheivable
   bool kickFailed = {false};
 
   /**

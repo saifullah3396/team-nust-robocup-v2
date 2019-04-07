@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceModule/Types/PIDComControl.cpp
+ * @file MotionModule/src/BalanceModule/Types/PIDComControl.cpp
  *
  * This file implements the class PIDComControl
  *
@@ -20,7 +20,7 @@ PIDComControl<Scalar>::PIDComControl(
 template<typename Scalar>
 bool PIDComControl<Scalar>::initiate()
 {
-  //! Behavior not yet defined
+  ///< Behavior not yet defined
   LOG_ERROR("Behavior PIDComControl is undefined")
   return false;
 }

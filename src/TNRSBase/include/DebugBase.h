@@ -182,23 +182,23 @@ public:
     return NULL;
   }
 protected:
-  //! Any message sent to the specified class
+  ///< Any message sent to the specified class
   string parseJSONMessage(const Json::Value msg);
 
-  //! Vector of pointers to threadsafe memory variables.
+  ///< Vector of pointers to threadsafe memory variables.
   vector<MemoryVariable*> variables;
 
-  //! String to enum map for variable names.
+  ///< String to enum map for variable names.
   map<string, unsigned> varMap;
 private:
-  //! Updates the class map with class name and its pointer.
+  ///< Updates the class map with class name and its pointer.
   void
   updateClassMap(const string& name, DebugBase* ptr);
 
-  //! Name to pointer map for all the childs of this class.
+  ///< Name to pointer map for all the childs of this class.
   static map<string, DebugBase*> classMap;
 
-  //! Image queue thread-safe access mutex.
+  ///< Image queue thread-safe access mutex.
   static pthread_mutex_t classMapAccessMutex;
 };
 

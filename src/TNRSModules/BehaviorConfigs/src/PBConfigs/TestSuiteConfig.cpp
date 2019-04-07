@@ -1,8 +1,8 @@
 /**
- * @file BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h
+ * @file TNRSModules/BehaviorConfigs/src/PBConfigs/TestSuiteConfig.cpp
  *
  * This file defines the struct TestSuiteConfig and its childs
- * 
+ *
  * * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 3 April 2018
  */
@@ -15,7 +15,7 @@ DEFINE_BEHAVIOR_CONFIG(
   (TestSuiteTypes, motion, MotionTestSuiteConfig),
   (TestSuiteTypes, localization, LocalizationTestSuiteConfig),
   (TestSuiteTypes, navigation, NavigationTestSuiteConfig),
-)
+);
 
 void VisionTestSuiteConfig::init() {}
 void VisionTestSuiteConfig::validate() {}

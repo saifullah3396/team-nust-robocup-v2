@@ -61,15 +61,15 @@ struct BallInfo : public DataHolder, DataHeader
     return val;
   }
 
-  CameraId camera = {CameraId::headTop}; //! Camera in which ball is observed
-  CameraId cameraNext = {CameraId::headBottom};//! Camera in which ball would be observed in next frame
-  unsigned bboxWidth = {0}; //! Ball bounding box width in image
-  unsigned bboxHeight = {0}; //! Ball bounding box height in image
-  bool found = {false}; //! Ball is found or not
-  T ballAge = {-1.0}; //! Time during which ball is observed
-  T radius = {0.0}; //! Ball radius
-  cv::Point_<T> posImage; //! Position of the ball in image
-  cv::Point_<T> posRel; //! Position of ball in robot frame
-  cv::Point_<T> velRel; //! Velocity of ball in robot frame
-  cv::Point_<T> accRel; //! Acceleration of ball in robot frame
+  CameraId camera = {CameraId::headTop}; ///< Camera in which ball is observed
+  CameraId cameraNext = {CameraId::headBottom};///< Camera in which ball would be observed in next frame
+  unsigned bboxWidth = {0}; ///< Ball bounding box width in image
+  unsigned bboxHeight = {0}; ///< Ball bounding box height in image
+  bool found = {false}; ///< Ball is found or not
+  T ballAge = {-1.0}; ///< Time during which ball is observed
+  T radius = {0.0}; ///< Ball radius
+  cv::Point_<T> posImage; ///< Position of the ball in image
+  cv::Point_<T> posRel; ///< Position of ball in robot frame
+  cv::Point_<T> velRel; ///< Velocity of ball in robot frame
+  cv::Point_<T> accRel; ///< Acceleration of ball in robot frame
 };

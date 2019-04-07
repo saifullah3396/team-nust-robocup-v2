@@ -1,5 +1,5 @@
 /**
- * @file UserCommModule/TcpClient.h
+ * @file UserCommModule/src/TcpClient.cpp
  *
  * This file implements the classes TcpMessage & TcpClient
  *
@@ -183,7 +183,7 @@ TcpClient::receive(queue<TcpMessage>& recvDataQueue, char* buffer,
       stringstream ss(parts[0]);
       unsigned msgType;
       ss >> msgType;
-      auto msg = 
+      auto msg =
         TcpMessage(parts[1], (CommMsgTypes)msgType, type, clientId);
       recvDataQueue.push(msg);
     }

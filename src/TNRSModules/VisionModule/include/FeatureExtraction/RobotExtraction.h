@@ -10,9 +10,11 @@
 
 #pragma once
 
-#include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
+#include "TNRSBase/include/DebugBase.h"
 #include "Utils/include/DataHolders/ObstacleType.h"
+#include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
 
+class BallExtraction;
 class RegionSegmentation;
 class FieldExtraction;
 class RobotRegion;
@@ -25,21 +27,21 @@ typedef boost::shared_ptr<RobotRegion> RobotRegionPtr;
 class RobotExtraction : public FeatureExtraction, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to send total module time
+    ///< Option to send total module time
     (int, sendTime, 0),
-    //! Option to draw robot scanned lines
+    ///< Option to draw robot scanned lines
     (int, drawScannedLines, 0),
-    //! Option to draw the bounding boxes for extracted jerseys
+    ///< Option to draw the bounding boxes for extracted jerseys
     (int, drawJerseyRegions, 0),
-    //! Option to draw robot scanned regions
-    (int, drawRobotRegions, 0),
-    //! Option to draw stray regions
+    ///< Option to draw stray obstacles
     (int, drawStrayRegions, 0),
-    //! Option to display info about extraction results
+    ///< Option to draw robot scanned regions
+    (int, drawRobotRegions, 0),
+    ///< Option to display info about extraction results
     (int, displayInfo, 0),
-    //! Option to display image output
+    ///< Option to display image output
     (int, displayOutput, 0),
-  )
+  );
 
 public:
   /**
@@ -90,18 +92,17 @@ private:
   void filterRobotLines();
 
   /**
+   * @brief filterBallRegions Filter out lines in ball region
+   * @param robotLines Lines to filter
+   * @param direction Direction of filter, false for horizontal, true for vertical
+   */
+  void filterBallRegions(
+    vector<boost::shared_ptr<LinearScannedLine> >& robotLines, const bool& direction);
+
+  /**
    * @brief findJerseys Finds jersey regions from jersey scanned lines
    */
   void findJerseys();
-
-  /**
-   * @brief filterJerseys Filters jersey scanned lines
-   * @param border Field border
-   * @param jerseyLines jersey scanned lines
-   */
-  void filterJerseys(
-    const vector<Point>& border,
-    vector<ScannedLinePtr>& jerseyLines);
 
   /**
    * @brief classifyRobots Integrates the info from robot scanned lines
@@ -119,22 +120,22 @@ private:
    */
   void updateRobotsInfo();
 
-  //! Robot Regions
+  ///< Robot Regions
   vector<RobotRegionPtr> jerseyRegions;
 
-  //! Robot Regions
+  ///< Robot Regions
   vector<RobotRegionPtr> filtRobotRegions;
 
-  //! Robot vertical scanned lines
-  vector<ScannedLinePtr> verRobotLines;
+  ///< Robot vertical scanned lines
+  vector<LinearScannedLinePtr> verRobotLines;
 
-  //! Robot horizontal scanned lines
-  vector<ScannedLinePtr> horRobotLines;
+  ///< Robot horizontal scanned lines
+  vector<LinearScannedLinePtr> horRobotLines;
 
-  //! Field border
-  vector<Point> border;
+  ///< Field border
+  vector<int> border;
 
-  //! Vector of regions that are not part of lines.
+  ///< Vector of regions that are not part of lines.
   vector<Rect> strayRegions;
 
   /**
@@ -142,17 +143,20 @@ private:
    */
   void drawResults();
 
-  //! OpenCv Cascade classifier for robots.
+  ///< OpenCv Cascade classifier for robots.
   // Not used anymore
   //CascadeClassifier classifier;
 
-  //! Field Extraction module object.
+  ///< Ball Extraction module object.
+  boost::shared_ptr<BallExtraction> ballExt;
+
+  ///< Field Extraction module object.
   boost::shared_ptr<FieldExtraction> fieldExt;
 
-  //! Lines Extraction module object.
+  ///< Lines Extraction module object.
   boost::shared_ptr<RegionSegmentation> regionSeg;
 
-  //! Processing times
+  ///< Processing times
   float processTime;
   float linesFilterTime;
   float findJerseysTime;
@@ -162,6 +166,6 @@ private:
 
   typedef vector<RobotRegionPtr>::iterator RRIter;
 
-  //! Time taken to refresh previous robot information
+  ///< Time taken to refresh previous robot information
   static constexpr float refreshTime = 0.01f;
 };

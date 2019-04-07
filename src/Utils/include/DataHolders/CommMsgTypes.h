@@ -1,5 +1,5 @@
 /**
- * @file CommModule/CommMsgTypes.h
+ * @file Utils/include/DataHolders/CommMsgTypes.h
  *
  * This file declares the enumeration CommMsgTypes
  *

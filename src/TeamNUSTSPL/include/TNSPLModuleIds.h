@@ -1,5 +1,5 @@
 /**
- * @file TeamNUSTSPL/TNSPLModuleIds.h
+ * @file TeamNUSTSPL/include/TNSPLModuleIds.h
  *
  * This file defines the enumeration TNSPLModuleIds
  *

@@ -28,8 +28,8 @@ HeadControl<Scalar>::HeadControl(
 
 template <typename Scalar>
 boost::shared_ptr<HeadControl<Scalar> > HeadControl<Scalar>::getType(
-  MotionModule* motionModule, const BehaviorConfigPtr& cfg) 
-{ 
+  MotionModule* motionModule, const BehaviorConfigPtr& cfg)
+{
   HeadControl<Scalar>* hc;
   switch (cfg->type) {
       case toUType(MBHeadControlTypes::headScan):
@@ -42,7 +42,7 @@ boost::shared_ptr<HeadControl<Scalar> > HeadControl<Scalar>::getType(
 
 template <typename Scalar>
 bool HeadControl<Scalar>::findTarget(
-  const HeadTargetTypes& targetType, 
+  const HeadTargetTypes& targetType,
   Matrix<Scalar, 4, 1>& targetPos,
   bool& trackable)
 {
@@ -63,8 +63,16 @@ bool HeadControl<Scalar>::findTarget(
       auto goalInfo = GOAL_INFO_IN(MotionModule);
       if (goalInfo.found)
       {
-        targetPos[0] = goalInfo.mid.x;
-        targetPos[1] = goalInfo.mid.y;
+        if (goalInfo.mid.x == goalInfo.mid.x) {
+          targetPos[0] = goalInfo.mid.x;
+          targetPos[1] = goalInfo.mid.y;
+        } else if (goalInfo.leftPost.x == goalInfo.leftPost.x) {
+          targetPos[0] = goalInfo.leftPost.x;
+          targetPos[1] = goalInfo.leftPost.y;
+        } else if (goalInfo.rightPost.x == goalInfo.rightPost.x) {
+          targetPos[0] = goalInfo.rightPost.x;
+          targetPos[1] = goalInfo.rightPost.y;
+        }
         targetPos[2] = 0.0;
         targetPos[3] = 1.0;
         trackable = true;

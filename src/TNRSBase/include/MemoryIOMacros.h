@@ -1,4 +1,4 @@
-//! Input Variables
+///< Input Variables
 #define MOTION_PERIOD_IN(Base) IVAR(int, Base::Input::motionThreadPeriod)
 #define PLANNING_PERIOD_IN(Base) IVAR(int, Base::Input::planningThreadPeriod)
 #define GB_PERIOD_IN(Base) IVAR(int, Base::Input::sbThreadPeriod)
@@ -125,7 +125,7 @@
 #define MB_INFO_IN_REL(Base, BasePtr) IVAR_REL(BasePtr, BehaviorInfoMap, Base::Input::mBehaviorInfo)
 #define PB_INFO_IN_REL(Base, BasePtr) IVAR_REL(BasePtr, BehaviorInfo, Base::Input::pBehaviorInfo)
 
-//! Output Variables
+///< Output Variables
 #define MOTION_PERIOD_OUT(Base) OVAR(int, Base::Output::motionThreadPeriod)
 #define PLANNING_PERIOD_OUT(Base) OVAR(int, Base::Output::planningThreadPeriod)
 #define GB_PERIOD_OUT(Base) OVAR(int, Base::Output::sbThreadPeriod)
@@ -189,7 +189,7 @@
 #define MB_INFO_OUT(Base) OVAR(BehaviorInfoMap, Base::Output::mBehaviorInfo)
 #define PB_INFO_OUT(Base) OVAR(BehaviorInfo, Base::Output::pBehaviorInfo)
 
-//! Output Variables
+///< Output Variables
 #define MOTION_PERIOD_OUT_REL(Base, BasePtr) OVAR_REL(BasePtr, int, Base::Output::motionThreadPeriod)
 #define PLANNING_PERIOD_OUT_REL(Base, BasePtr) OVAR_REL(BasePtr, int, Base::Output::planningThreadPeriod)
 #define GB_PERIOD_OUT_REL(Base, BasePtr) OVAR_REL(BasePtr, int, Base::Output::sbThreadPeriod)

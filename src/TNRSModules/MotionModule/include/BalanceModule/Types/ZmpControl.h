@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceModule/Types/ZmpControl.h
+ * @file MotionModule/include/BalanceModule/Types/ZmpControl.h
  *
  * This file declares the class ZmpControl
  *
@@ -82,41 +82,41 @@ private:
    */
   boost::shared_ptr<ZmpControlConfig> getBehaviorCast();
 
-  //! Preview controllers for x-y directions
+  ///< Preview controllers for x-y directions
   vector<ZmpPreviewController<Scalar>*> controllers;
 
-  //! Zmp reference generator for x-y directions
+  ///< Zmp reference generator for x-y directions
   boost::shared_ptr<ZmpRefGenerator<Scalar>> refGenerator;
 
-  //! Desired zmp references relative to support leg in x-y directions
+  ///< Desired zmp references relative to support leg in x-y directions
   boost::shared_ptr<ZmpRef<Scalar>> zmpRef;
 
-  //! Tasks vector for solving whole-body inverse kinematics
+  ///< Tasks vector for solving whole-body inverse kinematics
   vector<TaskPtr> tasks;
 
-  //! Desired com position in each update
+  ///< Desired com position in each update
   Matrix<Scalar, 3, 1> desComPosition;
 
-  //! Other leg (from support) index
+  ///< Other leg (from support) index
   LinkChains otherLeg;
 
-  //! Log for storing center of mass data
+  ///< Log for storing center of mass data
   fstream comLog;
 
-  //! Log for storing zmp ref data
+  ///< Log for storing zmp ref data
   fstream zmpRegLog;
 
-  //! Posture task target
+  ///< Posture task target
   Matrix<Scalar, Dynamic, 1> postureTarget;
 
-  //! Number of zmp reference previews required
+  ///< Number of zmp reference previews required
   static unsigned nPreviews;
 
-  //! Task weights and gains
+  ///< Task weights and gains
   static vector<Scalar> taskWeights;
   static vector<Scalar> taskGains;
 
-  //! Active joints for tasks
+  ///< Active joints for tasks
   vector<bool> activeJoints;
 
   Scalar maxTime = {0.05};

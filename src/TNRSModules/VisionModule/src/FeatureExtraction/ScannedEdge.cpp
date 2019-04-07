@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/ScannedEdge.cpp
+ * @file VisionModule/src/FeatureExtraction/ScannedEdge.cpp
  *
  * This file implements the struct ScannedEdge
  *

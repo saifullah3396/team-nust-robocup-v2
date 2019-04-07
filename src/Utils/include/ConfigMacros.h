@@ -1,5 +1,5 @@
 /**
- * @file Utils/ConfigMacros.h
+ * @file Utils/include/ConfigMacros.h
  *
  * The file defines the macro GET_CONFIG().
  *
@@ -98,4 +98,4 @@
     } \
   }
 #endif
-#endif //!_CONFIGMACROS_H_
+#endif ///<_CONFIGMACROS_H_

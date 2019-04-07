@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/KinematicsModule/KinematicsModule.h
+ * @file MotionModule/include/KinematicsModule/KinematicsModule.h
  *
  * This file declares the class for solving the kinematics
  * of the robot.
@@ -117,7 +117,7 @@ public:
    * Sets the simulated joint states equal to actual joint state
    */
   void setStateFromTo(
-    const JointStateType& from, 
+    const JointStateType& from,
     const JointStateType& to);
 
   /**
@@ -129,7 +129,7 @@ public:
    */
   void setJointPositions(
     const Joints& startIndex,
-    const Matrix<Scalar, Dynamic, 1>& simPosition, 
+    const Matrix<Scalar, Dynamic, 1>& simPosition,
     const JointStateType& type = JointStateType::actual,
     const bool& solveFk = true);
 
@@ -205,11 +205,11 @@ public:
    * @param simPosition: Simulated joint positions.
    * @param simVelocity: Simulated joint positions.
    * @param simAcceleration: Simulated joint positions.
-   * @param type: Type of joints 
+   * @param type: Type of joints
    */
   void setJointState(
     const Joints& startIndex,
-    const Matrix<Scalar, Dynamic, 1>& simPosition, 
+    const Matrix<Scalar, Dynamic, 1>& simPosition,
     const Matrix<Scalar, Dynamic, 1>& simVelocity,
     const Matrix<Scalar, Dynamic, 1>& simAcceleration,
     const JointStateType& type = JointStateType::actual,
@@ -226,7 +226,7 @@ public:
    */
   void setChainState(
     const LinkChains& chainIndex,
-    const Matrix<Scalar, Dynamic, 1>& simPosition, 
+    const Matrix<Scalar, Dynamic, 1>& simPosition,
     const Matrix<Scalar, Dynamic, 1>& simVelocity,
     const Matrix<Scalar, Dynamic, 1>& simAcceleration,
     const JointStateType& type = JointStateType::actual,
@@ -272,7 +272,7 @@ public:
    * @param chainIndex: Index of the limb.
    * @param eeIndex: The end effector index.
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, Dynamic>
    */
   Matrix<Scalar, 6, Dynamic> computeLimbJ(const LinkChains& chainIndex,
@@ -288,7 +288,7 @@ public:
    * @param endEffector: The end effector transformation
    *   matrix from the final frame of the chain
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, Dynamic>
    */
   Matrix<Scalar, 6, Dynamic> computeLimbJ(const LinkChains& chainIndex,
@@ -299,7 +299,7 @@ public:
   /**
    * Finds the Center of mass jacobian for the whole body
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, Dynamic>
    */
   Matrix<Scalar, 3, Dynamic> computeComJacobian(
@@ -311,7 +311,7 @@ public:
    *
    * @param chainIndex: Index of the limb.
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, Dynamic>
    */
   Matrix<Scalar, 3, Dynamic> computeLimbComJ(
@@ -325,7 +325,7 @@ public:
    * @param jacobianV: Com velocity jacobian to be updated
    * @param jacobianW: Com angular velocity jacobian to be updated
    * @param type: Type of joints
-   * 
+   *
    * @return void
    */
   void computeLinkComJ(
@@ -335,20 +335,20 @@ public:
     const JointStateType& type = JointStateType::actual);
 
   /**
-   * Solves the inverse kinematics for the center of mass X-Y while 
+   * Solves the inverse kinematics for the center of mass X-Y while
    * keeping the feet constrained on the ground.
    *
    * @param desCom: Desired center of mass position, only xy matters here
    * @param baseLimb: Support limb
    * @param eeIndex: Index of the support foot end-effector
    * @param type: Type of joints
-   * 
+   *
    * @return Joint values of the whole body
    */
   Matrix<Scalar, Dynamic, 1> solveComIkTwoVar(
     const Matrix<Scalar, 3, 1>& desCom,
     const LinkChains& LinkChains,
-    const unsigned& eeIndices, 
+    const unsigned& eeIndices,
     const JointStateType& type);
 
   /**
@@ -363,13 +363,13 @@ public:
    *   velocities depending upon the motion space.
    * @param eeIndices: Indices of desired end effectors for each limb.
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, 1>: Ik values of whole body joints.
    */
   Matrix<Scalar, Dynamic, 1> solveComIK(const LinkChains& baseLimb,
     const Matrix<Scalar, 6, 1>& comVelocityD,
     const vector<unsigned>& limbMotionSpace,
-    const vector<Matrix<Scalar, Dynamic, 1>>& limbVelocitiesD, 
+    const vector<Matrix<Scalar, Dynamic, 1>>& limbVelocitiesD,
     const vector<int>& eeIndices,
     const JointStateType& type = JointStateType::actual);
 
@@ -380,9 +380,9 @@ public:
    * @param chainIndex: Index of the end-effector chain.
    * @param eeIndex: The end effector transformation index.
    * @param targetT: The desired configuration of the end effector.
-   * @param startType: Type of joints to find the initial position of 
+   * @param startType: Type of joints to find the initial position of
    *   end-effector.
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, 1>: Ik values of the chain joints.
    */
   Matrix<Scalar, Dynamic, 1> solveJacobianIK(const LinkChains& chainIndex,
@@ -538,9 +538,9 @@ public:
    * @param chainIndex: Index of the end-effector chain.
    * @param endEffector: The end effector transformation.
    * @param targetT: The desired configuration of the end effector.
-   * @param startType: Type of joints to find the initial position of 
+   * @param startType: Type of joints to find the initial position of
    *   end-effector.
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, 1>: Ik values of the chain joints.
    */
   Matrix<Scalar, Dynamic, 1> solveJacobianIK(const LinkChains& chainIndex,
@@ -565,7 +565,7 @@ public:
    *
    * @param chainIndex: Index of the limb.
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, Dynamic>
    */
   Matrix<Scalar, Dynamic, Dynamic> computeMassMatrix(
@@ -581,14 +581,14 @@ public:
    * @param extMoments: External moments.
    * @param totalForces: Container for joint forces.
    * @param totalMoments: Container for joint forces.
-   * @param supportLeg: The leg base to be used as the inertial frame 
+   * @param supportLeg: The leg base to be used as the inertial frame
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, 1> returns the joint torques
    */
   Matrix<Scalar, Dynamic, 1> newtonEulerForces(const LinkChains& chainIndex,
     const Matrix<Scalar, 3, 1>& extForces, const Matrix<Scalar, 3, 1>& extMoments,
-    Matrix<Scalar, 3, 1>& totalForces, Matrix<Scalar, 3, 1>& totalMoments, 
+    Matrix<Scalar, 3, 1>& totalForces, Matrix<Scalar, 3, 1>& totalMoments,
     const LinkChains& supportLeg,
     const JointStateType& type = JointStateType::actual);
 
@@ -609,7 +609,7 @@ public:
    * @param supportLeg: Index of the support leg.
    * @param eeIndex: The end effector index.
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, 2, 1>
    */
   Matrix<Scalar, 2, 1> computeZmp(
@@ -673,8 +673,8 @@ public:
   /**
    * Computes the Zmp of the robot from feet force sensors
    *
-   * @param refFrame: Index of the reference foot frame 
-   * 
+   * @param refFrame: Index of the reference foot frame
+   *
    * @return Matrix<Scalar, 2, 1>
    */
   Matrix<Scalar, 2, 1> computeFsrZmp(const RobotFeet& refFrame);
@@ -685,7 +685,7 @@ public:
    * @param chainIndex: Index of the limb.
    * @param eeIndex: The end effector index.
    * @param type: Type of joints
-   * 
+   *
    * @return Matrix<Scalar, 4, 4>
    */
   Matrix<Scalar, 4, 4> getForwardEffector(const LinkChains& chainIndex,
@@ -736,17 +736,17 @@ public:
    * Returns the required joint
    *
    * @param index: Joint Index
-   * 
+   *
    * @return Joint
    */
   boost::shared_ptr<Joint<Scalar> > getJoint(const Joints& index);
-  
+
   /**
    * Returns the state of the required joint
    *
    * @param index: Joint Index
    * @param type: Type of joints
-   * 
+   *
    * @return Joint
    */
   boost::shared_ptr<JointState<Scalar> > getJointState(
@@ -772,13 +772,13 @@ public:
    * @param nElements: Number of elements including the
    *   first one.
    * @param type: Type of joints
-   * 
+   *
    * @return Vector<boost::shared_ptr<Joint<Scalar> > >
    */
   vector<boost::shared_ptr<Joint<Scalar> > > getJoints(
     const Joints& startIndex = Joints::first,
     const unsigned& nElements = toUType(Joints::count));
-  
+
   /**
    * Returns all the states of all required joints
    *
@@ -786,7 +786,7 @@ public:
    * @param nElements: Number of elements including the
    *   first one.
    * @param type: Type of joints
-   * 
+   *
    * @return Vector<boost::shared_ptr<JointState<Scalar> > >
    */
   vector<boost::shared_ptr<JointState<Scalar> > > getJointStates(
@@ -829,7 +829,7 @@ public:
    *
    * @param chainIndex: Chain of which the values are required
    * @param type: Type of joints.
-   * 
+   *
    * @return a vector containing the joint values.
    */
   vector<boost::shared_ptr<JointState<Scalar> > > getChainStates(
@@ -843,9 +843,9 @@ public:
    *
    * @return LinkInfo
    */
-  boost::shared_ptr<LinkInfo<Scalar> > 
+  boost::shared_ptr<LinkInfo<Scalar> >
   getLink(const Links& index);
-  
+
   /**
    * Returns the required chain
    *
@@ -853,7 +853,7 @@ public:
    *
    * @return LinkChain
    */
-  boost::shared_ptr<LinkChain<Scalar> > 
+  boost::shared_ptr<LinkChain<Scalar> >
   getLinkChain(const LinkChains& index);
 
   /**
@@ -895,7 +895,7 @@ public:
    * @author Vosk
    */
   vector<Matrix<Scalar, Dynamic, 1>> inverseLeftLeg(
-    const Matrix<Scalar, 4, 4>& endEffector, 
+    const Matrix<Scalar, 4, 4>& endEffector,
     const Matrix<Scalar, 4, 4>& targetT);
 
   /**
@@ -914,7 +914,7 @@ public:
    * @author Vosk
    */
   vector<Matrix<Scalar, Dynamic, 1>> inverseRightLeg(
-    const Matrix<Scalar, 4, 4>& endEffector, 
+    const Matrix<Scalar, 4, 4>& endEffector,
     const Matrix<Scalar, 4, 4>& targetT);
 
   /**
@@ -930,7 +930,7 @@ public:
    */
   void setEndEffector(
     const LinkChains& chain,
-    const unsigned& eeIndex, 
+    const unsigned& eeIndex,
     const Matrix<Scalar, 4, 1>& ee);
 
   /**
@@ -950,7 +950,7 @@ public:
    */
   void computeComWrtBase(
     const LinkChains& limbIndex,
-    const unsigned& eeIndex, 
+    const unsigned& eeIndex,
     Matrix<Scalar, 3, 1>& comVector,
     const JointStateType& type = JointStateType::actual);
 
@@ -965,7 +965,7 @@ public:
    */
   void computeComWrtBase(
     const LinkChains& limbIndex,
-    const unsigned& eeIndex, 
+    const unsigned& eeIndex,
     Matrix<Scalar, 2, 1>& comVector,
     const JointStateType& type = JointStateType::actual);
 
@@ -986,8 +986,8 @@ public:
 
   bool computeVirtualMass(
     const LinkChains& chainIndex,
-    const Matrix<Scalar, 3, 1>& direction, 
-    const Matrix<Scalar, 4, 4>& endEffector, 
+    const Matrix<Scalar, 3, 1>& direction,
+    const Matrix<Scalar, 4, 4>& endEffector,
     Scalar& virtualMass,
     const JointStateType& type = JointStateType::actual);
 
@@ -1001,12 +1001,12 @@ public:
 
   /**
    * Returns the transformed vector from foot frame to camera frame
-   * 
+   *
    * @param camIndex: top or bottom cam index
    * @param posInFoot: position vector in foot frame
-   * 
+   *
    * @return Matrix<Scalar, 4, 1>
-   */ 
+   */
   Matrix<Scalar, 4, 1> getWorldToCam(
     const CameraId& camIndex, const Matrix<Scalar, 4, 1>& posInFoot);
 
@@ -1014,15 +1014,15 @@ public:
    * Returns the current best estimate of com state relative to the given
    * base frame.
    *
-   * @param baseFrame: Target reference frame 
+   * @param baseFrame: Target reference frame
    * @param eeIndex: Target frame end-effector index
-   * 
+   *
    * @return ComState<Scalar>
    */
   ComState<Scalar> getComStateWrtFrame(
     const LinkChains& baseFrame = -1,
     const unsigned& eeIndex = 0);
-  
+
   /**
    * Returns the process model used for estimating center of mass
    * state in the given direction
@@ -1038,7 +1038,7 @@ public:
    * @return boost::shared_ptr<TorsoState<Scalar> >
    */
   boost::shared_ptr<TorsoState<Scalar> > getTorsoState();
-  
+
   /**
    * Returns the transformation from global base to body center frame
    * @param type joint state type
@@ -1088,7 +1088,7 @@ public:
    */
   void printKinematicData();
 
-private:  
+private:
   /**
    * Sets up the robot links and their inertias
    */
@@ -1096,34 +1096,34 @@ private:
 
   /**
    * Sets up the robot joints and their states
-   */ 
+   */
   void setupJoints();
 
   /**
    * Sets up the robot chains
-   */ 
+   */
   void setupChains();
 
   /**
    * Sets up the robot torso and center of mass states
-   */ 
+   */
   void setupWBStates();
 
   /**
    * Sets up the robot head chain
-   */ 
+   */
   void setupHeadChain();
-  
+
   /**
    * Sets up the robot left and right arm chains
-   */ 
+   */
   void setupArmChains();
 
   /**
    * Sets up the robot left and right leg chains
-   */ 
+   */
   void setupLegChains();
-  
+
   /**
    * Sets up the robot chain end effectors
    */
@@ -1138,7 +1138,7 @@ private:
    * Updates the robot torso state based on sensor readings
    */
   void updateTorsoState();
-  
+
   /**
    * Updates the robot center of mass state based on sensor readings
    */
@@ -1159,7 +1159,7 @@ private:
    * Updates which foot is on the ground.
    */
   void updateFootOnGround();
-  
+
   /**
    * This part of the code has been adapted from Kofinas'
    * NAOKinematics code but redefined using Eigen.
@@ -1171,7 +1171,7 @@ private:
    * @param type: Type of joints
    * @param solveFk: Whether to solve the forward kinematics
    *  along with dh transformations.
-   * 
+   *
    * @author Kofinas Nikos aka eldr4d, 2012 kouretes team
    * @author Vosk
    */
@@ -1191,83 +1191,83 @@ private:
   Matrix<Scalar, 3, 1> calculateCenterOfMass(
     const JointStateType& type = JointStateType::actual);
 
-  //! Base class object.
+  ///< Base class object.
   MotionModule* motionModule;
 
-  //! Task ik solver
+  ///< Task ik solver
   boost::shared_ptr<TaskIkSolver<Scalar> > tis;
 
-  //! Motion cycle time
+  ///< Motion cycle time
   Scalar cycleTime;
 
-  //! Global base reference frame
+  ///< Global base reference frame
   RobotFeet globalBase;
 
-  //! Global end-effector index
+  ///< Global end-effector index
   LegEEs globalEnd;
 
-  //! Transformation from body center torso frame to global base frame
+  ///< Transformation from body center torso frame to global base frame
   vector<Matrix<Scalar, 4, 4> > bodyToGlobal;
 
-  //! Transformation from global base to body center torso frame
+  ///< Transformation from global base to body center torso frame
   vector<Matrix<Scalar, 4, 4> > globalToBody;
 
-  //! Rotation matrix from global base to body center torso frame
+  ///< Rotation matrix from global base to body center torso frame
   vector<Matrix<Scalar, 6, 6> >globalToBodyRotX;
 
-  //! Torso acceleration of the robot in X-Y-Z
+  ///< Torso acceleration of the robot in X-Y-Z
   boost::shared_ptr<TorsoState<Scalar> > torsoState;
 
-  //! Imu filter
+  ///< Imu filter
   boost::shared_ptr<ImuFilter<Scalar> > imuFilter;
-  
-  //! Com state of the robot wrt the torso
+
+  ///< Com state of the robot wrt the torso
   boost::shared_ptr<ComState<Scalar> > comState;
 
-  //! KF-based com state estimator
+  ///< KF-based com state estimator
   vector<boost::shared_ptr<ComEstimator<Scalar, 3> > > comEstimator;
-  
-  //! Total mass of body chains.
+
+  ///< Total mass of body chains.
   Scalar totalChainsMass;
 
-  //! Joints vector
+  ///< Joints vector
   vector<boost::shared_ptr<Joint<Scalar> > > joints;
 
-  //! Links info vector
+  ///< Links info vector
   vector<boost::shared_ptr<LinkInfo<Scalar> > > links;
-  
-  //! Link chains vector
+
+  ///< Link chains vector
   vector<boost::shared_ptr<LinkChain<Scalar> > > linkChains;
 
-  //! Left foot transformation in torso frame.
+  ///< Left foot transformation in torso frame.
   Matrix<Scalar, 4, 4> lFootOnGround;
 
-  //! Right foot transformation in torso frame.
+  ///< Right foot transformation in torso frame.
   Matrix<Scalar, 4, 4> rFootOnGround;
 
-  //! Upper cam transformation in feet frame.
+  ///< Upper cam transformation in feet frame.
   Matrix<Scalar, 4, 4> upperCamInFeet;
 
-  //! Lower cam transformation in feet frame.
+  ///< Lower cam transformation in feet frame.
   Matrix<Scalar, 4, 4> lowerCamInFeet;
 
-  //! The variable that defines whether right or left or both feet are 
-  //! on the ground
+  ///< The variable that defines whether right or left or both feet are
+  ///< on the ground
   RobotFeet footOnGround;
 
-  //! Foot spacing in y-direction
+  ///< Foot spacing in y-direction
   Scalar footSpacing;
 
-  //! Torso pitch offset for camera transformation
+  ///< Torso pitch offset for camera transformation
   Scalar torsoPitchOffset;
 
-  //! Torso roll offset for camera transformation
+  ///< Torso roll offset for camera transformation
   Scalar torsoRollOffset;
 
-  //! Feet forces s buffer
+  ///< Feet forces s buffer
   boost::circular_buffer<Matrix<Scalar, 2, 1>> feetForcesBuffer;
 
-  //! Feet forces buffer size
+  ///< Feet forces buffer size
   size_t ffBufferSize;
 
   /**
@@ -1279,10 +1279,10 @@ private:
    */
   Matrix<Scalar, 4, 4> tBaseLLegInv, tEndLLegInv, rotFixLLeg, rotRLeg;
 
-  //! Log file path for robot center of mass and zmp estimate
+  ///< Log file path for robot center of mass and zmp estimate
   fstream comLog;
 
-  //! Json log file for imu data
+  ///< Json log file for imu data
   JsonLoggerPtr kinDataLogger;
   bool logKinData;
 

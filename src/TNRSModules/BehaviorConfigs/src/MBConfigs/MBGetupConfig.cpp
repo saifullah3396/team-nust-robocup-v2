@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MotionConfigs/MBGetupConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBGetupConfig.cpp
  *
  * This file implements the structs MBGetupConfig and KFMGetupConfig
  *
@@ -12,12 +12,12 @@
 DEFINE_BEHAVIOR_CONFIG(
   MBGetupConfig, MBConfig, MBGetupConfigPtr,
   (MBGetupTypes, kfmGetup, KFMGetupConfig),
-)
+);
 
 void KFMGetupConfig::init() {}
 void KFMGetupConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }
 
 

@@ -39,16 +39,7 @@ ParticleFilter::ParticleFilter(LocalizationModule* lModule) :
   DebugBase("ParticleFilter", this),
   lModule(lModule),
   cycleTime(lModule->getPeriodMinMS() / (1000.f)),
-  nParticles(20),
-  lostCount(0),
-  //recheckCount(0),
-  //inRecheck(false),
-  initiated(false),
-  localized(false),
-  lastKnownHalf(0),
   unitVecY(toUType(CameraId::count)),
-  prevGoalInfoId(0),
-  avgFilteredState(RobotPose2D<float>(NAN, NAN, NAN)),
   landmarkTypeCount(NUM_LANDMARK_TYPES),
   landmarkTypeStarts(NUM_LANDMARK_TYPES)
 {
@@ -66,6 +57,7 @@ ParticleFilter::ParticleFilter(LocalizationModule* lModule) :
 
   GET_CONFIG(
     "LocalizationConfig",
+    (int, ParticleFilter.nParticles, nParticles),
     (double, ParticleFilter.genStdX, genStd[0]),
     (double, ParticleFilter.genStdY, genStd[1]),
     (double, ParticleFilter.genStdTheta, genStd[2]),
@@ -84,7 +76,8 @@ ParticleFilter::ParticleFilter(LocalizationModule* lModule) :
   gaussianConst = 0.5 / (M_PI * measurementStd[0] * measurementStd[1]);
   expConstX = -0.5 / (measurementStd[0] * measurementStd[0]);
   expConstY = -0.5 / (measurementStd[1] * measurementStd[1]);
-  estimatedStates.set_capacity(20);
+  estimatedStates.set_capacity(nParticles);
+  particles.resize(nParticles);
   setupLandmarks();
   setupVoronoiMap();
   setupViewVectors();
@@ -94,17 +87,18 @@ ParticleFilter::ParticleFilter(LocalizationModule* lModule) :
 void ParticleFilter::init(const RobotPose2D<float>& state)
 {
   NormalDistribution<double> dist;
-  nParticles = 20;
-  particles.resize(nParticles);
-  float w = 1.0 / nParticles;
-  for (size_t i = 0; i < nParticles; ++i) {
-    for (size_t j = 0; j < state.get().size(); ++j) {
-      particles[i].state.get()[j] =
-        dist(random, state.get()[j], genStd[j]);
-    }
-    particles[i].weight = w;
+  auto w = 1.0 / (float) nParticles;
+  for (auto& p : particles) {
+    p.x() = dist(random, state.getX(), genStd[0]);
+    p.y() = dist(random, state.getY(), genStd[1]);
+    p.theta() = dist(random, state.getTheta(), genStd[2]);
+    p.ct = cos(p.theta());
+    p.st = sin(p.theta());
+    p.weight = w;
   }
   avgFilteredState = state;
+  avgFilteredState.ct = cos(avgFilteredState.theta());
+  avgFilteredState.st = sin(avgFilteredState.theta());
   wSlow = 0.0, wFast = 0.0;
   SIDE_CONFIDENCE_OUT(LocalizationModule) = 100;
   POSITION_CONFIDENCE_OUT(LocalizationModule) = 100;
@@ -113,20 +107,26 @@ void ParticleFilter::init(const RobotPose2D<float>& state)
 
 void ParticleFilter::init(const boost::circular_buffer<RobotPose2D<float> >& states)
 {
-  NormalDistribution<double> dist;
-  nParticles = 20;
-  particles.resize(nParticles);
-  float w = 1.0 / nParticles;
+  //Mat worldImage = Mat(vMapSize, CV_8UC3, Scalar(0,0,0));
+  //NormalDistribution<double> dist;
   avgFilteredState = RobotPose2D<float>(0.f, 0.f, 0.f);
-  int divider = nParticles / states.size();
+  auto w = 1.0 / (float) nParticles;
+  //int divider = nParticles / states.size();
   for (size_t i = 0; i < nParticles; ++i) {
-    for (size_t j = 0; j < particles[i].state.get().size(); ++j) {
-      particles[i].state.get()[j] =
-        dist(random, states[i / divider].get()[j], genStd[j]);
-    }
-    particles[i].weight = w;
-    avgFilteredState += particles[i].state;
+    auto& p = particles[i];
+    //p.x() = dist(random, states[i / divider].getX(), genStd[0]);
+    //p.y() = dist(random, states[i / divider].getY(), genStd[1]);
+    //p.theta() = dist(random, states[i / divider].getTheta(), genStd[2]);
+    //p.ct = cos(p.theta());
+    //p.st = sin(p.theta());
+    p = states[i];
+    p.weight = w;
+    avgFilteredState += p;
+    //drawParticle(Particle(states[i].getX(), states[i].getY(), states[i].getTheta()) , worldImage, Scalar(0,0,255));
+    //drawParticle(p, worldImage);
   }
+  //VisionUtils::displayImage("Particles init", worldImage);
+  //waitKey(0);
   avgFilteredState *= (1 / nParticles);
   wSlow = 0.0, wFast = 0.0;
   SIDE_CONFIDENCE_OUT(LocalizationModule) = 100;
@@ -136,25 +136,24 @@ void ParticleFilter::init(const boost::circular_buffer<RobotPose2D<float> >& sta
 
 void ParticleFilter::update()
 {
-  if (ON_SIDE_LINE_IN(LocalizationModule)) {
-    if (estimatedStates.capacity() != 20) estimatedStates.set_capacity(20);
-  } else {
-    if (estimatedStates.capacity() != 10) estimatedStates.set_capacity(10);
-  }
+  //if (ON_SIDE_LINE_IN(LocalizationModule)) {
+  //  if (estimatedStates.capacity() != 20) estimatedStates.set_capacity(20);
+  //} else {
+  //  if (estimatedStates.capacity() != nParticles) estimatedStates.set_capacity(nParticles);
+  //}
   if (!initiated) {
-    //! If the particle filter is not initiated and we do not have any info
-    //! on the robot position, try to get an estimate using observed landmarks info
+    ///< If the particle filter is not initiated and we do not have any info
+    ///< on the robot position, try to get an estimate using observed landmarks info
     updateRobotStateEstimate();
   } else {
-    //! Keep updating the estimate for correction
+    ///< Keep updating the estimate for correction
     //updateRobotStateEstimate();
-    //! Set the particles to 20 if the robot is localized
+    ///< Set the particles to 20 if the robot is localized
     if (localized)
       nParticles = 20;
     vector<LandmarkPtr> obsLandmarks;
     obsLandmarks.insert(obsLandmarks.begin(), knownLandmarks.begin(), knownLandmarks.end());
     obsLandmarks.insert(obsLandmarks.begin(), unknownLandmarks.begin(), unknownLandmarks.end());
-    //cout << "observed landmarks..." << obsLandmarks.size() << endl;
     prediction();
     if (obsLandmarks.size() > 5) {// && !IVAR(bool, LocalizationModule::robotInMotion)) {
       updateWeights(obsLandmarks);
@@ -428,8 +427,13 @@ void ParticleFilter::setupViewVectors()
 {
   Vector2f fovX(toUType(CameraId::count));
   Vector2f fovY(toUType(CameraId::count));
+  #ifndef NAOQI_VIDEO_PROXY_AVAILABLE
   auto settings =
     JsonUtils::readJson(ConfigManager::getConfigDirPath() + "CameraSettings.json");
+  #else
+  auto settings =
+    JsonUtils::readJson(ConfigManager::getConfigDirPath() + "NaoqiCameraSettings.json");
+  #endif
   JsonUtils::jsonToType(fovX[toUType(CameraId::headTop)], settings["visionTop"]["intrinsic"]["fovX"], 0.0);
   JsonUtils::jsonToType(fovY[toUType(CameraId::headTop)], settings["visionTop"]["intrinsic"]["fovY"], 0.0);
   JsonUtils::jsonToType(fovX[toUType(CameraId::headBottom)], settings["visionTop"]["intrinsic"]["fovX"], 0.0);
@@ -449,10 +453,11 @@ void ParticleFilter::setupViewVectors()
 
 void ParticleFilter::updateRobotStateEstimate()
 {
-  //! If we know the robot is on side lines
+  ///< @todo Possible problem with poseFromLandmark. It seems the robot isn't taking theta into account
+  ///< If we know the robot is on side lines
   if (ON_SIDE_LINE_IN(LocalizationModule)) {
-    //! If we have over 20 state estimates, initiate the particle filter
-    if (estimatedStates.size() >= 20) {
+    ///< If we have over nParticles state estimates, initiate the particle filter
+    if (estimatedStates.size() >= nParticles) {
       RobotPose2D<float> avgEstimatedState(0.f, 0.f, 0.f);
       for (size_t i = 0; i < estimatedStates.size(); ++i) {
         avgEstimatedState += estimatedStates[i];
@@ -465,22 +470,20 @@ void ParticleFilter::updateRobotStateEstimate()
         abs(avgEstimatedState.theta() + M_PI_2) < abs(avgEstimatedState.theta() - M_PI_2) ?
         -M_PI_2 : M_PI_2;
       estimatedStates.clear();
-      //! 10 while in game - 20 while in starting pose determination
-      estimatedStates.set_capacity(10);
-      //! We know the robot is in our half
+      ///< We know the robot is in our half
       lastKnownHalf = 0;
       init(avgEstimatedState);
     } else {
-      //! Estimate the robot position based on known observed landmarks such as
-      //! Goal, Corners, and Circle keeping mind the robot is on the side lines
+      ///< Estimate the robot position based on known observed landmarks such as
+      ///< Goal, Corners, and Circle keeping mind the robot is on the side lines
       estimateForSideLines();
     }
   } else {
-    if (estimatedStates.size() >= 10) {
+    if (estimatedStates.size() >= nParticles) {
       init(estimatedStates);
     } else {
-      //! Estimate the robot position based on known observed landmarks such as
-      //! Goal, Corners, and Circle
+      ///< Estimate the robot position based on known observed landmarks such as
+      ///< Goal, Corners, and Circle
       //cout << "estimating from landmarks..." << endl;
       estimateFromLandmarks();
     }
@@ -489,9 +492,9 @@ void ParticleFilter::updateRobotStateEstimate()
 
 void ParticleFilter::estimateForSideLines()
 {
-  //! Determine the state of the robot and initiate the particle filter
+  ///< Determine the state of the robot and initiate the particle filter
   auto goalInfo = GOAL_INFO_IN(LocalizationModule);
-  //! Get an estimate using goal information
+  ///< Get an estimate using goal information
   if (prevGoalInfoId != 0 && goalInfo.id != prevGoalInfoId) {
     if (goalInfo.found) {
       if (goalInfo.type == GoalPostType::ourTeam) {
@@ -544,13 +547,11 @@ void ParticleFilter::estimateForSideLines()
   }
   prevGoalInfoId = goalInfo.id;
 
-  //! Get an estimate using line landmarks information
+  ///< Get an estimate using line landmarks information
   auto landmarks = knownLandmarks;
   if (!landmarks.empty()) {
-    /*Mat worldImage = Mat(vMapSize, CV_8UC3, Scalar(0,0,0));*/
-    for (size_t i = 0; i < landmarks.size(); ++i) {
-      KnownLandmarkPtr l = landmarks[i];
-      auto rPose = l->poseFromLandmark;
+    //Mat worldImage = Mat(vMapSize, CV_8UC3, Scalar(0,0,0));
+    for (const auto& l : landmarks) {
       unsigned lCount = landmarkTypeCount[l->type];
       unsigned lStart = landmarkTypeStarts[l->type];
       //cout << "Type: " << l->type << endl;
@@ -558,26 +559,23 @@ void ParticleFilter::estimateForSideLines()
       //cout << "poseY: " << rPose.y << endl;
       //cout << "poseTheta: " << rPose.theta * 180 / M_PI << endl;
       for (size_t j = 0; j < lCount; ++j) {
-        auto lPose = landmarksOnField[j + lStart];
+        auto& landmarkPose = landmarksOnField[j + lStart];
         //cout << "lX: " << lPose.x << endl;
         //cout << "lY: " << lPose.y << endl;
         //cout << "lTheta: " << lPose.theta * 180 / M_PI << endl;
-        RobotPose2D<float> wPose;
-        wPose.x() = lPose.getX() + rPose.getX() * cos(lPose.getTheta()) - rPose.getY() * sin(lPose.getTheta());
-        wPose.y() = lPose.getY() + rPose.getX() * sin(lPose.getTheta()) + rPose.getY() * cos(lPose.getTheta());
-        wPose.theta() = MathsUtils::rangeToPi(rPose.getTheta() + lPose.getTheta());
+        auto wPose = landmarkPose.transform(l->poseFromLandmark);
         // Should be in our own half which is in -ve x and not too close to the goal line.
         // Should be either closer to upper line or lower line which is 3
         // meters from center
         //float rangeT = MathsUtils::rangeToPi(wPose.theta);
         bool positive = false;
-        if (wPose.x() > -4.25 && wPose.x() < 0.f) {
-          if (wPose.y() > 2.5f) {
-            if (wPose.theta() > -1.7444 && wPose.theta() < -1.39556) {
+        if (wPose.getX() > -4.25 && wPose.getX() < 0.f) {
+          if (wPose.getY() > 2.5f) {
+            if (wPose.getTheta() > -1.7444 && wPose.getTheta() < -1.39556) {
               positive = true;
             }
-          } else if (wPose.y() < -2.5f) {
-            if (wPose.theta() > 1.39556 && wPose.theta() < 1.7444) {
+          } else if (wPose.getY() < -2.5f) {
+            if (wPose.getTheta() > 1.39556 && wPose.getTheta() < 1.7444) {
               positive = true;
             }
           }
@@ -586,14 +584,14 @@ void ParticleFilter::estimateForSideLines()
         //cout << "wX: " << wPose.x << endl;
         //cout << "wY: " << wPose.y << endl;
         //cout << "wTheta: " << wPose.theta * 180 / M_PI << endl;
+        //drawParticle(wPose, worldImage);
+        //VisionUtils::displayImage("worldImage", worldImage);
+        //waitKey(0);
         if (positive) {
           estimatedStates.push_back(wPose);
         } else {
           continue;
         }
-        //drawParticle(wPose, worldImage);
-        //VisionUtils::displayImage("worldImage", worldImage);
-        //waitKey(0);
       }
     }
   }
@@ -601,16 +599,19 @@ void ParticleFilter::estimateForSideLines()
 
 void ParticleFilter::estimateFromLandmarks()
 {
-  //Mat worldImage = Mat(vMapSize, CV_8UC3, Scalar(0, 0, 0));
+  //cout << "EstimateFromLandmarks called..." << endl;
+  Mat worldImage = Mat(vMapSize, CV_8UC3, Scalar(0, 0, 0));
   auto& lastPose = LAST_POSE_2D_OUT(LocalizationModule);
   auto useLastEstimate = LOCALIZE_LAST_KNOWN_IN(LocalizationModule);
+  //cout << "useLastEstimate: " << useLastEstimate << endl;
+  //cout << "knownLandmarks: " << knownLandmarks.size() << endl;
   if (!knownLandmarks.empty()) {
-    float worldLimitX = HALF_FIELD_HEIGHT + 0.25;
-    float worldLimitY = HALF_FIELD_WIDTH + 0.25;
+    auto worldLimitX = HALF_FIELD_HEIGHT + 0.25;
+    auto worldLimitY = HALF_FIELD_WIDTH + 0.25;
     for (const auto& l : knownLandmarks) {
       auto rPose = l->poseFromLandmark;
-      unsigned lCount = landmarkTypeCount[l->type];
-      unsigned lStart = landmarkTypeStarts[l->type];
+      auto lCount = landmarkTypeCount[l->type];
+      auto lStart = landmarkTypeStarts[l->type];
       //cout << "Type: " << l->type << endl;
       //cout << "poseX: " << rPose.x << endl;
       //cout << "poseY: " << rPose.y << endl;
@@ -620,24 +621,25 @@ void ParticleFilter::estimateFromLandmarks()
         //cout << "lX: " << lPose.x << endl;
         //cout << "lY: " << lPose.y << endl;
         //cout << "lTheta: " << lPose.theta * 180 / M_PI << endl;
-        RobotPose2D<float> wPose = landmarkPoseToWorldPose(lPose, rPose);
+        RobotPose2D<float> wPose = lPose.transform(rPose);
         if (useLastEstimate && lastPose.getX() == lastPose.getX()) {
-          //! We know the last known pose of the robot so we find estimates
-          //! that are close to it
+          ///< We know the last known pose of the robot so we find estimates
+          ///< that are close to it
           if (
               wPose.x() > -worldLimitX &&
               wPose.x() < worldLimitX &&
               wPose.y() > -worldLimitY &&
               wPose.y() < worldLimitY)
           {
-            float d = (wPose.get() - lastPose.get()).segment(0, 2).norm();
+            auto d = (wPose.get() - lastPose.get()).segment(0, 2).norm();
             if (d < 1.f) { // Within 25 cm radius
+              //cout << "Drawing particle...3" << endl;
               estimatedStates.push_back(wPose);
               //drawParticle(wPose, worldImage);
             }
           }
         } else {
-          //! We add all the poses that lie within last known half
+          ///< We add all the poses that lie within last known half
           if (lastKnownHalf == 0) {
             if (
                 wPose.x() > -worldLimitX &&
@@ -645,6 +647,7 @@ void ParticleFilter::estimateFromLandmarks()
                 wPose.y() > -worldLimitY &&
                 wPose.y() < worldLimitY)
             {
+              //cout << "Drawing particle...2" << endl;
               estimatedStates.push_back(wPose);
               //drawParticle(wPose, worldImage);
               //cout << "wX: " << wPose.x << endl;
@@ -658,6 +661,7 @@ void ParticleFilter::estimateFromLandmarks()
                 wPose.y() > -worldLimitY &&
                 wPose.y() < worldLimitY)
             {
+              //cout << "Drawing particle...1" << endl;
               estimatedStates.push_back(wPose);
               //cout << "wX: " << wPose.x << endl;
               //cout << "wY: " << wPose.y << endl;
@@ -674,18 +678,18 @@ void ParticleFilter::estimateFromLandmarks()
       auto rPose = goalInfo.poseFromGoal;
       RobotPose2D<float> wPose;
       if (goalInfo.type == GoalPostType::ourTeam) {
-        RobotPose2D<float> lPose = landmarksOnField[FL_LB_GOALPOST];
+        auto lPose = landmarksOnField[FL_LB_GOALPOST];
         lPose.y() = 0.f;
         //wPose.x = lPose.x + rPose.x * cos(lPose.theta) - rPose.y * sin(
         //  lPose.theta);
         //wPose.y = lPose.y + rPose.x * sin(lPose.theta) + rPose.y * cos(
         //  lPose.theta);
         //wPose.theta = MathsUtils::rangeToPi(rPose.theta + lPose.theta);
-        wPose = landmarkPoseToWorldPose(lPose, rPose);
+        wPose = lPose.transform(rPose);
       } else if (goalInfo.type == GoalPostType::opponentTeam) {
-        RobotPose2D<float> lPose = landmarksOnField[FL_LT_GOALPOST];
+        auto lPose = landmarksOnField[FL_LT_GOALPOST];
         lPose.y() = 0.f;
-        wPose = landmarkPoseToWorldPose(lPose, rPose);
+        wPose = lPose.transform(rPose);
         /*
         wPose.x = lPose.x + rPose.x * cos(lPose.theta) - rPose.y * sin(
           lPose.theta);
@@ -693,13 +697,12 @@ void ParticleFilter::estimateFromLandmarks()
           lPose.theta);
         wPose.theta = MathsUtils::rangeToPi(rPose.theta + lPose.theta);*/
       } else {
-        RobotPose2D<float> lPose1 = landmarksOnField[FL_LB_GOALPOST];
+        auto lPose1 = landmarksOnField[FL_LB_GOALPOST];
         lPose1.y() = 0.f;
-        RobotPose2D<float> lPose2 = landmarksOnField[FL_LT_GOALPOST];
+        auto lPose2 = landmarksOnField[FL_LT_GOALPOST];
         lPose2.y() = 0.f;
-        RobotPose2D<float> wPose1, wPose2;
-        wPose1 = landmarkPoseToWorldPose(lPose1, rPose);
-        wPose2 = landmarkPoseToWorldPose(lPose2, rPose);
+        auto wPose1 = lPose1.transform(rPose);
+        auto wPose2 = lPose2.transform(rPose);
         /*wPose1.x = lPose1.x + rPose.x * cos(lPose1.theta) - rPose.y * sin(
           lPose1.theta);
         wPose1.y = lPose1.y + rPose.x * sin(lPose1.theta) + rPose.y * cos(
@@ -728,7 +731,6 @@ void ParticleFilter::estimateFromLandmarks()
           estimatedStates.push_back(wPose);
         }
       }
-      //drawParticle(wPose, worldImage);
     }
   }
   prevGoalInfoId = goalInfo.id;
@@ -757,16 +759,13 @@ void ParticleFilter::prediction()
     while (!positionInputs.empty()) {
       auto& input = positionInputs.front();
       NormalDistribution<double> dist;
-      for (size_t i = 0; i < nParticles; ++i) {
-        auto ct = cos(particles[i].state.getTheta());
-        auto st = sin(particles[i].state.getTheta());
-        particles[i].state.x() = particles[i].state.getX() + input.getX() * ct - input.getY() * st;
-        particles[i].state.y() = particles[i].state.getY() + input.getX() * st + input.getY() * ct;
-        particles[i].state.theta() = particles[i].state.getTheta() + input.getTheta();
-        for (size_t j = 0; j < particles[i].state.get().size(); ++j) {
-          particles[i].state.get()[j] =
-            dist(random, particles[i].state.get()[j], motionStd[j]);
-        }
+      for (auto& p : particles) {
+        p = p.transform(input);
+        p.x() = dist(random, p.getX(), motionStd[0]);
+        p.y() = dist(random, p.getY(), motionStd[1]);
+        p.theta() = dist(random, p.getTheta(), motionStd[2]);
+        p.ct = cos(p.theta());
+        p.st = sin(p.theta());
       }
       positionInputs.pop();
     }
@@ -778,41 +777,42 @@ void ParticleFilter::prediction()
 void ParticleFilter::prediction(const VelocityInput<double>& vI)
 {
   NormalDistribution<double> dist;
-  for (size_t i = 0; i < nParticles; ++i) {
-    Particle p = particles[i];
-    double thetaF = p.state.getTheta() + cycleTime * vI.getTheta();
-    double velMag = vI.get().segment(0, 2).norm();
-    double velAngle = atan2(vI.getY(), vI.getX());
+  for (auto& p : particles) {
+    auto thetaF = p.getTheta() + cycleTime * vI.getTheta();
+    auto velMag = vI.get().segment(0, 2).norm();
+    auto velAngle = atan2(vI.getY(), vI.getX());
     double deltaX;
     double deltaY;
     if (vI.getTheta() != 0.0) {
-      double arcRadius = velMag / vI.getTheta();
+      auto arcRadius = velMag / vI.getTheta();
       deltaX =
-        arcRadius * (sin(thetaF + velAngle) - sin(p.state.getTheta() + velAngle));
+        arcRadius * (sin(thetaF + velAngle) - sin(p.getTheta() + velAngle));
       deltaY =
-        arcRadius * (-cos(thetaF + velAngle) + cos(p.state.getTheta() + velAngle));
+        arcRadius * (-cos(thetaF + velAngle) + cos(p.getTheta() + velAngle));
     } else {
       deltaX = cycleTime * vI.getX();
       deltaY = cycleTime * vI.getY();
     }
-    p.state.x() += deltaX;
-    p.state.y() += deltaY;
-    p.state.theta() = thetaF;
-    for (size_t j = 0; j < particles[i].state.get().size(); ++j) {
-      particles[i].state.get()[j] =
-        dist(random, p.state.get()[j], predictionStd[j]);
-    }
+    p.x() += deltaX;
+    p.y() += deltaY;
+    p.theta() = thetaF;
+    p.x() = dist(random, p.getX(), motionStd[0]);
+    p.y() = dist(random, p.getY(), motionStd[1]);
+    p.theta() = dist(random, p.getTheta(), motionStd[2]);
+    p.ct = cos(p.theta());
+    p.st = sin(p.theta());
   }
 }
 
 void ParticleFilter::addPredictionNoise()
 {
   NormalDistribution<double> dist;
-  for (size_t i = 0; i < nParticles; ++i) {
-    for (size_t j = 0; j < particles[i].state.get().size(); ++j) {
-      particles[i].state.get()[j] =
-        dist(random, particles[i].state.get()[j], predictionStd[j]);
-    }
+  for (auto& p : particles) {
+    p.x() = dist(random, p.getX(), predictionStd[0]);
+    p.y() = dist(random, p.getY(), predictionStd[1]);
+    p.theta() = dist(random, p.getTheta(), predictionStd[2]);
+    p.ct = cos(p.theta());
+    p.st = sin(p.theta());
   }
 }
 
@@ -821,40 +821,31 @@ void ParticleFilter::updateWeights(const vector<LandmarkPtr>& obsLandmarks)
   avgFilteredState = RobotPose2D<float>(0.f, 0.f, 0.f);
   sumWeights = 0.0;
   maxWeight = 0.0;
-  Mat worldImage = Mat(vMapSize, CV_8UC3, Scalar(0,0,0));
+  auto worldImage = Mat(vMapSize, CV_8UC3, Scalar(0,0,0));
   if (!obsLandmarks.empty()) {
-    for (size_t i = 0; i < nParticles; ++i) {
-      Particle& p = particles[i];
-      double& w = particles[i].weight;
+    for (auto& p : particles) {
+      worldImage = Scalar(0,0,0);
+      drawParticle(p, worldImage);
+      auto& w = p.weight;
       vector<bool> lMarked(fieldLandmarks.size(), false);
-      for (size_t j = 0; j < fieldLandmarks.size(); ++j) {
-       auto ll = fieldLandmarks[j];
-       VisionUtils::drawPoint(Point(ll->pos.x * 100 + 500, 350 - 100 * ll->pos.y), worldImage, Scalar(0,0,255));
+
+      for (const auto& ll : fieldLandmarks) {
+      VisionUtils::drawPoint(
+        Point(ll->pos.x * 100 + 500, 350 - 100 * ll->pos.y),
+        worldImage, Scalar(0,0,255));
       }
-      for (size_t j = 0; j < obsLandmarks.size(); ++j) {
+
+      for (const auto& obs : obsLandmarks) {
         bool badObs = false;
-        auto obs = obsLandmarks[j];
-        auto ct = cos(p.state.theta());
-        auto st = sin(p.state.theta());
-        Point2f tPos;
-        tPos.x = p.state.x() + obs->pos.x * ct - obs->pos.y * st;
-        tPos.y = p.state.y() + obs->pos.x * st + obs->pos.y * ct;
+        auto tPos = static_cast<RobotPose2D<float>>(p).transform(obs->pos);
         if (abs(tPos.x) > 4.75 || abs(tPos.y) > 3.25) {
           badObs = true;
-          //++badObs;
-          //continue;
         }
         VisionUtils::drawPoint(Point(tPos.x * 100 + 500, 350 - 100 * tPos.y), worldImage, Scalar(255,0,0));
         if (!badObs) {
-          //cout << "T Pos: " << Point(tPos.x * 100 + 500, 350 - 100 * tPos.y) << endl;
-          //imshow("olImage", olImage);
-          //waitKey(0);
-          int index = -1;
-
           auto tPosWorld = worldToVoronoiMap(tPos);
-          unsigned label =
-            voronoiLabels.at<uint>(tPosWorld.y, tPosWorld.x);
-          double minDist = 1000;
+          auto label = voronoiLabels.at<uint>(tPosWorld.y, tPosWorld.x);
+          auto minDist = 1000.0;
           //if (!labelledLandmarks[label-1].empty()) {
           //  index = labelledLandmarks[label-1][0]->id;
           //  minDist = norm(labelledLandmarks[label-1][0]->pos - tPos);
@@ -862,71 +853,67 @@ void ParticleFilter::updateWeights(const vector<LandmarkPtr>& obsLandmarks)
           //cout << "label: " << label << endl;
           //cout << "labelledLandmarks[label-1].size(): " << labelledLandmarks[label-1].size() << endl;
           //cout << "fieldLandmarks.size(): " << fieldLandmarks.size() << endl;
-          for (unsigned k = 0; k < labelledLandmarks[label - 1].size(); ++k) {
-            auto ll = labelledLandmarks[label - 1][k];
+          LandmarkPtr matchedLandmark;
+          for (const auto& ll : labelledLandmarks[label - 1]) {
             //cout << "ll->id:"<< ll->id << endl;
             if (!lMarked[ll->id]) {
               if (obs->type == ll->type) {
-                double d = norm(ll->pos - tPos);
+                auto d = norm(ll->pos - tPos);
                 if (d < minDist) {
                   minDist = d;
-                  index = ll->id;
+                  matchedLandmark = ll;
                 }
               }
             }
           }
-          if (minDist < 0.25) {
-            auto ll = fieldLandmarks[index];
-            double dx = (tPos.x - ll->pos.x);
+          if (minDist < 0.10) {
+            auto dx = (tPos.x - matchedLandmark->pos.x);
             dx *= dx;
-            double dy = (tPos.y - ll->pos.y);
+            auto dy = (tPos.y - matchedLandmark->pos.y);
             dy *= dy;
             w *= gaussianConst * exp(dx * expConstX + dy * expConstY);
-            //cout << "w: " << gaussianConst * exp(dx*expConstX + dy*expConstY) << endl;
-            VisionUtils::drawPoint(Point(ll->pos.x * 100 + 500, 350 - 100 * ll->pos.y), worldImage, Scalar(0,255,0));
-            lMarked[index] = true;
+            VisionUtils::drawPoint(Point(matchedLandmark->pos.x * 100 + 500, 350 - 100 * matchedLandmark->pos.y), worldImage, Scalar(0,255,0));
+            lMarked[matchedLandmark->id] = true;
           } else {
-            double dx = 0.25 / sqrt(2);
+            auto dx = 0.25 / sqrt(2);
             dx *= dx;
-            double dy = 0.25 / sqrt(2);
+            auto dy = 0.25 / sqrt(2);
             dy *= dy;
             w *= gaussianConst * exp(dx * expConstX + dy * expConstY);
           }
         } else {
-          double dx = 0.25 / sqrt(2);
+          auto dx = 0.25 / sqrt(2);
           dx *= dx;
-          double dy = 0.25 / sqrt(2);
+          auto dy = 0.25 / sqrt(2);
           dy *= dy;
           w *= gaussianConst * exp(dx * expConstX + dy * expConstY);
         }
       }
-      particles[i].weight = w;
       sumWeights += w;
       maxWeight = w > maxWeight ? w : maxWeight;
-      avgFilteredState = avgFilteredState + particles[i].state;
+      avgFilteredState = avgFilteredState + p;
       //cout << "i; " << i << endl;
       //cout << "maxWeight: " << maxWeight << endl;
       //cout << "w: " << w << endl;
       //VisionUtils::displayImage("worldImage", worldImage, 0.5);
-      //imshow("olImage", olImage);
       //waitKey(0);
     }
   } else {
-    for (size_t i = 0; i < nParticles; ++i)
-      avgFilteredState = avgFilteredState + particles[i].state;
+    for (const auto& p : particles)
+      avgFilteredState += p;
   }
   avgFilteredState /= nParticles;
-  double avgWeights = sumWeights / nParticles;
+  auto avgWeights = sumWeights / nParticles;
   wSlow += ALPHA_SLOW * (avgWeights - wSlow);
   wFast += ALPHA_FAST * (avgWeights - wFast);
 }
 
 void ParticleFilter::normalizeWeights(const bool& noData)
 {
-  //! If no data or the highest weight is close to zero
+  ///< If no data or the highest weight is close to zero
   if (noData) {
-    for (size_t i = 0; i < nParticles; ++i)
-      particles[i].weight = 1.0 / nParticles;
+    for (auto& p : particles)
+      p.weight = 1.0 / (float) nParticles;
   } else {
     if (maxWeight < 1e-9) {
       lostCount++;
@@ -934,12 +921,12 @@ void ParticleFilter::normalizeWeights(const bool& noData)
         reset();
         lostCount = 0;
       } else {
-        for (size_t i = 0; i < nParticles; ++i)
-          particles[i].weight = 1.0 / nParticles;
+        for (auto& p : particles)
+          p.weight = 1.0 / (float) nParticles;
       }
     } else {
-      for (size_t i = 0; i < nParticles; ++i)
-        particles[i].weight = particles[i].weight / sumWeights;
+      for (auto& p : particles)
+        p.weight /= sumWeights;
       lostCount = 0;
     }
   }
@@ -950,11 +937,11 @@ void ParticleFilter::resample()
   if (!localized)
     return;
   vector<Particle> resampled;
-  double rNumber = random.FloatU() * (1.0 / nParticles);
-  double w = particles[0].weight;
+  auto rNumber = random.FloatU() * (1.0 / nParticles);
+  auto w = particles[0].weight;
   int j = 0;
-  double vl = 0;
-  double threshold = 1.0 - (wFast / wSlow);
+  auto vl = 0;
+  auto threshold = 1.0 - (wFast / wSlow);
   if (threshold > vl) vl = threshold;
   for (size_t i = 0; i < nParticles; ++i) {
     /*if (random.FloatU() < vl) {
@@ -962,13 +949,13 @@ void ParticleFilter::resample()
      NormalDistribution<double> distY;
      NormalDistribution<double> distTheta;
      Particle p;
-     p.state.x = distX(random, avgFilteredState.x, 0.25 / 3);
-     p.state.y = distY(random, avgFilteredState.y, 0.25 / 3);
-     p.state.theta = distTheta(random, avgFilteredState.theta, 10 * M_PI / 180 / 3);
+     p.x = distX(random, avgFilteredState.x, 0.25 / 3);
+     p.y = distY(random, avgFilteredState.y, 0.25 / 3);
+     p.theta = distTheta(random, avgFilteredState.theta, 10 * M_PI / 180 / 3);
      p.weight = 1.0 / nParticles;
      resampled.push_back(p);
      } else {*/
-    double u = rNumber + i / (double) nParticles;
+    auto u = rNumber + i / (double) nParticles;
     while (u > w) {
       j++;
       w += particles[j].weight;
@@ -1017,10 +1004,10 @@ void ParticleFilter::updatePositionConfidence()
     } else {
       lostCount = 0;
     }*/
-  double std = 0.0;
+  auto std = 0.0;
   //cout << "avgFilteredState: " <<avgFilteredState.get().transpose() << endl;
-  for (size_t i = 0; i < nParticles; ++i) {
-    std += (particles[i].state.get() - avgFilteredState.get()).segment(0, 2).norm();
+  for (const auto& p : particles) {
+    std += (p - avgFilteredState).get().segment(0, 2).norm();
     //cout << "i: " << particles[i].state.get().transpose() << endl;
   }
   std = sqrt(std / nParticles);
@@ -1092,10 +1079,12 @@ void ParticleFilter::updateSideConfidence()
 
   if (SIDE_CONFIDENCE_OUT(LocalizationModule) <= 30) {
     // Mirror all particles
-    for (size_t i = 0; i < nParticles; ++i) {
-      particles[i].state.x() = -particles[i].state.x();
-      particles[i].state.y() = -particles[i].state.y();
-      particles[i].state.theta() = particles[i].state.theta() + M_PI;
+    for (auto& p : particles) {
+      p.x() = -p.x();
+      p.y() = -p.y();
+      p.theta() = p.theta() + M_PI;
+      p.ct = cos(p.theta());
+      p.st = sin(p.theta());
     }
     SIDE_CONFIDENCE_OUT(LocalizationModule) = 70;
   } else {
@@ -1118,30 +1107,16 @@ void ParticleFilter::setUnknownLandmarks(const vector<UnknownLandmarkPtr>& landm
   this->unknownLandmarks = landmarks;
 }
 
-RobotPose2D<float> ParticleFilter::landmarkPoseToWorldPose(
-  const RobotPose2D<float> lPose, const RobotPose2D<float> rPose)
-{
-  RobotPose2D<float> wPose;
-  wPose.x() = lPose.getX() + rPose.getX() * cos(lPose.getTheta()) - rPose.getY() * sin(lPose.getTheta());
-  wPose.y() = lPose.getY() + rPose.getX() * sin(lPose.getTheta()) + rPose.getY() * cos(lPose.getTheta());
-  wPose.theta() = MathsUtils::rangeToPi(rPose.getTheta() + lPose.getTheta());
-  return wPose;
-}
-
-void ParticleFilter::drawParticle(const Particle& p, Mat& image)
-{
-  drawParticle(p.state, image);
-}
-
-void ParticleFilter::drawParticle(const RobotPose2D<float>& p, Mat& image)
+void ParticleFilter::drawParticle(const Particle& p, Mat& image, const Scalar& color)
 {
   if (!image.empty()) {
-    circle(image, worldToVoronoiMap(Point(p.getX(), p.getY())), 10, Scalar(255, 0, 0));
+    auto lineEnd = static_cast<RobotPose2D<float>>(p).transform(Point2f(0.15, 0.0));
+    circle(image, worldToVoronoiMap(Point2f(p.getX(), p.getY())), 10, color);
     line(
       image,
-      worldToVoronoiMap(Point(p.getX(), p.getY())),
-      worldToVoronoiMap(Point(p.getX() + 0.15 * cos(p.getTheta()), - 0.15 * sin(p.getTheta()))),
-      Scalar(255, 0, 0)
+      worldToVoronoiMap(Point2f(p.getX(), p.getY())),
+      worldToVoronoiMap(lineEnd),
+      color
     );
   }
 }

@@ -54,11 +54,11 @@ protected:
    */
   double costFunction(const vector<double> &vars, vector<double> &grad, void *data);
 
-  Eigen::Matrix<double, StateSize, StateSize> scale; //! Acceleration scale matrix
-  Eigen::Matrix<double, StateSize, 1> bias; //! Acceleration bias matrix
-  Eigen::Matrix<double, Eigen::Dynamic, StateSize> inputAcc; //! Input acceleration observed measurements
-  Eigen::Matrix<double, Eigen::Dynamic, 2> inputAngles; //! Input angles observed measurements
-  fstream measFile; //! File containing the measurements
+  Eigen::Matrix<double, StateSize, StateSize> scale; ///< Acceleration scale matrix
+  Eigen::Matrix<double, StateSize, 1> bias; ///< Acceleration bias matrix
+  Eigen::Matrix<double, Eigen::Dynamic, StateSize> inputAcc; ///< Input acceleration observed measurements
+  Eigen::Matrix<double, Eigen::Dynamic, 2> inputAngles; ///< Input angles observed measurements
+  fstream measFile; ///< File containing the measurements
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

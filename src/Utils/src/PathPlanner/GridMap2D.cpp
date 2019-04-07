@@ -54,7 +54,7 @@ namespace PathPlannerSpace
       ));
     distanceTransform(binaryMapR, distMapR, CV_DIST_L2, 3);
 
-    //! distance map now contains distance in meters:
+    ///< distance map now contains distance in meters:
     resize(distMapR, distMap, occMap->data.size());
     distMap = distMap * occMap->resolution * 4;
     //high_resolution_clock::time_point t1 =
@@ -66,12 +66,12 @@ namespace PathPlannerSpace
   void GridMap2D::inflateMap(double inflationRadius)
   {
     occMap->data = (distMap > inflationRadius);
-    //! recompute distance map with new binary map:
+    ///< recompute distance map with new binary map:
     distanceTransform(occMap->data, distMap, CV_DIST_L2, CV_DIST_MASK_PRECISE);
     distMap = distMap * occMap->resolution;
   }
 
-  //! See Costmap2D for mapToWorld / worldToMap implementations:
+  ///< See Costmap2D for mapToWorld / worldToMap implementations:
   void GridMap2D::mapToWorld(unsigned int mx, unsigned int my, double& wx,
     double& wy) const
   {

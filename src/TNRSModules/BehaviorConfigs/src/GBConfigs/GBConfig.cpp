@@ -1,5 +1,5 @@
 /**
- * @file GBModule/src/GBConfigs/GBConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/GBConfigs/GBConfig.cpp
  *
  * This file implements the struct GBConfig
  *

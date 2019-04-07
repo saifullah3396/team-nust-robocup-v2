@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/include/PBConfigs/PBStartupConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/PBConfigs/PBStartupConfig.h
  *
  * This file defines the struct PBStartupConfig and its childs
  *
@@ -19,7 +19,7 @@ DECLARE_BEHAVIOR_CONFIG(
   PBIds::startup,
   10.0,
   PBStartupTypes
-)
+);
 
 DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   RequestBehaviorConfig,
@@ -29,4 +29,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (string, requestedPosture, string("")),
   (string, requestedBehavior, string("")),
   (float, startWaitTime, 0.5f),
-)
+);

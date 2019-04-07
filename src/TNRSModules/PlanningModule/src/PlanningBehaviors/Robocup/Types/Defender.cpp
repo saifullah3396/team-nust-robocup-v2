@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/Defender.h
+ * @file PlanningBehaviors/Robocup/Types/Defender.cpp
  *
  * This file declares the class Defender.
  *
@@ -112,11 +112,11 @@ cv::Point_<float> Defender::findBallKickTarget()
   auto pose = ROBOT_POSE_2D_IN(PlanningModule);
   kickTarget.x = pose.getX();
   kickTarget.y = pose.getY();
-  //! Find a teammate to pass the ball
+  ///< Find a teammate to pass the ball
   for (const auto& tr : TEAM_ROBOTS_IN(PlanningModule)) {
-    //! Find robots
+    ///< Find robots
     if (tr.positionConfidence > 60) {
-      //! Team robot is ahead of this robot. We don't want to send the ball behind
+      ///< Team robot is ahead of this robot. We don't want to send the ball behind
       if (tr.pose.getX() > kickTarget.x) {
         if (!behindObstacle(kickTarget)) {
           kickTarget.x = tr.pose.getX();
@@ -131,9 +131,9 @@ cv::Point_<float> Defender::findBallKickTarget()
     LOG_INFO("Passing to teammate at:" << kickTarget)
     return kickTarget;
   } else {
-    //! Assign opponent goal as the target of the robot. Opponent goal is in positive X
+    ///< Assign opponent goal as the target of the robot. Opponent goal is in positive X
     kickTarget = cv::Point_<float>(goalPostX, MathsUtils::sign(pose.getY()) * goalPostY / 2);
-    if (behindObstacle(kickTarget)) { //! Whether the target is behind an obstacle
+    if (behindObstacle(kickTarget)) { ///< Whether the target is behind an obstacle
       auto lTarget = kickTarget;
       auto rTarget = kickTarget;
       lTarget.y += 0.2;

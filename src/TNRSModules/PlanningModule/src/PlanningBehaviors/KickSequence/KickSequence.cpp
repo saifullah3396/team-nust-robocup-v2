@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/KickSequence.h
+ * @file PlanningBehaviors/KickSequence/KickSequence.h
  *
  * This file declares the class KickSequence.
  *
@@ -12,8 +12,8 @@
 #include "PlanningModule/include/PlanningBehaviors/KickSequence/Types/FindAndKick.h"
 
 boost::shared_ptr<KickSequence> KickSequence::getType(
-  PlanningModule* planningModule, const BehaviorConfigPtr& cfg) 
-{ 
+  PlanningModule* planningModule, const BehaviorConfigPtr& cfg)
+{
   KickSequence* ks;
   switch (cfg->type) {
       case toUType(PBKickSequenceTypes::BALL_INTERCEPT):

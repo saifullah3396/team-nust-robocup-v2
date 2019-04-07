@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/src/PBConfigs/PBKickSequenceConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/PBConfigs/PBKickSequenceConfig.cpp
  *
  * This file defines the struct PBKickSequenceConfig and its childs
  *
@@ -13,7 +13,7 @@ DEFINE_BEHAVIOR_CONFIG(
   PBKickSequenceConfig, PBConfig, PBKickSequenceConfigPtr,
   (PBKickSequenceTypes, ballIntercept, BallInterceptConfig),
   (PBKickSequenceTypes, findAndKick, FindAndKickConfig),
-)
+);
 
 void BallInterceptConfig::init() {}
 void BallInterceptConfig::validate() {}

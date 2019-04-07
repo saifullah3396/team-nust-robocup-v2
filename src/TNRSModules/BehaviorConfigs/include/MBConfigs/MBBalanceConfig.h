@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h
  *
  * This file declares the structs MBBalanceConfig, MPComControlConfig,
  * PIDComControlConfig, and ZmpControlConfig
@@ -31,7 +31,7 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   MBBalanceTypes,
   (LinkChains, supportLeg, LinkChains::lLeg),
   (float, timeToReachB, 2.0),
-)
+);
 
 /**
  * @struct MPComControlConfig
@@ -42,7 +42,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE(
   MBBalanceConfig,
   MBBalanceTypes::mpComControl,
   MPComControlConfigPtr
-)
+);
 
 /**
  * @struct PIDComControlConfig
@@ -53,7 +53,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE(
   MBBalanceConfig,
   MBBalanceTypes::pidComControl,
   PIDComControlConfigPtr
-)
+);
 
 /**
  * @struct ZmpControlConfig
@@ -70,4 +70,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (bool, regularizeIk, true),
   (vector<unsigned>, activeJoints, vector<unsigned>()),
   (Eigen::Vector2f, target, Eigen::Vector2f()),
-)
+);

@@ -1,10 +1,10 @@
 /**
- * @file Utils/include/PolySpline.h
+ * @file Utils/src/Splines/PolySpline.cpp
  *
  * This file implements the class PolySpline
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 12 Aug 2017  
+ * @date 12 Aug 2017
  */
 
 #include "Utils/include/Splines/PolySpline.h"
@@ -17,15 +17,15 @@ PolySpline<Scalar>::PolySpline(
   const unsigned& degree,
   const unsigned& dim,
   const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-  const Matrix<Scalar, Dynamic, 1>& knots, 
-  const Scalar& stepSize, 
+  const Matrix<Scalar, Dynamic, 1>& knots,
+  const Scalar& stepSize,
   const Matrix<Scalar, Dynamic, Dynamic>& boundaryConds) :
   Spline<Scalar>(
     degree,
-    dim, 
-    controlPoints, 
+    dim,
+    controlPoints,
     knots,
-    stepSize,  
+    stepSize,
     PIECE_WISE_POLY),
   boundaryConds(boundaryConds)
 {
@@ -36,22 +36,22 @@ PolySpline<Scalar>::PolySpline(
   const unsigned& degree,
   const unsigned& dim,
   const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-  const Scalar& splineTime, 
-  const Scalar& stepSize, 
+  const Scalar& splineTime,
+  const Scalar& stepSize,
   const Matrix<Scalar, Dynamic, Dynamic>& boundaryConds) :
   Spline<Scalar>(
     degree,
-    dim, 
-    controlPoints, 
+    dim,
+    controlPoints,
     splineTime,
-    stepSize,  
+    stepSize,
     PIECE_WISE_POLY),
   boundaryConds(boundaryConds)
 {
 }
 
 template <typename Scalar>
-PolySpline<Scalar>::PolySpline(const string& filePath) : 
+PolySpline<Scalar>::PolySpline(const string& filePath) :
   Spline<Scalar>(filePath)
 {
   PolySpline<Scalar>::splineFromXml(filePath);
@@ -230,35 +230,32 @@ void PolySpline<Scalar>::splineFromXml(const string& filePath)
   fs.close();
   try {
     BOOST_FOREACH(const boost::property_tree::ptree::value_type &v, pt.get_child("spline")) {
-      //! Parsing attributes
-      if (v.first == "boundary_conditions") { //! parsing coefficients
+      ///< Parsing attributes
+      if (v.first == "boundary_conditions") { ///< parsing coefficients
         size_t i = 0;
         BOOST_FOREACH(const boost::property_tree::ptree::value_type &v, v.second) {
           if (v.first == "<xmlattr>") {
             boundaryType = v.second.get_child("type").data();
             if (boundaryType != "clamped" && boundaryType != "natural")
               throw SplineException<Scalar>(
-                this, 
-                "Invalid type specified for boundary conditions.", 
-                false, 
-                SplineExceptionType::EXC_INVALID_XML);
+                this,
+                "Invalid type specified for boundary conditions.",
+                false);
             boundaryConds.resize(2, this->dim);
           } else {
             if (i >= boundaryConds.rows()) {
               throw SplineException<Scalar>(
-                this, 
-                "Boundary conditions matrix row size mismatch.", 
-                false, 
-                SplineExceptionType::EXC_INVALID_XML);
+                this,
+                "Boundary conditions matrix row size mismatch.",
+                false);
             }
             size_t j = 0;
             BOOST_FOREACH(const boost::property_tree::ptree::value_type &v, v.second) {
               if (j >= this->dim) {
                 throw SplineException<Scalar>(
-                  this, 
-                  "Boundary conditions matrix column size mismatch.", 
-                  false, 
-                  SplineExceptionType::EXC_INVALID_XML
+                  this,
+                  "Boundary conditions matrix column size mismatch.",
+                  false
                 );
               }
               boundaryConds(i, j) = boost::lexical_cast<Scalar>(v.second.data());

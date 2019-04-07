@@ -166,7 +166,7 @@ template<typename Scalar>
 void Joint<Scalar>::makeDHMatrixSym()
 {
   #ifdef ALLOW_SYMBOLIC_COMPUTATIONS
-  //! Symbolic transformation matrix for this joint
+  ///< Symbolic transformation matrix for this joint
   symTrans =
     DenseMatrix(
       4, 4,

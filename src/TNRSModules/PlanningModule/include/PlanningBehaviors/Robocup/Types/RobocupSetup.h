@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/RobocupSetup.h
+ * @file PlanningBehaviors/Robocup/Types/RobocupSetup.h
  *
  * This file declares the class RobocupSetup.
  *

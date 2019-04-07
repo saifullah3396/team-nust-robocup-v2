@@ -21,24 +21,24 @@ void ComEstimator<Scalar, MeasSize>::init(
 {
   Matrix<Scalar, 3, 3> A, Q;
   Matrix<Scalar, 3, 1> B;
-  //! State Transition Matrix A
-  //! [ 1   dT  dT^2/2 ] [  x     ]
-  //! [ 0   1   dT     ] [  xdot  ]
-  //! [ 0   0   1      ] [  xddot ]
+  ///< State Transition Matrix A
+  ///< [ 1   dT  dT^2/2 ] [  x     ]
+  ///< [ 0   1   dT     ] [  xdot  ]
+  ///< [ 0   0   1      ] [  xddot ]
   A << 1.f, dT, dT * dT / 2, 0.f, 1.f, dT, 0.f, 0.f, 1.f;
-  //! Control Input Matrix B
-  //! [ dT^3/6 ]
-  //! [ dT^2/2 ]
-  //! [ dT ]
+  ///< Control Input Matrix B
+  ///< [ dT^3/6 ]
+  ///< [ dT^2/2 ]
+  ///< [ dT ]
   B << dT * dT * dT/ 6, dT * dT / 2, dT;
   C << 1, 0, -comHeight / Constants::gravity;
   model =
     boost::shared_ptr<ProcessModel<Scalar, 3, 1, 1> >(
       new ProcessModel<Scalar, 3, 1, 1> (A, B, C));
-  //! Process Noise Covariance Matrix Q
-  //! [ eX   0     0   ]
-  //! [ 0    eVX   0   ]
-  //! [ 0    0     eAx ]
+  ///< Process Noise Covariance Matrix Q
+  ///< [ eX   0     0   ]
+  ///< [ 0    eVX   0   ]
+  ///< [ 0    0     eAx ]
   Scalar procVar1, procVar2, procVar3;
   GET_CONFIG(
     "KinCalibration",
@@ -52,12 +52,12 @@ void ComEstimator<Scalar, MeasSize>::init(
   Q(2, 2) = procVar3;
   model->setNoiseCovMatrix(Q);
 
-  //! Initial state
+  ///< Initial state
   model->setState(initState);
-  //! Measure Matrix H
-  //! [ x    ] [ 1 0    0 ] [ x    ]
-  //! [ xddot] [ 0 0    1 ] [ xdot ]
-  //! [ zmp  ] [ 1 0 -z/g ] [ xddot]
+  ///< Measure Matrix H
+  ///< [ x    ] [ 1 0    0 ] [ x    ]
+  ///< [ xddot] [ 0 0    1 ] [ xdot ]
+  ///< [ zmp  ] [ 1 0 -z/g ] [ xddot]
   H << 1, 0, 0, 0, 0, 1, 1, 0, -comHeight / Constants::gravity;
   filter =
     boost::shared_ptr<KalmanFilter<Scalar, 3, 3, 1, 1> >(

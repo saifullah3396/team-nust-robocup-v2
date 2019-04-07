@@ -105,7 +105,7 @@ void RequestBehavior::ChestButtonWait::onRun() {
 
 void RequestBehavior::StartRequested::onRun() {
   try {
-    //! Read the json configuration
+    ///< Read the json configuration
     using namespace std;
     string jsonConfigPath;
     jsonConfigPath =
@@ -130,8 +130,8 @@ void RequestBehavior::StartRequested::onRun() {
     if (planningConfig) {
       PlanningRequestPtr request =
         boost::make_shared<RequestPlanningBehavior>(planningConfig);
-      //! Add in queue twice since first one is disregarded due to this
-      //! behavior already running
+      ///< Add in queue twice since first one is disregarded due to this
+      ///< behavior already running
       BaseModule::publishModuleRequest(request);
       BaseModule::publishModuleRequest(request);
     }

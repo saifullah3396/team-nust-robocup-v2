@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/TrajectoryPlanner/NloptConstraint.h
+ * @file MotionModule/include/TrajectoryPlanner/NloptConstraint.h
  *
  * This file declares the class NloptConstraint
  *
@@ -42,7 +42,7 @@ public:
   virtual Matrix<Scalar, Dynamic, 1> getValue() = 0;
 
 protected:
-  //! Tolerance vector
+  ///< Tolerance vector
   vector<Scalar> tols;
 
 private:

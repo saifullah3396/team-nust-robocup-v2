@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/LinesExtraction.h
+ * @file VisionModule/src/FeatureExtraction/LinesExtraction.cpp
  *
  * This file declares the class for field corners extraction from
  * the image.
@@ -9,23 +9,33 @@
  */
 
 #include <chrono>
+#include "LocalizationModule/include/FieldLandmarkIds.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/AngleDefinitions.h"
 #include "Utils/include/ConfigMacros.h"
+#include "Utils/include/DataHolders/RobotPose2D.h"
+#include "Utils/include/DataHolders/Landmark.h"
+#include "Utils/include/HardwareIds.h"
 #include "Utils/include/TNRSLine.h"
+#include "VisionModule/include/VisionModule.h"
+#include "VisionModule/include/CameraTransform.h"
+#include "VisionModule/include/ColorHandler.h"
 #include "VisionModule/include/FeatureExtraction/FieldExtraction.h"
 #include "VisionModule/include/FeatureExtraction/LinesExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
+#include "VisionModule/include/FeatureExtraction/RegionScanners.h"
 #include "VisionModule/include/FeatureExtraction/RobotExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RobotRegion.h"
 #include "VisionModule/include/FeatureExtraction/Circle.h"
 #include "VisionModule/include/FeatureExtraction/FittedLine.h"
+#include "VisionModule/include/FeatureExtraction/ScannedEdge.h"
+#include "VisionModule/include/FeatureExtraction/ScannedRegion.h"
 
 LinesExtraction::LinesExtraction(VisionModule* visionModule) :
   FeatureExtraction(visionModule),
   DebugBase("LinesExtraction", this)
 {
-  //! Initialize debug variables
+  ///< Initialize debug variables
   initDebugBase();
   int tempSendTime;
   int tempDrawScannedEdges;
@@ -65,7 +75,7 @@ LinesExtraction::LinesExtraction(VisionModule* visionModule) :
   SET_DVAR(int, displayInfo, tempDisplayInfo);
   SET_DVAR(int, displayOutput, tempDisplayOutput);
 
-  //! Get other feature extraction classes
+  ///< Get other feature extraction classes
   fieldExt = GET_FEATURE_EXT_CLASS(FieldExtraction, FeatureExtractionIds::field);
   regionSeg = GET_FEATURE_EXT_CLASS(RegionSegmentation, FeatureExtractionIds::segmentation);
   robotExt = GET_FEATURE_EXT_CLASS(RobotExtraction, FeatureExtractionIds::robot );
@@ -137,7 +147,7 @@ LinesExtraction::LinesExtraction(VisionModule* visionModule) :
     Scalar(255, 255, 255),
     5);
 
-  //! Initializing processing times
+  ///< Initializing processing times
   edgeScanTime = 0.f;
   fitLinesTime = 0.f;
   filterLinesTime = 0.f;
@@ -146,12 +156,15 @@ LinesExtraction::LinesExtraction(VisionModule* visionModule) :
   addLandmarksTime = 0.f;
   processTime = 0.f;
 
-  //currentImage = static_cast<unsigned>(CameraId::headBottom);
+  //activeCamera = static_cast<unsigned>(CameraId::headBottom);
 }
 
 Point LinesExtraction::worldToImage(const Point& point)
 {
   auto robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
+  robotPose2D.x() = 2.5;
+  robotPose2D.y() = -1.60;
+  robotPose2D.theta() = Angle::DEG_45;
   auto pointT = robotPose2D.transform(point);
   return Point(pointT.x * 100 + 500, 350 - pointT.y * 100);
 }
@@ -159,6 +172,9 @@ Point LinesExtraction::worldToImage(const Point& point)
 Point2f LinesExtraction::worldToImage(const Point2f& point)
 {
   auto robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
+  robotPose2D.x() = 2.5;
+  robotPose2D.y() = -1.60;
+  robotPose2D.theta() = Angle::DEG_45;
   auto pointT = robotPose2D.transform(point);
   return Point2f(pointT.x * 100 + 500, 350 - pointT.y * 100);
 }
@@ -166,29 +182,21 @@ Point2f LinesExtraction::worldToImage(const Point2f& point)
 void LinesExtraction::processImage()
 {
   auto tStart = high_resolution_clock::now();
-  /*static int imageResetCount = 0;
-  if (imageResetCount > 5) {
-    currentImage =
-      currentImage == static_cast<unsigned>(CameraId::headTop) ?
-      static_cast<unsigned>(CameraId::headBottom) : static_cast<unsigned>(CameraId::headTop);
-    imageResetCount = 0;
-  }
-  imageResetCount++;*/
   if (fieldExt->isFound()) {
     if (GET_DVAR(int, displayOutput))
       worldImage = mapDrawing.clone();//Scalar(0);
-    if (currentImage == static_cast<unsigned>(CameraId::headBottom)) {
+    if (activeCamera == CameraId::headBottom) {
       Point2f tempP;
-      cameraTransforms[currentImage]->imageToWorld(tempP, Point2f(0, 0), 0.f);
-      cameraTransforms[currentImage]->imageToWorld(tempP, Point2f(getImageWidth(), 0), 0.f);
-      cameraTransforms[currentImage]->imageToWorld(tempP, Point2f(getImageWidth(), getImageHeight()), 0.f);
-      cameraTransforms[currentImage]->imageToWorld(tempP, Point2f(0, getImageHeight()), 0.f);
+      cameraTransforms[toUType(activeCamera)]->imageToWorld(tempP, Point2f(0, 0), 0.f);
+      cameraTransforms[toUType(activeCamera)]->imageToWorld(tempP, Point2f(getImageWidth(), 0), 0.f);
+      cameraTransforms[toUType(activeCamera)]->imageToWorld(tempP, Point2f(getImageWidth(), getImageHeight()), 0.f);
+      cameraTransforms[toUType(activeCamera)]->imageToWorld(tempP, Point2f(0, getImageHeight()), 0.f);
     }
     vector<vector<ScannedEdgePtr> > connectedEdges;
     if (scanForEdges(connectedEdges)) {
       vector<FittedLinePtr> worldLines;
       findLinesFromEdges(connectedEdges, worldLines);
-      if (currentImage != static_cast<unsigned>(CameraId::headBottom)) {
+      if (activeCamera != CameraId::headBottom) {
         vector<Point2f> circlePoints;
         filterLines(worldLines, circlePoints);
         findFeatures(worldLines);
@@ -222,7 +230,7 @@ void LinesExtraction::processImage()
     LOG_INFO("Time taken by overall processing: " << processTime);
   }
   if (GET_DVAR(int, displayOutput)) {
-    VisionUtils::displayImage("LinesExtraction Image", bgrMat[currentImage]);
+    VisionUtils::displayImage("LinesExtraction Image", bgrMat[toUType(activeCamera)]);
     VisionUtils::displayImage("LinesExtraction World", worldImage);
   }
 }
@@ -231,114 +239,41 @@ bool LinesExtraction::scanForEdges(
   vector<vector<ScannedEdgePtr> >& connectedEdges)
 {
   auto tStart = high_resolution_clock::now();
+  auto verImagePoints = static_cast<LinesScan*>(regionSeg->getVerticalScan(ScanTypes::lines))->edgePoints;
+  auto horImagePoints = static_cast<LinesScan*>(regionSeg->getHorizontalScan(ScanTypes::lines))->edgePoints;
   auto border = fieldExt->getBorder();
-  auto fHeight = fieldExt->getFieldHeight();
   auto robotRegions = robotExt->getRobotRegions();
   if (border.empty()) {
     duration<double> timeSpan = high_resolution_clock::now() - tStart;
     edgeScanTime = timeSpan.count();
     return false;
   }
-  vector<Point2f> verImagePoints;
-  vector<Point2f> horImagePoints;
+  auto iter = verImagePoints.begin();
+  while (iter != verImagePoints.end()) {
+    if ((*iter).y > border[(*iter).x]) {
+      bool inRobotRegion = false;
+      for (const auto& rr : robotRegions) {
+        if (rr->sr->rect.contains((*iter))) {
+          inRobotRegion = true;
+          break;
+        }
+      }
+      if (!inRobotRegion)
+        ++iter;
+      else
+        iter = verImagePoints.erase(iter);
+    } else {
+      iter = verImagePoints.erase(iter);
+    }
+  }
+
+  auto scanStepHigh = regionSeg->getVerticalScan(ScanTypes::lines)->highStep;
   vector<Point2f> verWorldPoints;
   vector<Point2f> horWorldPoints;
-
-  srand(time(0));
-  int scanStepHigh, scanStepLow;
-  if (currentImage == static_cast<unsigned>(CameraId::headTop)) {
-    scanStepHigh = scanStepHighUpperCam;
-    scanStepLow = scanStepLowUpperCam;
-  } else {
-    scanStepHigh = scanStepHighLowerCam;
-    scanStepLow = scanStepLowLowerCam;
-  }
-  int horLineMaxSize = scanStepHigh * 2;
-  int scanStart = rand() % scanStepHigh + fHeight;
-  for (int y = scanStart; y < getImageHeight(); y = y + scanStepHigh) {
-    int horStartLine = -1;
-    int horStartLow = rand() % scanStepLow;
-    for (int x = horStartLow; x < getImageWidth(); x = x + scanStepLow) {
-      bool scan = true;
-      if (currentImage == static_cast<unsigned>(CameraId::headTop)) {
-        for (int j = 0; j < robotRegions.size(); ++j) {
-          if (!robotRegions[j]) continue;
-          if (robotRegions[j]->sr->rect.contains(Point(x, y))) {
-            scan = false;
-            break;
-          }
-        }
-      }
-      if (!scan) continue;
-      auto color = getYUV(x, y);
-      //! Horizontal Scanning
-      if (colorHandler->isColor(color, TNColors::white)) {
-        bgrMat[currentImage].at<Vec3b>(y, x) = Vec3b(0,0,255);
-        if (horStartLine == -1) {
-          horStartLine = x;
-        }/* else {
-          auto diff = x - horStartLine;
-          if (diff >= horLineMaxSize) {
-            horStartLine = -1;
-          }
-        }*/
-      } else {
-        if (horStartLine != -1) {
-          auto diff = abs(x - horStartLine);
-          if (diff >= scanStepLow) {
-            auto index = (horStartLine + x - scanStepLow) / 2;
-            horImagePoints.push_back(Point2f(index, y));
-          }
-        }
-        horStartLine = -1;
-      }
-    }
-  }
-  int verLineMaxSize = scanStepHigh * 2;
-  scanStart = rand() % scanStepHigh;
-  for (int x = scanStart; x < getImageWidth(); x = x + scanStepHigh) {
-    int verStartLine = -1;
-    int verStartLow = rand() % scanStepLow;
-    if (currentImage == static_cast<unsigned>(CameraId::headTop))
-      verStartLow += border[x].y;
-    for (int y = verStartLow; y < getImageHeight(); y = y + scanStepLow) {
-      bool scan = true;
-      if (currentImage == static_cast<unsigned>(CameraId::headTop)) {
-        for (int j = 0; j < robotRegions.size(); ++j) {
-          if (!robotRegions[j]) continue;
-          if (robotRegions[j]->sr->rect.contains(Point(x, y))) {
-            scan = false;
-            break;
-          }
-        }
-      }
-      if (!scan) continue;
-      auto color = getYUV(x, y);
-      if (colorHandler->isColor(color, TNColors::white)) {
-        if (verStartLine == -1) {
-          verStartLine = y;
-        }/* else {
-          auto diff = y - verStartLine;
-          if (diff >= verLineMaxSize)
-            verStartLine = -1;
-        }*/
-      } else {
-        if (verStartLine != -1) {
-          auto diff = y - verStartLine;
-          if (diff >= scanStepLow) {
-            auto index = (verStartLine + y - scanStepLow) / 2;
-            verImagePoints.push_back(Point2f(x, index));
-          }
-        }
-        verStartLine = -1;
-      }
-    }
-  }
-
   vector<ScannedEdgePtr> verLineEdges;
   vector<ScannedEdgePtr> horLineEdges;
   if (!verImagePoints.empty()) {
-    cameraTransforms[currentImage]->imageToWorld(
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(
       verWorldPoints,
       verImagePoints,
       0.0);
@@ -352,7 +287,7 @@ bool LinesExtraction::scanForEdges(
       connectedEdges, verLineEdges, scanStepHigh * 2.5, scanStepHigh, true);
   }
   if (!horImagePoints.empty()) {
-    cameraTransforms[currentImage]->imageToWorld(
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(
       horWorldPoints,
       horImagePoints,
       0.0);
@@ -366,8 +301,8 @@ bool LinesExtraction::scanForEdges(
       connectedEdges, horLineEdges, scanStepHigh, scanStepHigh * 2.5, false);
   }
   if (GET_DVAR(int, drawScannedEdges)) {
-    //VisionUtils::drawPoints(horImagePoints, bgrMat[currentImage]);
-    //VisionUtils::drawPoints(verImagePoints, bgrMat[currentImage]);
+    VisionUtils::drawPoints(horImagePoints, bgrMat[toUType(activeCamera)]);
+    VisionUtils::drawPoints(verImagePoints, bgrMat[toUType(activeCamera)]);
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   edgeScanTime = timeSpan.count();
@@ -417,7 +352,7 @@ void LinesExtraction::findConnectedEdges(
     if (se->bestTo) continue;
     auto neighbor = se->pred;
     auto minDist = 1000;
-    //se->draw(bgrMat[currentImage], Scalar(255, 0, 0));
+    //se->draw(bgrMat[toUType(activeCamera)], Scalar(255, 0, 0));
     while (neighbor) {
       auto diffX = se->pI.x - neighbor->pI.x;
       diffX *= diffX;
@@ -430,13 +365,13 @@ void LinesExtraction::findConnectedEdges(
       {
         se->bestNeighbor = neighbor;
         //cout << "bestNeighbor asigned..." << endl;
-        //neighbor->draw(bgrMat[currentImage], Scalar(0, 0, 255));
+        //neighbor->draw(bgrMat[toUType(activeCamera)], Scalar(0, 0, 255));
       } else if (se->bestNeighbor) {
         break;
       }
       minDist = std::min(sqrdDist, minDist);
       neighbor = neighbor->pred;
-      //imshow("bgr", bgrMat[currentImage]);
+      //imshow("bgr", bgrMat[toUType(activeCamera)]);
       //waitKey(0);
     }
     if (se->bestNeighbor) {
@@ -456,11 +391,11 @@ void LinesExtraction::findConnectedEdges(
   }
   /*for (const auto& se : scannedEdges) {
     if (se) {
-    se->draw(bgrMat[currentImage], Scalar(255, 0, 0));
+    se->draw(bgrMat[toUType(activeCamera)], Scalar(255, 0, 0));
     if (se->bestNeighbor)
-      se->bestNeighbor->draw(bgrMat[currentImage], Scalar(0, 0, 255));
+      se->bestNeighbor->draw(bgrMat[toUType(activeCamera)], Scalar(0, 0, 255));
     cout << "bestTo:" << se->bestTo << endl;
-    imshow("bgr", bgrMat[currentImage]);
+    imshow("bgr", bgrMat[toUType(activeCamera)]);
     waitKey(0);
     }
   }*/
@@ -473,11 +408,11 @@ void LinesExtraction::findConnectedEdges(
       groupedEdges.push_back(se);
       auto neighbor = se->bestNeighbor;
       auto prevAngle = se->angleW;
-      //se->draw(bgrMat[currentImage], Scalar(255,0,0));
+      //se->draw(bgrMat[toUType(activeCamera)], Scalar(255,0,0));
       while (neighbor && !neighbor->searched) {
         neighbor->searched = true;
-        //neighbor->draw(bgrMat[currentImage], Scalar(255,255,0));
-        //imshow("bgr", bgrMat[currentImage]);
+        //neighbor->draw(bgrMat[toUType(activeCamera)], Scalar(255,255,0));
+        //imshow("bgr", bgrMat[toUType(activeCamera)]);
         //waitKey(0);
         //cout << "neighbor->angleW: " << neighbor->angleW * MathsUtils::RAD_TO_DEG<< endl;
         //cout << "prevAngle: " << prevAngle * MathsUtils::RAD_TO_DEG << endl;
@@ -486,12 +421,12 @@ void LinesExtraction::findConnectedEdges(
             connectedEdges.push_back(groupedEdges);
             groupedEdges.clear();
           }
-          //neighbor->draw(bgrMat[currentImage], Scalar(255,0,0));
+          //neighbor->draw(bgrMat[toUType(activeCamera)], Scalar(255,0,0));
         }
         groupedEdges.push_back(neighbor);
         prevAngle = neighbor->angleW;
         neighbor = neighbor->bestNeighbor;
-        //imshow("bgr", bgrMat[currentImage]);
+        //imshow("bgr", bgrMat[toUType(activeCamera)]);
         //waitKey(0);
       }
       if (groupedEdges.size() >= minChainLength) {
@@ -500,12 +435,12 @@ void LinesExtraction::findConnectedEdges(
     }
   }
   /*
-  Mat test = bgrMat[currentImage].clone();
+  Mat test = bgrMat[toUType(activeCamera)].clone();
   for (size_t i = 0; i < connectedEdges.size(); ++i) {
     cout << "i: " << i << endl;
-    bgrMat[currentImage] = test.clone();
-    ScannedEdge::drawEdges(bgrMat[currentImage], connectedEdges[i], Scalar(255, 0,0));
-    imshow("bgr", bgrMat[currentImage]);
+    bgrMat[toUType(activeCamera)] = test.clone();
+    ScannedEdge::drawEdges(bgrMat[toUType(activeCamera)], connectedEdges[i], Scalar(255, 0,0));
+    imshow("bgr", bgrMat[toUType(activeCamera)]);
     waitKey(0);
   }*/
 }
@@ -551,6 +486,8 @@ void LinesExtraction::findLinesFromEdges(
         if (pointsCnt >= 0.95 * ce.size())
           break;
       }
+      if (ce.size() < 3)
+        break;
       do {
         p1 =
           ce[(int) (dist(rng) * ce.size())]->pW;
@@ -576,7 +513,9 @@ void LinesExtraction::findLinesFromEdges(
         }
         Point2f minP = collinearPoints[0];
         Point2f maxP = collinearPoints.back();
-        auto fl = boost::make_shared<FittedLine> (minP, maxP);
+        auto fl = boost::make_shared<FittedLine> ();
+        fl->p1 = minP;
+        fl->p2 = maxP;
         fl->diff = maxP - minP;
         fl->d = norm(fl->diff);
         fl->perp = Point2f(bestNx, bestNy);
@@ -616,12 +555,12 @@ void LinesExtraction::filterLines(
   auto tStart = high_resolution_clock::now();
   auto borderLines = fieldExt->getBorderLinesWorld();
   FittedLinePtr borderLine;
-  //cout << "borderLines.size(): " << borderLines.size() << endl;
-  if (borderLines.size() > 1) {
-    borderLine =
-      borderLines[0]->d > borderLines[1]->d ? borderLines[0] : borderLines[1];
-  } else {
-    borderLine = borderLines[0];
+  auto maxLen = 0;
+  for (const auto& line : borderLines) {
+    if (line->d > maxLen) {
+      borderLine = line;
+      maxLen = line->d;
+    }
   }
   if(GET_DVAR(int, drawBorderLines)) {
     auto p11 = worldToImage(borderLine->p1);
@@ -633,25 +572,25 @@ void LinesExtraction::filterLines(
   angleL = angleL < 0 ? M_PI + angleL : angleL;
   const auto minDistFromBorder = 0.1f;
 
-  //! Filter lines based on relationship with border line
+  ///< Filter lines based on relationship with border line
   for (auto& wl : worldLines) {
     if (!wl) continue;
-    //! Find perpendicular distance from border line
+    ///< Find perpendicular distance from border line
     auto dist = borderLine->findShortest(*wl);
-    //! Reject line if it is too close to border perpendicularly
+    ///< Reject line if it is too close to border perpendicularly
     if (fabsf(dist) < minDistFromBorder) {
       //cout << "Too close to border... rejected" << endl;
       wl.reset();
       continue;
     }
 
-    //! Find intersection with border line
+    ///< Find intersection with border line
     Point2f inter;
     if (wl->findIntersection(*borderLine, inter)) {
       auto diff1 = norm(inter - wl->p1);
       auto diff2 = norm(inter - wl->p2);
       auto ratio = diff1 / wl->d + diff2 / wl->d;
-      //! Reject line if it is intersecting with the border
+      ///< Reject line if it is intersecting with the border
       if (diff1 < 0.35 || diff2 < 0.35 || (ratio > 0.9 && ratio < 1.1)) {
         //cout << "Intersecting with border... rejected" << endl;
         wl.reset();
@@ -659,22 +598,22 @@ void LinesExtraction::filterLines(
       }
     }
 
-    //! Find line angle and compare with borderline angle
+    ///< Find line angle and compare with borderline angle
     wl->angle = atan2(wl->unit.y, wl->unit.x);
     wl->angle = wl->angle < 0 ? M_PI + wl->angle : wl->angle;
     //cout << "wl->angle: " << wl->angle * 180 / 3.14 << endl;
     auto angleD = abs(wl->angle - angleL);
-    //! 15-75 degrees the difference between border line angle and the estimated world line angle
-    //! Might have to increase the tolerance in real world
+    ///< 15-75 degrees the difference between border line angle and the estimated world line angle
+    ///< Might have to increase the tolerance in real world
     if (angleD >= Angle::DEG_15 && angleD <= Angle::DEG_75) {
-      //! If line is far from border, add it as circle line
+      ///< If line is far from border, add it as circle line
       if (wl->d < 1.0f && fabsf(dist) > 2.5f) {
         auto points = *(wl->points);
         //line(worldImage, worldToImage(wl->p1),  worldToImage(wl->p2), Scalar(255,0,255), 1);
         //cout << "circleLine: "<< endl;
         circlePoints.insert(circlePoints.begin(), points.begin(), points.end());
         wl->circleLine = true;
-      } else { //! Reject line if it is not far yet too far in angles from border
+      } else { ///< Reject line if it is not far yet too far in angles from border
         wl.reset();
         //cout << "Not parallel or perpendicular to border... rejected" << endl;
         continue;
@@ -683,15 +622,15 @@ void LinesExtraction::filterLines(
   }
 
   const auto minLineFilterDist = 0.1f;
-  //! Filter lines by removing overlapping parts and joining them into one line
+  ///< Filter lines by removing overlapping parts and joining them into one line
   for (auto& wl1 : worldLines) {
     if (!wl1 || wl1->circleLine) continue;
     vector<Point2f> collinearPoints;
     for (auto& wl2 : worldLines) {
       if (!wl2 || wl2 == wl1 || wl2->circleLine) continue;
-      //! Find the angle between the lines
+      ///< Find the angle between the lines
       if (fabsf(wl2->angle - wl1->angle) < Angle::DEG_15) {
-        //! Find the perpendicular distance between the lines
+        ///< Find the perpendicular distance between the lines
         auto dist = wl2->findShortest(*wl1);
         if (fabsf(dist) < minLineFilterDist) {
           collinearPoints.push_back(wl1->p1);
@@ -832,14 +771,16 @@ void LinesExtraction::findFeatures(vector<FittedLinePtr>& worldLines)
   //}
   static auto padding = 20;
   static auto interImageBox = cv::Rect(padding, padding, getImageWidth() - padding * 2, getImageHeight() - padding * 2);
-  for (const auto& wl1 : worldLines) {
+  for (size_t i = 0; i < worldLines.size(); ++i) {
+    const auto& wl1 = worldLines[i];
     if (!wl1 || wl1->circleLine) continue;
-    for (const auto& wl2 : worldLines) {
+    for (size_t j = i; j < worldLines.size(); ++j) {
+      const auto& wl2 = worldLines[j];
       if (!wl2 || wl2 == wl1 || wl2->circleLine) continue;
       Point2f inter;
       if (wl1->findIntersection(*wl2, inter)) {
         Point2f imageP;
-        cameraTransforms[currentImage]->worldToImage(
+        cameraTransforms[toUType(activeCamera)]->worldToImage(
           Point3f(inter.x, inter.y, 0.f), imageP);
         if (!interImageBox.contains(imageP))
           continue;
@@ -855,7 +796,7 @@ void LinesExtraction::findFeatures(vector<FittedLinePtr>& worldLines)
       auto unit1 = Point2f(diff1.x / d1, diff1.y / d1);
       if (unit1.x / wl1->unit.x < 0 && d1 < 0.2) {
         intersection1 = true;
-      } else if (d1 - wl1->d < 0.3) { //! Within 30 centimeters ahead of p2
+      } else if (d1 - wl1->d < 0.3) { ///< Within 30 centimeters ahead of p2
         auto r = d1 / wl1->d;
         if (r > 0.05 && r < 0.95)
           center1 = true;
@@ -867,7 +808,7 @@ void LinesExtraction::findFeatures(vector<FittedLinePtr>& worldLines)
         auto unit2 = Point2f(diff2.x / d2, diff2.y / d2);
         if (unit2.x / wl2->unit.x < 0 && d2 < 0.2) {
           intersection2 = true;
-        } else if (d2 - wl2->d < 0.3) { //! Within 30 centimeters ahead of p2
+        } else if (d2 - wl2->d < 0.3) { ///< Within 30 centimeters ahead of p2
           auto r = d2 / wl2->d;
           if (r > 0.05 && r < 0.95)
             center2 = true;
@@ -1033,7 +974,7 @@ bool LinesExtraction::findCircle(Circle& circleOutput, vector<Point2f>& circlePo
         break;
       Point2f p1 = circlePoints[(int) (dist(rng) * circlePoints.size())];
       Point2f p2 = circlePoints[(int) (dist(rng) * circlePoints.size())];
-      //! Make a circle for two points
+      ///< Make a circle for two points
       auto circles = Circle::pointsToCircle(p1, p2, radius);
       for (size_t c = 0; c < circles.size(); ++c) {
         int numPoints = 0;
@@ -1145,7 +1086,7 @@ void LinesExtraction::addLineLandmarks(vector<FittedLinePtr>& worldLines)
   auto tStart = high_resolution_clock::now();
   int count = 0;
   float nDiv;
-  nDiv = currentImage == static_cast<unsigned>(CameraId::headTop) ? 0.2 : 0.05;
+  nDiv = activeCamera == CameraId::headTop ? 0.2 : 0.05;
   for (size_t i = 0; i < worldLines.size(); ++i) {
     if (!worldLines[i]) continue;
     auto wl = worldLines[i];

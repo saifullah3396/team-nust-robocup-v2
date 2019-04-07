@@ -1,5 +1,5 @@
 /**
- * @file TeamComm/TeamComm.h
+ * @file GameCommModule/include/TeamComm.h
  *
  * This file declares the class TeamComm
  *
@@ -76,18 +76,18 @@ private:
    */
   void updateTeamData(const SPLStandardMessage& msg);
 
-  //! Port to be used for udp communication. Team ports are setup as
-  //! 10000 + teamNumber whereas teamNumber is defined in
-  //! Config/TeamSettings.
+  ///< Port to be used for udp communication. Team ports are setup as
+  ///< 10000 + teamNumber whereas teamNumber is defined in
+  ///< Config/TeamSettings.
   unsigned short port;
 
-  //! UdpComm class object for udp connection management.
+  ///< UdpComm class object for udp connection management.
   UdpComm udpComm;
 
-  //! GameCommModule pointer
+  ///< GameCommModule pointer
   GameCommModule* gameCommModule;
 
-  //! The receive queus for SPLStandardMessage.
+  ///< The receive queus for SPLStandardMessage.
   ThreadSafeQueue<SPLStandardMessage> receiveQueue;
 };
 

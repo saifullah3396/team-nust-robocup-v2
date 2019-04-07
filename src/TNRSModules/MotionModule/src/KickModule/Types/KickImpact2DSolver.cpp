@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/KickModule/Types/KickImpact2DSolver.cpp
+ * @file MotionModule/src/KickModule/Types/KickImpact2DSolver.cpp
  *
  * This file implements the class to KickImpact2DSolver
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
@@ -186,21 +186,21 @@ void KickImpact2DSolver<Scalar>::ineqConstraints(unsigned nCons, double *result,
 /*double
 KickImpact2DSolver<Scalar>::getDesBallVel(const double& phi)
 {
-  //! Solving ball distance equation which is made up of two parts;
-  //! Distance covered by the ball under static friction
-  //! 2as1 = vf1^2 - vi1^2
-  //!   where vf1 = 2/7*R*wi1 + 5/7*vi1
-  //! => s1 = (vf1^2 - vi1^2) / (-2*mu_s*g)
-  //! The distance covered after rolling under damped motion
-  //! s2 = vf1 / damping;
-  //!   since vi2 = vf1;
-  //! The resulting equation can be found by s = s1 + s2;
-  //! After the impact the angular velocity remains the same in the direction of its 
-  //! initial motion
+  ///< Solving ball distance equation which is made up of two parts;
+  ///< Distance covered by the ball under static friction
+  ///< 2as1 = vf1^2 - vi1^2
+  ///<   where vf1 = 2/7*R*wi1 + 5/7*vi1
+  ///< => s1 = (vf1^2 - vi1^2) / (-2*mu_s*g)
+  ///< The distance covered after rolling under damped motion
+  ///< s2 = vf1 / damping;
+  ///<   since vi2 = vf1;
+  ///< The resulting equation can be found by s = s1 + s2;
+  ///< After the impact the angular velocity remains the same in the direction of its 
+  ///< initial motion
   double& R = ballRadius;
-  //! Find the angular velocity in the direction of final motion of ball
-  //! This is necessary since initial and final angles can differ and therefore
-  //! component of angular velocity in final direction of motion is taken
+  ///< Find the angular velocity in the direction of final motion of ball
+  ///< This is necessary since initial and final angles can differ and therefore
+  ///< component of angular velocity in final direction of motion is taken
   double omega = iBallVel[0] / R * cos(iBallVel[1] - phi);
   double a = 12 / (49 * sf * Constants::gravity);
   double b = 5.0 / (7 * coeffDamping) - 10 * ballRadius * omega / (49 * sf * Constants::gravity);
@@ -229,39 +229,39 @@ void KickImpact2DSolver<Scalar>::optDef()
 	
 	//Scalar contactAngle; // phi opt var 1
 	
-  //! Objective function to minimize is virtualMass x velocity;
-  //! Hessian for this objective function is unknown.
-  //! Gradient for this function is unknown.
-  //! 6 variables; 
-  //! Euler Angle about X, 
-  //! Euler Angle about Y, 
-  //! end-effector contour parameter t
-  //! Angle of contact with ball
-  //! End effector initial velocity
-  //! End effector initial velocity angle
+  ///< Objective function to minimize is virtualMass x velocity;
+  ///< Hessian for this objective function is unknown.
+  ///< Gradient for this function is unknown.
+  ///< 6 variables; 
+  ///< Euler Angle about X, 
+  ///< Euler Angle about Y, 
+  ///< end-effector contour parameter t
+  ///< Angle of contact with ball
+  ///< End effector initial velocity
+  ///< End effector initial velocity angle
   unsigned numVars = 6;
   nlopt::opt opt(nlopt::LN_COBYLA, numVars);
   vector<double> lb(numVars), ub(numVars), var0(numVars), constraintTols;
   //These are not euler angles rather they are fixed angle rotations.
-  lb[0] = -5.0 * M_PI / 180.0; //! Lower bound for x-angle. 
-  lb[1] = -10.0 * M_PI / 180.0; //! Lower bound for y-angle. 
-  lb[2] = 0.0; //! Lower bound for parameterized curve [0...1].
-  lb[3] = kickPtr->targetAngle - 15 * M_PI / 180; // -M_PI / 2;//! Lower bound for the angle of impact with the ball. -90 degrees
-  lb[4] = -0.5; //! Lower bound for the velocity magnitude of the end effector.
+  lb[0] = -5.0 * M_PI / 180.0; ///< Lower bound for x-angle. 
+  lb[1] = -10.0 * M_PI / 180.0; ///< Lower bound for y-angle. 
+  lb[2] = 0.0; ///< Lower bound for parameterized curve [0...1].
+  lb[3] = kickPtr->targetAngle - 15 * M_PI / 180; // -M_PI / 2;///< Lower bound for the angle of impact with the ball. -90 degrees
+  lb[4] = -0.5; ///< Lower bound for the velocity magnitude of the end effector.
   if (kickPtr->kickLeg == LinkChains::rLeg)
-		lb[5] = -10.f * M_PI / 180.f; //! Upper bound for the end effector angle of velocity. 10 degrees
+		lb[5] = -10.f * M_PI / 180.f; ///< Upper bound for the end effector angle of velocity. 10 degrees
 	else
-		lb[5] = -M_PI / 2; //! Upper bound for the end effector angle of velocity. -90 degrees
+		lb[5] = -M_PI / 2; ///< Upper bound for the end effector angle of velocity. -90 degrees
   
-  ub[0] = 5.0 * M_PI / 180.0; //! Upper bound for x-angle. 
-  ub[1] = 10.0 * M_PI / 180.0; //! Upper bound for y-angle. 
-  ub[2] = 1.0; //! Upper bound for parameterized curve [0...1].
-  ub[3] = kickPtr->targetAngle + 15 * M_PI / 180; // M_PI / 2;//! Upper bound for the angle of impact with the ball. 90 degrees
-  ub[4] = 1.2f; //! Upper bound for the velocity magnitude of the end effector.
+  ub[0] = 5.0 * M_PI / 180.0; ///< Upper bound for x-angle. 
+  ub[1] = 10.0 * M_PI / 180.0; ///< Upper bound for y-angle. 
+  ub[2] = 1.0; ///< Upper bound for parameterized curve [0...1].
+  ub[3] = kickPtr->targetAngle + 15 * M_PI / 180; // M_PI / 2;///< Upper bound for the angle of impact with the ball. 90 degrees
+  ub[4] = 1.2f; ///< Upper bound for the velocity magnitude of the end effector.
   if (kickPtr->kickLeg == LinkChains::rLeg)
-		ub[5] = M_PI / 2; //! Upper bound for the end effector angle of velocity. -90 degrees
+		ub[5] = M_PI / 2; ///< Upper bound for the end effector angle of velocity. -90 degrees
 	else
-		ub[5] = 10.f * M_PI / 180.f; //! Upper bound for the end effector angle of velocity. 10 degrees
+		ub[5] = 10.f * M_PI / 180.f; ///< Upper bound for the end effector angle of velocity. 10 degrees
 		
   var0[0] = 0.f;
   var0[1] = 0.f;
@@ -270,7 +270,7 @@ void KickImpact2DSolver<Scalar>::optDef()
   var0[4] = 0.5f;
   var0[5] = kickPtr->targetAngle;
 
-  //! Joint velocity contraint for leg joints;
+  ///< Joint velocity contraint for leg joints;
   unsigned nCons = kM->getLinkChain(kickPtr->kickLeg)->size;
   for (int i = 0; i < nCons; ++i) {
     constraintTols.push_back(1e-8);

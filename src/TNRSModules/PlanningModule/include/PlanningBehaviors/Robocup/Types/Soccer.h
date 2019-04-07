@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/Robocup/Types/Soccer.h
+ * @file PlanningBehaviors/Robocup/Types/Soccer.h
  *
  * This file declares the class Soccer
  *
@@ -56,7 +56,7 @@ protected:
   DECLARE_FSM_STATE(Soccer, Getup, getup, onStart, onRun,)
   DECLARE_FSM_STATE(Soccer, WaitForPenalty, waitForPenalty, onStart, onRun,)
 
-  //! Pure
+  ///< Pure
   virtual bool shouldPlayBall();
   virtual bool ballInRange() = 0;
   virtual void goToBall(const float& distFromBall);
@@ -65,10 +65,10 @@ protected:
   virtual bool alignedToKick();
   virtual bool behindObstacle(const Point2f& target);
 
-  const float goalPosTol = 0.25f; //! 0.25 meters
-  const float goalAngleTol = 0.261666667; //! 15 degrees in radians
-  const float ballKickDist = 0.25f; //! 0.2 meters
-  const float ballMovedVelMin = 0.5f; //! 0.5 meters / s
+  const float goalPosTol = 0.25f; ///< 0.25 meters
+  const float goalAngleTol = 0.261666667; ///< 15 degrees in radians
+  const float ballKickDist = 0.25f; ///< 0.2 meters
+  const float ballMovedVelMin = 0.5f; ///< 0.5 meters / s
   Point2f lastKickTarget;
 
   static float coeffDamping;

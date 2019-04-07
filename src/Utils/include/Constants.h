@@ -1,3 +1,12 @@
+/**
+ * @file Utils/include/Constants.h
+ *
+ * This file defines the constants used in the code.
+ *
+ * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
+ * @date 05 Feb 2017
+ */
+
 #pragma once
 
 #include <string>
@@ -5,8 +14,8 @@
 
 namespace Constants
 {
-  const double infinity = 1e12; //! Definition of infinity
-  const double gravity = 9.80665; //! Gravitational acceleration
+  const double infinity = 1e12; ///< Definition of infinity
+  const double gravity = 9.80665; ///< Gravitational acceleration
 
   const double shoulderOffsetY = 0.098;
   const double elbowOffsetY = 0.015;

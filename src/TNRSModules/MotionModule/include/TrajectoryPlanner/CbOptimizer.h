@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/TrajectoryPlanner/CbOptimizer.h
+ * @file MotionModule/include/TrajectoryPlanner/CbOptimizer.h
  *
  * This file declares the class CbOptimizer
  *
@@ -140,16 +140,16 @@ private:
 
   CubicSpline<Scalar>* cb;
 
-  //! Vector of constraints
+  ///< Vector of constraints
   vector<boost::shared_ptr<NloptConstraint<Scalar>> > constraints;
 
-  //! Matrix defining the end-effector transformation frame from chain end
+  ///< Matrix defining the end-effector transformation frame from chain end
   Matrix<Scalar, 4, 4> endEffector;
   
-  //! Number of inner points to be used for evaluation for each knot
+  ///< Number of inner points to be used for evaluation for each knot
   unsigned innerPointsPerKnot;
 
-  //! Total number of inner points at which constraints are evaluated
+  ///< Total number of inner points at which constraints are evaluated
   unsigned nInnerPoints;
 
   Matrix<Scalar, Dynamic, 1> timesSeqU, timesSeqU2, timesSeqU3, timesSeqL, timesSeqL2, timesSeqL3;

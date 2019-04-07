@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/ExternalInterface.h
+ * @file PlanningModule/src/PlanningBehaviors/ExternalInterface/ExternalInterface.cpp
  *
  * This file declares the class ExternalInterface
  *

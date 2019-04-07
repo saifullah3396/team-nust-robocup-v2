@@ -1,5 +1,5 @@
 /**
- * @file Utils/src/RobotPose2D.cpp
+ * @file Utils/src/DataHolders/RobotPose2D.cpp
  *
  * This file implements the struct RobotPose2D
  *
@@ -42,7 +42,7 @@ Json::Value RobotPose2D<Scalar>::getJson() const
 
 template <typename Scalar>
 template <typename OtherScalar>
-RobotPose2D<OtherScalar> RobotPose2D<Scalar>::transform(const RobotPose2D<OtherScalar>& p)
+RobotPose2D<OtherScalar> RobotPose2D<Scalar>::transform(const RobotPose2D<OtherScalar>& p) const
 {
   return
     RobotPose2D<OtherScalar>(
@@ -51,14 +51,14 @@ RobotPose2D<OtherScalar> RobotPose2D<Scalar>::transform(const RobotPose2D<OtherS
       MathsUtils::rangeToPi(p.getTheta() + getTheta())
     );
 }
-template RobotPose2D<float> RobotPose2D<float>::transform(const RobotPose2D<float>& p);
-template RobotPose2D<float> RobotPose2D<double>::transform(const RobotPose2D<float>& p);
-template RobotPose2D<double> RobotPose2D<float>::transform(const RobotPose2D<double>& p);
-template RobotPose2D<double> RobotPose2D<double>::transform(const RobotPose2D<double>& p);
+template RobotPose2D<float> RobotPose2D<float>::transform(const RobotPose2D<float>& p) const;
+template RobotPose2D<float> RobotPose2D<double>::transform(const RobotPose2D<float>& p) const;
+template RobotPose2D<double> RobotPose2D<float>::transform(const RobotPose2D<double>& p) const;
+template RobotPose2D<double> RobotPose2D<double>::transform(const RobotPose2D<double>& p) const;
 
 template <typename Scalar>
 template <typename OtherScalar>
-Matrix<OtherScalar, 3, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScalar, 3, 1>& p)
+Matrix<OtherScalar, 3, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScalar, 3, 1>& p) const
 {
   return
     Matrix<OtherScalar, 3, 1>(
@@ -67,28 +67,28 @@ Matrix<OtherScalar, 3, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScala
       MathsUtils::rangeToPi(p[2] + getTheta())
     );
 }
-template Matrix<float, 3, 1> RobotPose2D<float>::transform(const Matrix<float, 3, 1>& p);
-template Matrix<float, 3, 1> RobotPose2D<double>::transform(const Matrix<float, 3, 1>& p);
-template Matrix<double, 3, 1> RobotPose2D<float>::transform(const Matrix<double, 3, 1>& p);
-template Matrix<double, 3, 1> RobotPose2D<double>::transform(const Matrix<double, 3, 1>& p);
+template Matrix<float, 3, 1> RobotPose2D<float>::transform(const Matrix<float, 3, 1>& p) const;
+template Matrix<float, 3, 1> RobotPose2D<double>::transform(const Matrix<float, 3, 1>& p) const;
+template Matrix<double, 3, 1> RobotPose2D<float>::transform(const Matrix<double, 3, 1>& p) const;
+template Matrix<double, 3, 1> RobotPose2D<double>::transform(const Matrix<double, 3, 1>& p) const;
 
 template <typename Scalar>
 template <typename OtherScalar>
-Matrix<OtherScalar, 2, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScalar, 2, 1>& p)
+Matrix<OtherScalar, 2, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScalar, 2, 1>& p) const
 {
  return Matrix<OtherScalar, 2, 1>(
      getX() + p[0] * ct - p[1] * st,
      getY() + p[0] * st + p[1] * ct
  );
 }
-template Matrix<float, 2, 1> RobotPose2D<float>::transform(const Matrix<float, 2, 1>& p);
-template Matrix<float, 2, 1> RobotPose2D<double>::transform(const Matrix<float, 2, 1>& p);
-template Matrix<double, 2, 1> RobotPose2D<float>::transform(const Matrix<double, 2, 1>& p);
-template Matrix<double, 2, 1> RobotPose2D<double>::transform(const Matrix<double, 2, 1>& p);
+template Matrix<float, 2, 1> RobotPose2D<float>::transform(const Matrix<float, 2, 1>& p) const;
+template Matrix<float, 2, 1> RobotPose2D<double>::transform(const Matrix<float, 2, 1>& p) const;
+template Matrix<double, 2, 1> RobotPose2D<float>::transform(const Matrix<double, 2, 1>& p) const;
+template Matrix<double, 2, 1> RobotPose2D<double>::transform(const Matrix<double, 2, 1>& p) const;
 
 template <typename Scalar>
 template <typename OtherScalar>
-cv::Point_<OtherScalar> RobotPose2D<Scalar>::transform(const cv::Point_<OtherScalar>& p)
+cv::Point_<OtherScalar> RobotPose2D<Scalar>::transform(const cv::Point_<OtherScalar>& p) const
 {
   return
     cv::Point_<OtherScalar>(
@@ -96,12 +96,25 @@ cv::Point_<OtherScalar> RobotPose2D<Scalar>::transform(const cv::Point_<OtherSca
       getY() + p.x * st + p.y * ct
     );
 }
-template cv::Point_<int> RobotPose2D<float>::transform(const cv::Point_<int>& p);
-template cv::Point_<int> RobotPose2D<double>::transform(const cv::Point_<int>& p);
-template cv::Point_<float> RobotPose2D<float>::transform(const cv::Point_<float>& p);
-template cv::Point_<float> RobotPose2D<double>::transform(const cv::Point_<float>& p);
-template cv::Point_<double> RobotPose2D<float>::transform(const cv::Point_<double>& p);
-template cv::Point_<double> RobotPose2D<double>::transform(const cv::Point_<double>& p);
+template cv::Point_<int> RobotPose2D<float>::transform(const cv::Point_<int>& p) const;
+template cv::Point_<int> RobotPose2D<double>::transform(const cv::Point_<int>& p) const;
+template cv::Point_<float> RobotPose2D<float>::transform(const cv::Point_<float>& p) const;
+template cv::Point_<float> RobotPose2D<double>::transform(const cv::Point_<float>& p) const;
+template cv::Point_<double> RobotPose2D<float>::transform(const cv::Point_<double>& p) const;
+template cv::Point_<double> RobotPose2D<double>::transform(const cv::Point_<double>& p) const;
+
+/*template <typename Scalar>
+cv::Point2f RobotPose2D<Scalar>::transform(const cv::Point2f& p)
+{
+  return
+    cv::Point2f(
+      getX() + p.x * ct - p.y * st,
+      getY() + p.x * st + p.y * ct
+    );
+}
+template cv::Point2f RobotPose2D<float>::transform(const cv::Point2f& p);
+template cv::Point2f RobotPose2D<double>::transform(const cv::Point2f& p);
+*/
 
 template <typename Scalar>
 RobotPose2D<Scalar> RobotPose2D<Scalar>::getInverse() const
@@ -113,6 +126,9 @@ RobotPose2D<Scalar> RobotPose2D<Scalar>::getInverse() const
       -getTheta()
     );
 }
+
+template RobotPose2D<float> RobotPose2D<float>::getInverse() const;
+template RobotPose2D<double> RobotPose2D<double>::getInverse() const;
 
 template struct RobotPose2D<float>;
 template struct RobotPose2D<double>;

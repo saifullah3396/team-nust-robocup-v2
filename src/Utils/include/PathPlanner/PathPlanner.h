@@ -156,20 +156,20 @@ namespace PathPlannerSpace
         to.getY(),
         0.0);
 
-      //! set the footstep
+      ///< set the footstep
       footstep.setX(step(0, 3));
       footstep.setY(step(1, 3));
       footstep.setTheta(
         MathsUtils::matToEuler((Matrix<Scalar, 3, 3>) step.block(0, 0, 3, 3))[2]);
       footstep.setLeg(to.getLeg());
 
-      //! check if the step lies within the executable range
+      ///< check if the step lies within the executable range
       if (performable<Scalar>(footstep)) {
         return true;
       } else {
-        //! check if there is only a minor divergence between the current support
-        //! foot and the foot placement used during the plannig task: in such a case
-        //! perform the step that has been used during the planning
+        ///< check if there is only a minor divergence between the current support
+        ///< foot and the foot placement used during the plannig task: in such a case
+        ///< perform the step that has been used during the planning
         float stepDiffX = fabs(from(0, 3) - fromPlanned.getX());
         float stepDiffY = fabs(from(1, 3) - fromPlanned.getY());
         float stepDiffTheta = fabs(
@@ -253,7 +253,7 @@ namespace PathPlannerSpace
     bool performable(const Scalar& stepX, const Scalar& stepY)
     {
       int cn = 0;
-      //! loop through all stepRange of the polygon
+      ///< loop through all stepRange of the polygon
       auto& stepRange = environmentParams.stepRange;
       for (unsigned int i = 0; i < stepRange.size() - 1; ++i) {
         if ((stepRange[i].second <= stepY && stepRange[i + 1].second > stepY) || (stepRange[i].second >= stepY && stepRange[i + 1].second < stepY)) {

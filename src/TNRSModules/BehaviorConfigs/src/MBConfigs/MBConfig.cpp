@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MBConfigs/MBConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBConfig.cpp
  *
  * This file implements the struct MBConfig
  *

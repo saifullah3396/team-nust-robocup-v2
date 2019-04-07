@@ -42,7 +42,7 @@ DEFINE_INPUT_CONNECTOR(MotionModule,
   (GoalInfo<float>, goalInfo),
   (RobotPose2D<float>, robotPose2D),
   (bool, landmarksFound),
-)
+);
 DEFINE_OUTPUT_CONNECTOR(MotionModule,
   (vector<float>, jointPositionSensors),
   (vector<float>, handSensors),
@@ -60,7 +60,7 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
   (BehaviorInfoMap, mBehaviorInfo),
   (RobotFeet, footOnGround),
   (RobotFeet, currentStepLeg),
-)
+);
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
     #ifndef V6_CROSS_BUILD
@@ -132,14 +132,14 @@ void MotionModule::initMemoryConn()
 
 void MotionModule::init()
 {
-  //! Setup motion sensors
+  ///< Setup motion sensors
   LOG_INFO("Initializing motion module sensor layers...")
   setupSensors();
-  //! Setup motion actuators
+  ///< Setup motion actuators
   LOG_INFO("Initializing motion module actuator layers...")
   setupActuators();
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    //! Disable NaoQi's fall manager
+    ///< Disable NaoQi's fall manager
     LOG_INFO("Disabling Naoqi fall manager...")
     #ifndef V6_CROSS_BUILD
       motionProxy->setFallManagerEnabled(false);
@@ -155,20 +155,20 @@ void MotionModule::init()
     motionProxy.call<void>("setMoveArmsEnabled", false, false);
     #endif
   #endif
-  //! Create kinematics module
+  ///< Create kinematics module
   LOG_INFO("Initializing KinematicsModule...")
   kinematicsModule = boost::shared_ptr<KinematicsModule<MType>>(new KinematicsModule<MType>(this));
   kinematicsModule->init();
-  //! Create motion generator module
+  ///< Create motion generator module
   LOG_INFO("Initializing MotionGenerator...")
   motionGenerator = MotionGeneratorPtr(new MotionGenerator<MType>(this));
-  //! Create fall detector
+  ///< Create fall detector
   LOG_INFO("Initializing FallDetector...")
   fallDetector = FallDetectorPtr(new FallDetector<MType>(this));
-  //! Create trajectory planner
+  ///< Create trajectory planner
   LOG_INFO("Initializing TrajectoryPlanner...")
   trajectoryPlanner =  TrajectoryPlannerPtr(new TrajectoryPlanner<MType>(this));
-  //! Reset output variables
+  ///< Reset output variables
   LOG_INFO("Initializing MotionModule Output Variables...")
   JOINT_POSITIONS_OUT(MotionModule) = vector<float>(toUType(Joints::count), 0.f);
   HAND_SENSORS_OUT(MotionModule) = vector<float>(toUType(RobotHands::count), 0.f);
@@ -270,7 +270,7 @@ void MotionModule::handleRequests()
       if (mbManagers.find(rmb->mbManagerId) != mbManagers.end()) {
         mbManagers[rmb->mbManagerId]->manageRequest(rmb);
       } else {
-        //! Create motion behavior manager
+        ///< Create motion behavior manager
         mbManagers.insert(
           pair<unsigned, MBManagerPtr>(
             rmb->mbManagerId,

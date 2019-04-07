@@ -13,5 +13,5 @@ DEFINE_MODULE_REQUEST(
   UserCommRequest, ModuleRequest, UserCommRequestPtr,
   (UserCommRequestIds, sendMsgRequest, SendMsgRequest),
   (UserCommRequestIds, sendImageRequest, SendImageRequest),
-)
+);
 

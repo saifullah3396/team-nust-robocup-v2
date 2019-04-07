@@ -57,10 +57,10 @@ public:
   virtual void loadExternalConfig() override {}
 
 protected:
-  //! The final posture state after dive
+  ///< The final posture state after dive
   PostureState endPosture;
 
-  //! Motion execution time updated after each update
+  ///< Motion execution time updated after each update
   Scalar execTime;
 
 public:

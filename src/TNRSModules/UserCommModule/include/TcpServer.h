@@ -49,7 +49,7 @@ public:
    * @param e Boost system error code
    * @param conn Accepted connection
    */
-  void handleAccept(const boost::system::error_code& e, const connection_ptr& conn);
+  void handleAccept(const boost::system::error_code& e, const ConnectionPtr& conn);
 
   /**
    * @brief update Updates the server read/write cycle
@@ -61,7 +61,7 @@ public:
    * @param e Boost system error code
    * @param conn Associated connection
    */
-  virtual void handleWrite(const boost::system::error_code& e, const connection_ptr& conn) = 0;
+  virtual void handleWrite(const boost::system::error_code& e, const ConnectionPtr& conn) = 0;
 
   /**
    * @brief handleRead Called when some data is read from connection. The write
@@ -69,14 +69,14 @@ public:
    * @param e Boost system error code
    * @param conn Associated connection
    */
-  virtual void handleRead(const boost::system::error_code& e, connection_ptr& conn) = 0;
+  virtual void handleRead(const boost::system::error_code& e, ConnectionPtr& conn) = 0;
 
 protected:
-  //! The acceptor object used to accept incoming socket connections.
+  ///< The acceptor object used to accept incoming socket connections.
   boost::asio::ip::tcp::acceptor acceptor;
 
-  //! A vector of connections that are alive
-  std::vector<connection_ptr> conns;
+  ///< A vector of connections that are alive
+  std::vector<ConnectionPtr> conns;
 };
 
 /**
@@ -106,12 +106,12 @@ public:
   /**
    * @brief handleWrite See TcpServer::handleWrite
    */
-  void handleWrite(const boost::system::error_code& e, const connection_ptr& conn) final;
+  void handleWrite(const boost::system::error_code& e, const ConnectionPtr& conn) final;
 
   /**
    * @brief handleRead See TcpServer::handleRead
    */
-  void handleRead(const boost::system::error_code& e, connection_ptr& conn) final;
+  void handleRead(const boost::system::error_code& e, ConnectionPtr& conn) final;
 
   /**
    * @brief addMessage Pushes a communication message to queue
@@ -120,16 +120,16 @@ public:
   void addMessage(const CommMessage& msg);
 
 private:
-  //! Queue containing all the messages to be sent to the connected clients
+  ///< Queue containing all the messages to be sent to the connected clients
   ThreadSafeQueue<CommMessage>* outDataQueue;
 
-  //! Json parser for recieved messages
+  ///< Json parser for recieved messages
   Json::Reader reader;
 
-  //! Message that is to be sent to all clients
+  ///< Message that is to be sent to all clients
   std::string outMessage;
 
-  //! Message that is read from all the clients
+  ///< Message that is read from all the clients
   std::string inMessage;
 };
 
@@ -155,12 +155,12 @@ public:
   /**
    * @brief handleWrite See TcpServer::handleWrite
    */
-  void handleWrite(const boost::system::error_code& e, const connection_ptr& conn) final;
+  void handleWrite(const boost::system::error_code& e, const ConnectionPtr& conn) final;
 
   /**
    * @brief handleRead See TcpServer::handleRead
    */
-  void handleRead(const boost::system::error_code& e, connection_ptr& conn) final;
+  void handleRead(const boost::system::error_code& e, ConnectionPtr& conn) final;
 
   /**
    * @brief update See TcpServer::update
@@ -174,9 +174,9 @@ public:
   void addImage(const cv::Mat& image);
 
 private:
-  //! Queue containing all the messages to be sent to the connected clients
+  ///< Queue containing all the messages to be sent to the connected clients
   ThreadSafeQueue<cv::Mat>* outImageQueue;
 
-  //! Out image
+  ///< Out image
   string outMessage;
 };

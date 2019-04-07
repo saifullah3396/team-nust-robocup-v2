@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MotionConfigs/MBDiveConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBDiveConfig.cpp
  *
  * This file implements the structs MBDiveConfig and KFMDiveConfig
  *
@@ -15,16 +15,16 @@ DEFINE_BEHAVIOR_CONFIG(
   MBDiveConfig, MBConfig, MBDiveConfigPtr,
   (MBDiveTypes, kfmDive, KFMDiveConfig),
   (MBDiveTypes, handSaveDive, HandSaveDiveConfig),
-)
+);
 
 void KFMDiveConfig::init() {}
 void KFMDiveConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }
 
 void HandSaveDiveConfig::init() {}
 void HandSaveDiveConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }

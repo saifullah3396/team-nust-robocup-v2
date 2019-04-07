@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceModule/Types/MPComControl.h
+ * @file MotionModule/include/BalanceModule/Types/MPComControl.h
  *
  * This file declares the class MPComControl
  *

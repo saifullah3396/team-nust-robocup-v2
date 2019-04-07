@@ -20,7 +20,7 @@ void JointEstimator<Scalar>::init(
   const Matrix<Scalar, 2, 1>& initState,
   const Scalar& dt)
 {
-  //! Read the joint configuration
+  ///< Read the joint configuration
   Json::Value json;
   try {
     using namespace std;
@@ -37,24 +37,24 @@ void JointEstimator<Scalar>::init(
   this->dt = dt;
   Matrix<Scalar, 2, 2> A, Q;
   Matrix<Scalar, 2, 1> B;
-  //! State Transition Matrix A
+  ///< State Transition Matrix A
   A << 1.0, dt, 0, 1.0;
-  //! Control Input Matrix B
+  ///< Control Input Matrix B
   B << dt * dt / 2, dt;
   model =
     boost::shared_ptr<ProcessModel<Scalar, 2, 1, 1> >(
       new ProcessModel<Scalar, 2, 1, 1>(A, B));
-  //! Process Noise Covariance Matrix Q
+  ///< Process Noise Covariance Matrix Q
   Q.setZero();
   Q(0, 0) = jointConfig["procVariance"][0].asFloat();
   Q(1, 1) = jointConfig["procVariance"][1].asFloat();
   model->setNoiseCovMatrix(Q);
 
-  //! Initial state
+  ///< Initial state
   model->setState(initState);
   lastCmd = initState[0];
   Matrix<Scalar, 1, 2> H;
-  //! Measure Matrix H
+  ///< Measure Matrix H
   H << 1.0, 0.0;
   filter =
     boost::shared_ptr<KalmanFilter<Scalar, 2, 1, 1, 1> >(

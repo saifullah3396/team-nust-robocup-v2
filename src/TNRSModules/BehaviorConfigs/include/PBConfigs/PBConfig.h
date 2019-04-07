@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/include/PBConfigs/PBConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/PBConfigs/PBConfig.h
  *
  * This file declares the struct PBConfig
  *
@@ -21,15 +21,15 @@ struct PBConfig : BehaviorConfig
 {
   /**
    * Constructor
-   * 
+   *
    * @param id: Id of the behavior
    * @param maxRunTime: Maximum allowed time for the behavior
    * @param type: Type of the behavior
-   */ 
+   */
   PBConfig(
     const PBIds& id,
     const float& maxRunTime,
-    const int& type) : 
+    const int& type) :
   BehaviorConfig(toUType(id), BaseBehaviorType::planning, maxRunTime, type)
   {}
 

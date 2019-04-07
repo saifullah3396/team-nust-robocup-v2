@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/FittedLine.h
+ * @file VisionModule/include/FeatureExtraction/FittedLine.h
  *
  * This file defines the struct FittedLine.
  *

@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/include/NavigationBehavior/NavigationBehavior.h
+ * @file PlanningBehaviors/NavigationBehavior/NavigationBehavior.h
  *
  * This file declares the class NavigationBehavior
  *
@@ -33,11 +33,11 @@ struct RobotPose2D;
 class NavigationBehavior : public PlanningBehavior, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to send planned footsteps
+    ///< Option to send planned footsteps
     (int, sendFootsteps, 0),
-    //! Option to draw planned footsteps
+    ///< Option to draw planned footsteps
     (int, drawFootsteps, 0),
-  )
+  );
 public:
   /**
    * @brief NavigationBehavior Constructor
@@ -168,43 +168,43 @@ protected:
   /// Search direction
   bool forwardSearch;
 
-  //! Vector of path steps
+  ///< Vector of path steps
   vector<PathPlannerSpace::State> plannedPath;
 
-  //! Transformation frame of the right foot in previous cycle
+  ///< Transformation frame of the right foot in previous cycle
   Matrix<float, 4, 4> prevRFoot;
 
-  //! Transformation frame of the left foot in previous cycle
+  ///< Transformation frame of the left foot in previous cycle
   Matrix<float, 4, 4> prevLFoot;
 
-  //! The start footstep id for tracking footsteps
+  ///< The start footstep id for tracking footsteps
   int startStep;
 
-  //! Current goal pose
+  ///< Current goal pose
   RobotPose2D<float> goal;
 
-  //! The path planner object
+  ///< The path planner object
   boost::shared_ptr<PathPlannerSpace::PathPlanner> pathPlanner;
 
-  //! Current state of this behavior
+  ///< Current state of this behavior
   unsigned behaviorState;
 
-  //! Whether the path is currently planned
+  ///< Whether the path is currently planned
   bool pathPlanned;
 
-  //! Whether the path is sent for execution
+  ///< Whether the path is sent for execution
   bool pathExecuted;
 
-  //! Fail count while planning
+  ///< Fail count while planning
   int planFailCount;
 
-  //! Fail count while re-planning
+  ///< Fail count while re-planning
   int replanFailCount;
 
-  //! Max tries for planning
+  ///< Max tries for planning
   static int planMaxTries;
 
-  //! Max tries for re-planning
+  ///< Max tries for re-planning
   static int replanMaxTries;
 
   /**

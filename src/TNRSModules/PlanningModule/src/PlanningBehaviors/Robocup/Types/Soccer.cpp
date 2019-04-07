@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/src/PlanningBehaviors/Robocup/Types/Soccer.cpp
+ * @file PlanningBehaviors/Robocup/Types/Soccer.cpp
  *
  * This file implements the class Soccer
  *
@@ -43,10 +43,10 @@ Soccer::Soccer(
   Robocup(planningModule, config, name),
   lastKickTarget(Point2f(0.f, 0.f)),
   goingToTarget(GoingToTarget::none),
-  goalPosTol(0.25f), //! 0.25 meters
-  goalAngleTol(0.261666667), //! 15 degrees in radians
-  ballKickDist(0.25f), //! 0.25 meters
-  ballMovedVelMin(0.5f)//! 0.5 meters
+  goalPosTol(0.25f), ///< 0.25 meters
+  goalAngleTol(0.261666667), ///< 15 degrees in radians
+  ballKickDist(0.25f), ///< 0.25 meters
+  ballMovedVelMin(0.5f)///< 0.5 meters
 {
   DEFINE_FSM_STATE(Soccer, SetPosture, setPosture)
   DEFINE_FSM_STATE(Soccer, Localize, localize)
@@ -110,14 +110,14 @@ void Soccer::update()
   if (this->getChild())
     boost::static_pointer_cast<PlanningBehavior>(this->getChild())->setMBIdOffset(MOTION_1+1);
 
-  //! Update required input data
+  ///< Update required input data
   updateRobotData(); /// Tested
 
-  //! Stop if a motion or static behavior request is in progress
+  ///< Stop if a motion or static behavior request is in progress
   if (requestInProgress()) return; /// Tested
 
-  //! Print game state
-  //! printGameData();
+  ///< Print game state
+  ///< printGameData();
   fsm->update();
 }
 
@@ -240,7 +240,7 @@ void Soccer::PlayBall::onRun()
   } else if (bPtr->robotIsPenalised()) {
     nextState = bPtr->waitForPenalty.get();
   } else {
-    //! Start tracking ball
+    ///< Start tracking ball
     if (!bPtr->mbInProgress()) {
       auto httConfig =
         boost::make_shared<HeadTargetTrackConfig>();
@@ -289,7 +289,7 @@ void Soccer::AlignToKick::onRun()
     nextState = bPtr->waitForPenalty.get();
   } else {
     //cout << "Soccer::AlignToKick::onRun()" << endl;
-    //! Align to pass the ball to best target
+    ///< Align to pass the ball to best target
     if (bPtr->goingToTarget != GoingToTarget::kickAlignment) {
       RobotPose2D<float> target;
       bPtr->findBestBallAlignment(target);
@@ -402,7 +402,7 @@ void Soccer::Getup::onRun()
 {
   static bool getupCmdSent = false;
   if (getupCmdSent) {
-    if (!bPtr->mbInProgress()) { //! Finished
+    if (!bPtr->mbInProgress()) { ///< Finished
       nextState = bPtr->fallRecovery.get();
       getupCmdSent = false;
     }
@@ -427,7 +427,7 @@ void Soccer::WaitForPenalty::onStart()
 {
   BaseModule::publishModuleRequest(boost::make_shared<SwitchVision>(false));
   BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(false));
-  //! Localization has to be reset as well
+  ///< Localization has to be reset as well
   LOCALIZE_LAST_KNOWN_OUT_REL(PlanningModule, bPtr) = false;
 }
 
@@ -489,11 +489,11 @@ Point2f Soccer::findBallKickTarget()
   cv::Point_<float> kickTarget;
   kickTarget.x = ROBOT_POSE_2D_IN(PlanningModule).getX();
   kickTarget.y = ROBOT_POSE_2D_IN(PlanningModule).getY();
-  //! Find a teammate to pass the ball
+  ///< Find a teammate to pass the ball
   for (const auto& robot : TEAM_ROBOTS_IN(PlanningModule)) {
-    //! Find robots
+    ///< Find robots
     if (robot.positionConfidence > 60) {
-      //! Team robot is ahead of this robot. We don't want to send the ball behind
+      ///< Team robot is ahead of this robot. We don't want to send the ball behind
       if (robot.pose.getX() > kickTarget.x) {
         if (!behindObstacle(kickTarget)) {
           kickTarget.x = robot.pose.getX();
@@ -507,9 +507,9 @@ Point2f Soccer::findBallKickTarget()
   if (teammateFound) {
     return kickTarget;
   } else {
-    //! Assign opponent goal as the target of the robot. Opponent goal is in positive X
+    ///< Assign opponent goal as the target of the robot. Opponent goal is in positive X
     kickTarget = cv::Point_<float>(goalPostX, MathsUtils::sign(ROBOT_POSE_2D_IN(PlanningModule).getY()) * goalPostY / 2);
-    if (behindObstacle(kickTarget)) { //! Whether the target is behind an obstacle
+    if (behindObstacle(kickTarget)) { ///< Whether the target is behind an obstacle
       auto lTarget = kickTarget;
       auto rTarget = kickTarget;
       lTarget.y += 0.2;
@@ -556,8 +556,8 @@ bool Soccer::alignedToKick()
   static float midToFootDist = 0.0475;
   static constexpr float kickAlignmentTol = 0.02;
   if (ballRel.x > 0.18 ||
-      fabsf(ballRel.y - midToFootDist) > kickAlignmentTol && //! Left foot
-      fabsf(ballRel.y + midToFootDist) > kickAlignmentTol) //! Right foot
+      fabsf(ballRel.y - midToFootDist) > kickAlignmentTol && ///< Left foot
+      fabsf(ballRel.y + midToFootDist) > kickAlignmentTol) ///< Right foot
     return false;
   return true;
 }

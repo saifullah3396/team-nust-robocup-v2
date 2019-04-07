@@ -1,5 +1,5 @@
 /**
- * @file Utils/include/MotionLogger.h
+ * @file MotionModule/include/MotionLogger.h
  *
  * This file defines the class MotionLogger
  *
@@ -86,15 +86,15 @@ public:
    */
   void logJointStates(const Scalar& time);
 
-  //! Setters
+  ///< Setters
   void setRefTime(const high_resolution_clock::time_point& refTime)
     { this->refTime = refTime; }
 
 private:
-  //! Reference time from which all other readings are recorded
+  ///< Reference time from which all other readings are recorded
   high_resolution_clock::time_point refTime;
 
-  //! Kinematics module object
+  ///< Kinematics module object
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
 };
 typedef boost::shared_ptr<MotionLogger<MType> > MotionLoggerPtr;

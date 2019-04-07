@@ -1,5 +1,5 @@
 /**
- * @file MotionModuleTests/MotionModuleTests.cpp
+ * @file MotionModule/tests/src/MotionModuleTests.cpp
  *
  * This file implements the class MotionModuleTests
  *

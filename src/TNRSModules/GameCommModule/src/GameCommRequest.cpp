@@ -11,5 +11,5 @@
 
 DEFINE_MODULE_REQUEST_WITHOUT_TYPES(
   GameCommRequest, ModuleRequest, GameCommRequestPtr
-)
+);
 

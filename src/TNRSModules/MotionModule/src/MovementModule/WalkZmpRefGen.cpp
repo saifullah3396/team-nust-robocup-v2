@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/WalkZmpRefGen/WalkZmpRefGen.h
+ * @file MotionModule/src/MovementModule/WalkZmpRefGen.cpp
  *
  * This file implements the class WalkZmpRefGen
  *
@@ -90,7 +90,7 @@ void WalkZmpRefGen<Scalar>::update(const Scalar& timeStep)
   //LOG_INFO("previewEndTime: "<< previewEndTime);
   for (const auto& fs : boost::adaptors::reverse(*footsteps))
   {
-    //! Matching floats here, this can be dangerous
+    ///< Matching floats here, this can be dangerous
     if (fabsf(previewEndTime - fs->timeAtFinish) <= 1e-3) {
       //LOG_INFO("fs->timeAtFinish: " << fs->timeAtFinish);
       globalTransPose = globalTransPose.transform(fs->pose2D);

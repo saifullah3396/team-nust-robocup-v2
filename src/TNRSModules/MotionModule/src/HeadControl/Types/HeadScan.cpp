@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/HeadControl/Types/HeadScan.h
+ * @file MotionModule/src/HeadControl/Types/HeadScan.cpp
  *
  * This file implements the class HeadScan
  *

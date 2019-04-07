@@ -45,7 +45,7 @@ DECLARE_MODULE_REQUEST(
   TNSPLModules,
   localization,
   LocalizationRequestIds
-)
+);
 
 /**
  * @class SwitchLocalization
@@ -57,7 +57,7 @@ DECLARE_SWITCH_REQUEST_TYPE(
   LocalizationRequest,
   LocalizationRequestIds,
   switchLocalization
-)
+);
 
 /**
  * @class SwitchParticleFilter
@@ -69,7 +69,7 @@ DECLARE_SWITCH_REQUEST_TYPE(
   LocalizationRequest,
   LocalizationRequestIds,
   switchParticleFilter
-)
+);
 
 /**
  * @class SwitchFieldMap
@@ -81,7 +81,7 @@ DECLARE_SWITCH_REQUEST_TYPE(
   LocalizationRequest,
   LocalizationRequestIds,
   switchFieldMap
-)
+);
 
 /**
  * @class SwitchBallObstacle
@@ -93,7 +93,7 @@ DECLARE_SWITCH_REQUEST_TYPE(
   LocalizationRequest,
   LocalizationRequestIds,
   switchBallObstacle
-)
+);
 
 /**
  * @class InitiateLocalizer
@@ -106,7 +106,7 @@ DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
   LocalizationRequestIds,
   initiateLocalizer,
   (RobotPose2D<float>, pose2D, RobotPose2D<float>(0.0, 0.0, 0.0))
-)
+);
 
 /**
  * @class ResetLocalizer
@@ -118,7 +118,7 @@ DECLARE_MODULE_REQUEST_TYPE(
   LocalizationRequest,
   LocalizationRequestIds,
   resetLocalizer
-)
+);
 
 /**
  * @class PositionUpdate
@@ -131,7 +131,7 @@ DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
   LocalizationRequestIds,
   positionUpdate,
   (PositionInput<float>, input, PositionInput<float>(0.0, 0.0, 0.0))
-)
+);
 
 /**
  * @class KnownLandmarksUpdate
@@ -144,7 +144,7 @@ DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
   LocalizationRequestIds,
   knownLandmarksUpdate,
   (vector<boost::shared_ptr<KnownLandmark<float> > >, landmarks, vector<boost::shared_ptr<KnownLandmark<float> > >())
-)
+);
 
 
 /**
@@ -158,4 +158,4 @@ DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
   LocalizationRequestIds,
   unknownLandmarksUpdate,
   (vector<boost::shared_ptr<UnknownLandmark<float> > >, landmarks, vector<boost::shared_ptr<UnknownLandmark<float> > >())
-)
+);

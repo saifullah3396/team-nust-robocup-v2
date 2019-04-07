@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BallThrow/Types/WBBallThrow.h
+ * @file MotionModule/include/BallThrow/Types/WBBallThrow.h
  *
  * This file declares the class WBBallThrow
  *
@@ -71,31 +71,31 @@ private:
     const vector<vector<Scalar> >& jointTrajectories,
     const Scalar& stepTime);
 
-  //! Finite state machine for this behavior
+  ///< Finite state machine for this behavior
   DECLARE_FSM(fsm, WBBallThrow<Scalar>)
 
-  //! GrabBall: Grab ball action
+  ///< GrabBall: Grab ball action
   DECLARE_FSM_STATE(WBBallThrow<Scalar>, GrabBall, grabBall, onStart, onRun,)
 
-  //! Retract: Ball retraction action
+  ///< Retract: Ball retraction action
   DECLARE_FSM_STATE(WBBallThrow<Scalar>, Retract, retract, onStart, onRun,)
 
-  //! ThrowBall: Throw ball action
+  ///< ThrowBall: Throw ball action
   DECLARE_FSM_STATE(WBBallThrow<Scalar>, ThrowBall, throwBall, onStart, onRun,)
 
-  //! Joint trajectories from cubic spline
+  ///< Joint trajectories from cubic spline
   vector < vector<Scalar> > jointTrajectories;
 
-  //! Time to grab the ball
+  ///< Time to grab the ball
   Scalar timeToGrab = {1.0};
 
-  //! Time to retract
+  ///< Time to retract
   Scalar timeToRetract = {3.0};
 
-  //! Time to throw
+  ///< Time to throw
   Scalar timeToThrow = {1.0};
 
-  //! Time of execution of a state
+  ///< Time of execution of a state
   Scalar execTime = {0.0};
 
 public:

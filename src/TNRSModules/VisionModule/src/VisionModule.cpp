@@ -1,5 +1,5 @@
 /**
- * @file VisionModule/VisionModule.cpp
+ * @file VisionModule/src/VisionModule.cpp
  *
  * This file implements a class for vision planning.
  * All the functions and algorithms for image processing, object
@@ -14,15 +14,18 @@
 #include <Eigen/Dense>
 #include "TeamNUSTSPL/include/TNSPLModuleIds.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "UserCommModule/include/UserCommRequest.h"
 #include "Utils/include/DebugUtils.h"
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/Camera.h"
+#include "Utils/include/DataHolders/CommMsgTypes.h"
 #include "Utils/include/DataHolders/GoalInfo.h"
 #include "Utils/include/DataHolders/PlanningState.h"
 #include "Utils/include/DataHolders/RoboCupGameControlData.h"
 #include "Utils/include/DataHolders/Obstacle.h"
 #include "Utils/include/PrintUtils.h"
+#include "Utils/include/VisionUtils.h"
 #include "Utils/include/ZLIBCompression.h"
 #include "VisionModule/include/CameraModule.h"
 #include "VisionModule/include/FeatureExtraction/BallExtraction.h"
@@ -46,14 +49,14 @@ DEFINE_INPUT_CONNECTOR(VisionModule,
   (RoboCupGameControlData, gameData),
   (bool, robotOnSideLine),
   (RobotPose2D<float>, robotPose2D),
-)
+);
 
 DEFINE_OUTPUT_CONNECTOR(VisionModule,
   (BallInfo<float>, ballInfo),
   (GoalInfo<float>, goalInfo),
   (bool, landmarksFound),
   (ObsObstacles<float>, obstaclesObs),
-)
+);
 
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
   #ifndef V6_CROSS_BUILD
@@ -63,8 +66,7 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
       DebugBase("VisionModule", this),
       camProxy(camProxy),
       logImages(vector<bool>(toUType(CameraId::count), false)),
-      writeVideo(vector<bool>(toUType(CameraId::count), false)),
-      featureExtToRun(vector<bool>(toUType(FeatureExtractionIds::count), false))
+      writeVideo(vector<bool>(toUType(CameraId::count), false))
     {
     }
   #else
@@ -74,8 +76,7 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
       DebugBase("VisionModule", this),
       camProxy(camProxy),
       logImages(vector<bool>(toUType(CameraId::count), false)),
-      writeVideo(vector<bool>(toUType(CameraId::count), false)),
-      featureExtToRun(vector<bool>(toUType(FeatureExtractionIds::count), false))
+      writeVideo(vector<bool>(toUType(CameraId::count), false))
     {
     }
   #endif
@@ -84,8 +85,7 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
     BaseModule(teamNUSTSPL, TNSPLModules::vision, "VisionModule"),
     DebugBase("VisionModule", this),
     logImages(vector<bool>(toUType(CameraId::count), false)),
-    writeVideo(vector<bool>(toUType(CameraId::count), false)),
-    featureExtToRun(vector<bool>(toUType(FeatureExtractionIds::count), false))
+    writeVideo(vector<bool>(toUType(CameraId::count), false))
   {
   }
 #endif
@@ -114,6 +114,7 @@ void VisionModule::init()
   cameraModule =
     boost::shared_ptr<CameraModule>(new CameraModule(this));
   #else
+  activeCamera = CameraId::headTop;
   cameraModule =
     boost::shared_ptr<CameraModule>(new CameraModule());
   #endif
@@ -130,17 +131,22 @@ void VisionModule::init()
   LOG_INFO("Initializing VisionModule debugging variables... See" << ConfigManager::getConfigDirPath() << "VisionConfig.ini")
   int tempDebug;
   int tempDebugImageIndex;
+  int tempSendBinaryImage;
   int tempSendKnownLandmarks;
   int tempSendUnknownLandmarks;
   GET_CONFIG(
     "VisionConfig",
     (int, VisionModule.debug, tempDebug),
     (int, VisionModule.debugImageIndex, tempDebugImageIndex),
+    (int, VisionModule.sendBinaryImage, tempSendBinaryImage),
     (int, VisionModule.sendKnownLandmarks, tempSendKnownLandmarks),
     (int, VisionModule.sendUnknownLandmarks, tempSendUnknownLandmarks),
   )
   SET_DVAR(int, debug, tempDebug);
   SET_DVAR(int, debugImageIndex, tempDebugImageIndex);
+  SET_DVAR(int, sendBinaryImage, tempSendBinaryImage);
+  SET_DVAR(int, sendKnownLandmarks, tempSendKnownLandmarks);
+  SET_DVAR(int, sendUnknownLandmarks, tempSendUnknownLandmarks);
   LOG_INFO("Initializing VisionModule Output variables...")
   BALL_INFO_OUT(VisionModule) = BallInfo<float>();
   GOAL_INFO_OUT(VisionModule) = GoalInfo<float>();
@@ -172,11 +178,9 @@ void VisionModule::handleRequests()
       } else if (reqId == toUType(VisionRequestIds::switchFeatureExtModule)) {
         auto uli = boost::static_pointer_cast <SwitchFeatureExtModule>(request);
         if (uli->id != FeatureExtractionIds::count) {
-          featureExtToRun[toUType(uli->id)] = uli->state;
+          featureExt[toUType(uli->id)]->setEnabled(uli->state);
         } else {
-          for (size_t i = 0; i < toUType(FeatureExtractionIds::count); ++i) {
-            featureExtToRun[i] = uli->state;
-          }
+          for (const auto& fe : featureExt) fe->setEnabled(uli->state);
         }
       }
     }
@@ -194,6 +198,16 @@ void VisionModule::mainRoutine()
     // save video if required
     //handleVideoWriting();
     // process image for extracting new features
+    //Mat image = FeatureExtraction::makeYuvMat(static_cast<CameraId>(0));
+    //Mat out;
+    ////colorHandler->getBinary(image, out, TNColors::red);
+    //VisionUtils::displayImage("Top", out);
+    FeatureExtraction::updateImageMatrices(activeCamera, bool(GET_DVAR(int, debug)));
+    if (activeCamera == CameraId::headBottom)
+      FeatureExtraction::createYuvHist(activeCamera, false);
+    FeatureExtraction::clearLandmarks();
+    if (GET_DVAR(int, debug))
+      colorHandler->update();
     if (featureExtractionUpdate())
       updateLandmarksInfo();
     if (projectField)
@@ -210,17 +224,13 @@ void VisionModule::mainRoutine()
 
 void VisionModule::cameraUpdate()
 {
+  activeCamera = activeCamera == CameraId::headTop ? CameraId::headBottom : CameraId::headTop;
   #ifdef MODULE_IS_REMOTE
-  for (int i = 0; i < toUType(CameraId::count); ++i) {
-    cameraModule->updateImage(i, logImages[i], useLoggedImages);
-    cameraTransforms[i]->update();
-  }
+  cameraModule->updateImage(activeCamera, logImages[toUType(activeCamera)], useLoggedImages);
+  cameraTransforms[toUType(activeCamera)]->update();
   #else
-  for (size_t i = 0; i < toUType(CameraId::count); ++i) {
-    cameraModule->updateImage(i);
-    // update camera transformation matrices
-    cameraTransforms[i]->update();
-  }
+  cameraModule->updateImage(activeCamera);
+  cameraTransforms[toUType(activeCamera)]->update();
   #endif
 }
 
@@ -243,13 +253,17 @@ void VisionModule::handleVideoWriting()
 
 bool VisionModule::featureExtractionUpdate()
 {
-  FeatureExtraction::setupImagesAndHists();
-  FeatureExtraction::clearLandmarks();
-  colorHandler->update();
+  /*featureExt[toUType(FeatureExtractionIds::segmentation)]->setEnabled(true);
+  featureExt[toUType(FeatureExtractionIds::field)]->setEnabled(true);
+  featureExt[toUType(FeatureExtractionIds::ball)]->setEnabled(true);
+  featureExt[toUType(FeatureExtractionIds::robot)]->setEnabled(true);
+  featureExt[toUType(FeatureExtractionIds::goal)]->setEnabled(false);
+  featureExt[toUType(FeatureExtractionIds::lines)]->setEnabled(true);*/
   if (colorHandler->fieldHistFormed()) {
-    for (size_t i = 0; i < toUType(FeatureExtractionIds::count); ++i) {
-      if (featureExtToRun[i]) {
-        featureExt[i]->processImage();
+    for (const auto& fe : featureExt) {
+      if (fe->isEnabled()) {
+        fe->setActiveCamera(activeCamera);
+        fe->processImage();
       }
     }
     return true;
@@ -267,6 +281,13 @@ void VisionModule::updateLandmarksInfo()
       FeatureExtraction::getUnknownLandmarks());
   BaseModule::publishModuleRequest(klu);
   BaseModule::publishModuleRequest(ulu);
+  /*for (auto l : klu->landmarks) {
+    if (l->type == 0) {
+      cout << "l->type:" << l->type << endl;
+      cout << "l->pos: "<< l->pos << endl;
+      cout << "l->pose:" << l->poseFromLandmark.get().transpose() << endl;
+    }
+  }*/
   if (klu->landmarks.size() > 0)// || ulu->landmarks.size() > 10)
     LANDMARKS_FOUND_OUT(VisionModule) = true;
   else
@@ -413,15 +434,20 @@ void VisionModule::sendUnknownLandmarksInfo()
 
 void VisionModule::sendImages()
 {
-  auto image = FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex));
   if (GET_DVAR(int, sendBinaryImage) >= 0) {
     ASSERT(GET_DVAR(int, sendBinaryImage) < toUType(TNColors::count));
-    colorHandler->getBinary(image, image, static_cast<TNColors>(GET_DVAR(int, sendBinaryImage)));
+    Mat image = FeatureExtraction::makeYuvMat(static_cast<CameraId>(GET_DVAR(int, debugImageIndex)));
+    Mat out;
+    colorHandler->getBinary(image, out, static_cast<TNColors>(GET_DVAR(int, sendBinaryImage)));
+    image = out;
     UserCommRequestPtr request =
-      boost::make_shared<SendImageRequest>(FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex)));
+      boost::make_shared<SendImageRequest>(image);
+    BaseModule::publishModuleRequest(request);
+  } else {
+    Mat image = FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex));
+    cv::resize(image, image, Size(160, 120));
+    UserCommRequestPtr request =
+      boost::make_shared<SendImageRequest>(image);
     BaseModule::publishModuleRequest(request);
   }
-  UserCommRequestPtr request =
-    boost::make_shared<SendImageRequest>(image);
-  BaseModule::publishModuleRequest(request);
 }

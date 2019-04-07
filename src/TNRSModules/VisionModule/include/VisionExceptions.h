@@ -1,5 +1,5 @@
 /**
- * @file VisionModule/include/VisionException.h
+ * @file VisionModule/include/VisionExceptions.h
  *
  * This file declares the class VisionException
  *
@@ -11,17 +11,6 @@
 #include <boost/make_shared.hpp>
 #include <boost/filesystem.hpp>
 #include "Utils/include/Exceptions/TNRSException.h"
-
-/**
- * Enumeration for possible types of vision exceptions
- *
- * @enum VisionExceptionType
- */
-DEFINE_ENUM_WITH_STRING_CONVERSIONS(
-  VisionExceptionType,
-  (EXC_BALL_CLASSIFIER_NOT_FOUND)
-  (EXC_ROBOT_CLASSIFIER_NOT_FOUND)
-)
 
 /**
  * @class VisionException
@@ -42,11 +31,9 @@ public:
   VisionException(
     const string& moduleName,
     const string& message,
-    const bool& bSysMsg,
-    const VisionExceptionType& type) throw () :
+    const bool& bSysMsg) throw () :
     TNRSException(message, bSysMsg),
-    name(moduleName),
-    type(type)
+    name(moduleName)
   {
   }
 
@@ -61,5 +48,4 @@ public:
 
 private:
   string name;
-  VisionExceptionType type;
 };

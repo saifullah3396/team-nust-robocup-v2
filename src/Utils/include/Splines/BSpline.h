@@ -1,5 +1,5 @@
 /**
- * @file Utils/include/BSpline.h
+ * @file Utils/include/Splines/BSpline.h
  *
  * This file declares the class BSpline
  *
@@ -59,7 +59,7 @@ public:
     const unsigned& degree,
     const unsigned& dim,
     const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-    const Scalar& splineTime, 
+    const Scalar& splineTime,
     const Scalar& stepSize);
 
   /**
@@ -71,17 +71,17 @@ public:
 
   /**
    * Destructor
-   */ 
-  ~BSpline() 
+   */
+  ~BSpline()
   {
   }
-  
+
   /**
    * Derived from Spline
    */
   virtual void
   evaluateSpline(
-    vector<vector<Scalar> >& spline, 
+    vector<vector<Scalar> >& spline,
     vector<Scalar>& splineTime,
     const unsigned& derivative = 2);
 
@@ -110,20 +110,20 @@ public:
    */
   bool
   generateSplineAtStep(vector<Matrix<Scalar, Dynamic, 1>>& splineAtStep, const Scalar& step);
-  
+
   /**
    * Finds normal on the spline to the given vector
-   * 
+   *
    * @param normal: input normal vector
    * @param splinePoint: output spline point
-   * 
+   *
    * @return if a point on spline is found
-   */ 
+   */
   bool findNormalToVec(
     const Matrix<Scalar, 3, 1>& normal,
     Matrix<Scalar, 3, 1>& splinePoint,
     const Matrix<Scalar, 2, 1>& tBounds);
-  
+
   /**
    * Returns the value of minimum knot in the knot sequence.
    *
@@ -145,19 +145,19 @@ public:
   {
     return maxKnot;
   }
-  
+
   /**
    * Sets the given knot vector
-   * 
+   *
    * @param knots: the input knots sequence
-   */ 
+   */
   void setKnots(const Matrix<Scalar, Dynamic, 1>& knots);
-  
+
   /**
    * Gets the spline
    *
    * @param derivative: derivative order to return
-   * 
+   *
    * @return Matrix<Scalar, Dynamic, Dynamic>
    */
   Matrix<Scalar, Dynamic, Dynamic> getSpline(const unsigned& derivative)
@@ -200,33 +200,33 @@ private:
    * @param int& knotLocation: Location of the knot for current step.
    * @param int dim: Dimension
    * @param vector<Scalar>& basisVector: BSpline basis functions.
-   * 
+   *
    * @return the spline of given dimension and derivative
    */
   vector<Scalar>
   evaluateSplineAtBasis(
-    const int& knotLocation, 
-    const int& dim, 
+    const int& knotLocation,
+    const int& dim,
     vector<Scalar>& basisVector);
 
-  //! Output spline and its derivatives 0, 1, ...
+  ///< Output spline and its derivatives 0, 1, ...
   vector<Matrix<Scalar, Dynamic, Dynamic>> bSpline;
 
-  //! Order of the derivative.
+  ///< Order of the derivative.
   vector<unsigned> derivativeOrder;
 
-  //! Order of the spline.
+  ///< Order of the spline.
   unsigned order;
 
-  //! Order of the derivative.
+  ///< Order of the derivative.
   unsigned nDerivatives;
 
-  //! Min knot value in knot sequence.
+  ///< Min knot value in knot sequence.
   Scalar minKnot;
 
-  //! Max knot value in knot sequence.
+  ///< Max knot value in knot sequence.
   Scalar maxKnot;
-  
+
   friend class BSplineNormalFinder<Scalar>;
 };
 

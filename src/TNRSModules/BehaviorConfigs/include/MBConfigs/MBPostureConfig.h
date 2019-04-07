@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
  *
  * This file defines the structs MBPostureConfig
  *
@@ -28,7 +28,7 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   MBPostureTypes,
   (float, timeToReachP, 2.0),
   (PostureState, targetPosture, PostureState::unknown),
-)
+);
 
 /**
  * @struct InterpToPostureConfig
@@ -40,4 +40,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBPostureTypes::interpToPosture,
   InterpToPostureConfigPtr,
   (Eigen::VectorXf, jointsToReach, Eigen::VectorXf()),
-)
+);

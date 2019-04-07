@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/GetupModule/Types/KeyFrameMotionGetup.h
+ * @file MotionModule/include/GetupModule/Types/KeyFrameMotionGetup.h
  *
  * This file declares the class KeyFrameMotionGetup
  *
@@ -61,10 +61,10 @@ private:
    */
   void setupGetupMotion(const Scalar keyFrames[][25]);
 
-  //! Total time to get up
+  ///< Total time to get up
   Scalar getupTime;
 
-  //! Motion execution time updated after each update
+  ///< Motion execution time updated after each update
   Scalar execTime;
 };
 

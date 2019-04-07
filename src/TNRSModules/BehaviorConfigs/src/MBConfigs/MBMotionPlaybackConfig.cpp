@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBMotionPlaybackConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBMotionPlaybackConfig.h
  *
  * This file defines the struct MBMotionPlaybackConfig and its childs
  *
@@ -12,7 +12,7 @@
 DEFINE_BEHAVIOR_CONFIG(
   MBMotionPlaybackConfig, MBConfig, MBMotionPlaybackConfigPtr,
   (MBMotionPlaybackTypes, replayStoredMB, ReplayStoredMBConfig),
-)
+);
 
 void ReplayStoredMBConfig::init() {}
 void ReplayStoredMBConfig::validate()

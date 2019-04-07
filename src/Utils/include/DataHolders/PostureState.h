@@ -10,9 +10,9 @@
 #pragma once
 
 /**
- * Enumeration for all the predefined robot postures.
+ * @brief Enumeration for all the predefined robot postures.
  *
- * @enum Posture
+ * @enum PostureState
  */
 enum class PostureState
 : unsigned int {

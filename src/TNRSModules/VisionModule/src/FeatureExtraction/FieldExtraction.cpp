@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/FieldExtraction.cpp
+ * @file VisionModule/src/FeatureExtraction/FieldExtraction.cpp
  *
  * This file implements the class for field extraction from the image.
  *
@@ -8,10 +8,14 @@
  * @date 22 Aug 2017
  */
 
+#include <Eigen/Dense>
+#include "VisionModule/include/CameraTransform.h"
+#include "VisionModule/include/ColorHandler.h"
 #include "VisionModule/include/FeatureExtraction/FieldExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
 #include "VisionModule/include/FeatureExtraction/FittedLine.h"
 #include "Utils/include/ConfigMacros.h"
+#include "Utils/include/HardwareIds.h"
 #include "Utils/include/DataUtils.h"
 
 FieldExtraction::FieldExtraction(VisionModule* visionModule) :
@@ -45,7 +49,7 @@ FieldExtraction::FieldExtraction(VisionModule* visionModule) :
   fieldHeight = 0;
   fieldFound = false;
 
-  //! Initializing processing times
+  ///< Initializing processing times
   processTime = 0.0;
   pointsFilterTime = 0.0;
   fitLinesTime = 0.0;
@@ -54,6 +58,11 @@ FieldExtraction::FieldExtraction(VisionModule* visionModule) :
 
 void FieldExtraction::processImage()
 {
+  ///< If current image is not the top image,
+  ///< the border points and border lines will stay the same as for
+  ///< the previous run carried out with top image
+  if (activeCamera != CameraId::headTop)
+    return;
   auto tStart = high_resolution_clock::now();
   auto filteredPoints = filterBorderPoints();
   fitLines(filteredPoints);
@@ -63,7 +72,7 @@ void FieldExtraction::processImage()
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   processTime = timeSpan.count();
   if (GET_DVAR(int, displayOutput))
-    VisionUtils::displayImage("FieldExtraction", bgrMat[currentImage]);
+    VisionUtils::displayImage("FieldExtraction", bgrMat[toUType(activeCamera)]);
   if (GET_DVAR(int, displayInfo)) {
     LOG_INFO("FieldExtraction Results:");
     LOG_INFO("Time taken by filtering points: " << pointsFilterTime);
@@ -82,7 +91,7 @@ vector<Point> FieldExtraction::filterBorderPoints()
   if (!borderPoints.empty()) {
     auto avgHeight = regionSeg->getFieldAvgHeight();
     auto minBestHeight = regionSeg->getFieldMinBestHeight();
-    //! Sort extracted field points
+    ///< Sort extracted field points
     sort(
       borderPoints.begin(),
       borderPoints.end(),
@@ -94,14 +103,14 @@ vector<Point> FieldExtraction::filterBorderPoints()
     float avgToMin = abs(minBestHeight - avgHeight);
     float newAvgY = 0.f;
     float newMaxY = 0.f;
-    //! Filter out points by getting points lying on minimum y and same x
+    ///< Filter out points by getting points lying on minimum y and same x
     vector<Point> filterBelow;
     filterBelow.push_back(borderPoints[0]);
     for (size_t i = 1; i < borderPoints.size(); ++i) {
       if (filterBelow.back().x == borderPoints[i].x) {
         continue;
       } else {
-        //! Add points lying avgToMin pixels above the avg height
+        ///< Add points lying avgToMin pixels above the avg height
         if (borderPoints[i].y < avgHeight + avgToMin + 10) { // Tolerance of 10 pixels
           filterBelow.push_back(borderPoints[i]);
           newAvgY += borderPoints[i].y;
@@ -111,18 +120,18 @@ vector<Point> FieldExtraction::filterBorderPoints()
     }
     newAvgY /= filterBelow.size();
 
-    //! Filter out points that lie way above the possible field
+    ///< Filter out points that lie way above the possible field
     for (size_t i = 0; i < filterBelow.size(); ++i) {
-      //VisionUtils::drawPoint(filterBelow[i], bgrMat[currentImage], Scalar(0,255,255));
+      //VisionUtils::drawPoint(filterBelow[i], bgrMat[toUType(activeCamera)], Scalar(0,255,255));
       if (filterBelow[i].y > newAvgY - 2 * abs(newMaxY - newAvgY)) {
         filtered.push_back(filterBelow[i]);
-        //VisionUtils::drawPoint(filterBelow[i], bgrMat[currentImage], Scalar(255,0,255));
+        //VisionUtils::drawPoint(filterBelow[i], bgrMat[toUType(activeCamera)], Scalar(255,0,255));
       }
     }
   }
   if (GET_DVAR(int, drawFiltPoints)) {
     for (size_t i = 0; i < filtered.size(); ++i) {
-      VisionUtils::drawPoint(filtered[i], bgrMat[currentImage], Scalar(255, 0, 0));
+      VisionUtils::drawPoint(filtered[i], bgrMat[toUType(activeCamera)], Scalar(255, 0, 0));
     }
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
@@ -266,7 +275,7 @@ void FieldExtraction::fitLines(const vector<Point>& points)
         VisionUtils::findIntersection(best, best2, intersection);
         if (intersection.x > 0 && intersection.x < getImageWidth() &&
             intersection.y > 0 && intersection.y < getImageHeight()) {
-          //VisionUtils::drawPoint(intersection, bgrMat[currentImage]);
+          //VisionUtils::drawPoint(intersection, bgrMat[toUType(activeCamera)]);
           if (best[1] > best2[1]) {
             borderLines.push_back(
               Vec4f(best[0], best[1], intersection.x, intersection.y));
@@ -292,7 +301,7 @@ void FieldExtraction::fitLines(const vector<Point>& points)
         }
         if (y1 < 0) y1 = 0;
         if (y1 >= getImageHeight() - 2) y1 = getImageHeight() - 2;
-        border.push_back(Point(x, y1));
+        border.push_back(y1);
         //maskPoints.push_back(Point(x, y1 - 10));
         fieldHeight = y1 < fieldHeight ? y1 : fieldHeight;
       }
@@ -312,29 +321,28 @@ void FieldExtraction::makeFieldRect() {
     fieldRect.y = fieldHeight;
     fieldRect.width = getImageWidth();
     fieldRect.height = getImageHeight() - fieldHeight;
-    //! Four points are converted to create perspective transform matrix for faster computation later on
+    ///< Four points are converted to create perspective transform matrix for faster computation later on
     Point2f f1, f2, f3, f4;
-    cameraTransforms[currentImage]->imageToWorld(f1, Point2f(fieldRect.x, fieldRect.y), 0.f);
-    cameraTransforms[currentImage]->imageToWorld(f2, Point2f(fieldRect.width, fieldRect.y), 0.f);
-    cameraTransforms[currentImage]->imageToWorld(f3, Point2f(fieldRect.width, getImageHeight()), 0.f);
-    cameraTransforms[currentImage]->imageToWorld(f4, Point2f(fieldRect.x, getImageHeight()), 0.f);
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(f1, Point2f(fieldRect.x, fieldRect.y), 0.f);
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(f2, Point2f(fieldRect.width, fieldRect.y), 0.f);
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(f3, Point2f(fieldRect.width, getImageHeight()), 0.f);
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(f4, Point2f(fieldRect.x, getImageHeight()), 0.f);
     fieldFound = true;
   }
 }
 
 void FieldExtraction::transformBorderLines() {
   auto tStart = high_resolution_clock::now();
-  for (size_t i = 0; i < borderLines.size(); ++i) {
-    auto l = borderLines[i];
+  for (const auto& l : borderLines) {
     if (l[0] < 10 && l[2] < 10) continue;
     if (l[0] > getImageWidth() - 10 && l[2] > getImageWidth() - 10) continue;
     Point2f wp1, wp2;
-    cameraTransforms[currentImage]->imageToWorld(wp1, Point2f(l[0], l[1]), 0.f);
-    cameraTransforms[currentImage]->imageToWorld(wp2, Point2f(l[2], l[3]), 0.f);
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(wp1, Point2f(l[0], l[1]), 0.f);
+    cameraTransforms[toUType(activeCamera)]->imageToWorld(wp2, Point2f(l[2], l[3]), 0.f);
     auto diff = wp2 - wp1;
     float d = norm(diff);
     auto unit = Point2f(diff.x / d, diff.y / d);
-    FittedLinePtr fl = boost::make_shared < FittedLine > (wp1, wp2);
+    auto fl = boost::make_shared<FittedLine>(wp1, wp2);
     fl->unit = unit;
     fl->d = d;
     fl->diff = diff;
@@ -350,13 +358,16 @@ void FieldExtraction::transformBorderLines() {
 void FieldExtraction::drawResults()
 {
   if (GET_DVAR(int, drawBorder)) {
-    if (!border.empty())
-      polylines(bgrMat[currentImage], border, false, Scalar(255, 0, 0, 8), 2);
+    for (size_t x = 0; x < border.size(); ++x)
+      VisionUtils::drawPoint(
+        Point(x, border[x]),
+        bgrMat[toUType(activeCamera)],
+        Scalar(255, 0, 0));
   }
   if (GET_DVAR(int, drawBorderLines)) {
     for (size_t i = 0; i < borderLines.size(); ++i) {
       auto l = borderLines[i];
-      line(bgrMat[currentImage],
+      line(bgrMat[toUType(activeCamera)],
         Point(l[0],l[1]),
         Point(l[2],l[3]),
         Scalar(255,255,0),

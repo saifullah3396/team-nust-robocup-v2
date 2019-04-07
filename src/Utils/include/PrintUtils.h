@@ -14,10 +14,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <ostream>
+#include <streambuf>
 #include "Utils/include/ConfigManager.h"
+#include "Utils/include/ThreadSafeQueue.h"
 #include "Utils/include/VariadicMacros.h"
 
 using namespace std;
+#define OSS(VALUES) \
+    static_cast<std::ostringstream&&>(std::ostringstream() << VALUES)
 
 class PrintUtils
 {
@@ -25,48 +31,41 @@ public:
   /**
    * @brief PrintUtils Constructor
    */
-  PrintUtils() {}
+  PrintUtils();
 
   /**
    * @brief ~PrintUtils Destructor
    */
-  ~PrintUtils() { mainLog.close(); }
-  static fstream mainLog; //! Output log file
+  ~PrintUtils();
+  static void startSendingOutputOverNetwork();
+  static void addMessage(const std::stringstream& stream);
+  static ThreadSafeQueue<string>& getMessagesQueue() { return messagesQueue; }
+
+  static std::stringstream stream; ///< Output log stream
+  static pthread_mutex_t printMutex;
+private:
+  static fstream mainLog; ///< Output log file
+  ///< Only used if sending messages over the network
+  static ThreadSafeQueue<string> messagesQueue;
+  static string fileName;
+  static bool sendOutputOverNetwork;
 };
 
 #ifndef MODULE_IS_REMOTE
+  #define ADD_LOG_MESSAGE(msg) \
+    pthread_mutex_lock(&PrintUtils::printMutex); \
+    PrintUtils::stream << msg; \
+    PrintUtils::addMessage(PrintUtils::stream); \
+    pthread_mutex_unlock(&PrintUtils::printMutex);
+
   #define LOG_INFO(msg) \
-    if (PrintUtils::mainLog.is_open()) { \
-      PrintUtils::mainLog << "[Info] " << msg << endl;\
-    } else {\
-      PrintUtils::mainLog.open(\
-        ConfigManager::getLogsDirPath() + "Output.txt",\
-        std::ofstream::out | std::ofstream::trunc\
-      ); \
-      PrintUtils::mainLog << "[Info] " << msg << endl; \
-    }
+    ADD_LOG_MESSAGE("[Info] " << msg << endl)
 
   #define LOG_ERROR(msg) \
-    if (PrintUtils::mainLog.is_open()) { \
-      PrintUtils::mainLog << "[Error] " << msg << endl;\
-    } else { \
-      PrintUtils::mainLog.open(\
-        ConfigManager::getLogsDirPath() + "Output.txt",\
-        std::ofstream::out | std::ofstream::trunc\
-      ); \
-      PrintUtils::mainLog << "[Error] " << msg << endl;\
-    }
+    ADD_LOG_MESSAGE("[Error] " << msg << endl)
 
   #define LOG_EXCEPTION(msg) \
-    if (PrintUtils::mainLog.is_open()) { \
-      PrintUtils::mainLog << "[Exception] " << msg << endl;\
-    } else { \
-      PrintUtils::mainLog.open(\
-        ConfigManager::getLogsDirPath() + "Output.txt",\
-        std::ofstream::out | std::ofstream::trunc\
-      ); \
-      PrintUtils::mainLog << "[Exception] " << msg << endl;\
-    }
+    ADD_LOG_MESSAGE("[Exception] " << msg << endl)
 #else
   #define LOG_INFO(msg) \
     cout << "[Info] " << msg << endl;

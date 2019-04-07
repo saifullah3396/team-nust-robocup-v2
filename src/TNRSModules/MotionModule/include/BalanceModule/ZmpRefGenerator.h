@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/BalanceModule/ZmpRefGenerator.cpp
+ * @file MotionModule/include/BalanceModule/ZmpRefGenerator.h
  *
  * This file declares the class ZmpRefGenerator
  *
@@ -32,7 +32,7 @@ public:
    * @param nReferences Total number of previewable references
    */
   ZmpRefGenerator(
-    MotionModule* motionModule, 
+    MotionModule* motionModule,
     const RobotFeet& refFrame,
     const unsigned& nReferences);
 
@@ -43,26 +43,26 @@ public:
 
   /**
    * @brief initiate Initiates the zmp reference generator
-   */ 
+   */
   virtual bool initiate() = 0;
-  
+
   /**
    * @brief update Finds the next zmp references and updates the output
    * @param timeStep Update cycle time
-   */ 
+   */
   virtual void update(const Scalar& timeStep) = 0;
 
-  //! Getters
+  ///< Getters
   const boost::shared_ptr<ZmpRef<Scalar>>& getCurrentRef() const { return zmpRef; }
   const RobotFeet& getRefFrame() const { return refFrame; }
 
 protected:
-  boost::shared_ptr<KinematicsModule<Scalar> > kM; //! Kinematics module
-  boost::shared_ptr<ZmpRef<Scalar>> zmpRef; //! References container
-  Scalar cycleTime; //! The time step between each reference generated
-  unsigned nReferences; //! Number of previewable references
-  RobotFeet refFrame; //! Base frame of reference
-  
+  boost::shared_ptr<KinematicsModule<Scalar> > kM; ///< Kinematics module
+  boost::shared_ptr<ZmpRef<Scalar>> zmpRef; ///< References container
+  Scalar cycleTime; ///< The time step between each reference generated
+  unsigned nReferences; ///< Number of previewable references
+  RobotFeet refFrame; ///< Base frame of reference
+
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

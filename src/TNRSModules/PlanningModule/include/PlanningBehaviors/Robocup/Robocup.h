@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/Robocup.h
+ * @file PlanningModule/include/PlanningBehaviors/Robocup/Robocup.h
  *
  * This file declares the class Robocup.
  *
@@ -11,6 +11,7 @@
 
 #include "BehaviorManager/include/StateMachineMacros.h"
 #include "PlanningModule/include/PlanningBehavior.h"
+#include "Utils/include/DataHolders/RobotPose2D.h"
 
 enum class KeyFrameGetupTypes : unsigned int;
 struct MBHeadControlConfig;
@@ -69,11 +70,11 @@ protected:
     const StiffnessState& desStiffness,
     const unsigned& mbManagerId);
 
-  //! Whether robot is supposed to get into penalised posture
+  ///< Whether robot is supposed to get into penalised posture
   bool penaliseMotion;
   bool inFallRecovery;
   bool readyToGetup;
-  //! Whether to wait to get unpenalised
+  ///< Whether to wait to get unpenalised
   bool waitForUnpenalise;
   RobotPose2D<float> moveTarget;
 

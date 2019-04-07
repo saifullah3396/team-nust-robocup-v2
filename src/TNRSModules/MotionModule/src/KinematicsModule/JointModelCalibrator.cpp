@@ -1,5 +1,5 @@
 /**
- * @file Utils/src/Solvers/JointModelCalibrator.cpp
+ * @file MotionModule/src/KinematicsModule/JointModelCalibrator.cpp
  *
  * This file implements the class JointModelCalibrator
  *
@@ -69,11 +69,11 @@ double JointModelCalibrator::costFunction(
 
 void JointModelCalibrator::optDef()
 {
-  //!Objective function to minimize the difference between the measured
-  //!acceleration and target acceleration
-  //!Hessian for this objective function is unknown.
-  //!Gradient for this function is unknown.
-  //!4 variables; 1 x time shift and pid gains x 3
+  ///<Objective function to minimize the difference between the measured
+  ///<acceleration and target acceleration
+  ///<Hessian for this objective function is unknown.
+  ///<Gradient for this function is unknown.
+  ///<4 variables; 1 x time shift and pid gains x 3
   nlopt::opt opt(nlopt::LN_COBYLA, 4);
   vector<double> lb(4), ub(4), var0;
   var0.push_back(0.0);

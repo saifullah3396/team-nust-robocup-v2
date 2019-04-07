@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/KickModule/JSE2DImpKick.cpp
+ * @file MotionModule/src/KickModule/Types/JSE2DImpKick.cpp
  *
  * This file implements the class JSE2DImpKick
  *

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceZmpRefGen/BalanceZmpRefGen.h
+ * @file MotionModule/include/BalanceModule/BalanceZmpRefGen.h
  *
  * This file declares the class BalanceZmpRefGen
  *
@@ -14,7 +14,7 @@
 
 /**
  * @class BalanceZmpRefGen
- * @brief The class for generating simple zmp reference for shifting 
+ * @brief The class for generating simple zmp reference for shifting
  *   robot balance to the required support leg
  */
 template <typename Scalar>
@@ -30,7 +30,7 @@ public:
    * @param targetZmp Target zmp positions
    */
   BalanceZmpRefGen(
-    MotionModule* motionModule, 
+    MotionModule* motionModule,
     const RobotFeet& refFrame,
     const unsigned& nReferences,
     const Scalar& totalTime,
@@ -52,9 +52,9 @@ public:
   void update(const Scalar& timeStep) final;
 
 private:
-  Scalar totalTime = {0.0}; //! Total time to shift balance
-  Matrix<Scalar, 2, 1> targetZmp = Matrix<Scalar, 2, 1>::Zero(); //! Target zmp position
-  Matrix<Scalar, 2, 1> initZmpPosition = Matrix<Scalar, 2, 1>::Zero(); //! Initial zmp position
+  Scalar totalTime = {0.0}; ///< Total time to shift balance
+  Matrix<Scalar, 2, 1> targetZmp = Matrix<Scalar, 2, 1>::Zero(); ///< Target zmp position
+  Matrix<Scalar, 2, 1> initZmpPosition = Matrix<Scalar, 2, 1>::Zero(); ///< Initial zmp position
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

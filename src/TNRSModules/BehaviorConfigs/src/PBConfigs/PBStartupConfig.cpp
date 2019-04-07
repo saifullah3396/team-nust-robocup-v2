@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/PBConfigs/PBStartupConfig.h
+ * @file TNRSModules/BehaviorConfigs/src/PBConfigs/PBStartupConfig.cpp
  *
  * This file defines the struct PBStartupConfig and its childs
  *
@@ -12,7 +12,7 @@
 DEFINE_BEHAVIOR_CONFIG(
   PBStartupConfig, PBConfig, PBStartupConfigPtr,
   (PBStartupTypes, requestBehavior, RequestBehaviorConfig),
-)
+);
 
 void RequestBehaviorConfig::init() {}
 void RequestBehaviorConfig::validate() {}

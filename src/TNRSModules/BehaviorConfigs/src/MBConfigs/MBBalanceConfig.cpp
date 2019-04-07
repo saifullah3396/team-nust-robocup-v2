@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MotionConfigs/MBBalanceConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBBalanceConfig.cpp
  *
  * This file defines the structs MBBalanceConfig, MPComControlConfig,
  * PIDComControlConfig, and ZmpControlConfig
@@ -16,7 +16,7 @@ DEFINE_BEHAVIOR_CONFIG(
   (MBBalanceTypes, mpComControl, MPComControlConfig),
   (MBBalanceTypes, pidComControl, PIDComControlConfig),
   (MBBalanceTypes, zmpControl, ZmpControlConfig),
-)
+);
 
 void MPComControlConfig::init() {}
 void MPComControlConfig::validate()

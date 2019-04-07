@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/KickModule/MaxMomentumEEOpt.cpp
+ * @file MotionModule/src/KickModule/MaxMomentumEEOpt.cpp
  *
  * This file implements the class MaxMomentumEEOpt
  * 
@@ -95,25 +95,25 @@ void MaxMomentumEEOpt<Scalar>::ineqConstraints(unsigned nCons, double *result, u
 template <typename Scalar>
 void MaxMomentumEEOpt<Scalar>::optDef()
 {
-  //!Objective function to minimize is virtualMass x velocity;
-  //!Hessian for this objective function is unknown.
-  //!Gradient for this function is unknown.
-  //!4 variables; 2xEuler Angles, end-effector contour parameter t, and velocity.
+  ///<Objective function to minimize is virtualMass x velocity;
+  ///<Hessian for this objective function is unknown.
+  ///<Gradient for this function is unknown.
+  ///<4 variables; 2xEuler Angles, end-effector contour parameter t, and velocity.
   nlopt::opt opt(nlopt::LN_COBYLA, 4);
   vector<double> lb(4), ub(4), var0, constraintTols;
   //These are not euler angles rather they are fixed angle rotations.
-  lb[0] = -5.0 * M_PI / 180.0; //! Lower bound for x-angle. 
-  lb[1] = -10.0 * M_PI / 180.0; //! Lower bound for y-angle. 
-  lb[2] = 0.0; //! Lower bound for parameterized curve [0...1].
-  lb[3] = 0.01; //! Lower bound for velocity in given direction.
-  ub[0] = 5.0 * M_PI / 180.0; //! Upper bound for x-angle. 
-  ub[1] = 10.0 * M_PI / 180.0; //! Upper bound for y-angle. 
-  ub[2] = 1.0; //! Upper bound for parameterized curve [0...1].
-  ub[3] = 2.0; //! Upper bound for velocity in given direction.
+  lb[0] = -5.0 * M_PI / 180.0; ///< Lower bound for x-angle. 
+  lb[1] = -10.0 * M_PI / 180.0; ///< Lower bound for y-angle. 
+  lb[2] = 0.0; ///< Lower bound for parameterized curve [0...1].
+  lb[3] = 0.01; ///< Lower bound for velocity in given direction.
+  ub[0] = 5.0 * M_PI / 180.0; ///< Upper bound for x-angle. 
+  ub[1] = 10.0 * M_PI / 180.0; ///< Upper bound for y-angle. 
+  ub[2] = 1.0; ///< Upper bound for parameterized curve [0...1].
+  ub[3] = 2.0; ///< Upper bound for velocity in given direction.
   for (size_t i = 0; i < lb.size(); ++i)
     var0.push_back(lb[i]);
 
-  //! Joint velocity contraint for leg joints;
+  ///< Joint velocity contraint for leg joints;
   auto chainStart = kM->getLinkChain(kickModulePtr->kickLeg)->start;
   auto chainSize = kM->getLinkChain(kickModulePtr->kickLeg)->size;
   velLimits.resize(chainSize);

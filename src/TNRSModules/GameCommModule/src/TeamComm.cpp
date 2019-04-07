@@ -1,5 +1,5 @@
 /**
- * @file TeamComm/TeamComm.h
+ * @file GameCommModule/src/TeamComm.cpp
  *
  * This file implements the class TeamComm
  *

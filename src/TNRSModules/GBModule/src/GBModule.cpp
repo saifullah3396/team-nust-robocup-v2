@@ -109,7 +109,7 @@ void GBModule::init()
 {
   LOG_INFO("Initializing static behaviors manager...")
   gbManager = boost::make_shared<GBManager>(this);
-  //! Make new layers for sensors directly related with gbmodule
+  ///< Make new layers for sensors directly related with gbmodule
   LOG_INFO("Initializing static behavior module sensor layers...")
   sensorLayers.resize(toUType(GBSensors::count));
   sensorLayers[toUType(GBSensors::jointStiffnesses)] =
@@ -120,7 +120,7 @@ void GBModule::init()
     SensorLayer::makeSensorLayer(
       toUType(SensorTypes::ledSensors),
       OVAR_PTR(vector<float>, GBModule::Output::ledSensors), memoryProxy);
-  //! Update the sensors
+  ///< Update the sensors
   sensorsUpdate();
   #ifndef MODULE_IS_REMOTE
     #ifndef V6_CROSS_BUILD
@@ -128,7 +128,7 @@ void GBModule::init()
     #endif
   #endif
   LOG_INFO("Initializing static behavior module actuator layers...")
-  //! Make new layers for actuators directly related with gbmodule
+  ///< Make new layers for actuators directly related with gbmodule
   actuatorLayers.resize(toUType(GBActuators::count));
   #ifndef V6_CROSS_BUILD
     actuatorLayers[toUType(GBActuators::jointStiffnesses)] =

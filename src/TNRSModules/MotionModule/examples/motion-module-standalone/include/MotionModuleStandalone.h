@@ -102,17 +102,17 @@ public:
   }
 
 private:
-  //! Pointer to local data shared memory object
+  ///< Pointer to local data shared memory object
   SharedMemoryPtr sharedMemory;
 
-  //! Pointer to NaoQi internal device communication manager (DCM)
+  ///< Pointer to NaoQi internal device communication manager (DCM)
   ALDCMProxyPtr dcmProxy;
 
-  //! Pointer to NaoQi internal memory
+  ///< Pointer to NaoQi internal memory
   ALMemoryProxyPtr memoryProxy;
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  //! Pointer to NaoQi internal motion class
+  ///< Pointer to NaoQi internal motion class
   ALMotionProxyPtr motionProxy;
   #endif
 };

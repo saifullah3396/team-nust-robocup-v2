@@ -51,7 +51,7 @@ public:
     MotionModule* motionModule, const BehaviorConfigPtr& cfg);
 
 protected:
-  //! The final posture state after dive
+  ///< The final posture state after dive
   PostureState endPosture;
 
 public:

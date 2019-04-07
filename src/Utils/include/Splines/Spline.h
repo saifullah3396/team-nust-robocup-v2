@@ -1,5 +1,5 @@
 /**
- * @file Utils/inlclude/Spline.h
+ * @file Utils/include/Splines/Spline.h
  *
  * This file declares the class Spline
  *
@@ -26,16 +26,6 @@ template <typename Scalar>
 class Spline;
 
 /**
- * Enumeration for possible types of spline exceptions
- *
- * @enum SplineExceptionType
- */
-DEFINE_ENUM_WITH_STRING_CONVERSIONS(
-  SplineExceptionType,
-  (EXC_INVALID_XML)
-)
-
-/**
  * @class SplineException
  * @brief Spline exception management class
  */
@@ -55,8 +45,7 @@ public:
   SplineException(
     Spline<Scalar>* spline,
     const string& message,
-    const bool& bSysMsg,
-    const SplineExceptionType& type
+    const bool& bSysMsg
   ) throw ();
 
   /**
@@ -66,9 +55,6 @@ public:
 
   string getExcPrefix()
     { return "Exception caught in spline;\n\t"; }
-
-private:
-  SplineExceptionType type;
 };
 
 /**
@@ -95,7 +81,7 @@ public:
     const unsigned& dim,
     const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
     const Matrix<Scalar, Dynamic, 1>& knots,
-    const Scalar& stepSize, 
+    const Scalar& stepSize,
     const unsigned& type);
 
   /**
@@ -112,10 +98,10 @@ public:
     const unsigned& degree,
     const unsigned& dim,
     const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-    const Scalar& splineTime, 
-    const Scalar& stepSize, 
+    const Scalar& splineTime,
+    const Scalar& stepSize,
     const unsigned& type);
-    
+
   /**
    * Constructor that sets up the spline from xml file
    *
@@ -126,13 +112,13 @@ public:
   /**
    * Default destructor for this class.
    */
-  virtual ~Spline() 
+  virtual ~Spline()
   {
   }
 
   /**
    * Sets up the class variables necessary for computing spline
-   */ 
+   */
   virtual void setup() {}//= 0;
 
   /**
@@ -140,13 +126,13 @@ public:
    */
   virtual void
   evaluateSpline(
-    vector<vector<Scalar> >& spline, 
+    vector<vector<Scalar> >& spline,
     vector<Scalar>& splineTime,
     const unsigned& derivative) = 0;
 
   /**
    * Parses an xml file to get the spline properties
-   * 
+   *
    * @param filePath: input xml file
    */
   virtual void splineFromXml(const string& filePath);
@@ -158,10 +144,10 @@ public:
    * @param startTime: Starting time of knots (Generally zero)
    */
   virtual void plotSpline() {}//= 0;
-  
+
   /**
    * Getters
-   */ 
+   */
   unsigned& getNKnots() { return nKnots; }
   unsigned& getDim() { return dim; }
   Scalar& getStepSize() { return stepSize; }
@@ -171,31 +157,31 @@ public:
 protected:
   /**
    * Checks whether the spline input parameters are valid
-   */ 
+   */
   virtual void validateParamters() {}
-  
-  //! Spline type
+
+  ///< Spline type
   int type;
-  
-  //! Dimension of the spline (3D, 2D).
+
+  ///< Dimension of the spline (3D, 2D).
   unsigned dim;
 
-  //! Degree of the spline
+  ///< Degree of the spline
   unsigned degree;
 
-  //! Number of knots.
+  ///< Number of knots.
   unsigned nKnots;
 
-  //! Spline step size
+  ///< Spline step size
   Scalar stepSize;
 
-  //! Knot Sequence.
+  ///< Knot Sequence.
   Matrix<Scalar, Dynamic, 1> knots;
 
-  //!Control Points.
+  ///<Control Points.
   Matrix<Scalar, Dynamic, Dynamic> controlPoints;
 
-  //! Coefficients of the spline.
+  ///< Coefficients of the spline.
   vector<Matrix<Scalar, Dynamic, Dynamic>> coeffs;
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

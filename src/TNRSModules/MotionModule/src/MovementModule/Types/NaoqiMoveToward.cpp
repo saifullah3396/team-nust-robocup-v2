@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/MovementModule/Types/NaoqiMoveToward.cpp
+ * @file MotionModule/src/MovementModule/Types/NaoqiMoveToward.cpp
  *
  * This file implements the class NaoqiMoveToward
  *
@@ -26,7 +26,7 @@ void NaoqiMoveToward<Scalar>::loadExternalConfig()
 {
   static bool loaded = false;
   if (!loaded) {
-    //! read parameters from config file:
+    ///< read parameters from config file:
     //GET_CONFIG(
     //  "MotionBehaviors",
     //  (Scalar, Any variable, Container for that variable),

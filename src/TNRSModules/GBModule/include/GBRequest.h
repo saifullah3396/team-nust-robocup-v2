@@ -40,7 +40,7 @@ DECLARE_MODULE_REQUEST(
   TNSPLModules,
   gb,
   GBRequestIds
-)
+);
 
 struct RequestGeneralBehavior : public GBRequest, BehaviorRequest
 {
@@ -85,4 +85,4 @@ DECLARE_MODULE_REQUEST_TYPE(
   GBRequest,
   GBRequestIds,
   killBehavior
-)
+);

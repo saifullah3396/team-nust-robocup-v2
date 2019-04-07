@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceModule/ZmpPreviewController.h
+ * @file MotionModule/include/BalanceModule/ZmpPreviewController.h
  *
  * This file declares the class ZmpPreviewController
  *
@@ -85,24 +85,24 @@ protected:
    */
   void updateGains();
 
-  //! Number of previews for the preview controller.
+  ///< Number of previews for the preview controller.
   int nPreviews;
 
-  //! Error matrices, preview gain matrix, controlInputs (com jerk),
+  ///< Error matrices, preview gain matrix, controlInputs (com jerk),
   Scalar intError, trueIntError;
 
-  //! Optimal gain matrices.
+  ///< Optimal gain matrices.
   Matrix<Scalar, Dynamic, Dynamic> kGain, gGain;
 
   Matrix<Scalar, Dynamic, 1> matPrevGain;
 
-  //! Process model
+  ///< Process model
   boost::shared_ptr<ProcessModel<Scalar, 3, 1, 1> > model;
 
-  //! State
+  ///< State
   Matrix<Scalar, 3, 1> trueState;
 
-  //! First state check
+  ///< First state check
   bool firstState;
 
   template <unsigned StateSize>

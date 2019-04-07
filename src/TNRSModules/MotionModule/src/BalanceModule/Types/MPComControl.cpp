@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceModule/Types/MPComControl.cpp
+ * @file MotionModule/src/BalanceModule/Types/MPComControl.cpp
  *
  * This file implements the class MPComControl
  *
@@ -43,7 +43,7 @@ bool MPComControl<Scalar>::initiate()
   this->jointsI = this->kM->getJointPositions();
   this->jointsDelta = jointsToReach - this->jointsI;
   Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
-  if (!activeJoints.any()) { //! Posture already reached
+  if (!activeJoints.any()) { ///< Posture already reached
     return false;
   } else {
     auto timeStep = this->cycleTime;
@@ -62,7 +62,7 @@ bool MPComControl<Scalar>::initiate()
   this->jointsI = this->kM->getJointPositions();
   this->jointsDelta = jointsToReach - this->jointsI;
   Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
-  if (!activeJoints.any()) { //! Posture already reached
+  if (!activeJoints.any()) { ///< Posture already reached
     return false;
   } else {
     return true;

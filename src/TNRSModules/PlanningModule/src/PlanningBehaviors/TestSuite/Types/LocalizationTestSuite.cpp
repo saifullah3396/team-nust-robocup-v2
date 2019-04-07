@@ -7,13 +7,14 @@
  * @date 21 Jul 2018
  */
 
+#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
+#include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "PlanningModule/include/PlanningRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.h"
 #include "TNRSBase/include/DebugBase.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
-#include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
-#include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
+#include "Utils/include/AngleDefinitions.h"
 #include "Utils/include/ConfigMacros.h"
 #include "VisionModule/include/VisionRequest.h"
 
@@ -23,6 +24,7 @@ LocalizationTestSuite::LocalizationTestSuite(
   TestSuite(planningModule, config, "LocalizationTestSuite")
 {
   DEFINE_FSM_STATE(LocalizationTestSuite, SideLineLocalization, sideLineLocalization);
+  DEFINE_FSM_STATE(LocalizationTestSuite, LocalizationLostState, localizationLostState);
   DEFINE_FSM_STATE(LocalizationTestSuite, LocalizationPrediction, localizationPrediction);
   DEFINE_FSM_STATE(LocalizationTestSuite, LocalizationWithMovement, localizationWithMovement);
   DEFINE_FSM(fsm, LocalizationTestSuite, sideLineLocalization);
@@ -59,6 +61,15 @@ bool LocalizationTestSuite::initiate()
     BaseModule::publishModuleRequest(
       boost::make_shared<SwitchFeatureExtModule>(true, FeatureExtractionIds::ball));
     BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(true));
+    /*Json::Value value;
+    value["GoalExtraction"]["drawScannedLines"] = 1;
+    value["GoalExtraction"]["drawScannedRegions"] = 1;
+    value["GoalExtraction"]["drawGoalBaseWindows"] = 1;
+    value["GoalExtraction"]["drawShiftedBorderLines"] = 1;
+    value["GoalExtraction"]["drawGoalPostBases"] = 1;
+    value["GoalExtraction"]["displayOutput"] = 1;
+    DebugBase::processDebugMsg(value);
+    */
     return true;
   } catch (BehaviorException& e) {
     LOG_EXCEPTION(e.what());
@@ -99,19 +110,49 @@ void LocalizationTestSuite::SideLineLocalization::onRun()
         boost::make_shared <HeadTargetTrackConfig> ();
       mConfig->headTargetType = HeadTargetTypes::goal;
       // Robot is on sidelines with other robots so keep scan range minimum.
-      mConfig->scanConfig->scanMaxYaw = 45 * M_PI / 180;
+      mConfig->scanConfig = boost::make_shared<HeadScanConfig>();
+      mConfig->scanConfig->scanMaxYaw = Angle::DEG_45;
       bPtr->setupMBRequest(MOTION_1, mConfig);
     }
   } else {
-    LOCALIZE_LAST_KNOWN_OUT_REL(PlanningModule, bPtr) = true;
-    nextState = nullptr;
+    bPtr->killAllMotionBehaviors();
+    cout << "Robot pose: " << ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr).get().transpose() << endl;
+    //LOCALIZE_LAST_KNOWN_OUT_REL(PlanningModule, bPtr) = true;
+    //nextState = nullptr;
+  }
+}
+
+void LocalizationTestSuite::LocalizationLostState::onStart()
+{
+  ON_SIDE_LINE_OUT_REL(PlanningModule, bPtr) = false;
+  LOCALIZE_LAST_KNOWN_OUT_REL(PlanningModule, bPtr) = false;
+}
+
+void LocalizationTestSuite::LocalizationLostState::onRun()
+{
+  auto localized = ROBOT_LOCALIZED_IN_REL(PlanningModule, bPtr);
+  if (!localized) {
+    if (!bPtr->mbInProgress()) {
+      auto mConfig =
+        boost::make_shared <HeadTargetTrackConfig> ();
+      mConfig->headTargetType = HeadTargetTypes::goal;
+      // Robot is on sidelines with other robots so keep scan range minimum.
+      mConfig->scanConfig = boost::make_shared<HeadScanConfig>();
+      mConfig->scanConfig->scanMaxYaw = Angle::DEG_45;
+      bPtr->setupMBRequest(MOTION_1, mConfig);
+    }
+  } else {
+    bPtr->killAllMotionBehaviors();
+    //cout << "Localized..." << endl;
+    cout << "Robot pose: " << ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr).get().transpose() << endl;
+    //nextState = nullptr;
   }
 }
 
 void LocalizationTestSuite::LocalizationPrediction::onStart()
 {
   BaseModule::publishModuleRequest(
-    boost::make_shared<InitiateLocalizer>(RobotPose2D<float>(-4.25, 0.0, 0.0)));
+    boost::make_shared<InitiateLocalizer>(RobotPose2D<float>(0.0, 0.0, 0.0)));
 }
 
 void LocalizationTestSuite::LocalizationPrediction::onRun()

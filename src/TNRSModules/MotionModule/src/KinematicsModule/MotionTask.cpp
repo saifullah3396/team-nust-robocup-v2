@@ -73,7 +73,7 @@ Matrix<Scalar, Dynamic, Dynamic>
 MotionTask<Scalar>::getJacobian()
 {
   Matrix<Scalar, Dynamic, Dynamic> jacobian = computeJacobian();
-  //! Removes dependency on rhipyawpitch joint transforms it to lhipyawpitch joint
+  ///< Removes dependency on rhipyawpitch joint transforms it to lhipyawpitch joint
   jacobian.col(toUType(Joints::lHipYawPitch)) += jacobian.col(toUType(Joints::rHipYawPitch));
   jacobian.col(toUType(Joints::rHipYawPitch)).setZero();
   for (size_t i = 0; i < nDof; ++i) {

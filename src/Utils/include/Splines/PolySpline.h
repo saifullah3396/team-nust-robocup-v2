@@ -1,5 +1,5 @@
 /**
- * @file Utils/inlclude/PolySpline.h
+ * @file Utils/include/Splines/PolySpline.h
  *
  * This file declares the class PolySpline
  *
@@ -36,7 +36,7 @@ public:
     const unsigned& dim,
     const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
     const Matrix<Scalar, Dynamic, 1>& knots,
-    const Scalar& stepSize, 
+    const Scalar& stepSize,
     const Matrix<Scalar, Dynamic, Dynamic>& boundaryConds);
 
   /**
@@ -56,8 +56,8 @@ public:
     const unsigned& degree,
     const unsigned& dim,
     const Matrix<Scalar, Dynamic, Dynamic>& controlPoints,
-    const Scalar& splineTime, 
-    const Scalar& stepSize, 
+    const Scalar& splineTime,
+    const Scalar& stepSize,
     const Matrix<Scalar, Dynamic, Dynamic>& boundaryConds);
 
   /**
@@ -79,7 +79,7 @@ public:
    */
   virtual void
   evaluateSpline(
-    vector<vector<Scalar> >& spline, 
+    vector<vector<Scalar> >& spline,
     vector<Scalar>& splineTime,
     const unsigned& derivative);
 
@@ -105,7 +105,7 @@ public:
 
   /**
    * Getters used by friend classes
-   */ 
+   */
   Matrix<Scalar, Dynamic, Dynamic>& getRepKnots() { return knotsRep; }
   Matrix<Scalar, Dynamic, Dynamic>& getBAccels() { return bAccels; }
   Matrix<Scalar, Dynamic, Dynamic>& getBAccelsU() { return bAccelsU; }
@@ -132,47 +132,47 @@ protected:
    * for each variable to find x = invA * b.
    */
   virtual void genInvAMat() = 0;
-  
+
   /**
    * Derived from Spline
    */
   void validateParameters();
-  
-  //! Type of boundary given conditions 
-  //! natural or clamped
+
+  ///< Type of boundary given conditions
+  ///< natural or clamped
   string boundaryType;
-  
-  //! Knot sequence for multiple variables.
+
+  ///< Knot sequence for multiple variables.
   Matrix<Scalar, Dynamic, Dynamic> knotsRep;
 
-  //! Velocities at the boundaries for multiple variables
+  ///< Velocities at the boundaries for multiple variables
   Matrix<Scalar, Dynamic, Dynamic> boundaryConds;
-  
-  //! Upper control points.
+
+  ///< Upper control points.
   Matrix<Scalar, Dynamic, Dynamic> controlPointsU;
 
-  //! Lower control points.
+  ///< Lower control points.
   Matrix<Scalar, Dynamic, Dynamic> controlPointsL;
 
-  //! Difference of upper and lower control points.
+  ///< Difference of upper and lower control points.
   Matrix<Scalar, Dynamic, Dynamic> controlPointsDiff;
 
-  //! A matrix for Ax = b.
+  ///< A matrix for Ax = b.
   Matrix<Scalar, Dynamic, Dynamic> A;
 
-  //! Inverse of the A matrix.
+  ///< Inverse of the A matrix.
   Matrix<Scalar, Dynamic, Dynamic> invA;
 
-  //! b matrix for Ax = b.
+  ///< b matrix for Ax = b.
   Matrix<Scalar, Dynamic, Dynamic> b;
 
-  //! Inner boundary accelerations x (bAccels) = invA b.
+  ///< Inner boundary accelerations x (bAccels) = invA b.
   Matrix<Scalar, Dynamic, Dynamic> bAccels;
 
-  //! Upper inner boundary accelerations.
+  ///< Upper inner boundary accelerations.
   Matrix<Scalar, Dynamic, Dynamic> bAccelsU;
 
-  //! Lower inner boundary accelerations.
+  ///< Lower inner boundary accelerations.
   Matrix<Scalar, Dynamic, Dynamic> bAccelsL;
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

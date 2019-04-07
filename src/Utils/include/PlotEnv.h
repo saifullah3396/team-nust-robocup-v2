@@ -273,8 +273,8 @@ namespace GnuPlotEnv
         Matrix<Scalar, 2, 1>(-1.f, 1.f), const Matrix<Scalar, 2, 1>& zRange = Matrix<Scalar, 2, 1>(-1.f, 1.f))
     {
       Gnuplot::set_terminal_std("qt");
-      if (two_dim) cmd("set size ratio -1"); //! Equal x-y ratios for better view
-      else cmd("set view equal xyz"); //! Equal x-y-z ratios for better view
+      if (two_dim) cmd("set size ratio -1"); ///< Equal x-y ratios for better view
+      else cmd("set view equal xyz"); ///< Equal x-y-z ratios for better view
       //cmd("set size ratio -1");
       set_xrange(xRange[0], xRange[1]);
       set_yrange(yRange[0], yRange[1]);
@@ -283,7 +283,7 @@ namespace GnuPlotEnv
       set_xlabel(labelx);
       set_ylabel(labely);
       set_zlabel(labelz);
-      //! Setup an empty plot
+      ///< Setup an empty plot
       //cmd("plot 1/0");
       LineStyle ls;
       ls.color = GnuPlotColor::black;

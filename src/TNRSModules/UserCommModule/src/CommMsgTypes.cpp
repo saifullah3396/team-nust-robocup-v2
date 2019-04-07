@@ -1,5 +1,5 @@
 /**
- * @file CommModule/CommMsgTypes.cpp
+ * @file UserCommModule/src/CommMsgTypes.cpp
  *
  * This file defines the enumeration CommMsgTypes
  *

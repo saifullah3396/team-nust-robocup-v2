@@ -1,5 +1,5 @@
 /**
- * @file VisionModule/VisionModule.h
+ * @file VisionModule/include/VisionModule.h
  *
  * This file declares a class for vision planning.
  * All the functions and algorithms for image processing, object
@@ -28,6 +28,7 @@ class CameraTransform;
 class ColorHandler;
 class FeatureExtraction;
 enum class TNColors : unsigned int;
+enum class CameraId : unsigned int;
 typedef boost::shared_ptr<CameraModule> CameraModulePtr;
 typedef boost::shared_ptr<CameraTransform> CameraTransformPtr;
 typedef boost::shared_ptr<ColorHandler> ColorHandlerPtr;
@@ -50,17 +51,17 @@ class VisionModule : public BaseModule, public DebugBase
    * Debug variables for this module
    */
   INIT_DEBUG_BASE_(
-    //! Option to enable any kind of debugging.
+    ///< Option to enable any kind of debugging.
     (int, debug, 1),
-    //! Option to choose which output image should be sent for debugging.
+    ///< Option to choose which output image should be sent for debugging.
     (int, debugImageIndex, 2),
-    //! Option to send a binarized image for a given color
+    ///< Option to send a binarized image for a given color
     (int, sendBinaryImage, -1),
-    //! Option to enable known landmark info to be sent
+    ///< Option to enable known landmark info to be sent
     (int, sendKnownLandmarks, 1),
-    //! Option to enable unknown landmark info to be sent
+    ///< Option to enable unknown landmark info to be sent
     (int, sendUnknownLandmarks, 1),
-  )
+  );
 
   DECLARE_INPUT_CONNECTOR(
     visionThreadPeriod,
@@ -70,13 +71,13 @@ class VisionModule : public BaseModule, public DebugBase
     gameData,
     robotOnSideLine,
     robotPose2D
-  )
+  );
   DECLARE_OUTPUT_CONNECTOR(
     ballInfo,
     goalInfo,
     landmarksFound,
     obstaclesObs
-  )
+  );
 
 public:
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
@@ -261,41 +262,41 @@ private:
    */
   void setupFieldProjection();
 
-  //! Runs the vision module if true
+  ///< Runs the vision module if true
   bool runVision = {true};
 
-  //! Flag to use logged images or realtime images
+  ///< Flag to use logged images or realtime images
   bool useLoggedImages = {false};
 
-  //! Project field on the images
+  ///< Project field on the images
   bool projectField = {false};
 
-  //! Field points in world coordinates
+  ///< Field points in world coordinates
   vector<Point3f> fieldPoints;
 
-  //! Logs images for the respective camera in respective robot dir
+  ///< Logs images for the respective camera in respective robot dir
   vector<bool> logImages;
 
-  //! Starts video writer for the respective camera if true
+  ///< Starts video writer for the respective camera if true
   vector<bool> writeVideo;
 
-  //! Pointer to a vector of feature extraction classes.
+  ///< Pointer to a vector of feature extraction classes.
   vector<FeatureExtractionPtr> featureExt;
 
-  //! A vector determining whether to update a given feature extraction class or not
-  vector<bool> featureExtToRun;
+  ///< Current active camera
+  CameraId activeCamera;
 
-  //! Pointer to CameraModule class.
+  ///< Pointer to CameraModule class.
   CameraModulePtr cameraModule;
 
-  //! Pointer to camera transform classes.
+  ///< Pointer to camera transform classes.
   vector<CameraTransformPtr> cameraTransforms;
 
-  //! Pointer to ColorHandler class.
+  ///< Pointer to ColorHandler class.
   ColorHandlerPtr colorHandler;
 
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  //! Pointer to NaoQi video device proxy
+  ///< Pointer to NaoQi video device proxy
     #ifndef V6_CROSS_BUILD
       ALVideoDeviceProxyPtr camProxy;
     #else

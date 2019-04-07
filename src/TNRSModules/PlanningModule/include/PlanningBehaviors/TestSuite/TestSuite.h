@@ -1,19 +1,19 @@
 /**
- * @file PlanningModule/PlanningBehaviors/TestSuite.h
+ * @file PlanningModule/include/PlanningBehaviors/TestSuite/TestSuite.h
  *
  * This file declares the class TestSuite.
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 16 Nov 2017 
+ * @date 16 Nov 2017
  */
 
 #pragma once
 
 #include "PlanningModule/include/PlanningBehavior.h"
 
-/** 
+/**
  * @class TestSuite
- * @brief A base class for defining test sequences 
+ * @brief A base class for defining test sequences
  */
 class TestSuite : public PlanningBehavior
 {
@@ -26,7 +26,7 @@ public:
    * @param name Behavior name
    */
   TestSuite(
-    PlanningModule* planningModule, 
+    PlanningModule* planningModule,
     const boost::shared_ptr<TestSuiteConfig>& config,
     const string& name = "TestSuite");
 
@@ -37,10 +37,10 @@ public:
 
   /**
    * @brief getType Returns its own child based on the given type
-   * 
+   *
    * @param planningModule Pointer to base planning module
    * @param cfg Config of the requested behavior
-   * 
+   *
    * @return boost::shared_ptr<TestSuite>
    */
   static boost::shared_ptr<TestSuite> getType(
@@ -49,7 +49,7 @@ public:
 private:
   /**
    * Returns the cast of config as TestSuiteConfigPtr
-   */ 
+   */
   boost::shared_ptr<TestSuiteConfig> getBehaviorCast();
 };
 

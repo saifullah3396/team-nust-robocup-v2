@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/DiveModule/Types/HandSaveDive.h
+ * @file MotionModule/src/DiveModule/Types/HandSaveDive.cpp
  *
  * This file implements the class HandSaveDive
  *

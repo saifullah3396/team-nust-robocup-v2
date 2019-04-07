@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/MovementModule/TNRSFootstep.h
+ * @file Utils/include/DataHolders/TNRSFootstep.h
  *
  * This file defines the struct TNRSFootstep
  *

@@ -55,7 +55,7 @@ protected:
   */ 
   boost::shared_ptr<GBLedsConfig> getBehaviorCast();
   
-  //! Led request
+  ///< Led request
   LedRequestPtr ledRequest;
 };
 

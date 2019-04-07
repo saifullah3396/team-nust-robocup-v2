@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/DiveModule/Types/KeyFrameMotionDive.h
+ * @file MotionModule/src/DiveModule/Types/KeyFrameMotionDive.cpp
  *
  * This file implements the class KeyFrameMotionDive
  *

@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehavior.cpp
+ * @file PlanningModule/src/PlanningBehavior.cpp
  *
  * This file implements the base class for all types of planning behaviors.
  *
@@ -203,7 +203,7 @@ bool PlanningBehavior::requestInProgress(
   }
 
   if (req->isReceived()) {
-    //! Request received on the other end
+    ///< Request received on the other end
     if (req->getAccepted()) {
       //cout << "Accepted request" << endl;
       if (feedback.isInitiated() &&

@@ -1,5 +1,5 @@
 /**
- * @file GameCommModule/GameCommModule.h
+ * @file GameCommModule/include/GameCommModule.h
  *
  * This file declares the class GameCommModule
  *
@@ -39,10 +39,10 @@ public:
     robotLocalized,
     positionConfidence,
     sideConfidence
-  )
+  );
   DECLARE_OUTPUT_CONNECTOR(
     teamRobots
-  )
+  );
 
   /**
    * @brief GameCommModule Constructor
@@ -69,7 +69,7 @@ public:
    * See BaseModule::mainRoutine()
    */
   void mainRoutine() final;
-  
+
   /**
    * See BaseModule::handleRequests()
    */
@@ -86,6 +86,6 @@ public:
   void setThreadPeriod() final;
 
 private:
-  //! Pointer to TeamComm class
+  ///< Pointer to TeamComm class
   TeamCommPtr teamComm;
 };

@@ -102,7 +102,7 @@ namespace PathPlannerSpace
     vector<double> stepRangeY = vector<double>(
       stepRanges[1],
       stepRanges[1] + sizeof(stepRanges[1]) / sizeof(stepRanges[1][0]));
-    //! Create step range
+    ///< Create step range
     environmentParams.stepRange.clear();
     environmentParams.stepRange.reserve(stepRangeX.size());
     double x, y;
@@ -118,11 +118,11 @@ namespace PathPlannerSpace
         pair<int, int>(discVal(x, cellSize), discVal(y, cellSize)));
     }
 
-    //! Insert first point again at the end!
+    ///< Insert first point again at the end!
     environmentParams.stepRange.push_back(environmentParams.stepRange[0]);
     environmentParams.maxStepWidth = sqrt(maxX * maxX + maxY * maxY) * 1.5;
 
-    //! Initialize the heuristic
+    ///< Initialize the heuristic
     boost::shared_ptr<MyHeuristic> h;
     //cout << "Initializing Heuristic" << endl;
     if (heuristicType == "EuclideanHeuristic") {
@@ -139,7 +139,7 @@ namespace PathPlannerSpace
           diffAngleCost,
           maxStepWidth));
     } else if (heuristicType == "PathCostHeuristic") {
-      //! For heuristic inflation
+      ///< For heuristic inflation
       double footIncircle = min(
         (environmentParams.footSizeX / 2.0 - abs(
           environmentParams.footOriginShiftX)),
@@ -155,7 +155,7 @@ namespace PathPlannerSpace
           diffAngleCost,
           maxStepWidth,
           footIncircle));
-      //! Keep a local ptr for visualization
+      ///< Keep a local ptr for visualization
       pathCostHeuristicPtr =
         boost::dynamic_pointer_cast < PathCostHeuristic > (h);
     } else {
@@ -165,10 +165,10 @@ namespace PathPlannerSpace
     //cout << "Reseting environment" << endl;
     environmentParams.myHeuristic = h;
 
-    //! Initialize the planner environment
+    ///< Initialize the planner environment
     plannerEnvironmentPtr.reset(new PathPlannerEnvironment(environmentParams));
     //cout << "Resetted environment" << endl;
-    //! Set up planner
+    ///< Set up planner
     if (plannerType == "ARAPlanner" || plannerType == "ADPlanner" || plannerType == "RSTARPlanner") {
       //cout << "Planning with " << plannerType << endl;
     } else {
@@ -215,7 +215,7 @@ namespace PathPlannerSpace
     int ret = 0;
     MDPConfig mdpConfig;
     vector<int> solutionStateIds;
-    //! Commit start/goal poses to the environment
+    ///< Commit start/goal poses to the environment
     auto diffLeft =
       State(
         startFootLeft.getX() - goalFootLeft.getX(),
@@ -259,17 +259,17 @@ namespace PathPlannerSpace
     plannerEnvironmentPtr->InitializeEnv(NULL);
     plannerEnvironmentPtr->InitializeMDPCfg(&mdpConfig);
 
-    //! Inform AD planner about changed (start) states for replanning
+    ///< Inform AD planner about changed (start) states for replanning
     if (pathExisted && !environmentParams.forwardSearch && plannerType == "ADPlanner") {
       vector<int> changedEdges;
       changedEdges.push_back(mdpConfig.startstateid);
-      //! update the AD planner
+      ///< update the AD planner
       boost::shared_ptr<ADPlanner> adPlanner =
         boost::dynamic_pointer_cast < ADPlanner > (plannerPtr);
       adPlanner->update_preds_of_changededges(&changedEdges);
     }
 
-    //! set up SBPL
+    ///< set up SBPL
     if (plannerPtr->set_start(mdpConfig.startstateid) == 0) {
       //cout << "Failed to set start state." << endl;
       return false;
@@ -351,7 +351,7 @@ namespace PathPlannerSpace
     State startLeft;
     vector<int>::const_iterator stateIdsIter = stateIds.begin();
 
-    //! first state is always the robot's left foot
+    ///< first state is always the robot's left foot
     if (!plannerEnvironmentPtr->getState(*stateIdsIter, &startLeft)) {
       path.clear();
       return false;
@@ -363,8 +363,8 @@ namespace PathPlannerSpace
     }
     ++stateIdsIter;
 
-    //! check if the robot's left foot can be ommited as first state in the path,
-    //! i.e. the robot's right foot is appended first to the path
+    ///< check if the robot's left foot can be ommited as first state in the path,
+    ///< i.e. the robot's right foot is appended first to the path
     if (s.getLeg() == LEFT) path.push_back(startFootRight);
     else path.push_back(startLeft);
     path.push_back(s);
@@ -377,9 +377,9 @@ namespace PathPlannerSpace
       path.push_back(s);
     }
 
-    //! add last neutral step
+    ///< add last neutral step
     if (path.back().getLeg() == RIGHT) path.push_back(goalFootLeft);
-    else //! lastLeg == LEFT
+    else ///< lastLeg == LEFT
     path.push_back(goalFootRight);
 
     return true;
@@ -389,14 +389,14 @@ namespace PathPlannerSpace
   PathPlanner::reset()
   {
     //cout << "Resetting planner" << endl;
-    //! reset the previously calculated paths
+    ///< reset the previously calculated paths
     path.clear();
     planningStatesIds.clear();
-    //! reset the planner
-    //! INFO: forcePlanningFromScratch was not working properly the last time
-    //! checked; therefore instead of using this function the planner is manually
-    //! reset
-    //!plannerPtr->forcePlanningFromScratch();
+    ///< reset the planner
+    ///< INFO: forcePlanningFromScratch was not working properly the last time
+    ///< checked; therefore instead of using this function the planner is manually
+    ///< reset
+    ///<plannerPtr->forcePlanningFromScratch();
     plannerEnvironmentPtr->reset();
     setPlanner();
     //cout << "resetted planner" << endl;
@@ -406,10 +406,10 @@ namespace PathPlannerSpace
   PathPlanner::resetTotally()
   {
     //cout << "Resetting planner and environment" << endl;
-    //! reset the previously calculated paths
+    ///< reset the previously calculated paths
     path.clear();
     planningStatesIds.clear();
-    //! reinitialize the planner environment
+    ///< reinitialize the planner environment
     plannerEnvironmentPtr.reset(new PathPlannerEnvironment(environmentParams));
     setPlanner();
   }
@@ -430,7 +430,7 @@ namespace PathPlannerSpace
     if (forceNewPlan || plannerType == "RSTARPlanner" || plannerType == "ARAPlanner") {
       reset();
     }
-    //! start the planning and return success
+    ///< start the planning and return success
     return run();
   }
 
@@ -554,7 +554,7 @@ namespace PathPlannerSpace
   void
   PathPlanner::updateMap()
   {
-    //! check if the path is still valid on updated map.
+    ///< check if the path is still valid on updated map.
     mapPtr->updateDistanceMap();
     plannerEnvironmentPtr->updateMap();
   }

@@ -53,10 +53,10 @@ struct GoalInfo : public DataHolder, public DataHeader
     return val;
   }
 
-  bool found = {false}; //! Whether the goal post is found
-  GoalPostType type = {GoalPostType::unknown}; //! Whether the goal post is type or opponents
-  cv::Point_<T> leftPost; //! Left post position
-  cv::Point_<T> rightPost; //! Right post position
-  cv::Point_<T> mid; //! Goal middle position
-  RobotPose2D<T> poseFromGoal; //! Pose of robot from the goal
+  bool found = {false}; ///< Whether the goal post is found
+  GoalPostType type = {GoalPostType::unknown}; ///< Whether the goal post is type or opponents
+  cv::Point_<T> leftPost; ///< Left post position
+  cv::Point_<T> rightPost; ///< Right post position
+  cv::Point_<T> mid; ///< Goal middle position
+  RobotPose2D<T> poseFromGoal; ///< Pose of robot from the goal
 };

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MotionConfigs/MBMovementConfig.cpp
+ * @file TNRSModules/BehaviorConfigs/src/MBConfigs/MBMovementConfig.cpp
  *
  * This file implements the structs MBMovementConfig
  *
@@ -18,23 +18,23 @@ DEFINE_BEHAVIOR_CONFIG(
   (MBMovementTypes, naoqiFootsteps, NaoqiFootstepsConfig),
   (MBMovementTypes, naoqiMoveToward, NaoqiMoveTowardConfig),
   (MBMovementTypes, speedWalk, SpeedWalkConfig),
-)
+);
 
 void NaoqiFootstepsConfig::init() {}
 void NaoqiFootstepsConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }
 
 void NaoqiMoveTowardConfig::init() {}
 void NaoqiMoveTowardConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }
 
 void SpeedWalkConfig::init() {}
 void SpeedWalkConfig::validate()
 {
-  //! Throw a BConfigException is behavior configuration is invalid
+  ///< Throw a BConfigException is behavior configuration is invalid
 }
 

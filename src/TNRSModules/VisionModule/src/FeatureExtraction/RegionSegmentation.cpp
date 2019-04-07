@@ -1,5 +1,5 @@
 /**
- * @file VisionModule/include/FeatureExtraction/RegionSegmentation.cpp
+ * @file VisionModule/src/FeatureExtraction/RegionSegmentation.cpp
  *
  * This file implements the class for segmenting the image into different
  * regions for further processing.
@@ -14,8 +14,13 @@
 #include "VisionModule/include/FeatureExtraction/BallExtraction.h"
 #include "VisionModule/include/FeatureExtraction/GoalExtraction.h"
 #include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
+#include "VisionModule/include/FeatureExtraction/RegionScanners.h"
 #include "VisionModule/include/ColorHandler.h"
+#include "Utils/include/ConfigManager.h"
 #include "Utils/include/ConfigMacros.h"
+#include "Utils/include/EnumUtils.h"
+#include "Utils/include/HardwareIds.h"
+#include "Utils/include/VisionUtils.h"
 
 RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
   FeatureExtraction(visionModule),
@@ -24,7 +29,108 @@ RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
   initDebugBase();
   getDebugVars();
 
-  //! Initializing processing times
+  ourColor = TNColors::yellow;
+  oppColor = TNColors::blue;
+
+  auto top = toUType(CameraId::headTop);
+  auto bottom = toUType(CameraId::headBottom);
+  hScans.resize(toUType(ScanTypes::count));
+  vScans.resize(toUType(ScanTypes::count));
+  hMinScanStepLow.resize(toUType(CameraId::count));
+  vMinScanStepLow.resize(toUType(CameraId::count));
+  hScanStepSizes.resize(toUType(CameraId::count));
+  vScanStepSizes.resize(toUType(CameraId::count));
+  hScanStepHigh.resize(toUType(CameraId::count));
+  vScanStepHigh.resize(toUType(CameraId::count));
+  hScanStepSizes[top].resize(toUType(ScanTypes::count));
+  vScanStepSizes[bottom].resize(toUType(ScanTypes::count));
+
+  auto root =
+    JsonUtils::readJson(ConfigManager::getCommonConfigDirPath() + "VisionConfig.json");
+  JsonUtils::jsonToType(hScanStepHigh, root["hScanStepHigh"], vector<int>());
+  JsonUtils::jsonToType(vScanStepHigh, root["vScanStepHigh"], vector<int>());
+  JsonUtils::jsonToType(hScanStepSizes[top], root["upperCamHScanSteps"], vector<int>());
+  JsonUtils::jsonToType(vScanStepSizes[top], root["upperCamVScanSteps"], vector<int>());
+  JsonUtils::jsonToType(hScanStepSizes[bottom], root["lowerCamHScanSteps"], vector<int>());
+  JsonUtils::jsonToType(vScanStepSizes[bottom], root["lowerCamVScanSteps"], vector<int>());
+  hMinScanStepLow[top] = *std::min_element(begin(hScanStepSizes[top]), end(hScanStepSizes[top]));
+  vMinScanStepLow[top] = *std::min_element(begin(vScanStepSizes[top]), end(vScanStepSizes[top]));
+  hMinScanStepLow[bottom] = *std::min_element(begin(hScanStepSizes[bottom]), end(hScanStepSizes[bottom]));
+  vMinScanStepLow[bottom] = *std::min_element(begin(vScanStepSizes[bottom]), end(vScanStepSizes[bottom]));
+
+  auto defaultCamera = top;
+  //auto ballType = root["ballType"].asInt();
+  //hScans[toUType(ScanTypes::field)] =
+    //new FieldScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::field)], hScanStepHigh[defaultCamera], false);
+  hScans[toUType(ScanTypes::robot)] =
+    new RobotScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::robot)], hScanStepHigh[defaultCamera], false);
+  hScans[toUType(ScanTypes::ball)] =
+    new BallScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], hScanStepHigh[defaultCamera], false);
+  hScans[toUType(ScanTypes::ourJersey)] =
+    new JerseyScan(ourColor, hScanStepSizes[defaultCamera][toUType(ScanTypes::ourJersey)], hScanStepHigh[defaultCamera], false);
+  hScans[toUType(ScanTypes::oppJersey)] =
+    new JerseyScan(oppColor, hScanStepSizes[defaultCamera][toUType(ScanTypes::oppJersey)], hScanStepHigh[defaultCamera], false);
+  hScans[toUType(ScanTypes::lines)] =
+    new LinesScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::lines)], hScanStepHigh[defaultCamera], false);
+  hScans[toUType(ScanTypes::goal)] =
+    new GoalScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::goal)], hScanStepHigh[defaultCamera], false);
+
+  vScans[toUType(ScanTypes::field)] =
+    new FieldScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::field)], vScanStepHigh[defaultCamera], true);
+  vScans[toUType(ScanTypes::robot)] =
+    new RobotScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::robot)], vScanStepHigh[defaultCamera], true);
+  vScans[toUType(ScanTypes::ball)] =
+    new BallScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], vScanStepHigh[defaultCamera], true);
+  vScans[toUType(ScanTypes::ourJersey)] =
+    new JerseyScan(ourColor, vScanStepSizes[defaultCamera][toUType(ScanTypes::ourJersey)], vScanStepHigh[defaultCamera], true);
+  vScans[toUType(ScanTypes::oppJersey)] =
+    new JerseyScan(oppColor, vScanStepSizes[defaultCamera][toUType(ScanTypes::oppJersey)], vScanStepHigh[defaultCamera], true);
+  vScans[toUType(ScanTypes::lines)] =
+    new LinesScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::lines)], vScanStepHigh[defaultCamera], true);
+  //vScans[toUType(ScanTypes::goal)] =
+    //new GoalScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::goal)], vScanStepHigh[defaultCamera], true);
+
+  /*if (ballType == 0) {
+    hScans[toUType(ScanTypes::ball)]->color = TNColors::red;
+    vScans[toUType(ScanTypes::ball)]->color = TNColors::red;
+  } else {
+    hScans[toUType(ScanTypes::ball)]->color = TNColors::black;
+    vScans[toUType(ScanTypes::ball)]->color = TNColors::black;
+  }*/
+
+  for (size_t i = 0; i < hScans.size(); ++i) {
+    auto& scan = hScans[i];
+    if (scan) {
+      scan->enabled = true;
+      scan->scanTables.resize(toUType(CameraId::count));
+      scan->scanTables[top] = vector<bool>(imageWidth[top], false);
+      scan->scanTables[bottom] = vector<bool>(imageWidth[bottom], false);
+      for (size_t j = 0; j < scan->scanTables[top].size(); ++j) {
+        scan->scanTables[top][j] = j % hScanStepSizes[top][i] == 0;
+      }
+      for (size_t j = 0; j < scan->scanTables[bottom].size(); ++j) {
+        scan->scanTables[bottom][j] = j % hScanStepSizes[bottom][i] == 0;
+      }
+    }
+  }
+  for (size_t i = 0; i < vScans.size(); ++i) {
+    auto& scan = vScans[i];
+    if (scan) {
+      scan->enabled = true;
+      scan->scanTables.resize(toUType(CameraId::count));
+      scan->scanTables[top] = vector<bool>(imageHeight[top], false);
+      scan->scanTables[bottom] = vector<bool>(imageHeight[bottom], false);
+      for (size_t j = 0; j < scan->scanTables[top].size(); ++j) {
+        scan->scanTables[top][j] = j % vScanStepSizes[top][i] == 0;
+      }
+      for (size_t j = 0; j < scan->scanTables[bottom].size(); ++j) {
+        scan->scanTables[bottom][j] = j % vScanStepSizes[bottom][i] == 0;
+      }
+    }
+  }
+
+
+  ///< Initializing processing times
   horizontalScanTime = 0.0;
   verticalScanTime = 0.0;
   processTime = 0.0;
@@ -46,8 +152,6 @@ void RegionSegmentation::getDebugVars()
     (int, RegionSegmentation.drawPoints, tempDrawPoints),
     (int, RegionSegmentation.displayInfo, tempDisplayInfo),
     (int, RegionSegmentation.displayOutput, tempDisplayOutput),
-    (int, RegionSegmentation.scanStepLow, scanStepLow),
-    (int, RegionSegmentation.scanStepHigh, scanStepHigh),
   );
   SET_DVAR(int, sendTime, tempSendTime);
   SET_DVAR(int, drawVerticalLines, tempDrawVerticalLines);
@@ -60,28 +164,11 @@ void RegionSegmentation::getDebugVars()
 void RegionSegmentation::processImage()
 {
   auto tStart = high_resolution_clock::now();
-  vScanLimitIdx = getImageHeight() - scanStepLow;
-  hScanLimitIdx = getImageWidth() - scanStepLow;
-
-  horRobotLines.clear();
-  //horBallLines.clear();
-  horJerseyLinesOurs.clear();
-  horJerseyLinesOpps.clear();
-
-  //verGoalLines.clear();
-  verRobotLines.clear();
-  //verBallLines.clear();
-  verJerseyLinesOurs.clear();
-  verJerseyLinesOpps.clear();
-
-  borderPoints.clear();
-  ourColor = TNColors::yellow;
-  oppColor = TNColors::blue;
-
+  reset();
+  vScanLimitIdx = getImageHeight() - vMinScanStepLow[toUType(activeCamera)];
+  hScanLimitIdx = getImageWidth() - hMinScanStepLow[toUType(activeCamera)];
   horizontalScan();
   verticalScan();
-
-  drawResults();
   auto tEnd = high_resolution_clock::now();
   duration<double> timeSpan = tEnd - tStart;
   processTime = timeSpan.count();
@@ -93,234 +180,138 @@ void RegionSegmentation::processImage()
     LOG_INFO("Average field height:" << avgHeight);
     LOG_INFO("Minimum best field height:" << minBestHeight);
   }
-  if (GET_DVAR(int, displayOutput))
-    VisionUtils::displayImage("RegionSegmentation", bgrMat[currentImage]);
-  //waitKey(0);
+  if (GET_DVAR(int, displayOutput)) {
+    drawResults();
+    VisionUtils::displayImage("RegionSegmentation", bgrMat[toUType(activeCamera)]);
+  }
+}
+
+void RegionSegmentation::reset()
+{
+  setScanSettings();
+  for (size_t i = 0; i < hScans.size(); ++i) {
+    if (hScans[i] && hScans[i]->enabled) {
+      hScans[i]->scanLines.clear();
+      hScans[i]->lowStep =
+        hScanStepSizes[toUType(activeCamera)][i];
+    }
+  }
+  for (size_t i = 0; i < vScans.size(); ++i) {
+    if (vScans[i] && vScans[i]->enabled) {
+      vScans[i]->scanLines.clear();
+      vScans[i]->lowStep =
+        vScanStepSizes[toUType(activeCamera)][i];
+    }
+  }
+  borderPoints.clear();
+  static_cast<LinesScan*>(hScans[toUType(ScanTypes::lines)])->edgePoints.clear();
+  static_cast<LinesScan*>(vScans[toUType(ScanTypes::lines)])->edgePoints.clear();
+}
+
+void RegionSegmentation::setScanSettings()
+{
+  if (activeCamera == CameraId::headTop) {
+    //hScans[toUType(ScanTypes::field)]->enabled = true;
+    hScans[toUType(ScanTypes::ourJersey)]->enabled = true;
+    hScans[toUType(ScanTypes::oppJersey)]->enabled = true;
+    hScans[toUType(ScanTypes::goal)]->enabled = true;
+
+    vScans[toUType(ScanTypes::field)]->enabled = true;
+    vScans[toUType(ScanTypes::ourJersey)]->enabled = true;
+    vScans[toUType(ScanTypes::oppJersey)]->enabled = true;
+    //vScans[toUType(ScanTypes::goal)]->enabled = true;
+  } else {
+    //hScans[toUType(ScanTypes::field)]->enabled = false;
+    hScans[toUType(ScanTypes::ourJersey)]->enabled = false;
+    hScans[toUType(ScanTypes::oppJersey)]->enabled = false;
+    hScans[toUType(ScanTypes::goal)]->enabled = false;
+
+    vScans[toUType(ScanTypes::field)]->enabled = false;
+    vScans[toUType(ScanTypes::ourJersey)]->enabled = false;
+    vScans[toUType(ScanTypes::oppJersey)]->enabled = false;
+    //vScans[toUType(ScanTypes::goal)]->enabled = false;
+  }
 }
 
 void RegionSegmentation::horizontalScan()
 {
   auto tStart = high_resolution_clock::now();
-  int horPrevLen = 1000;
-  //! Last field height with some margin
-  auto lastHeight = fieldExt->getFieldHeight() - 50;
-
-  srand(time(0));
-  int horStartHigh = rand() % scanStepHigh;
-
-  //! Field scan parameters
-  int otherF = 0, greenF = 0, horStartF = -1, horEndF = -1;
-  int fieldMin = getImageWidth();
-  int fieldMax = 0;
-  bool fieldFound = false;
-  //! Robot scan parameters
-  int whiteR = 0, otherR = 0, greenR = 0, horStartRobot = -1;
-  //! Ball scan parameters
-  int otherB = 0, blackB = 0, whiteB = 0, horStartBall = -1;
-  //! Team jersey scan parameters
-  //int horStartJerseyOurs = -1;
-  //! Opponent jersey scan parameters
-  //int horStartJerseyOpps = -1;
- /* for (int y = 0; y < getImageHeight(); ++y) {
-    for (int x = 0; x < getImageWidth(); ++x) {
-      auto color = getYUV(x, y);
-      if (colorHandler->isColor(color, TNColors::GREEN)) {
-        VisionUtils::drawPoint(Point(x, y), bgrMat[currentImage], Scalar(255, 0, 0));
+  auto minScanStepLow = hMinScanStepLow[toUType(activeCamera)];
+  if (activeCamera == CameraId::headTop) {
+    ///< Last field height with some margin
+    auto lastHeight = fieldExt->getFieldHeight() - 50;
+    for (int y = 0; y < getImageHeight(); y = y + hScanStepHigh[toUType(activeCamera)]) {
+      bool scanInField = y > lastHeight;
+      for (const auto& scan : hScans) {
+        if (scan && scan->enabled) scan->reset();
       }
-    }
-  }*/
-
-  for (int y = horStartHigh; y < getImageHeight(); y = y + scanStepHigh) {
-    bool scanInField = y > lastHeight;
-    if (scanInField) {
-      otherF = 0, greenF = 0, horStartF = -1, horEndF = -1;
-      fieldMin = getImageWidth();
-      fieldMax = 0;
-      fieldFound = false;
-      whiteR = 0, otherR = 0, greenR = 0, horStartRobot = -1;
-      //! Ball scan parameters
-      otherB = 0, blackB = 0, whiteB = 0, horStartBall = -1;
-    }
-    //! Team jersey scan parameters
-    int horStartJerseyOurs = -1;
-    //! Opponent jersey scan parameters
-    int horStartJerseyOpps = -1;
-    //uchar* p = whiteEdges.ptr<uchar>(y);
-    //auto tStart1 = high_resolution_clock::now();
-    int horStartLow = rand() % scanStepLow;
-    for (int x = horStartLow; x < getImageWidth(); x = x + scanStepLow) {
-      auto color = getYUV(x, y);
-      //! Horizontal Scanning
-      if (colorHandler->isColor(color, TNColors::green)) {
+      for (int x = 0; x < getImageWidth(); x = x + minScanStepLow) {
         if (scanInField) {
-          //! Field Scanning
-          if (horStartF == -1) {
-            horStartF = x;
-          }
-          otherF = 0;
-          greenF++;
-
-          greenR++;
-          if (greenR > 1) {
-            if (otherR != 0) {
-              float rR = whiteR / (float) otherR;
-              if (horStartRobot != -1 && otherR > 0 && whiteR > 0 && rR > 0.05f && rR < 0.99f) {
-                auto sl = boost::make_shared < ScannedLine > (Point(
-                  horStartRobot,
-                  y), Point(x - scanStepLow, y));
-                horRobotLines.push_back(sl);
-                // line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(0,0,255), 1);
-                //  imshow("image", bgrMat[currentImage]);
-                //  waitKey(0);
-              }
-              otherR = 0;
-              greenR = 0;
-              whiteR = 0;
-              horStartRobot = -1;
+          if (x >= hScanLimitIdx) {
+            for (const auto& scan : hScans) {
+              if (scan && scan->enabled) scan->onScanLimitReached(x, y);
             }
-            horStartRobot = -1;
+            break;
           }
-
-        }
-
-        //! Team Jersey Scanning
-        if (horStartJerseyOurs != -1) {
-          auto sl = boost::make_shared < ScannedLine > (Point(
-            horStartJerseyOurs,
-            y), Point(x - scanStepLow, y));
-          horJerseyLinesOurs.push_back(sl);
-          //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255,255,0), 2);
-          horStartJerseyOurs = -1;
-        }
-
-        //! Opponent Jersey Scanning
-        if (horStartJerseyOpps != -1) {
-          auto sl = boost::make_shared < ScannedLine > (Point(
-            horStartJerseyOpps,
-            y), Point(x - scanStepLow, y));
-          horJerseyLinesOpps.push_back(sl);
-          //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255,0,0), 2);
-          horStartJerseyOpps = -1;
-        }
-      } else {
-        bool isOurs = colorHandler->isColor(color, ourColor);
-        bool isOpps = colorHandler->isColor(color, oppColor);
-
-        if (scanInField) {
-          bool isWhite = colorHandler->isColor(color, TNColors::white);
-          //bool isBlack = colorHandler->isColor(color, TNColors::black);
-          //! Field Scanning
-          if (horStartF != -1) otherF++;
-
-          /*if (scanBall) {
-           //! Ball Scanning
-           if (horStartBall == -1) {
-           horStartBall = x;
-           } else {
-           otherB++;
-           if (isWhite) {
-           whiteB++;
-           }
-           if (isBlack) {
-           blackB++;
-           }
-           }
-           }*/
-
-          //! Robot Scanning
-          if (horStartRobot == -1) {
-            horStartRobot = x;
-          } else {
-            otherR++;
-            if (isWhite) {
-              whiteR++;
+          auto pixel = getYUV(x, y);
+          TNColors color = colorHandler->whichColor(pixel);
+          for (const auto& scan : hScans) {
+            if (scan && scan->enabled && scan->scanTables[toUType(activeCamera)][x])
+              scan->update(color, x, y);
+          }
+        } else {
+          auto& ourScan = hScans[toUType(ScanTypes::ourJersey)];
+          auto& oppScan = hScans[toUType(ScanTypes::oppJersey)];
+          auto& goalScan = hScans[toUType(ScanTypes::goal)];
+          if (x >= hScanLimitIdx) {
+            if (ourScan->enabled) {
+              ourScan->onScanLimitReached(x, y);
             }
-            /*if (whiteR > 50 && otherR < 1) {
-             horStartRobot = x;
-             whiteR = 0;
-             otherR = 0;
-             greenR = 0;
-             }*/
+            if (oppScan->enabled) {
+              oppScan->onScanLimitReached(x, y);
+            }
+            if (goalScan->enabled) {
+              goalScan->onScanLimitReached(x, y);
+            }
+            break;
           }
-          greenR = 0;
-        }
-
-        //! Team Jersey Scanning
-        if (horStartJerseyOurs == -1) {
-          if (isOurs) horStartJerseyOurs = x;
-        }
-
-        //! Team Jersey Scanning
-        if (!isOurs) {
-          if (horStartJerseyOurs != -1) {
-            auto sl = boost::make_shared < ScannedLine > (Point(
-              horStartJerseyOurs,
-              y), Point(x - scanStepLow, y));
-            horJerseyLinesOurs.push_back(sl);
-            //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255,255,0), 2);
-            horStartJerseyOurs = -1;
+          auto pixel = getYUV(x, y);
+          TNColors color = colorHandler->whichColor(pixel);
+          if (ourScan->enabled && ourScan->scanTables[toUType(activeCamera)][x]) {
+            ourScan->update(color, x, y);
+          }
+          if (oppScan->enabled && oppScan->scanTables[toUType(activeCamera)][x]) {
+            oppScan->update(color, x, y);
+          }
+          if (goalScan->enabled && goalScan->scanTables[toUType(activeCamera)][x]) {
+            goalScan->update(color, x, y);
           }
         }
-
-        //! Opponent Jersey Scanning
-        if (horStartJerseyOpps == -1) {
-          if (isOpps) horStartJerseyOpps = x;
-        }
-
-        //! Opponent Jersey Scanning
-        if (!isOpps) {
-          if (horStartJerseyOpps != -1) {
-            auto sl = boost::make_shared < ScannedLine > (Point(
-              horStartJerseyOpps,
-              y), Point(x - scanStepLow, y));
-            horJerseyLinesOpps.push_back(sl);
-            //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255,0,0), 2);
-            horStartJerseyOpps = -1;
-          }
-        }
+        //bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(255,0,0);
       }
-
-      if (scanInField) {
-        //! Field Scanning
-        if (otherF > 2 || x >= hScanLimitIdx) {
-          if (horStartF != -1) {
-            if (greenF > 2) {
-              if (abs(horStartF - horEndF) > horPrevLen) {
-                horEndF = x;
-                fieldMin = horStartF;
-                fieldMax = horEndF;
-                fieldFound = true;
-                horPrevLen = horEndF - horStartF;
-              } else {
-                horEndF = x;
-                fieldMin = horStartF < fieldMin ? horStartF : fieldMin;
-                fieldMax = horEndF > fieldMax ? horEndF : fieldMax;
-                fieldFound = true;
-                horPrevLen = horEndF - horStartF;
-              }
-              horStartF = -1;
-              greenF = 0;
-            } else {
-              horStartF = -1;
-              greenF = 0;
-            }
-          }
-          horStartF = -1;
-          greenF = 0;
-        }
-      }
+      //hScans[toUType(ScanTypes::ourJersey)]->draw(bgrMat[toUType(activeCamera)]);
+      //VisionUtils::displayImage("bgrMat[toUType(activeCamera)]:", bgrMat[toUType(activeCamera)]);
+      //waitKey(0);
     }
-    //! Field points accumulation
-    if (fieldFound) {
-      borderPoints.push_back(Point(fieldMin, y));
-      borderPoints.push_back(Point(fieldMax, y));
-      if (GET_DVAR(int, drawHorizontalLines))
-        line(
-          bgrMat[currentImage],
-          Point(fieldMin, y),
-          Point(fieldMax, y),
-          Scalar(0,255,0), 1
-        );
+  } else {
+    for (int y = 0; y < getImageHeight(); y = y + hScanStepHigh[toUType(activeCamera)]) {
+      for (const auto& scan : hScans) {
+        if (scan && scan->enabled) scan->reset();
+      }
+      for (int x = 0; x < getImageWidth(); x = x + minScanStepLow) {
+        if (x >= hScanLimitIdx) {
+          for (const auto& scan : hScans) {
+            if (scan && scan->enabled) scan->onScanLimitReached(x, y);
+          }
+          break;
+        }
+        auto pixel = getYUV(x, y);
+        TNColors color = colorHandler->whichColor(pixel);
+        for (const auto& scan : hScans) {
+          if (scan && scan->enabled && scan->scanTables[toUType(activeCamera)][x])
+            scan->update(color, x, y);
+        }
+      }
     }
   }
   auto tEnd = high_resolution_clock::now();
@@ -331,307 +322,102 @@ void RegionSegmentation::horizontalScan()
 void RegionSegmentation::verticalScan()
 {
   auto tStart = high_resolution_clock::now();
-  //! Field scan parameters
-  int otherF = 0, greenF = 0;
-  int fieldMin = getImageWidth();
-  int fieldMax = 0;
-  bool fieldFound = false;
-  //! Ball scan parameters
-  int otherB = 0, blackB = 0, whiteB = 0;
-  auto lastHeight = fieldExt->getFieldHeight() - 50;
-  avgHeight = 0;
-  minBestHeight = 1000;
-  int count = 0;
-  int verPrevLen = 1000;
-  int verStartHigh = rand() % scanStepHigh;
-  for (int x = verStartHigh; x < getImageWidth(); x = x + scanStepHigh) {
-    //! Field scan parameters
-    int verStartF = -1;
-    int verEndF = -1;
-    otherF = 0, greenF = 0;
-    fieldMin = getImageHeight();
-    fieldMax = 0;
-    fieldFound = false;
-    //! Ball scan parameters
-    //int verStartBall = -1;
-    otherB, blackB = 0, whiteB = 0;
-    //int verStartLine = -1;
-    //! Robot scan parameters
-    int verStartRobot = -1;
-    int whiteR = 0, otherR = 0, greenR = 0;
-    //! Team jersey scan parameters
-    int verStartJerseyOurs = -1;
-    //! Opponent jersey scan parameters
-    int verStartJerseyOpps = -1;
-    int verStartLow = rand() % scanStepLow;
-    for (int y = verStartLow; y < getImageHeight(); y = y + scanStepLow) {
-      bool scanInField = y > lastHeight;
-      auto color = getYUV(x, y);
-      //! Vertical Scanning
-      if (colorHandler->isColor(color, TNColors::green)) {
-        if (scanInField) {
-          //! Field Scanning
-          if (verStartF == -1) {
-            verStartF = y;
-          }
-          otherF = 0;
-          greenF++;
+  auto minScanStepLow = vMinScanStepLow[toUType(activeCamera)];
+  if (activeCamera == CameraId::headTop) {
+    ///< Last field height with some margin
+    auto lastHeight = fieldExt->getFieldHeight() - 50;
+    avgHeight = 0;
+    minBestHeight = 1000;
 
-          //! Robot Scanning
-          greenR++;
-          if (greenR > 1 || y >= vScanLimitIdx) {
-            float r;
-            if (otherR != 0) {
-              r = whiteR / (float) otherR;
-              if (verStartRobot != -1 && otherR > 1 && whiteR > 1 && r > 0.05f && r < 0.99f) {
-                auto sl = boost::make_shared < ScannedLine > (Point(
-                  x,
-                  verStartRobot), Point(x, y - scanStepLow));
-                verRobotLines.push_back(sl);
-                //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(0,0,255), 1);
-                //imshow("Vertical robot lines", bgrMat[currentImage]);
-                //waitKey(0);
-              }
-              otherR = 0;
-              whiteR = 0;
-              greenR = 0;
-              verStartRobot = -1;
-            }
-            verStartRobot = -1;
-          }
-
-          //! Ball Scanning
-          /*if (scanBall) {
-           if (otherB != 0) {
-           float rBWhite = whiteB / (float) otherB;
-           float rBBlack = blackB / (float) otherB;
-           bool check = rBWhite > 0.05 && rBWhite < 0.95f;
-           check = check && rBBlack > 0.05 && rBBlack < 0.95f;
-           if (
-           verStartBall != -1 &&
-           check &&
-           y - verStartBall < 100)
-           {
-           auto sl =
-           boost::make_shared<ScannedLine>(
-           Point(x, verStartBall), Point(x, y - scanStepLow)
-           );
-           verBallLines.push_back(sl);
-           //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(0,0,255), 1);
-           //imshow("image", bgrMat[currentImage]);
-           //waitKey(0);
-           }
-           otherB = 0;
-           whiteB = 0;
-           verStartBall = -1;
-           } else {
-           otherB = 0;
-           whiteB = 0;
-           verStartBall = -1;
-           }
-           }*/
-        }
-
-        //! Team Jersey Scanning
-        if (verStartJerseyOurs != -1) {
-          auto sl = boost::make_shared < ScannedLine > (Point(
-            x,
-            verStartJerseyOurs), Point(x, y - scanStepLow));
-          verJerseyLinesOurs.push_back(sl);
-          //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255,255,0), 2);
-          verStartJerseyOurs = -1;
-        }
-
-        //! Opponent Jersey Scanning
-        if (verStartJerseyOpps != -1) {
-          auto sl = boost::make_shared < ScannedLine > (Point(
-            x,
-            verStartJerseyOpps), Point(x, y - scanStepLow));
-          verJerseyLinesOpps.push_back(sl);
-          //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255,0,0), 2);
-          verStartJerseyOpps = -1;
-        }
-      } else {
-        bool isOurs = colorHandler->isColor(color, ourColor);
-        bool isOpps = colorHandler->isColor(color, oppColor);
-
-        if (scanInField) {
-          bool isWhite = colorHandler->isColor(color, TNColors::white);
-          //bool isBlack = colorHandler->isColor(color, TNColors::black);
-          //! Field Scanning
-          if (verStartF != -1) otherF++;
-
-          /*if (scanBall) {
-           //! Ball Scanning
-           if (verStartBall == -1) {
-           verStartBall = y;
-           } else {
-           otherB++;
-           if (isWhite) {
-           whiteB++;
-           }
-           if (isBlack) {
-           blackB++;
-           }
-           }
-           }*/
-
-          //! Robot Scanning
-          if (verStartRobot == -1) {
-            verStartRobot = y;
-          } else {
-            otherR++;
-            if (isWhite) {
-              whiteR++;
-            }
-          }
-          greenR = 0;
-        }
-
-        //! Team Jersey Scanning
-        if (verStartJerseyOurs == -1) {
-          if (isOurs) verStartJerseyOurs = y;
-        }
-
-        if (verStartJerseyOpps == -1) {
-          if (isOpps) verStartJerseyOpps = y;
-        }
-        //! Team Jersey Scanning
-        if (!isOurs) {
-          if (verStartJerseyOurs != -1) {
-            auto sl = boost::make_shared < ScannedLine > (Point(
-              x,
-              verStartJerseyOurs), Point(x, y - scanStepLow));
-            verJerseyLinesOurs.push_back(sl);
-            //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255,255,0), 2);
-            verStartJerseyOurs = -1;
-          }
-        }
-
-        //! Opponent Jersey Scanning
-        if (!isOpps) {
-          if (verStartJerseyOpps != -1) {
-            auto sl = boost::make_shared < ScannedLine > (Point(
-              x,
-              verStartJerseyOpps), Point(x, y - scanStepLow));
-            verJerseyLinesOpps.push_back(sl);
-            //line(bgrMat[currentImage], sl->p1, sl->p2, Scalar(255,0,0), 2);
-            verStartJerseyOpps = -1;
-          }
-        }
+    for (int x = 0; x < getImageWidth(); x = x + vScanStepHigh[toUType(activeCamera)]) {
+      for (const auto& scan : vScans) {
+        if (scan) scan->reset();
       }
-
-      if (scanInField) {
-        //! Field Scanning
-        if (otherF > 2 || y >= vScanLimitIdx) {
-          if (verStartF != -1) {
-            if (greenF > 2) {
-              if (abs(verStartF - verEndF) > verPrevLen) {
-                verEndF = y;
-                fieldMin = verStartF;
-                fieldMax = verEndF;
-                fieldFound = true;
-                verPrevLen = verEndF - verStartF;
-              } else {
-                verEndF = y;
-                fieldMin = verStartF < fieldMin ? verStartF : fieldMin;
-                fieldMax = verEndF > fieldMax ? verEndF : fieldMax;
-                fieldFound = true;
-                verPrevLen = verEndF - verStartF;
-              }
-              verStartF = -1;
-              greenF = 0;
-            } else {
-              verStartF = -1;
-              greenF = 0;
+      for (int y = 0; y < getImageHeight(); y = y + minScanStepLow) {
+        bool scanInField = y > lastHeight;
+        if (scanInField) {
+          if (y >= vScanLimitIdx) {
+            for (const auto& scan : vScans) {
+              if (scan && scan->enabled) scan->onScanLimitReached(y, x);
+            }
+            break;
+          }
+          auto pixel = getYUV(x, y);
+          TNColors color = colorHandler->whichColor(pixel);
+          for (const auto& scan : vScans) {
+            if (scan && scan->scanTables[toUType(activeCamera)][y]) {
+              scan->update(color, y, x);
             }
           }
-          verStartF = -1;
-          greenF = 0;
+        } else {
+          auto& ourScan = vScans[toUType(ScanTypes::ourJersey)];
+          auto& oppScan = vScans[toUType(ScanTypes::oppJersey)];
+          if (y >= vScanLimitIdx) {
+            if (ourScan->enabled) {
+              ourScan->onScanLimitReached(y, x);
+            }
+            if (oppScan->enabled) {
+              oppScan->onScanLimitReached(y, x);
+            }
+            break;
+          }
+
+          auto pixel = getYUV(x, y);
+          TNColors color = colorHandler->whichColor(pixel);
+          if (ourScan->enabled) {
+            ourScan->update(color, y, x);
+          }
+          if (oppScan->enabled) {
+            oppScan->update(color, y, x);
+          }
         }
+        //bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(255,0,0);
+        //VisionUtils::displayImage("bgrMat[toUType(activeCamera)]:", bgrMat[toUType(activeCamera)]);
+        //waitKey(0);
       }
-      /*if(colorHandler->isColor(color, TNColors::WHITE))
-       {
-       if (verStartLine == -1) {
-       verStartLine = y;
-       }
-
-       if (verStartGoal == -1) {
-       verStartGoal = y;
-       }
-
-       } else {
-       if (verStartLine != -1) {
-       float diff = y - verStartLine;
-       if( diff >= 1 ) {
-       int index;
-       if (diff == 0) {
-       index = verStartLine;
-       } else {
-       index = (verStartLine + y - scanStepLow) / 2;
-       }
-       uchar* p = whiteEdges.ptr<uchar>(index);
-       p[x] = 255;
-       auto se =
-       boost::make_shared<ScannedEdge>(Point(x, index));
-       lineEdges.push_back(se);
-       //uchar* p = whiteEdges.ptr<uchar>(y - scanStepLow);
-       //p[x] = 255;
-       //p = whiteEdges.ptr<uchar>(verStartLine);
-       //p[x] = 255;
-       //whiteEdges.at<uchar>(sl->p1.y, sl->p1.x) = 255;
-       //whiteEdges.at<uchar>(sl->p2.y, sl->p2.x) = 255;
-       //line(yuv, sl->p1, sl->p2, Scalar(255,0,0), 1);
-
-       //auto se2 = boost::make_shared<ScannedEdge>(Point(x, y));
-       //se1->connectedTo = se2;
-       //se2->connectedTo = se1;
-       //verLineEdges.push_back(se1);
-       //verLineEdges.push_back(se2);
-       //drawPoint(Point(horStartLine, i), out, Scalar(0,0,255));
-       //drawPoint(Point(tmpEndLine, i), out, Scalar(255,0,0));
-       //line(yuv, Point(x, verStartLine), Point(x, y), Scalar(255,255,255), 1);
-       //imshow("test", out);
-       //waitKey(0);
-       }
-       }
-       verStartLine = -1;
-
-       if (verStartGoal != -1) {
-       float width = y - verStartGoal;
-       if( width >= 5 ) {
-       auto sl =
-       boost::make_shared<ScannedLine>(
-       Point(x, verStartGoal), Point(x, y)
-       );
-       verGoalLines.push_back(sl);
-       //line(yuv, sl->p1, sl->p2, Scalar(255,0,255), 1);
-       }
-       }
-       verStartGoal = -1;
-       }*/
-    }
-
-    //! Field points accumulation
-    if (fieldFound && fieldMin != getImageHeight()) {
-      borderPoints.push_back(Point(x, fieldMin));
-      borderPoints.push_back(Point(x, fieldMax));
-      minBestHeight = fieldMin < minBestHeight ? fieldMin : minBestHeight;
-      avgHeight += fieldMin;
       if (GET_DVAR(int, drawVerticalLines))
-        line(
-          bgrMat[currentImage],
-          Point(x, fieldMin),
-          Point(x, fieldMax),
-          Scalar(0,255,0), 1
-        );
-      count++;
+        vScans[toUType(ScanTypes::field)]->draw(bgrMat[toUType(activeCamera)]);
+      //VisionUtils::displayImage("bgrMat[toUType(activeCamera)]:", bgrMat[toUType(activeCamera)]);
+      //waitKey(0);
+      if (static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldFound) {
+        if (static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldFound &&
+            static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin != getImageHeight())
+        {
+          borderPoints.push_back(Point(x, static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin));
+          //borderPoints.push_back(Point(x, static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMax));
+          minBestHeight =
+            static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin < minBestHeight ?
+            static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin : minBestHeight;
+          avgHeight += static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin;
+        }
+      }
+    }
+    if (borderPoints.size() > 1)
+      avgHeight /= borderPoints.size();
+    else
+      avgHeight = 0;
+  } else {
+    for (int x = 0; x < getImageWidth(); x = x + vScanStepHigh[toUType(activeCamera)]) {
+      for (const auto& scan : vScans) {
+        if (scan && scan->enabled) scan->reset();
+      }
+      for (int y = 0; y < getImageHeight(); y = y + minScanStepLow) {
+        if (y >= vScanLimitIdx) {
+          for (const auto& scan : vScans) {
+            if (scan && scan->enabled) scan->onScanLimitReached(y, x);
+          }
+          break;
+        }
+        auto pixel = getYUV(x, y);
+        TNColors color = colorHandler->whichColor(pixel);
+        for (const auto& scan : vScans) {
+          if (scan && scan->enabled && scan->scanTables[toUType(activeCamera)][y]) {
+            scan->update(color, y, x);
+          }
+        }
+      }
     }
   }
-  if (count > 1)
-    avgHeight /= count;
-  else
-    avgHeight = 0;
   auto tEnd = high_resolution_clock::now();
   duration<double> timeSpan = tEnd - tStart;
   verticalScanTime = timeSpan.count();
@@ -639,88 +425,24 @@ void RegionSegmentation::verticalScan()
 
 void RegionSegmentation::drawResults()
 {
-  Mat bgr = bgrMat[currentImage];
+  Mat bgr = bgrMat[toUType(activeCamera)];
   if (GET_DVAR(int, drawPoints)) {
     if (!borderPoints.empty())
       VisionUtils::drawPoints(borderPoints, bgr);
   }
 
   if (GET_DVAR(int, drawVerticalLines)) {
-    for (int i = 0; i < verJerseyLinesOurs.size(); ++i) {
-      if (verJerseyLinesOurs[i])
-      line(bgr, verJerseyLinesOurs[i]->p1, verJerseyLinesOurs[i]->p2, Scalar(0, 255, 255), 2);
-    }
-
-    for (int i = 0; i < verJerseyLinesOpps.size(); ++i) {
-      if (verJerseyLinesOpps[i])
-       line(bgr, verJerseyLinesOpps[i]->p1, verJerseyLinesOpps[i]->p2, Scalar(255, 0, 0), 2);
-    }
-
-    for (int i = 0; i < verRobotLines.size(); ++i) {
-      if (verRobotLines[i])
-      line(bgr, verRobotLines[i]->p1, verRobotLines[i]->p2, Scalar(255, 255, 255), 2);
+    for (const auto& scan : vScans) {
+      if (scan && scan->enabled) scan->draw(bgrMat[toUType(activeCamera)]);
     }
   }
 
   if (GET_DVAR(int, drawHorizontalLines)) {
-
-    for (int i = 0; i < horJerseyLinesOurs.size(); ++i) {
-      if (horJerseyLinesOurs[i])
-        line(bgr, horJerseyLinesOurs[i]->p1, horJerseyLinesOurs[i]->p2, Scalar(0, 255, 255), 2);
-    }
-
-    for (int i = 0; i < horJerseyLinesOpps.size(); ++i) {
-      if (horJerseyLinesOpps[i])
-        line(bgr, horJerseyLinesOpps[i]->p1, horJerseyLinesOpps[i]->p2, Scalar(255, 0, 0), 2);
-    }
-
-    for (int i = 0; i < horRobotLines.size(); ++i) {
-      if (horRobotLines[i])
-        line(bgr, horRobotLines[i]->p1, horRobotLines[i]->p2, Scalar(255, 255, 255), 2);
+    for (const auto& scan : hScans) {
+      if (scan && scan->enabled) scan->draw(bgrMat[toUType(activeCamera)]);
     }
   }
 }
 
-/*static vector<int> l(3), u(3);
- VisionUtils::createWindow("Color-Calibration");
- VisionUtils::addTrackBar("Color-Lowery", "Color-Calibration", &l[0], 255);
- VisionUtils::addTrackBar("Color-Loweru", "Color-Calibration", &l[1], 255);
- VisionUtils::addTrackBar("Color-Lowerv", "Color-Calibration", &l[2], 255);
- VisionUtils::addTrackBar("Color-Uppery", "Color-Calibration", &u[0], 255);
- VisionUtils::addTrackBar("Color-Upperu", "Color-Calibration", &u[1], 255);
- VisionUtils::addTrackBar("Color-Upperv", "Color-Calibration", &u[2], 255);
- Mat binary;
- VisionUtils::applyThreshold(
- yuv,
- l,
- u,
- binary
- );
- VisionUtils::displayImage(binary, "binary1");
- */
-//Mat yuv = makeYuvMat();
-//Mat green, white;
-/*green = Mat(yuv.size(), CV_8UC3, Scalar(0,0,0));
- for(int y = 0; y < getImageHeight(); ++y)
- {
- for (int x = 0; x < getImageWidth(); ++x) {
- auto color = getYUV(x, y);
- if(colorHandler->isGreenHist(color)) {
- green.at<Vec3b>(y, x) = Vec3b(0, 255, 0);
- }
- }
- }*/
-//colorHandler->getBinary(yuv, green, TNColors::GREEN);
-/*VisionUtils::displayImage(yuv, "yuv");
- waitKey(0);
- VisionUtils::displayImage(green, "greens");
- waitKey(0);
- colorHandler->getBinary(yuv, white, TNColors::WHITE);
- Mat g2;
- colorHandler->getBinary(yuv, g2, TNColors::GREEN);*/
-//colorHandler->getBinary(yuv, white, TNColors::WHITE);
-//colorHandler->getBinary(yuv, green, TNColors::GREEN);
-//VisionUtils::displayImage(yuv, "yuvyuv");
-//VisionUtils::displayImage(green, "green");
-//VisionUtils::displayImage(white, "w");
-//waitKey(0);
+Scan* RegionSegmentation::getHorizontalScan(const ScanTypes& type) { return hScans[toUType(type)]; }
+Scan* RegionSegmentation::getVerticalScan(const ScanTypes& type) { return vScans[toUType(type)]; }

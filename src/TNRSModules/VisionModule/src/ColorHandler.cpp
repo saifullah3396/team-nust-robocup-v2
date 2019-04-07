@@ -56,10 +56,6 @@ void ColorHandler::update()
       for (int i = 0; i < 3; ++i)
         colorTables[ci]->upper[ti].yuv[i] = upper[i];
     }
-    cout << "ci index:" << ci << endl;
-    cout << "ti index:" << ti << endl;
-    cout << "lower: " << colorTables[ci]->lower[ti].yuv << endl;
-    cout << "upper: " << colorTables[ci]->upper[ti].yuv << endl;
     SET_DVAR(int, colorIndex, -1);
     SET_DVAR(int, tableIndex, -1);
   }
@@ -85,44 +81,84 @@ void ColorHandler::getBinary(const Mat& in, Mat& out, const TNColors& colorIndex
   }
 }
 
- void ColorHandler::computeUVHist(const Mat& uv, const Mat& mask, const bool& drawHists)
+static Vec3b getColorBGR(const TNColors& colorIndex)
 {
-  Mat uvCh[2];
-  split(uv, uvCh);
-  Mat uHist, vHist;
-  const float histRange[] =
-    { 0, 256 };
-  const float* range =
-    { histRange };
-  calcHist(
-    &uvCh[0], 1, 0, mask, uHist, 1, &histBins, &range, uniformHist, accumulateHist);
-  calcHist(
-    &uvCh[1], 1, 0, mask, vHist, 1, &histBins, &range, uniformHist, accumulateHist);
-  uHistBuff.push_back(uHist);
-  vHistBuff.push_back(vHist);
-  pixelsBuff.push_back(countNonZero(mask));
-  //! Draw histograms for debugging
-  if (uHistBuff.size() >= 5) {
-    Mat avgHistU = uHistBuff[0];
-    Mat avgHistV = vHistBuff[0];
-    int pixels = pixelsBuff[0];
-    for (int i = 1; i < 5; ++i) {
-      addWeighted(uHistBuff[i], 1.0, avgHistU, 1.0, 0, avgHistU);
-      addWeighted(vHistBuff[i], 1.0, avgHistV, 1.0, 0, avgHistV);
-      pixels += pixelsBuff[i];
+
+}
+
+void ColorHandler::computeUVHist(const Mat& uv, const Mat& mask, const bool& drawHists)
+{
+  try {
+    Mat uvCh[2];
+    split(uv, uvCh);
+    Mat uHist, vHist;
+    const float histRange[] =
+      { 0, 256 };
+    const float* range =
+      { histRange };
+    calcHist(
+      &uvCh[0], 1, 0, mask, uHist, 1, &histBins, &range, uniformHist, accumulateHist);
+    calcHist(
+      &uvCh[1], 1, 0, mask, vHist, 1, &histBins, &range, uniformHist, accumulateHist);
+    uHistBuff.push_back(uHist);
+    vHistBuff.push_back(vHist);
+    pixelsBuff.push_back(countNonZero(mask));
+    ///< Draw histograms for debugging
+    if (uHistBuff.size() >= 5) {
+      Mat avgHistU = uHistBuff[0];
+      Mat avgHistV = vHistBuff[0];
+      int pixels = pixelsBuff[0];
+      for (int i = 1; i < 5; ++i) {
+        addWeighted(uHistBuff[i], 1.0, avgHistU, 1.0, 0, avgHistU);
+        addWeighted(vHistBuff[i], 1.0, avgHistV, 1.0, 0, avgHistV);
+        pixels += pixelsBuff[i];
+      }
+      avgHistU = avgHistU / pixels;
+      avgHistV = avgHistV / pixels;
+      ///< Remove values below 35% of maximum value.
+      double uMin, uMax, vMin, vMax;
+      minMaxLoc(avgHistU, &uMin, &uMax);
+      minMaxLoc(avgHistV, &vMin, &vMax);
+      for (int i = 0; i < 256; ++i) {
+        greenHistU[i] = avgHistU.at<float>(i / 8) < 0.3 * uMax ? 0 : 1.0;
+        greenHistV[i] = avgHistV.at<float>(i / 8) < 0.3 * vMax ? 0 : 1.0;
+      }
+      fieldHist = true;
+      #ifdef MODULE_IS_REMOTE
+      if (drawHists) {
+        Mat drawHistU = avgHistU;
+        Mat drawHistV = avgHistV;
+        for (int i = 0; i < 32; ++i) {
+          drawHistU.at<float>(i) = drawHistU.at<float>(i) < 0.3 * uMax ? 0 : drawHistU.at<float>(i);
+          drawHistV.at<float>(i) = drawHistV.at<float>(i) < 0.3 * vMax ? 0 : drawHistV.at<float>(i);
+        }
+        int histWidth = 256, histHeight = 400;
+        int binWidth = cvRound(double(histWidth/histBins));
+        Mat histImage(histHeight, histWidth, CV_8UC3, Scalar(0,0,0));
+        ///< Drawing all peaks
+        for (int i = 0; i < histWidth; ++i) {
+          line(
+            histImage,
+            Point(i, histHeight),
+            Point(i, cvRound(histHeight * (1 - drawHistU.at<float>(i/binWidth)))),
+            Scalar(255, 0, 0), 2, 8, 0
+          );
+          line(
+            histImage,
+            Point(i, histHeight),
+            Point(i, cvRound(histHeight * (1 - drawHistV.at<float>(i/binWidth)))),
+            Scalar(0, 255, 0), 2, 8, 0
+          );
+        }
+        VisionUtils::displayImage("histImage", histImage, 1.0);
+        waitKey(0);
+      }
+      #endif
+    } else {
+      fieldHist = false;
     }
-    avgHistU = avgHistU / pixels;
-    avgHistV = avgHistV / pixels;
-    //! Remove values below 35% of maximum value.
-    double uMin, uMax, vMin, vMax;
-    minMaxLoc(avgHistU, &uMin, &uMax);
-    minMaxLoc(avgHistV, &vMin, &vMax);
-    for (int i = 0; i < 256; ++i) {
-      greenHistU[i] = avgHistU.at<float>(i / 8) < 0.3 * uMax ? 0 : 1.0;
-      greenHistV[i] = avgHistV.at<float>(i / 8) < 0.3 * vMax ? 0 : 1.0;
-    }
-    fieldHist = true;
-  } else {
+  } catch (exception& e) {
+    LOG_EXCEPTION("Exception caught in ColorHandler::computeUVHist:" << e.what());
     fieldHist = false;
   }
 }
@@ -131,6 +167,22 @@ bool ColorHandler::isGreenHist(const TNColor& color) const
 {
   if ((int) greenHistU[color.getU()] && (int) greenHistV[color.getV()]) return true;
   return false;
+}
+
+TNColors ColorHandler::whichColor(const TNColor& color) const
+{
+  for (int i = 0; i < toUType(TNColors::count); ++i) {
+    for (int j = 0; j < colorTables[i]->nTables; ++j) {
+      if (
+        static_cast<bool>(colorTables[i]->lutY[j][static_cast<int>(color.getY())]) &&
+        static_cast<bool>(colorTables[i]->lutU[j][static_cast<int>(color.getU())]) &&
+        static_cast<bool>(colorTables[i]->lutV[j][static_cast<int>(color.getV())]))
+      {
+        return static_cast<TNColors>(i);
+      }
+    }
+  }
+  return TNColors::count;
 }
 
 bool ColorHandler::isColor(const TNColor& color, const TNColors& colorIndex) const
@@ -151,6 +203,5 @@ bool ColorHandler::fieldHistFormed() const
 {
   return fieldHist;
 }
-
 
 typedef boost::shared_ptr<ColorHandler> ColorHandlerPtr;

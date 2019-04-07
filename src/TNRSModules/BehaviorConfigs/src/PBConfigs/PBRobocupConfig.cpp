@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/PBConfigs/PBRobocupConfig.h
+ * @file TNRSModules/BehaviorConfigs/src/PBConfigs/PBRobocupConfig.cpp
  *
  * This file defines the struct PBRobocupConfig and its childs
  *
@@ -16,7 +16,7 @@ DEFINE_BEHAVIOR_CONFIG(
   (PBRobocupTypes, attacker, AttackerConfig),
   (PBRobocupTypes, defender, DefenderConfig),
   (PBRobocupTypes, penalties, PenaltiesConfig),
-)
+);
 
 void RobocupSetupConfig::init() {}
 void RobocupSetupConfig::validate() {}

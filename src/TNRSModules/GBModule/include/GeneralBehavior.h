@@ -20,7 +20,7 @@
 #ifndef V6_CROSS_BUILD
   #define NAOQI_MOTION_PROXY_TYPE ALMotionProxyPtr
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  //! Naoqi motion proxy object
+  ///< Naoqi motion proxy object
   typedef boost::shared_ptr<AL::ALMotionProxy> ALMotionProxyPtr;
   #endif
 #else
@@ -81,7 +81,7 @@ protected:
   #endif
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  NAOQI_MOTION_PROXY_TYPE motionProxy; //! Naoqi motion proxy object
+  NAOQI_MOTION_PROXY_TYPE motionProxy; ///< Naoqi motion proxy object
   #endif
-  GBModule* gbModule; //! Pointer to base static module
+  GBModule* gbModule; ///< Pointer to base static module
 };

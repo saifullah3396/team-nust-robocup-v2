@@ -23,17 +23,17 @@ class LocalizationModule;
 class FieldMap : public MemoryBase, DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to enable any kind of debugging.
+    ///< Option to enable any kind of debugging.
     (int, debug, 0),
-    //! Option to send particles to the debugger.
+    ///< Option to send particles to the debugger.
     (int, sendParticles, 0),
-    //! Option to send the obstacles map to the debugger.
+    ///< Option to send the obstacles map to the debugger.
     (int, sendObstacleMap, 0),
-    //! Draws the particles on the map
+    ///< Draws the particles on the map
     (int, drawParticles, 0),
-    //! Displays particle map
+    ///< Displays particle map
     (int, displayOutput, 0),
-  )
+  );
 public:
   /**
    * @brief FieldMap Constructor
@@ -65,7 +65,7 @@ public:
   template<typename T>
   cv::Point_<int> worldToMap(const cv::Point_<T>& p);
 
-  //! Setters
+  ///< Setters
   void setBallObstacle(const bool& addBallObstacle)
     { this->addBallObstacle = addBallObstacle; }
 
@@ -78,21 +78,21 @@ private:
    */
   void updateOccupancyMap();
 
-  //! Pointer to localizer
+  ///< Pointer to localizer
   boost::shared_ptr<ParticleFilter> localizer;
 
-  //! Base matrix for generating occupancy map
+  ///< Base matrix for generating occupancy map
   Mat occupancyMapBase;
 
   //Mat worldImage;
   //Mat mapDrawing;
 
-  //! Previous id of the observed obstacles
+  ///< Previous id of the observed obstacles
   int prevObsId = {0};
 
-  //! Whether to add ball as an obstacle
+  ///< Whether to add ball as an obstacle
   bool addBallObstacle = {false};
 
-  //! Radius of the ball used for obstacle generation
+  ///< Radius of the ball used for obstacle generation
   float ballRadius = {0.05};
 };

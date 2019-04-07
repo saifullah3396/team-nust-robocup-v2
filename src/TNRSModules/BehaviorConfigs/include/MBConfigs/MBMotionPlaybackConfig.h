@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/MBConfigs/MBMotionPlaybackConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBMotionPlaybackConfig.h
  *
  * This file defines the struct MBMotionPlaybackConfig and its types
  *
@@ -22,7 +22,7 @@ DECLARE_BEHAVIOR_CONFIG(
   MBIds::motionPlayback,
   9999.f,
   MBMotionPlaybackTypes
-)
+);
 
 /**
  * @struct ReplayStoredMBConfig
@@ -36,4 +36,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   ReplayStoredMBConfigPtr,
   (string, pathToMB, string("")),
   (vector<unsigned>, activeJoints, vector<unsigned>(24, 1)),
-)
+);

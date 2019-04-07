@@ -1,5 +1,5 @@
 /**
- * @file UdpComm.cpp
+ * @file GameCommModule/src/UdpComm.cpp
  * Implements a wrapper for a UDP socket.
  * @author Armin Burchardt
  */

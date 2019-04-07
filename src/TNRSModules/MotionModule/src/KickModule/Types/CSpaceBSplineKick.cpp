@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/KickModule/CSpaceBSplineKick.cpp
+ * @file MotionModule/src/KickModule/Types/CSpaceBSplineKick.cpp
  *
  * This file implements the class CSpaceBSplineKick
  *
@@ -289,8 +289,8 @@ void CSpaceBSplineKick<Scalar>::defineTrajectory()
   Matrix<Scalar, 1, 3> initialVelocity, finalVelocity;
   initialVelocity.setZero();
 
-  //! Setting up pre-impact trajectory.
-  //! Required cartesian velocities at initial and final poses
+  ///< Setting up pre-impact trajectory.
+  ///< Required cartesian velocities at initial and final poses
   finalVelocity.resize(3); //x-y-z, r-p-y
   if (!this->desImpactVelKnown) {
     this->computeDesImpactVel(impactJoints);
@@ -298,7 +298,7 @@ void CSpaceBSplineKick<Scalar>::defineTrajectory()
   this->desImpactVel[0] = std::min((Scalar)this->desImpactVel[0], (Scalar)1.0);
   this->desImpactVel[1] = std::min((Scalar)this->desImpactVel[1], (Scalar)1.0);
   finalVelocity = this->desImpactVel.transpose(); // x-y-z velocity
-  //! Cartesian velocities in torso frame.
+  ///< Cartesian velocities in torso frame.
   finalVelocity.block(0, 0, 3, 1) =
     this->torsoToSupport.block(0, 0, 3, 3) * finalVelocity.segment(0, 3);
 
@@ -340,7 +340,7 @@ void CSpaceBSplineKick<Scalar>::defineTrajectory()
   /*auto cTraj = bSpline->getSpline(0);
   cout << "cTraj: " << cTraj << endl;
 
-  //! Plotting
+  ///< Plotting
   GnuPlotEnv::PlotEnv<Scalar>
     plotEnv(
       "CSpaceBSplineKick", "x", "y", "z",

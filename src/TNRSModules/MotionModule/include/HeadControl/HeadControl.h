@@ -72,7 +72,7 @@ protected:
   vector<Scalar> targetAngles = {0.0, 0.0};
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   const vector<std::string> naoqiNames = {"HeadYaw", "HeadPitch"};
-  const Scalar fractionMaxSpeed = {0.1};
+  const Scalar fractionMaxSpeed = {0.85};
 #endif
 
 public:

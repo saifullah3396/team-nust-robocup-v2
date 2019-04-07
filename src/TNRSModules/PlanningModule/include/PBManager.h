@@ -11,7 +11,7 @@
 
 #include "BehaviorManager/include/BehaviorManager.h"
 
-//! Forward declaration
+///< Forward declaration
 class PlanningModule;
 
 /**
@@ -39,7 +39,7 @@ private:
   bool
   makeBehavior(BehaviorPtr& behavior, const BehaviorConfigPtr& cfg);
   
-  //! Pointer to the base planning behaviors module
+  ///< Pointer to the base planning behaviors module
   PlanningModule* planningModule;
 };
 typedef boost::shared_ptr<PBManager> PBManagerPtr;

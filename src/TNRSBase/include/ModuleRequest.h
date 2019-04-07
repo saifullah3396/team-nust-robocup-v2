@@ -1,5 +1,5 @@
 /**
- * @file TNRSBase/include/ModuleRequests.h
+ * @file TNRSBase/include/ModuleRequest.h
  *
  * This file declares the struct ModuleRequest
  *
@@ -31,11 +31,11 @@ public:
     const TNSPLModules& moduleId,
     const unsigned& requestId);
 
-  //! Getters
+  ///< Getters
   TNSPLModules getModuleId() { return moduleId; }
   unsigned getRequestId() { return requestId; }
 
-  //! Setters
+  ///< Setters
   void setRequestId(const unsigned& requestId)
     { this->requestId = requestId; }
 
@@ -61,7 +61,7 @@ public:
   virtual Json::Value getJson();
 
 private:
-  TNSPLModules moduleId; //! Module id
-  unsigned requestId; //! Request id
+  TNSPLModules moduleId; ///< Module id
+  unsigned requestId; ///< Request id
 };
 typedef boost::shared_ptr<ModuleRequest> ModuleRequestPtr;

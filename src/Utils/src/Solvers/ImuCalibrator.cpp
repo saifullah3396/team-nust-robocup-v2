@@ -59,11 +59,11 @@ double ImuCalibrator<StateSize>::costFunction(
 template <int StateSize>
 void ImuCalibrator<StateSize>::optDef()
 {
-  //!Objective function to minimize the difference between the measured
-  //!acceleration and target acceleration
-  //!Hessian for this objective function is unknown.
-  //!Gradient for this function is unknown.
-  //!2 x StateSize  variables; bias x StateSize and scale x StateSize are to be found
+  ///<Objective function to minimize the difference between the measured
+  ///<acceleration and target acceleration
+  ///<Hessian for this objective function is unknown.
+  ///<Gradient for this function is unknown.
+  ///<2 x StateSize  variables; bias x StateSize and scale x StateSize are to be found
   nlopt::opt opt(nlopt::LN_COBYLA, StateSize * 2);
   vector<double> lb(StateSize * 2), ub(StateSize * 2), var0;
   for (int i = 0; i < lb.size(); ++i) {

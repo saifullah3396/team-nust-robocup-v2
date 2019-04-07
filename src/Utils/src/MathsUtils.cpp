@@ -639,16 +639,16 @@ pseudoInverse(
   const MatrixBase<Derived>& mat,
   const typename Derived::Scalar tolerance)
 {
-  typedef typename Derived::Scalar Scalar;
-  typedef typename internal::plain_row_type<Derived>::type RowVectorType;
-  JacobiSVD<Derived> svd(mat, ComputeThinU | ComputeThinV);
-  RowVectorType singularValues = svd.singularValues();
-  Derived singularValuesInv(singularValues.size(), singularValues.size());
+typedef typename Derived::Scalar Scalar;
+  auto svd = mat.jacobiSvd(Eigen::ComputeFullU | Eigen::ComputeFullV);
+  const auto &singularValues = svd.singularValues();
+  Eigen::Matrix<Scalar, Derived::ColsAtCompileTime, Derived::RowsAtCompileTime> singularValuesInv(mat.cols(), mat.rows());
   singularValuesInv.setZero();
   for (unsigned int i = 0; i < singularValues.size(); ++i) {
-    if (singularValues[i] > tolerance) singularValuesInv(i, i) =
-        1 / singularValues[i];
-    else singularValuesInv(i, i) = 0;
+    if (singularValues(i) > tolerance)
+      singularValuesInv(i, i) = Scalar{1} / singularValues(i);
+    else
+      singularValuesInv(i, i) = Scalar{0};
   }
   return svd.matrixV() * singularValuesInv * svd.matrixU().adjoint();
 }
@@ -660,6 +660,11 @@ template Eigen::Matrix<typename Matrix<double, Dynamic, Dynamic>::Scalar, Dynami
   pseudoInverse<Matrix<double, Dynamic, Dynamic>>(
     const MatrixBase<Matrix<double, Dynamic, Dynamic> >& mat,
     const typename Matrix<double, Dynamic, Dynamic>::Scalar tolerance = typename Matrix<double, Dynamic, Dynamic>::Scalar(1e-4));
+template Eigen::Matrix<typename Matrix<float, 3, 4>::Scalar, Dynamic, Dynamic>
+pseudoInverse<Matrix<float, 3, 4>>(
+ const MatrixBase<Matrix<float, 3, 4> >& mat,
+ const typename Matrix<float, 3, 4>::Scalar tolerance = typename Matrix<float, 3, 4>::Scalar(1e-4));
+
 
 template<typename Derived>
 Eigen::Matrix<typename Derived::Scalar, Dynamic, 1>
@@ -721,4 +726,4 @@ template cv::Point_<float> operator/(const cv::Point_<float>& p, const float val
 template cv::Point_<double> operator/(const cv::Point_<double>& p, const double value);
 #endif
 
-} //! MathsUtils
+} ///< MathsUtils

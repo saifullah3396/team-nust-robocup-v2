@@ -1,5 +1,5 @@
 /**
- * @file Utils/includes/DataHolders/Camera.h
+ * @file Utils/include/DataHolders/Camera.h
  *
  * This file defines the struct Camera
  *
@@ -43,7 +43,7 @@ namespace Json {
 #define CLEAR_P(x, s) memset((x), 0, s)
 #define CLEAR(x) CLEAR_P(&(x), sizeof(x))
 
-//! According to bhuman-kernel for Nao robot
+///< According to bhuman-kernel for Nao robot
 #define V4L2_MT9M114_FADE_TO_BLACK V4L2_CID_PRIVATE_BASE
 #define V4L2_MT9M114_BRIGHTNESS_DARK (V4L2_CID_PRIVATE_BASE+1)
 #define V4L2_MT9M114_AE_TARGET_GAIN (V4L2_CID_PRIVATE_BASE+2)
@@ -202,13 +202,13 @@ struct Camera : public DataHolder
   bool getImageFromDevice();
   #endif
 
-  string name = string{"None"}; //! Name of the camera
+  string name = string{"None"}; ///< Name of the camera
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
-  string clientName = string{"None"}; //! Camera subscribed client name
-  uint8_t resolution = {0}; //! Resolution of the camera
-  uint8_t colorSpace = {AL::kYUV422ColorSpace}; //! Colorspace definition of the camera
+  string clientName = string{"None"}; ///< Camera subscribed client name
+  uint8_t resolution = {0}; ///< Resolution of the camera
+  uint8_t colorSpace = {AL::kYUV422ColorSpace}; ///< Colorspace definition of the camera
   #else
-  unsigned colorSpace = {V4L2_PIX_FMT_RGB24}; //! Colorspace definition of the camera
+  unsigned colorSpace = {V4L2_PIX_FMT_RGB24}; ///< Colorspace definition of the camera
   struct v4l2_format fmt;
   struct v4l2_streamparm parm;
   struct v4l2_buffer buf;
@@ -219,18 +219,18 @@ struct Camera : public DataHolder
   struct buffer *buffers;
   struct timeval tv;
   #endif
-  uint16_t fps = {30}; //! Frames per second for the video
-  uint8_t* image = {nullptr}; //! Camera image
-  uint32_t width = {0}; //! Image width
-  uint32_t height = {0}; //! Image height
-  T fovX = {0}; //! Camera field of view X
-  T fovY = {0}; //! Camera field of view Y
-  T focalX = {0}; //! Camera focal length X
-  T focalY = {0};//! Camera focal length Y
-  T centerOffX = {0}; //! Camera center offset X
-  T centerOffY = {0}; //! Camera center offset Y
+  uint16_t fps = {30}; ///< Frames per second for the video
+  uint8_t* image = {nullptr}; ///< Camera image
+  uint32_t width = {0}; ///< Image width
+  uint32_t height = {0}; ///< Image height
+  T fovX = {0}; ///< Camera field of view X
+  T fovY = {0}; ///< Camera field of view Y
+  T focalX = {0}; ///< Camera focal length X
+  T focalY = {0};///< Camera focal length Y
+  T centerOffX = {0}; ///< Camera center offset X
+  T centerOffY = {0}; ///< Camera center offset Y
   #ifndef VISUALIZER_BUILD
-  cv::Mat distCoeffs = {cv::Mat_<float>(1, 5)}; //! Distortion coefficients
+  cv::Mat distCoeffs = {cv::Mat_<float>(1, 5)}; ///< Distortion coefficients
   #endif
   #ifdef NAOQI_VIDEO_PROXY_AVAILABLE
     CameraSettings settings;

@@ -42,7 +42,7 @@ DECLARE_MODULE_REQUEST(
   TNSPLModules,
   vision,
   VisionRequestIds
-)
+);
 
 /**
  * @class SwitchVision
@@ -54,7 +54,7 @@ DECLARE_SWITCH_REQUEST_TYPE(
   VisionRequest,
   VisionRequestIds,
   switchVision
-)
+);
 
 /**
  * @class SwitchFieldProjection
@@ -67,7 +67,7 @@ DECLARE_SWITCH_REQUEST_TYPE_WITH_VARS(
   VisionRequestIds,
   switchVideoWriter,
   (CameraId, camIndex, CameraId::headTop)
-)
+);
 
 /**
  * @class SwitchFieldProjection
@@ -79,7 +79,7 @@ DECLARE_SWITCH_REQUEST_TYPE(
   VisionRequest,
   VisionRequestIds,
   switchFieldProjection
-)
+);
 
 /**
  * @class SwitchLogImages
@@ -92,7 +92,7 @@ DECLARE_SWITCH_REQUEST_TYPE_WITH_VARS(
   VisionRequestIds,
   switchLogImages,
   (CameraId, camIndex, CameraId::headTop)
-)
+);
 
 /**
  * @class SwitchLogImages
@@ -104,7 +104,7 @@ DECLARE_SWITCH_REQUEST_TYPE(
   VisionRequest,
   VisionRequestIds,
   switchUseLoggedImages
-)
+);
 
 
 /**
@@ -118,4 +118,4 @@ DECLARE_SWITCH_REQUEST_TYPE_WITH_VARS(
   VisionRequestIds,
   switchFeatureExtModule,
   (FeatureExtractionIds, id, FeatureExtractionIds::segmentation),
-)
+);

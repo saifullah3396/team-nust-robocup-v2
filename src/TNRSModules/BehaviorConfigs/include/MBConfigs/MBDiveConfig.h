@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBDiveConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBDiveConfig.h
  *
  * This file declares the structs MBDiveConfig and KFMDiveConfig
  *
@@ -24,7 +24,7 @@ DECLARE_BEHAVIOR_CONFIG(
   MBIds::dive,
   10.0,
   MBDiveTypes
-)
+);
 
 /**
  * @struct KFMDiveConfig
@@ -37,7 +37,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBDiveTypes::kfmDive,
   KFMDiveConfigPtr,
   (KeyFrameDiveTypes, keyFrameDiveType, KeyFrameDiveTypes::inPlace),
-)
+);
 
 /**
  * @struct HandSaveDiveConfig
@@ -50,4 +50,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBDiveTypes::handSaveDive,
   HandSaveDiveConfigPtr,
   (LinkChains, supportLeg, LinkChains::lLeg),
-)
+);

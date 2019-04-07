@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/MovementModule/Types/NaoqiMoveToward.h
+ * @file MotionModule/include/MovementModule/Types/NaoqiMoveToward.h
  *
  * This file declares the class NaoqiMoveToward
  *

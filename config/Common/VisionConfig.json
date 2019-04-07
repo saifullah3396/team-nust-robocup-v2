@@ -1,0 +1,9 @@
+{
+    "ballType" : 1,
+    "hScanStepHigh" : [8, 4],
+    "vScanStepHigh" : [8, 4],
+    "upperCamHScanSteps" : [8, 8, 4, 8, 8, 4, 8],
+    "upperCamVScanSteps" : [8, 8, 4, 8, 8, 4, 8],
+    "lowerCamHScanSteps" : [2, 2, 2, 2, 2, 2, 2],
+    "lowerCamVScanSteps" : [2, 2, 2, 2, 2, 2, 2]
+}

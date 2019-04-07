@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/GetupModule/Types/KeyFrameMotionGetup.h
+ * @file MotionModule/src/GetupModule/Types/KeyFrameMotionGetup.cpp
  *
  * This file implements the class KeyFrameMotionGetup
  *

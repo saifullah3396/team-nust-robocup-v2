@@ -1,5 +1,5 @@
 /**
- * @file UdpComm.h
+ * @file GameCommModule/include/UdpComm.h
  * Declares a wrapper for a UDP socket.
  * @author Armin Burchardt
  */

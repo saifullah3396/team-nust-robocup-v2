@@ -1,10 +1,10 @@
 /**
- * @file Utils/include/BSplineNormalFinder.cpp
+ * @file Utils/src/Solvers/BSplineNormalFinder.cpp
  *
  * This file implements the class BSplineNormalFinder
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 Jul 2018  
+ * @date 17 Jul 2018
  */
 
 #include "Utils/include/Solvers/BSplineNormalFinder.h"
@@ -12,7 +12,7 @@
 
 template <typename Scalar>
 double BSplineNormalFinder<Scalar>::costFunction(
-  const vector<double>& vars, 
+  const vector<double>& vars,
   vector<double>& grad,
   void *data)
 {
@@ -32,21 +32,21 @@ void BSplineNormalFinder<Scalar>::optDef()
     cout << "This solver only works for bsplines in 3-dimensions." << endl;
     return;
   }
-  //! Set bspline to find first order derivative
+  ///< Set bspline to find first order derivative
   bSplinePtr->derivativeOrder.clear();
   for (size_t i = 0; i < 2; ++i) // 0 to  1
-    bSplinePtr->derivativeOrder.push_back(i);  
+    bSplinePtr->derivativeOrder.push_back(i);
   bSplinePtr->nDerivatives = bSplinePtr->derivativeOrder.size();
-  //! Objective function to minimize the (angle - 90) between the given normal
-  //! and the bspline curve.
-  //! Hessian for this objective function is unknown.
-  //! Gradient for this function is unknown.
-  //! 1 variable; Curve t parameter
+  ///< Objective function to minimize the (angle - 90) between the given normal
+  ///< and the bspline curve.
+  ///< Hessian for this objective function is unknown.
+  ///< Gradient for this function is unknown.
+  ///< 1 variable; Curve t parameter
   nlopt::opt opt(nlopt::LN_COBYLA, 1);
   vector<double> lb(1), ub(1), var0;
   //These are not euler angles rather they are fixed angle rotations.
-  lb[0] = tBounds[0]; //! Lower bound for parameterized curve.
-  ub[0] = tBounds[1]; //! Upper bound for parameterized curve.
+  lb[0] = tBounds[0]; ///< Lower bound for parameterized curve.
+  ub[0] = tBounds[1]; ///< Upper bound for parameterized curve.
   for (int i = 0; i < lb.size(); ++i)
     var0.push_back(tBounds[0]);
 

@@ -57,7 +57,7 @@ public:
   virtual void loadExternalConfig() override {}
   
 protected:
-  //! The final posture state after getting up
+  ///< The final posture state after getting up
   PostureState endPosture;
   
 public:

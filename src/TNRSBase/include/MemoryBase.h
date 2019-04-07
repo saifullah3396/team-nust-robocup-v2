@@ -39,13 +39,13 @@ public:
    */
   virtual ~MemoryBase() {}
 
-  //! Getters
+  ///< Getters
   InputMemoryConnector* getInputConnector() { return inputConnector; }
   OutputMemoryConnector* getOutputConnector() { return outputConnector; }
 protected:
-  //! Shared memory input connector of the thread
+  ///< Shared memory input connector of the thread
   InputMemoryConnector* inputConnector;
 
-  //! Shared memory output connector of the thread
+  ///< Shared memory output connector of the thread
   OutputMemoryConnector* outputConnector;
 };

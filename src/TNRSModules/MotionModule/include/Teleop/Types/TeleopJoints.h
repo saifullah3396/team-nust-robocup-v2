@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/Teleop/Types/TeleopJoints.h
+ * @file MotionModule/include/Teleop/Types/TeleopJoints.h
  *
  * This file declares the class TeleopJoints
  *
@@ -64,10 +64,10 @@ private:
    */
   boost::shared_ptr<TeleopJointsConfig> getBehaviorCast();
 
-  //! Task gain
+  ///< Task gain
   static Scalar jointTaskGain;
 
-  //! Tasks for solving inverse kinematics
+  ///< Tasks for solving inverse kinematics
   PostureTaskPtr jointTask;
 };
 

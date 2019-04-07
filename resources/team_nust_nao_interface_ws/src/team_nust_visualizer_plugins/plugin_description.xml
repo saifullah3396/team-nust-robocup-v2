@@ -1,0 +1,37 @@
+<library path="libteam_nust_visualizer_plugins">
+  <class name="team_nust_visualizer_plugins/Console"
+         type="team_nust_visualizer_plugins::Console"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel widget for displaying log messages recieved from the robot.
+    </description>
+  </class>
+  <class name="team_nust_visualizer_plugins/RobotState"
+         type="team_nust_visualizer_plugins::RobotState"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel widget for displaying robot state messages.
+    </description>
+  </class>
+  <class name="team_nust_visualizer_plugins/CameraCalibration"
+         type="team_nust_visualizer_plugins::CameraCalibration"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel widget for updating camera settings in real-time
+    </description>
+  </class>
+  <class name="team_nust_visualizer_plugins/ColorCalibration"
+         type="team_nust_visualizer_plugins::ColorCalibration"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel widget for updating color settings in real-time
+    </description>
+  </class>
+  <class name="team_nust_visualizer_plugins/SensorsInfo"
+         type="team_nust_visualizer_plugins::SensorsInfo"
+         base_class_type="rviz::Panel">
+    <description>
+      A panel widget for updating camera settings in real-time
+    </description>
+  </class>
+</library>

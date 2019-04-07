@@ -1,5 +1,5 @@
 /**
- * @file VisionModule/CameraTransform.h
+ * @file VisionModule/include/CameraTransform.h
  *
  * This file declares the class CameraTransform.
  *
@@ -9,16 +9,11 @@
 
 #pragma once
 
+#include <Eigen/Dense>
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 #include "TNRSBase/include/MemoryBase.h"
-//#include "VisionModule/include/VisionModule.h"
-//#include "VisionModule/include/CameraModule/CameraModule.h"
-//#include "Utils/include/DataHolders/Camera.h"
-//#include "Utils/include/HardwareIds.h"
-//#include "Utils/include/MathsUtils.h"
-//#include "Utils/include/VisionUtils.h"
 
 enum class CameraId : unsigned int;
 class VisionModule;
@@ -27,6 +22,8 @@ template <typename T>
 class Camera;
 typedef boost::shared_ptr<Camera<float> > CameraPtr;
 typedef boost::shared_ptr<CameraModule> CameraModulePtr;
+
+using namespace cv;
 
 /**
  * @class CameraTransform
@@ -56,7 +53,7 @@ public:
   void computeCamMatrix();
 
 
-  /*Point3f compute3DOnPlaneFrom2D(const Point2f& imagePt) 
+  /*Point3f compute3DOnPlaneFrom2D(const Point2f& imagePt)
    {
    Point2f normalizedImagePt;
    normalizedImagePt.x = (imagePt.x - cams->centerOffX) / cams->focalX;
@@ -71,8 +68,8 @@ public:
 
    return pt;
    }
-   
-   Vector4f computePlaneEquation(const vector<Vector4f>& ps) 
+
+   Vector4f computePlaneEquation(const vector<Vector4f>& ps)
    {
    //Vector p0_p1
    Vector3f p0_p1 = (ps[0] - ps[1]).block(0, 0, 3, 1);
@@ -80,7 +77,7 @@ public:
 
    //Normal vector
    Vector3f n = p0_p1.cross(p0_p2);
-   
+
    Vector4f coeffs;
    coeffs[0] = n[0];
    coeffs[1] = n[1];
@@ -104,7 +101,7 @@ public:
    * Converts the posize_t in image coordinates on height Z to the
    * world coordinates. The static frame for the world coordinates
    * lies between the robot feet on the ground and so the world
-   * coordinate Z = Constant value. The simplified equations to solve 
+   * coordinate Z = Constant value. The simplified equations to solve
    * for world coordinates X, Y and Camera coordinate Z are found and used.
    *
    * @param worldPoint: Extracted X, Y in world frame.
@@ -118,7 +115,7 @@ public:
    * Converts a vector of points in image coordinates on height Z to the
    * world coordinates. The static frame for the world coordinates
    * lies between the robot feet on the ground and so the world
-   * coordinate Z = Constant value. The simplified equations to solve 
+   * coordinate Z = Constant value. The simplified equations to solve
    * for world coordinates X, Y and Camera coordinate Z are found and used.
    *
    * @param worldPoints: Extracted X, Y in world frame.
@@ -132,7 +129,7 @@ public:
 
   /**
    * Converts the posize_t in world coordinates to the image coordinates.
-   * 
+   *
    * @param worldPoint: Extracted X, Y, Z in world frame.
    * @param imagePoint: Image coordinates x and y in image frame.
    */
@@ -142,13 +139,21 @@ public:
 
   /**
    * Converts the points in world coordinates to the image coordinates.
-   * 
+   *
    * @param worldPoints: Extracted points in world frame.
    * @param imagePoints: Image coordinates x and y in image frame.
    */
   void worldToImage(
     const vector<Point3f>& worldPoints,
     vector<Point2f>& imagePoints);
+
+  /**
+   * @brief prevImageToCurrentImage Converts a point in previous image
+   *   to current image
+   * @param prevPos Previous point position in image
+   * @return New point position in image
+   */
+  Matrix<float, 3, 1> prevImageToCurrentImage(const Matrix<float, 3, 1>& prevPos);
 
   Mat& getCamMatrixCv() { return camMatrixCv; }
 
@@ -161,53 +166,56 @@ public:
   Matrix<float, 3, 4> getProjMatrix() { return projMatrix; }
 
 private:
-  //! The matrix A, for finding the solution to the system of equations
-  //! defined by camera, and perspective transformation relations. 
-  //! Used as inv(A) * b
+  ///< The matrix A, for finding the solution to the system of equations
+  ///< defined by camera, and perspective transformation relations.
+  ///< Used as inv(A) * b
   Matrix3f A;
 
-  //! The matrix b, for finding the solution to the system of equations
-  //! defined by camera, and perspective transformation relations. 
-  //! Used as inv(A) * b
+  ///< The matrix b, for finding the solution to the system of equations
+  ///< defined by camera, and perspective transformation relations.
+  ///< Used as inv(A) * b
   Vector3f b;
 
-  //! The camera matrices vector.
+  ///< The camera matrices vector.
   Matrix3f camMatrix;
 
-  //! The camera matrices vector in opencv mat.
+  ///< The camera matrices vector in opencv mat.
   Mat camMatrixCv;
 
-  //! The extrinsic matrices vector
+  ///< The extrinsic matrices vector
   Matrix<float, 3, 4> extMatrix;
 
-  //! The inverse extrinsic matrices vector
+  ///< The inverse extrinsic matrices vector
   Matrix4f invExtMatrix;
 
-  //! The inverse projection transformation matrices
+  ///< The inverse projection transformation matrices
   //vector<Matrix<float, 4, 3> > invProjMatrix;
 
-  //! The forward projection transformation matrices
+  ///< The forward projection transformation matrices
   Matrix<float, 3, 4> projMatrix;
 
-  //! Vector of cams
+  ///< Previous projection matrix inverse
+  MatrixXf prevProjMatrixInv;
+
+  ///< Vector of cams
   CameraPtr cam;
 
-  //! CameraModule ptr
+  ///< CameraModule ptr
   CameraModulePtr camModule;
 
-  //! Perspective transform matrix
+  ///< Perspective transform matrix
   Mat pTransform;
 
-  //! Known points in image
+  ///< Known points in image
   vector<Point2f> imageHomographyPoints;
 
-  //! Known points in world
+  ///< Known points in world
   vector<Point2f> worldHomographyPoints;
 
-  //! Perspective transformation matrix is found
+  ///< Perspective transformation matrix is found
   bool persFound;
 
-  //! Index of the camera
+  ///< Index of the camera
   CameraId camIndex;
 
 public:

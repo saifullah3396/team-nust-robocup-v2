@@ -1,10 +1,10 @@
 /**
- * @file GBModule/src/StiffnessModule/StiffnessModule.h
+ * @file GBModule/src/StiffnessModule/StiffnessModule.cpp
  *
  * This file implements the class StiffnessModule
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 12 Sep 2017 
+ * @date 12 Sep 2017
  */
 
 #include "GBModule/include/StiffnessModule/StiffnessModule.h"
@@ -20,9 +20,9 @@ StiffnessModule::StiffnessModule(
 }
 
 boost::shared_ptr<StiffnessModule> StiffnessModule::getType(
-  GBModule* gbModule, 
+  GBModule* gbModule,
   const BehaviorConfigPtr& cfg)
-{ 
+{
   StiffnessModule* sm;
   switch (cfg->type) {
       case toUType(GBStiffnessTypes::stiffnessInterp):
@@ -33,6 +33,6 @@ boost::shared_ptr<StiffnessModule> StiffnessModule::getType(
 
 GBStiffnessConfigPtr StiffnessModule::getBehaviorCast()
 {
-  return 
+  return
     boost::static_pointer_cast <GBStiffnessConfig> (config);
 }

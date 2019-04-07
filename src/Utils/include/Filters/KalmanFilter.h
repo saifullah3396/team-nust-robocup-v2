@@ -155,19 +155,19 @@ public:
   }
 
 private:
-  //! Process model for the system update
+  ///< Process model for the system update
   boost::shared_ptr<ProcessModel<Scalar, StateSize, InputSize, OutputSize> > model;
 
-  //! Measurement matrix
+  ///< Measurement matrix
   Matrix<Scalar, MeasSize, StateSize> H = {Matrix<Scalar, MeasSize, StateSize>::Zero()};
 
-  //! Measurement matrix transpose
+  ///< Measurement matrix transpose
   Matrix<Scalar, StateSize, MeasSize> Ht = {Matrix<Scalar, StateSize, MeasSize>::Zero()};
 
-  //! Measurement noise covariance matrix
+  ///< Measurement noise covariance matrix
   Matrix<Scalar, MeasSize, MeasSize> R = {Matrix<Scalar, MeasSize, MeasSize>::Zero()};
 
-  //! State estimate error covariance
+  ///< State estimate error covariance
   Matrix<Scalar, StateSize, StateSize> P = {Matrix<Scalar, StateSize, StateSize>::Zero()};
 
 public:

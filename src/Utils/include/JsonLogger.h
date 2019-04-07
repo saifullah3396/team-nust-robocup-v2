@@ -66,18 +66,18 @@ namespace Utils
       file.close();
     }
     
-    //! Getters
+    ///< Getters
     const string& getPath() const { return path; }
     Json::Value& getRoot() { return root; }
     
-    //! Setters
+    ///< Setters
     void setRoot(const Json::Value& root) { this->root = root; }
     void setPath(const string& root) { this->path = path; }
   protected:  
-    //! Behavior specific path to log file
+    ///< Behavior specific path to log file
     string path;
     
-    //! Root json object which holds the logged data
+    ///< Root json object which holds the logged data
     Json::Value root;
   };
 }

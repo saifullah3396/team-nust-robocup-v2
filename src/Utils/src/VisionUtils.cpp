@@ -176,7 +176,7 @@ namespace VisionUtils
   template<typename T>
   auto doIntersect(const cv::Vec<T, 4>& l1, const cv::Vec<T, 4>& l2) -> bool
     {
-      //! Find the four orientations needed for general and special cases
+      ///< Find the four orientations needed for general and special cases
       auto p1 = cv::Point_<T> (l1[0], l1[1]);
       auto q1 = cv::Point_<T> (l1[2], l1[3]);
       auto p2 = cv::Point_<T> (l2[0], l2[1]);
@@ -185,18 +185,18 @@ namespace VisionUtils
       auto o2 = orientation(p1, q1, q2);
       auto o3 = orientation(p2, q2, p1);
       auto o4 = orientation(p2, q2, q1);
-      //! General case
+      ///< General case
       if (o1 != o2 && o3 != o4) return true;
-      //! Special Cases
-      //! p1, q1 and p2 are colinear and p2 lies on segment p1q1
+      ///< Special Cases
+      ///< p1, q1 and p2 are colinear and p2 lies on segment p1q1
       else if (o1 == 0 && onSegment(p1, p2, q1)) return true;
-      //! p1, q1 and p2 are colinear and q2 lies on segment p1q1
+      ///< p1, q1 and p2 are colinear and q2 lies on segment p1q1
       else if (o2 == 0 && onSegment(p1, q2, q1)) return true;
-      //! p2, q2 and p1 are colinear and p1 lies on segment p2q2
+      ///< p2, q2 and p1 are colinear and p1 lies on segment p2q2
       else if (o3 == 0 && onSegment(p2, p1, q2)) return true;
-      //! p2, q2 and q1 are colinear and q1 lies on segment p2q2
+      ///< p2, q2 and q1 are colinear and q1 lies on segment p2q2
       else if (o4 == 0 && onSegment(p2, q1, q2)) return true;
-      return false; //! Doesn't fall in any of the above cases
+      return false; ///< Doesn't fall in any of the above cases
     }
 
   template<typename T>
@@ -210,7 +210,7 @@ namespace VisionUtils
     auto p3p4 = p3 - p4;
     auto det = p1p2.x * p3p4.y - p1p2.y * p3p4.x;
     if (det != 0.0) {
-      //! det == 0 -> Lines are parallel
+      ///< det == 0 -> Lines are parallel
       auto c1 = p1.x * p2.y - p1.y * p2.x;
       auto c2 = p3.x * p4.y - p3.y * p4.x;
       p.x = (c1 * p3p4.x - p1p2.x * c2) / det;
@@ -224,29 +224,29 @@ namespace VisionUtils
   /*template<typename T>
    bool isInside(const vector<Point_<T> >& polygon, const Point_<T>& p)
    {
-   //! There must be at least 3 vertices in polygon
+   ///< There must be at least 3 vertices in polygon
    if (polygon.size() < 3)  return false;
-   //! Create a point for line segment from p to infinite
+   ///< Create a point for line segment from p to infinite
    auto extreme = Point_<T>(INF, p.y);
-   //! Count intersections of the above line with sides of polygon
+   ///< Count intersections of the above line with sides of polygon
    auto count = 0, i = 0;
    do
    {
    auto next = (i+1)%n;
-   //! Check if the line segment from 'p' to 'extreme' intersects
-   //! with the line segment from 'polygon[i]' to 'polygon[next]'
+   ///< Check if the line segment from 'p' to 'extreme' intersects
+   ///< with the line segment from 'polygon[i]' to 'polygon[next]'
    if (doIntersect(polygon[i], polygon[next], p, extreme))
    {
-   //! If the point 'p' is colinear with line segment 'i-next',
-   //! then check if it lies on segment. If it lies, return true,
-   //! otherwise false
+   ///< If the point 'p' is colinear with line segment 'i-next',
+   ///< then check if it lies on segment. If it lies, return true,
+   ///< otherwise false
    if (orientation(polygon[i], p, polygon[next]) == 0)
    return onSegment(polygon[i], p, polygon[next]);
    count++;
    }
    i = next;
    } while (i != 0);
-   //! Return true if count is odd, false otherwise
+   ///< Return true if count is odd, false otherwise
    return count&1;
    }*/
 
@@ -285,7 +285,7 @@ namespace VisionUtils
             point.x = x2;
             point.y = y2;
             comp.push_back(point);
-            //! 4 connected
+            ///< 4 connected
             if (x2 > 0 && (src(y2, x2 - 1) != 0)) {
               stack2.push(i - 1);
               src(y2, x2 - 1) = 0;
@@ -303,7 +303,7 @@ namespace VisionUtils
               src(y2, x2 + 1) = 0;
             }
 
-            //! 8 connected
+            ///< 8 connected
             if (x2 > 0 && y2 > 0 && (src(y2 - 1, x2 - 1) != 0)) {
               stack2.push(i - w - 1);
               src(y2 - 1, x2 - 1) = 0;
@@ -451,5 +451,5 @@ namespace VisionUtils
 
    return ellipse;
    }*/
-} //! VisionUtils
+} ///< VisionUtils
 

@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/HeadControl/Types/HeadTargetTrack.h
+ * @file MotionModule/src/HeadControl/Types/HeadTargetTrack.cpp
  *
  * This file implements the class HeadTargetTrack
  *
@@ -70,10 +70,10 @@ void HeadTargetTrack<Scalar>::update()
     }
     CameraId trackingCam = CameraId::headTop;
     if (posWorld.head(2).norm() < lowerCamUsageRange && posWorld[2] < lowerCamUsageZ) {
-      //! If targetXY is within 60 cm and z is reasonably low, use lower cam
+      ///< If targetXY is within 60 cm and z is reasonably low, use lower cam
       trackingCam = CameraId::headBottom;
     }
-    if (trackTarget(this->kM->getWorldToCam(trackingCam, posWorld))) { //! Target reached
+    if (trackTarget(this->kM->getWorldToCam(trackingCam, posWorld))) { ///< Target reached
       // finish();
       // keep tracking until killed
     }
@@ -92,8 +92,8 @@ bool HeadTargetTrack<Scalar>::trackTarget(const Matrix<Scalar, 4, 1>& posCam)
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   Matrix<Scalar, 2, 1> posFromCenter, meas;
-  posFromCenter[0] = atan2(posCam[2], posCam[0]) - M_PI / 2; //! X-angle
-  posFromCenter[1] = -(atan2(posCam[2], posCam[1]) - M_PI / 2); //! Y-angle
+  posFromCenter[0] = atan2(posCam[2], posCam[0]) - M_PI / 2; ///< X-angle
+  posFromCenter[1] = -(atan2(posCam[2], posCam[1]) - M_PI / 2); ///< Y-angle
   meas[0] = this->kM->getJointState(Joints::headYaw)->position();
   meas[1] = this->kM->getJointState(Joints::headPitch)->position();
   for (size_t i = 0; i < 1; ++i) { // Moving it about Y has problems, so keep it fixed
@@ -101,8 +101,8 @@ bool HeadTargetTrack<Scalar>::trackTarget(const Matrix<Scalar, 4, 1>& posCam)
     auto input = trackersXY[i]->update(meas[i]);
     this->naoqiChangeAngles(this->naoqiNames[i], input, this->fractionMaxSpeed);
   }
-  if (fabsf(trackersXY[0]->prevError1()) < Angle::DEG_2 &&
-      fabsf(trackersXY[1]->prevError1()) < Angle::DEG_2)
+  if (fabsf(trackersXY[0]->prevError1()) < Angle::DEG_2)// &&
+      //fabsf(trackersXY[1]->prevError1()) < Angle::DEG_2)
   {
     return true;
   }

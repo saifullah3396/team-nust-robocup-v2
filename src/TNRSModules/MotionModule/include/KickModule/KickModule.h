@@ -145,89 +145,89 @@ protected:
   //void makeFootSurfaces3D(
   //  const bool& leftFoot, fstream& log, fstream& zxLog, Mat& surfaceMat);
 
-  //! Ball mass
+  ///< Ball mass
   static Scalar ballMass;
 
-  //! Ball radius
+  ///< Ball radius
   static Scalar ballRadius;
   
-  //! Ball static friction coefficient
+  ///< Ball static friction coefficient
   static Scalar sf;
   
-  //! Ball rolling friction coefficient
+  ///< Ball rolling friction coefficient
   static Scalar rf;
 
-  //! Coefficient of damping for ball if damping equation is used
+  ///< Coefficient of damping for ball if damping equation is used
   Scalar coeffDamping;
 
-  //! Ball Position in base leg frame
+  ///< Ball Position in base leg frame
   Matrix<Scalar, 3, 1> ballPosition;
 
-  //! Ball to target direction vector
+  ///< Ball to target direction vector
   Matrix<Scalar, 3, 1> ballToTargetUnit;
 
-  //! Target Position in base leg frame
+  ///< Target Position in base leg frame
   Matrix<Scalar, 3, 1> targetPosition;
 
-  //! Angle from ball to target
+  ///< Angle from ball to target
   Scalar targetAngle;
 
-  //! Distance from ball to target
+  ///< Distance from ball to target
   Scalar targetDistance;
 
-  //! Distance between the feet frames.
+  ///< Distance between the feet frames.
   Scalar footSpacing;
 
-  //! Kicking Leg 
+  ///< Kicking Leg 
   LinkChains kickLeg;
 
-  //! Support Leg 
+  ///< Support Leg 
   LinkChains supportLeg;
   
-  //! End-Effector frame wrt kick leg base
+  ///< End-Effector frame wrt kick leg base
   Matrix<Scalar, 4, 4> endEffector;
 
-  //! End-effector pose at impact wrt the support leg frame
+  ///< End-effector pose at impact wrt the support leg frame
   Matrix<Scalar, 4, 4> impactPose;	
 
-  //! Transformation matrix from support leg frame to end effector frame
+  ///< Transformation matrix from support leg frame to end effector frame
   Matrix<Scalar, 4, 4> supportToKick;
   
-  //! Transformation matrix from torso to support leg frame
+  ///< Transformation matrix from torso to support leg frame
   Matrix<Scalar, 4, 4> torsoToSupport;
 
-  //! Inverse of torsoToSupport
+  ///< Inverse of torsoToSupport
   Matrix<Scalar, 4, 4> supportToTorso;
 
-  //! Desired end-effector velocity on impact in cartesian space
+  ///< Desired end-effector velocity on impact in cartesian space
   Matrix<Scalar, 3, 1> desImpactVel;
 
-  //! Desired ball velocity in 1D in target direction
+  ///< Desired ball velocity in 1D in target direction
   Scalar desBallVel;
 
-  //! Whether to compute desImpactVel based on distance // Impulse/Vm based solution
+  ///< Whether to compute desImpactVel based on distance // Impulse/Vm based solution
   bool desImpactVelKnown;
 
-  //! Kick task active joints
+  ///< Kick task active joints
   vector<bool> kickTaskJoints;
 
-  //! Arms task active joints
+  ///< Arms task active joints
   vector<bool> armsTaskJoints;
 
-  //! Time taken by the overall kick trajectory
+  ///< Time taken by the overall kick trajectory
   Scalar totalTimeToKick;
 
-  //! BSpline defining the left foot contour 
+  ///< BSpline defining the left foot contour 
   static BSpline<Scalar>* lFootContour;
   
-  //! BSpline defining the right foot contour 
+  ///< BSpline defining the right foot contour 
   static BSpline<Scalar>* rFootContour;
   
-  //! Foot rectangle defined by position vectors to four corners
+  ///< Foot rectangle defined by position vectors to four corners
   static vector<Matrix<Scalar, 3, 1> > footRect;
 
-  //! Maximum momentum optimizer is friend as it uses kick module
-  //! functions and variables
+  ///< Maximum momentum optimizer is friend as it uses kick module
+  ///< functions and variables
   friend class MaxMomentumEEOpt<Scalar>;
 private:
   /**

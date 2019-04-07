@@ -97,14 +97,14 @@ public:
    */
   virtual bool checkConflict(const boost::shared_ptr<MotionTask<Scalar> >& task);
 
-  //! Setters
+  ///< Setters
   void setJSType(const JointStateType& jsType) { this->jsType = jsType; }
   void setGain(const Scalar& gain) { this->gain = gain; }
   void setWeight(const Scalar& weight) { this->weight = weight; }
   void setActiveJoints(const vector<bool>& activeJoints) { this->activeJoints = activeJoints; }
   void setActiveResidual(const vector<bool>& activeResidual) { this->activeResidual = activeResidual; }
 
-  //! Getters
+  ///< Getters
   Scalar getGain() const { return gain; }
   Scalar getWeight() const { return weight; }
   MotionTaskType getType() const { return taskType; }
@@ -115,34 +115,34 @@ public:
   Matrix<Scalar, Dynamic, Dynamic> getResidual();
 
 protected:
-  //! A pointer to robot kinematics
+  ///< A pointer to robot kinematics
   boost::shared_ptr<KinematicsModule<Scalar> > km;
 
-  //! Type of joint state to be used for kinematic computation
+  ///< Type of joint state to be used for kinematic computation
   JointStateType jsType;
 
-  //! Number of degrees of freedom possible for this task
+  ///< Number of degrees of freedom possible for this task
   unsigned nDof;
 
-  //! Output residual size
+  ///< Output residual size
   unsigned nResidual;
 
-  //! Current task residual
+  ///< Current task residual
   Matrix<Scalar, Dynamic, Dynamic> residual;
 
-  //! Type of the task
+  ///< Type of the task
   MotionTaskType taskType;
 
-  //! Active degrees of freedom
+  ///< Active degrees of freedom
   vector<bool> activeJoints;
 
-  //! Active residual components
+  ///< Active residual components
   vector<bool> activeResidual;
 
-  //! MotionTask gain
+  ///< MotionTask gain
   Scalar gain;
 
-  //! MotionTask priority weight
+  ///< MotionTask priority weight
   Scalar weight;
 
 public:
@@ -188,13 +188,13 @@ public:
 
   Matrix<Scalar, Dynamic, Dynamic> computeResidual(const Scalar& dt);
 
-  //! Setters
+  ///< Setters
   void setTargetPosture(
     const Matrix<Scalar, Dynamic, 1>& targetJoints)
     { this->targetJoints = targetJoints; }
 
 private:
-  //! Target joints for the required posture
+  ///< Target joints for the required posture
   Matrix<Scalar, Dynamic, 1> targetJoints;
 
 public:
@@ -245,7 +245,7 @@ public:
    */
   bool checkConflict(const boost::shared_ptr<MotionTask<Scalar> >& task);
 
-  //! Setters
+  ///< Setters
   void setTargetCom(
     const Matrix<Scalar, 3, 1>& targetCom)
     { this->targetCom = targetCom; }
@@ -257,16 +257,16 @@ public:
     { this->baseFrame = baseFrame; }
 
 private:
-  //! Reference frame for com computations
+  ///< Reference frame for com computations
   RobotFeet baseFrame;
 
-  //! Index of base chain end-effector
+  ///< Index of base chain end-effector
   LegEEs baseEE;
 
-  //! Target center of mass position
+  ///< Target center of mass position
   Matrix<Scalar, 3, 1> targetCom;
 
-  //! First step uses com estimate
+  ///< First step uses com estimate
   bool firstStep;
 
 public:
@@ -320,12 +320,12 @@ public:
    */
   bool checkConflict(const boost::shared_ptr<MotionTask<Scalar> >& task);
 
-  //! Setters
+  ///< Setters
   void setTargetRel(
     const Matrix<Scalar, 4, 4>& target)
     { this->target = this->km->getGlobalToBody() * target; }
 
-  //! Setters
+  ///< Setters
   void setTarget(const Matrix<Scalar, 4, 4>& target)
     { this->target = target; }
 
@@ -335,17 +335,17 @@ public:
   void setEndEffector(const Matrix<Scalar, 4, 4>& endEffector)
     { this->endEffector = endEffector; }
 
-  //! Getters
+  ///< Getters
   Matrix<Scalar, 4, 4> getTarget() { return target; }
 
 protected:
-  //! Index of the chain for which this task is defined
+  ///< Index of the chain for which this task is defined
   LinkChains chainIndex;
 
-  //! End effector transformation for this chain
+  ///< End effector transformation for this chain
   Matrix<Scalar, 4, 4> endEffector;
 
-  //! Target end-effector position
+  ///< Target end-effector position
   Matrix<Scalar, 4, 4> target;
 
 public:
@@ -434,11 +434,11 @@ public:
    */
   bool checkConflict(const boost::shared_ptr<MotionTask<Scalar> >& task);
 
-  //! Getters
+  ///< Getters
   Matrix<Scalar, 4, 4> getTarget()
     { return target; }
 
-  //! Setters
+  ///< Setters
   void setTarget(
     const Matrix<Scalar, 4, 4>& target)
     { this->target = target; }
@@ -450,16 +450,16 @@ public:
     { this->endEffector = endEffector; }
 
 protected:
-  //! Index of the base chain
+  ///< Index of the base chain
   RobotFeet baseFrame;
 
-  //! Index of base chain end-effector
+  ///< Index of base chain end-effector
   LegEEs baseEE;
 
-  //! Transformation frame of the end-effector to be used as base frame
+  ///< Transformation frame of the end-effector to be used as base frame
   Matrix<Scalar, 4, 4> endEffector;
 
-  //! Target transformation to be reached by the torso
+  ///< Target transformation to be reached by the torso
   Matrix<Scalar, 4, 4> target;
 
 public:

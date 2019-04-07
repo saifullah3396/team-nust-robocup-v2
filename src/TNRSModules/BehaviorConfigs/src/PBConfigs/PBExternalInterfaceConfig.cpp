@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/PBConfigs/PBExternalInterfaceConfig.h
+ * @file TNRSModules/BehaviorConfigs/src/PBConfigs/PBExternalInterfaceConfig.cpp
  *
  * This file defines the struct PBExternalInterfaceConfig and its childs
  *
@@ -13,16 +13,16 @@ DEFINE_BEHAVIOR_CONFIG(
   PBExternalInterfaceConfig, PBConfig, PBExternalInterfaceConfigPtr,
   (PBExternalInterfaceTypes, nihaCognition, NIHACognitionConfig),
   (PBExternalInterfaceTypes, userReqHandler, UserRequestsHandlerConfig),
-)
+);
 
 void NIHACognitionConfig::init() {}
 void NIHACognitionConfig::validate()
 {
-  
+
 }
 
 void UserRequestsHandlerConfig::init() {}
 void UserRequestsHandlerConfig::validate()
 {
-  
+
 }

@@ -4,7 +4,7 @@
  * This file declares the class RobotStartup
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 16 Nov 2017 
+ * @date 16 Nov 2017
  */
 
 #pragma once
@@ -14,9 +14,9 @@
 
 struct PBStartupConfig;
 
-/** 
+/**
  * @class RobotStartup
- * @brief The class for defining the stratup behavior of the robot when 
+ * @brief The class for defining the stratup behavior of the robot when
  *   the code first initiates on the robot.
  */
 class RobotStartup : public PlanningBehavior
@@ -29,7 +29,7 @@ public:
    * @param name Behavior name
    */
   RobotStartup(
-    PlanningModule* planningModule, 
+    PlanningModule* planningModule,
     const boost::shared_ptr<PBStartupConfig>& config,
     const string& name = "RobotStartup");
 
@@ -37,13 +37,13 @@ public:
    * @brief ~RobotStartup Destructor
    */
   virtual ~RobotStartup() {}
-  
+
   /**
    * @brief getType Returns its own child based on the given type
-   * 
+   *
    * @param planningModule Pointer to base planning module
    * @param cfg Config of the requested behavior
-   * 
+   *
    * @return boost::shared_ptr<RobotStartup>
    */
   static boost::shared_ptr<RobotStartup> getType(
@@ -52,7 +52,7 @@ public:
 private:
   /**
    * @brief getBehaviorCast Returns the cast of config as PBStartupConfigPtr
-   */ 
+   */
   boost::shared_ptr<PBStartupConfig> getBehaviorCast();
 };
 

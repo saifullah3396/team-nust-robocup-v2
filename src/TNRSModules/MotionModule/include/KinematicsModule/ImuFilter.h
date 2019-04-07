@@ -43,7 +43,7 @@ public:
     Eigen::Matrix<Scalar, 3, 1> measAcc,
     const Eigen::Matrix<Scalar, 3, 1>& measGyr);
 
-  //! Getters
+  ///< Getters
   Eigen::Matrix<Scalar, 4, 1> getQuaternion();
   Eigen::Matrix<Scalar, 3, 3> getRotation();
 private:

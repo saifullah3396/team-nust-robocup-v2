@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/ExternalInterface/Types/UserRequestsHandler.h
+ * @file PlanningBehaviors/ExternalInterface/Types/UserRequestsHandler.h
  *
  * This file declares the class UserRequestsHandler
  *
@@ -22,9 +22,9 @@ struct UserRequestsHandlerConfig;
 class UserRequestsHandler : public ExternalInterface, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to send total module time
+    ///< Option to send total module time
     (vector<float>, jointCommands, vector<float>(toUType(Joints::count), NAN)),
-  )
+  );
 public:
   /**
    * @brief UserRequestsHandler Constructor

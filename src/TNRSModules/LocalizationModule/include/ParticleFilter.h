@@ -39,11 +39,11 @@ using namespace RandomLib;
 class ParticleFilter : public MemoryBase, DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Option to display landmarks map that is initialized at start
+    ///< Option to display landmarks map that is initialized at start
     (int, displayLandmarksMap, 0),
-    //! Option to display voronoi map made from landmark positions
+    ///< Option to display voronoi map made from landmark positions
     (int, displayVoronoiMap, 0),
-  )
+  );
 public:
   /**
    * Constructor
@@ -151,7 +151,7 @@ private:
   void setupViewVectors();
 
   /**
-   * Tries to determine the robots position according to known landmarks 
+   * Tries to determine the robots position according to known landmarks
    * information.
    */
   void updateRobotStateEstimate();
@@ -195,7 +195,7 @@ private:
   void addPredictionNoise();
 
   /**
-   * Updates particle weights based on the likelihood of the observed 
+   * Updates particle weights based on the likelihood of the observed
    *   measurements.
    * @param obsLandmarks: Vector of observed landmarks
    */
@@ -225,14 +225,6 @@ private:
   void resample();
 
   /**
-   * @brief landmarkPoseToWorldPose Converts robot pose wrt to landmark to world pose
-   * @param lPose Pose from landmark
-   * @param rPose Robot pose
-   */
-   RobotPose2D<float> landmarkPoseToWorldPose(
-    const RobotPose2D<float> lPose, const RobotPose2D<float> rPose);
-
-  /**
    * @brief worldToVoronoiMap Converts a point in world to a point on voronoi map
    * @param p Input point in world
    * @return Output point in map
@@ -246,119 +238,132 @@ private:
    */
   Point2f worldToVoronoiMap(const Point2f& p);
 
-  //! Whether the filter has been initiated with some initial estimate
-  bool initiated;
+  /**
+   * @brief drawParticle Draws a particle on the world map
+   * @param p Particle
+   * @param image Map image
+   */
+  void drawParticle(const Particle& p, Mat& image, const Scalar& color = Scalar(255, 0, 0));
 
-  //! Whether the robot has been localized to a good extent
-  bool localized;
+  ///< Whether the filter has been initiated with some initial estimate
+  bool initiated = {false};
 
-  //! Total number of generated particles
-  int nParticles;
+  ///< Whether the robot has been localized to a good extent
+  bool localized = {false};
 
-  //! Vector containing all the particles
+  ///< Total number of generated particles
+  size_t nParticles = {20};
+
+  ///< Vector containing all the particles
   vector<Particle> particles;
 
-  //! The gaussian covariance constant parameter
+  ///< The gaussian covariance constant parameter
   float gaussianConst;
 
-  //! The exponential constant value for x-axis
+  ///< The exponential constant value for x-axis
   float expConstX;
 
-  //! The exponential constant value for y-axis
+  ///< The exponential constant value for y-axis
   float expConstY;
 
-  //! Sum of weights of all the particles
-  double sumWeights;
+  ///< Sum of weights of all the particles
+  double sumWeights = {0.0};
 
-  //! Maximum weight from all the particles
-  double maxWeight;
+  ///< Maximum weight from all the particles
+  double maxWeight = {0.0};
 
-  //! Landmarks grid resolution
-  double lGridResolution;
+  ///< Landmarks grid resolution
+  double lGridResolution = {0.01};
 
-  //! Voronoi map resolution
+  ///< Voronoi map resolution
   double vMapResolution;
 
-  //! Voronoi map size
+  ///< Voronoi map size
   Size vMapSize;
 
-  //! The number of times the robot is lost after which particle filter is reset
-  int lostCount;
+  ///< The number of times the robot is lost after which particle filter is reset
+  int lostCount = {0};
 
-  //! Estimated poses of the robot found from known landmarks
-  //! Currnetly only goal info is used for this estimate
+  ///< Estimated poses of the robot found from known landmarks
+  ///< Currnetly only goal info is used for this estimate
   boost::circular_buffer<RobotPose2D<float> > estimatedStates;
 
-  //! Vector of the actual field landmarks
+  ///< Vector of the actual field landmarks
   vector<LandmarkPtr> fieldLandmarks;
 
-  //! Vector of the actual field landmarks, labelled according to their
-  //! position using voronoi map of the environment
+  ///< Vector of the actual field landmarks, labelled according to their
+  ///< position using voronoi map of the environment
   vector<vector<LandmarkPtr> > labelledLandmarks;
 
-  //! Number of landmarks in each type
+  ///< Number of landmarks in each type
   vector<unsigned> landmarkTypeCount;
 
-  //! Starting index of each type of landmark
+  ///< Starting index of each type of landmark
   vector<unsigned> landmarkTypeStarts;
 
-  //! The unit vector that represents the minimum field of view angle
-  //! from the lower camera frame and maximum field of view angle from
-  //! the upper camera frame
+  ///< The unit vector that represents the minimum field of view angle
+  ///< from the lower camera frame and maximum field of view angle from
+  ///< the upper camera frame
   vector<Vector3f> unitVecY;
 
-  //! Draws a particle on map
-  void drawParticle(const Particle& p, Mat& image);
-  void drawParticle(const RobotPose2D<float>& p, Mat& image);
-
-  //! The minimum distance from the camera view on the ground
+  ///< The minimum distance from the camera view on the ground
   float minDistGround;
 
-  //! The maximum distance from the camera view on the ground
+  ///< The maximum distance from the camera view on the ground
   float maxDistGround;
 
-  //! Random  library object
+  ///< Random  library object
   Random random;
 
-  //! Parameters for augmented monte-carlo localization method
+  ///< Parameters for augmented monte-carlo localization method
   double wSlow, wFast;
 
-  //! Current average state of the robot
-  RobotPose2D<float> avgFilteredState;
+  ///< Current average state of the robot
+  RobotPose2D<float> avgFilteredState = {RobotPose2D<float>(NAN, NAN, NAN)};
 
-  //! Last known half the robot is in: 0 us/1 opponents.
-  unsigned lastKnownHalf;
+  ///< Last known half the robot is in: 0 us/1 opponents.
+  unsigned lastKnownHalf = {BOTTOM_HALF};
 
-  //! Filter prediction standard deviation when the robot is standing
+  ///< Filter prediction standard deviation when the robot is standing
   Vector3d predictionStd;
 
-  //! Filter prediction standard deviation when the robot is in motion
+  ///< Filter prediction standard deviation when the robot is in motion
   Vector3d motionStd;
 
-  //! Filter measurement standard deviation
+  ///< Filter measurement standard deviation
   Vector3d measurementStd;
 
-  //! Standard deviation used for states generation during initialization
+  ///< Standard deviation used for states generation during initialization
   Vector3d genStd;
 
-  //! Cycle time of the filter loop
+  ///< Cycle time of the filter loop
   float cycleTime;
 
-  //! Queue containing all the prediction control inputs
+  ///< Queue containing all the prediction control inputs
   queue<PositionInput<float> > positionInputs;
-  
-  //! Queue containing latest known landmarks observation.
+
+  ///< Queue containing latest known landmarks observation.
   vector<KnownLandmarkPtr> knownLandmarks;
-  
-  //! Queue containing latest unknown landmarks observation.
+
+  ///< Queue containing latest unknown landmarks observation.
   vector<UnknownLandmarkPtr> unknownLandmarks;
 
-  //! Id of the last received goal info
-  int prevGoalInfoId;
+  ///< Id of the last received goal info
+  int prevGoalInfoId = {0};
 
-  //! A matrix containing the labelled voronoi image
+  ///< A matrix containing the labelled voronoi image
   Mat voronoiLabels;
 
-  //! Pointer to localization module object
+  ///< Pointer to localization module object
   LocalizationModule* lModule;
+
+  /**
+   * @enum FieldHalf
+   * @brief The enumeration for top and bottom halves
+   *   of the field
+   */
+  enum FieldHalf {
+    BOTTOM_HALF,
+    TOP_HALF
+  };
 };

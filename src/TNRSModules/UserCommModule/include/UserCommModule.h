@@ -1,5 +1,5 @@
 /**
- * @file UserCommModule/UserCommModule.h
+ * @file UserCommModule/include/UserCommModule.h
  *
  * This file declares the class UserCommModule
  *
@@ -28,10 +28,10 @@ class UserCommModule : public BaseModule
 {
   DECLARE_INPUT_CONNECTOR(
     userCommThreadPeriod
-  )
+  );
   DECLARE_OUTPUT_CONNECTOR(
     heartBeat
-  )
+  );
 public:
   /**
    * @brief UserCommModule Constructor
@@ -104,15 +104,18 @@ private:
   void addImageToQueue(
     const cv::Mat& image);
 
-  //! Boost Asio based Tcp server that asynchronously handles read/write from clients
+  ///< Boost Asio based Tcp server that asynchronously handles read/write from clients
   vector<boost::shared_ptr<TcpServer> > servers;
 
-  //! Connection ports for each connection type
+  ///< Connection ports for each connection type
   vector<unsigned short> connPorts;
 
-  //! Boost io services for each connection type
+  ///< Boost io services for each connection type
   vector<boost::shared_ptr<boost::asio::io_service > > ioServices;
 
-  //! Boost io threads for each connection type
+  ///< Boost io threads for each connection type
   vector<boost::thread> ioThreads;
+
+  ///< Fstream for log file
+  fstream logsFile;
 };

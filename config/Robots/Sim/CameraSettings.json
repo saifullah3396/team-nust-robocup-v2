@@ -77,12 +77,12 @@
          "e" : 0.0
       },
       "intrinsic" : {
-         "centerOffX" : 324.37957538430817,
-         "centerOffY" : 222.6340833034254,
-         "focalX" : 556.153682688819,
-         "focalY" : 556.43345704373291,
-         "fovX" : 60.969999999999999,
-         "fovY" : 47.640000000000001
+        "fovX": 60.97,
+        "fovY": 47.64,
+        "focalX": 543.58,
+        "focalY": 543.64,
+        "centerOffX": 320,
+        "centerOffY": 240
       },
       "subscription" : {
          "colorSpace" : 9,

@@ -1,5 +1,5 @@
 /**
- * @file Utils/include/Variable.h
+ * @file TNRSBase/include/MemoryVariable.h
  *
  * This file declares the class Variable
  *
@@ -57,10 +57,10 @@ public:
   virtual void setValueFromPtr(MemoryVariable* ptr) = 0;
   virtual void getValueIntoPtr(MemoryVariable* ptr) = 0;
 
-  //! Getters
+  ///< Getters
   const string& getVariableName() { return name; }
 private:
-  string name; //! Variable name
+  string name; ///< Variable name
 };
 
 /**
@@ -178,8 +178,8 @@ public:
   }
 
 protected:
-  T value; //! Value of the variable.
-  pthread_mutex_t accessMutex; //! Mutex for thread safe access to variable
+  T value; ///< Value of the variable.
+  pthread_mutex_t accessMutex; ///< Mutex for thread safe access to variable
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

@@ -1,8 +1,0 @@
-prefix=/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/devel
-
-Name: team_nust_visualizer_plugins
-Description: Description of team_nust_visualizer_plugins
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/sensei/team-nust-robocup/resources/team_nust_nao_interface_ws/devel/lib 
-Requires: roscpp std_msgs team_nust_msgs

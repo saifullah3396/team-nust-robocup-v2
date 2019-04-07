@@ -57,7 +57,7 @@ struct PIDController
     pidC[2] = pid[2] / _dt;
   }
 
-  //! Setters
+  ///< Setters
   void setCmd(const Scalar& cmd) { this->_cmd = cmd; }
   void setDt(const Scalar& dt) { this->_dt = dt; }
 
@@ -65,15 +65,15 @@ struct PIDController
   const Scalar& prevError2() { return _prevError2; }
   const Scalar& prevInput() { return _prevInput; }
 private:
-  //! Controller gains proportional, integral, derivative
+  ///< Controller gains proportional, integral, derivative
   Eigen::Matrix<Scalar, 3, 1> pid;
 
-  //! Constants resulting from pid gains
+  ///< Constants resulting from pid gains
   Eigen::Matrix<Scalar, 3, 1> pidC;
 
-  Scalar _prevError1 = {0}; //! Error in cycle k-1
-  Scalar _prevError2 = {0}; //! Error in cycle k-2
-  Scalar _prevInput = {0}; //! Last input
-  Scalar _cmd = {0}; //! Last command
-  Scalar _dt = {0.01}; //! Time step
+  Scalar _prevError1 = {0}; ///< Error in cycle k-1
+  Scalar _prevError2 = {0}; ///< Error in cycle k-2
+  Scalar _prevInput = {0}; ///< Last input
+  Scalar _cmd = {0}; ///< Last command
+  Scalar _dt = {0.01}; ///< Time step
 };

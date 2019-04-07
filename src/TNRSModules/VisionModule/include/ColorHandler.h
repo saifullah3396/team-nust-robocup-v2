@@ -1,5 +1,5 @@
 /**
- * @file ColorHandler/ColorHandler.h
+ * @file VisionModule/include/ColorHandler.h
  *
  * This file declares the class ColorHandler.
  *
@@ -49,12 +49,12 @@ struct ColorTable
 class ColorHandler : public DebugBase
 {
   INIT_DEBUG_BASE_(
-    //! Color to update
+    ///< Color to update
     (int, colorIndex, -1),
     (int, tableIndex, -1),
     (vector<int>, lower, vector<int>()),
     (vector<int>, upper, vector<int>()),
-  )
+  );
 public:
   /**
    * @brief ColorHandler Constructor
@@ -68,24 +68,26 @@ public:
 
   void update();
   void getBinary(const Mat& in, Mat& out, const TNColors& colorIndex) const;
+  static Vec3b getColorBGR(const TNColors& colorIndex);
   void computeUVHist(const Mat& uv, const Mat& mask, const bool& drawHists);
   bool isGreenHist(const TNColor& color) const;
   bool isColor(const TNColor& color, const TNColors& colorIndex) const;
+  TNColors whichColor(const TNColor& color) const;
   bool fieldHistFormed() const;
 
 private:
   void createColorLut(uint8_t*& tableY, uint8_t*& tableU, uint8_t*& tableV, const TNColor& min, const TNColor& max);
   vector<ColorTable*> colorTables;
 
-  //! Histogram bins
+  ///< Histogram bins
   int histBins = {32};
 
-  //! Opencv calcHist settings
+  ///< Opencv calcHist settings
   bool uniformHist = {true};
   bool accumulateHist = {false};
   bool fieldHist = {false};
 
-  //! Accumulative Histogram buffers
+  ///< Accumulative Histogram buffers
   boost::circular_buffer<Mat> uHistBuff;
   boost::circular_buffer<Mat> vHistBuff;
   boost::circular_buffer<int> pixelsBuff;

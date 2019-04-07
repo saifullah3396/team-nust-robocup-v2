@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/KinematicsModule/TaskIkSolver.cpp
+ * @file MotionModule/src/KinematicsModule/TaskIkSolver.cpp
  *
  * This file implements the class TaskIkSolver
  *
@@ -62,14 +62,14 @@ Scalar TaskIkSolver<Scalar>::computeCost()
 template <typename Scalar>
 void TaskIkSolver<Scalar>::init()
 {
-  //! Setup the qp solver
+  ///< Setup the qp solver
   qp = new SQProblem(nDof, nDof * 2);
   Options myOptions;
   myOptions.setToMPC();
   myOptions.printLevel = PL_NONE;
   qp->setOptions(myOptions);
-  //! Get maximum velocity of each joint and set up velocity constraints
-  //! matrices
+  ///< Get maximum velocity of each joint and set up velocity constraints
+  ///< matrices
   maxP.resize(nDof);
   minP.resize(nDof);
   maxV.resize(nDof);
@@ -146,9 +146,9 @@ bool TaskIkSolver<Scalar>::step(
   }
   //duration<double> timeSpan = high_resolution_clock::now() - tStart;
   //cout << "Step 1: " << DataUtils::varToString(timeSpan.count()) << "seconds.";
-  //! Set up velocity constraints matrix by choosing the minimum from
-  //! maximum joint velocity and the maximum distance the joint can move
-  //! due to its kinematic constraint
+  ///< Set up velocity constraints matrix by choosing the minimum from
+  ///< maximum joint velocity and the maximum distance the joint can move
+  ///< due to its kinematic constraint
   /*tStart = high_resolution_clock::now();
   Eigen::Matrix<Scalar, Dynamic, Dynamic, RowMajor> Z =
     Eigen::Matrix<Scalar, Dynamic, Dynamic, RowMajor>::Zero(nDof, nDof);

@@ -1,5 +1,5 @@
 /**
- * @file ControlModule/include/JointRequest.h
+ * @file MotionModule/include/JointRequest.h
  *
  * This file defines the class JointRequest
  *

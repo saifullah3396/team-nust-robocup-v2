@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/include/KickModule/JSE2DImpKick.h
+ * @file MotionModule/include/KickModule/Types/JSE2DImpKick.h
  *
  * This file declares the class JSE2DImpKick
  *
@@ -51,7 +51,7 @@ public:
 private:
   /**
    * @brief getBehaviorCast Returns the cast of config to JSE2DImpKickConfigPtr
-   */ 
+   */
   boost::shared_ptr<JSE2DImpKickConfig> getBehaviorCast();
 
   struct JSE2DPlanKick : public JointSpaceKick<Scalar>::PlanKick
@@ -66,19 +66,19 @@ private:
 
   /**
    * @brief setupKickBase See JointSpaceKick::setupKickBase()
-   */ 
+   */
   void setupKickBase() final;
-  
+
   /**
    * @brief solveForImpact Solves for the best impact conditions
    *   to find impact pose and velocity of the end-effector
-   */ 
+   */
   void solveForImpact() final;
-  
-  //! Ball initial velocity
+
+  ///< Ball initial velocity
   Matrix<Scalar, 3, 1> ballVelocity;
-  
-  //! Best impact conditions solver
+
+  ///< Best impact conditions solver
   boost::shared_ptr<KickImpact2DSolver<Scalar>> kickImpact2DSolver;
   friend class KickImpact2DSolver<Scalar>;
 };

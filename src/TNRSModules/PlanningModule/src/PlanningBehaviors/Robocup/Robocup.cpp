@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/PlanningBehaviors/Robocup.h
+ * @file PlanningBehaviors/Robocup/Robocup.cpp
  *
  * This file implements the class Robocup.
  *
@@ -52,7 +52,6 @@ boost::shared_ptr<Robocup> Robocup::getType(
   PlanningModule* planningModule, const BehaviorConfigPtr& cfg)
 {
   Robocup* r;
-  cout << "Config type:" << cfg->type << endl;
   switch (cfg->type) {
     case toUType(PBRobocupTypes::robocupSetup):
       r = new RobocupSetup(planningModule, SPC(RobocupSetupConfig, cfg)); break;

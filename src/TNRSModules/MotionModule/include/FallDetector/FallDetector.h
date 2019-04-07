@@ -51,13 +51,13 @@ public:
   update();
 
 private:
-  //! Size of the buffer torso imu sensor buffer
+  ///< Size of the buffer torso imu sensor buffer
   size_t bufferSize;
 
-  //! A circular buffer for averaging out the imu accelerations
+  ///< A circular buffer for averaging out the imu accelerations
   boost::circular_buffer<Matrix<Scalar, 3, 1> > torsoAccBuffer;
 
-  //! Kinematics module object.
+  ///< Kinematics module object.
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
 
 public:

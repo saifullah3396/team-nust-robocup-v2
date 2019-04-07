@@ -1,6 +1,6 @@
 /**
 
- * @file MotionModule/BalanceModule/ZmpControl.cpp
+ * @file MotionModule/src/BalanceModule/Types/ZmpControl.cpp
  *
  * This file implements the class ZmpControl
  *
@@ -59,7 +59,7 @@ template<typename Scalar>
 bool ZmpControl<Scalar>::initiate()
 {
   LOG_INFO("ZmpControl.initiate()")
-  //! Set up center of mass and zmp reference logs
+  ///< Set up center of mass and zmp reference logs
   comLog.open(
     (ConfigManager::getLogsDirPath() + string("ZmpControl/Com.txt")).c_str(),
     std::ofstream::out | std::ofstream::trunc
@@ -73,17 +73,17 @@ bool ZmpControl<Scalar>::initiate()
   zmpRegLog << "# X Y" << endl;
   zmpRegLog.close();
 
-  //! Set the support leg as global base for kinematic computations
+  ///< Set the support leg as global base for kinematic computations
   LinkChains& supportLeg = getBehaviorCast()->supportLeg;
   this->kM->setGlobalBase(static_cast<RobotFeet>(supportLeg), LegEEs::footCenter);
 
-  //! Set current joint estimates to simulated states
+  ///< Set current joint estimates to simulated states
   this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
 
-  //! Set max joint velocities to be used
+  ///< Set max joint velocities to be used
   this->kM->getTaskSolver()->setMaxVelocityLimitGain(1.0);
 
-  //! Set up the reference generator based on given zmp targets
+  ///< Set up the reference generator based on given zmp targets
   refGenerator =
     boost::shared_ptr<BalanceZmpRefGen<Scalar>>(new BalanceZmpRefGen<Scalar>(
         this->motionModule,
@@ -94,19 +94,19 @@ bool ZmpControl<Scalar>::initiate()
     ));
   refGenerator->initiate();
 
-  //! Setup the center of mass desired position
+  ///< Setup the center of mass desired position
   auto comState = this->kM->getComStateWrtFrame(supportLeg, toUType(LegEEs::footBase));
   desComPosition.setZero();
   desComPosition[2] = comState.position[2];
 
-  //! Initiate the preview controllers for x-y directions
+  ///< Initiate the preview controllers for x-y directions
   for (int i = 0; i < controllers.size(); ++i) {
     controllers[i] = new ZmpPreviewController<Scalar>(this->kM->getComModel(i));
     controllers[i]->setPreviewLength(nPreviews);
     controllers[i]->initController();
   }
 
-  //! Set shoulder pitch roll joint limits so it does not self collide if used
+  ///< Set shoulder pitch roll joint limits so it does not self collide if used
   //this->kM->getTaskSolver()->setMinJointLimit(MathsUtils::degToRads(12.0), L_SHOULDER_ROLL);
   //this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(22.0), L_SHOULDER_ROLL);
   //this->kM->getTaskSolver()->setMaxJointLimit(MathsUtils::degToRads(-12.0), R_SHOULDER_ROLL);
@@ -117,10 +117,10 @@ bool ZmpControl<Scalar>::initiate()
   activeJoints = vector<bool>(getBehaviorCast()->activeJoints.begin(), getBehaviorCast()->activeJoints.end());
 
   tasks.resize(toUType(IkTasks::count));
-  //! Make a center of mass task to control its desired trajectory
+  ///< Make a center of mass task to control its desired trajectory
   auto comResidual = vector<bool>(3, true);
 
-  //! Remove center of mass z-axis tracking
+  ///< Remove center of mass z-axis tracking
   comResidual[2] = false;
   tasks[toUType(IkTasks::com)] =
     this->kM->makeComTask(
@@ -134,7 +134,7 @@ bool ZmpControl<Scalar>::initiate()
     );
 
   if (getBehaviorCast()->keepOtherLegContact) {
-    //! keep the other leg on ground contact with high priority
+    ///< keep the other leg on ground contact with high priority
     tasks[toUType(IkTasks::contact)] =
       this->kM->makeContactTask(
         otherLeg,
@@ -146,8 +146,8 @@ bool ZmpControl<Scalar>::initiate()
   }
 
   if (getBehaviorCast()->regularizeIk) {
-    //! Use predefined joints as target for end posture after balance
-    //! This is necessary for convergence towards a feasible posture
+    ///< Use predefined joints as target for end posture after balance
+    ///< This is necessary for convergence towards a feasible posture
     tasks[toUType(IkTasks::regularization)] =
       this->kM->makePostureTask(
         postureTarget,
@@ -158,8 +158,8 @@ bool ZmpControl<Scalar>::initiate()
   }
 
   if (getBehaviorCast()->useTargetPosture) {
-    //! Use predefined joints as target for end posture after balance
-    //! This is necessary for convergence towards a feasible posture
+    ///< Use predefined joints as target for end posture after balance
+    ///< This is necessary for convergence towards a feasible posture
     tasks[toUType(IkTasks::posture)] =
       this->kM->makePostureTask(
         postureTarget,
@@ -170,11 +170,11 @@ bool ZmpControl<Scalar>::initiate()
   }
 
   if (getBehaviorCast()->keepTorsoUpright) {
-    //! Torso task to keep torso orientation to the initial orientation
-    //! This can be useful if the torso is to be kept upright
+    ///< Torso task to keep torso orientation to the initial orientation
+    ///< This can be useful if the torso is to be kept upright
     Matrix<Scalar, 4, 4> target = this->kM->getGlobalToBody();
-    auto activeResidual = vector<bool>(6, false); //! X-Y-Z, Roll-Pitch-Yaw
-    //! Only use Pitch tracking
+    auto activeResidual = vector<bool>(6, false); ///< X-Y-Z, Roll-Pitch-Yaw
+    ///< Only use Pitch tracking
     activeResidual[4] = true;
     tasks[toUType(IkTasks::torso)] =
       this->kM->makeTorsoTask(
@@ -188,13 +188,13 @@ bool ZmpControl<Scalar>::initiate()
       );
   }
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  //! In case motion proxy is turned on, we cannot use real-time updates.
-  //! We can then simply find ik for all center of mass states and interpolate
-  //! between them.
+  ///< In case motion proxy is turned on, we cannot use real-time updates.
+  ///< We can then simply find ik for all center of mass states and interpolate
+  ///< between them.
   LOG_ERROR("ZmpControl is undefined with USE_NAOQI_MOTION_PROXY=ON");
   return false;
 
-  //! Make a task solver
+  ///< Make a task solver
   TaskIkSolver<Scalar> tis =
     TaskIkSolver<Scalar>(
       this->motionModule->getKinematicsModule(), 1, activeJoints, true, this->cycleTime);

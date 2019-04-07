@@ -59,10 +59,10 @@ protected:
    */
   void whistleAction();
 
-  //! Time as in how long should we check for whistle
+  ///< Time as in how long should we check for whistle
   float timeToDetect;
   
-  //! Behavior time after initiation
+  ///< Behavior time after initiation
   float execTime;
 };
 

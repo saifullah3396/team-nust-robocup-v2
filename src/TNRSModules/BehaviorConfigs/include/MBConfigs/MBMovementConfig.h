@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBMovementConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBMovementConfig.h
  *
  * This file defines the structs MBMovementConfig
  *
@@ -45,7 +45,7 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   MBMovementTypes,
   (MBPostureConfigPtr, startPosture, InterpToPostureConfigPtr()),
   (MBPostureConfigPtr, endPosture, InterpToPostureConfigPtr()),
-)
+);
 
 /**
  * @struct NaoqiMoveTowardConfig
@@ -57,7 +57,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBMovementTypes::naoqiFootsteps,
   NaoqiFootstepsConfigPtr,
   (vector<TNRSFootstep<float>>, plannedPath, vector<TNRSFootstep<float>>()),
-)
+);
 
 /**
  * @struct NaoqiMoveTowardConfig
@@ -70,7 +70,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBMovementTypes::naoqiMoveToward,
   NaoqiMoveTowardConfigPtr,
   (VelocityInput<float>, velocityInput, VelocityInput<float>()),
-)
+);
 
 /**
  * @struct SpeedWalkConfig
@@ -86,4 +86,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (bool, minimizeJointVels, false),
   (bool, keepTorsoUpright, false),
   (int, maxNSteps, 1),
-)
+);

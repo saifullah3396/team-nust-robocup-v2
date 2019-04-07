@@ -1,5 +1,5 @@
 /**
- * @file UserCommModule/TcpConnection.h
+ * @file UserCommModule/include/TcpConnection.h
  *
  * This file declares the class TcpConnection
  *

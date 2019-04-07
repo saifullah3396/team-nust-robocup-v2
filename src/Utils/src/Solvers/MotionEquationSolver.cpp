@@ -1,10 +1,10 @@
 /**
- * @file PlanningBehaviors/KickSequence/MotionEquationSolver.cpp
+ * @file Utils/src/Solvers/MotionEquationSolver.cpp
  *
  * This file implements the class MotionEquationSolver
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 Jul 2018  
+ * @date 17 Jul 2018
  */
 
 #include "Utils/include/Solvers/MotionEquationSolver.h"
@@ -26,14 +26,14 @@ MotionEquationSolver::costFunction(const vector<double>& vars, vector<double>& g
 void
 MotionEquationSolver::optDef()
 {
-  //!Objective function to minimize the distance between target
-  //!Hessian for this objective function is unknown.
-  //!Gradient for this function is unknown.
-  //!1 variable; time it will take to reach the desired target
+  ///<Objective function to minimize the distance between target
+  ///<Hessian for this objective function is unknown.
+  ///<Gradient for this function is unknown.
+  ///<1 variable; time it will take to reach the desired target
   nlopt::opt opt(nlopt::LN_COBYLA, 1);
   vector<double> lb(1), ub(1), var0;
-  lb[0] = 0.0; //! Lower bound for time
-  ub[0] = 10.0; //! Upper bound for time
+  lb[0] = 0.0; ///< Lower bound for time
+  ub[0] = 10.0; ///< Upper bound for time
   for (int i = 0; i < lb.size(); ++i)
     var0.push_back(lb[i]);
 

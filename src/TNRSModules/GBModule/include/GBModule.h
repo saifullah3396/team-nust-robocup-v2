@@ -36,20 +36,20 @@ typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
  */
 class GBModule : public BaseModule
 {
-  //! Memory input connection
+  ///< Memory input connection
   DECLARE_INPUT_CONNECTOR(
     sbThreadPeriod,
     switchSensors
-  )
+  );
 
-  //! Memory output connection
+  ///< Memory output connection
   DECLARE_OUTPUT_CONNECTOR(
     jointStiffnessSensors,
     ledSensors,
     stiffnessState,
     whistleDetected,
     gBehaviorInfo
-  )
+  );
 
 public:
   #ifndef V6_CROSS_BUILD
@@ -140,7 +140,7 @@ public:
    */
   void setThreadPeriod() final;
 
-  //! Getters
+  ///< Getters
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
     #ifndef V6_CROSS_BUILD
       boost::shared_ptr<AL::ALMotionProxy> getSharedMotionProxy()
@@ -163,20 +163,20 @@ private:
    */
   void actuatorsUpdate();
 
-  GBManagerPtr gbManager; //! Static behaviors manager shared object
-  vector<SensorLayerPtr> sensorLayers; //! Vector of pointer to SensorLayer objects
-  vector<ActuatorLayerPtr> actuatorLayers; //! Vector of pointer to ActuatorLayer objects
+  GBManagerPtr gbManager; ///< Static behaviors manager shared object
+  vector<SensorLayerPtr> sensorLayers; ///< Vector of pointer to SensorLayer objects
+  vector<ActuatorLayerPtr> actuatorLayers; ///< Vector of pointer to ActuatorLayer objects
 
   #ifndef V6_CROSS_BUILD
-    ALMemoryProxyPtr memoryProxy; //! Pointer to NaoQi internal memory proxy
-    ALDCMProxyPtr dcmProxy; //! Pointer to NaoQi internal dcm proxy
+    ALMemoryProxyPtr memoryProxy; ///< Pointer to NaoQi internal memory proxy
+    ALDCMProxyPtr dcmProxy; ///< Pointer to NaoQi internal dcm proxy
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-      boost::shared_ptr<AL::ALMotionProxy> motionProxy; //! Pointer to NaoQi internal motion class
+      boost::shared_ptr<AL::ALMotionProxy> motionProxy; ///< Pointer to NaoQi internal motion class
     #endif
   #else
-    qi::AnyObject memoryProxy; //! Pointer to NaoQi internal memory proxy
+    qi::AnyObject memoryProxy; ///< Pointer to NaoQi internal memory proxy
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-      qi::AnyObject motionProxy; //! Pointer to NaoQi internal motion class
+      qi::AnyObject motionProxy; ///< Pointer to NaoQi internal motion class
     #endif
   #endif
 

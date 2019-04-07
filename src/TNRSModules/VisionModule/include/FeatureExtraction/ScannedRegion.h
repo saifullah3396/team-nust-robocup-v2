@@ -1,5 +1,5 @@
 /**
- * @file FeatureExtraction/ScannedRegion.h
+ * @file VisionModule/include/FeatureExtraction/ScannedRegion.h
  *
  * This file declares the struct ScannedRegion
  *
@@ -15,7 +15,7 @@
 
 /**
  * @struct ScannedRegion
- * @brief Holds information about the regions resulting from scanning 
+ * @brief Holds information about the regions resulting from scanning
  *   the image.
  */
 struct ScannedRegion
@@ -89,18 +89,20 @@ struct ScannedRegion
   static void linkRegions(
     std::vector<boost::shared_ptr<ScannedRegion>>& resultRegions,
     std::vector<boost::shared_ptr<ScannedRegion>>& regions,
-    const unsigned& xTol,
-    const unsigned& yTol);
+    const int& xTol,
+    const int& yTol,
+    const int& sizeRatioTol = 10.0,
+    cv::Mat image = cv::Mat());
 
-  cv::Rect rect; //! Rect defining the bounding box of the region
-  cv::Point center; //! Region center
-  cv::Point leftBase; //! Left base corner
-  cv::Point rightBase; //! Right base corner
-  bool assigned = {false}; //! Whether this region has already been assigned as best neighbor
-  bool horizontal = {false}; //! Whether this region has width / height > 1
-  boost::shared_ptr<ScannedRegion> pred; //! Preceding ScannedRegion in search
-  boost::shared_ptr<ScannedRegion> bestNeighbor; //! Best neighbouring ScannedRegion
+  cv::Rect rect; ///< Rect defining the bounding box of the region
+  cv::Point center; ///< Region center
+  cv::Point leftBase; ///< Left base corner
+  cv::Point rightBase; ///< Right base corner
+  bool assigned = {false}; ///< Whether this region has already been assigned as best neighbor
+  bool horizontal = {false}; ///< Whether this region has width / height > 1
+  boost::shared_ptr<ScannedRegion> pred; ///< Preceding ScannedRegion in search
+  boost::shared_ptr<ScannedRegion> bestNeighbor; ///< Best neighbouring ScannedRegion
 };
 
 typedef boost::shared_ptr<ScannedRegion> ScannedRegionPtr;
-typedef std::vector<ScannedRegionPtr>::iterator SRIter; //! Iterator
+typedef std::vector<ScannedRegionPtr>::iterator SRIter; ///< Iterator

@@ -1,10 +1,10 @@
 /**
- * @file Simulator/Interface.h
+ * @file ControlModule/include/VrepInterface.h
  *
  * This file declares the class Interface
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 21 June 2017  
+ * @date 21 June 2017
  */
 
 #include <alnaosim/alnaosim.h>
@@ -41,165 +41,165 @@ extern "C" {
  * @class Interface
  * @brief Sets up the connection between the vrep cpp remote api server
  *   and the naoqi's simulated robot.
- */ 
+ */
 class Interface
 {
 public:
   /**
    * Constructor
-   */ 
-	Interface();
-  
+   */
+  Interface();
+
   /**
    * Destructor
-   */ 
-	~Interface();
-  
+   */
+  ~Interface();
+
   /**
    * Initializes the interface
-   */ 
-	void init();
-  
+   */
+  void init();
+
   /**
    * Updates the robot state in simulation and in nao sim
-   */ 
-	void update();
-	
+   */
+  void update();
+
 private:
   /**
    * Launches the naoqi simulated robot based on the given simulator
    * sdk and robot model along with naoqi-hal. Furthermore, it sets all
    * nao actuators to their zero position.
-   */ 
-	void setupNaoqi();
-  
+   */
+  void setupNaoqi();
+
   /**
-   * Sets up the connnection with vrep remote api servers running on the 
+   * Sets up the connnection with vrep remote api servers running on the
    * simulator
-   */ 
-	void setupVrep();
-  
+   */
+  void setupVrep();
+
   /**
-   * Sets up the connection between vrep sensor/actuator handles and 
+   * Sets up the connection between vrep sensor/actuator handles and
    * naoqi simulated robot sensor/actuator handles
-   */ 
+   */
   void setupInterface();
-  
+
   /**
    * Updates all the sensors in naoqi from vrep
-   */ 
-	void updateNaoqi();
-  
+   */
+  void updateNaoqi();
+
   /**
    * Updates all the actuator commands in vrep from naoqi
-   */ 
-	void updateVrep();
-	
+   */
+  void updateVrep();
+
   /**
    * Updates the joint states from vrep to naoqi
-   */ 
-	void jointsUpdate();
-  
+   */
+  void jointsUpdate();
+
   /**
    * Updates the inertial sensor states from vrep to naoqi
-   */ 
-	void imuUpdate();
-  
+   */
+  void imuUpdate();
+
   /**
    * Updates the camera sensor images from vrep to naoqi
-   */ 
-	void camUpdate();
-  
+   */
+  void camUpdate();
+
   /**
    * Updates the foot sensor states from vrep to naoqi
-   */ 
-	void fsrUpdate();
-	
+   */
+  void fsrUpdate();
+
   /**
    * Gets the robot joint handles from vrep
-   */ 
-	void getJointHandles();
-  
+   */
+  void getJointHandles();
+
   /**
    * Gets the camera sensor handles from vrep
-   */ 
-	void getCamHandles();
-  
+   */
+  void getCamHandles();
+
   /**
    * Gets the foot sensor handles from vrep
-   */ 
-	void getFsrHandles();
-	
+   */
+  void getFsrHandles();
+
   //! Naoqi simulated robot launcher
   Sim::SimLauncher* naoqiSim;
-  
+
   //! Naoqi simulator sdk path
   string naoqiSimPath;
-  
+
   //! Pointer for naoqi based robot model
   Sim::Model* naoqiModel;
-  
-  //! Pointer for naoqi based robot hardware abstraction layer 
+
+  //! Pointer for naoqi based robot hardware abstraction layer
   Sim::HALInterface* naoqiHal;
-  
+
   //! The nao model type used in the simulation
   string modelType;
-  
+
   //! The port at which naoqi simulated robot is set up
   int naoqiPort;
-  
+
   //! Period of update cycle for interface (extraction and update)
-  int periodMinMS; 
-  
+  int periodMinMS;
+
   //! Client id for connection with vrep sensor streaming server
   int clientId;
-  
+
   //! Vrep handles for robot joints
-	vector<simxInt> jointHandles;
-  
+  vector<simxInt> jointHandles;
+
   //! Container for received joint position values
   vector<float> jointPositions;
-  
+
   //! Vrep handles for robot cameras
-	vector<simxInt> camHandles;
-  
+  vector<simxInt> camHandles;
+
   //! Pointer to the recveived camera image
-	simxUChar* image;
-  
+  simxUChar* image;
+
   //! Vrep handles for robot camera resolutions
-	vector<simxInt*> vrepCamRes;
-  
+  vector<simxInt*> vrepCamRes;
+
   //! Vrep handles for robot force sensors
-	vector<simxInt> fsrHandles;
-  
+  vector<simxInt> fsrHandles;
+
   //! Pointer to the recveived fsr sensor values
   vector<simxFloat*> fsrSensorVals;
-    
+
   //! Vrep pointer to fsr sensor states
-	vector<simxUChar> fsrStates;
-  
-  //! Naoqi definition of camera resolutions 
+  vector<simxUChar> fsrStates;
+
+  //! Naoqi definition of camera resolutions
   //! see sdk/include/alvisiondefinitions.h for details
-	vector<unsigned> naoqiCamRes;
-  
-  //! A vector of naoqi represented joint names 
+  vector<unsigned> naoqiCamRes;
+
+  //! A vector of naoqi represented joint names
   vector<string> jointNames;
 
   //! A vector of naoqi joint sensor handles
   vector<const Sim::AngleSensor*> jointSensors;
-  
+
   //! A vector of naoqi joint actuator handles
   vector<const Sim::AngleActuator*> jointActuators;
-  
+
   //! A vector of naoqi camera handles
   vector<const Sim::CameraSensor*> camSensors;
-  
+
   //! A vector of naoqi fsr handles
   vector<const Sim::FSRSensor*> fsrSensors;
-  
+
   //! A vector of naoqi inertial sensor handles
   const Sim::InertialSensor* inertialSensor;
-  
+
   //! Last camera update time
   high_resolution_clock::time_point camLastUpdateTime;
 };

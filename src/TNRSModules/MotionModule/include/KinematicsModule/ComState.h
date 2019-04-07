@@ -32,7 +32,7 @@ struct ComState
     eeIndex = 0;
   }
 
-  //! The inertial frame for com position.
+  ///< The inertial frame for com position.
   RobotFeet baseFrame;
   unsigned eeIndex;
 

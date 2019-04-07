@@ -1,9 +1,9 @@
 /**
- * @file BehaviorConfigs/include/MBConfigs/MBKickConfig.h
+ * @file TNRSModules/BehaviorConfigs/include/MBConfigs/MBKickConfig.h
  *
- * This file defines the structs MBKickConfig, JSKickConfig, 
+ * This file defines the structs MBKickConfig, JSKickConfig,
  * JSE2DImpKickConfig and JSOImpKickConfig
- * 
+ *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 3 April 2018
  */
@@ -17,7 +17,7 @@
 
 using namespace chrono;
 
-//! Since commas in macros cause problems
+///< Since commas in macros cause problems
 #define POINT_DEFINITION cv::Point2f(-1.0, -1.0)
 
 struct MBPostureConfig;
@@ -52,7 +52,7 @@ DECLARE_BEHAVIOR_CONFIG_WITH_VARS(
   (Eigen::Vector2f, targetDistAngle, Eigen::Vector2f::Zero()),
   (MBPostureConfigPtr, postureConfig, InterpToPostureConfigPtr()),
   (MBBalanceConfigPtr, balanceConfig, MBBalanceConfigPtr()),
-)
+);
 
 /**
  * @struct JSKickConfig
@@ -68,7 +68,7 @@ DECLARE_BEHAVIOR_CONFIG_BASE_TYPE_WITH_VARS(
   JSKickConfigPtr,
   (float, minTimeToKick, 1.f),
   (bool, inKickBalance, true),
-)
+);
 
 /**
  * @struct JSOImpKickConfig
@@ -81,7 +81,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   JSOImpKickConfigPtr,
   (float, minTimeToKick, 1.f),
   (bool, inKickBalance, true),
-)
+);
 
 /**
  * @struct JSE2DImpKickConfig
@@ -101,7 +101,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (cv::Point2f, ballVel, cv::Point2f()),
   (double, timeUntilImpact, 0.0),
   (double, timeAtEstimation, 0.0),
-)
+);
 
 /**
  * @struct CSpaceBSplineKick
@@ -112,4 +112,4 @@ DECLARE_BEHAVIOR_CONFIG_TYPE(
   MBKickConfig,
   MBKickTypes::cSpaceBSplineKick,
   CSpaceBSplineKickConfigPtr
-)
+);

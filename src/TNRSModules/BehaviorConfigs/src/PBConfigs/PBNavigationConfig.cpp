@@ -1,5 +1,5 @@
 /**
- * @file BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h
+ * @file TNRSModules/BehaviorConfigs/src/PBConfigs/PBNavigationConfig.cpp
  *
  * This file defines the struct PBNavigationConfig and its childs
  *
@@ -12,7 +12,7 @@
 DEFINE_BEHAVIOR_CONFIG(
   PBNavigationConfig, PBConfig, PBNavigationConfigPtr,
   (PBNavigationTypes, goToTarget, GoToTargetConfig),
-)
+);
 
 void GoToTargetConfig::init() {}
 void GoToTargetConfig::validate() {}

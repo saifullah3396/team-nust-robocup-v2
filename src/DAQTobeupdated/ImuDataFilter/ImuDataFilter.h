@@ -116,45 +116,45 @@ template<typename T>
       Matrix<T, 3, 1>& omegaBias, Matrix<T, 3, 1>& accBias);
 
   private:
-    //!Number of elements in the state vector.
+    ///<Number of elements in the state vector.
     const size_t nState = 16;
 
-    //!System state vector.
+    ///<System state vector.
     Matrix<T, Dynamic, 1> x;
 
-    //!State covariance matrix.
+    ///<State covariance matrix.
     Matrix<T, Dynamic, Dynamic> P;
 
-    //!State covariance matrix.
+    ///<State covariance matrix.
     const Matrix<T, 3, 1> gravVec = Matrix<T, 3, 1>(0, 0, Constants::gravity);
 
-    //!Gyrometer covariance.
+    ///<Gyrometer covariance.
     const T gyroCov = 0.01;
 
-    //!Accelerometer covariance.
+    ///<Accelerometer covariance.
     const T accCov = 0.1;
 
-    //!Gravity covariance.
+    ///<Gravity covariance.
     const T gravCov = 0.1;
 
-    //!Observation noise.
+    ///<Observation noise.
     Matrix<T, Dynamic, Dynamic> Q;
 
-    //!Measurement noise.
+    ///<Measurement noise.
     const Matrix<T, 3, 3> gravR = Matrix<T, 3, 3>::Identity() * gravCov;
 
-    //!Acceleraton input in current step.
+    ///<Acceleraton input in current step.
     Matrix<T, 3, 1> acc;
 
-    //!Gyro input in current step.
+    ///<Gyro input in current step.
     Matrix<T, 3, 1> gyro;
 
-    //!The variable that checks whether the filter has been initiated.
+    ///<The variable that checks whether the filter has been initiated.
     bool initiated;
 
-    //!Time step after initiation.
+    ///<Time step after initiation.
     float timeStep;
 
-    //!Cycle time.
+    ///<Cycle time.
     const float cycleTime = 0.01;
   };

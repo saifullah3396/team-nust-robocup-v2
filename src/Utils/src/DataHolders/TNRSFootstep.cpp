@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/src/MovementModule/TNRSFootstep.cpp
+ * @file Utils/src/DataHolders/TNRSFootstep.cpp
  *
  * This file implements the struct TNRSFootstep
  *

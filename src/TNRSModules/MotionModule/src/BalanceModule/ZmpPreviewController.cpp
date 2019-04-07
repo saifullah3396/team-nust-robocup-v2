@@ -1,5 +1,5 @@
 /**
- * @file MotionModule/BalanceModule/ZmpPreviewController.cpp
+ * @file MotionModule/src/BalanceModule/ZmpPreviewController.cpp
  *
  * This file implements the class ZmpPreviewController
  *

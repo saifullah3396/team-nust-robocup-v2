@@ -65,24 +65,30 @@ private:
    * @brief testSideLineLocalizationAction Tests localization for robot standing
    *   on sidelines
    */
-  DECLARE_FSM(fsm, LocalizationTestSuite)
+  DECLARE_FSM(fsm, LocalizationTestSuite);
 
   /**
    * @brief SideLineLocalization Tests localization for robot standing
    *   on sidelines
    */
-  DECLARE_FSM_STATE(LocalizationTestSuite, SideLineLocalization, sideLineLocalization, onStart, onRun,)
+  DECLARE_FSM_STATE(LocalizationTestSuite, SideLineLocalization, sideLineLocalization, onStart, onRun,);
+
+  /**
+   * @brief LocalizationLostState Tests localization for robot standing
+   *   anywhere in the field with unknown position but with known half.
+   */
+  DECLARE_FSM_STATE(LocalizationTestSuite, LocalizationLostState, localizationLostState, onStart, onRun,);
 
   /**
    * @brief LocalizationPrediction Tests the prediction step of localization
    */
-  DECLARE_FSM_STATE(LocalizationTestSuite, LocalizationPrediction, localizationPrediction, onStart, onRun,)
+  DECLARE_FSM_STATE(LocalizationTestSuite, LocalizationPrediction, localizationPrediction, onStart, onRun,);
 
   /**
    * @brief LocalizationWithMovement Tests localization for robot starting from
    *   sidelines and moving to a goal spot
    */
-  DECLARE_FSM_STATE(LocalizationTestSuite, LocalizationWithMovement, localizationWithMovement, onStart, onRun,)
+  DECLARE_FSM_STATE(LocalizationTestSuite, LocalizationWithMovement, localizationWithMovement, onStart, onRun,);
 
   enum MBManagerIds {
     MOTION_1

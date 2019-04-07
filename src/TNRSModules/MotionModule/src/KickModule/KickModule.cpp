@@ -351,12 +351,12 @@ template <typename Scalar>
 void KickModule<Scalar>::setDesBallVel()
 {
   //desBallVel = sqrt(targetDistance / (0.026 / rf + 0.02496 / sf));
-  //! Solving ball distance equation which is made up of two parts;
-  //! Distance covered by the ball until the ball starts to roll
-  //! And the distance covered after rolling under damped motion
-  //! targetDistance = posI + velI / damping * (1 - exp(-damping * time));
-  //! posI is set to zero as we are finding distance relative to ball
-  //! The quadratic equation for the ball distance becomes;
+  ///< Solving ball distance equation which is made up of two parts;
+  ///< Distance covered by the ball until the ball starts to roll
+  ///< And the distance covered after rolling under damped motion
+  ///< targetDistance = posI + velI / damping * (1 - exp(-damping * time));
+  ///< posI is set to zero as we are finding distance relative to ball
+  ///< The quadratic equation for the ball distance becomes;
   Scalar vRatio = 5.0 / 7.0;
   Scalar a = (vRatio * vRatio - 1.0) / (-2.0 * this->sf * Constants::gravity);
   Scalar b = vRatio * (1.0 / this->coeffDamping);

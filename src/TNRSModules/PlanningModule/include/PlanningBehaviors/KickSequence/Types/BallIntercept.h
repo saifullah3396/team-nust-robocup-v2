@@ -1,5 +1,5 @@
 /**
- * @file PlanningModule/KickSequences/BallIntercept.h
+ * @file PlanningBehaviors/KickSequence/Types/BallIntercept.h
  *
  * This file declares the class BallIntercept
  *
@@ -22,12 +22,12 @@ class BallIntercept : public KickSequence
 public:
   /**
    * Constructor
-   * 
+   *
    * @param planningModule: pointer to parent planning module
    * @param config: Configuration of this behavior
    */
   BallIntercept(
-    PlanningModule* planningModule, 
+    PlanningModule* planningModule,
     const BehaviorConfigPtr& config) :
     KickSequence(planningModule, config, "BallIntercept"),
     behaviorState(startup)
@@ -43,43 +43,43 @@ public:
 
   /**
    * Derived from Behavior
-   */ 
+   */
   bool initiate();
   void update();
   void finish();
   void loadExternalConfig();
-  
+
 private:
   /**
    * * Returns the config casted as BallInterceptConfigPtr
-   */ 
+   */
   BallInterceptConfigPtr getBehaviorCast();
-  
+
   /**
    * Startup state action
-   */ 
+   */
   void startupAction();
-  
+
   /**
    * Ball incoming state action
-   */ 
+   */
   void ballIncomingAction();
 
-  //! Current behavior state
+  ///< Current behavior state
   unsigned behaviorState;
-  
-  #ifdef SIMULATION  
-  //! Ball damping coefficient
+
+  #ifdef SIMULATION
+  ///< Ball damping coefficient
   static float coeffDamping;
   #else
   static float rollingFriction;
   #endif
-  
+
   /**
    * All the possible states of this behavior
-   * 
+   *
    * @enum BehaviorState
-   */ 
+   */
   enum BehaviorState
   {
     startup,

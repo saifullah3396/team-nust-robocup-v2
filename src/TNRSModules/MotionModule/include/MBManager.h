@@ -12,7 +12,7 @@
 #include "MotionModule/include/MTypeHeader.h"
 #include "BehaviorManager/include/BehaviorManager.h"
 
-//! Forward declaration
+///< Forward declaration
 class MotionModule;
 
 /**
@@ -41,7 +41,7 @@ private:
   bool
   makeBehavior(BehaviorPtr& behavior, const BehaviorConfigPtr& cfg);
   
-  //! Pointer to the base motion behaviors module
+  ///< Pointer to the base motion behaviors module
   MotionModule* motionModule;
 };
 
