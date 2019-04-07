@@ -35,3 +35,9 @@ DECLARE_BEHAVIOR_CONFIG_TYPE(
   GoToTargetConfigPtr
 );
 
+DECLARE_BEHAVIOR_CONFIG_TYPE(
+  PlanTowardsConfig,
+  PBNavigationConfig,
+  PBNavigationTypes::PlanTowards,
+  PlanTowardsConfigPtr
+);

@@ -9,7 +9,7 @@
   "_comment_4": "For possible values of requestedPosture, see Utils/PostureState.h",
   "requestedPosture" : "Stand",
   "_comment_5": "Path to the json configuration of requested planning behavior. For details, see PlanningModule/PlanningBehaviorIds.h",
-  "requestedBehavior" : "Robocup/Attacker.json",
+  "requestedBehavior" : "NavigationBehavior/PlanTowards.json",
   "startWaitTime" : 0.0,
   "logData" : false
 }

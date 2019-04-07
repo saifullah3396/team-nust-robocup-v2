@@ -1590,3 +1590,5 @@ src/TNRSModules/GameCommModule/src/GameCommRequest.cpp
 src/TNRSModules/PlanningModule/src/PlanningRequest.cpp
 src/TNRSModules/VisionModule/src/VisionRequest.cpp
 src/TNRSModules/LocalizationModule/src/LocalizationRequest.cpp
+src/TNRSModules/PlanningModule/include/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.h
+src/TNRSModules/PlanningModule/src/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.cpp
