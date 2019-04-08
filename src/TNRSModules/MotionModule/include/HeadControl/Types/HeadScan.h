@@ -76,6 +76,12 @@ private:
    */
   void scanEnv();
 
+  /**
+   * @brief trackTarget Tracks the current targetAngles
+   * @return True if target reached
+   */
+  bool trackTarget();
+
   ///< Finite state machine for this behavior
   DECLARE_FSM(fsm, HeadScan<Scalar>)
 

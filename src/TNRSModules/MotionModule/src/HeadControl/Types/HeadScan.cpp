@@ -14,6 +14,7 @@
 #include "MotionModule/include/HeadControl/Types/HeadScan.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/AngleDefinitions.h"
+#include "Utils/include/PIDController.h"
 
 template <typename Scalar>
 HeadScan<Scalar>::HeadScan(
@@ -32,6 +33,13 @@ bool HeadScan<Scalar>::initiate()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   LOG_INFO("HeadScan.initiate() called...");
+  this->trackersXY.resize(2);
+  for (size_t i = 0; i < this->trackersXY.size(); ++i) {
+    this->trackersXY[i] =
+      boost::shared_ptr<PIDController<Scalar>>(
+        new PIDController<Scalar>(this->cycleTime));
+    this->trackersXY[i]->setPidGains(this->pidGains[i]);
+  }
   return true;
   #else
   LOG_ERROR("Behavior HeadScan undefined without Naoqi")
@@ -42,8 +50,9 @@ bool HeadScan<Scalar>::initiate()
 template <typename Scalar>
 void HeadScan<Scalar>::update()
 {
-  if (fsm->update())
+  if (fsm->update()) {
     return;
+  }
 }
 
 template <typename Scalar>
@@ -59,11 +68,26 @@ void HeadScan<Scalar>::setScanTarget(
 {
   this->targetAngles[toUType(Joints::headYaw)] = yaw;
   this->targetAngles[toUType(Joints::headPitch)] = pitch;
+}
+
+template <typename Scalar>
+bool HeadScan<Scalar>::trackTarget()
+{
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  for (size_t i = 0; i < this->targetAngles.size(); ++i) {
-    if (this->targetAngles[i] == this->targetAngles[i])
-      this->naoqiSetAngles(this->naoqiNames[i], this->targetAngles[i], this->fractionMaxSpeed);
+  Matrix<Scalar, 2, 1> meas;
+  meas[0] = this->kM->getJointState(Joints::headYaw)->position();
+  meas[1] = this->kM->getJointState(Joints::headPitch)->position();
+  bool targetsReached = true;
+  for (size_t i = 0; i < 2; ++i) { // Moving it about Y has problems, so keep it fixed
+    if (this->targetAngles[i] == this->targetAngles[i]) {
+      this->trackersXY[i]->setCmd(this->targetAngles[i]);
+      auto input = this->trackersXY[i]->update(meas[i]);
+      this->naoqiChangeAngles(this->naoqiNames[i], input, this->fractionMaxSpeed);
+      if (fabsf(this->trackersXY[i]->prevError1()) > Angle::DEG_2)
+        targetsReached = false;
+    }
   }
+  return targetsReached;
   #endif
 }
 
@@ -71,27 +95,11 @@ template <typename Scalar>
 bool HeadScan<Scalar>::waitOnTargetReached()
 {
   static Scalar scanTime = 0.0;
-  auto headYaw = this->kM->getJointState(Joints::headYaw)->position();
-  if (getBehaviorCast()->scanLowerArea) {
-    auto& headPitch = this->kM->getJointState(Joints::headPitch)->position();
-    if (fabsf(headYaw - this->targetAngles[toUType(Joints::headYaw)]) < Angle::DEG_2 &&
-        fabsf(headPitch - this->targetAngles[toUType(Joints::headPitch)]) < Angle::DEG_2)
-    {
-      if (scanTime >= this->getBehaviorCast()->totalWaitTime) {
-        scanTime = 0.0;
-        return false;
-      }
-      scanTime += this->cycleTime;
-    }
-  } else {
-    if (fabsf(headYaw - this->targetAngles[toUType(Joints::headYaw)]) < Angle::DEG_2) {
-      if (scanTime >= this->getBehaviorCast()->totalWaitTime) {
-        scanTime = 0.0;
-        return false;
-      }
-      scanTime += this->cycleTime;
-    }
+  if (scanTime >= this->getBehaviorCast()->totalWaitTime) {
+    scanTime = 0.0;
+    return false;
   }
+  scanTime += this->cycleTime;
   return true;
 }
 
@@ -110,7 +118,7 @@ template <typename Scalar>
 void HeadScan<Scalar>::MidScan::onRun()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  if (!this->bPtr->waitOnTargetReached())
+  if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached())
     this->nextState = this->bPtr->leftScan.get();
   #endif
 }
@@ -133,7 +141,7 @@ template <typename Scalar>
 void HeadScan<Scalar>::LeftScan::onRun()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  if (!this->bPtr->waitOnTargetReached())
+  if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached())
     this->nextState = this->bPtr->rightScan.get();
   #endif
 }
@@ -154,7 +162,7 @@ template <typename Scalar>
 void HeadScan<Scalar>::RightScan::onRun()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  if (!this->bPtr->waitOnTargetReached())
+  if (this->bPtr->trackTarget() && !this->bPtr->waitOnTargetReached())
     this->nextState = this->bPtr->midScan.get();
   #endif
 }

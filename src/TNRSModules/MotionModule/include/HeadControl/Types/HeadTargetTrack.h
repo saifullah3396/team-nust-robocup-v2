@@ -14,8 +14,6 @@
 
 struct HeadScanConfig;
 struct HeadTargetTrackConfig;
-template <typename Scalar>
-struct PIDController;
 
 template <typename Scalar>
 class HeadTargetTrack : public HeadControl<Scalar>
@@ -50,11 +48,6 @@ public:
    * @brief finish See Behavior::finish()
    */
   void finish() final;
-
-  /**
-   * @brief loadExternalConfig See Behavior::loadExternalConfig()
-   */
-  void loadExternalConfig() final;
 private:
   /**
    * @brief getBehaviorCast Returns the casted config
@@ -68,11 +61,4 @@ private:
    * @return True on success
    */
   bool trackTarget(const Matrix<Scalar, 4, 1>& posCam);
-
-  ///< Pid controller for target tracking
-  vector<boost::shared_ptr<PIDController<Scalar> > > trackersXY;
-
-  static vector<Matrix<Scalar, 3, 1>> pidGains;
-  static Scalar lowerCamUsageRange; ///< meters
-  static Scalar lowerCamUsageZ; ///< meters
 };

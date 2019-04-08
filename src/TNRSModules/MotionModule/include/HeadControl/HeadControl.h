@@ -13,6 +13,8 @@
 
 enum class HeadTargetTypes : unsigned int;
 struct MBHeadControlConfig;
+template <typename Scalar>
+struct PIDController;
 
 /**
  * @class HeadControl
@@ -53,7 +55,7 @@ public:
   /**
    * @brief loadExternalConfig See Behavior::loadExternalConfig
    */
-  virtual void loadExternalConfig() override {}
+  virtual void loadExternalConfig() override;
 
 protected:
   /**
@@ -75,6 +77,11 @@ protected:
   const Scalar fractionMaxSpeed = {0.85};
 #endif
 
+  ///< Pid controller for target tracking
+  vector<boost::shared_ptr<PIDController<Scalar> > > trackersXY;
+  static vector<Matrix<Scalar, 3, 1>> pidGains;
+  static Scalar lowerCamUsageRange; ///< meters
+  static Scalar lowerCamUsageZ; ///< meters
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

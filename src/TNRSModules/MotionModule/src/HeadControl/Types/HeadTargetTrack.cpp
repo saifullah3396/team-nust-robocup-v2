@@ -17,13 +17,6 @@
 #include "Utils/include/ConfigMacros.h"
 
 template <typename Scalar>
-vector<Matrix<Scalar, 3, 1> > HeadTargetTrack<Scalar>::pidGains;
-template <typename Scalar>
-Scalar HeadTargetTrack<Scalar>::lowerCamUsageRange =  0.6;
-template <typename Scalar>
-Scalar HeadTargetTrack<Scalar>::lowerCamUsageZ = 0.5;
-
-template <typename Scalar>
 HeadTargetTrack<Scalar>::HeadTargetTrack(
   MotionModule* motionModule,
   const boost::shared_ptr<HeadTargetTrackConfig>& config) :
@@ -36,12 +29,12 @@ bool HeadTargetTrack<Scalar>::initiate()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   LOG_INFO("HeadTargetTrack.initiate() called...");
-  trackersXY.resize(2);
-  for (size_t i = 0; i < trackersXY.size(); ++i) {
-    trackersXY[i] =
+  this->trackersXY.resize(2);
+  for (size_t i = 0; i < this->trackersXY.size(); ++i) {
+    this->trackersXY[i] =
       boost::shared_ptr<PIDController<Scalar>>(
         new PIDController<Scalar>(this->cycleTime));
-    trackersXY[i]->setPidGains(HeadTargetTrack::pidGains[i]);
+    this->trackersXY[i]->setPidGains(HeadTargetTrack::pidGains[i]);
   }
   if (this->getBehaviorCast()->scanConfig) {
     this->setupChildRequest(this->getBehaviorCast()->scanConfig, true);
@@ -69,7 +62,7 @@ void HeadTargetTrack<Scalar>::update()
       finish();
     }
     CameraId trackingCam = CameraId::headTop;
-    if (posWorld.head(2).norm() < lowerCamUsageRange && posWorld[2] < lowerCamUsageZ) {
+    if (posWorld.head(2).norm() < this->lowerCamUsageRange && posWorld[2] < this->lowerCamUsageZ) {
       ///< If targetXY is within 60 cm and z is reasonably low, use lower cam
       trackingCam = CameraId::headBottom;
     }
@@ -96,17 +89,15 @@ bool HeadTargetTrack<Scalar>::trackTarget(const Matrix<Scalar, 4, 1>& posCam)
   posFromCenter[1] = -(atan2(posCam[2], posCam[1]) - M_PI / 2); ///< Y-angle
   meas[0] = this->kM->getJointState(Joints::headYaw)->position();
   meas[1] = this->kM->getJointState(Joints::headPitch)->position();
+  bool targetsReached = true;
   for (size_t i = 0; i < 1; ++i) { // Moving it about Y has problems, so keep it fixed
-    trackersXY[i]->setCmd(posFromCenter[i] + meas[i]);
-    auto input = trackersXY[i]->update(meas[i]);
+    this->trackersXY[i]->setCmd(posFromCenter[i] + meas[i]);
+    auto input = this->trackersXY[i]->update(meas[i]);
     this->naoqiChangeAngles(this->naoqiNames[i], input, this->fractionMaxSpeed);
+    if (fabsf(this->trackersXY[i]->prevError1()) > Angle::DEG_2)
+      targetsReached = false;
   }
-  if (fabsf(trackersXY[0]->prevError1()) < Angle::DEG_2)// &&
-      //fabsf(trackersXY[1]->prevError1()) < Angle::DEG_2)
-  {
-    return true;
-  }
-  return false;
+  return targetsReached;
   #endif
 }
 
@@ -115,26 +106,6 @@ void HeadTargetTrack<Scalar>::finish()
 {
   LOG_INFO("HeadTargetTrack.finish() called...");
   this->inBehavior = false;
-}
-
-template <typename Scalar>
-void HeadTargetTrack<Scalar>::loadExternalConfig()
-{
-  static bool loaded = false;
-  if (!loaded) {
-    pidGains.resize(2);
-    GET_CONFIG("MotionBehaviors",
-      (Scalar, HeadTargetTrack.kpx, pidGains[0][0]),
-      (Scalar, HeadTargetTrack.kix, pidGains[0][1]),
-      (Scalar, HeadTargetTrack.kdx, pidGains[0][2]),
-      (Scalar, HeadTargetTrack.kpy, pidGains[1][0]),
-      (Scalar, HeadTargetTrack.kiy, pidGains[1][1]),
-      (Scalar, HeadTargetTrack.kdy, pidGains[1][2]),
-      (Scalar, HeadTargetTrack.lowerCamUsageRange, lowerCamUsageRange),
-      (Scalar, HeadTargetTrack.lowerCamUsageZ, lowerCamUsageZ),
-    );
-    loaded = true;
-  }
 }
 
 template <typename Scalar>

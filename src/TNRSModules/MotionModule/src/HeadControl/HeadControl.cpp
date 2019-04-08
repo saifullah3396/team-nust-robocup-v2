@@ -14,8 +14,16 @@
 #include "MotionModule/include/HeadControl/Types/HeadTargetTrack.h"
 #include "MotionModule/include/HeadControl/Types/HeadScan.h"
 #include "TNRSBase/include/MemoryIOMacros.h"
+#include "Utils/include/ConfigMacros.h"
 #include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/GoalInfo.h"
+
+template <typename Scalar>
+vector<Matrix<Scalar, 3, 1> > HeadControl<Scalar>::pidGains;
+template <typename Scalar>
+Scalar HeadControl<Scalar>::lowerCamUsageRange =  0.6;
+template <typename Scalar>
+Scalar HeadControl<Scalar>::lowerCamUsageZ = 0.5;
 
 template <typename Scalar>
 HeadControl<Scalar>::HeadControl(
@@ -99,6 +107,26 @@ bool HeadControl<Scalar>::findTarget(
     LOG_EXCEPTION(e.what());
     this->inBehavior = false;
     return false;
+  }
+}
+
+template <typename Scalar>
+void HeadControl<Scalar>::loadExternalConfig()
+{
+  static bool loaded = false;
+  if (!loaded) {
+    pidGains.resize(2);
+    GET_CONFIG("MotionBehaviors",
+      (Scalar, HeadControl.kpx, pidGains[0][0]),
+      (Scalar, HeadControl.kix, pidGains[0][1]),
+      (Scalar, HeadControl.kdx, pidGains[0][2]),
+      (Scalar, HeadControl.kpy, pidGains[1][0]),
+      (Scalar, HeadControl.kiy, pidGains[1][1]),
+      (Scalar, HeadControl.kdy, pidGains[1][2]),
+      (Scalar, HeadControl.lowerCamUsageRange, lowerCamUsageRange),
+      (Scalar, HeadControl.lowerCamUsageZ, lowerCamUsageZ),
+    );
+    loaded = true;
   }
 }
 
