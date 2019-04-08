@@ -110,7 +110,7 @@ VelocityInput<Scalar> PotentialField2D<Scalar>::update(
     totalFRep += kRep * fRepParallel;
     totalFRep += fRepPerp * kRepPerp;
   }
-  cout << "totalFRep: " << totalFRep.norm() << endl;
+  //cout << "totalFRep: " << totalFRep.norm() << endl;
   fAtt[0] += totalFRep[0];
   fAtt[1] += totalFRep[1];
   ///< Transform back to robot coordinates

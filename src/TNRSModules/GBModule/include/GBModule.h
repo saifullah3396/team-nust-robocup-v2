@@ -38,12 +38,13 @@ class GBModule : public BaseModule
 {
   ///< Memory input connection
   DECLARE_INPUT_CONNECTOR(
-    sbThreadPeriod,
+    gbThreadPeriod,
     switchSensors
   );
 
   ///< Memory output connection
   DECLARE_OUTPUT_CONNECTOR(
+    gbThreadTimeTaken,
     jointStiffnessSensors,
     ledSensors,
     stiffnessState,
@@ -139,6 +140,11 @@ public:
    * @brief setThreadPeriod See BaseModule::setThreadPeriod()
    */
   void setThreadPeriod() final;
+
+  /**
+   * @brief setThreadTimeTaken See BaseModule::setThreadTimeTaken()
+   */
+  void setThreadTimeTaken() final;
 
   ///< Getters
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE

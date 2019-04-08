@@ -562,19 +562,19 @@ namespace JsonUtils
       if (Rows > 1 && Cols > 1) {
         for (int i = 0; i < val.size(); ++i) {
           for (int j = 0; j < val.size(); ++j) {
-            if (val[i][j].asFloat() != Json::nullValue) {
+            if (val[i][j] != Json::nullValue) {
               var(i, j) = static_cast<Scalar>(val[i][j].asFloat());
             } else {
-              LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion")
+              LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion: " << val[i][j]);
             }
           }
         }
       } else {
         for (int i = 0; i < val.size(); ++i) {
-          if (val[i].asFloat() != Json::nullValue) {
+          if (val[i] != Json::nullValue) {
             var[i] = static_cast<Scalar>(val[i].asFloat());
           } else {
-            LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion")
+            LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion: " << val[i]);
           }
         }
       }
@@ -622,11 +622,12 @@ namespace JsonUtils
   void jsonToType(VectorXf& var, Json::Value val, const VectorXf& def)
   {
     if (!val.empty()) {
+      var.resize(val.size());
       for (int i = 0; i < val.size(); ++i) {
-        if (val[i].asFloat() != Json::nullValue) {
+        if (val[i] != Json::nullValue) {
           var[i] = val[i].asFloat();
         } else {
-          LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion");
+          LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion: " << val[i]);
         }
       }
     } else {
@@ -639,10 +640,10 @@ namespace JsonUtils
     if (!val.empty()) {
       for (int i = 0; i < var.rows; ++i) {
         for (int j = 0; j < var.cols; ++j) {
-          if (val[i][j].asFloat() != Json::nullValue) {
+          if (val[i][j] != Json::nullValue) {
             var.at<float>(i, j) = val[i][j].asFloat();
           } else {
-            LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Eigen::Matrix conversion")
+            LOG_ERROR("Invalid json object passed to jsonToType for Json::Value to Mat conversion: " << val[i][j])
           }
         }
       }

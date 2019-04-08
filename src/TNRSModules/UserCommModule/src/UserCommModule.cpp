@@ -24,6 +24,7 @@ DEFINE_INPUT_CONNECTOR(UserCommModule,
 );
 
 DEFINE_OUTPUT_CONNECTOR(UserCommModule,
+  (int, userCommThreadTimeTaken),
   (int, heartBeat),
 );
 
@@ -41,6 +42,11 @@ UserCommModule::UserCommModule(void* teamNUSTSPL) :
 void UserCommModule::setThreadPeriod()
 {
   setPeriodMinMS(USER_COMM_PERIOD_IN(UserCommModule));
+}
+
+void UserCommModule::setThreadTimeTaken()
+{
+  USER_COMM_TIME_TAKEN_OUT(UserCommModule) = lastIterationTimeMS;
 }
 
 void UserCommModule::initMemoryConn()

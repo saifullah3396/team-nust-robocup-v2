@@ -30,6 +30,7 @@ class UserCommModule : public BaseModule
     userCommThreadPeriod
   );
   DECLARE_OUTPUT_CONNECTOR(
+    userCommThreadTimeTaken,
     heartBeat
   );
 public:
@@ -73,6 +74,11 @@ public:
    * See BaseModule::setThreadPeriod()
    */
   void setThreadPeriod() final;
+
+  /**
+   * @brief setThreadTimeTaken See BaseModule::setThreadTimeTaken()
+   */
+  void setThreadTimeTaken() final;
 
   /**
    * @brief join Calls join on child threads along with its own thread

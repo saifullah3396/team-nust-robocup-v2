@@ -69,6 +69,7 @@ void NavigationTestSuite::update()
 {
   //LOG_INFO("NavigationTestSuite::update() called...")
   if (requestInProgress()) return;
+  if (shutdownCallBack()) return;
   if (fsm->update())
     finish();
 }

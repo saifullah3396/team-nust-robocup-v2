@@ -28,7 +28,7 @@
  * Definition of input connector and variables for this module
  */
 DEFINE_INPUT_CONNECTOR(GBModule,
-  (int, sbThreadPeriod),
+  (int, gbThreadPeriod),
   (vector<float>, switchSensors),
 )
 
@@ -36,6 +36,7 @@ DEFINE_INPUT_CONNECTOR(GBModule,
  * Definition of output connector and variables for this module
  */
 DEFINE_OUTPUT_CONNECTOR(GBModule,
+  (int, gbThreadTimeTaken),
   (vector<float>, jointStiffnessSensors),
   (vector<float>, ledSensors),
   (StiffnessState, stiffnessState),
@@ -93,6 +94,11 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
 void GBModule::setThreadPeriod()
 {
   setPeriodMinMS(GB_PERIOD_IN(GBModule));
+}
+
+void GBModule::setThreadTimeTaken()
+{
+  GB_TIME_TAKEN_OUT(GBModule) = lastIterationTimeMS;
 }
 
 void GBModule::initMemoryConn()

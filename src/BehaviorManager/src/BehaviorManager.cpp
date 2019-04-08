@@ -44,15 +44,15 @@ void BehaviorManager::manageRequest(
     req->setReceived(true);
     ///< Behavior already exists
     if (bPtr) {
-      //cout << "Behavior already exists..." << endl;
-      //if (name == "PlanningBehavior")
-      //  cout << "Behavior already running" << endl;
+      /*if (name == "MBManager") {
+        cout << "Behavior already running" << endl;
+        cout << "reqConfig->id: " << reqConfig->id << endl;
+        cout << "bPtr->getBehaviorConfig()->id: " << bPtr->getBehaviorConfig()->id << endl;
+        cout << "reqConfig->type: " << reqConfig->type << endl;
+        cout << "bPtr->getBehaviorConfig()->type: " << bPtr->getBehaviorConfig()->type << endl;
+      }*/
       ///< Check if the requested behavior is the same as the behavior to
       ///< be managed
-      //cout << "reqConfig->id: " << reqConfig->id << endl;
-      //cout << "bPtr->getBehaviorConfig()->id: " << bPtr->getBehaviorConfig()->id << endl;
-      //cout << "reqConfig->type: " << reqConfig->type << endl;
-      //cout << "bPtr->getBehaviorConfig()->type: " << bPtr->getBehaviorConfig()->type << endl;
       if (reqConfig->id == bPtr->getBehaviorConfig()->id &&
           reqConfig->type == bPtr->getBehaviorConfig()->type)
       {

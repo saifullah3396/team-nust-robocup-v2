@@ -54,7 +54,7 @@ bool NaoqiMoveToward<Scalar>::initiate()
 template <typename Scalar>
 void NaoqiMoveToward<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
 {
-  LOG_INFO("NaoqiMoveToward.reinitiate() called...")
+  //LOG_INFO("NaoqiMoveToward.reinitiate() called...")
   this->config = cfg;
 }
 

@@ -275,7 +275,7 @@ void Robocup::setNavigationConfig(const RobotPose2D<float>& target,
   //if (this->getChild())
   //  return;
   auto config =
-    boost::make_shared<GoToTargetConfig>();
+    boost::make_shared<PlanTowardsConfig>();
   config->goal = target;
   config->reachClosest = true;
   if (startPosture)

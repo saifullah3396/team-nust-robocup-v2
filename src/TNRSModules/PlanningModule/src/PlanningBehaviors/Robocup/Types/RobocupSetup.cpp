@@ -81,6 +81,7 @@ void RobocupSetup::update()
 
   // Stop if a motion or static behavior request is in progress
   if (requestInProgress()) return; /// Tested
+  if (shutdownCallBack()) return; /// Tested
 
   // Just for debugging individual behaviors bypassing this behavior
   //behaviorState = gameplaySequence;

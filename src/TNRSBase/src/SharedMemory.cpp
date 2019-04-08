@@ -49,11 +49,20 @@ SharedMemory::init()
   )
   DEFINE_VARIABLE(int, motionThreadPeriod, mtPeriod); //15
   DEFINE_VARIABLE(int, planningThreadPeriod, ptPeriod);
-  DEFINE_VARIABLE(int, sbThreadPeriod, sbtPeriod);
+  DEFINE_VARIABLE(int, gbThreadPeriod, sbtPeriod);
   DEFINE_VARIABLE(int, visionThreadPeriod, vtPeriod);
   DEFINE_VARIABLE(int, localizationThreadPeriod, ltPeriod);
   DEFINE_VARIABLE(int, userCommThreadPeriod, ucommtPeriod);
   DEFINE_VARIABLE(int, gameCommThreadPeriod, gcommtPeriod);
+
+  DEFINE_VARIABLE(int, motionThreadTimeTaken, mtPeriod); //15
+  DEFINE_VARIABLE(int, planningThreadTimeTaken, ptPeriod);
+  DEFINE_VARIABLE(int, gbThreadTimeTaken, sbtPeriod);
+  DEFINE_VARIABLE(int, visionThreadTimeTaken, vtPeriod);
+  DEFINE_VARIABLE(int, localizationThreadTimeTaken, ltPeriod);
+  DEFINE_VARIABLE(int, userCommThreadTimeTaken, ucommtPeriod);
+  DEFINE_VARIABLE(int, gameCommThreadTimeTaken, gcommtPeriod);
+
   DEFINE_VARIABLE(int, heartBeat, 0);
   DEFINE_VARIABLE(
     vector<float>,

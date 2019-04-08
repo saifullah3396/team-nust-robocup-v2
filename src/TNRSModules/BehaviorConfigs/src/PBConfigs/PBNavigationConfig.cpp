@@ -12,7 +12,11 @@
 DEFINE_BEHAVIOR_CONFIG(
   PBNavigationConfig, PBConfig, PBNavigationConfigPtr,
   (PBNavigationTypes, goToTarget, GoToTargetConfig),
+  (PBNavigationTypes, planTowards, PlanTowardsConfig),
 );
 
 void GoToTargetConfig::init() {}
 void GoToTargetConfig::validate() {}
+
+void PlanTowardsConfig::init() {}
+void PlanTowardsConfig::validate() {}

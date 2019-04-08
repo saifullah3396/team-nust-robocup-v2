@@ -62,7 +62,7 @@ boost::shared_ptr<NavigationBehavior> NavigationBehavior::getType(
   switch (cfg->type) {
     case toUType(PBNavigationTypes::goToTarget):
       nb = new GoToTarget(planningModule, SPC(GoToTargetConfig, cfg)); break;
-    case toUType(PBNavigationTypes::PlanTowards):
+    case toUType(PBNavigationTypes::planTowards):
       nb = new PlanTowards(planningModule, SPC(PlanTowardsConfig, cfg)); break;
   }
   return boost::shared_ptr<NavigationBehavior >(nb);

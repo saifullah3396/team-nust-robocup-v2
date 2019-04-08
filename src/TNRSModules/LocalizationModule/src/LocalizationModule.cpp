@@ -42,6 +42,7 @@ DEFINE_INPUT_CONNECTOR(LocalizationModule,
   (bool, robotInMotion),
 );
 DEFINE_OUTPUT_CONNECTOR(LocalizationModule,
+  (int, localizationThreadTimeTaken),
   (RobotPose2D<float>, robotPose2D),
   (RobotPose2D<float>, lastKnownPose2D),
   (OccupancyMap<float>, occupancyMap),
@@ -63,6 +64,11 @@ LocalizationModule::LocalizationModule(void* processingModule) :
 void LocalizationModule::setThreadPeriod()
 {
   setPeriodMinMS(LOCALIZATION_PERIOD_IN(LocalizationModule));
+}
+
+void LocalizationModule::setThreadTimeTaken()
+{
+  LOCALIZATION_TIME_TAKEN_OUT(LocalizationModule) = lastIterationTimeMS;
 }
 
 void LocalizationModule::initMemoryConn()

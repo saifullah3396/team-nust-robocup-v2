@@ -1,7 +1,7 @@
 /**
  * @file PlanningModule/include/PlanningBehaviorIds.h
  *
- * This file declares the enumeration for all the behavior planning 
+ * This file declares the enumeration for all the behavior planning
  * behaviors and their childs
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
@@ -45,7 +45,7 @@ enum class PBNavigationTypes
 : unsigned int
 {
   goToTarget = 0,
-  PlanTowards
+  planTowards
 };
 
 /**

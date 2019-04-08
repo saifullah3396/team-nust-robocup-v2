@@ -37,6 +37,7 @@ DEFINE_INPUT_CONNECTOR(GameCommModule,
 );
 
 DEFINE_OUTPUT_CONNECTOR(GameCommModule,
+  (int, gameCommThreadTimeTaken),
   (vector<TeamRobot<float> >, teamRobots),
 );
 
@@ -52,6 +53,11 @@ GameCommModule::GameCommModule(void* teamNUSTSPL) :
 void GameCommModule::setThreadPeriod()
 {
   setPeriodMinMS(GAME_COMM_PERIOD_IN(GameCommModule));
+}
+
+void GameCommModule::setThreadTimeTaken()
+{
+  GAME_COMM_TIME_TAKEN_OUT(GameCommModule) = lastIterationTimeMS;
 }
 
 void GameCommModule::initMemoryConn()

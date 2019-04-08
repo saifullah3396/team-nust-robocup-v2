@@ -114,7 +114,8 @@ void Soccer::update()
   updateRobotData(); /// Tested
 
   ///< Stop if a motion or static behavior request is in progress
-  if (requestInProgress()) return; /// Tested
+  if (requestInProgress()) return;
+  if (shutdownCallBack()) return;
 
   ///< Print game state
   ///< printGameData();
@@ -180,7 +181,10 @@ void Soccer::GoToPosition::onStart()
   //cout << "Soccer::GoToPosition::onRun()" << endl;
   if (bPtr->goingToTarget != GoingToTarget::none &&
       bPtr->goingToTarget != GoingToTarget::initPosition)
-    bPtr->killChild();
+  {
+    bPtr->setNavigationConfig(ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr));
+    //bPtr->killChild();
+  }
 }
 
 void Soccer::GoToPosition::onRun()
@@ -218,7 +222,7 @@ void Soccer::PlayBall::onStart()
   //cout << "Soccer::PlayBall::onStart()" << endl;
   if (bPtr->goingToTarget != GoingToTarget::none &&
       bPtr->goingToTarget != GoingToTarget::ball) {
-    bPtr->killChild();
+    bPtr->setNavigationConfig(ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr));
   }
   /*if (bPtr->matchLastMotionRequest(
         (int)MBIds::headControl, (int)MBHeadControlTypes::headTargetTrack))
@@ -278,7 +282,9 @@ void Soccer::AlignToKick::onStart()
   //cout << "Soccer::AlignToKick::onStart()" << endl;
   if (bPtr->goingToTarget != GoingToTarget::none &&
       bPtr->goingToTarget != GoingToTarget::kickAlignment)
-    bPtr->killChild();
+  {
+    bPtr->setNavigationConfig(ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr));
+  }
 }
 
 void Soccer::AlignToKick::onRun()

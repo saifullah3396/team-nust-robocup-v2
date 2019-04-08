@@ -41,6 +41,7 @@ public:
     sideConfidence
   );
   DECLARE_OUTPUT_CONNECTOR(
+    gameCommThreadTimeTaken,
     teamRobots
   );
 
@@ -84,6 +85,11 @@ public:
    * See BaseModule::setThreadPeriod()
    */
   void setThreadPeriod() final;
+
+  /**
+   * @brief setThreadTimeTaken See BaseModule::setThreadTimeTaken()
+   */
+  void setThreadTimeTaken() final;
 
 private:
   ///< Pointer to TeamComm class

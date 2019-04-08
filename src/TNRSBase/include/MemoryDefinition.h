@@ -31,7 +31,7 @@ enum class MemoryVariableIds : unsigned int
   ///< Input: GBModule
   ///< Output: PlanningModule
   ///< Variable Type: int
-  sbThreadPeriod,
+  gbThreadPeriod,
   ///< VisionModule Thread Period
   ///< Input: VisionModule
   ///< Output: PlanningModule
@@ -52,6 +52,41 @@ enum class MemoryVariableIds : unsigned int
   ///< Output: PlanningModule
   ///< Variable Type: int
   userCommThreadPeriod,
+  ///< Time taken by the MotionModule Thread
+  ///< Input: None
+  ///< Output: MotionModule
+  ///< Variable Type: int
+  motionThreadTimeTaken,
+  ///< Time taken by the PlanningModule Thread
+  ///< Input: None
+  ///< Output: PlanningModule
+  ///< Variable Type: int
+  planningThreadTimeTaken,
+  ///< Time taken by the GBModule Thread
+  ///< Input: None
+  ///< Output: GBModule
+  ///< Variable Type: int
+  gbThreadTimeTaken,
+  ///< Time taken by the VisionModule Thread
+  ///< Input: None
+  ///< Output: VisionModule
+  ///< Variable Type: int
+  visionThreadTimeTaken,
+  ///< Time taken by the LocalizationModule Thread
+  ///< Input: None
+  ///< Output: LocalizationModule
+  ///< Variable Type: int
+  localizationThreadTimeTaken,
+  ///< Time taken by the UserCommModule Thread
+  ///< Input: None
+  ///< Output: UserCommModule
+  ///< Variable Type: int
+  userCommThreadTimeTaken,
+  ///< Time taken by the GameCommModule Thread
+  ///< Input: None
+  ///< Output: GameCommModule
+  ///< Variable Type: int
+  gameCommThreadTimeTaken,
   ///< HeartBeat for connection status
   ///< Input: None,
   ///< Output: CommModule

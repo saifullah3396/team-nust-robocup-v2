@@ -70,6 +70,7 @@ DEFINE_INPUT_CONNECTOR(PlanningModule,
 );
 
 DEFINE_OUTPUT_CONNECTOR(PlanningModule,
+  (int, planningThreadTimeTaken),
   (PlanningState, planningState),
   (int, robocupRole),
   (int, robotIntention),
@@ -110,6 +111,11 @@ PlanningModule::PlanningModule(void* parent, const qi::AnyObject& memoryProxy) :
 void PlanningModule::setThreadPeriod()
 {
   setPeriodMinMS(PLANNING_PERIOD_IN(PlanningModule));
+}
+
+void PlanningModule::setThreadTimeTaken()
+{
+  PLANNING_TIME_TAKEN_OUT(PlanningModule) = lastIterationTimeMS;
 }
 
 void PlanningModule::initMemoryConn()

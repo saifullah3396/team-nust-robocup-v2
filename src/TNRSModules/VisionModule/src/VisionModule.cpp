@@ -52,6 +52,7 @@ DEFINE_INPUT_CONNECTOR(VisionModule,
 );
 
 DEFINE_OUTPUT_CONNECTOR(VisionModule,
+  (int, visionThreadTimeTaken),
   (BallInfo<float>, ballInfo),
   (GoalInfo<float>, goalInfo),
   (bool, landmarksFound),
@@ -93,6 +94,11 @@ DEFINE_OUTPUT_CONNECTOR(VisionModule,
 void VisionModule::setThreadPeriod()
 {
   setPeriodMinMS(VISION_PERIOD_IN(VisionModule));
+}
+
+void VisionModule::setThreadTimeTaken()
+{
+  VISION_TIME_TAKEN_OUT(VisionModule) = lastIterationTimeMS;
 }
 
 void VisionModule::initMemoryConn()
@@ -281,6 +287,7 @@ void VisionModule::updateLandmarksInfo()
       FeatureExtraction::getUnknownLandmarks());
   BaseModule::publishModuleRequest(klu);
   BaseModule::publishModuleRequest(ulu);
+  LOG_INFO("N landmarks seen: " << klu->landmarks.size());
   /*for (auto l : klu->landmarks) {
     if (l->type == 0) {
       cout << "l->type:" << l->type << endl;

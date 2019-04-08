@@ -44,6 +44,7 @@ DEFINE_INPUT_CONNECTOR(MotionModule,
   (bool, landmarksFound),
 );
 DEFINE_OUTPUT_CONNECTOR(MotionModule,
+  (int, motionThreadTimeTaken),
   (vector<float>, jointPositionSensors),
   (vector<float>, handSensors),
   (vector<float>, inertialSensors),
@@ -118,6 +119,11 @@ MotionModule::~MotionModule()
 void MotionModule::setThreadPeriod()
 {
   setPeriodMinMS(MOTION_PERIOD_IN(MotionModule));
+}
+
+void MotionModule::setThreadTimeTaken()
+{
+  MOTION_TIME_TAKEN_OUT(MotionModule) = lastIterationTimeMS;
 }
 
 void MotionModule::initMemoryConn()

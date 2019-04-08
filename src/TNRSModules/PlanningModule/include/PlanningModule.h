@@ -67,6 +67,7 @@ class PlanningModule : public BaseModule
     footOnGround
    );
   DECLARE_OUTPUT_CONNECTOR(
+    planningThreadTimeTaken,
     planningState,
     robocupRole,
     robotIntention,
@@ -105,29 +106,34 @@ public:
   }
 
   /**
-   * Derived from BaseModule
+   * @brief init See BaseModule::init()
    */
-  void init();
+  void init() final;
 
   /**
-   * Derived from BaseModule
+   * @brief mainRoutine See BaseModule::mainRoutine()
    */
-  void mainRoutine();
+  void mainRoutine() final;
 
   /**
-   * Derived from BaseModule
+   * @brief handleRequests See BaseModule::handleRequests()
    */
-  void handleRequests();
+  void handleRequests() final;
 
   /**
-   * Derived from BaseModule
+   * @brief initMemoryConn See BaseModule::initMemoryConn()
    */
-  void initMemoryConn();
+  void initMemoryConn() final;
 
   /**
-   * Derived from BaseModule
+   * @brief setThreadPeriod See BaseModule::setThreadPeriod()
    */
-  void setThreadPeriod();
+  void setThreadPeriod() final;
+
+  /**
+   * @brief setThreadTimeTaken See BaseModule::setThreadTimeTaken()
+   */
+  void setThreadTimeTaken() final;
 
   /**
    * Gets the pointer to path planner

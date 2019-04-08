@@ -51,6 +51,8 @@ bool VisionTestSuite::initiate()
 
 void VisionTestSuite::update()
 {
+  if (requestInProgress()) return;
+  if (shutdownCallBack()) return;
   try {
     auto& testType = getBehaviorCast()->testType;
     if (testType == "Segmentation") {

@@ -206,6 +206,7 @@ public:
 
 protected:
   ThreadSafeQueue<ModuleRequestPtr> inRequests; ///< A queue for receiving requests
+  int lastIterationTimeMS = {0}; ///< Time taken by the thread in milliseconds
 
 private:
   /**
@@ -232,6 +233,11 @@ private:
    * @brief Sets the thread cycle time
    */
   virtual void setThreadPeriod() = 0;
+
+  /**
+   * @brief Sets the time taken by the thread to memory
+   */
+  virtual void setThreadTimeTaken() = 0;
 
   /**
    * @brief onIterationComplete Syncs the local memory variables of the module

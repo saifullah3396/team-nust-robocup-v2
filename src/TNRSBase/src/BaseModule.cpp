@@ -189,7 +189,7 @@ void BaseModule::startupInputSync()
 void BaseModule::onIterationComplete()
 {
   auto timeNow = high_resolution_clock::now();
-  auto lastIterationTimeMS =
+  lastIterationTimeMS =
     duration_cast < milliseconds > (timeNow - iterationStartTime).count();
   //if (moduleName == "LocalizationModule")
   //    LOG_INFO(moduleName << " took time: " << lastIterationTimeMS)
@@ -200,5 +200,6 @@ void BaseModule::onIterationComplete()
   } else {
     moduleTime = moduleTime + lastIterationTimeMS * 1e-3;
   }
+  setThreadTimeTaken();
   checkSuspend();
 }

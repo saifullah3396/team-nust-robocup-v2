@@ -80,6 +80,7 @@ bool LocalizationTestSuite::initiate()
 void LocalizationTestSuite::update()
 {
   if (requestInProgress()) return;
+  if (shutdownCallBack()) return;
   if (fsm->update())
     finish();
 }
