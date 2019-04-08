@@ -1,9 +1,24 @@
+/**
+ * @file PlanningBehaviors/NavigationBehavior/Types/PlanTowards.h
+ *
+ * This file declares the class PlanTowards
+ *
+ * @author <A href="mailto:">Umaid Muhammad Zaffar</A>
+ * @author <A href="mailto:">Marium Aslam</A>
+ * @date 7 April 2019
+ */
+
 #pragma once
 
+#include <memory>
 #include "PlanningModule/include/PlanningBehaviors/NavigationBehavior/NavigationBehavior.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
 #include "Utils/include/DataHolders/Obstacle.h"
 
+template <typename Scalar>
+class VelocityInput;
+template <typename Scalar>
+class PotentialField2D;
 struct PlanTowardsConfig;
 
 /**
@@ -13,40 +28,36 @@ struct PlanTowardsConfig;
 class PlanTowards : public NavigationBehavior
 {
 public:
-    /**
-     * @brief PlanTowards Constructor
-     * @param planningModule Pointer to base planning module
-     * @param config Configuration of this behavior
-     */
-    PlanTowards(PlanningModule planningModule, const boost::shared_ptr<PlanTowardsConfig>& config);
-    /**
-     * @brief ~PlanTowards Destructor
-     */
-    ~PlanTowards() final{}
+  /**
+   * @brief PlanTowards Constructor
+   * @param planningModule Pointer to base planning module
+   * @param config Configuration of this behavior
+   */
+  PlanTowards(
+    PlanningModule* planningModule,
+    const boost::shared_ptr<PlanTowardsConfig>& config);
+
+  /**
+   * @brief ~PlanTowards Destructor
+   */
+  ~PlanTowards() final;
+
+  bool initiate() final;
+  void reinitiate(const boost::shared_ptr<BehaviorConfig>& cfg) final;
+  void update() final;
+  void finish() final;
+  void loadExternalConfig() final {}
 
 private:
-    /**
-     * * Returns the config casted as PlanTowardsConfigPtr.
-     */
-    boost::shared_ptr<PlanTowardsConfig> getBehaviorCast();
+  /**
+   * * Returns the config casted as PlanTowardsConfigPtr.
+   */
+  boost::shared_ptr<PlanTowardsConfig> getBehaviorCast();
 
-    bool initiate();
-    bool reinitiate(PlanTowardsConfig* cfg);
-    bool update();
-    bool finish();
-    bool loadExternalConfig();
+  void executeMotionAction() final;
 
-    void executeMotionAction() override;
-
-   /* bool velocityForPath(
-      const RobotPose2D<Scalar>& robotPose,
-      const RobotPose2D<Scalar>& goalPose,
-      const vector<Obstacle<Scalar>>& obstacles);*/
-
-    RobotPose2D<float> goal;
-
-    VelocityInput<Scalar> velocity;
-
+  std::unique_ptr<VelocityInput<float>> velocityInput;
+  std::unique_ptr<PotentialField2D<float>> potentialField2D;
 };
 
 typedef boost::shared_ptr<PlanTowardsConfig> PlanTowardsPtr;

@@ -93,7 +93,7 @@ protected:
    *
    * @return true if starting pose is set up
    */
-  bool setStart();
+  virtual bool setStart();
 
   /**
    * Sets the starting pose in path planner
@@ -103,7 +103,7 @@ protected:
    *
    * @return true if starting pose is set up
    */
-  virtual bool setStart(const PathPlannerSpace::State& left, const PathPlannerSpace::State& right) override;
+  bool setStart(const PathPlannerSpace::State& left, const PathPlannerSpace::State& right);
 
   /**
    * Sets the goal position to reach in the environment

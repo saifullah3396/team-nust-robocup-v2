@@ -4,7 +4,7 @@
     "maxRuntime" : 3600,
     "type" : 3,
     "startPose" : [0.0, 0.0, 0.0],
-    "startPoseKnown" : true,
+    "startPoseKnown" : false,
     "onSideAtStart" : false,
     "httConfig" : {
         "baseType" : 0,

@@ -38,6 +38,6 @@ DECLARE_BEHAVIOR_CONFIG_TYPE(
 DECLARE_BEHAVIOR_CONFIG_TYPE(
   PlanTowardsConfig,
   PBNavigationConfig,
-  PBNavigationTypes::PlanTowards,
+  PBNavigationTypes::planTowards,
   PlanTowardsConfigPtr
 );

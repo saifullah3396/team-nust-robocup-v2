@@ -6,15 +6,16 @@
   "maxRuntime" : 3600,
   "_comment_3": "For possible values of type, see PlanningModule/PlanningBehaviorIds.h, MotionModule/MotionBehaviorIds.h and GBModule/GeneralBehaviorsIds.h",
   "type" : 1,
-  "goal" : [1.0, 0.0, 0.0],
+  "goal" : [0.001, 0.0, 0.0],
+  "reachClosest" : true,
   "_comment_5": "The requested start posture behavior to run. For details, see BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h",
-  "startPosture" : 
-  {     
+  "startPosture" :
+  {
      "baseType" : 0,
      "id" : 0,
      "maxRuntime" : 45,
      "_comment_6": "For possible values of requestedPosture, see Utils/PostureState.h",
-     "targetPosture" : 1, 
+     "targetPosture" : 4,
      "timeToReachP" : 2.0,
      "jointsToReach" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -22,13 +23,13 @@
                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
      "type" : 0
   },
-  "endPosture" : 
-  {     
+  "endPosture" :
+  {
      "baseType" : 0,
      "id" : 0,
      "maxRuntime" : 45,
      "_comment_6": "For possible values of requestedPosture, see Utils/PostureState.h",
-     "targetPosture" : 1, 
+     "targetPosture" : 4,
      "timeToReachP" : 2.0,
      "jointsToReach" : [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -36,8 +37,8 @@
                          0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
      "type" : 0
   },
-  "hcConfig" : 
-  {     
+  "hcConfig" :
+  {
      "baseType" : 0,
      "id" : 5,
      "maxRuntime" : 99999,
