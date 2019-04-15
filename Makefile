@@ -9,14 +9,14 @@ configure:
 		echo "Please define either CROSS=<cross toolchain name>, REMOTE=<remote toolchain name> or SIMULATION=<sim toolchain name> to continue)";\
 		exit 1; \
 	fi
-	qibuild configure $(CMAKE_FLAGS) $(CONFFLAGS) $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) $(MOTION_PROXY_FLAG) $(VIDEO_PROXY_FLAG)
+	qibuild configure $(CMAKE_FLAGS) $(CONFFLAGS) $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) $(MOTION_PROXY_FLAG) $(VIDEO_PROXY_FLAG) -DROBOT_VERSION=$(ROBOT_VERSION)
 
 install:
 	@if [ "$(strip $(CONFFLAGS))" = "" ]; then\
 		echo "Please define either CROSS=<cross toolchain name>, REMOTE=<remote toolchain name> or SIMULATION=<sim toolchain name> to continue)";\
 		exit 1; \
 	fi
-	qibuild make $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) -j4
+	qibuild make $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)
 
 clean:
 	ifdef CROSS

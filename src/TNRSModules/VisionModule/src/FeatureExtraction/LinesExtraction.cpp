@@ -161,20 +161,14 @@ LinesExtraction::LinesExtraction(VisionModule* visionModule) :
 
 Point LinesExtraction::worldToImage(const Point& point)
 {
-  auto robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
-  robotPose2D.x() = 2.5;
-  robotPose2D.y() = -1.60;
-  robotPose2D.theta() = Angle::DEG_45;
+  const auto& robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
   auto pointT = robotPose2D.transform(point);
   return Point(pointT.x * 100 + 500, 350 - pointT.y * 100);
 }
 
 Point2f LinesExtraction::worldToImage(const Point2f& point)
 {
-  auto robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
-  robotPose2D.x() = 2.5;
-  robotPose2D.y() = -1.60;
-  robotPose2D.theta() = Angle::DEG_45;
+  const auto& robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
   auto pointT = robotPose2D.transform(point);
   return Point2f(pointT.x * 100 + 500, 350 - pointT.y * 100);
 }

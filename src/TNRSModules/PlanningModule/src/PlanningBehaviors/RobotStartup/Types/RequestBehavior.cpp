@@ -30,7 +30,7 @@ bool RequestBehavior::initiate()
   return true;
 }
 
-void RequestBehavior::update() 
+void RequestBehavior::update()
 {
   if (requestInProgress()) return;
   if (shutdownCallBack()) return;
@@ -66,7 +66,7 @@ void RequestBehavior::setStartPosture()
     } else if (requestedPosture == "StandKick") {
       startPosture = PostureState::standKick;
     } else {
-      throw 
+      throw
       BehaviorException(
         this,
         "Invalid start posture requested. See " +
@@ -74,7 +74,7 @@ void RequestBehavior::setStartPosture()
         "RobotStartup/RequestBehavior.json.",
         true
       );
-    } 
+    }
   } catch (BehaviorException& e) {
     LOG_EXCEPTION(e.what());
     startPosture = PostureState::unknown;
@@ -98,7 +98,12 @@ void RequestBehavior::ChestButtonWait::onRun() {
     }
     wait += bPtr->cycleTime;
   #else
-  if (SWITCH_SENSORS_OUT_REL(PlanningModule, bPtr)[toUType(SwitchSensors::chestBoardButton)] > 0.1)
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  auto& switchSensors = SWITCH_SENSORS_OUT_REL(PlanningModule, bPtr);
+  #else
+  const auto& switchSensors = SWITCH_SENSORS_IN_REL(PlanningModule, bPtr);
+  #endif
+  if (switchSensors[toUType(SwitchSensors::chestBoardButton)] > 0.1)
     nextState = bPtr->startRequested.get();
   #endif
 }

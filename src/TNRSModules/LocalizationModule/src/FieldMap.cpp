@@ -111,7 +111,7 @@ void FieldMap::updateOccupancyMap()
 
   if (addBallObstacle) {
     ///< Draw ball as an obstacle if required
-    auto wbInfo = WORLD_BALL_INFO_IN(LocalizationModule);
+    const auto& wbInfo = WORLD_BALL_INFO_IN(LocalizationModule);
     if (wbInfo.found) {
       circle(
         occupancyMap.data,

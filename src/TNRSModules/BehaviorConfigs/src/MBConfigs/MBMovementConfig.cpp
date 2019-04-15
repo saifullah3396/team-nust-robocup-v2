@@ -18,6 +18,7 @@ DEFINE_BEHAVIOR_CONFIG(
   (MBMovementTypes, naoqiFootsteps, NaoqiFootstepsConfig),
   (MBMovementTypes, naoqiMoveToward, NaoqiMoveTowardConfig),
   (MBMovementTypes, speedWalk, SpeedWalkConfig),
+  (MBMovementTypes, kinResolutionWalk, KinResolutionWalkConfig),
 );
 
 void NaoqiFootstepsConfig::init() {}
@@ -38,3 +39,8 @@ void SpeedWalkConfig::validate()
   ///< Throw a BConfigException is behavior configuration is invalid
 }
 
+void KinResolutionWalkConfig::init() {}
+void KinResolutionWalkConfig::validate()
+{
+  ///< Throw a BConfigException is behavior configuration is invalid
+}

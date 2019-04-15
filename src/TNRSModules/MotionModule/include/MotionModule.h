@@ -49,6 +49,7 @@ typedef map<unsigned, BehaviorInfo> BehaviorInfoMap;
  */
 class MotionModule : public BaseModule
 {
+  #ifndef V6_CROSS_BUILD
   DECLARE_INPUT_CONNECTOR(
     motionThreadPeriod,
     jointStiffnessSensors,
@@ -77,9 +78,47 @@ class MotionModule : public BaseModule
     footOnGround,
     currentStepLeg
   );
+  #else
+  DECLARE_INPUT_CONNECTOR(
+    motionThreadPeriod,
+    #ifdef REALTIME_LOLA_AVAILABLE
+    jointPositionSensors,
+    handSensors,
+    inertialSensors,
+    fsrSensors,
+    #endif
+    jointStiffnessSensors,
+    touchSensors,
+    ballInfo,
+    goalInfo,
+    robotPose2D,
+    landmarksFound
+  );
+  DECLARE_OUTPUT_CONNECTOR(
+    motionThreadTimeTaken,
+    #ifndef REALTIME_LOLA_AVAILABLE
+    jointPositionSensors,
+    handSensors,
+    inertialSensors,
+    fsrSensors,
+    #endif
+    nFootsteps,
+    upperCamInFeet,
+    lowerCamInFeet,
+    lFootOnGround,
+    rFootOnGround,
+    postureState,
+    robotFallen,
+    kickTarget,
+    robotInMotion,
+    mBehaviorInfo,
+    footOnGround,
+    currentStepLeg
+  );
+  #endif
 public:
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  #ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE // V5 with motion proxy
     /**
      * Constructor
      *
@@ -93,21 +132,7 @@ public:
      const ALMemoryProxyPtr& memoryProxy,
      const ALDCMProxyPtr& dcmProxy,
      const ALMotionProxyPtr& motionProxy);
-  #else
-    /**
-     * Constructor
-     *
-     * @param parent: parent: Pointer to parent module
-     * @param memoryProxy: Pointer to NaoQi's memory proxy
-     * @param motionProxy: Pointer to NaoQi's motion proxy
-     */
-    MotionModule(
-     void* parent,
-     const qi::AnyObject& memoryProxy,
-     const qi::AnyObject& motionProxy);
-  #endif
-#else
-  #ifndef V6_CROSS_BUILD
+  #else // V5 without motion proxy
     /**
      * Constructor
      *
@@ -119,16 +144,27 @@ public:
      void* parent,
      const ALMemoryProxyPtr& memoryProxy,
      const ALDCMProxyPtr& dcmProxy);
-  #else
+  #endif
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE // V6 with no realtime support
     /**
      * Constructor
      *
      * @param parent: parent: Pointer to parent module
      * @param memoryProxy: Pointer to NaoQi's memory proxy
+     * @param motionProxy: Pointer to NaoQi's motion proxy
      */
     MotionModule(
      void* parent,
-     const qi::AnyObject& memoryProxy);
+     const qi::AnyObject& memoryProxy,
+     const qi::AnyObject& motionProxy);
+  #else // V6 with realtime LoLA support
+    /**
+     * Constructor
+     *
+     * @param parent: parent: Pointer to parent module
+     */
+    MotionModule(void* parent);
   #endif
 #endif
 
@@ -188,20 +224,23 @@ public:
    */
   TrajectoryPlannerPtr getTrajectoryPlanner();
 
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
    * Gets the motion proxy module
    *
    * @return MotionProxyPtr
    */
-    #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
       ALMotionProxyPtr getSharedMotionProxy();
-    #else
+    #endif
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
       qi::AnyObject getSharedMotionProxy();
     #endif
   #endif
 
 private:
+  #ifndef V6_CROSS_BUILD
   /**
    * Sets up the motion sensors
    */
@@ -222,6 +261,20 @@ private:
    * Sends the requested actuator commands to NaoQi DCM for execution
    */
   void actuatorsUpdate();
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      /**
+       * Sets up the motion sensors
+       */
+      void setupSensors();
+
+      /**
+       * Updates sensor values from NaoQi ALMemory to our local
+       * shared memory
+       */
+      void sensorsUpdate();
+    #endif
+  #endif
 
   ///< Motion behaviors manager shared object
   map<unsigned, MBManagerPtr> mbManagers;
@@ -238,11 +291,18 @@ private:
   ///< Trajectory planner module object
   TrajectoryPlannerPtr trajectoryPlanner;
 
-  ///< Vector of pointer to SensorLayer objects
-  vector<SensorLayerPtr> sensorLayers;
+  #ifndef V6_CROSS_BUILD
+    ///< Vector of pointer to SensorLayer objects
+    vector<SensorLayerPtr> sensorLayers;
 
-  ///< Vector of pointer to ActuatorLayer objects
-  vector<ActuatorLayerPtr> actuatorLayers;
+    ///< Vector of pointer to ActuatorLayer objects
+    vector<ActuatorLayerPtr> actuatorLayers;
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+    ///< Vector of pointer to SensorLayer objects
+    vector<SensorLayerPtr> sensorLayers;
+    #endif
+  #endif
 
   #ifndef V6_CROSS_BUILD
     ///< Pointer to NaoQi internal memory proxy
@@ -256,23 +316,35 @@ private:
     ///< Pointer to NaoQi internal dcm proxy
     ALDCMProxyPtr dcmProxy;
   #else
-    qi::AnyObject memoryProxy;
-    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+    #ifndef REALTIME_LOLA_AVAILABLE
+      qi::AnyObject memoryProxy;
       qi::AnyObject motionProxy;
     #endif
   #endif
 
-  enum class MotionSensors : unsigned {
-    jointPosition,
-    handSensors,
-    inertial,
-    fsr,
-    count
-  };
+  #ifndef V6_CROSS_BUILD
+    enum class MotionSensors : unsigned {
+      jointPosition,
+      handSensors,
+      inertial,
+      fsr,
+      count
+    };
 
-  enum class MotionActuators : unsigned {
-    jointActuators,
-    handActuators,
-    count
-  };
+    enum class MotionActuators : unsigned {
+      jointActuators,
+      handActuators,
+      count
+    };
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      enum class MotionSensors : unsigned {
+        jointPosition,
+        handSensors,
+        inertial,
+        fsr,
+        count
+      };
+    #endif
+  #endif
 };

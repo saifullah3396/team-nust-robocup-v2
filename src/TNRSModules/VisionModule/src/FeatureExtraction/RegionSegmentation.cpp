@@ -180,8 +180,8 @@ void RegionSegmentation::processImage()
     LOG_INFO("Average field height:" << avgHeight);
     LOG_INFO("Minimum best field height:" << minBestHeight);
   }
+  drawResults();
   if (GET_DVAR(int, displayOutput)) {
-    drawResults();
     VisionUtils::displayImage("RegionSegmentation", bgrMat[toUType(activeCamera)]);
   }
 }

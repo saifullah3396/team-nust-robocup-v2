@@ -9,6 +9,11 @@
 
 #include "GameCommModule/include/GameCommModule.h"
 #include "LocalizationModule/include/LocalizationModule.h"
+#ifdef V6_CROSS_BUILD
+  #ifdef REALTIME_LOLA_AVAILABLE
+    #include "ControlModule/include/LolaModule.h"
+  #endif
+#endif
 #include "MotionModule/include/MotionModule.h"
 #include "PlanningModule/include/PlanningModule.h"
 #include "GBModule/include/GBModule.h"
@@ -41,7 +46,6 @@ TeamNUSTSPL::TeamNUSTSPL(qi::SessionPtr session) :
 
 void TeamNUSTSPL::init()
 {
-  LOG_INFO("Initializing TeamNUSTSPL Module...");
   #ifdef MODULE_IS_LOCAL_SIMULATED
   LOG_INFO("The module is built for local simulations...");
   ConfigManager::setDirPaths("Robots/Sim/");
@@ -52,6 +56,7 @@ void TeamNUSTSPL::init()
       ConfigManager::createDirs();
     #endif
   #endif
+  LOG_INFO("Initializing TeamNUSTSPL Module...");
   LOG_INFO("Getting Naoqi ALMemoryProxy handle...");
   LOG_INFO("For information on this proxy, see naoqi-sdk/include/alproxies/almemoryproxy.h");
   #ifndef V6_CROSS_BUILD
@@ -144,53 +149,68 @@ void TeamNUSTSPL::setupTNRSModules()
     (bool, startVisionModule, modulesToRun[toUType(TNSPLModules::vision)]),
     (bool, startGameCommModule, modulesToRun[toUType(TNSPLModules::gameComm)]),
     (bool, startUserCommModule, modulesToRun[toUType(TNSPLModules::userComm)]),
+    #ifdef V6_CROSS_BUILD
+      #ifdef REALTIME_LOLA_AVAILABLE
+        (bool, startLolaModule, modulesToRun[toUType(TNSPLModules::lola)]),
+      #endif
+    #endif
   );
 
   childModules.resize(toUType(TNSPLModules::count));
   if (modulesToRun[toUType(TNSPLModules::planning)]) {
     LOG_INFO("Constructing PlanningModule... See src/TNRSModules/PlanningModule.")
-    childModules[toUType(TNSPLModules::planning)] =
-      boost::make_shared<PlanningModule>(this, memoryProxy);
+    #ifndef V6_CROSS_BUILD
+      childModules[toUType(TNSPLModules::planning)] =
+        boost::make_shared<PlanningModule>(this, memoryProxy);
+    #else
+      #ifndef REALTIME_LOLA_AVAILABLE
+        childModules[toUType(TNSPLModules::planning)] =
+          boost::make_shared<PlanningModule>(this, memoryProxy);
+      #else
+        childModules[toUType(TNSPLModules::planning)] =
+          boost::make_shared<PlanningModule>(this);
+      #endif
+    #endif
   }
 
   if (modulesToRun[toUType(TNSPLModules::motion)]) {
     LOG_INFO("Constructing MotionModule... See src/TNRSModules/MotionModule.")
-    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-      #ifndef V6_CROSS_BUILD
+    #ifndef V6_CROSS_BUILD
+      #ifdef NAOQI_MOTION_PROXY_AVAILABLE
         childModules[toUType(TNSPLModules::motion)] =
           boost::make_shared<MotionModule>(this, memoryProxy, dcmProxy, motionProxy);
       #else
         childModules[toUType(TNSPLModules::motion)] =
-          boost::make_shared<MotionModule>(this, memoryProxy, motionProxy);
+          boost::make_shared<MotionModule>(this, memoryProxy, dcmProxy);
       #endif
     #else
-      #ifndef V6_CROSS_BUILD
+      #ifndef REALTIME_LOLA_AVAILABLE
         childModules[toUType(TNSPLModules::motion)] =
-          boost::make_shared<MotionModule>(this, memoryProxy, dcmProxy);
+          boost::make_shared<MotionModule>(this, memoryProxy, motionProxy);
       #else
         childModules[toUType(TNSPLModules::motion)] =
-          boost::make_shared<MotionModule>(this, memoryProxy);
+          boost::make_shared<MotionModule>(this);
       #endif
     #endif
   }
 
   if (modulesToRun[toUType(TNSPLModules::gb)]) {
     LOG_INFO("Constructing GBModule... See src/TNRSModules/GBModule.")
-    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-      #ifndef V6_CROSS_BUILD
+    #ifndef V6_CROSS_BUILD
+      #ifdef NAOQI_MOTION_PROXY_AVAILABLE
         childModules[toUType(TNSPLModules::gb)] =
           boost::make_shared<GBModule>(this, memoryProxy, dcmProxy, motionProxy);
       #else
         childModules[toUType(TNSPLModules::gb)] =
-          boost::make_shared<GBModule>(this, memoryProxy, motionProxy);
+          boost::make_shared<GBModule>(this, memoryProxy, dcmProxy);
       #endif
     #else
-      #ifndef V6_CROSS_BUILD
+      #ifndef REALTIME_LOLA_AVAILABLE
         childModules[toUType(TNSPLModules::gb)] =
-          boost::make_shared<GBModule>(this, memoryProxy, dcmProxy);
+          boost::make_shared<GBModule>(this, memoryProxy, motionProxy);
       #else
         childModules[toUType(TNSPLModules::gb)] =
-          boost::make_shared<GBModule>(this, memoryProxy);
+          boost::make_shared<GBModule>(this);
       #endif
     #endif
   }
@@ -244,6 +264,16 @@ void TeamNUSTSPL::setupTNRSModules()
     childModules[toUType(TNSPLModules::gameComm)] =
       boost::make_shared<GameCommModule>(this);
   }
+
+  #ifdef V6_CROSS_BUILD
+    #ifdef REALTIME_LOLA_AVAILABLE
+      if (modulesToRun[toUType(TNSPLModules::lola)]) {
+        LOG_INFO("Constructing LolaModule... See src/TNRSModules/LolaModule.")
+        childModules[toUType(TNSPLModules::lola)] =
+          boost::make_shared<LolaModule>(this);
+      }
+    #endif
+  #endif
 
   LOG_INFO("Initializing TNRSModules... See src/TNRSModules/TNRSBase/include/BaseModule.")
   for (size_t i = 0; i < childModules.size(); ++i) {

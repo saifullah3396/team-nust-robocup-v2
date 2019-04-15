@@ -34,50 +34,67 @@ void SensorLayer::init(const string& jsonFile) {
   } catch (Json::Exception& e) {
     LOG_EXCEPTION("Error reading hardware layer ids from json file:\t" << jsonFile << "\n\t" << e.what());
   }
+  #ifndef V6_CROSS_BUILD
   setSensorPtr();
+  #endif
 }
 
+#ifndef V6_CROSS_BUILD
 void SensorLayer::update()
 {
   try {
-#if defined(MODULE_IS_REMOTE) || defined(V6_CROSS_BUILD)
-    #ifndef V6_CROSS_BUILD
-      *sensorHandle = memoryProxy->getListData(keys);
+    #ifdef MODULE_IS_REMOTE
+    *sensorHandle = memoryProxy->getListData(keys);
     #else
-      *sensorHandle = memoryProxy.call<vector<float> >("getListData", keys);
-    #endif
-#else
     for (size_t i = 0; i < size; ++i) {
       (*sensorHandle)[i] = *sensorPtrs[i];
     }
-#endif
+    #endif
   } catch (const exception& e) {
     LOG_EXCEPTION(e.what())
   }
 }
+#else
+#ifndef REALTIME_LOLA_AVAILABLE
+void SensorLayer::update()
+{
+  try {
+    *sensorHandle = memoryProxy.call<AL::ALValue>("getListData", keys);
+  } catch (const exception& e) {
+    LOG_EXCEPTION(e.what())
+  }
+}
+#else
+void SensorLayer::update(const msgpack::object_map& map)
+{
+  try {
+    for (size_t i = 0; i < size; ++i) {
+      //(*sensorHandle)[i] = map[keys[i]];
+    }
+  } catch (const exception& e) {
+    LOG_EXCEPTION(e.what())
+  }
+}
+#endif
+#endif
 
+#ifndef V6_CROSS_BUILD
 void SensorLayer::setSensorPtr()
 {
   if (memoryProxy) {
     #ifndef MODULE_IS_REMOTE
     sensorPtrs.resize(size);
     for (size_t i = 0; i < size; ++i) {
-      #ifndef V6_CROSS_BUILD
-        sensorPtrs[i] = (float*) memoryProxy->getDataPtr(keys[i]);
-      #else
-      //try {
-      //  sensorPtrs[i] = (float*) memoryProxy.call<float*>("getDataPtr", keys[i]);
-      //} catch (const exception& e) {
-      //  LOG_EXCEPTION(e.what());
-      //}
-      #endif
+      sensorPtrs[i] = (float*) memoryProxy->getDataPtr(keys[i]);
     }
     #endif
   } else {
     LOG_ERROR("Cannot access Naoqi motion proxy at SensorLayer::setSensorPtrs().");
   }
 }
+#endif
 
+#ifndef V6_CROSS_BUILD
 SensorLayerPtr SensorLayer::makeSensorLayer(
   const unsigned& sensorIndex,
   vector<float>* sensorHandle,
@@ -86,40 +103,40 @@ SensorLayerPtr SensorLayer::makeSensorLayer(
   try {
     SensorLayerPtr sl;
     switch (sensorIndex) {
-      case static_cast<unsigned>(SensorTypes::joints) + static_cast<unsigned>(JointSensorTypes::position):
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::position):
         sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::position);
         break;
-      case static_cast<unsigned>(SensorTypes::joints) + static_cast<unsigned>(JointSensorTypes::temp):
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::temp):
         sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::temp);
         break;
-      case static_cast<unsigned>(SensorTypes::joints) + static_cast<unsigned>(JointSensorTypes::current):
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::current):
         sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::current);
         break;
-      case static_cast<unsigned>(SensorTypes::joints) + static_cast<unsigned>(JointSensorTypes::hardness):
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::hardness):
         sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::hardness);
         break;
-      case static_cast<unsigned>(SensorTypes::handSensors):
+      case toUType(SensorTypes::handSensors):
         sl = boost::make_shared<HandSensorsLayer>(memoryProxy);
         break;
-      case static_cast<unsigned>(SensorTypes::touchSensors):
+      case toUType(SensorTypes::touchSensors):
         sl = boost::make_shared<TouchSensorsLayer>(memoryProxy);
         break;
-      case static_cast<unsigned>(SensorTypes::switchSensors):
+      case toUType(SensorTypes::switchSensors):
         sl = boost::make_shared<SwitchSensorsLayer>(memoryProxy);
         break;
-      case static_cast<unsigned>(SensorTypes::batterySensors):
+      case toUType(SensorTypes::batterySensors):
         sl = boost::make_shared<BatterySensorsLayer>(memoryProxy);
         break;
-      case static_cast<unsigned>(SensorTypes::inertialSensors):
+      case toUType(SensorTypes::inertialSensors):
         sl = boost::make_shared<InertialSensorsLayer>(memoryProxy);
         break;
-      case static_cast<unsigned>(SensorTypes::sonarSensors):
+      case toUType(SensorTypes::sonarSensors):
         sl = boost::make_shared<SonarSensorsLayer>(memoryProxy);
         break;
-      case static_cast<unsigned>(SensorTypes::fsrSensors):
+      case toUType(SensorTypes::fsrSensors):
         sl = boost::make_shared<FsrSensorsLayer>(memoryProxy);
         break;
-      case static_cast<unsigned>(SensorTypes::ledSensors):
+      case toUType(SensorTypes::ledSensors):
         sl = boost::make_shared<LedSensorsLayer>(memoryProxy);
         break;
     }
@@ -129,6 +146,112 @@ SensorLayerPtr SensorLayer::makeSensorLayer(
     LOG_EXCEPTION(e.what())
   }
 }
+#else
+#ifndef REALTIME_LOLA_AVAILABLE
+SensorLayerPtr SensorLayer::makeSensorLayer(
+  const unsigned& sensorIndex,
+  vector<float>* sensorHandle,
+  const NAOQI_MEMORY_PROXY_TYPE& memoryProxy)
+{
+  try {
+    SensorLayerPtr sl;
+    switch (sensorIndex) {
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::position):
+        sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::position);
+        break;
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::temp):
+        sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::temp);
+        break;
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::current):
+        sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::current);
+        break;
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::hardness):
+        sl = boost::make_shared<JointSensorsLayer>(memoryProxy, JointSensorTypes::hardness);
+        break;
+      case toUType(SensorTypes::handSensors):
+        sl = boost::make_shared<HandSensorsLayer>(memoryProxy);
+        break;
+      case toUType(SensorTypes::touchSensors):
+        sl = boost::make_shared<TouchSensorsLayer>(memoryProxy);
+        break;
+      case toUType(SensorTypes::switchSensors):
+        sl = boost::make_shared<SwitchSensorsLayer>(memoryProxy);
+        break;
+      case toUType(SensorTypes::batterySensors):
+        sl = boost::make_shared<BatterySensorsLayer>(memoryProxy);
+        break;
+      case toUType(SensorTypes::inertialSensors):
+        sl = boost::make_shared<InertialSensorsLayer>(memoryProxy);
+        break;
+      case toUType(SensorTypes::sonarSensors):
+        sl = boost::make_shared<SonarSensorsLayer>(memoryProxy);
+        break;
+      case toUType(SensorTypes::fsrSensors):
+        sl = boost::make_shared<FsrSensorsLayer>(memoryProxy);
+        break;
+      case toUType(SensorTypes::ledSensors):
+        sl = boost::make_shared<LedSensorsLayer>(memoryProxy);
+        break;
+    }
+    sl->setSensorHandle(sensorHandle);
+    return sl;
+  } catch (exception &e) {
+    LOG_EXCEPTION(e.what())
+  }
+}
+#else
+SensorLayerPtr SensorLayer::makeSensorLayer(
+  const unsigned& sensorIndex,
+  vector<float>* sensorHandle)
+{
+  try {
+    SensorLayerPtr sl;
+    switch (sensorIndex) {
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::position):
+        sl = boost::make_shared<JointSensorsLayer>(JointSensorTypes::position);
+        break;
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::temp):
+        sl = boost::make_shared<JointSensorsLayer>(JointSensorTypes::temp);
+        break;
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::current):
+        sl = boost::make_shared<JointSensorsLayer>(JointSensorTypes::current);
+        break;
+      case toUType(SensorTypes::joints) + toUType(JointSensorTypes::hardness):
+        sl = boost::make_shared<JointSensorsLayer>(JointSensorTypes::hardness);
+        break;
+      case toUType(SensorTypes::handSensors):
+        sl = boost::make_shared<HandSensorsLayer>();
+        break;
+      case toUType(SensorTypes::touchSensors):
+        sl = boost::make_shared<TouchSensorsLayer>();
+        break;
+      case toUType(SensorTypes::switchSensors):
+        sl = boost::make_shared<SwitchSensorsLayer>();
+        break;
+      case toUType(SensorTypes::batterySensors):
+        sl = boost::make_shared<BatterySensorsLayer>();
+        break;
+      case toUType(SensorTypes::inertialSensors):
+        sl = boost::make_shared<InertialSensorsLayer>();
+        break;
+      case toUType(SensorTypes::sonarSensors):
+        sl = boost::make_shared<SonarSensorsLayer>();
+        break;
+      case toUType(SensorTypes::fsrSensors):
+        sl = boost::make_shared<FsrSensorsLayer>();
+        break;
+      case toUType(SensorTypes::ledSensors):
+        sl = boost::make_shared<LedSensorsLayer>();
+        break;
+    }
+    sl->setSensorHandle(sensorHandle);
+    return sl;
+  } catch (exception &e) {
+    LOG_EXCEPTION(e.what())
+  }
+}
+#endif
+#endif
 
 void ActuatorLayer::update()
 {
@@ -144,7 +267,9 @@ void ActuatorLayer::update()
       commands[4][0] = dcmProxy->getTime(20);
       dcmProxy->setAlias(commands);
     #else
+    #ifdef REALTIME_LOLA_AVAILABLE
     ///< @todo Define lola based request handler for realtime usage
+    #endif
     #endif
     ///< Execute in remove
     requests.popQueue();
@@ -198,28 +323,28 @@ ActuatorLayerPtr ActuatorLayer::makeActuatorLayer(
     ActuatorLayerPtr al;
     switch (actuatorIndex)
     {
-      case static_cast<unsigned>(ActuatorTypes::jointActuators) + static_cast<unsigned>(JointActuatorTypes::angles):
+      case toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::angles):
         #ifndef V6_CROSS_BUILD
           al = boost::make_shared<JointActuatorsLayer>(dcmProxy, JointActuatorTypes::angles);
         #else
           al = boost::make_shared<JointActuatorsLayer>(JointActuatorTypes::angles);
         #endif
         break;
-      case static_cast<unsigned>(ActuatorTypes::jointActuators) + static_cast<unsigned>(JointActuatorTypes::hardness):
+      case toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness):
         #ifndef V6_CROSS_BUILD
           al = boost::make_shared<JointActuatorsLayer>(dcmProxy, JointActuatorTypes::hardness);
         #else
           al = boost::make_shared<JointActuatorsLayer>(JointActuatorTypes::hardness);
         #endif
         break;
-      case static_cast<unsigned>(ActuatorTypes::handActuators):
+      case toUType(ActuatorTypes::handActuators):
         #ifndef V6_CROSS_BUILD
           al = boost::make_shared<HandActuatorsLayer>(dcmProxy);
         #else
-          al = boost::make_shared<HandActuatorsLayer>(dcmProxy);
+          al = boost::make_shared<HandActuatorsLayer>();
         #endif
         break;
-      case static_cast<unsigned>(ActuatorTypes::ledActuators):
+      case toUType(ActuatorTypes::ledActuators):
         #ifndef V6_CROSS_BUILD
           al = boost::make_shared<LedActuatorsLayer>(dcmProxy);
         #else

@@ -64,8 +64,13 @@ void MotionTestSuite::update()
   if (shutdownCallBack()) return;
   if (!mbInProgress()) {
     ///< Repeat on finish based on chest button press
-    if (setPostureAndStiffness(PostureState::stand, StiffnessState::max, MOTION_1)) {
-      if (SWITCH_SENSORS_OUT(PlanningModule)[toUType(SwitchSensors::chestBoardButton)] > 0.1) {
+    #ifndef V6_CROSS_BUILD
+    auto& switchSensors = SWITCH_SENSORS_OUT(PlanningModule);
+    #else
+    const auto& switchSensors = SWITCH_SENSORS_IN(PlanningModule);
+    #endif
+    if (switchSensors[toUType(SwitchSensors::chestBoardButton)] > 0.1) {
+      if (setPostureAndStiffness(PostureState::stand, StiffnessState::max, MOTION_1)) {
         if (motionConfig) {
           setupMBRequest(MOTION_1, boost::static_pointer_cast<MBConfig>(motionConfig));
         } else {

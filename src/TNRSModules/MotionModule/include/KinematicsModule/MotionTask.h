@@ -60,7 +60,7 @@ public:
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
     const JointStateType& jsType,
     const MotionTaskType& taskType,
-    const vector<bool>& activeResidual = vector<bool>());
+    const vector<float>& activeResidual = vector<float>());
 
   virtual ~MotionTask() {}
 
@@ -102,14 +102,14 @@ public:
   void setGain(const Scalar& gain) { this->gain = gain; }
   void setWeight(const Scalar& weight) { this->weight = weight; }
   void setActiveJoints(const vector<bool>& activeJoints) { this->activeJoints = activeJoints; }
-  void setActiveResidual(const vector<bool>& activeResidual) { this->activeResidual = activeResidual; }
+  void setActiveResidual(const vector<float>& activeResidual) { this->activeResidual = activeResidual; }
 
   ///< Getters
   Scalar getGain() const { return gain; }
   Scalar getWeight() const { return weight; }
   MotionTaskType getType() const { return taskType; }
   vector<bool> getActiveJoints() const { return activeJoints; }
-  vector<bool> getActiveResidual() const { return activeResidual; }
+  vector<float> getActiveResidual() const { return activeResidual; }
   Matrix<Scalar, Dynamic, Dynamic> getJacobian();
   Matrix<Scalar, Dynamic, Dynamic> getResidual(const Scalar& dt);
   Matrix<Scalar, Dynamic, Dynamic> getResidual();
@@ -137,7 +137,7 @@ protected:
   vector<bool> activeJoints;
 
   ///< Active residual components
-  vector<bool> activeResidual;
+  vector<float> activeResidual;
 
   ///< MotionTask gain
   Scalar gain;
@@ -174,7 +174,7 @@ public:
     const Scalar& gain,
     const vector<bool>& activeJoints,
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-    const vector<bool>& activeResidual = vector<bool>(),
+    const vector<float>& activeResidual = vector<float>(),
     const JointStateType& jsType = JointStateType::sim);
 
   /**
@@ -231,7 +231,7 @@ public:
     const Scalar& gain,
     const vector<bool>& activeJoints,
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-    const vector<bool>& activeResidual = vector<bool>(),
+    const vector<float>& activeResidual = vector<float>(),
     const JointStateType& jsType = JointStateType::sim);
 
   Matrix<Scalar, Dynamic, Dynamic> computeJacobian();
@@ -307,7 +307,7 @@ public:
     const Scalar& gain,
     const vector<bool>& activeJoints,
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-    const vector<bool>& activeResidual = vector<bool>(),
+    const vector<float>& activeResidual = vector<float>(),
     const JointStateType& jsType = JointStateType::sim,
     const MotionTaskType& taskType = MotionTaskType::cartesian);
 
@@ -384,7 +384,7 @@ public:
     const Scalar& gain,
     const vector<bool>& activeJoints,
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-    const vector<bool>& activeResidual = vector<bool>(),
+    const vector<float>& activeResidual = vector<float>(),
     const JointStateType& jsType = JointStateType::sim);
 
 public:
@@ -421,7 +421,7 @@ public:
     const Scalar& gain,
     const vector<bool>& activeJoints,
     const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-    const vector<bool>& activeResidual = vector<bool>(),
+    const vector<float>& activeResidual = vector<float>(),
     const JointStateType& jsType = JointStateType::sim);
 
   Matrix<Scalar, Dynamic, Dynamic> computeJacobian();

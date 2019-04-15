@@ -332,12 +332,12 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   Matrix<Scalar, Dynamic, Dynamic> jointPosPre;
   jointPosPre.resize(cPosesPre.size(), chainSize);
   jointPosPre.setZero();
-  vector<bool> activeResidual = vector<bool>(6, true);
+  vector<float> activeResidual = vector<float>(6, 1.0);
 
   ///< We do not care about orientation while solving for inverse kinematics
-  activeResidual[3] = false;
-  activeResidual[4] = false;
-  activeResidual[5] = false;
+  activeResidual[3] = 0.0;
+  activeResidual[4] = 0.0;
+  activeResidual[5] = 0.0;
   ///< Remove HipYawPitch joint from calclation of inverse kinematics
   vector<bool> activeJoints = vector<bool>(chainSize, true);
   activeJoints[0] = false;
@@ -347,9 +347,9 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   ///< Solve inverse kinematics for poses 1-4. This process is really expensive
   for (int i = 1; i < jointPosPre.rows(); ++i) {
     //if (i >= 5) {
-    //  activeResidual[3] = true;
-    //  activeResidual[4] = true;
-    //  activeResidual[5] = true;
+    //  activeResidual[3] = 1.0;
+    //  activeResidual[4] = 1.0;
+    //  activeResidual[5] = 1.0;
     //}
     this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
     //this->kM->setChainPositions(this->kickLeg, jointPosPre.row(i-1).transpose(), JointStateType::sim);
@@ -533,9 +533,9 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   //requiredJoints.row(0) = impactJoints.transpose();
   ///< Else use the final pose of constant velocity phase
   jointPosPost.row(0) = prevJoints.transpose();
-  activeResidual[3] = true;
-  activeResidual[4] = true;
-  activeResidual[5] = true;
+  activeResidual[3] = 1.0;
+  activeResidual[4] = 1.0;
+  activeResidual[5] = 1.0;
   ///< Solve inverse kinematics for post impact poses
   for (int i = 1; i < jointPosPost.rows(); ++i) { ///< First pos is known
     this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
@@ -678,8 +678,8 @@ void JointSpaceKick<Scalar>::requestExecution(const bool& addArmsMovement)
   if (addArmsMovement) {
     ///< Make center of mass task
     auto comState = this->kM->getComStateWrtFrame(this->supportLeg, toUType(LegEEs::footCenter));
-    auto comResidual = vector<bool>(3, true);
-    comResidual[2] = false;
+    auto comResidual = vector<float>(3, 1.0);
+    comResidual[2] = 0.0;
     vector<boost::shared_ptr<MotionTask<Scalar> > > tasks;
     auto comTask =
       this->kM->makeComTask(

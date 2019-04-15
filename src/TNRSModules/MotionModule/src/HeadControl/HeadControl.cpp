@@ -56,7 +56,7 @@ bool HeadControl<Scalar>::findTarget(
 {
   try {
     if (targetType == HeadTargetTypes::ball) {
-      auto ballInfo = BALL_INFO_IN(MotionModule);
+      const auto& ballInfo = BALL_INFO_IN(MotionModule);
       if (ballInfo.found) {
         targetPos[0] = ballInfo.posRel.x;
         targetPos[1] = ballInfo.posRel.y;
@@ -68,7 +68,7 @@ bool HeadControl<Scalar>::findTarget(
         return false;
       }
     } else if (targetType == HeadTargetTypes::goal) {
-      auto goalInfo = GOAL_INFO_IN(MotionModule);
+      const auto& goalInfo = GOAL_INFO_IN(MotionModule);
       if (goalInfo.found)
       {
         if (goalInfo.mid.x == goalInfo.mid.x) {

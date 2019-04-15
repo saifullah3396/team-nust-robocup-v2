@@ -38,9 +38,13 @@ bool WalkZmpRefGen<Scalar>::initiate()
   globalTransPose = RobotPose2D<Scalar>(0.0, 0.0, 0.0);
   for (size_t i = 0; i < this->nReferences; ++i) {
     if (footstep != footsteps->end() && fabsf(time - (*footstep)->timeAtFinish) <= 1e-3) {
+      auto currentOffset = refOffset;
+      if ((*footstep)->foot == RobotFeet::rFoot)
+        currentOffset[1] *= -1;
       globalTransPose = globalTransPose.transform((*footstep)->pose2D);
       zmp[0] = globalTransPose.getX();
       zmp[1] = globalTransPose.getY();
+      zmp += currentOffset;
       footstep++;
     }
     this->zmpRef->x.push_back(zmp[0]);
@@ -71,9 +75,13 @@ void WalkZmpRefGen<Scalar>::retransform(Scalar timeStep)
   transPose = RobotPose2D<Scalar>(0.0, 0.0, 0.0);
   for (size_t i = 0; i < this->nReferences; ++i) {
     if (footstep != footsteps->end() && fabsf(timeStep - (*footstep)->timeAtFinish) <= 1e-3) {
+      auto currentOffset = refOffset;
+      if ((*footstep)->foot == RobotFeet::rFoot)
+        currentOffset[1] *= -1;
       transPose = transPose.transform((*footstep)->pose2D);
       zmp[0] = transPose.getX();
       zmp[1] = transPose.getY();
+      zmp += currentOffset;
       footstep++;
     }
     this->zmpRef->x.push_back(zmp[0]);
@@ -93,9 +101,12 @@ void WalkZmpRefGen<Scalar>::update(const Scalar& timeStep)
     ///< Matching floats here, this can be dangerous
     if (fabsf(previewEndTime - fs->timeAtFinish) <= 1e-3) {
       //LOG_INFO("fs->timeAtFinish: " << fs->timeAtFinish);
+      auto currentOffset = refOffset;
+      if (fs->foot == RobotFeet::rFoot)
+        currentOffset[1] *= -1;
       globalTransPose = globalTransPose.transform(fs->pose2D);
-      this->zmpRef->x.push_back(globalTransPose.getX());
-      this->zmpRef->y.push_back(globalTransPose.getY());
+      this->zmpRef->x.push_back(globalTransPose.getX() + currentOffset[0]);
+      this->zmpRef->y.push_back(globalTransPose.getY() + currentOffset[1]);
       //LOG_INFO("latestZmpRefY: " << this->zmpRef->y.back());
       return;
     }

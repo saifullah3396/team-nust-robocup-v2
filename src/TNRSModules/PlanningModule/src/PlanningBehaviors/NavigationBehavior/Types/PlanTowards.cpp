@@ -45,7 +45,7 @@ void PlanTowards::reinitiate(const boost::shared_ptr<BehaviorConfig>& cfg)
 
 void PlanTowards::update()
 {
-  auto robotPose2D = ROBOT_POSE_2D_IN(PlanningModule);
+  const auto& robotPose2D = ROBOT_POSE_2D_IN(PlanningModule);
   if (robotPose2D.getX() == robotPose2D.getX()) {
     *velocityInput =
       potentialField2D->update(

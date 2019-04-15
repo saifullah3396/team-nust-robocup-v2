@@ -18,6 +18,7 @@
 struct GBConfig;
 typedef boost::shared_ptr<GBConfig> GBConfigPtr;
 
+#ifndef V6_CROSS_BUILD
 /**
  * @enum GBRequestIds
  * @brief Types of request valid for GBModule
@@ -28,6 +29,16 @@ enum class GBRequestIds {
   behaviorRequest,
   killBehavior
 };
+#else //! No realtime actuator requests here in V6
+/**
+ * @enum GBRequestIds
+ * @brief Types of request valid for GBModule
+ */
+enum class GBRequestIds {
+  behaviorRequest,
+  killBehavior
+};
+#endif
 
 /**
  * @class GBRequest

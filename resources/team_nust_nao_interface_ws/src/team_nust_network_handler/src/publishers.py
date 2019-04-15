@@ -48,48 +48,48 @@ class SensorNames:
             "RAnkleRoll"
         ]
     JOINTS = \
-        [ 
-          'HeadYaw', 
-          'HeadPitch', 
-          'LHipYawPitch', 
-          'LHipRoll', 
-          'LHipPitch', 
-          'LKneePitch', 
-          'LAnklePitch', 
-          'LAnkleRoll', 
-          'RHipYawPitch', 
-          'RHipRoll', 
-          'RHipPitch', 
-          'RKneePitch', 
-          'RAnklePitch', 
-          'RAnkleRoll', 
-          'LShoulderPitch', 
-          'LShoulderRoll', 
-          'LElbowYaw', 
-          'LElbowRoll', 
-          'LWristYaw', 
-          'LHand', 
-          'RShoulderPitch', 
-          'RShoulderRoll', 
-          'RElbowYaw', 
-          'RElbowRoll', 
-          'RWristYaw', 
-          'RHand', 
-          'RFinger23', 
-          'RFinger13', 
-          'RFinger12', 
-          'LFinger21', 
-          'LFinger13', 
-          'LFinger11', 
-          'RFinger22', 
-          'LFinger22', 
-          'RFinger21', 
-          'LFinger12', 
-          'RFinger11', 
-          'LFinger23', 
-          'LThumb1', 
-          'RThumb1', 
-          'RThumb2', 
+        [
+          'HeadYaw',
+          'HeadPitch',
+          'LHipYawPitch',
+          'LHipRoll',
+          'LHipPitch',
+          'LKneePitch',
+          'LAnklePitch',
+          'LAnkleRoll',
+          'RHipYawPitch',
+          'RHipRoll',
+          'RHipPitch',
+          'RKneePitch',
+          'RAnklePitch',
+          'RAnkleRoll',
+          'LShoulderPitch',
+          'LShoulderRoll',
+          'LElbowYaw',
+          'LElbowRoll',
+          'LWristYaw',
+          'LHand',
+          'RShoulderPitch',
+          'RShoulderRoll',
+          'RElbowYaw',
+          'RElbowRoll',
+          'RWristYaw',
+          'RHand',
+          'RFinger23',
+          'RFinger13',
+          'RFinger12',
+          'LFinger21',
+          'LFinger13',
+          'LFinger11',
+          'RFinger22',
+          'LFinger22',
+          'RFinger21',
+          'LFinger12',
+          'RFinger11',
+          'LFinger23',
+          'LThumb1',
+          'RThumb1',
+          'RThumb2',
           'LThumb2'
         ]
     HANDS = \
@@ -302,23 +302,23 @@ class TeamNUSTStatePublisher(ROSPublisher):
     @motion_thread_period.setter
     def motion_thread_period(self, motion_thread_period):
         self._msg.motion_thread_period = int(motion_thread_period)
-        
+
     @property
     def planning_thread_period(self):
-        return self._msg.motion_thread_period
+        return self._msg.planning_thread_period
 
     @planning_thread_period.setter
     def planning_thread_period(self, planning_thread_period):
-        self._msg.planning_thread_period = int(planning_thread_period)        
+        self._msg.planning_thread_period = int(planning_thread_period)
 
     @property
-    def sb_thread_period(self):
-        return self._msg.sb_thread_period
+    def gb_thread_period(self):
+        return self._msg.gb_thread_period
 
-    @sb_thread_period.setter
-    def sb_thread_period(self, sb_thread_period):
-        self._msg.sb_thread_period = int(sb_thread_period)
-        
+    @gb_thread_period.setter
+    def gb_thread_period(self, gb_thread_period):
+        self._msg.gb_thread_period = int(gb_thread_period)
+
     @property
     def vision_thread_period(self):
         return self._msg.vision_thread_period
@@ -326,7 +326,7 @@ class TeamNUSTStatePublisher(ROSPublisher):
     @vision_thread_period.setter
     def vision_thread_period(self, vision_thread_period):
         self._msg.vision_thread_period = int(vision_thread_period)
-        
+
     @property
     def localization_thread_period(self):
         return self._msg.localization_thread_period
@@ -334,7 +334,7 @@ class TeamNUSTStatePublisher(ROSPublisher):
     @localization_thread_period.setter
     def localization_thread_period(self, localization_thread_period):
         self._msg.localization_thread_period = int(localization_thread_period)
-        
+
     @property
     def user_comm_thread_period(self):
         return self._msg.user_comm_thread_period
@@ -342,7 +342,7 @@ class TeamNUSTStatePublisher(ROSPublisher):
     @user_comm_thread_period.setter
     def user_comm_thread_period(self, user_comm_thread_period):
         self._msg.user_comm_thread_period = int(user_comm_thread_period)
-        
+
     @property
     def game_comm_thread_period(self):
         return self._msg.game_comm_thread_period
@@ -350,7 +350,63 @@ class TeamNUSTStatePublisher(ROSPublisher):
     @game_comm_thread_period.setter
     def game_comm_thread_period(self, game_comm_thread_period):
         self._msg.game_comm_thread_period = int(game_comm_thread_period)
-    
+
+    @property
+    def motion_time_taken(self):
+        return self._msg.motion_time_taken
+
+    @motion_time_taken.setter
+    def motion_time_taken(self, motion_time_taken):
+        self._msg.motion_time_taken = int(motion_time_taken)
+
+    @property
+    def planning_time_taken(self):
+        return self._msg.planning_time_taken
+
+    @planning_time_taken.setter
+    def planning_time_taken(self, planning_time_taken):
+        self._msg.planning_time_taken = int(planning_time_taken)
+
+    @property
+    def gb_time_taken(self):
+        return self._msg.gb_time_taken
+
+    @gb_time_taken.setter
+    def gb_time_taken(self, gb_time_taken):
+        self._msg.gb_time_taken = int(gb_time_taken)
+
+    @property
+    def vision_time_taken(self):
+        return self._msg.vision_time_taken
+
+    @vision_time_taken.setter
+    def vision_time_taken(self, vision_time_taken):
+        self._msg.vision_time_taken = int(vision_time_taken)
+
+    @property
+    def localization_time_taken(self):
+        return self._msg.localization_time_taken
+
+    @localization_time_taken.setter
+    def localization_time_taken(self, localization_time_taken):
+        self._msg.localization_time_taken = int(localization_time_taken)
+
+    @property
+    def user_comm_time_taken(self):
+        return self._msg.user_comm_time_taken
+
+    @user_comm_time_taken.setter
+    def user_comm_time_taken(self, user_comm_time_taken):
+        self._msg.user_comm_time_taken = int(user_comm_time_taken)
+
+    @property
+    def game_comm_time_taken(self):
+        return self._msg.game_comm_time_taken
+
+    @game_comm_time_taken.setter
+    def game_comm_time_taken(self, game_comm_time_taken):
+        self._msg.game_comm_time_taken = int(game_comm_time_taken)
+
     @property
     def heart_beat(self):
         return self._msg.heart_beat
@@ -358,7 +414,7 @@ class TeamNUSTStatePublisher(ROSPublisher):
     @heart_beat.setter
     def heart_beat(self, heart_beat):
         self._msg.heart_beat = int(heart_beat)
-        
+
     @property
     def player_number(self):
         return self._msg.player_number
@@ -590,7 +646,7 @@ class TeamInfoPublisher(ROSPublisher):
             tr.shooting_to = Point(robot_info['shootingTo'][0], robot_info['shootingTo'][1], 0.0)
             team_robots.append(tr)
         self._msg.robots = team_robots
-        
+
 class BehaviorInfoPublisher(ROSPublisher):
     def __init__(self, name):
         super(BehaviorInfoPublisher, self).__init__(name, BehaviorInfo)
@@ -618,9 +674,9 @@ class MBInfoPublisher(BehaviorInfoPublisher):
     def __init__(self):
         super(MBInfoPublisher, self).__init__('mb_info')
 
-class SBInfoPublisher(BehaviorInfoPublisher):
+class GBInfoPublisher(BehaviorInfoPublisher):
     def __init__(self):
-        super(SBInfoPublisher, self).__init__('sb_info')
+        super(GBInfoPublisher, self).__init__('gb_info')
 
 class ObsObstaclesPublisher(ROSPublisher):
     def __init__(self):
@@ -705,7 +761,7 @@ class LocalizationStatePublisher(ROSPublisher):
     @landmarks_found.setter
     def landmarks_found(self, landmarks_found):
         self._msg.landmarks_found = bool(landmarks_found)
-        
+
 
 class OccupancyGridPublisher(ROSPublisher):
     def __init__(self):
@@ -753,7 +809,7 @@ class GoalInfoPublisher(ROSPublisher):
         self._msg.found = goal_info['found']
         self._msg.left_post = Point(goal_info['leftPost'][0], goal_info['leftPost'][1], 0.0)
         self._msg.right_post = Point(goal_info['rightPost'][0], goal_info['rightPost'][1], 0.0)
-        self._msg.mid = Point(goal_info['mid'][0], goal_info['mid'][1], 0.0)  
+        self._msg.mid = Point(goal_info['mid'][0], goal_info['mid'][1], 0.0)
         self._msg.poseFromGoal = Pose2D(goal_info['poseFromGoal'][0][0], goal_info['poseFromGoal'][0][1], goal_info['poseFromGoal'][0][2])
         self._msg.goal_type = goal_info['type']
 
@@ -883,7 +939,6 @@ class ImagePublisher:
         np_bytes_array = np.frombuffer(bytearray.fromhex(image_msg), dtype=np.uint8)
         np_image = cv2.imdecode(np_bytes_array, cv2.CV_LOAD_IMAGE_COLOR)
         self._image_msg = self._bridge.cv2_to_imgmsg(np_image)
-        print 'setting new image message'
 
 
 class UnknownLandmarkPublisher:

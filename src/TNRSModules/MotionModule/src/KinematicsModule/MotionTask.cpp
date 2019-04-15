@@ -30,7 +30,7 @@ MotionTask<Scalar>::MotionTask(
   const boost::shared_ptr<KinematicsModule<Scalar> >& km,
   const JointStateType& jsType,
   const MotionTaskType& taskType,
-  const vector<bool>& activeResidual) :
+  const vector<float>& activeResidual) :
   weight(weight),
   gain(gain),
   nResidual(nResidual),
@@ -46,7 +46,7 @@ MotionTask<Scalar>::MotionTask(
   else
     ASSERT(activeJoints.size() == nDof);
   if (this->activeResidual.empty())
-    this->activeResidual = vector<bool>(nResidual, true);
+    this->activeResidual = vector<float>(nResidual, 1.0);
  else
     ASSERT(this->activeResidual.size() == nResidual);
   residual.resize(nResidual, 1);
@@ -97,9 +97,7 @@ MotionTask<Scalar>::getResidual(const Scalar& dt)
 {
   residual = computeResidual(dt);
   for (size_t i = 0; i < nResidual; ++i) {
-    if (!activeResidual[i]) {
-      residual.row(i).setZero();
-    }
+    residual.row(i) *= activeResidual[i];
   }
   return residual;
 }
@@ -114,7 +112,7 @@ PostureTask<Scalar>::PostureTask(
   const Scalar& gain,
   const vector<bool>& activeJoints,
   const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-  const vector<bool>& activeResidual,
+  const vector<float>& activeResidual,
   const JointStateType& jsType) :
   MotionTask<Scalar>(weight, gain, 24, activeJoints, km, jsType, MotionTaskType::posture, activeResidual),
   targetJoints(targetJoints)
@@ -164,7 +162,7 @@ ComTask<Scalar>::ComTask(
   const Scalar& gain,
   const vector<bool>& activeJoints,
   const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-  const vector<bool>& activeResidual,
+  const vector<float>& activeResidual,
   const JointStateType& jsType) :
   MotionTask<Scalar>(weight, gain, 3, activeJoints, km, jsType, MotionTaskType::com, activeResidual),
   baseFrame(baseFrame), baseEE(baseEE), targetCom(targetCom), firstStep(true)
@@ -187,17 +185,17 @@ ComTask<Scalar>::computeResidual(const Scalar& dt)
   if (firstStep) {
     firstStep = false;
     diff =
-      (targetCom - this->km->getComStateWrtFrame(static_cast<LinkChains>(baseFrame), toUType(LegEEs::footBase)).position);
+      (targetCom - this->km->getComStateWrtFrame(static_cast<LinkChains>(baseFrame), toUType(baseEE)).position);
   } else {
     diff =
-      (targetCom - this->km->computeComWrtBase(static_cast<LinkChains>(baseFrame), toUType(LegEEs::footBase), this->jsType));
+      (targetCom - this->km->computeComWrtBase(static_cast<LinkChains>(baseFrame), toUType(baseEE), this->jsType));
   }
   /*for (size_t i = 0; i < this->nResidual; ++i) {
     if (this->activeResidual[i]) {
       diff[i] = fabsf(diff[i]) < 5e-4 ? 0.0 : diff[i];
     }
   }
-  //LOG_INFO("diff:" << diff.transpose())*/
+  LOG_INFO("diff:" << diff.transpose())*/
   return diff / dt;
 }
 
@@ -220,7 +218,7 @@ CartesianTask<Scalar>::CartesianTask(
   const Scalar& gain,
   const vector<bool>& activeJoints,
   const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-  const vector<bool>& activeResidual,
+  const vector<float>& activeResidual,
   const JointStateType& jsType,
   const MotionTaskType& taskType) :
   MotionTask<Scalar>(weight, gain, 6, activeJoints, km, jsType, taskType, activeResidual),
@@ -300,7 +298,7 @@ ContactTask<Scalar>::ContactTask(
   const Scalar& gain,
   const vector<bool>& activeJoints,
   const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-  const vector<bool>& activeResidual,
+  const vector<float>& activeResidual,
   const JointStateType& jsType) :
   CartesianTask<Scalar>(
     chainIndex,
@@ -330,7 +328,7 @@ TorsoTask<Scalar>::TorsoTask(
   const Scalar& gain,
   const vector<bool>& activeJoints,
   const boost::shared_ptr<KinematicsModule<Scalar> >& km,
-  const vector<bool>& activeResidual,
+  const vector<float>& activeResidual,
   const JointStateType& jsType) :
   MotionTask<Scalar>(weight, gain, 6, activeJoints, km, jsType, MotionTaskType::torso, activeResidual),
   endEffector(this->km->getEndEffector(static_cast<LinkChains>(baseFrame), toUType(baseEE))),
@@ -346,12 +344,12 @@ TorsoTask<Scalar>::computeJacobian()
   Matrix<Scalar, 6, Dynamic> j;
   j.resize(6, this->nDof);
   j.setZero();
-  auto ch = this->km->getLinkChain(LinkChains::lLeg);
+  //auto ch = this->km->getLinkChain(LinkChains::lLeg);
+  //j.block(0, ch->start, 6, ch->size) =
+  //  -this->km->computeLimbJ(LinkChains::lLeg, endEffector, this->jsType).block(0, 0, 6, ch->size);
+  auto ch = this->km->getLinkChain(static_cast<LinkChains>(baseFrame));
   j.block(0, ch->start, 6, ch->size) =
-    -this->km->computeLimbJ(LinkChains::lLeg, endEffector, this->jsType).block(0, 0, 6, ch->size);
-  ch = this->km->getLinkChain(LinkChains::rLeg);
-  j.block(0, ch->start, 6, ch->size) =
-    -this->km->computeLimbJ(LinkChains::rLeg, endEffector, this->jsType).block(0, 0, 6, ch->size);
+    -this->km->computeLimbJ(static_cast<LinkChains>(baseFrame), endEffector, this->jsType).block(0, 0, 6, ch->size);
   return j;
 }
 

@@ -173,6 +173,20 @@ void MotionBehavior<Scalar>::setJointCmds(
 }
 
 template <typename Scalar>
+void MotionBehavior<Scalar>::setAdditionalJointOffsets(
+  const Matrix<Scalar, Dynamic, 1>& offsets)
+{
+  mG->setAdditionalJointOffsets(offsets);
+}
+
+template <typename Scalar>
+void MotionBehavior<Scalar>::setAdditionalJointOffset(
+  const Joints& joint, const Scalar& offset)
+{
+  mG->setAdditionalJointOffset(joint, offset);
+}
+
+template <typename Scalar>
 void MotionBehavior<Scalar>::addMotionTask(const boost::shared_ptr<MotionTask<Scalar> >& task)
   { mG->addMotionTask(task); }
 

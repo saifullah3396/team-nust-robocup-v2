@@ -109,7 +109,7 @@ cv::Point_<float> Defender::findBallKickTarget()
   LOG_INFO("Finding ball kick target...")
   bool teammateFound = false;
   cv::Point_<float> kickTarget;
-  auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+  const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
   kickTarget.x = pose.getX();
   kickTarget.y = pose.getY();
   ///< Find a teammate to pass the ball

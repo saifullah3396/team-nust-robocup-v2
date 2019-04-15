@@ -12,6 +12,7 @@
 #include "MotionModule/include/MovementModule/Types/NaoqiFootsteps.h"
 #include "MotionModule/include/MovementModule/Types/NaoqiMoveToward.h"
 #include "MotionModule/include/MovementModule/Types/SpeedWalk.h"
+#include "MotionModule/include/MovementModule/Types/KinResolutionWalk.h"
 #include "BehaviorConfigs/include/MBConfigs/MBMovementConfig.h"
 
 template <typename Scalar>
@@ -35,6 +36,8 @@ boost::shared_ptr<MovementModule<Scalar> > MovementModule<Scalar>::getType(
         mm = new NaoqiMoveToward<Scalar>(motionModule, SPC(NaoqiMoveTowardConfig, cfg)); break;
       case toUType(MBMovementTypes::speedWalk):
         mm = new SpeedWalk<Scalar>(motionModule, SPC(SpeedWalkConfig, cfg)); break;
+      case toUType(MBMovementTypes::kinResolutionWalk):
+        mm = new KinResolutionWalk<Scalar>(motionModule, SPC(KinResolutionWalkConfig, cfg)); break;
   }
   return boost::shared_ptr<MovementModule<Scalar> >(mm);
 }

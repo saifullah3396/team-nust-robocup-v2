@@ -622,7 +622,7 @@ void RobotExtraction::updateRobotsInfo()
         obstacle.front.p1 + obstacle.front.perp * obstacle.depth,
         obstacle.front.p2 + obstacle.front.perp * obstacle.depth
       );
-    auto robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
+    const auto& robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
     obstacle.frontT =
       TNRSLine<float>(
         robotPose2D.transform(obstacle.front.p1),

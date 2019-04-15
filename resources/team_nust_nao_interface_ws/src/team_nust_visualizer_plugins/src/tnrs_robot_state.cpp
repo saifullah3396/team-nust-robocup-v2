@@ -26,7 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -72,22 +72,36 @@ string state_table_names[toUType(StateTables::count)] {
 enum class ModulesStateItems : unsigned int {
   motionThreadPeriod,
   planningThreadPeriod,
-  sbThreadPeriod,
+  gbThreadPeriod,
   visionThreadPeriod,
   localizerThreadPeriod,
   userCommThreadPeriod,
   gameCommThreadPeriod,
-  count,
+  motionThreadTimeTaken,
+  planningThreadTimeTaken,
+  gbThreadTimeTaken,
+  visionThreadTimeTaken,
+  localizerThreadTimeTaken,
+  userCommThreadTimeTaken,
+  gameCommThreadTimeTaken,
+  count
 };
 
 string modules_state_items_names[toUType(ModulesStateItems::count)] {
   "motionThreadPeriod",
   "planningThreadPeriod",
-  "sbThreadPeriod",
+  "gbThreadPeriod",
   "visionThreadPeriod",
   "localizationThreadPeriod",
   "userCommThreadPeriod",
-  "gameCommThreadPeriod"
+  "gameCommThreadPeriod",
+  "motionThreadTimeTaken",
+  "planningThreadTimeTaken",
+  "gbThreadTimeTaken",
+  "visionThreadTimeTaken",
+  "localizationThreadTimeTaken",
+  "userCommThreadTimeTaken",
+  "gameCommThreadTimeTaken"
 };
 
 enum class RobotStateItems : unsigned int {
@@ -149,14 +163,14 @@ string localizer_state_items_names[toUType(LocalizerStateItems::count)] {
 
 enum class BehaviorStateItems : unsigned int {
   planningBehavior,
-  sbBehavior,
+  gbBehavior,
   motionBehavior,
   count
 };
 
 string behavior_state_items_names[toUType(BehaviorStateItems::count)] {
   "planningBehavior",
-  "sbBehavior",
+  "gbBehavior",
   "motionBehavior"
 };
 
@@ -167,18 +181,18 @@ string behavior_state_items_names[toUType(BehaviorStateItems::count)] {
   }
 
 #define SET_ITEM_VALUE(TableIndex, ItemIndex, Value) \
-  data_tables[toUType(TableIndex)]->item(toUType(ItemIndex), 1)->setText(Value); 
+  data_tables[toUType(TableIndex)]->item(toUType(ItemIndex), 1)->setText(Value);
 
 #define SET_ITEM_WIDGET(TableIndex, ItemIndex, Widget) \
-  data_tables[toUType(TableIndex)]->setCellWidget(toUType(ItemIndex), 1, Widget); 
-  
+  data_tables[toUType(TableIndex)]->setCellWidget(toUType(ItemIndex), 1, Widget);
+
 #define GET_ITEM_WIDGET(TableIndex, ItemIndex) \
   data_tables[toUType(TableIndex)]->cellWidget(toUType(ItemIndex), 1)
-  
+
 #define BOOL_TO_STRING(OUT, IN) \
   if (IN) OUT = "True"; \
   else OUT = "False";
-  
+
 RobotState::RobotState(QWidget* parent) : rviz::Panel(parent)
 {
   connectionStatus = new QLabel();
@@ -192,10 +206,10 @@ RobotState::RobotState(QWidget* parent) : rviz::Panel(parent)
     data_tables[i]->setColumnCount(2);
     data_tables[i]->setHorizontalHeaderLabels(labels);
     data_tables[i]->setShowGrid(false);
-    data_tables[i]->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents); 
-    data_tables[i]->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents); 
+    data_tables[i]->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    data_tables[i]->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
   }
-  data_tables[toUType(StateTables::modulesState)]->setRowCount(toUType(TNSPLModules::count));
+  data_tables[toUType(StateTables::modulesState)]->setRowCount(toUType(ModulesStateItems::count));
   data_tables[toUType(StateTables::robotState)]->setRowCount(toUType(RobotStateItems::count));
   data_tables[toUType(StateTables::gameState)]->setRowCount(toUType(GameStateItems::count));
   data_tables[toUType(StateTables::localizerState)]->setRowCount(toUType(LocalizerStateItems::count));
@@ -216,17 +230,17 @@ RobotState::RobotState(QWidget* parent) : rviz::Panel(parent)
   SET_TABLE_NAMES(robotState, RobotStateItems, robot_state_items_names)
   SET_TABLE_NAMES(gameState, GameStateItems, game_state_items_names)
   SET_TABLE_NAMES(localizerState, LocalizerStateItems, localizer_state_items_names)
-  SET_TABLE_NAMES(behaviorState, BehaviorStateItems, behavior_state_items_names)  
+  SET_TABLE_NAMES(behaviorState, BehaviorStateItems, behavior_state_items_names)
 
   SET_ITEM_WIDGET(StateTables::behaviorState, BehaviorStateItems::planningBehavior, new QLabel());
   SET_ITEM_WIDGET(StateTables::behaviorState, BehaviorStateItems::motionBehavior, new QLabel());
-  SET_ITEM_WIDGET(StateTables::behaviorState, BehaviorStateItems::sbBehavior, new QLabel());
-  
+  SET_ITEM_WIDGET(StateTables::behaviorState, BehaviorStateItems::gbBehavior, new QLabel());
+
   tnrs_state_subscriber = nh_.subscribe("/team_nust_state", 1, &RobotState::updateTeamNUSTState, this);
   localizer_state_subscriber = nh_.subscribe("/localization_state", 1, &RobotState::updateLocalizerState, this);
   pb_info_subscriber = nh_.subscribe("/pb_info", 1, &RobotState::updatePBInfo, this);
   mb_info_subscriber = nh_.subscribe("/mb_info", 1, &RobotState::updateMBInfo, this);
-  sb_info_subscriber = nh_.subscribe("/sb_info", 1, &RobotState::updateSBInfo, this);
+  gb_info_subscriber = nh_.subscribe("/gb_info", 1, &RobotState::updateGBInfo, this);
   layout->addWidget(tabs);
   layout->addWidget(connectionStatus);
   setLayout(layout);
@@ -247,8 +261,8 @@ QString RobotState::getBehaviorContent(const team_nust_msgs::BehaviorInfo::Const
   } else {
     ROS_INFO("Unable to parse configuration associated with %s", b_info->name.c_str());
   }
-  
-  QString b_string = 
+
+  QString b_string =
     QString("Name: ") + QString::fromStdString(b_info->name) + QString("\n") +
     QString("State: ") + QString::fromStdString(b_info->fsm_state) + QString("\n") +
     QString("Initiated: ") + QString::number(b_info->initiated) + QString("\n") +
@@ -256,7 +270,7 @@ QString RobotState::getBehaviorContent(const team_nust_msgs::BehaviorInfo::Const
     QString("Paused: ") + QString::number(b_info->paused) + QString("\n") +
     QString("Finished: ") + QString::number(b_info->finished) + QString("\n") +
     QString("Config: ") + QString::fromStdString(config);
-  
+
   return b_string;
 }
 
@@ -276,20 +290,20 @@ void RobotState::updateMBInfo(const team_nust_msgs::BehaviorInfo::ConstPtr& b_in
         setText(getBehaviorContent(b_info));
 }
 
-void RobotState::updateSBInfo(const team_nust_msgs::BehaviorInfo::ConstPtr& b_info)
+void RobotState::updateGBInfo(const team_nust_msgs::BehaviorInfo::ConstPtr& b_info)
 {
   static_cast<QLabel*>(
     GET_ITEM_WIDGET(
-      StateTables::behaviorState, BehaviorStateItems::sbBehavior))->
+      StateTables::behaviorState, BehaviorStateItems::gbBehavior))->
         setText(getBehaviorContent(b_info));
 }
 
 void RobotState::updateTeamNUSTState(const team_nust_msgs::TeamNUSTState::ConstPtr& state)
-{    
+{
   static int prev_beat = 0;
   if (state->heart_beat != prev_beat)
     connectionStatus->setText("Connected to robot.");
-  else 
+  else
     connectionStatus->setText("Disconnected.");
   prev_beat = state->heart_beat;
   setModulesState(state);
@@ -301,11 +315,19 @@ void RobotState::setModulesState(const team_nust_msgs::TeamNUSTState::ConstPtr& 
 {
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::motionThreadPeriod, QString::number(state->motion_thread_period));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::planningThreadPeriod, QString::number(state->planning_thread_period));
-  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::sbThreadPeriod, QString::number(state->sb_thread_period));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::gbThreadPeriod, QString::number(state->gb_thread_period));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::visionThreadPeriod, QString::number(state->vision_thread_period));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::localizerThreadPeriod, QString::number(state->localization_thread_period));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::userCommThreadPeriod, QString::number(state->user_comm_thread_period));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::gameCommThreadPeriod, QString::number(state->game_comm_thread_period));
+
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::motionThreadTimeTaken, QString::number(state->motion_time_taken));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::planningThreadTimeTaken, QString::number(state->planning_time_taken));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::gbThreadTimeTaken, QString::number(state->gb_time_taken));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::visionThreadTimeTaken, QString::number(state->vision_time_taken));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::localizerThreadTimeTaken, QString::number(state->localization_time_taken));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::userCommThreadTimeTaken, QString::number(state->user_comm_time_taken));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::gameCommThreadTimeTaken, QString::number(state->game_comm_time_taken));
 }
 
 void RobotState::setRobotState(const team_nust_msgs::TeamNUSTState::ConstPtr& state)
@@ -340,20 +362,20 @@ void RobotState::setRobotState(const team_nust_msgs::TeamNUSTState::ConstPtr& st
     case 16: posture_state = "DiveSumo"; break;
     case 17: posture_state = "Unknown"; break;
     default: posture_state = "Unknown"; break;
-  }  
+  }
   std::string robot_fallen;
   BOOL_TO_STRING(robot_fallen, state->robot_fallen)
-  
+
   std::string robot_in_motion;
   BOOL_TO_STRING(robot_in_motion, state->robot_in_motion)
-  
+
   std::string foot_on_ground;
   switch (state->foot_on_ground) {
     case 0: foot_on_ground = "Left foot"; break;
     case 1: foot_on_ground = "Right foot"; break;
     case 2: foot_on_ground = "Unknown"; break;
     default: foot_on_ground = "Unknown"; break;
-  }  
+  }
   SET_ITEM_VALUE(StateTables::robotState, RobotStateItems::stiffnessState, QString::fromStdString(stiffness_state));
   SET_ITEM_VALUE(StateTables::robotState, RobotStateItems::postureState, QString::fromStdString(posture_state));
   SET_ITEM_VALUE(StateTables::robotState, RobotStateItems::robotFallen, QString::fromStdString(robot_fallen));
@@ -366,7 +388,7 @@ void RobotState::setGameState(const team_nust_msgs::TeamNUSTState::ConstPtr& sta
   SET_ITEM_VALUE(StateTables::gameState, GameStateItems::playerNumber, QString::number(state->player_number));
   SET_ITEM_VALUE(StateTables::gameState, GameStateItems::teamNumber, QString::number(state->team_number));
   SET_ITEM_VALUE(StateTables::gameState, GameStateItems::teamPort, QString::number(state->team_port));
-    
+
   std::string team_color;
   switch (state->team_color) {
     case 0: team_color = "Blue"; break;
@@ -380,11 +402,11 @@ void RobotState::setGameState(const team_nust_msgs::TeamNUSTState::ConstPtr& sta
     case 8: team_color = "Brown"; break;
     case 9: team_color = "Gray"; break;
     default: team_color = "Unknown"; break;
-  }  
+  }
   SET_ITEM_VALUE(StateTables::gameState, GameStateItems::teamColor, QString::fromStdString(team_color));
-  
 
-  
+
+
   std::string robocup_role;
   switch (state->robocup_role) {
     case 0: robocup_role = "Goal Keeper"; break;
@@ -396,7 +418,7 @@ void RobotState::setGameState(const team_nust_msgs::TeamNUSTState::ConstPtr& sta
     default: robocup_role = "Unknown"; break;
   }
   SET_ITEM_VALUE(StateTables::gameState, GameStateItems::robocupRole, QString::fromStdString(robocup_role));
-   
+
   std::string robot_intention;
   switch (state->robot_intention) {
     case 0: robot_intention = "Nothing in particular"; break;

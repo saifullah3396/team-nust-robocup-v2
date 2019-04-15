@@ -21,13 +21,29 @@
  *
  * @enum MotionRequestIds
  */
-enum class MotionRequestIds {
-  jointRequest,
-  handsRequest,
-  behaviorRequest,
-  killBehavior,
-  killBehaviors
-};
+#ifndef V6_CROSS_BUILD
+  enum class MotionRequestIds {
+    jointRequest,
+    handsRequest,
+    behaviorRequest,
+    killBehavior,
+    killBehaviors
+  };
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE
+    enum class MotionRequestIds {
+      behaviorRequest,  // No actuators regardless
+      killBehavior,
+      killBehaviors
+    };
+  #else
+    enum class MotionRequestIds {
+      behaviorRequest,
+      killBehavior,
+      killBehaviors
+    };
+  #endif
+#endif
 
 /**
  * @class MotionRequest

@@ -26,7 +26,15 @@ bool StiffnessInterp::initiate()
   LOG_INFO("StiffnessInterp.initiate() called...")
   auto& sToReach = getBehaviorCast()->sToReach;
   auto& targetState = getBehaviorCast()->targetState;
-  sI = JOINT_STIFFNESSES_OUT(GBModule);
+  #ifndef V6_CROSS_BUILD
+    sI = JOINT_STIFFNESSES_OUT(GBModule);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+    sI = JOINT_STIFFNESSES_OUT(GBModule);
+    #else
+    sI = JOINT_STIFFNESSES_IN(GBModule);
+    #endif
+  #endif
   sDelta = vector<float>(toUType(Joints::count), NAN);
   #ifndef NAOQI_MOTION_PROXY_AVAILABLE
   unsigned removeCnt = 0;
@@ -48,7 +56,15 @@ bool StiffnessInterp::initiate()
   vector<unsigned> jointIds;
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     if (sToReach[i] != sToReach[i]) continue;
-    sI[i] = JOINT_STIFFNESSES_OUT(GBModule)[i];
+    #ifndef V6_CROSS_BUILD
+      sI[i] = JOINT_STIFFNESSES_OUT(GBModule)[i];
+    #else
+      #ifndef REALTIME_LOLA_AVAILABLE
+        sI[i] = JOINT_STIFFNESSES_OUT(GBModule)[i];
+      #else
+        sI[i] = JOINT_STIFFNESSES_IN(GBModule)[i];
+      #endif
+    #endif
     float diff = sToReach[i] - sI[i];
     if (abs(diff) < 0.005) continue;
     sDelta[i] = diff;

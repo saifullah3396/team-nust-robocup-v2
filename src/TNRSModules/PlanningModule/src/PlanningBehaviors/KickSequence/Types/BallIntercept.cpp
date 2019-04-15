@@ -82,9 +82,9 @@ void BallIntercept::startupAction()
 
 void BallIntercept::ballIncomingAction()
 {
-  auto bInfo = BALL_INFO_IN(PlanningModule);
+  const auto& bInfo = BALL_INFO_IN(PlanningModule);
   #ifdef SIMULATION
-  bInfo.posRel.x = 2.9642791748047; // Fixed ball 
+  bInfo.posRel.x = 2.9642791748047; // Fixed ball
   bInfo.posRel.y = -0.049993824958801;
   // velocity after ball starts rolling an damping equation starts to apply
   bInfo.velRel.x = -1.0867657661438;
@@ -93,9 +93,9 @@ void BallIntercept::ballIncomingAction()
   auto targetRight = Vector2f(0.15f, -0.05f);
   auto targetLeft = Vector2f(0.15f, 0.05f);
   auto dmeSolver = DampedMESolver(
-    targetRight, 
-    Vector2f (bInfo.posRel.x, bInfo.posRel.y), 
-    Vector2f (bInfo.velRel.x, bInfo.velRel.y), 
+    targetRight,
+    Vector2f (bInfo.posRel.x, bInfo.posRel.y),
+    Vector2f (bInfo.velRel.x, bInfo.velRel.y),
     coeffDamping
   );
   dmeSolver.optDef();
@@ -105,10 +105,10 @@ void BallIntercept::ballIncomingAction()
     auto timeToReach = dmeSolver.getTimeToReach();
     cout << "position: " << position << endl;
     cout << "velocity: " << velocity << endl;
-    //cout << "timeToReach: " << timeToReach << endl; 
-    //cout << "dist: " << dmeSolver.getDistFromTarget() << endl; 
+    //cout << "timeToReach: " << timeToReach << endl;
+    //cout << "dist: " << dmeSolver.getDistFromTarget() << endl;
     if (dmeSolver.getDistFromTarget() < 0.02 &&
-        timeToReach > 4.f) 
+        timeToReach > 4.f)
     {
       if (!mbInProgress()) {
         auto kConfig =
@@ -127,7 +127,7 @@ void BallIntercept::ballIncomingAction()
     }
   }
   #else
-  bInfo.posRel.x = 3; // Fixed ball 
+  bInfo.posRel.x = 3; // Fixed ball
   bInfo.posRel.y = -0.05;
   bInfo.velRel.x = -1.5;
   bInfo.velRel.y = 0.f;
@@ -136,9 +136,9 @@ void BallIntercept::ballIncomingAction()
   auto targetRight = Vector2f(0.15f, -0.05f);
   auto targetLeft = Vector2f(0.15f, 0.05f);
   auto dmeSolver = FrictionMESolver(
-    targetRight, 
-    Vector2f (bInfo.posRel.x, bInfo.posRel.y), 
-    Vector2f (bInfo.velRel.x, bInfo.velRel.y), 
+    targetRight,
+    Vector2f (bInfo.posRel.x, bInfo.posRel.y),
+    Vector2f (bInfo.velRel.x, bInfo.velRel.y),
     rollingFriction
   );
   //cout << "bInfo.posRel: " << bInfo.posRel << endl;
@@ -150,7 +150,7 @@ void BallIntercept::ballIncomingAction()
     auto timeToReach = dmeSolver.getTimeToReach();
     //cout << "position: " << position << endl;
     //cout << "velocity: " << velocity << endl;
-    //cout << "timeToReach: " << timeToReach << endl; 
+    //cout << "timeToReach: " << timeToReach << endl;
     if (dmeSolver.getDistFromTarget() < 1.f)
       //cout << "timeToReach: " << timeToReach << endl;
     if (dmeSolver.getDistFromTarget() < 0.02 && timeToReach >= 2.f && timeToReach < 4.f) {
@@ -159,15 +159,15 @@ void BallIntercept::ballIncomingAction()
         position[0] > targetRight[0] - 0.05f &&
         position[0] - targetRight[0] < 0.05f &&
         position[1] - targetRight[1] > -0.025f &&
-        position[1] - targetRight[1] < 0.05f) 
+        position[1] - targetRight[1] < 0.05f)
       {
         supportLeg = CHAIN_L_LEG;
-        
+
       } else if ( // Near left foot
         position[0] > targetLeft[0] - 0.05f &&
         position[0] - targetLeft[0] < 0.05f &&
         position[1] - targetLeft[1] < 0.025f &&
-        position[1] - targetLeft[1] > -0.05f) 
+        position[1] - targetLeft[1] > -0.05f)
       {
         supportLeg = CHAIN_R_LEG;
       }
@@ -175,7 +175,7 @@ void BallIntercept::ballIncomingAction()
       //cout << "position: " << position << endl;
       if (!comToSupport) {
         if (!mbInProgress()) {
-          auto bConfig = 
+          auto bConfig =
             boost::make_shared<MPComControlConfig>(supportLeg, 1.0f);
           setupMBRequest(MOTION_1, bConfig);
         }

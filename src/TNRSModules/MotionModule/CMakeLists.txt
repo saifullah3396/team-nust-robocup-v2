@@ -78,8 +78,8 @@ else()
       libtnrs-behavior-manager.so
       -lnlopt
       -ljsoncpp
-      libqpOASES.so
-      -lalvalue)
+      libqpOASES.so)
+      #-lalvalue)
   else()
       qi_use_lib(
         tnrs-motion-module

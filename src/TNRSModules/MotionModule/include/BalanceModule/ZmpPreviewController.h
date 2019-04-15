@@ -110,13 +110,9 @@ protected:
     AugmentedStateMats(
       const boost::shared_ptr<ProcessModel<Scalar, 3, 1, 1> >& model)
     {
-      cout << "model: " << model << endl;
       matA = model->getStateMatrix();
-      cout << "A: " << matA << endl;
       matB = model->getInputMatrix();
-      cout << "B: " << matB << endl;
       matC = model->getOutputMatrix();
-      cout << "C: " << matC << endl;
       matI << 1.0, Matrix<Scalar, StateSize, 1>::Zero();
       Matrix<Scalar, 1, StateSize> matCA = matC * matA;
       Matrix<Scalar, 1, StateSize + 1> mat1CA;

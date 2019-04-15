@@ -11,7 +11,6 @@
 
 #include <Eigen/Dense>
 #include "MBConfig.h"
-#include "MotionModule/include/PostureModule/PostureDefinitions.h"
 #include "Utils/include/DataHolders/PostureState.h"
 #include "Utils/include/HardwareIds.h"
 

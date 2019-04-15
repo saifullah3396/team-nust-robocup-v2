@@ -46,6 +46,7 @@ public:
     const Json::Value& root = Json::Value(),
     const high_resolution_clock::time_point& refTime = high_resolution_clock::now());
 
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
    * @brief recordJointCmds Logs the joint commands sent by naoqi-based methods
    * @param cmds Joint commands
@@ -61,6 +62,7 @@ public:
     const vector<vector<Scalar> >& time,
     const vector<unsigned>& ids);
   #endif
+  #endif
 
   /**
    * @brief recordJointCmds Logs the joint commands sent by naoqi-based methods
@@ -68,6 +70,7 @@ public:
    * @param time Joint command times
    * @param activeJoints Active joints
    */
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   #ifndef V6_CROSS_BUILD_REMOVED
   void recordJointCmds(
     const AL::ALValue& cmds,
@@ -78,6 +81,7 @@ public:
     const vector<vector<Scalar> >& cmds,
     const vector<vector<Scalar> >& time,
     const Matrix<bool, Dynamic, 1> activeJoints);
+  #endif
   #endif
 
   /**

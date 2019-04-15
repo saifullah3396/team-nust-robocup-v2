@@ -68,11 +68,19 @@ public:
    */
   bool previewsAvailable(const Scalar& timeStep);
 
+  ///< Setters
+  void setRefOffset(const Matrix<Scalar, 2, 1>& refOffet) {
+    this->refOffset = refOffet;
+  }
+
 private:
   std::deque<boost::shared_ptr<TNRSFootstep<Scalar>>>* footsteps;
 
   ///< Pose that determines total transformation
   RobotPose2D<Scalar> globalTransPose;
+
+  ///< Zmp offsets from support foot frame
+  Matrix<Scalar, 2, 1> refOffset = {Matrix<Scalar, 2, 1>::Zero()};
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

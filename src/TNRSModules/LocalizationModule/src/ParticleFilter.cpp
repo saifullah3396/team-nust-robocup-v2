@@ -493,7 +493,7 @@ void ParticleFilter::updateRobotStateEstimate()
 void ParticleFilter::estimateForSideLines()
 {
   ///< Determine the state of the robot and initiate the particle filter
-  auto goalInfo = GOAL_INFO_IN(LocalizationModule);
+  const auto& goalInfo = GOAL_INFO_IN(LocalizationModule);
   ///< Get an estimate using goal information
   if (prevGoalInfoId != 0 && goalInfo.id != prevGoalInfoId) {
     if (goalInfo.found) {
@@ -602,7 +602,7 @@ void ParticleFilter::estimateFromLandmarks()
   //cout << "EstimateFromLandmarks called..." << endl;
   Mat worldImage = Mat(vMapSize, CV_8UC3, Scalar(0, 0, 0));
   auto& lastPose = LAST_POSE_2D_OUT(LocalizationModule);
-  auto useLastEstimate = LOCALIZE_LAST_KNOWN_IN(LocalizationModule);
+  const auto& useLastEstimate = LOCALIZE_LAST_KNOWN_IN(LocalizationModule);
   //cout << "useLastEstimate: " << useLastEstimate << endl;
   //cout << "knownLandmarks: " << knownLandmarks.size() << endl;
   if (!knownLandmarks.empty()) {
@@ -672,7 +672,7 @@ void ParticleFilter::estimateFromLandmarks()
       }
     }
   }
-  auto goalInfo = GOAL_INFO_IN(LocalizationModule);
+  const auto& goalInfo = GOAL_INFO_IN(LocalizationModule);
   if (prevGoalInfoId != 0 && goalInfo.id != prevGoalInfoId) {
     if (goalInfo.found) {
       auto rPose = goalInfo.poseFromGoal;
@@ -1033,7 +1033,7 @@ void ParticleFilter::updateSideConfidence()
 {
   if (!localized)
     return;
-  auto goalInfo = GOAL_INFO_IN(LocalizationModule);
+  const auto& goalInfo = GOAL_INFO_IN(LocalizationModule);
   if (prevGoalInfoId != 0 && goalInfo.id != prevGoalInfoId) {
     if (goalInfo.found && goalInfo.type != GoalPostType::unknown) {
       if (goalInfo.mid == goalInfo.mid) { // NAN

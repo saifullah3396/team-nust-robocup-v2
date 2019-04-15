@@ -36,6 +36,7 @@ typedef boost::shared_ptr<AL::DCMProxy> ALDCMProxyPtr;
  */
 class GBModule : public BaseModule
 {
+  #ifndef V6_CROSS_BUILD
   ///< Memory input connection
   DECLARE_INPUT_CONNECTOR(
     gbThreadPeriod,
@@ -51,7 +52,29 @@ class GBModule : public BaseModule
     whistleDetected,
     gBehaviorInfo
   );
+  #else
+  ///< Memory input connection
+  DECLARE_INPUT_CONNECTOR(
+    gbThreadPeriod,
+    #ifdef REALTIME_LOLA_AVAILABLE
+    jointStiffnessSensors,
+    ledSensors,
+    #endif
+    switchSensors
+  );
 
+  ///< Memory output connection
+  DECLARE_OUTPUT_CONNECTOR(
+    gbThreadTimeTaken,
+    #ifndef REALTIME_LOLA_AVAILABLE
+    jointStiffnessSensors,
+    ledSensors,
+    #endif
+    stiffnessState,
+    whistleDetected,
+    gBehaviorInfo
+  );
+  #endif
 public:
   #ifndef V6_CROSS_BUILD
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
@@ -82,7 +105,7 @@ public:
        const ALDCMProxyPtr& dcmProxy);
     #endif
   #else
-    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+    #ifndef REALTIME_LOLA_AVAILABLE
       /**
        * @brief GBModule Constructor
        *
@@ -99,11 +122,8 @@ public:
        * @brief GBModule Constructor
        *
        * @param parent: parent: Pointer to parent module
-       * @param memoryProxy: Pointer to NaoQi's memory proxy
        */
-      GBModule(
-       void* parent,
-       const qi::AnyObject& memoryProxy);
+      GBModule(void* parent);
     #endif
   #endif
 
@@ -147,16 +167,19 @@ public:
   void setThreadTimeTaken() final;
 
   ///< Getters
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
       boost::shared_ptr<AL::ALMotionProxy> getSharedMotionProxy()
         { return motionProxy; }
-    #else
+    #endif
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
       qi::AnyObject getSharedMotionProxy()
         { return motionProxy; }
     #endif
   #endif
 private:
+  #ifndef V6_CROSS_BUILD
   /**
    * @brief sensorsUpdate Updates sensor values from NaoQi
    *   ALMemory to our local shared memory
@@ -168,10 +191,26 @@ private:
    *   to NaoQi DCM for execution
    */
   void actuatorsUpdate();
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      /**
+       * @brief sensorsUpdate Updates sensor values from NaoQi
+       *   ALMemory to our local shared memory
+       */
+      void sensorsUpdate();
+    #endif
+  #endif
 
   GBManagerPtr gbManager; ///< Static behaviors manager shared object
+
+  #ifndef V6_CROSS_BUILD
   vector<SensorLayerPtr> sensorLayers; ///< Vector of pointer to SensorLayer objects
   vector<ActuatorLayerPtr> actuatorLayers; ///< Vector of pointer to ActuatorLayer objects
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      vector<SensorLayerPtr> sensorLayers; ///< Vector of pointer to SensorLayer objects
+    #endif
+  #endif
 
   #ifndef V6_CROSS_BUILD
     ALMemoryProxyPtr memoryProxy; ///< Pointer to NaoQi internal memory proxy
@@ -180,29 +219,45 @@ private:
       boost::shared_ptr<AL::ALMotionProxy> motionProxy; ///< Pointer to NaoQi internal motion class
     #endif
   #else
-    qi::AnyObject memoryProxy; ///< Pointer to NaoQi internal memory proxy
-    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+    #ifndef REALTIME_LOLA_AVAILABLE
+      qi::AnyObject memoryProxy; ///< Pointer to NaoQi internal memory proxy
       qi::AnyObject motionProxy; ///< Pointer to NaoQi internal motion class
     #endif
   #endif
 
-  /**
-   * @enum GBSensors
-   * @brief Enumeration for the sensors handled by this class
-   */
-  enum class GBSensors : unsigned {
-    jointStiffnesses,
-    led,
-    count
-  };
+  #ifndef V6_CROSS_BUILD
+    /**
+     * @enum GBSensors
+     * @brief Enumeration for the sensors handled by this class
+     */
+    enum class GBSensors : unsigned {
+      jointStiffnesses,
+      led,
+      count
+    };
 
-  /**
-   * @enum GBSensors
-   * @brief Enumeration for the actuators handled by this class
-   */
-  enum class GBActuators : unsigned {
-    jointStiffnesses,
-    led,
-    count
-  };
+    /**
+     * @enum GBSensors
+     * @brief Enumeration for the actuators handled by this class
+     */
+    enum class GBActuators : unsigned {
+      jointStiffnesses,
+      led,
+      count
+    };
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+    /**
+     * @enum GBSensors
+     * @brief Enumeration for the sensors handled by this class
+     */
+    enum class GBSensors : unsigned {
+      jointStiffnesses,
+      led,
+      count
+    };
+
+    //! No actuator layers in V6 in either case
+    #endif
+  #endif
 };

@@ -25,7 +25,15 @@ bool InterpolateLeds::initiate()
   LOG_INFO("InterpolateLeds.initiate() called...")
   auto& inToReach = this->getBehaviorCast()->inToReach;
   auto& timeToReachIn = this->getBehaviorCast()->timeToReachIn;
-  ledsI = LED_SENSORS_OUT(GBModule);
+  #ifndef V6_CROSS_BUILD
+    ledsI = LED_SENSORS_OUT(GBModule);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      ledsI = LED_SENSORS_OUT(GBModule);
+    #else
+      ledsI = LED_SENSORS_IN(GBModule);
+    #endif
+  #endif
   ledsDelta = vector<float>(toUType(LedActuators::count), NAN);
 
   for (int i = 0; i < toUType(LedActuators::count); ++i) {

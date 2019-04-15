@@ -37,7 +37,9 @@ void PrintUtils::startSendingOutputOverNetwork() {
 
 void PrintUtils::addMessage(const std::stringstream& stream) {
   if (!sendOutputOverNetwork) {
+    //#ifndef MODULE_IS_LOCAL_SIMULATED
     cout << stream.str();
+    //#endif
     if (mainLog.is_open()) {
       mainLog << stream.str();
     } else {

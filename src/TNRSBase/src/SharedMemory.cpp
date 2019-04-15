@@ -36,32 +36,35 @@ void
 SharedMemory::init()
 {
   variables.assign(toUType(MemoryVariableIds::count), NULL);
-  int mtPeriod, ptPeriod, sbtPeriod, vtPeriod, ltPeriod, ucommtPeriod, gcommtPeriod;
+  int mtPeriod, ptPeriod, gbtPeriod, vtPeriod, ltPeriod, ucommtPeriod, gcommtPeriod, lolatPeriod;
   GET_CONFIG(
     "BaseModules",
     (int, MotionModule.period, mtPeriod),
     (int, PlanningModule.period, ptPeriod),
-    (int, GBModule.period, sbtPeriod),
+    (int, GBModule.period, gbtPeriod),
     (int, VisionModule.period, vtPeriod),
     (int, LocalizationModule.period, ltPeriod),
     (int, UserCommModule.period, ucommtPeriod),
     (int, GameCommModule.period, gcommtPeriod),
+    (int, LolaModule.period, lolatPeriod),
   )
   DEFINE_VARIABLE(int, motionThreadPeriod, mtPeriod); //15
   DEFINE_VARIABLE(int, planningThreadPeriod, ptPeriod);
-  DEFINE_VARIABLE(int, gbThreadPeriod, sbtPeriod);
+  DEFINE_VARIABLE(int, gbThreadPeriod, gbtPeriod);
   DEFINE_VARIABLE(int, visionThreadPeriod, vtPeriod);
   DEFINE_VARIABLE(int, localizationThreadPeriod, ltPeriod);
   DEFINE_VARIABLE(int, userCommThreadPeriod, ucommtPeriod);
   DEFINE_VARIABLE(int, gameCommThreadPeriod, gcommtPeriod);
+  DEFINE_VARIABLE(int, lolaThreadPeriod, lolatPeriod);
 
   DEFINE_VARIABLE(int, motionThreadTimeTaken, mtPeriod); //15
   DEFINE_VARIABLE(int, planningThreadTimeTaken, ptPeriod);
-  DEFINE_VARIABLE(int, gbThreadTimeTaken, sbtPeriod);
+  DEFINE_VARIABLE(int, gbThreadTimeTaken, gbtPeriod);
   DEFINE_VARIABLE(int, visionThreadTimeTaken, vtPeriod);
   DEFINE_VARIABLE(int, localizationThreadTimeTaken, ltPeriod);
   DEFINE_VARIABLE(int, userCommThreadTimeTaken, ucommtPeriod);
   DEFINE_VARIABLE(int, gameCommThreadTimeTaken, gcommtPeriod);
+  DEFINE_VARIABLE(int, lolaThreadTimeTaken, lolatPeriod);
 
   DEFINE_VARIABLE(int, heartBeat, 0);
   DEFINE_VARIABLE(

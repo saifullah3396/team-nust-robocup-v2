@@ -10,20 +10,31 @@
 #pragma once
 
 #include "ControlModule/include/ActuatorRequests.h"
+#ifndef V6_CROSS_BUILD
 #include "GBModule/include/GBRequest.h"
+#else
+#include "ControlModule/include/LolaRequest.h"
+#endif
 
+#ifndef V6_CROSS_BUILD
+#define LED_REQUEST_BASE GBRequest
+#define LED_REQUEST_BASE_IDS GBRequestIds
+#else //! V6 handles realtime requests through Lola
+#define LED_REQUEST_BASE LolaRequest
+#define LED_REQUEST_BASE_IDS LolaRequestIds
+#endif
 /**
  * @struct LedRequest
  * @brief Defines a basic leds actuation request
  */
-struct LedRequest : public ActuatorRequest, public GBRequest
+struct LedRequest : public ActuatorRequest, public LED_REQUEST_BASE
 {
   /**
    * @brief LedRequest Constructor
    */
   LedRequest() :
     ActuatorRequest(toUType(LedActuators::count)),
-    GBRequest(GBRequestIds::ledRequest)
+    LED_REQUEST_BASE(LED_REQUEST_BASE_IDS::ledRequest)
   {
   }
 
@@ -33,7 +44,7 @@ struct LedRequest : public ActuatorRequest, public GBRequest
    * @return true if successful
    */
   virtual bool assignFromJson(const Json::Value& obj) {
-    if (!GBRequest::assignFromJson(obj))
+    if (!LED_REQUEST_BASE::assignFromJson(obj))
       return false;
     try {
       FOR_EACH(ASSIGN_FROM_JSON_VAR_1, (vector<float>, value, vector<float>(size, NAN)),)
@@ -50,7 +61,7 @@ struct LedRequest : public ActuatorRequest, public GBRequest
    * @return Json object
    */
   virtual Json::Value getJson() {
-    Json::Value obj = GBRequest::getJson();
+    Json::Value obj = LED_REQUEST_BASE::getJson();
     try {
       FOR_EACH(GET_JSON_VAR_1, (vector<float>, value, vector<float>(size, NAN)),);
     } catch (Json::Exception& e) {

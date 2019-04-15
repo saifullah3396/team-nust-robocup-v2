@@ -347,7 +347,7 @@ bool NavigationBehavior::setGoal(const RobotPose2D<float>& goal)
 
 bool NavigationBehavior::findPossibleGoal(RobotPose2D<float>& goal)
 {
-  auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+  const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
   Matrix<float, 2, 1> unit;
   float diffStep = 0.10;
   unit[0] = pose.getX() - goal.getX();
@@ -371,7 +371,7 @@ bool NavigationBehavior::getFootTransform(
 {
   Matrix<float, 4, 4> torsoFrameT;
   //if (!pathPlanned) {
-    auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+    const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
     Matrix<float, 3, 3> rotation;
     MathsUtils::makeRotationZ(rotation, pose.getTheta());
     torsoFrameT =
@@ -418,7 +418,7 @@ bool NavigationBehavior::checkPathValidity()
     }
   } else {
     if (currentStep > 0) {
-      auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+      const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
       RobotPose2D<float> diff;
       diff.x() = pose.getX() - plannedPath[currentStep-1].getX();
       diff.y() = pose.getY() - plannedPath[currentStep-1].getY();

@@ -51,7 +51,7 @@ void FindAndKick::loadExternalConfig()
       (float, FindAndKick.reqVel, reqVel),
     )
     desKickVel.x = reqVel * cos (reqDirection * M_PI / 180.0);
-    desKickVel.y = reqVel * sin (reqDirection * M_PI / 180.0);    
+    desKickVel.y = reqVel * sin (reqDirection * M_PI / 180.0);
     loaded = true;
   }
 }
@@ -117,7 +117,7 @@ void FindAndKick::startupAction()
     auto vRequest = boost::make_shared<SwitchVision>(true);
     BaseModule::publishModuleRequest(vRequest);
     #endif
-    behaviorState = searchBall; 
+    behaviorState = searchBall;
   }
 }
 
@@ -129,7 +129,7 @@ void FindAndKick::searchBallAction()
     killMotionBehavior(MOTION_1);
     behaviorState = headTapWait;
   }
-  auto bInfo = BALL_INFO_IN(PlanningModule);
+  const auto& bInfo = BALL_INFO_IN(PlanningModule);
   if (!bInfo.found) {
     if (!mbInProgress()) {
       //cout << "Setting find ball" << endl;
@@ -147,7 +147,7 @@ void FindAndKick::searchBallAction()
     if (
       bInfo.posRel.x < 0.16f && // 16cm
       fabsf(bInfo.posRel.y) < 0.05f) // 5 cm
-    {  
+    {
       behaviorState = kick;
     }
   }
@@ -156,7 +156,7 @@ void FindAndKick::searchBallAction()
 void FindAndKick::kickAction()
 {
   LOG_INFO("FindAndKick.kickAction()...")
-  auto bInfo = BALL_INFO_IN(PlanningModule);
+  const auto& bInfo = BALL_INFO_IN(PlanningModule);
   if (!mbInProgress()) {
     auto kConfig =
       boost::make_shared <JSOImpKickConfig> (

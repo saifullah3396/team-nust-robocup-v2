@@ -17,6 +17,24 @@
 #include "Utils/include/Constants.h"
 
 template <typename Scalar>
+MotionGenerator<Scalar>::MotionGenerator(
+  MotionModule* motionModule) :
+  MemoryBase(motionModule),
+  motionModule(motionModule),
+  cmdsReceived(false)
+{
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  motionProxy = motionModule->getSharedMotionProxy();
+  #endif
+  kM = motionModule->getKinematicsModule();
+  cycleTime = motionModule->getPeriodMinMS() / 1000.f;
+  jointCmds.resize(toUType(Joints::count));
+  additionalJointOffsets.resize(toUType(Joints::count));
+  additionalJointOffsets.setZero();
+  jointCmds = kM->getJointPositions();
+}
+
+template <typename Scalar>
 void MotionGenerator<Scalar>::update()
 {
   #ifndef NAOQI_MOTION_PROXY_AVAILABLE
@@ -26,11 +44,17 @@ void MotionGenerator<Scalar>::update()
       motionLogger->logJointStates(motionModule->getModuleTime());
     return;
   }
+
   if (!motionTasks.empty()) {
     this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
     jointCmds = this->kM->solveTasksIK(motionTasks, 1);
+    jointCmds += additionalJointOffsets;
+    //cout << "JointCmds lhipyawpitch:" << jointCmds[toUType(Joints::lHipYawPitch)] * 180 / 3.14 << endl;
+    //cout << "JointCmds rhipyawpitch:" << jointCmds[toUType(Joints::rHipYawPitch)] * 180 / 3.14 << endl;
     motionTasks.clear();
   }
+
+  //cout << "Setting joint cmd:" << jointCmds.transpose() << endl;
   auto jr = boost::shared_ptr<JointRequest>(new JointRequest());
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     jr->setValue(jointCmds[i], i);
@@ -44,6 +68,17 @@ void MotionGenerator<Scalar>::update()
   if (motionLogger)
     motionLogger->logJointStates(motionModule->getModuleTime());
   #endif
+}
+
+template <typename Scalar>
+void MotionGenerator<Scalar>::reset()
+{
+  additionalJointOffsets.setZero();
+}
+
+template <typename Scalar>
+void MotionGenerator<Scalar>::setAdditionalJointOffset(const Joints& joint, const Scalar& offset) {
+  this->additionalJointOffsets[toUType(joint)] = offset;
 }
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE

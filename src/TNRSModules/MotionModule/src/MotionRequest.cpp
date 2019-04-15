@@ -11,12 +11,29 @@
 #include "MotionModule/include/JointRequest.h"
 #include "MotionModule/include/HandsRequest.h"
 
-DEFINE_MODULE_REQUEST(
-  MotionRequest, ModuleRequest, MotionRequestPtr,
-  (MotionRequestIds, jointRequest, JointRequest),
-  (MotionRequestIds, handsRequest, HandsRequest),
-  (MotionRequestIds, behaviorRequest, RequestMotionBehavior),
-  (MotionRequestIds, killBehavior, KillMotionBehavior),
-  (MotionRequestIds, killBehaviors, KillMotionBehaviors),
-);
-
+#ifndef V6_CROSS_BUILD
+  DEFINE_MODULE_REQUEST(
+    MotionRequest, ModuleRequest, MotionRequestPtr,
+    (MotionRequestIds, jointRequest, JointRequest),
+    (MotionRequestIds, handsRequest, HandsRequest),
+    (MotionRequestIds, behaviorRequest, RequestMotionBehavior),
+    (MotionRequestIds, killBehavior, KillMotionBehavior),
+    (MotionRequestIds, killBehaviors, KillMotionBehaviors),
+  );
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE
+  DEFINE_MODULE_REQUEST(
+    MotionRequest, ModuleRequest, MotionRequestPtr, // No actuators regardless
+    (MotionRequestIds, behaviorRequest, RequestMotionBehavior),
+    (MotionRequestIds, killBehavior, KillMotionBehavior),
+    (MotionRequestIds, killBehaviors, KillMotionBehaviors),
+  );
+  #else
+  DEFINE_MODULE_REQUEST(
+    MotionRequest, ModuleRequest, MotionRequestPtr,
+    (MotionRequestIds, behaviorRequest, RequestMotionBehavior),
+    (MotionRequestIds, killBehavior, KillMotionBehavior),
+    (MotionRequestIds, killBehaviors, KillMotionBehaviors),
+  );
+  #endif
+#endif

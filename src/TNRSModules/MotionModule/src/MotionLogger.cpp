@@ -33,6 +33,7 @@ MotionLogger<Scalar>::MotionLogger(
 {
 }
 
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
 #ifndef V6_CROSS_BUILD_REMOVED
 void MotionLogger<Scalar>::recordJointCmds(
@@ -132,6 +133,7 @@ void MotionLogger<Scalar>::recordJointCmds(
     }
   }
 }
+#endif
 
 template <typename Scalar>
 void MotionLogger<Scalar>::logJointStates(const Scalar& time)

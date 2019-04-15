@@ -106,7 +106,9 @@ void VisionTestSuite::testSegmentation()
   value["RegionSegmentation"]["drawHorizontalLines"] = 1;
   value["RegionSegmentation"]["drawVerticalLines"] = 1;
   value["RegionSegmentation"]["drawPoints"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["RegionSegmentation"]["displayOutput"] = 1;
+  #endif
   value["RegionSegmentation"]["displayInfo"] = 1;
   DebugBase::processDebugMsg(value);
   /*if (!mbInProgress()) {
@@ -139,8 +141,10 @@ void VisionTestSuite::testFieldExtraction()
   value["FieldExtraction"]["drawFiltPoints"] = 1;
   value["FieldExtraction"]["drawBorder"] = 1;
   value["FieldExtraction"]["drawBorderLines"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["FieldExtraction"]["displayOutput"] = 1;
-  value["LinesExtraction"]["displayInfo"] = 1;
+  #endif
+  value["FieldExtraction"]["displayInfo"] = 1;
   DebugBase::processDebugMsg(value);
 }
 
@@ -171,7 +175,10 @@ void VisionTestSuite::testGoalExtraction()
   value["GoalExtraction"]["drawGoalBaseWindows"] = 1;
   value["GoalExtraction"]["drawShiftedBorderLines"] = 1;
   value["GoalExtraction"]["drawGoalPostBases"] = 1;
+  value["GoalExtraction"]["displayInfo"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["GoalExtraction"]["displayOutput"] = 1;
+  #endif
   DebugBase::processDebugMsg(value);
 }
 
@@ -197,7 +204,9 @@ void VisionTestSuite::testBallExtraction()
   value["BallExtraction"]["drawPredictionState"] = 1;
   value["BallExtraction"]["drawScannedRegions"] = 1;
   value["BallExtraction"]["drawBallContour"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["BallExtraction"]["displayOutput"] = 1;
+  #endif
   value["BallExtraction"]["displayInfo"] = 1;
   DebugBase::processDebugMsg(value);
 }
@@ -225,7 +234,10 @@ void VisionTestSuite::testRobotExtraction()
   value["RobotExtraction"]["drawJerseyRegions"] = 1;
   value["RobotExtraction"]["drawRobotRegions"] = 1;
   value["RobotExtraction"]["drawStrayRegions"] = 1;
+  value["RobotExtraction"]["displayInfo"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["RobotExtraction"]["displayOutput"] = 1;
+  #endif
   DebugBase::processDebugMsg(value);
 }
 
@@ -259,7 +271,9 @@ void VisionTestSuite::testLinesExtraction()
   value["LinesExtraction"]["drawCorners"] = 1;
   value["LinesExtraction"]["drawCircle"] = 1;
   value["LinesExtraction"]["drawUnknownLandmarks"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["LinesExtraction"]["displayOutput"] = 1;
+  #endif
   value["LinesExtraction"]["displayInfo"] = 1;
   DebugBase::processDebugMsg(value);
   BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(false));

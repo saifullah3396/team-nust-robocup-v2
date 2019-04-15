@@ -11,12 +11,14 @@
 
 #pragma once
 
+#include <msgpack/include/msgpack.hpp>
 #include <queue>
 #ifndef V6_CROSS_BUILD
   #include <alproxies/almemoryproxy.h>
   #include <alproxies/dcmproxy.h>
 #else
   #include <qi/anyobject.hpp>
+  #include <qi/alvalue.h>
 #endif
 #include "ControlModule/include/ActuatorRequests.h"
 #include "Utils/include/PrintUtils.h"
@@ -36,6 +38,7 @@ typedef boost::shared_ptr<vector<float> > vectorFloatPtr;
   #define NAOQI_MEMORY_PROXY_TYPE qi::AnyObject
 #endif
 
+#ifndef V6_CROSS_BUILD
 #define DEFINE_SENSOR_LAYER(ClassName, FileName) \
   class ClassName : public SensorLayer \
   { \
@@ -51,6 +54,38 @@ typedef boost::shared_ptr<vector<float> > vectorFloatPtr;
       init(FileName); \
     } \
 };
+#else
+#ifndef REALTIME_LOLA_AVAILABLE //! Use memory proxy if lola is not available, only in V6s
+#define DEFINE_SENSOR_LAYER(ClassName, FileName) \
+class ClassName : public SensorLayer \
+{ \
+public: \
+  /** \
+   * Constructor \
+   * \
+   * @param memoryProxy: pointer to NaoQi's memory proxy. \
+   */ \
+  ClassName(const NAOQI_MEMORY_PROXY_TYPE& memoryProxy) : \
+    SensorLayer(memoryProxy) \
+  { \
+    init(FileName); \
+  } \
+};
+#else
+#define DEFINE_SENSOR_LAYER(ClassName, FileName) \
+class ClassName : public SensorLayer \
+{ \
+public: \
+  /** \
+   * Constructor \
+   */ \
+  ClassName() : SensorLayer() \
+  { \
+    init(FileName); \
+  } \
+};
+#endif
+#endif
 
 #ifndef V6_CROSS_BUILD
   #define DEFINE_ACTUATOR_LAYER(ClassName, FileName) \
@@ -96,20 +131,46 @@ public:
    * @brief SensorLayer Constructor
    * @param memoryProxy Naoqi memory proxy
    */
-  SensorLayer(const NAOQI_MEMORY_PROXY_TYPE& memoryProxy) :
-    memoryProxy(memoryProxy)
-  {
-  }
+  #ifndef V6_CROSS_BUILD
+    SensorLayer(const NAOQI_MEMORY_PROXY_TYPE& memoryProxy) :
+      memoryProxy(memoryProxy)
+    {
+    }
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      SensorLayer(const NAOQI_MEMORY_PROXY_TYPE& memoryProxy) :
+        memoryProxy(memoryProxy)
+      {
+      }
+    #else
+      SensorLayer() {}
+    #endif
+  #endif
 
   /**
    * @brief ~SensorLayer Destructor
    */
   virtual ~SensorLayer() {}
 
-  /**
-   * @brief update Updates the sensor values from NaoQi ALMemory
-   */
-  void update();
+  #ifndef V6_CROSS_BUILD
+    /**
+     * @brief update Updates the sensor values from NaoQi ALMemory
+     */
+    void update();
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+    /**
+     * @brief update Updates the sensor values from NaoQi ALMemory
+     */
+    void update();
+    #else
+    /**
+     * @brief update Updates the sensor values from the input map
+     * @param map The map received from Lola
+     */
+    void update(const msgpack::object_map& map);
+    #endif
+  #endif
 
   /**
    * @brief setSensorHandle Sets the sensor container
@@ -121,25 +182,55 @@ public:
     this->sensorHandle->resize(size);
   }
 
-  /**
-   * @brief makeSensorLayer Constructs a sensor layer for given index
-   *
-   * @param sensorIndex Index of the sensor group
-   * @param sensorHandle Pointer to the object recieving sensor values
-   * @param memoryProxy Pointer to Naoqi memory Proxy
-   *
-   * @return boost::shared_ptr<SensorLayer>
-   */
-  static boost::shared_ptr<SensorLayer> makeSensorLayer(
-    const unsigned& sensorIndex,
-    vector<float>* sensorHandle,
-    const NAOQI_MEMORY_PROXY_TYPE& memoryProxy);
-
+  #ifndef V6_CROSS_BUILD
+    /**
+     * @brief makeSensorLayer Constructs a sensor layer for given index
+     *
+     * @param sensorIndex Index of the sensor group
+     * @param sensorHandle Pointer to the object recieving sensor values
+     * @param memoryProxy Pointer to Naoqi memory Proxy
+     *
+     * @return boost::shared_ptr<SensorLayer>
+     */
+    static boost::shared_ptr<SensorLayer> makeSensorLayer(
+      const unsigned& sensorIndex,
+      vector<float>* sensorHandle,
+      const NAOQI_MEMORY_PROXY_TYPE& memoryProxy);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      /**
+       * @brief makeSensorLayer Constructs a sensor layer for given index
+       *
+       * @param sensorIndex Index of the sensor group
+       * @param sensorHandle Pointer to the object recieving sensor values
+       * @param memoryProxy Pointer to Naoqi memory Proxy
+       *
+       * @return boost::shared_ptr<SensorLayer>
+       */
+      static boost::shared_ptr<SensorLayer> makeSensorLayer(
+        const unsigned& sensorIndex,
+        vector<float>* sensorHandle,
+        const NAOQI_MEMORY_PROXY_TYPE& memoryProxy);
+    #else
+      /* @brief makeSensorLayer Constructs a sensor layer for given index
+      *
+      * @param sensorIndex Index of the sensor group
+      * @param sensorHandle Pointer to the object recieving sensor values
+      *
+      * @return boost::shared_ptr<SensorLayer>
+      */
+      static boost::shared_ptr<SensorLayer> makeSensorLayer(
+        const unsigned& sensorIndex,
+        vector<float>* sensorHandle);
+    #endif
+  #endif
 protected:
-  /**
-   * @brief setSensorPtr Updates sensor pointers from naoqi memory
-   */
-  void setSensorPtr();
+  #ifndef V6_CROSS_BUILD //! Pointers are only available in V5s
+    /**
+     * @brief setSensorPtr Updates sensor pointers from naoqi memory
+     */
+    void setSensorPtr();
+  #endif
 
   /**
    * @brief init Initializes the sensor class for given
@@ -150,9 +241,18 @@ protected:
 private:
   vector<string> keys; ///< Vector of sensor keys
   size_t size; ///< Size of Sensors
-  NAOQI_MEMORY_PROXY_TYPE memoryProxy; ///< Pointer to NaoQi internal memory
-  vector<float>* sensorHandle; ///< Extracted values of the sensors
+  #ifndef V6_CROSS_BUILD
+    NAOQI_MEMORY_PROXY_TYPE memoryProxy; ///< Pointer to NaoQi internal memory
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      //! Only require memory proxy if lola support is not used
+      NAOQI_MEMORY_PROXY_TYPE memoryProxy;
+    #endif
+  #endif
+  #ifndef V6_CROSS_BUILD //! Only available in V5s
   vector<float*> sensorPtrs; ///< Pointers to sensors of NaoQi ALMemory
+  #endif
+  vector<float>* sensorHandle; ///< Extracted values of the sensors
 };
 
 typedef boost::shared_ptr<SensorLayer> SensorLayerPtr;
@@ -169,10 +269,22 @@ public:
    * @param memoryProxy Naoqi memory proxy
    * @param type Type of joint sensors
    */
-  JointSensorsLayer(
-    const NAOQI_MEMORY_PROXY_TYPE& memoryProxy,
-    const JointSensorTypes& type) :
-    SensorLayer(memoryProxy)
+  #ifndef V6_CROSS_BUILD //! V5s always use memory proxy for sensors
+    JointSensorsLayer(
+      const NAOQI_MEMORY_PROXY_TYPE& memoryProxy,
+      const JointSensorTypes& type) :
+      SensorLayer(memoryProxy)
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE //! Use memory proxy without lola
+      JointSensorsLayer(
+        const NAOQI_MEMORY_PROXY_TYPE& memoryProxy,
+        const JointSensorTypes& type) :
+        SensorLayer(memoryProxy)
+    #else //! Else use lola map
+      JointSensorsLayer(
+        const JointSensorTypes& type)
+    #endif
+  #endif
   {
     string file;
     switch (type) {
@@ -234,7 +346,9 @@ public:
       //cout << "path:" << path << endl;
       ifstream config(path, ifstream::binary);
       config >> json;
+      #ifndef V6_CROSS_BUILD
       alias = json["alias"].asString();
+      #endif
       if (json["keys"].size() > 0) {
         auto keysObj = json["keys"];
         size = keysObj.size();
@@ -301,10 +415,10 @@ private:
 
   vector<string> keys; ///< Vector to memory keys
   unsigned size; ///< Size of actuators
-  string alias; ///< Unique actuation request command alias
   ThreadSafeQueue<ActuatorRequestPtr> requests; ///< Actuator requests queue
-  float dcmTime; ///< NaoQi DCM architecture time
   #ifndef V6_CROSS_BUILD
+  string alias; ///< Unique actuation request command alias
+  float dcmTime; ///< NaoQi DCM architecture time
   AL::ALValue commands; ///< Commands sent to DCM
   ALDCMProxyPtr dcmProxy; ///< Pointer to NaoQi DCM
   #endif

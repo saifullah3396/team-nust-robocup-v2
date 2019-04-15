@@ -4,7 +4,7 @@
  * This file implements the class ZmpPreviewController
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date Jul 22 2018 
+ * @date Jul 22 2018
  */
 
 #include "MotionModule/include/BalanceModule/ZmpPreviewController.h"
@@ -75,10 +75,7 @@ ZmpPreviewController<Scalar>::initController()
     P = dare(obsA, obsB, obsQ, 10).transpose();
   obsGain = pow((10 + (obsB.transpose() * P * obsB)(0, 0)), -1) * obsB.transpose() * P * obsA;
   matAl = matA - obsGain * matC;
-  cout << "obsGain" << obsGain << endl;
-  cout << "matAl\n" << matAl << endl;
   EigenSolver<Matrix<Scalar, 3, 3> > eigensolver(matAl);
-  cout << eigensolver.eigenvalues() << endl;
 }
 
 template<typename Scalar>

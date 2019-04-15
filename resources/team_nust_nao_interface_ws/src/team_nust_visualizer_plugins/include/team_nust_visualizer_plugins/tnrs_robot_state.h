@@ -26,7 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 #pragma once
 
 #include <std_msgs/String.h>
@@ -44,14 +44,14 @@ class QTableWidgetItem;
 
 namespace team_nust_visualizer_plugins
 {
-  
+
 class RobotState: public rviz::Panel
 {
 Q_OBJECT
 public:
   RobotState(QWidget* parent = 0);
   ~RobotState() {}
-  
+
 private:
   void updateTeamNUSTState(const team_nust_msgs::TeamNUSTState::ConstPtr& state);
   void setModulesState(const team_nust_msgs::TeamNUSTState::ConstPtr& state);
@@ -61,28 +61,28 @@ private:
   void updateLocalizerState(const team_nust_msgs::LocalizationState::ConstPtr& state);
   void updatePBInfo(const team_nust_msgs::BehaviorInfo::ConstPtr& b_info);
   void updateMBInfo(const team_nust_msgs::BehaviorInfo::ConstPtr& b_info);
-  void updateSBInfo(const team_nust_msgs::BehaviorInfo::ConstPtr& b_info);
-   
+  void updateGBInfo(const team_nust_msgs::BehaviorInfo::ConstPtr& b_info);
+
   // The current name of the output topic.
   QString input_topic_;
-  
+
   // Data table
   std::vector<QTableWidget*> data_tables;
-  
+
   // Connection status
   QLabel* connectionStatus;
-  
+
   // Subscriber for robot state topic
   ros::Subscriber tnrs_state_subscriber;
-  
+
   // Subscriber for behaviors info topic
   ros::Subscriber pb_info_subscriber;
   ros::Subscriber mb_info_subscriber;
-  ros::Subscriber sb_info_subscriber;
-  
+  ros::Subscriber gb_info_subscriber;
+
   // Subscriber for localizer state
   ros::Subscriber localizer_state_subscriber;
-  
+
   // The ROS node handle.
   ros::NodeHandle nh_;
 };

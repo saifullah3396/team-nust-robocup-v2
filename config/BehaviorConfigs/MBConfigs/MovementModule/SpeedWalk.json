@@ -4,8 +4,10 @@
     "maxRuntime" : 3600,
     "type" : 2,
     "logData" : false,
-    "velocityInput" : [0.25, 0.0, 0.0],
-    "minimizeJointVels" : true,
-    "maxNSteps" : 10,
-    "keepTorsoUpright" : true
+    "velocityInput" : [0.0, 0.5, 0.0],
+    "refOffset" : [0.0, -0.015],
+    "minimizeJointVels" : false,
+    "maxNSteps" : 2223,
+    "keepTorsoUpright" : true,
+    "addHipCompensation" : false
 }

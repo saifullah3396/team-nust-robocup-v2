@@ -64,4 +64,4 @@ elif [ "$ROBOT" = "Nu-15" ]; then
 fi
 
 LOG_DIR_PATH=$PATH_TO_TEAM_NUST_DIR/logs/Robots/Nu-1$ROBOT_NUM
-rsync -r nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/logs/* $LOG_DIR_PATH -v
+rsync -r nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/team_nust/logs/* $LOG_DIR_PATH -v

@@ -36,6 +36,7 @@ typedef boost::shared_ptr<PBManager> PBManagerPtr;
  */
 class PlanningModule : public BaseModule
 {
+  #ifndef V6_CROSS_BUILD
   DECLARE_INPUT_CONNECTOR(
     planningThreadPeriod,
     landmarksFound,
@@ -84,6 +85,60 @@ class PlanningModule : public BaseModule
     moveTarget,
     worldBallInfo
   );
+  #else
+  DECLARE_INPUT_CONNECTOR(
+    planningThreadPeriod,
+    landmarksFound,
+    stiffnessState,
+    postureState,
+    robotPose2D,
+    ballInfo,
+    robotLocalized,
+    jointPositionSensors,
+    jointStiffnessSensors,
+    inertialSensors,
+    fsrSensors,
+    ledSensors,
+    whistleDetected,
+    robotFallen,
+    playerNumber,
+    teamNumber,
+    teamColor,
+    goalInfo,
+    teamRobots,
+    obstaclesObs,
+    gBehaviorInfo,
+    mBehaviorInfo,
+    occupancyMap,
+    nFootsteps,
+    lFootOnGround,
+    rFootOnGround,
+    robotInMotion,
+    footOnGround,
+    touchSensors,
+    switchSensors
+   );
+  DECLARE_OUTPUT_CONNECTOR(
+    planningThreadTimeTaken,
+    planningState,
+    robocupRole,
+    robotIntention,
+    robotOnSideLine,
+    localizeWithLastKnown,
+    pBehaviorInfo,
+    #ifndef REALTIME_LOLA_AVAILABLE
+    jointTemperatureSensors,
+    jointCurrentSensors,
+    touchSensors,
+    switchSensors,
+    batterySensors,
+    sonarSensors,
+    #endif
+    gameData,
+    moveTarget,
+    worldBallInfo
+  );
+  #endif
 public:
   /**
    * Constructor
@@ -91,9 +146,13 @@ public:
    * @param parent: Pointer to parent
    */
   #ifndef V6_CROSS_BUILD
-  PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy);
+    PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy);
   #else
-  PlanningModule(void* parent, const qi::AnyObject& memoryProxy); ///< New syntax
+    #ifndef REALTIME_LOLA_AVAILABLE
+      PlanningModule(void* parent, const qi::AnyObject& memoryProxy); ///< New syntax
+    #else
+      PlanningModule(void* parent); ///< New syntax
+    #endif
   #endif
 
   /**
@@ -147,49 +206,85 @@ public:
    *
    * @return void
    */
-  void
-  updateWorldBallInfo();
+  void updateWorldBallInfo();
 private:
-  /**
-   * Updates sensor values from NaoQi ALMemory to our local
-   * shared memory
-   */
-  void sensorsUpdate();
+  #ifndef V6_CROSS_BUILD
+    /**
+     * Updates sensor values from NaoQi ALMemory to our local
+     * shared memory
+     */
+    void sensorsUpdate();
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      /**
+       * Updates sensor values from NaoQi ALMemory to our local
+       * shared memory
+       */
+      void sensorsUpdate();
+    #endif
+  #endif
 
+  #ifndef V6_CROSS_BUILD
   /**
    * Sets up the team configuration data to be inserted in ALMemory
    * for robocup game controller
    *
    * @return void
    */
-  void
-  setupRoboCupDataHandler();
+  void setupRoboCupDataHandler();
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      void setupRoboCupDataHandler();
+    #endif
+  #endif
 
   ///< Planning behaviors manager
   PBManagerPtr pbManager;
 
-  ///< Vector of pointer to SensorLayer objects
-  vector<SensorLayerPtr> sensorLayers;
+  #ifndef V6_CROSS_BUILD
+    ///< Vector of pointer to SensorLayer objects
+    vector<SensorLayerPtr> sensorLayers;
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      ///< Vector of pointer to SensorLayer objects
+      vector<SensorLayerPtr> sensorLayers;
+    #endif
+  #endif
 
   ///< Pointer to base path planner
   PathPlannerSpace::PathPlannerPtr pathPlanner;
 
   #ifndef V6_CROSS_BUILD
-  ///< Pointer to NaoQi internal memory proxy
-  ALMemoryProxyPtr memoryProxy;
+    ///< Pointer to NaoQi internal memory proxy
+    ALMemoryProxyPtr memoryProxy;
   #else
-  qi::AnyObject memoryProxy;
+    #ifndef REALTIME_LOLA_AVAILABLE
+      qi::AnyObject memoryProxy;
+    #endif
   #endif
 
   ///< Team ball tracker class object.
   boost::shared_ptr<WorldBallTracker> wbTracker;
 
-  enum class PlanningSensors : unsigned {
-    jointTemps,
-    jointCurrents,
-    touchSensors,
-    switchSensors,
-    batterSensors,
-    count
-  };
+  #ifndef V6_CROSS_BUILD
+    enum class PlanningSensors : unsigned {
+      jointTemps,
+      jointCurrents,
+      touchSensors,
+      switchSensors,
+      batterSensors,
+      count
+    };
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      enum class PlanningSensors : unsigned {
+        jointTemps,
+        jointCurrents,
+        touchSensors,
+        switchSensors,
+        batterSensors,
+        count
+      };
+    #endif
+  #endif
 };

@@ -1,7 +1,7 @@
 /**
- * @file MotionModule/include/MovementModule/Types/SpeedWalk.h
+ * @file MotionModule/include/MovementModule/Types/KinResolutionWalk.h
  *
- * This file declares the class SpeedWalk
+ * This file declares the class KinResolutionWalk
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 21 Jul 2018
@@ -15,8 +15,6 @@
 #include "MotionModule/include/MovementModule/MovementModule.h"
 
 template <typename Scalar>
-class MotionTask;
-template <typename Scalar>
 class ZmpPreviewController;
 template <typename Scalar>
 struct WalkParameters;
@@ -24,30 +22,30 @@ template <typename Scalar>
 class WalkZmpRefGen;
 template <typename Scalar>
 struct TNRSFootstep;
-struct SpeedWalkConfig;
+struct KinResolutionWalkConfig;
 
 /**
- * @class SpeedWalk
+ * @class KinResolutionWalk
  * @brief A class for that defines a robot walk based on input desired speed
  */
 template <typename Scalar>
-class SpeedWalk : public MovementModule<Scalar>
+class KinResolutionWalk : public MovementModule<Scalar>
 {
 public:
   /**
-   * @brief SpeedWalk Constructor
+   * @brief KinResolutionWalk Constructor
    *
    * @param motionModule Pointer to base motion module
    * @param config Configuration of this behavior
    */
-  SpeedWalk(
+  KinResolutionWalk(
     MotionModule* motionModule,
-    const boost::shared_ptr<SpeedWalkConfig>& config);
+    const boost::shared_ptr<KinResolutionWalkConfig>& config);
 
   /**
-   * @brief ~SpeedWalk Destructor
+   * @brief ~KinResolutionWalk Destructor
    */
-  ~SpeedWalk() final;
+  ~KinResolutionWalk() final;
 
   /**
    * @brief initiate See Behavior::initiate()
@@ -76,9 +74,9 @@ public:
   void loadExternalConfig() final;
 private:
   /**
-   * @brief getBehaviorCast Returns the cast of config to SpeedWalkConfigPtr
+   * @brief getBehaviorCast Returns the cast of config to KinResolutionWalkConfigPtr
    */
-  boost::shared_ptr<SpeedWalkConfig> getBehaviorCast();
+  boost::shared_ptr<KinResolutionWalkConfig> getBehaviorCast();
   boost::shared_ptr<WalkParameters<Scalar> > params;
 
   void addStep(
@@ -146,43 +144,20 @@ private:
   ///< The index of step trajectory in the cycle
   unsigned stepTrajIndex = {0};
 
-  ///< Hip compensation task targe joints
-  Matrix<Scalar, Dynamic, 1> hcTargetJoints;
-
-  ///< Hip compensation task active joints
-  vector<bool> hcActiveJoints;
-
   ///< Current base support foot
   RobotFeet currentBase;
-
-  ///< Tasks vector for solving whole-body inverse kinematics
-  vector<boost::shared_ptr<MotionTask<Scalar>>> tasks;
 
   ///< Accumulative orientations of feet
   Matrix<Scalar, 4, 4> globalFeetOrientation;
 
-  ///< Task weights and gains
-  static vector<Scalar> taskWeights;
-  static vector<Scalar> taskGains;
   static Scalar maxHipLOffset;
   static Scalar maxHipROffset;
-  Scalar hipInitPos;
 
   ///< Log for storing center of mass data
   fstream comLog;
 
   ///< Log for storing zmp ref data
   fstream zmpRegLog;
-
-  enum IkTasks : unsigned int {
-    com,
-    minJointVel,
-    prevStep,
-    step,
-    hipCompensation,
-    torso,
-    count
-  };
 };
 
-typedef boost::shared_ptr<SpeedWalk<MType> > SpeedWalkPtr;
+typedef boost::shared_ptr<KinResolutionWalk<MType> > KinResolutionWalkPtr;

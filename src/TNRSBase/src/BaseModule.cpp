@@ -191,8 +191,6 @@ void BaseModule::onIterationComplete()
   auto timeNow = high_resolution_clock::now();
   lastIterationTimeMS =
     duration_cast < milliseconds > (timeNow - iterationStartTime).count();
-  //if (moduleName == "LocalizationModule")
-  //    LOG_INFO(moduleName << " took time: " << lastIterationTimeMS)
   if (lastIterationTimeMS < periodMinMS) {
     int waitTimeMS = periodMinMS - lastIterationTimeMS;
     usleep(waitTimeMS * 1000);

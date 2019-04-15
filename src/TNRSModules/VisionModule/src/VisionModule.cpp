@@ -452,7 +452,7 @@ void VisionModule::sendImages()
     BaseModule::publishModuleRequest(request);
   } else {
     Mat image = FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex));
-    cv::resize(image, image, Size(160, 120));
+    //cv::resize(image, image, Size(160, 120));
     UserCommRequestPtr request =
       boost::make_shared<SendImageRequest>(image);
     BaseModule::publishModuleRequest(request);

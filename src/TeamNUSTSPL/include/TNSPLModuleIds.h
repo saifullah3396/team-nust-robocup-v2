@@ -23,5 +23,8 @@ enum class TNSPLModules
   localization,
   gameComm,
   userComm,
+  #ifdef V6_CROSS_BUILD
+  lola,
+  #endif
   count
 };

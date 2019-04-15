@@ -25,6 +25,7 @@
 ///< Forward declaration
 template <typename Scalar>
 class MotionTask;
+enum class Joints : unsigned int;
 
 /**
  * @class MotionGenerator
@@ -36,39 +37,32 @@ class MotionGenerator : public MemoryBase
 {
 public:
   /**
-   * Constructor
+   * @brief MotionGenerator Constructor
    *
    * @param motionModule: Pointer to base motion module
    */
-  MotionGenerator(MotionModule* motionModule) :
-    MemoryBase(motionModule),
-    motionModule(motionModule),
-    cmdsReceived(false)
-  {
-    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    motionProxy = motionModule->getSharedMotionProxy();
-    #endif
-    kM = motionModule->getKinematicsModule();
-    cycleTime = motionModule->getPeriodMinMS() / 1000.f;
-    jointCmds.resize(toUType(Joints::count));
-    jointCmds = kM->getJointPositions();
-  }
+  MotionGenerator(MotionModule* motionModule);
 
   /**
-   * Destructor
+   * @brief ~MotionGenerator Destructor
    */
-  virtual
-  ~MotionGenerator()
-  {
-  }
+  virtual ~MotionGenerator() {}
 
   /**
-   * Transforms requested tasks to joint requests and sends it to dcm
+   * @brief update Transforms requested tasks to joint
+   *   requests and sends it to dcm
    */
   void update();
 
+
   /**
-   * Takes a vector of joint positions to be called at given times
+   * @brief reset Resets the commanded joint values
+   */
+  void reset();
+
+  /**
+   * @brief runKeyFrameMotion Takes a vector of joint positions to be
+   *   called at given times
    *
    * @param joints: Required joint positions at given times
    * @param times: Times vector
@@ -76,7 +70,8 @@ public:
    * @return The cumulative time of this keyframe motion
    */
   Scalar runKeyFrameMotion(
-    const vector<Matrix<Scalar, Dynamic, 1> >& joints, const Matrix<Scalar, Dynamic, 1>& times);
+    const vector<Matrix<Scalar, Dynamic, 1> >& joints,
+    const Matrix<Scalar, Dynamic, 1>& times);
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
@@ -275,6 +270,21 @@ public:
   }
 
   /**
+   * @brief setAdditionalJointOffsets Sets the offsets for all joints for this cycle
+   * @param offsets A vector of offsets
+   */
+  void setAdditionalJointOffsets(const Matrix<Scalar, Dynamic, 1>& offsets) {
+    this->additionalJointOffsets = offsets;
+  }
+
+  /**
+   * @brief setAdditionalJointOffset Sets the joint offset for this cycle
+   * @param joint Joint index
+   * @param offset Offset
+   */
+  void setAdditionalJointOffset(const Joints& joint, const Scalar& offset);
+
+  /**
    * @brief setMotionLogger Sets the motion logger
    * @param motionLogger Logger
    */
@@ -315,8 +325,12 @@ private:
   ///< given motion cycle.
   vector<boost::shared_ptr<MotionTask<Scalar> > > motionTasks;
 
-  ///< Joint velocity commands for joint estimator
+  ///< Joint position commands for joint estimator
   Matrix<Scalar,  Dynamic, 1> jointCmds;
+
+  ///< Joint position offsets that may be added to each joint motion where required
+  ///< This is used in SpeedWalk for HipCompensation
+  Matrix<Scalar,  Dynamic, 1> additionalJointOffsets;
 
   ///< Commands are recieved in this cycle
   bool cmdsReceived;

@@ -38,7 +38,6 @@ bool MPComControl<Scalar>::initiate()
       &balanceDefs[1][0],
       sizeof(balanceDefs[1]) / sizeof(balanceDefs[1][0]));
   }
-  cout << "jointsToReach: " << jointsToReach * MathsUtils::RAD_TO_DEG << endl;
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   this->jointsI = this->kM->getJointPositions();
   this->jointsDelta = jointsToReach - this->jointsI;

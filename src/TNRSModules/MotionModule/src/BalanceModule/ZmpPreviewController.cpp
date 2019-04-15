@@ -121,7 +121,7 @@ Matrix<Scalar, Dynamic, 1> ZmpPreviewController<Scalar>::stepActual(const Matrix
     "MotionBehaviors",
     (Scalar, ZmpControl.obsQ1, obsQ(0, 0)),
     (Scalar, ZmpControl.obsQ2, obsQ(1, 1)),
-    (Scalar, ZmpControl.obsQ3, obsQ(2, 2)),
+    (Scalar, ZmpCLolaModuleontrol.obsQ3, obsQ(2, 2)),
     (Scalar, ZmpControl.obsR, R),
   );
   model->computeObsGain(obsQ, R);*/
@@ -139,8 +139,8 @@ Matrix<Scalar, Dynamic, 1> ZmpPreviewController<Scalar>::stepActual(const Matrix
   //Scalar controlInputTrue =
   //  -kGain(0, 0) * trueIntError - (kGain.block(0, 1, 1, 3) * trueState)(0, 0) - prevGain;
   //trueState = model->getUpdatedState(trueState, controlInputTrue);
-  model->setInput(controlInput);
-  return model->getUpdatedState(trueState, controlInput);
+  //model->setInput(controlInput);
+  return model->getUpdatedState(estState, controlInput);
 }
 
 template class ZmpPreviewController<MType>;

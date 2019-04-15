@@ -268,7 +268,6 @@ void WBBallThrow<Scalar>::ThrowBall::onStart()
     jacobian,
     Matrix<Scalar, Dynamic, 1>(desCartesianVel.block(0, 0, 3, 1)));
   //desiredBoundVels.row(1) = preThrowJVel.transpose(); // Second row
-  cout << "DesiredBoundVels: " << preThrowJVel.transpose() << endl;
 
   ///< Set elbow yaw final position to 40.0 degrees
   desiredJoints(1, 2) = 40.0 * MathsUtils::DEG_TO_RAD;
@@ -309,7 +308,6 @@ void WBBallThrow<Scalar>::ThrowBall::onStart()
   cbopt.optDef();
   vector<Scalar> trajTime;
   cb1.evaluateSpline(this->bPtr->jointTrajectories, trajTime, 0);
-  cout << "Time:" << trajTime.back() << endl;
   cbopt.logConstraints(100, trajTime.back(), this->bPtr->logsDirPath, true);
   this->bPtr->timeToThrow = trajTime.back();
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE

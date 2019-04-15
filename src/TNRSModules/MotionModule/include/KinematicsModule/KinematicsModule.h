@@ -367,7 +367,7 @@ public:
    * @return Matrix<Scalar, Dynamic, 1>: Ik values of whole body joints.
    */
   Matrix<Scalar, Dynamic, 1> solveComIK(const LinkChains& baseLimb,
-    const Matrix<Scalar, 6, 1>& comVelocityD,
+    Matrix<Scalar, 6, 1>& comVelocityD,
     const vector<unsigned>& limbMotionSpace,
     const vector<Matrix<Scalar, Dynamic, 1>>& limbVelocitiesD,
     const vector<int>& eeIndices,
@@ -405,7 +405,7 @@ public:
     vector<bool> activeJoints = vector<bool>(),
     const Scalar& weight = 1e-6,
     const Scalar& gain = 0.85,
-    vector<bool> activeResidual = vector<bool>()
+    vector<float> activeResidual = vector<float>()
   );
 
   /**
@@ -422,7 +422,7 @@ public:
     vector<bool> activeJoints = vector<bool>(),
     const Scalar& weight = 10,
     const Scalar& gain = 0.9,
-    vector<bool> activeResidual = vector<bool>()
+    vector<float> activeResidual = vector<float>()
   );
 
   /**
@@ -441,7 +441,7 @@ public:
     vector<bool> activeJoints = vector<bool>(),
     const Scalar& weight = 1,
     const Scalar& gain = 0.9,
-    vector<bool> activeResidual = vector<bool>()
+    vector<float> activeResidual = vector<float>()
   );
 
   /**
@@ -460,7 +460,7 @@ public:
     vector<bool> activeJoints = vector<bool>(),
     const Scalar& weight = 1,
     const Scalar& gain = 0.9,
-    vector<bool> activeResidual = vector<bool>()
+    vector<float> activeResidual = vector<float>()
   );
 
   /**
@@ -482,7 +482,7 @@ public:
     vector<bool> activeJoints = vector<bool>(),
     const Scalar& weight = 1,
     const Scalar& gain = 0.9,
-    vector<bool> activeResidual = vector<bool>()
+    vector<float> activeResidual = vector<float>()
   );
 
   /**
@@ -503,7 +503,7 @@ public:
     vector<bool> activeJoints,
     const Scalar& weight,
     const Scalar& gain,
-    vector<bool> activeResidual = vector<bool>());
+    vector<float> activeResidual = vector<float>());
 
   /**
    * @brief solveCartesianIK: Solves the inverse kinematics for the
@@ -557,7 +557,7 @@ public:
     const Matrix<Scalar, 4, 4>& targetT,
     const unsigned& maxIterations,
     vector<bool>& activeJoints,
-    vector<bool> activeResidual = vector<bool>());
+    vector<float> activeResidual = vector<float>());
 
   /**
    * Finds the specified limb mass matrix with respect to
@@ -1082,6 +1082,8 @@ public:
   boost::shared_ptr<TaskIkSolver<Scalar> > getTaskSolver() const {
     return tis;
   }
+
+  void setJointOffset(const Joints& index, const Scalar& offset, const JointStateType& type);
 
   /**
    * Function to print all the kinematic data for debugging.

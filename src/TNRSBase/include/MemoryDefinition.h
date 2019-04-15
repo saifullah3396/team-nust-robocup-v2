@@ -52,6 +52,11 @@ enum class MemoryVariableIds : unsigned int
   ///< Output: PlanningModule
   ///< Variable Type: int
   userCommThreadPeriod,
+  ///< LolaModule Thread Period
+  ///< Input: LolaModule
+  ///< Output: SharedMemory
+  ///< Variable Type: int
+  lolaThreadPeriod,
   ///< Time taken by the MotionModule Thread
   ///< Input: None
   ///< Output: MotionModule
@@ -87,6 +92,11 @@ enum class MemoryVariableIds : unsigned int
   ///< Output: GameCommModule
   ///< Variable Type: int
   gameCommThreadTimeTaken,
+  ///< Time taken by the LolaModule Thread
+  ///< Input: None
+  ///< Output: L
+  ///< Variable Type: int
+  lolaThreadTimeTaken,
   ///< HeartBeat for connection status
   ///< Input: None,
   ///< Output: CommModule

@@ -25,8 +25,8 @@ class ThreadSafeQueue;
 class CommMessage;
 
 /**
- * @class TcpClient 
- * @brief Defines a tcp client with asynchronous communication capability 
+ * @class TcpClient
+ * @brief Defines a tcp client with asynchronous communication capability
  *   based on boost::asio
  */
 class TcpClient
@@ -39,17 +39,17 @@ public:
    * @param port Connection port
    */
   TcpClient(
-    boost::shared_ptr<boost::asio::io_service>& ioService, 
-    const std::string& host, 
+    boost::shared_ptr<boost::asio::io_service>& ioService,
+    const std::string& host,
     const std::string& port);
 
   /**
    * @brief ~TcpClient Destructor
-   */ 
+   */
   virtual ~TcpClient() {}
 
   /**
-   * @brief handleConnect Called when a new connection is made with 
+   * @brief handleConnect Called when a new connection is made with
    *   the server. Sends a response to the server.
    * @param e Boost system error code
    * @param endpoint_iterator Connection endpoint iterator
@@ -76,10 +76,10 @@ public:
    * @brief update Updates the server read/write cycle
    */
   virtual void update() = 0;
-  
+
   /**
    * @brief onConnection Callback for successful connection to server
-   */ 
+   */
   virtual void onConnection() {}
 
 protected:
@@ -92,8 +92,8 @@ protected:
   boost::shared_ptr<boost::asio::io_service> ioService;
 
   ///< A vector of connections that are alive
-  connection conn;
-  
+  Connection conn;
+
   ///< Robot server ip
   string host;
 
@@ -104,7 +104,7 @@ protected:
 /**
  * @class DataClient
  * @brief A TcpClient that handles received data
- */  
+ */
 class DataClient : public TcpClient
 {
 public:
@@ -117,12 +117,12 @@ public:
    * @param publisher_name ROS Data publisher name
    */
   DataClient(
-    boost::shared_ptr<boost::asio::io_service>& ioService, 
-    const std::string& host, 
+    boost::shared_ptr<boost::asio::io_service>& ioService,
+    const std::string& host,
     const std::string& port,
     ros::NodeHandle& nh,
     const std::string& publisher_name);
-  
+
   /**
    * @brief handleWrite See TcpClient::handleWrite
    */
@@ -137,16 +137,16 @@ public:
    * @brief update See TcpClient::update
    */
   void update() final;
-  
+
   /**
    * @brief onConnection See TcpClient::onConnection
-   */ 
+   */
   void onConnection() final;
-  
+
   /**
    * @brief commandToMessage Converts a user command to an outMessage
    * @param msg User command topic
-   */ 
+   */
   void commandToMessage(const std_msgs::String::ConstPtr& msg);
 
 private:
@@ -160,13 +160,13 @@ private:
 
   ///< Json parser for recieved messages
   Json::Reader reader;
-  
+
   ///< Network data publisher
   ros::Publisher dataPublisher;
-  
+
   ///< Network data subscriber
   ros::Subscriber dataSubscriber;
-  
+
   ///< Ros node handler
   ros::NodeHandle nh;
 };
@@ -174,7 +174,7 @@ private:
 /**
  * @class ImageClient
  * @brief A TcpClient that handles received image data
- */  
+ */
 class ImageClient : public TcpClient
 {
 public:
@@ -187,15 +187,15 @@ public:
    * @param publisher_name ROS Data publisher name
    */
   ImageClient(
-    boost::shared_ptr<boost::asio::io_service>& ioService, 
-    const std::string& host, 
+    boost::shared_ptr<boost::asio::io_service>& ioService,
+    const std::string& host,
     const std::string& port,
     ros::NodeHandle& nh,
     const std::string& publisher_name);
 
   /**
    * @brief ~ImageClient Destructor
-   */ 
+   */
   ~ImageClient() final {}
 
   /**
@@ -219,7 +219,7 @@ private:
 
   ///< Network data publisher
   ros::Publisher dataPublisher;
-  
+
   ///< Ros node handler
   ros::NodeHandle nh;
 };

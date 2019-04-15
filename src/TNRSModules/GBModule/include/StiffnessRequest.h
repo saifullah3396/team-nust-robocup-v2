@@ -10,20 +10,32 @@
 #pragma once
 
 #include "ControlModule/include/ActuatorRequests.h"
+#ifndef V6_CROSS_BUILD
 #include "GBModule/include/GBRequest.h"
+#else
+#include "ControlModule/include/LolaRequest.h"
+#endif
+
+#ifndef V6_CROSS_BUILD
+#define STIFFNESS_REQUEST_BASE GBRequest
+#define STIFFNESS_REQUEST_BASE_IDS GBRequestIds
+#else //! V6 handles realtime requests through Lola
+#define STIFFNESS_REQUEST_BASE LolaRequest
+#define STIFFNESS_REQUEST_BASE_IDS LolaRequestIds
+#endif
 
 /**
  * @class StiffnessRequest
  * @brief Defines a basic stiffness actuator request
  */
-struct StiffnessRequest : public ActuatorRequest, public GBRequest
+struct StiffnessRequest : public ActuatorRequest, public STIFFNESS_REQUEST_BASE
 {
   /**
    * @brief StiffnessRequest Constructor
    */
   StiffnessRequest() :
     ActuatorRequest(static_cast<unsigned>(Joints::count)),
-    GBRequest(GBRequestIds::stiffnessRequest)
+    STIFFNESS_REQUEST_BASE(STIFFNESS_REQUEST_BASE_IDS::stiffnessRequest)
   {
   }
 
@@ -33,7 +45,7 @@ struct StiffnessRequest : public ActuatorRequest, public GBRequest
    * @return true if successful
    */
   virtual bool assignFromJson(const Json::Value& obj) {
-    if (!GBRequest::assignFromJson(obj))
+    if (!STIFFNESS_REQUEST_BASE::assignFromJson(obj))
       return false;
     try {
       FOR_EACH(ASSIGN_FROM_JSON_VAR_1, (vector<float>, value, vector<float>(size, NAN)),)
@@ -50,7 +62,7 @@ struct StiffnessRequest : public ActuatorRequest, public GBRequest
    * @return Json object
    */
   virtual Json::Value getJson() {
-    Json::Value obj = GBRequest::getJson();
+    Json::Value obj = STIFFNESS_REQUEST_BASE::getJson();
     try {
       FOR_EACH(GET_JSON_VAR_1, (vector<float>, value, vector<float>(size, NAN)),);
     } catch (Json::Exception& e) {

@@ -85,5 +85,23 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   (VelocityInput<float>, velocityInput, VelocityInput<float>()),
   (bool, minimizeJointVels, false),
   (bool, keepTorsoUpright, false),
+  (bool, addHipCompensation, false),
   (int, maxNSteps, 1),
+  (Vector2f, refOffset, Vector2f::Zero()),
+);
+
+/**
+ * @struct KinResolutionWalkConfig
+ * @brief Movement based on whole-body ik and preview controllers for
+ *   speed-based walking behavior
+ */
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  KinResolutionWalkConfig,
+  MBMovementConfig,
+  MBMovementTypes::kinResolutionWalk,
+  KinResolutionWalkConfigPtr,
+  (VelocityInput<float>, velocityInput, VelocityInput<float>()),
+  (bool, addHipCompensation, false),
+  (int, maxNSteps, 1),
+  (Vector2f, refOffset, Vector2f::Zero()),
 );

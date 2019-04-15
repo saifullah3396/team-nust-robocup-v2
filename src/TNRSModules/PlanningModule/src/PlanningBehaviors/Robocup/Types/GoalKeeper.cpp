@@ -220,7 +220,7 @@ void GoalKeeper::InterceptBall::onRun()
 
 bool GoalKeeper::divePossible()
 {
-  auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+  const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
   Point2f wInRobot;
   //wInRobot.x = -pose.getX() * pose.cosT - pose.getY() * pose.sinT;
   wInRobot.y = pose.getX() * pose.st - pose.getY() * pose.ct;

@@ -4,7 +4,7 @@ from publishers import \
     SensorNames, JointStatePublisher, JointInfoPublisher, \
     SensorsPublisher, BallInfoPublisher, GoalInfoPublisher, OccupancyGridPublisher, \
     LocalizationStatePublisher, ObsObstaclesPublisher, TeamInfoPublisher, \
-    TeamNUSTStatePublisher, PBInfoPublisher, MBInfoPublisher, SBInfoPublisher
+    TeamNUSTStatePublisher, PBInfoPublisher, MBInfoPublisher, GBInfoPublisher
 
 
 class MemoryDataPublisher:
@@ -32,7 +32,7 @@ class MemoryDataPublisher:
         self.team_info_publisher = TeamInfoPublisher()
         self.pb_info_publisher = PBInfoPublisher()
         self.mb_info_publisher = MBInfoPublisher()
-        self.sb_info_publisher = SBInfoPublisher()
+        self.gb_info_publisher = GBInfoPublisher()
         self.team_nust_state_publisher = TeamNUSTStatePublisher()
 
     def publish(self):
@@ -50,8 +50,8 @@ class MemoryDataPublisher:
               self.team_nust_state_publisher.motion_thread_period = memory_data[name]
             elif name == 'planningThreadPeriod':
               self.team_nust_state_publisher.planning_thread_period = memory_data[name]
-            elif name == 'sbThreadPeriod':
-              self.team_nust_state_publisher.sb_thread_period = memory_data[name]
+            elif name == 'gbThreadPeriod':
+              self.team_nust_state_publisher.gb_thread_period = memory_data[name]
             elif name == 'visionThreadPeriod':
               self.team_nust_state_publisher.vision_thread_period = memory_data[name]
             elif name == 'localizationThreadPeriod':
@@ -60,6 +60,20 @@ class MemoryDataPublisher:
               self.team_nust_state_publisher.game_comm_thread_period = memory_data[name]
             elif name == 'userCommThreadPeriod':
               self.team_nust_state_publisher.user_comm_thread_period = memory_data[name]
+            elif name == 'motionThreadTimeTaken':
+              self.team_nust_state_publisher.motion_time_taken = memory_data[name]
+            elif name == 'planningThreadTimeTaken':
+              self.team_nust_state_publisher.planning_time_taken = memory_data[name]
+            elif name == 'gbThreadTimeTaken':
+              self.team_nust_state_publisher.gb_time_taken = memory_data[name]
+            elif name == 'visionThreadTimeTaken':
+              self.team_nust_state_publisher.vision_time_taken = memory_data[name]
+            elif name == 'localizationThreadTimeTaken':
+              self.team_nust_state_publisher.localization_time_taken = memory_data[name]
+            elif name == 'gameCommThreadTimeTaken':
+              self.team_nust_state_publisher.game_comm_time_taken = memory_data[name]
+            elif name == 'userCommThreadTimeTaken':
+              self.team_nust_state_publisher.user_comm_time_taken = memory_data[name]
             elif name == 'heartBeat':
               self.team_nust_state_publisher.heart_beat = memory_data[name]
             elif name == 'jointPositionSensors':
@@ -214,6 +228,6 @@ class MemoryDataPublisher:
             elif name == "mBehaviorInfo":
                 self.mb_info_publisher.behavior_info = memory_data[name]
                 self.mb_info_publisher.publish()
-            elif name == "sBehaviorInfo":
-                self.sb_info_publisher.behavior_info = memory_data[name]
-                self.sb_info_publisher.publish()
+            elif name == "gBehaviorInfo":
+                self.gb_info_publisher.behavior_info = memory_data[name]
+                self.gb_info_publisher.publish()

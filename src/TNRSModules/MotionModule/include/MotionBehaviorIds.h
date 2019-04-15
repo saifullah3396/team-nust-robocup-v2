@@ -88,6 +88,7 @@ enum class MBMovementTypes
   naoqiFootsteps,
   naoqiMoveToward,
   speedWalk,
+  kinResolutionWalk,
   count
 };
 

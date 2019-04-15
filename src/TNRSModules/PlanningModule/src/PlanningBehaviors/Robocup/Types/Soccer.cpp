@@ -558,7 +558,7 @@ void Soccer::findBestBallAlignment(RobotPose2D<float>& alignPosition)
 
 bool Soccer::alignedToKick()
 {
-  auto ballRel = BALL_INFO_IN(PlanningModule).posRel;
+  const auto& ballRel = BALL_INFO_IN(PlanningModule).posRel;
   static float midToFootDist = 0.0475;
   static constexpr float kickAlignmentTol = 0.02;
   if (ballRel.x > 0.18 ||
@@ -570,7 +570,7 @@ bool Soccer::alignedToKick()
 
 bool Soccer::behindObstacle(const Point2f& target)
 {
-  auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
+  const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
   TNRSLine<float> targetLine;
   targetLine.p1 = Point2f(pose.getX(), pose.getY());
   for (auto obs : OBSTACLES_OBS_IN(PlanningModule).data) {

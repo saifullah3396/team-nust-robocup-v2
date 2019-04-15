@@ -2,8 +2,8 @@
 
 ///< See Utils/include/PostureState.h
 ///< WARNING: These postures are defined according to the enumeration in
-///< PostureState.h. For new postures, add the posture state in PostureState.h 
-///< in the respective sequence 
+///< PostureState.h. For new postures, add the posture state in PostureState.h
+///< in the respective sequence
 
 static const float postureDefinitions[7][24] =
   {
@@ -20,10 +20,10 @@ static const float postureDefinitions[7][24] =
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
     // Stand
       { 0.0, 16.0, 90.0, 11.5, -90.0, 0.0, -90.0, 90.0, -11.5, 90.0, 0.0, 90.0,
-        0.0, 0.0, -26.0, 40.0, -20.0, 0.0, 0.0, 0.0, -26.0, 40.0, -20.0, 0.0 },
+        0.0, 0.0, -26.0, 52.0, -26.0, 0.0, 0.0, 0.0, -26.0, 52.0, -26.0, 0.0 },
     // Stand with hands behind
       { 0.0, 16.0, 119.5, 3.5, 0.0, -44.9, -90.0, 119.5, -3.5, 0.0, 44.9, 90.0,
-        0.0, 0.0, -26.0, 40.0, -20.0, 0.0, 0.0, 0.0, -26.0, 40.0, -20.0, 0.0 },
+        0.0, 0.0, -26.0, 52.0, -26.0, 0.0, 0.0, 0.0, -26.0, 52.0, -26.0, 0.0 },
     // Stand for walk with hands behind
       { 0.0, 16.0, 119.5, 3.5, 0.0, -44.9, -90.0, 119.5, -3.5, 0.0, 44.9, 90.0,
         0.0, 0.0, -20.0, 50.0, -30.0, 0.0, 0.0, 0.0, -20.0, 50.0, -30.0, 0.0 },

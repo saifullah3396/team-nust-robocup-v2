@@ -34,6 +34,7 @@
 
 typedef map<unsigned, BehaviorInfo> BehaviorInfoMap;
 
+#ifndef V6_CROSS_BUILD
 DEFINE_INPUT_CONNECTOR(MotionModule,
   (int, motionThreadPeriod),
   (vector<float>, jointStiffnessSensors),
@@ -62,9 +63,46 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
   (RobotFeet, footOnGround),
   (RobotFeet, currentStepLeg),
 );
-
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    #ifndef V6_CROSS_BUILD
+#else
+DEFINE_INPUT_CONNECTOR(MotionModule,
+  (int, motionThreadPeriod),
+  (vector<float>, jointStiffnessSensors),
+  (vector<float>, touchSensors),
+  #ifdef REALTIME_LOLA_AVAILABLE
+  (vector<float>, jointPositionSensors),
+  (vector<float>, handSensors),
+  (vector<float>, inertialSensors),
+  (vector<float>, fsrSensors),
+  #endif
+  (BallInfo<float>, ballInfo),
+  (GoalInfo<float>, goalInfo),
+  (RobotPose2D<float>, robotPose2D),
+  (bool, landmarksFound),
+);
+DEFINE_OUTPUT_CONNECTOR(MotionModule,
+  (int, motionThreadTimeTaken),
+  #ifndef REALTIME_LOLA_AVAILABLE
+  (vector<float>, jointPositionSensors),
+  (vector<float>, handSensors),
+  (vector<float>, inertialSensors),
+  (vector<float>, fsrSensors),
+  #endif
+  (int, nFootsteps),
+  (Matrix4f, upperCamInFeet),
+  (Matrix4f, lowerCamInFeet),
+  (Matrix4f, lFootOnGround),
+  (Matrix4f, rFootOnGround),
+  (PostureState, postureState),
+  (bool, robotFallen),
+  (cv::Point_<float>, kickTarget),
+  (bool, robotInMotion),
+  (BehaviorInfoMap, mBehaviorInfo),
+  (RobotFeet, footOnGround),
+  (RobotFeet, currentStepLeg),
+);
+#endif
+#ifndef V6_CROSS_BUILD
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
       MotionModule::MotionModule(
         void* parent,
         const ALMemoryProxyPtr& memoryProxy,
@@ -79,18 +117,6 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
   #else
     MotionModule::MotionModule(
       void* parent,
-      const qi::AnyObject& memoryProxy,
-      const qi::AnyObject& motionProxy) :
-      BaseModule(parent, TNSPLModules::motion, "MotionModule"),
-      memoryProxy(memoryProxy),
-      motionProxy(motionProxy)
-    {
-    }
-  #endif
-#else
-  #ifndef V6_CROSS_BUILD
-    MotionModule::MotionModule(
-      void* parent,
       const ALMemoryProxyPtr& memoryProxy,
       const ALDCMProxyPtr& dcmProxy) :
       BaseModule(parent, TNSPLModules::motion, "MotionModule"),
@@ -98,12 +124,21 @@ DEFINE_OUTPUT_CONNECTOR(MotionModule,
       dcmProxy(dcmProxy)
     {
     }
-  #else
+  #endif
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE
     MotionModule::MotionModule(
       void* parent,
-      const qi::AnyObject& memoryProxy) :
+      const qi::AnyObject& memoryProxy,
+      const qi::AnyObject& motionProxy) :
       BaseModule(parent, TNSPLModules::motion, "MotionModule"),
-      memoryProxy(memoryProxy)
+      memoryProxy(memoryProxy),
+      motionProxy(motionProxy)
+    {
+    }
+  #else
+    MotionModule::MotionModule(void* parent) :
+      BaseModule(parent, TNSPLModules::motion, "MotionModule")
     {
     }
   #endif
@@ -138,27 +173,71 @@ void MotionModule::initMemoryConn()
 
 void MotionModule::init()
 {
-  ///< Setup motion sensors
-  LOG_INFO("Initializing motion module sensor layers...")
-  setupSensors();
-  ///< Setup motion actuators
-  LOG_INFO("Initializing motion module actuator layers...")
-  setupActuators();
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    ///< Disable NaoQi's fall manager
-    LOG_INFO("Disabling Naoqi fall manager...")
-    #ifndef V6_CROSS_BUILD
-      motionProxy->setFallManagerEnabled(false);
-    #else
-      motionProxy.call<void>("setFallManagerEnabled", false);
+  ///< Reset output variables
+  LOG_INFO("Initializing MotionModule Output Variables...")
+  #ifndef V6_CROSS_BUILD
+    JOINT_POSITIONS_OUT(MotionModule) = vector<float>(toUType(Joints::count), 0.f);
+    HAND_SENSORS_OUT(MotionModule) = vector<float>(toUType(RobotHands::count), 0.f);
+    INERTIAL_SENSORS_OUT(MotionModule) = vector<float>(toUType(InertialSensors::count), 0.f);
+    INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerX)] = 0.0;
+    INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerY)] = 0.0;
+    INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerZ)] = -Constants::gravity;
+    FSR_SENSORS_OUT(MotionModule) = vector<float>(toUType(FsrSensors::count), 0.f);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      JOINT_POSITIONS_OUT(MotionModule) = vector<float>(toUType(Joints::count), 0.f);
+      HAND_SENSORS_OUT(MotionModule) = vector<float>(toUType(RobotHands::count), 0.f);
+      INERTIAL_SENSORS_OUT(MotionModule) = vector<float>(toUType(InertialSensors::count), 0.f);
+      INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerX)] = 0.0;
+      INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerY)] = 0.0;
+      INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerZ)] = -Constants::gravity;
+      FSR_SENSORS_OUT(MotionModule) = vector<float>(toUType(FsrSensors::count), 0.f);
     #endif
-    LOG_INFO("Waking Robot Up...")
-    #ifndef V6_CROSS_BUILD
-    motionProxy->wakeUp();
-    motionProxy->setMoveArmsEnabled(false, false);
-    #else
-    motionProxy.call<void>("wakeUp");
-    motionProxy.call<void>("setMoveArmsEnabled", false, false);
+  #endif
+  N_FOOTSTEPS_OUT(MotionModule) = 0;
+  UPPER_CAM_TRANS_OUT(MotionModule) = Matrix4f::Identity();
+  LOWER_CAM_TRANS_OUT(MotionModule) = Matrix4f::Identity();
+  L_FOOT_TRANS_OUT(MotionModule) = Matrix4f::Identity();
+  R_FOOT_TRANS_OUT(MotionModule) = Matrix4f::Identity();
+  POSTURE_STATE_OUT(MotionModule) = PostureState::unknown;
+  ROBOT_FALLEN_OUT(MotionModule) = false;
+  KICK_TARGET_OUT(MotionModule) = Point2f(0.f, 0.f);
+  ROBOT_IN_MOTION_OUT(MotionModule) = false;
+  MB_INFO_OUT(MotionModule) = BehaviorInfoMap();
+  FOOT_ON_GROUND_OUT(MotionModule) = RobotFeet::lFoot;
+  STEP_LEG_OUT(MotionModule) = RobotFeet::unknown;
+
+  #ifndef V6_CROSS_BUILD
+    ///< Setup motion sensors
+    LOG_INFO("Initializing motion module sensor layers...")
+    setupSensors();
+    ///< Setup motion actuators
+    LOG_INFO("Initializing motion module actuator layers...")
+    setupActuators();
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      ///< Setup motion sensors
+      LOG_INFO("Initializing motion module sensor layers...")
+      setupSensors();
+    #endif
+  #endif
+
+  #ifndef V6_CROSS_BUILD
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+      ///< Disable NaoQi's fall manager
+      LOG_INFO("Disabling Naoqi fall manager...")
+      motionProxy->setFallManagerEnabled(false);
+      LOG_INFO("Waking Robot Up...")
+      motionProxy->wakeUp();
+      motionProxy->setMoveArmsEnabled(false, false);
+    #endif
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      ///< Disable NaoQi's fall manager
+      LOG_INFO("Disabling Naoqi fall manager...")
+      motionProxy.call<void>("setFallManagerEnabled", false);
+      motionProxy.call<void>("wakeUp");
+      motionProxy.call<void>("setMoveArmsEnabled", false, false);
     #endif
   #endif
   ///< Create kinematics module
@@ -174,31 +253,13 @@ void MotionModule::init()
   ///< Create trajectory planner
   LOG_INFO("Initializing TrajectoryPlanner...")
   trajectoryPlanner =  TrajectoryPlannerPtr(new TrajectoryPlanner<MType>(this));
-  ///< Reset output variables
-  LOG_INFO("Initializing MotionModule Output Variables...")
-  JOINT_POSITIONS_OUT(MotionModule) = vector<float>(toUType(Joints::count), 0.f);
-  HAND_SENSORS_OUT(MotionModule) = vector<float>(toUType(RobotHands::count), 0.f);
-  INERTIAL_SENSORS_OUT(MotionModule) = vector<float>(toUType(InertialSensors::count), 0.f);
-  INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerX)] = 0.0;
-  INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerY)] = 0.0;
-  INERTIAL_SENSORS_OUT(MotionModule)[toUType(InertialSensors::accelerometerZ)] = -Constants::gravity;
-  FSR_SENSORS_OUT(MotionModule) = vector<float>(toUType(FsrSensors::count), 0.f);
-  N_FOOTSTEPS_OUT(MotionModule) = 0;
-  UPPER_CAM_TRANS_OUT(MotionModule) = Matrix4f::Identity();
-  LOWER_CAM_TRANS_OUT(MotionModule) = Matrix4f::Identity();
-  L_FOOT_TRANS_OUT(MotionModule) = Matrix4f::Identity();
-  R_FOOT_TRANS_OUT(MotionModule) = Matrix4f::Identity();
-  POSTURE_STATE_OUT(MotionModule) = PostureState::unknown;
-  ROBOT_FALLEN_OUT(MotionModule) = false;
-  KICK_TARGET_OUT(MotionModule) = Point2f(0.f, 0.f);
-  ROBOT_IN_MOTION_OUT(MotionModule) = false;
-  MB_INFO_OUT(MotionModule) = BehaviorInfoMap();
-  FOOT_ON_GROUND_OUT(MotionModule) = RobotFeet::lFoot;
 }
 
+#ifndef V6_CROSS_BUILD
 void MotionModule::setupSensors()
 {
   sensorLayers.resize(toUType(MotionSensors::count));
+  LOG_INFO("toUType(MotionSensors::count):"  << toUType(MotionSensors::count));
   sensorLayers[toUType(MotionSensors::jointPosition)] =
     SensorLayer::makeSensorLayer(
       toUType(SensorTypes::joints) + toUType(JointSensorTypes::position),
@@ -220,17 +281,46 @@ void MotionModule::setupSensors()
       OVAR_PTR(vector<float>, MotionModule::Output::fsrSensors),
       memoryProxy);
   sensorsUpdate();
+  LOG_INFO("Setting broker..");
   #ifndef MODULE_IS_REMOTE
-    #ifndef V6_CROSS_BUILD
-      ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&MotionModule::sensorsUpdate, this));
-    #endif
+    ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&MotionModule::sensorsUpdate, this));
   #endif
+  LOG_INFO("Setting broker..");
 }
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE
+    void MotionModule::setupSensors()
+    {
+      sensorLayers.resize(toUType(MotionSensors::count));
+      sensorLayers[toUType(MotionSensors::jointPosition)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::joints) + toUType(JointSensorTypes::position),
+          OVAR_PTR(vector<float>, MotionModule::Output::jointPositionSensors),
+          memoryProxy);
+      sensorLayers[toUType(MotionSensors::handSensors)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::handSensors),
+          OVAR_PTR(vector<float>, MotionModule::Output::handSensors),
+          memoryProxy);
+      sensorLayers[toUType(MotionSensors::inertial)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::inertialSensors),
+          OVAR_PTR(vector<float>, MotionModule::Output::inertialSensors),
+          memoryProxy);
+      sensorLayers[toUType(MotionSensors::fsr)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::fsrSensors),
+          OVAR_PTR(vector<float>, MotionModule::Output::fsrSensors),
+          memoryProxy);
+      sensorsUpdate();
+    }
+  #endif
+#endif
 
+#ifndef V6_CROSS_BUILD
 void MotionModule::setupActuators()
 {
   actuatorLayers.resize(toUType(MotionActuators::count));
-    #ifndef V6_CROSS_BUILD
     actuatorLayers[toUType(MotionActuators::jointActuators)] =
       ActuatorLayer::makeActuatorLayer(
         toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::angles),
@@ -239,21 +329,12 @@ void MotionModule::setupActuators()
       ActuatorLayer::makeActuatorLayer(
         toUType(ActuatorTypes::handActuators),
         dcmProxy);
-    #else
-    actuatorLayers[toUType(MotionActuators::jointActuators)] =
-      ActuatorLayer::makeActuatorLayer(
-        toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::angles));
-    actuatorLayers[toUType(MotionActuators::handActuators] =
-      ActuatorLayer::makeActuatorLayer(
-        toUType(ActuatorTypes::handActuators),
-        dcmProxy);
-    #endif
   #ifndef MODULE_IS_REMOTE
-    #ifndef V6_CROSS_BUILD
-      ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPreProcess(boost::bind(&MotionModule::actuatorsUpdate, this));
-    #endif
+    ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPreProcess(boost::bind(&MotionModule::actuatorsUpdate, this));
   #endif
 }
+#else //! No actuators with/without in V6s
+#endif
 
 void MotionModule::handleRequests()
 {
@@ -262,6 +343,8 @@ void MotionModule::handleRequests()
   auto request = inRequests.queueFront();
   if (boost::static_pointer_cast <MotionRequest>(request)) {
     auto reqId = request->getRequestId();
+    #ifndef V6_CROSS_BUILD
+    //! Realtime actuator requests through MotionModule are only available in V5s
     if (reqId == toUType(MotionRequestIds::jointRequest)) {
       actuatorLayers[toUType(MotionActuators::jointActuators)]->addRequest(
         boost::static_pointer_cast<JointRequest>(request)
@@ -271,6 +354,9 @@ void MotionModule::handleRequests()
         boost::static_pointer_cast<HandsRequest>(request)
       );
     } else if (reqId == toUType(MotionRequestIds::behaviorRequest)) {
+    #else
+    if (reqId == toUType(MotionRequestIds::behaviorRequest)) {
+    #endif
       auto rmb =
         boost::static_pointer_cast<RequestMotionBehavior>(request);
       if (mbManagers.find(rmb->mbManagerId) != mbManagers.end()) {
@@ -303,13 +389,16 @@ void MotionModule::handleRequests()
 void MotionModule::mainRoutine()
 {
   MB_INFO_OUT(MotionModule).clear();
-  #ifdef MODULE_IS_REMOTE
-    sensorsUpdate();
+  #ifndef V6_CROSS_BUILD
+    #ifdef MODULE_IS_REMOTE
+      sensorsUpdate();
+    #endif
   #else
-    #ifdef V6_CROSS_BUILD
+    #ifndef REALTIME_LOLA_AVAILABLE
       sensorsUpdate();
     #endif
   #endif
+  motionGenerator->reset();
   kinematicsModule->update();
   fallDetector->update();
   for (auto it = mbManagers.begin(); it != mbManagers.end(); )
@@ -329,34 +418,43 @@ void MotionModule::mainRoutine()
     }
   }
   motionGenerator->update();
-  #ifdef MODULE_IS_REMOTE
-    actuatorsUpdate();
-  #else
-    #ifdef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
+    #ifdef MODULE_IS_REMOTE
       actuatorsUpdate();
     #endif
-  #endif
-}
-
-void MotionModule::sensorsUpdate()
-{
-  for (const auto& sl : sensorLayers)
-    if (sl) sl->update();
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    #ifndef V6_CROSS_BUILD
-      float steps = memoryProxy->getData("Motion/Walk/NbStep");
-    #else
-      float steps = memoryProxy.call<float>("getData", "Motion/Walk/NbStep");
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE //! No actuator in any case
     #endif
-    N_FOOTSTEPS_OUT(MotionModule) = static_cast<int>(steps);
   #endif
 }
 
-void MotionModule::actuatorsUpdate()
-{
-  for (const auto& al : actuatorLayers)
-    if (al) al->update();
-}
+#ifndef V6_CROSS_BUILD
+  void MotionModule::sensorsUpdate()
+  {
+    for (const auto& sl : sensorLayers)
+      if (sl) sl->update();
+    #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+    auto steps = memoryProxy->getData("Motion/Walk/NbStep");
+    N_FOOTSTEPS_OUT(MotionModule) = static_cast<int>(steps);
+    #endif
+  }
+
+  void MotionModule::actuatorsUpdate()
+  {
+    for (const auto& al : actuatorLayers)
+      if (al) al->update();
+  }
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE
+    void MotionModule::sensorsUpdate()
+    {
+      for (const auto& sl : sensorLayers)
+        if (sl) sl->update();
+      float steps = memoryProxy.call<float>("getData", "Lala's Voice");
+      N_FOOTSTEPS_OUT(MotionModule) = static_cast<int>(steps);
+    }
+  #endif
+#endif
 
 KinematicsModulePtr MotionModule::getKinematicsModule()
 {
@@ -373,11 +471,13 @@ TrajectoryPlannerPtr MotionModule::getTrajectoryPlanner()
   return trajectoryPlanner;
 }
 
-#ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  #ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
     ALMotionProxyPtr MotionModule::getSharedMotionProxy()
       { return motionProxy; }
-  #else
+  #endif
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE
     qi::AnyObject MotionModule::getSharedMotionProxy()
       { return motionProxy; }
   #endif

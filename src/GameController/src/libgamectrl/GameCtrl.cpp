@@ -18,8 +18,12 @@
 #define BOOST_SIGNALS_NO_DEPRECATION_WARNING
 #include <alcommon/albroker.h>
 #include <alcommon/alproxy.h>
+#ifndef V6_CROSS_BUILD
 #include <alproxies/dcmproxy.h>
 #include <alproxies/almemoryproxy.h>
+#else
+#include <qi/anyobject.h>
+#endif
 #undef BOOST_SIGNALS_NO_DEPRECATION_WARNING
 #ifdef __clang__
 #pragma clang diagnostic pop

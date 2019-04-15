@@ -3,7 +3,7 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 0,
-  "testType" : "GoalExtraction",
-  "startPose" : [-2.412, 1.15, -160.0],
+  "testType" : "Segmentation",
+  "startPose" : [0.0, 0.0, 0.0],
   "logData" : false
 }

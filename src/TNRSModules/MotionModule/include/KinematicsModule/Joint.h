@@ -101,6 +101,13 @@ struct JointState
    */
   virtual ~JointState() {}
 
+  virtual void setPosition(const Scalar& position) = 0;
+  virtual void setVelocity(const Scalar& velocity) = 0;
+  virtual void setAccel(const Scalar& accel) = 0;
+  virtual const Scalar& position() = 0;
+  virtual const Scalar& velocity() = 0;
+  virtual const Scalar& accel() = 0;
+
   ///< Transformation matrix for this joint
   Eigen::Matrix<Scalar, 4, 4> trans = {Eigen::Matrix<Scalar, 4, 4>::Identity()};
 
@@ -117,12 +124,8 @@ struct JointState
   ///< A vector representing the center of mass of this link in base frame;
   Eigen::Matrix<Scalar, 3, 1> comInBase = {Eigen::Matrix<Scalar, 3, 1>::Zero()};
 
-  virtual void setPosition(const Scalar& position) = 0;
-  virtual void setVelocity(const Scalar& velocity) = 0;
-  virtual void setAccel(const Scalar& accel) = 0;
-  virtual const Scalar& position() = 0;
-  virtual const Scalar& velocity() = 0;
-  virtual const Scalar& accel() = 0;
+  ///< Position offset
+  Scalar offset = {0.0};
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

@@ -150,7 +150,7 @@ void RobocupSetup::cfgHandlingAction()
     LOG_INFO("GameCtrlState: STATE_SET")
     auto secState = (unsigned) gameData.secondaryState;
     auto kickOffTeam = (unsigned) gameData.kickOffTeam;
-    auto ourTeamNumber = TEAM_NUMBER_IN(PlanningModule);
+    const auto& ourTeamNumber = TEAM_NUMBER_IN(PlanningModule);
     if (secState == STATE2_PENALTYSHOOT) {
       LOG_INFO("GameCtrlState: STATE2_PENALTYSHOOT")
       if (kickOffTeam == ourTeamNumber) {
@@ -186,7 +186,7 @@ void RobocupSetup::readySequenceAction()
   } else {
     LOG_INFO("Robot localized...")
     bool teamRobotOverlap = false;
-    auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+    const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
     unsigned teamRobotsLost = 0;
     LOG_INFO("RobotPosition: " << pose.get());
     for (const auto& tr : TEAM_ROBOTS_IN(PlanningModule)) {
@@ -211,7 +211,7 @@ void RobocupSetup::readySequenceAction()
     if (!teamRobotOverlap && teamRobotsLost >= 1) {
       auto& gameData = GAME_DATA_OUT(PlanningModule);
       auto kickOffTeam = (unsigned) gameData.kickOffTeam;
-      auto ourTeamNumber = TEAM_NUMBER_IN(PlanningModule);
+      const auto& ourTeamNumber = TEAM_NUMBER_IN(PlanningModule);
       int robocupRole = (int) RobocupRole::goalKeeper;
       auto smallestDist = 1e3;
       if (kickOffTeam == ourTeamNumber) {
@@ -275,12 +275,12 @@ void RobocupSetup::getInPositionAction()
       if (!mbInProgress()) {
         RobotPose2D<float> target;
         if (setSequenceFinished) {
-          auto pose = ROBOT_POSE_2D_IN(PlanningModule);
-          auto& role = ROBOCUP_ROLE_OUT(PlanningModule);
+          const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
+          const auto& role = ROBOCUP_ROLE_OUT(PlanningModule);
           if (role == (int)RobocupRole::goalKeeper) {
             target = positionsInGame[0];
           } else if (role == (int)RobocupRole::defender || role == (int)RobocupRole::defenseSupport) {
-            auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+            const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
             auto smallestDist = 1e3;
             for (int i = 1; i < 3; ++i) {
               auto dist = (pose.get() - positionsInGame[i].get()).norm();
@@ -304,7 +304,7 @@ void RobocupSetup::getInPositionAction()
           ON_SIDE_LINE_OUT(PlanningModule) = false;
         } else {
           auto kickOffTeam = (unsigned) gameData.kickOffTeam;
-          auto ourTeamNumber = TEAM_NUMBER_IN(PlanningModule);
+          const auto& ourTeamNumber = TEAM_NUMBER_IN(PlanningModule);
           if (kickOffTeam == ourTeamNumber) { // Attack team
             target = startPositionsAtt[ROBOCUP_ROLE_OUT(PlanningModule)];
           } else {
@@ -324,7 +324,7 @@ void RobocupSetup::getInPositionAction()
 
 void RobocupSetup::goingToPositionAction()
 {
-  auto pose = ROBOT_POSE_2D_IN(PlanningModule);
+  const auto& pose = ROBOT_POSE_2D_IN(PlanningModule);
   if ((moveTarget.get() - pose.get()).norm() < 5e-3) {
     if (setSequenceFinished)
       behaviorState = gameplaySequence;

@@ -180,6 +180,19 @@ public:
    */
   void setJointCmds(const Matrix<Scalar, Dynamic, 1>& jr);
 
+  /**
+   * @brief setAdditionalJointOffsets Sets the offsets for all joints for this cycle
+   * @param offsets A vector of offsets
+   */
+  void setAdditionalJointOffsets(const Matrix<Scalar, Dynamic, 1>& offsets);
+
+  /**
+   * @brief setAdditionalJointOffset Sets the joint offset for this cycle
+   * @param joint Joint index
+   * @param offset Offset
+   */
+  void setAdditionalJointOffset(const Joints& joint, const Scalar& offset);
+
   ///< Getters
   boost::shared_ptr<KinematicsModule<Scalar> > getKinematicsModule()
     { return kM; }

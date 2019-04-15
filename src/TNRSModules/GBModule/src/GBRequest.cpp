@@ -11,6 +11,7 @@
 #include "GBModule/include/StiffnessRequest.h"
 #include "GBModule/include/LedRequest.h"
 
+#ifndef V6_CROSS_BUILD
 DEFINE_MODULE_REQUEST(
   GBRequest, ModuleRequest, GBRequestPtr,
   (GBRequestIds, stiffnessRequest, StiffnessRequest),
@@ -18,4 +19,10 @@ DEFINE_MODULE_REQUEST(
   (GBRequestIds, behaviorRequest, RequestGeneralBehavior),
   (GBRequestIds, killBehavior, KillGeneralBehavior),
 );
-
+#else //! No realtime actuator requests here in V6
+DEFINE_MODULE_REQUEST(
+  GBRequest, ModuleRequest, GBRequestPtr,
+  (GBRequestIds, behaviorRequest, RequestGeneralBehavior),
+  (GBRequestIds, killBehavior, KillGeneralBehavior),
+);
+#endif

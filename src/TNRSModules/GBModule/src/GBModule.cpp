@@ -24,6 +24,7 @@
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/DataHolders/StiffnessState.h"
 
+#ifndef V6_CROSS_BUILD
 /**
  * Definition of input connector and variables for this module
  */
@@ -43,6 +44,33 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
   (bool, whistleDetected),
   (BehaviorInfo, gBehaviorInfo),
 )
+#else
+/**
+ * Definition of input connector and variables for this module
+ */
+DEFINE_INPUT_CONNECTOR(GBModule,
+  (int, gbThreadPeriod),
+  #ifdef REALTIME_LOLA_AVAILABLE
+  (vector<float>, jointStiffnessSensors),
+  (vector<float>, ledSensors),
+  #endif
+  (vector<float>, switchSensors),
+)
+
+/**
+ * Definition of output connector and variables for this module
+ */
+DEFINE_OUTPUT_CONNECTOR(GBModule,
+  (int, gbThreadTimeTaken),
+  #ifndef REALTIME_LOLA_AVAILABLE
+  (vector<float>, jointStiffnessSensors),
+  (vector<float>, ledSensors),
+  #endif
+  (StiffnessState, stiffnessState),
+  (bool, whistleDetected),
+  (BehaviorInfo, gBehaviorInfo),
+)
+#endif
 
 #ifndef V6_CROSS_BUILD
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
@@ -69,7 +97,7 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
     }
   #endif
 #else
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  #ifndef REALTIME_LOLA_AVAILABLE
     GBModule::GBModule(
       void* parent,
       const qi::AnyObject& memoryProxy,
@@ -80,12 +108,8 @@ DEFINE_OUTPUT_CONNECTOR(GBModule,
     {
     }
   #else
-    GBModule::GBModule(
-      void* parent,
-      const qi::AnyObject& memoryProxy) :
-      BaseModule(parent, TNSPLModules::gb, "GBModule"),
-      memoryProxy(memoryProxy),
-      motionProxy(motionProxy)
+    GBModule::GBModule(void* parent) :
+      BaseModule(parent, TNSPLModules::gb, "GBModule")
     {
     }
   #endif
@@ -117,47 +141,69 @@ void GBModule::init()
   gbManager = boost::make_shared<GBManager>(this);
   ///< Make new layers for sensors directly related with gbmodule
   LOG_INFO("Initializing static behavior module sensor layers...")
-  sensorLayers.resize(toUType(GBSensors::count));
-  sensorLayers[toUType(GBSensors::jointStiffnesses)] =
-    SensorLayer::makeSensorLayer(
-      toUType(SensorTypes::joints) + toUType(JointSensorTypes::hardness),
-      OVAR_PTR(vector<float>, GBModule::Output::jointStiffnessSensors), memoryProxy);
-  sensorLayers[toUType(GBSensors::led)] =
-    SensorLayer::makeSensorLayer(
-      toUType(SensorTypes::ledSensors),
-      OVAR_PTR(vector<float>, GBModule::Output::ledSensors), memoryProxy);
-  ///< Update the sensors
-  sensorsUpdate();
-  #ifndef MODULE_IS_REMOTE
-    #ifndef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
+    sensorLayers.resize(toUType(GBSensors::count));
+    sensorLayers[toUType(GBSensors::jointStiffnesses)] =
+      SensorLayer::makeSensorLayer(
+        toUType(SensorTypes::joints) + toUType(JointSensorTypes::hardness),
+        OVAR_PTR(vector<float>, GBModule::Output::jointStiffnessSensors), memoryProxy);
+    sensorLayers[toUType(GBSensors::led)] =
+      SensorLayer::makeSensorLayer(
+        toUType(SensorTypes::ledSensors),
+        OVAR_PTR(vector<float>, GBModule::Output::ledSensors), memoryProxy);
+    ///< Update the sensors
+    sensorsUpdate();
+
+    #ifndef MODULE_IS_REMOTE
       ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::sensorsUpdate, this));
     #endif
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      sensorLayers.resize(toUType(GBSensors::count));
+      sensorLayers[toUType(GBSensors::jointStiffnesses)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::joints) + toUType(JointSensorTypes::hardness),
+          OVAR_PTR(vector<float>, GBModule::Output::jointStiffnessSensors), memoryProxy);
+      sensorLayers[toUType(GBSensors::led)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::ledSensors),
+          OVAR_PTR(vector<float>, GBModule::Output::ledSensors), memoryProxy);
+      ///< Update the sensors
+      sensorsUpdate();
+    #endif
   #endif
+
   LOG_INFO("Initializing static behavior module actuator layers...")
   ///< Make new layers for actuators directly related with gbmodule
-  actuatorLayers.resize(toUType(GBActuators::count));
   #ifndef V6_CROSS_BUILD
-    actuatorLayers[toUType(GBActuators::jointStiffnesses)] =
-      ActuatorLayer::makeActuatorLayer(
-        toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness),
-        dcmProxy);
+    //! No need for realtime actuator if naoqi motion proxy is present
+    #ifndef NAOQTI_MOTION_PROXY_AVAILABLE
+      actuatorLayers.resize(toUType(GBActuators::count));
+        actuatorLayers[toUType(GBActuators::jointStiffnesses)] =
+          ActuatorLayer::makeActuatorLayer(
+            toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness),
+            dcmProxy);
+      #ifndef MODULE_IS_REMOTE
+        ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::actuatorsUpdate, this));
+      #endif
+    #endif
+
     actuatorLayers[toUType(GBActuators::led)] =
       ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators), dcmProxy);
   #else
-    actuatorLayers[toUType(GBActuators::jointStiffnesses)] =
-      ActuatorLayer::makeActuatorLayer(
-        toUType(ActuatorTypes::jointActuators) + toUType(JointActuatorTypes::hardness));
-    actuatorLayers[toUType(GBActuators::led)] =
-      ActuatorLayer::makeActuatorLayer(toUType(ActuatorTypes::ledActuators));
-  #endif
-  #ifndef MODULE_IS_REMOTE
-    #ifndef V6_CROSS_BUILD
-      ((TeamNUSTSPL*) getParent())->getParentBroker()->getProxy("DCM")->getModule()->atPostProcess(boost::bind(&GBModule::actuatorsUpdate, this));
+    #ifndef REALTIME_LOLA_AVAILABLE // No need for actuator layers in either case for V6
     #endif
   #endif
   LOG_INFO("Initializing GBModule Output Variables...")
-  JOINT_STIFFNESSES_OUT(GBModule) = vector<float>(toUType(Joints::count), 0.f);
-  LED_SENSORS_OUT(GBModule) = vector<float>(toUType(LedActuators::count), 0.f);
+  #ifndef V6_CROSS_BUILD
+    JOINT_STIFFNESSES_OUT(GBModule) = vector<float>(toUType(Joints::count), 0.f);
+    LED_SENSORS_OUT(GBModule) = vector<float>(toUType(LedActuators::count), 0.f);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+    JOINT_STIFFNESSES_OUT(GBModule) = vector<float>(toUType(Joints::count), 0.f);
+    LED_SENSORS_OUT(GBModule) = vector<float>(toUType(LedActuators::count), 0.f);
+    #endif
+  #endif
   STIFFNESS_STATE_OUT(GBModule) = StiffnessState::unknown;
   WHISTLE_DETECTED_OUT(GBModule) = false;
   GB_INFO_OUT(GBModule) = BehaviorInfo();
@@ -170,6 +216,8 @@ void GBModule::handleRequests()
   auto request = inRequests.queueFront();
   if (boost::static_pointer_cast <GBRequest>(request)) {
     auto reqId = request->getRequestId();
+    #ifndef V6_CROSS_BUILD
+    //! Realtime actuator requests through GBModule are only in V5s
     if (reqId == toUType(GBRequestIds::stiffnessRequest)) {
       actuatorLayers[toUType(GBActuators::jointStiffnesses)]->addRequest(
         boost::static_pointer_cast<StiffnessRequest>(request)
@@ -179,6 +227,9 @@ void GBModule::handleRequests()
         boost::static_pointer_cast<LedRequest>(request)
       );
     } else if (reqId == toUType(GBRequestIds::behaviorRequest)) {
+    #else
+    if (reqId == toUType(GBRequestIds::behaviorRequest)) {
+    #endif
       auto rsb =
         boost::static_pointer_cast<RequestGeneralBehavior>(request);
       gbManager->manageRequest(rsb);
@@ -192,25 +243,28 @@ void GBModule::handleRequests()
 void GBModule::mainRoutine()
 {
   // Update led sensors in mainRoutine()...
-  sensorLayers[toUType(GBSensors::led)]->update();
-  #ifdef MODULE_IS_REMOTE
-    sensorsUpdate();
-  #else
-    #ifdef V6_CROSS_BUILD
+  #ifndef V6_CROSS_BUILD
+    sensorLayers[toUType(GBSensors::led)]->update();
+    #ifdef MODULE_IS_REMOTE
       sensorsUpdate();
     #endif
+  #else
+  #ifndef REALTIME_LOLA_AVAILABLE
+    sensorLayers[toUType(GBSensors::led)]->update();
+    sensorsUpdate();
+  #endif
   #endif
   gbManager->update();
   GB_INFO_OUT(GBModule) = gbManager->getBehaviorInfo();
-  #ifdef MODULE_IS_REMOTE
-    actuatorsUpdate();
-  #else
-    #ifdef V6_CROSS_BUILD
-      sensorsUpdate();
+  #ifndef V6_CROSS_BUILD
+    #ifdef MODULE_IS_REMOTE
+      actuatorsUpdate();
     #endif
+  #else //! No actuators
   #endif
 }
 
+#ifndef V6_CROSS_BUILD
 void GBModule::sensorsUpdate()
 {
   for (size_t i = 0; i < sensorLayers.size(); ++i) {
@@ -226,3 +280,15 @@ void GBModule::actuatorsUpdate()
     actuatorLayers[i]->update();
   }
 }
+#else
+#ifndef REALTIME_LOLA_AVAILABLE
+void GBModule::sensorsUpdate()
+{
+  for (size_t i = 0; i < sensorLayers.size(); ++i) {
+    // LEDSensors are updated in mainRoutine() because of their large number
+    if (i != toUType(GBSensors::led))
+      sensorLayers[i]->update();
+  }
+}
+#endif
+#endif

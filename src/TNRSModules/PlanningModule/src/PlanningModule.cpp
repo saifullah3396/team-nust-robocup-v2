@@ -38,6 +38,7 @@
 
 using namespace PathPlannerSpace;
 
+#ifndef V6_CROSS_BUILD
 DEFINE_INPUT_CONNECTOR(PlanningModule,
   (int, planningThreadPeriod),
   (bool, landmarksFound),
@@ -87,25 +88,87 @@ DEFINE_OUTPUT_CONNECTOR(PlanningModule,
   (RobotPose2D<float>, moveTarget),
   (WorldBallInfo<float>, worldBallInfo),
 );
+#else
+DEFINE_INPUT_CONNECTOR(PlanningModule,
+  (int, planningThreadPeriod),
+  (bool, landmarksFound),
+  (StiffnessState, stiffnessState),
+  (PostureState, postureState),
+  (RobotPose2D<float>, robotPose2D),
+  (BallInfo<float>, ballInfo),
+  (bool, robotLocalized),
+  (vector<float>, jointPositionSensors),
+  (vector<float>, jointStiffnessSensors),
+  (vector<float>, inertialSensors),
+  (vector<float>, fsrSensors),
+  (vector<float>, ledSensors),
+  (bool, whistleDetected),
+  (bool, robotFallen),
+  (int, playerNumber),
+  (int, teamNumber),
+  (int, teamColor),
+  (GoalInfo<float>, goalInfo),
+  (vector<TeamRobot<float> >, teamRobots),
+  (ObsObstacles<float>, obstaclesObs),
+  (BehaviorInfo, gBehaviorInfo),
+  (BehaviorInfoMap, mBehaviorInfo),
+  (OccupancyMap<float>, occupancyMap),
+  (int, nFootsteps),
+  (Matrix4f, lFootOnGround),
+  (Matrix4f, rFootOnGround),
+  (bool, robotInMotion),
+  (int, footOnGround),
+  (vector<float>, touchSensors),
+  (vector<float>, switchSensors),
+);
+
+DEFINE_OUTPUT_CONNECTOR(PlanningModule,
+  (int, planningThreadTimeTaken),
+  (PlanningState, planningState),
+  (int, robocupRole),
+  (int, robotIntention),
+  (bool, robotOnSideLine),
+  (bool, localizeWithLastKnown),
+  (BehaviorInfo, pBehaviorInfo),
+  #ifndef REALTIME_LOLA_AVAILABLE
+  (vector<float>, jointTemperatureSensors),
+  (vector<float>, jointCurrentSensors),
+  (vector<float>, touchSensors),
+  (vector<float>, switchSensors),
+  (vector<float>, batterySensors),
+  (vector<float>, sonarSensors),
+  #endif
+  (RoboCupGameControlData, gameData),
+  (RobotPose2D<float>, moveTarget),
+  (WorldBallInfo<float>, worldBallInfo),
+);
+#endif
 
 #ifndef V6_CROSS_BUILD
-PlanningModule::PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy) :
-  BaseModule(
-    parent,
-    TNSPLModules::planning,
-    "PlanningModule"
-  ), memoryProxy(memoryProxy)
-{
-}
+  PlanningModule::PlanningModule(void* parent, const ALMemoryProxyPtr& memoryProxy) :
+    BaseModule(
+      parent,
+      TNSPLModules::planning,
+      "PlanningModule"
+    ), memoryProxy(memoryProxy)
+  {
+  }
 #else
-PlanningModule::PlanningModule(void* parent, const qi::AnyObject& memoryProxy) :
-  BaseModule(
-    parent,
-    TNSPLModules::planning,
-    "PlanningModule"
-  ), memoryProxy(memoryProxy)
-{
-}
+  #ifndef REALTIME_LOLA_AVAILABLE
+    PlanningModule::PlanningModule(void* parent, const qi::AnyObject& memoryProxy) :
+      BaseModule(
+        parent,
+        TNSPLModules::planning,
+        "PlanningModule"
+      ), memoryProxy(memoryProxy)
+    {
+    }
+  #else
+    PlanningModule::PlanningModule(void* parent) :
+      BaseModule(parent, TNSPLModules::planning, "PlanningModule")
+    {
+    }
+  #endif
 #endif
 
 void PlanningModule::setThreadPeriod()
@@ -135,33 +198,65 @@ void PlanningModule::init()
   LOG_INFO("Initializing roboCup data handles...")
   setupRoboCupDataHandler();
   LOG_INFO("Initializing planning module sensor layers...")
-  sensorLayers.resize(toUType(PlanningSensors::count));
-  sensorLayers[toUType(PlanningSensors::jointTemps)] =
-    SensorLayer::makeSensorLayer(
-      toUType(SensorTypes::joints) + toUType(JointSensorTypes::temp),
-      OVAR_PTR(vector<float>, PlanningModule::Output::jointTemperatureSensors),
-      memoryProxy);
-  sensorLayers[toUType(PlanningSensors::jointCurrents)] =
-    SensorLayer::makeSensorLayer(
-      toUType(SensorTypes::joints) + toUType(JointSensorTypes::current),
-      OVAR_PTR(vector<float>, PlanningModule::Output::jointCurrentSensors),
-      memoryProxy);
-  sensorLayers[toUType(PlanningSensors::touchSensors)] =
-    SensorLayer::makeSensorLayer(
-      toUType(SensorTypes::touchSensors),
-      OVAR_PTR(vector<float>, PlanningModule::Output::touchSensors),
-      memoryProxy);
-  sensorLayers[toUType(PlanningSensors::switchSensors)] =
-    SensorLayer::makeSensorLayer(
-      toUType(SensorTypes::switchSensors),
-      OVAR_PTR(vector<float>, PlanningModule::Output::switchSensors),
-      memoryProxy);
-  sensorLayers[toUType(PlanningSensors::batterSensors)] =
-    SensorLayer::makeSensorLayer(
-      toUType(SensorTypes::batterySensors),
-      OVAR_PTR(vector<float>, PlanningModule::Output::batterySensors),
-      memoryProxy);
-  sensorsUpdate();
+  #ifndef V6_CROSS_BUILD
+    sensorLayers.resize(toUType(PlanningSensors::count));
+    sensorLayers[toUType(PlanningSensors::jointTemps)] =
+      SensorLayer::makeSensorLayer(
+        toUType(SensorTypes::joints) + toUType(JointSensorTypes::temp),
+        OVAR_PTR(vector<float>, PlanningModule::Output::jointTemperatureSensors),
+        memoryProxy);
+    sensorLayers[toUType(PlanningSensors::jointCurrents)] =
+      SensorLayer::makeSensorLayer(
+        toUType(SensorTypes::joints) + toUType(JointSensorTypes::current),
+        OVAR_PTR(vector<float>, PlanningModule::Output::jointCurrentSensors),
+        memoryProxy);
+    sensorLayers[toUType(PlanningSensors::touchSensors)] =
+      SensorLayer::makeSensorLayer(
+        toUType(SensorTypes::touchSensors),
+        OVAR_PTR(vector<float>, PlanningModule::Output::touchSensors),
+        memoryProxy);
+    sensorLayers[toUType(PlanningSensors::switchSensors)] =
+      SensorLayer::makeSensorLayer(
+        toUType(SensorTypes::switchSensors),
+        OVAR_PTR(vector<float>, PlanningModule::Output::switchSensors),
+        memoryProxy);
+    sensorLayers[toUType(PlanningSensors::batterSensors)] =
+      SensorLayer::makeSensorLayer(
+        toUType(SensorTypes::batterySensors),
+        OVAR_PTR(vector<float>, PlanningModule::Output::batterySensors),
+        memoryProxy);
+    sensorsUpdate();
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      sensorLayers.resize(toUType(PlanningSensors::count));
+      sensorLayers[toUType(PlanningSensors::jointTemps)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::joints) + toUType(JointSensorTypes::temp),
+          OVAR_PTR(vector<float>, PlanningModule::Output::jointTemperatureSensors),
+          memoryProxy);
+      sensorLayers[toUType(PlanningSensors::jointCurrents)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::joints) + toUType(JointSensorTypes::current),
+          OVAR_PTR(vector<float>, PlanningModule::Output::jointCurrentSensors),
+          memoryProxy);
+      sensorLayers[toUType(PlanningSensors::touchSensors)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::touchSensors),
+          OVAR_PTR(vector<float>, PlanningModule::Output::touchSensors),
+          memoryProxy);
+      sensorLayers[toUType(PlanningSensors::switchSensors)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::switchSensors),
+          OVAR_PTR(vector<float>, PlanningModule::Output::switchSensors),
+          memoryProxy);
+      sensorLayers[toUType(PlanningSensors::batterSensors)] =
+        SensorLayer::makeSensorLayer(
+          toUType(SensorTypes::batterySensors),
+          OVAR_PTR(vector<float>, PlanningModule::Output::batterySensors),
+          memoryProxy);
+      sensorsUpdate();
+    #endif
+  #endif
   LOG_INFO("Initializing world ball tracker...")
   wbTracker = boost::make_shared <WorldBallTracker> (this);
   wbTracker->init();
@@ -184,12 +279,23 @@ void PlanningModule::init()
   ON_SIDE_LINE_OUT(PlanningModule) = false;
   LOCALIZE_LAST_KNOWN_OUT(PlanningModule) = false;
   PB_INFO_OUT(PlanningModule) = BehaviorInfo();
-  JOINT_TEMPERATURES_OUT(PlanningModule) = vector<float>(toUType(Joints::count), 0.f);
-  JOINT_CURRENTS_OUT(PlanningModule) = vector<float>(toUType(Joints::count), 0.f);
-  TOUCH_SENSORS_OUT(PlanningModule) = vector<float>(toUType(TouchSensors::count), 0.f);
-  SWITCH_SENSORS_OUT(PlanningModule) = vector<float>(toUType(SwitchSensors::count), 0.f);
-  BATTERY_SENSORS_OUT(PlanningModule) = vector<float>(toUType(BatterySensors::count), 0.f);
-  SONAR_SENSORS_OUT(PlanningModule) = vector<float>(toUType(SonarSensors::count), 0.f);
+  #ifndef V6_CROSS_BUILD
+    JOINT_TEMPERATURES_OUT(PlanningModule) = vector<float>(toUType(Joints::count), 0.f);
+    JOINT_CURRENTS_OUT(PlanningModule) = vector<float>(toUType(Joints::count), 0.f);
+    TOUCH_SENSORS_OUT(PlanningModule) = vector<float>(toUType(TouchSensors::count), 0.f);
+    SWITCH_SENSORS_OUT(PlanningModule) = vector<float>(toUType(SwitchSensors::count), 0.f);
+    BATTERY_SENSORS_OUT(PlanningModule) = vector<float>(toUType(BatterySensors::count), 0.f);
+    SONAR_SENSORS_OUT(PlanningModule) = vector<float>(toUType(SonarSensors::count), 0.f);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      JOINT_TEMPERATURES_OUT(PlanningModule) = vector<float>(toUType(Joints::count), 0.f);
+      JOINT_CURRENTS_OUT(PlanningModule) = vector<float>(toUType(Joints::count), 0.f);
+      TOUCH_SENSORS_OUT(PlanningModule) = vector<float>(toUType(TouchSensors::count), 0.f);
+      SWITCH_SENSORS_OUT(PlanningModule) = vector<float>(toUType(SwitchSensors::count), 0.f);
+      BATTERY_SENSORS_OUT(PlanningModule) = vector<float>(toUType(BatterySensors::count), 0.f);
+      SONAR_SENSORS_OUT(PlanningModule) = vector<float>(toUType(SonarSensors::count), 0.f);
+    #endif
+  #endif
   GAME_DATA_OUT(PlanningModule) = RoboCupGameControlData();
   MOVE_TARGET_OUT(PlanningModule) = RobotPose2D<float>(0.0, 0.0, 0.0);
 }
@@ -215,29 +321,47 @@ void PlanningModule::handleRequests()
 void PlanningModule::mainRoutine()
 {
   //pathPlanner->updateMap();
-  sensorsUpdate();
+  #ifndef V6_CROSS_BUILD
+    sensorsUpdate();
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      sensorsUpdate();
+    #endif
+  #endif
   updateWorldBallInfo();
   pbManager->update();
   PB_INFO_OUT(PlanningModule) = pbManager->getBehaviorInfo();
 }
 
-void PlanningModule::sensorsUpdate()
-{
-  for (size_t i = 0; i < sensorLayers.size(); ++i) {
-    sensorLayers[i]->update();
-  }
-  RoboCupGameControlData gameControlData;
-  #ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD
+  void PlanningModule::sensorsUpdate()
+  {
+    for (size_t i = 0; i < sensorLayers.size(); ++i) {
+      sensorLayers[i]->update();
+    }
+    RoboCupGameControlData gameControlData;
     AL::ALValue value = memoryProxy->getData("GameCtrl/RoboCupGameControlData");
     if (value.isBinary() && value.getSize() == sizeof(RoboCupGameControlData))
       memcpy(&gameControlData, value, sizeof(RoboCupGameControlData));
-  #else
-    auto value = memoryProxy.call<vector<char>>("getData", "GameCtrl/RoboCupGameControlData");
-    memcpy(&gameControlData, &value, sizeof(RoboCupGameControlData));
+    gameControlData.teams[1].teamColour = 2;
+    GAME_DATA_OUT(PlanningModule) = gameControlData;
+  }
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE
+    void PlanningModule::sensorsUpdate()
+    {
+      for (size_t i = 0; i < sensorLayers.size(); ++i) {
+        sensorLayers[i]->update();
+      }
+      RoboCupGameControlData gameControlData;
+      AL::ALValue value = memoryProxy.call<AL::ALValue>("getData", "GameCtrl/RoboCupGameControlData");
+      if (value.isBinary() && value.getSize() == sizeof(RoboCupGameControlData))
+        memcpy(&gameControlData, value, sizeof(RoboCupGameControlData));
+      gameControlData.teams[1].teamColour = 2;
+      GAME_DATA_OUT(PlanningModule) = gameControlData;
+    }
   #endif
-  gameControlData.teams[1].teamColour = 2;
-  GAME_DATA_OUT(PlanningModule) = gameControlData;
-}
+#endif
 
 void PlanningModule::updateWorldBallInfo()
 {
@@ -245,7 +369,7 @@ void PlanningModule::updateWorldBallInfo()
   wbTracker->predict();
   if (ROBOT_LOCALIZED_IN(PlanningModule) && BALL_INFO_IN(PlanningModule).found) {
     // Position is translated & rotated with robot's angle
-    auto robotPose2D = ROBOT_POSE_2D_IN(PlanningModule);
+    const auto& robotPose2D = ROBOT_POSE_2D_IN(PlanningModule);
     auto posWorld = robotPose2D.transform(BALL_INFO_IN(PlanningModule).posRel);
     measurements.push_back(posWorld.x);
     measurements.push_back(posWorld.y);
@@ -281,10 +405,9 @@ void PlanningModule::updateWorldBallInfo()
   WORLD_BALL_INFO_OUT(PlanningModule) = wbInfo;
 }
 
-
-void PlanningModule::setupRoboCupDataHandler()
-{
-  #ifndef V6_CROSS_BUILD
+#ifndef V6_CROSS_BUILD
+  void PlanningModule::setupRoboCupDataHandler()
+  {
     #ifdef MODULE_IS_REMOTE
     RoboCupGameControlData gameCtrlData;
     AL::ALValue value((const char*) &gameCtrlData, sizeof(gameCtrlData));
@@ -299,15 +422,21 @@ void PlanningModule::setupRoboCupDataHandler()
     memoryProxy->insertData(
       "GameCtrl/playerNumber",
       (int) PLAYER_NUMBER_IN(PlanningModule));
-  #else
-    RoboCupGameControlData gameCtrlData;
-    auto value = vector<char>((const char*) &gameCtrlData, (const char*) &gameCtrlData + sizeof(gameCtrlData));
-    memoryProxy.call<void>("insertData", "GameCtrl/RoboCupGameControlData", value);
-    memoryProxy.call<void>("insertData", "GameCtrl/teamNumber", (int) TEAM_NUMBER_IN(PlanningModule));
-    memoryProxy.call<void>("insertData", "GameCtrl/teamColour", (int) TEAM_COLOR_IN(PlanningModule));
-    memoryProxy.call<void>("insertData", "GameCtrl/playerNumber", (int) PLAYER_NUMBER_IN(PlanningModule));
+  }
+#else
+  #ifndef REALTIME_LOLA_AVAILABLE
+  void PlanningModule::setupRoboCupDataHandler()
+  {
+    //! This data is received through game comm module if lola is used
+    //! and actuations are done through lola module
+    #ifndef REALTIME_LOLA_AVAILABLE
+      memoryProxy.call<void>("insertData", "GameCtrl/teamNumber", (int) TEAM_NUMBER_IN(PlanningModule));
+      memoryProxy.call<void>("insertData", "GameCtrl/teamColour", (int) TEAM_COLOR_IN(PlanningModule));
+      memoryProxy.call<void>("insertData", "GameCtrl/playerNumber", (int) PLAYER_NUMBER_IN(PlanningModule));
+    #endif
+  }
   #endif
-}
+#endif
 
 PathPlannerSpace::PathPlannerPtr PlanningModule::getPathPlanner()
 {

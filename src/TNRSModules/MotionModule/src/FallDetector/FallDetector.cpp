@@ -35,7 +35,15 @@ void FallDetector<Scalar>::update()
     //float angleYZ(atan2(-avgAcc[1], -avgAcc[2]));
     //cout << "kM->getFootOnGround(): " << kM->getFootOnGround() << endl;
     //cout << "avgAcc: " << avgAcc << endl;
-  auto& inertial = INERTIAL_SENSORS_OUT(MotionModule);
+  #ifndef V6_CROSS_BUILD
+    auto& inertial = INERTIAL_SENSORS_OUT(MotionModule);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      const auto& inertial = INERTIAL_SENSORS_OUT(MotionModule);
+    #else
+      const auto& inertial = INERTIAL_SENSORS_IN(MotionModule);
+    #endif
+  #endif
   auto& angleY = inertial[toUType(InertialSensors::torsoAngleY)];
   //cout << "angleY: " << (Scalar) inertial[TORSO_ANGLE_Y]  * 180 / M_PI << endl;
   //cout << "angleX: " << (Scalar) inertial[TORSO_ANGLE_X]  * 180 / M_PI  << endl;

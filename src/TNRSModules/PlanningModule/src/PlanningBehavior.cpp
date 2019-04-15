@@ -20,12 +20,19 @@
 bool PlanningBehavior::shutdownCallBack()
 {
   static bool shutdown = false, removeStiffness = false;
+  #ifndef REALTIME_LOLA_AVAILABLE
+  auto& touchSensors = TOUCH_SENSORS_OUT(PlanningModule);
+  #else
+  const auto& touchSensors = TOUCH_SENSORS_IN(PlanningModule);
+  #endif
   if (
-    TOUCH_SENSORS_OUT(PlanningModule)[toUType(TouchSensors::headTouchRear)] > 0.1 ||
-    TOUCH_SENSORS_OUT(PlanningModule)[toUType(TouchSensors::headTouchMiddle)] > 0.1 ||
-    TOUCH_SENSORS_OUT(PlanningModule)[toUType(TouchSensors::headTouchFront)] > 0.1) {
+    touchSensors[toUType(TouchSensors::headTouchRear)] > 0.1 ||
+    touchSensors[toUType(TouchSensors::headTouchMiddle)] > 0.1 ||
+    touchSensors[toUType(TouchSensors::headTouchFront)] > 0.1)
+  {
     this->killAllMotionBehaviors();
     this->killGeneralBehavior();
+    this->killChild();
     shutdown = true;
   }
   if (shutdown && !removeStiffness) {
@@ -144,11 +151,11 @@ bool PlanningBehavior::gbInProgress()
 
 bool PlanningBehavior::mbInProgress()
 {
-  auto mbInfo = MB_INFO_IN(PlanningModule);
+  const auto& mbInfo = MB_INFO_IN(PlanningModule);
   for (size_t i = 0; i < mbManagerIds.size(); ++i)
   {
     if (mbInfo.find(mbManagerIds[i]) != mbInfo.end()) {
-      if (behaviorInProgress(mbInfo[mbManagerIds[i]]))
+      if (behaviorInProgress(mbInfo.at(mbManagerIds[i])))
         return true;
     }
   }
@@ -170,14 +177,14 @@ bool PlanningBehavior::requestInProgress()
   bool inProgress = false;
   if(requestInProgress(lastGeneralRequest, lastGBConfig, GB_INFO_IN(PlanningModule), gRequestTime))
     inProgress = true;
-  auto mbInfo = MB_INFO_IN(PlanningModule);
+  const auto& mbInfo = MB_INFO_IN(PlanningModule);
   for (size_t i = 0; i < mbManagerIds.size(); ++i)
   {
     if (mbInfo.find(mbManagerIds[i]) == mbInfo.end()) {
       mbManagerIds.erase(mbManagerIds.begin()+i);
     } else {
       if (i == mbManagerIds.size()-1) {
-        if(requestInProgress(lastMotionRequest, lastMBConfig, mbInfo[mbManagerIds[i]], mRequestTime))
+        if(requestInProgress(lastMotionRequest, lastMBConfig, mbInfo.at(mbManagerIds[i]), mRequestTime))
           inProgress = true;
       }
     }

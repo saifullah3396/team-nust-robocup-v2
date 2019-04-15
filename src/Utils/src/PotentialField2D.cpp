@@ -51,7 +51,7 @@ VelocityInput<Scalar> PotentialField2D<Scalar>::update(
   totalFRep.setZero();
   Scalar cTheta = cos(robotPose.getTheta());
   Scalar sTheta = sin(robotPose.getTheta());
-  for (int i = 0; i < 2; ++i) {
+  for (int i = 0; i < obstacles.size(); ++i) {
     /*Obstacle obs = obstacles[i];
     Scalar worldLX = robotPose.getX() + obs.leftBound.x * cTheta - obs.leftBound.y * sTheta;
     Scalar worldLY = robotPose.getY() + obs.leftBound.x * sTheta + obs.leftBound.y * cTheta;

@@ -10,7 +10,21 @@
 #pragma once
 
 #include "ControlModule/include/ActuatorRequests.h"
+#ifndef V6_CROSS_BUILD
 #include "MotionModule/include/MotionRequest.h"
+#else
+#include "ControlModule/include/LolaRequest.h"
+#endif
+
+#ifndef V6_CROSS_BUILD
+#define JOINT_REQUEST_BASE MotionRequest
+#define JOINT_REQUEST_BASE_IDS MotionRequestIds
+#else
+#ifndef REALTIME_LOLA_AVAILABLE
+#define JOINT_REQUEST_BASE LolaRequest
+#define JOINT_REQUEST_BASE_IDS LolaRequestIds
+#endif
+#endif
 
 using namespace std;
 
@@ -18,14 +32,14 @@ using namespace std;
  * @class JointRequest
  * @brief Defines a basic joint actuation request
  */
-struct JointRequest : public ActuatorRequest, public MotionRequest
+struct JointRequest : public ActuatorRequest, public JOINT_REQUEST_BASE
 {
   /**
    * Constructor
    */
   JointRequest() :
     ActuatorRequest(toUType(Joints::count)),
-    MotionRequest(MotionRequestIds::jointRequest)
+    JOINT_REQUEST_BASE(JOINT_REQUEST_BASE_IDS::jointRequest)
   {
   }
 
@@ -35,7 +49,7 @@ struct JointRequest : public ActuatorRequest, public MotionRequest
    * @return true if successful
    */
   virtual bool assignFromJson(const Json::Value& obj) {
-    if (!MotionRequest::assignFromJson(obj))
+    if (!JOINT_REQUEST_BASE::assignFromJson(obj))
       return false;
     try {
       FOR_EACH(ASSIGN_FROM_JSON_VAR_1, (vector<float>, value, vector<float>(size, NAN)),)
@@ -52,7 +66,7 @@ struct JointRequest : public ActuatorRequest, public MotionRequest
    * @return Json object
    */
   virtual Json::Value getJson() {
-    Json::Value obj = MotionRequest::getJson();
+    Json::Value obj = JOINT_REQUEST_BASE::getJson();
     try {
       FOR_EACH(GET_JSON_VAR_1, (vector<float>, value, vector<float>(size, NAN)),);
     } catch (Json::Exception& e) {

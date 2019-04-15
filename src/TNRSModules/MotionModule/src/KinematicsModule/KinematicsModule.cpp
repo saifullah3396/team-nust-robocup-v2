@@ -185,7 +185,8 @@ void KinematicsModule<Scalar>::update()
 template <typename Scalar>
 void KinematicsModule<Scalar>::cleanup()
 {
-  kinDataLogger->save();
+  if (kinDataLogger)
+    kinDataLogger->save();
 }
 
 template <typename Scalar>
@@ -211,7 +212,15 @@ void KinematicsModule<Scalar>::setupLinksAndInertias()
 template <typename Scalar>
 void KinematicsModule<Scalar>::setupJoints()
 {
-  auto& posSensors = JOINT_POSITIONS_OUT(MotionModule);
+  #ifndef V6_CROSS_BUILD
+    auto& posSensors = JOINT_POSITIONS_OUT(MotionModule);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      auto& posSensors = JOINT_POSITIONS_OUT(MotionModule);
+    #else
+      const auto& posSensors = JOINT_POSITIONS_IN(MotionModule);
+    #endif
+  #endif
   for (size_t i = 0; i < toUType(Joints::count); ++i) {
     DHParams<Scalar>* params =
       new DHParams<Scalar>(
@@ -986,7 +995,15 @@ template <typename Scalar>
 void KinematicsModule<Scalar>::updateJointStates()
 {
   try {
-    auto& posSensors = JOINT_POSITIONS_OUT(MotionModule);
+    #ifndef V6_CROSS_BUILD
+      auto& posSensors = JOINT_POSITIONS_OUT(MotionModule);
+    #else
+      #ifndef REALTIME_LOLA_AVAILABLE
+        auto& posSensors = JOINT_POSITIONS_OUT(MotionModule);
+      #else
+        const auto& posSensors = JOINT_POSITIONS_IN(MotionModule);
+      #endif
+    #endif
     for (size_t i = 0; i < toUType(Joints::count); ++i) {
       JOINT_STATE_ACTUAL(i)->update(posSensors[i]);
     }
@@ -1015,7 +1032,15 @@ void KinematicsModule<Scalar>::updateTorsoState()
     // Need a kalman filter for this tracker.
     // Nao sensors are updated almost with cycle time of 40ms in memory
     // Whereas motion module runs at 10ms
-    auto& inertial = INERTIAL_SENSORS_OUT(MotionModule);
+    #ifndef V6_CROSS_BUILD
+      auto& inertial = INERTIAL_SENSORS_OUT(MotionModule);
+    #else
+      #ifndef REALTIME_LOLA_AVAILABLE
+        auto& inertial = INERTIAL_SENSORS_OUT(MotionModule);
+      #else
+        const auto& inertial = INERTIAL_SENSORS_IN(MotionModule);
+      #endif
+    #endif
     static auto gravity = Matrix<Scalar, 3, 1>(0.0, 0.0, -Constants::gravity);
     torsoState->accel[0] = inertial[toUType(InertialSensors::accelerometerX)];
     torsoState->accel[1] = inertial[toUType(InertialSensors::accelerometerY)];
@@ -1546,15 +1571,90 @@ KinematicsModule<Scalar>::solveComIkTwoVar(
  */
 template <typename Scalar>
 Matrix<Scalar, Dynamic, 1>
-KinematicsModule<Scalar>::solveComIK(const LinkChains& baseLimb,
-  const Matrix<Scalar, 6, 1>& comVelocityD,
+KinematicsModule<Scalar>::solveComIK(
+  const LinkChains& baseLimb,
+  Matrix<Scalar, 6, 1>& comVelocityD,
   const vector<unsigned>& limbMotionSpace,
-  const vector<Matrix<Scalar, Dynamic, 1> >& limbVelocitiesD, const vector<int>& eeIndices, const JointStateType& type)
+  const vector<Matrix<Scalar, Dynamic, 1> >& limbVelocitiesD,
+  const vector<int>& eeIndices,
+  const JointStateType& type)
 {
   ASSERT(limbMotionSpace.size() == toUType(LinkChains::count));
   ASSERT(eeIndices.size() == toUType(LinkChains::count));
   ASSERT(baseLimb == LinkChains::lLeg || baseLimb == LinkChains::rLeg);
-  vector<Matrix<Scalar, 4, 4> > limbTs(toUType(LinkChains::count));
+
+  static Matrix<Scalar, 3, 3> identity33 = Matrix<Scalar, 3, 3>::Identity();
+  static Matrix<Scalar, 3, 3> zero33 = Matrix<Scalar, 3, 3>::Zero();
+  Matrix<Scalar, 3, 3> globalToBodyRot =
+    getGlobalToBody().block(0, 0, 3, 3);
+  Matrix<Scalar, 6, 6> xBase;
+  xBase <<
+    identity33,
+    MathsUtils::makeSkewMat(static_cast<Matrix<Scalar, 3, 1>>(globalToBodyRot * getBodyToGlobal().block(0, 3, 3, 1))),
+    zero33,
+    identity33;
+  Matrix<Scalar, 6, Dynamic> baseJ =
+    computeLimbJ(static_cast<LinkChains>(baseLimb), eeIndices[toUType(baseLimb)]);
+  Matrix<Scalar, 3, 1> com =
+    getComStateWrtFrame(static_cast<LinkChains>(baseLimb), eeIndices[toUType(baseLimb)]).position;
+  Matrix<Scalar, 3, Dynamic> baseComJ =
+    computeLimbComJ(static_cast<LinkChains>(baseLimb), type);
+  Matrix<Scalar, 3, Dynamic> fsemJ =
+    - baseJ.topRows(3) + MathsUtils::makeSkewMat(com) * baseJ.bottomRows(3) + baseComJ;
+
+
+  Matrix<Scalar, 6, Dynamic> baseJT = xBase * baseJ;
+  vector<Matrix<Scalar, 6, 6> > XiWithBaseJacobian(toUType(LinkChains::count));
+  vector<Matrix<Scalar, Dynamic, Dynamic> > limbJsInv(toUType(LinkChains::count));
+  Matrix<Scalar, 3, 1> comLimbsDiff = Matrix<Scalar, 3, 1>::Zero();
+  for (const auto& lc : LinkChains()) {
+    if (lc == baseLimb)
+      continue;
+    Matrix<Scalar, 3, Dynamic> limbComJ = globalToBodyRot * computeLimbComJ(lc, type);
+    if (limbMotionSpace[toUType(lc)]) {
+      Matrix<Scalar, 4, 4> limbT =
+        getForwardEffector(lc, eeIndices[toUType(lc)], type);
+      Matrix<Scalar, 6, 6> Xi;
+      Xi <<
+        identity33,
+        MathsUtils::makeSkewMat(static_cast<Matrix<Scalar, 3, 1>>(globalToBodyRot * limbT.block(0, 3, 3, 1))),
+        zero33,
+        identity33;
+      XiWithBaseJacobian[toUType(lc)] = Xi.inverse() * baseJT;
+      Matrix<Scalar, Dynamic, Dynamic> limbJ = computeLimbJ(lc, eeIndices[toUType(lc)], type);
+      limbJsInv[toUType(lc)] = MathsUtils::pseudoInverse(limbJ);
+      fsemJ += limbComJ * limbJsInv[toUType(lc)] * XiWithBaseJacobian[toUType(lc)];
+      comLimbsDiff += limbComJ * limbJsInv[toUType(lc)] * limbVelocitiesD[toUType(lc)];
+    } else {
+      comLimbsDiff += limbComJ * limbVelocitiesD[toUType(lc)];
+    }
+  }
+
+  comVelocityD.segment(0, 3) = comVelocityD.segment(0, 3) - comLimbsDiff;
+  Matrix<Scalar, Dynamic, 1> jointD(toUType(Joints::count));
+  Matrix<Scalar, Dynamic, Dynamic> totalJ;
+  totalJ.resize(6, 6);
+  totalJ << fsemJ, -baseJ.bottomRows(3);
+  vector<Matrix<Scalar, Dynamic, 1> > jointVD(toUType(LinkChains::count));
+  jointVD[toUType(baseLimb)] =
+    MathsUtils::pseudoInverse(totalJ) * comVelocityD;
+  for (size_t i = 0; i < toUType(LinkChains::count); ++i) {
+    if (i != toUType(baseLimb)) {
+      jointVD[i].resize(linkChains[i]->size);
+      jointVD[i].setZero();
+      if (limbMotionSpace[i]) {
+        Matrix<Scalar, Dynamic, Dynamic> rhs = limbVelocitiesD[i] + XiWithBaseJacobian[i] * jointVD[toUType(baseLimb)];
+        jointVD[i] = limbJsInv[i] * rhs;
+      }
+    }
+    for (size_t j = linkChains[i]->start; j < linkChains[i]->start + linkChains[i]->size; ++j) {
+      jointD[j] = JOINT_STATE(j, type)->position() + jointVD[i][j-linkChains[i]->start] * cycleTime;
+    }
+  }
+  return jointD;
+
+
+  /*vector<Matrix<Scalar, 4, 4> > limbTs(toUType(LinkChains::count));
   Matrix<Scalar, 3, 3> rBase;
   Matrix<Scalar, 6, 6> XBase;
   Matrix<Scalar, 6, 6> Xo;
@@ -1562,11 +1662,10 @@ KinematicsModule<Scalar>::solveComIK(const LinkChains& baseLimb,
   vector<Matrix<Scalar, Dynamic, Dynamic> > limbJs(toUType(LinkChains::count));
   vector<Matrix<Scalar, 6, 6> > XiWithBaseJacobian(toUType(LinkChains::count));
   vector<Matrix<Scalar, Dynamic, Dynamic> > limbJsInv(toUType(LinkChains::count));
-  Matrix<Scalar, 3, 1> comWrtBaseLimb;
-  computeComWrtBase(baseLimb, eeIndices[toUType(baseLimb)], comWrtBaseLimb, type);
-  //cout << "comwrtBase: " << comWrtBaseLimb << endl;
+  Matrix<Scalar, 3, 1> comWrtBaseLimb =
+    getComStateWrtFrame(baseLimb, eeIndices[toUType(baseLimb)]).position;
   limbTs[toUType(baseLimb)] = getForwardEffector(baseLimb, eeIndices[toUType(baseLimb)], type);
-  rBase = torsoState->rot.block(0, 0, 3, 3);//MathsUtils::getTInverse(temp).block(0, 0, 3, 3);
+  rBase = MathsUtils::getTInverse(limbTs[toUType(baseLimb)]).block(0, 0, 3, 3);
   Matrix<Scalar, 3, 1> eeBase = limbTs[toUType(baseLimb)].block(0, 3, 3, 1);
   Matrix<Scalar, 3, 1> eeBaseR = rBase * eeBase;
   XBase << Matrix<Scalar, 3, 3>::Identity(), MathsUtils::makeSkewMat(eeBaseR),
@@ -1633,6 +1732,7 @@ KinematicsModule<Scalar>::solveComIK(const LinkChains& baseLimb,
         jointVD[i] = limbJsInv[i] * rhs;
       }
     }
+    //cout << "jointVd:" << i << "\n" << jointVD[i] << endl;
     for (size_t j = linkChains[i]->start; j < linkChains[i]->start + linkChains[i]->size; ++j) {
       jointD[j] = JOINT_STATE(j, type)->position() + jointVD[i][j-linkChains[i]->start] * cycleTime;
       //if (i == toUType(baseLimb)) {
@@ -1643,7 +1743,7 @@ KinematicsModule<Scalar>::solveComIK(const LinkChains& baseLimb,
     }
   }
   //cout << "jointsVD: " << jointVD[toUType(baseLimb)] << endl;
-  return jointD;
+  return jointD;*/
 }
 
 template <typename Scalar>
@@ -2201,7 +2301,16 @@ Matrix<Scalar, 3, 1> KinematicsModule<Scalar>::calculateCenterOfMass(
 template <typename Scalar>
 void KinematicsModule<Scalar>::updateFootOnGround()
 {
-  auto& fsrSensors = FSR_SENSORS_OUT(MotionModule);
+  #ifndef V6_CROSS_BUILD
+    auto& fsrSensors = FSR_SENSORS_OUT(MotionModule);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      auto& fsrSensors = FSR_SENSORS_OUT(MotionModule);
+    #else
+      const auto& fsrSensors = FSR_SENSORS_IN(MotionModule);
+    #endif
+  #endif
+
   /* Naoqi does it itself idk why?
    * fsrSensors[L_FOOT_TOTAL_WEIGHT] =
       fsrSensors[L_FOOT_FSR_FL] +
@@ -2256,6 +2365,8 @@ void KinematicsModule<Scalar>::updateFootOnGround()
       else footOnGround = RobotFeet::lFoot;
     }
   }
+
+  //! Override if we know the step leg
   if(STEP_LEG_OUT(MotionModule) == RobotFeet::lFoot)
     footOnGround = RobotFeet::rFoot;
   else if(STEP_LEG_OUT(MotionModule) == RobotFeet::rFoot)
@@ -2266,7 +2377,15 @@ void KinematicsModule<Scalar>::updateFootOnGround()
 template <typename Scalar>
 Matrix<Scalar, 2, 1> KinematicsModule<Scalar>::computeFsrZmp(const RobotFeet& refFrame)
 {
-  auto& fsrSensors = FSR_SENSORS_OUT(MotionModule);
+  #ifndef V6_CROSS_BUILD
+    auto& fsrSensors = FSR_SENSORS_OUT(MotionModule);
+  #else
+    #ifndef REALTIME_LOLA_AVAILABLE
+      auto& fsrSensors = FSR_SENSORS_OUT(MotionModule);
+    #else
+      const auto& fsrSensors = FSR_SENSORS_IN(MotionModule);
+    #endif
+  #endif
   Matrix<Scalar, 4, 4> tl = getForwardEffector(LinkChains::lLeg, toUType(LegEEs::ankle));
   Matrix<Scalar, 4, 4> tr = getForwardEffector(LinkChains::rLeg, toUType(LegEEs::ankle));
   Matrix<Scalar, 2, 1> cop;
@@ -2309,9 +2428,9 @@ template <typename Scalar>
 void KinematicsModule<Scalar>::updateTorsoToFeet()
 {
   L_FOOT_TRANS_OUT(MotionModule) =
-    getForwardEffector(LinkChains::lLeg, toUType(LegEEs::footBase)).template cast <float> ();
+    getForwardEffector(LinkChains::lLeg, toUType(LegEEs::footCenter)).template cast <float> ();
   R_FOOT_TRANS_OUT(MotionModule) =
-    getForwardEffector(LinkChains::rLeg, toUType(LegEEs::footBase)).template cast <float> ();
+    getForwardEffector(LinkChains::rLeg, toUType(LegEEs::footCenter)).template cast <float> ();
   footSpacing =
     L_FOOT_TRANS_OUT(MotionModule)(1, 3) -
     R_FOOT_TRANS_OUT(MotionModule)(1, 3);
@@ -2359,7 +2478,7 @@ KinematicsModule<Scalar>::makePostureTask(
   vector<bool> activeJoints,
   const Scalar& weight,
   const Scalar& gain,
-  vector<bool> activeResidual)
+  vector<float> activeResidual)
 {
   if (activeJoints.empty()) {
     activeJoints.resize(toUType(Joints::count), false);
@@ -2383,7 +2502,7 @@ KinematicsModule<Scalar>::makeContactTask(
   vector<bool> activeJoints,
   const Scalar& weight,
   const Scalar& gain,
-  vector<bool> activeResidual)
+  vector<float> activeResidual)
 {
   if (activeJoints.empty()) {
     activeJoints.resize(toUType(Joints::count), false);
@@ -2409,7 +2528,7 @@ KinematicsModule<Scalar>::makeCartesianTask(
   vector<bool> activeJoints,
   const Scalar& weight,
   const Scalar& gain,
-  vector<bool> activeResidual)
+  vector<float> activeResidual)
 {
   if (activeJoints.empty()) {
     activeJoints.resize(toUType(Joints::count), false);
@@ -2436,7 +2555,7 @@ KinematicsModule<Scalar>::makeCartesianTask(
   vector<bool> activeJoints,
   const Scalar& weight,
   const Scalar& gain,
-  vector<bool> activeResidual)
+  vector<float> activeResidual)
 {
   return makeCartesianTask(
     chainIndex,
@@ -2457,7 +2576,7 @@ KinematicsModule<Scalar>::makeComTask(
   vector<bool> activeJoints,
   const Scalar& weight,
   const Scalar& gain,
-  vector<bool> activeResidual)
+  vector<float> activeResidual)
 {
   if (activeJoints.empty()) {
     activeJoints.resize(toUType(Joints::count), true);
@@ -2483,7 +2602,7 @@ KinematicsModule<Scalar>::makeTorsoTask(
   vector<bool> activeJoints,
   const Scalar& weight,
   const Scalar& gain,
-  vector<bool> activeResidual)
+  vector<float> activeResidual)
 {
   if (activeJoints.empty()) {
     activeJoints.resize(toUType(Joints::count), true);
@@ -2566,7 +2685,7 @@ KinematicsModule<Scalar>::solveJacobianIK(
   const Matrix<Scalar, 4, 4>& targetT,
   const unsigned& maxIterations,
   vector<bool>& activeJoints,
-  vector<bool> activeResidual)
+  vector<float> activeResidual)
 {
   tis->reset(false);
   unsigned chainStart = linkChains[toUType(chainIndex)]->start;
@@ -3152,7 +3271,7 @@ Scalar KinematicsModule<Scalar>::getJointPosition(
   const Joints& index,
   const JointStateType& type)
 {
-  return joints[toUType(index)]->states[toUType(type)]->position();
+  return joints[toUType(index)]->states[toUType(type)]->position() + joints[toUType(index)]->states[toUType(type)]->offset;
 }
 
 template <typename Scalar>
@@ -3164,7 +3283,7 @@ Matrix<Scalar, Dynamic, 1> KinematicsModule<Scalar>::getJointPositions(
   Matrix<Scalar, Dynamic, 1> positions;
   positions.resize(nElements);
   for (size_t i = 0; i < nElements; ++i) {
-    positions[i] = joints[toUType(startIndex) + i]->states[toUType(type)]->position();
+    positions[i] = joints[toUType(startIndex) + i]->states[toUType(type)]->position() + joints[toUType(startIndex) + i]->states[toUType(type)]->offset;
   }
   return positions;
 }
@@ -3282,6 +3401,11 @@ template <typename Scalar>
 Scalar KinematicsModule<Scalar>::getCycleTime()
 {
   return cycleTime;
+}
+
+template <typename Scalar>
+void KinematicsModule<Scalar>::setJointOffset(const Joints& index, const Scalar& offset, const JointStateType& type) {
+  joints[toUType(index)]->states[toUType(type)]->offset = offset;
 }
 
 template class KinematicsModule<MType>;

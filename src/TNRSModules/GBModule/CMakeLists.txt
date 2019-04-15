@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12)
 project (tnrs-gb-module)
 
 include($ENV{PATH_TO_TEAM_NUST_DIR}/make/cmake/common.cmake)
-include_directories(include)
+include_directories(include $ENV{PATH_TO_TEAM_NUST_DIR}/resources/msgpack/include)
 
 find_path(EIGEN3_INCLUDE_DIRS "Eigen" PATHS "${SDK_DIR}/include" PATH_SUFFIXES "eigen3")
 if (EIGEN3_INCLUDE_DIRS)

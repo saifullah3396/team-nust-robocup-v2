@@ -86,7 +86,7 @@ bool Robocup::otherRobotOnBall()
 {
   // Find if any other teammate is following ball right now and
   // is also closer.
-  auto ballToRobot = norm(BALL_INFO_IN(PlanningModule).posRel);
+  const auto& ballToRobot = norm(BALL_INFO_IN(PlanningModule).posRel);
   for (const auto& tr : TEAM_ROBOTS_IN(PlanningModule)) {
     // If any robot is intending to play the ball
     if (tr.intention == 3) {
@@ -195,7 +195,7 @@ void Robocup::fallenRobotAction()
 void Robocup::fallRecoveryAction()
 {
   cout << "Executing Robocup.inFallRecoveryAction()..." << endl;
-  auto posture = POSTURE_STATE_IN(PlanningModule);
+  const auto& posture = POSTURE_STATE_IN(PlanningModule);
   if (ROBOT_FALLEN_IN(PlanningModule)) {
     if (posture == PostureState::fallFront) {
       getupFromGround(KeyFrameGetupTypes::front, StiffnessState::getup, MOTION_1);

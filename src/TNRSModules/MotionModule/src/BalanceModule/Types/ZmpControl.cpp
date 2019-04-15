@@ -118,10 +118,10 @@ bool ZmpControl<Scalar>::initiate()
 
   tasks.resize(toUType(IkTasks::count));
   ///< Make a center of mass task to control its desired trajectory
-  auto comResidual = vector<bool>(3, true);
+  auto comResidual = vector<float>(3, 1.0);
 
   ///< Remove center of mass z-axis tracking
-  comResidual[2] = false;
+  comResidual[2] = 0.0;
   tasks[toUType(IkTasks::com)] =
     this->kM->makeComTask(
       static_cast<RobotFeet>(supportLeg),
@@ -173,9 +173,9 @@ bool ZmpControl<Scalar>::initiate()
     ///< Torso task to keep torso orientation to the initial orientation
     ///< This can be useful if the torso is to be kept upright
     Matrix<Scalar, 4, 4> target = this->kM->getGlobalToBody();
-    auto activeResidual = vector<bool>(6, false); ///< X-Y-Z, Roll-Pitch-Yaw
+    auto activeResidual = vector<float>(6, 0.0); ///< X-Y-Z, Roll-Pitch-Yaw
     ///< Only use Pitch tracking
-    activeResidual[4] = true;
+    activeResidual[4] = 1.0;
     tasks[toUType(IkTasks::torso)] =
       this->kM->makeTorsoTask(
         static_cast<RobotFeet>(supportLeg),
@@ -278,8 +278,8 @@ void ZmpControl<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
   // Set dummy target
   Matrix<Scalar, 3, 1> comTarget;
   comTarget.setZero();
-  auto comResidual = vector<bool>(3, true);
-  comResidual[2] = false;
+  auto comResidual = vector<float>(3, 1.0);
+  comResidual[2] = 0.0;
   tasks[toUType(IkTasks::com)] =
     this->kM->makeComTask(
       static_cast<RobotFeet>(getBehaviorCast()->supportLeg),
@@ -348,7 +348,7 @@ void ZmpControl<Scalar>::reinitiate(const BehaviorConfigPtr& cfg)
       activeJointsTorso[this->kM->getLinkChain(supportLeg)->start + i] = true;
     tasks[toUType(IkTasks::torso)] =  this->kM->makeTorsoTask(supportLeg, toUType(LegEEs::footBase), target, activeJointsTorso, taskWeights[toUType(IkTasks::torso)], taskGains[toUType(IkTasks::torso)]);*/
     Matrix<Scalar, 4, 4> target = this->kM->getGlobalToBody();
-    auto activeResidual = vector<bool>(6, false); // X-Y-Z, Roll-Pitch-Yaw
+    auto activeResidual = vector<float>(6, false); // X-Y-Z, Roll-Pitch-Yaw
     tasks[toUType(IkTasks::torso)] =
       this->kM->makeTorsoTask(
       static_cast<RobotFeet>(supportLeg),

@@ -15,7 +15,7 @@ if __name__ == '__main__':
       #path = "../data/data.json";
       #json_data=open(path).read()
       handler = DataHandler()
-      rate = rospy.Rate(10)
+      rate = rospy.Rate(1)
       #path_to_image = "/home/sensei/Pictures/1.jpeg"
       #image = cv2.resize(cv2.imread(path_to_image), (320, 240))
       #yuv = cv2.cvtColor(image, cv2.COLOR_BGR2YUV)
