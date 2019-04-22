@@ -24,7 +24,7 @@ ColorHandler::ColorHandler() :
     for (int j = 0; j < colorTables[i]->nTables; ++j) {
       JsonUtils::jsonToType(colorTables[i]->lower[j].yuv, root[colorNames[i]]["lower"][j], colorTables[i]->lower[j].yuv);
       JsonUtils::jsonToType(colorTables[i]->upper[j].yuv, root[colorNames[i]]["upper"][j], colorTables[i]->upper[j].yuv);
-      for (size_t k = 0; k < 255; ++k) {
+      for (size_t k = 0; k < 256; ++k) {
         colorTables[i]->lutY[j][k] = k >= colorTables[i]->lower[j].y() && k <= colorTables[i]->upper[j].y();
         colorTables[i]->lutU[j][k] = k >= colorTables[i]->lower[j].u() && k <= colorTables[i]->upper[j].u();
         colorTables[i]->lutV[j][k] = k >= colorTables[i]->lower[j].v() && k <= colorTables[i]->upper[j].v();

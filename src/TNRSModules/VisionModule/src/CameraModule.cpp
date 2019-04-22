@@ -232,6 +232,11 @@ bool CameraModule::setupCameras()
           yuv.data = cams[toUType(index)]->image;
           cv::Mat bgr;
           cvtColor(yuv, bgr, COLOR_YUV2BGR_YUY2);
+          if (index == CameraId::headTop) {
+            VisionUtils::displayImage("Top", bgr);
+          } else {
+            VisionUtils::displayImage("Bottom", bgr);
+          }
           imwrite(imageStr, bgr);
         }
         #ifndef V6_CROSS_BUILD
@@ -241,18 +246,24 @@ bool CameraModule::setupCameras()
         #endif
       } else {
         string name;
+        string imageStr;
         if (index == CameraId::headTop) {
           GET_CONFIG(
             "VisionConfig",
             (string, InputImage.testImageTop, name),
           )
+          imageStr = ConfigManager::getLogsDirPath() +
+          "Images/Top/" + name;
         } else {
           GET_CONFIG(
             "VisionConfig",
             (string, InputImage.testImageBot, name),
           )
+          imageStr = ConfigManager::getLogsDirPath() +
+          "Images/Bottom/" + name;
         }
-        cv::Mat img = imread(ROOT_DIR + string("/ProcessingChilds/VisionModule/Logs/") + name);
+        cout << "reading image" << imageStr << endl;
+        cv::Mat img = imread(imageStr);
         //Mat yuv;
         //cvtColor(img, yuv, COLOR_RGB2YUV);
         //VisionUtils::displayImage(yuv, "InputYuv1");

@@ -39,6 +39,11 @@ struct ScannedRegion
   ScannedRegion(const cv::Rect& rect);
 
   /**
+   * @brief resetParams Finds the parameters according to updated rect state
+   */
+  void resetParams();
+
+  /**
    * @brief ScannedRegion::join Performs a union with another region
    * @param other Other region
    */
@@ -85,6 +90,8 @@ struct ScannedRegion
    * @param regions Input regions
    * @param xTol Tolerance in X
    * @param yTol Tolerance in Y
+   * @param sizeRatioTol Tolerance in size difference
+   * @param image Image for output
    */
   static void linkRegions(
     std::vector<boost::shared_ptr<ScannedRegion>>& resultRegions,
@@ -92,6 +99,19 @@ struct ScannedRegion
     const int& xTol,
     const int& yTol,
     const int& sizeRatioTol = 10.0,
+    cv::Mat image = cv::Mat());
+
+  /**
+   * @brief linkRegions Links scanned regions based on x-y dist threshold
+   * @param resultRegions Output regions
+   * @param regions Input regions
+   * @param sizeRatioTol Tolerance in size difference
+   * @param image Image for output
+   */
+  static void linkRegions(
+    std::vector<boost::shared_ptr<ScannedRegion>>& resultRegions,
+    std::vector<boost::shared_ptr<ScannedRegion>>& regions,
+    const double& sizeRatioTol,
     cv::Mat image = cv::Mat());
 
   cv::Rect rect; ///< Rect defining the bounding box of the region

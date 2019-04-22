@@ -12,17 +12,17 @@
 #include <opencv2/objdetect/objdetect.hpp>
 #include "TNRSBase/include/DebugBase.h"
 #include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
-/*
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/optional_debug_tools.h"
 
 using namespace tflite;
-*/
+
 typedef boost::shared_ptr<Rect> RectPtr;
 
 class FieldExtraction;
+class RobotExtraction;
 class RegionSegmentation;
 class BallTracker;
 
@@ -33,17 +33,17 @@ class BallTracker;
 class BallExtraction : public FeatureExtraction, public DebugBase
 {
   INIT_DEBUG_BASE_(
-    ///< Option to send total module time
     (int, sendTime, 0),
-    ///< Option to draw ball predicted state
     (int, drawPredictionState, 0),
-    ///< Option to draw ball scanned regions
+    (int, drawScannedLines, 0),
+    (int, drawUnlinkedScannedRegions, 0),
+    (int, drawClassifiedPentagons, 0),
+    (int, drawClassifiedTriangles, 0),
+    (int, drawBallCircles, 0),
     (int, drawScannedRegions, 0),
-    ///< Option to draw extracted ball contour
     (int, drawBallContour, 0),
-    ///< Option to display info about the results
+    (int, drawPredictionROI, 0),
     (int, displayInfo, 0),
-    ///< Option to display image output
     (int, displayOutput, 0),
   );
 
@@ -89,13 +89,6 @@ private:
   bool resetBallTracker();
 
   /**
-   * @brief getPredRoi Makes a roi for predicted state
-   * @param predRoi Ouput roi
-   * @param predState Predicted ball state
-   */
-  void getPredRoi(Rect& predRoi, const Mat& predState);
-
-  /**
    * @brief redBallDetector A red ball detector
    * @param origRect image rect
    */
@@ -115,60 +108,51 @@ private:
    */
   unsigned getBallFrameInNextCycle(BallInfo<float>& ballInfo);
 
-  void findBallRegions();
-
   /**
-   * @brief findBallUpperCam Scans the ball in upper camera image
+   * @brief findBallRegions Finds possible ball regions from robot lines
+   * @param ballRegions Output regions
    */
-  void findBall(vector<int>& pairIndices);
+  void findBallRegions(vector<boost::shared_ptr<ScannedRegion> >& ballRegions);
 
   /**
-   * @brief findBallFromPredState Uses predicted ball state to
+   * @brief findBallROIFromPredState Uses predicted ball state to
    *   find the ball
+   * @param roi Output ball roi
    * @param predState Predicted state
    */
-  void findBallFromPredState(Mat& predState);
+  void findBallROIFromPredState(Rect& roi, Mat& predState);
 
   /**
-   * @brief findBallUpperCam Scans the ball in upper camera image
-   * @param roi Region of interest
+   * @brief filterFromRobotRegions Filters out the ball regions by removing
+   *   known robot regions from them
+   * @param ballRegions Ball regions
    */
-  void findBallUpperCam(const Rect& roi);
+  void filterFromRobotRegions(
+    vector<boost::shared_ptr<ScannedRegion> >& ballRegions);
 
   /**
-   * @brief findBallLowerCam Scans the ball in lower camera image
-   * @param roi Region of interest
+   * @brief findCandidatesWithBallFeatures Finds ball regions based on ball features
+   * @param ballRegions Input regions
+   * @param bestCandidates Ball region candidates that have passed all tests
+   * @param poorCandidates Ball region candidates that have passed only a
+   *   sufficient amount of tests
    */
-  void findBallLowerCam(const Rect& roi);
+  void findCandidatesWithBallFeatures(
+    vector<boost::shared_ptr<ScannedRegion> >& ballRegions,
+    vector<Rect>& bestCandidates,
+    vector<Rect>& poorCandidates);
 
   /**
-   * @brief scanRandom Scans an area by randomly choosing from the given
-   *   bounding boxes in the area
-   * @param boundRects Bounding boxes that are resulting from scan
-   * @param pairIndices Indices for grid bounding boxes
-   * @param iters Number of iterations to randomly scan the area
-   */
-  void scanRandom(vector<RectPtr>& boundRects, const vector<int>& pairIndices, const int& iters);
-
-  /**
-   * @brief scanRandom Scans the given roi
-   * @param boundRects Bounding boxes that are resulting from scan
-   * @param roi Region of interest
-   */
-  void scanRoi(vector<RectPtr>& boundRects, const Rect& roi);
-
-  /**
-   * @brief filterRegions Filters out the scanned ball regions
-   * @param boundRects Possible ball regions
-   * @param threshold dist threshold for considering two regions as one
-   */
-  void filterRegions(vector<RectPtr>& boundRects, const float& threshold);
-
-  /**
-   * @brief classifyRegions Classifies all the regions based on ball classifier
+   * @brief classifyRegionsCNN Classifies all the regions based on CNN classifier
    * @param boundRects Possible ball regions
    */
-  void classifyRegions(vector<RectPtr>& boundRects);
+  void classifyRegionsCNN(vector<Rect>& boundRects);
+
+  /**
+   * @brief classifyRegionsCascade Classifies all the regions based on cascade classifier
+   * @param boundRects Possible ball regions
+   */
+  void classifyRegionsCascade(vector<Rect>& boundRects);
 
   /**
    * Applies the classifier to given image and stores ball bouding box
@@ -185,63 +169,79 @@ private:
    */
   void updateBallInfo();
 
-  ///< Balls found in current iteration
-  vector<Rect> foundBall;
+  boost::shared_ptr<FieldExtraction> fieldExt; ///< Field Extraction module object.
+  boost::shared_ptr<RobotExtraction> robotExt; ///< Robot Extraction module object.
+  boost::shared_ptr<RegionSegmentation> regionSeg; ///< Field Extraction module object.
+  boost::shared_ptr<BallTracker> ballTracker;///< Ball tracker class object.
 
-  ///< Ball radius in xyz frame
-  float ballRadius;
+  vector<Rect> classifiedBalls; ///< Balls classified in current iteration
+  float ballRadius = {0.05}; ///< Ball radius in xyz frame
+  unsigned ballType = {1}; ///< Type of the ball
+  float coeffSF; ///< Static friction coefficients
+  float coeffRF; ///< Rolling friction coefficients
 
-  ///< Upper radius threshold.
-  float ballRadiusMax;
+  float lineLinkHorXTolRatio = {1.5}; ///< Line difference ratio in X for horizontal scan
+  float lineLinkHorYTolRatio = {1.5}; ///< Line difference ratio in Y for horizontal scan
+  float lineLinkVerXTolRatio = {1.5}; ///< Line difference ratio in X for vertical scan
+  float lineLinkVerYTolRatio = {1.5}; ///< Line difference ratio in Y for vertical scan
+  float maxLineLengthDiffRatio = {1.25}; ///< Line length difference ratio for both scans
+  float regionsXDiffTol = {16}; ///< Region link max distance in X in pixels
+  float regionsYDiffTol = {16}; ///< Region link max distance in Y in pixels
+  float maxRegionSizeDiffRatio = {2.5}; ///< Region link max difference in sizes
+  float regionFilterMinWidth = {10}; ///< Minimum width for regions found
+  float regionFilterMinHeight = {10}; ///< Minimum height for regions found
+  float regionFilterMaxAspectRatio = {5}; ///< Minimum aspect ratio for regions found in width and height
 
-  ///< Lower radius threshold.
-  float ballRadiusMin;
+  float robotFilterHeightRatio = {0.8}; ///< Max height to be considered for found robot regions
+  float fallenRobotFilterHeightRatio = {0.5}; ///< Max height to be considered for found fallen robot regions
+  float robotMaxOverlapTop = {0.65}; ///< Max overlap threshold for ball to top robot regions
+  float robotMaxOverlapBottom = {0.95}; ///< Max overlap threshold for ball to bottom robot regions
+  float minOverlapAreaThreshold = {100}; ///< Minimum overlap area threshold for overlap to be considered
+  float maxBallRegionSizeRatio = {0.5}; ///< Maximum regions size wrt image size above which they are discarded
 
-  ///< OpenCv Cascade classifier for ball.
-  CascadeClassifier cascade;
+  float ballRegionPaddingRatio = {1.25}; ///< Padding ratio wrt region size when finding ball features
+  float adaptiveThresholdWindowSizeRatio = {2.0}; ///< Ratio of size of window to size of expected ball size for adaptive threshold
+  float adaptiveThresholdSubConstantRatio = {2.0}; ///< Ratio of subtraction constant wrt expected ball size for adaptive threshold
+  float maxBallBlobSizeRatio = {0.8}; ///< Ratio of maximum blob size for ball pentagon features wrt expected ball size
+  float minBallBlobSizeRatio = {0.2}; ///< Ratio of minimum blob size for ball pentagon features wrt expected ball size
+  float ballBlobMaxAspectRatio = {3}; ///< Minimum aspect ratio for regions found in width and height
+  float maxBallBlobIntensity = {100}; ///< Maximum blob intensity for ball blobs
+  int minPentagonsRequired = {3}; ///< Minimum 3 are required for making a triangle combination
+  int maxPentagonsRequired = {6}; ///< Maximum 6 are set because ball cannot have many blobs
+  int minPentagonsPoorCandidates = {2}; ///< Minimum 2 pentagons are required to call it a poor but sufficient candidates
+  float maxBlobToBlobSizeDiffRatio = {0.5}; ///< Maximum difference of sizes between blobs in one combination of 3
 
-  ///< Field Extraction module object.
-  boost::shared_ptr<FieldExtraction> fieldExt;
+  int gaussianSizeX = {3}; ///< X Size of gaussian filter to be applied on binary image for hough circle
+  int gaussianSizeY = {3}; ///< Y Size of gaussian filter to be applied on binary image for hough circle
+  int gaussianSigmaX = {2}; ///< X Sigma of gaussian filter to be applied on binary image for hough circle
+  int gaussianSigmaY = {2}; ///< Y Sigma of gaussian filter to be applied on binary image for hough circle
 
-  ///< Field Extraction module object.
-  boost::shared_ptr<RegionSegmentation> regionSeg;
+  int houghCirclesMethod = {CV_HOUGH_GRADIENT}; ///< OpenCv method used for hough circles
+  int houghCirclesMinDistRatio = {2}; ///< Minimum distance between two circles wrt image size
+  int minRadiusPixelTolerance = {25}; ///< Minimum radius limit wrt expected ball size
+  int maxRadiusPixelTolerance = {25}; ///< Maximum radius limit wrt expected ball size
 
-  ///< Ball tracker class object.
-  boost::shared_ptr<BallTracker> ballTracker;
+  float triangleToCircleMaxDistRatio = {2.0}; ///< Maximum distance of circle center to triangle center wrt ball size
+  float cascadePaddingRatio = {1.25}; ///< Padding of rectangle while applying cascade filter
+  float CNNClassificationTolerance = 0.25; ///< Max difference of classified label and actual label
 
-  ///< Distance threshold for combining two regions
-  vector<int> regionsDist;
+  float predictedAreaRoiRatio = {3}; /// Size of ROI wrt predicted state
+
+  std::unique_ptr<FlatBufferModel> model; ///< Tflite model
+  ops::builtin::BuiltinOpResolver resolver; ///< Tflite model resolvier
+  std::unique_ptr<Interpreter> interpreter;///< Tflite model interpreter
+
+  CascadeClassifier cascade; ///< OpenCv Cascade classifier for ball.
 
   ///< Processing times
-  float processTime;
-  float resetBallTrackerTime;
-  float ballDetectionTime;
-  float scanTime;
-  float regionFilterTime;
-  float regionClassificationTime;
-  float updateBallInfoTime;
-  float findBallRegionsTime;
-
-  ///< Ball scan step for lower cam
-  int scanStepLow;
-  int scanStepHigh;
-
-  ///< Type of the ball
-  unsigned ballType;
-
-  ///< Friction coefficients
-  float coeffSF;
-  float coeffRF;
-
-  ///< Ball scanning parameters
-  vector<Point> topXYPairs;
-  vector<Point> bottomXYPairs;
-  vector<int> xySeen;
-  Point gridSizeTop;
-  Point gridSizeBottom;
-
-  ///< Tflite mode interpreter
-  //std::unique_ptr<FlatBufferModel> model;
-  //ops::builtin::BuiltinOpResolver resolver;
-  //std::unique_ptr<Interpreter> interpreter;
+  float processTime = {0.f};
+  float resetBallTrackerTime = {0.f};
+  float findBallFromPredStateTime = {0.f};
+  float findBallRegionsTime = {0.f};
+  float filterFromRobotRegionsTime = {0.f};
+  float findCandidatesWithBallFeaturesTime = {0.f};
+  float classifyRegionsCNNTime = {0.f};
+  float classifyRegionsCascadeTime = {0.f};
+  float redBallDetectorTime = {0.f};
+  float updateBallInfoTime = {0.f};
 };

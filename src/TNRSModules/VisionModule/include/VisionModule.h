@@ -227,6 +227,13 @@ private:
    */
   void handleVideoWriting();
 
+  #ifndef MODULE_IS_REMOTE
+  /**
+   * @brief saveImages Saves bgr images if required
+   */
+  void saveImages();
+  #endif
+
   /**
    * @brief featureExtractionUpdate updates feature extraction classes
    * @return true if images have been processed

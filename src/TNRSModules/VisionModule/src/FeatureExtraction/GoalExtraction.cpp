@@ -34,7 +34,7 @@
 using namespace MathsUtils;
 
 GoalExtraction::GoalExtraction(VisionModule* visionModule) :
-  FeatureExtraction(visionModule), DebugBase("GoalExtraction", this)
+  FeatureExtraction(visionModule, "GoalExtraction"), DebugBase("GoalExtraction", this)
 {
   initDebugBase();
   int tempSendTime;
@@ -114,8 +114,10 @@ void GoalExtraction::processImage()
     LOG_INFO("Time taken by overall processing: " << processTime);
     LOG_INFO("Goal posts found: " << GOAL_INFO_OUT(VisionModule).found);
   }
-  if (GET_DVAR(int, displayOutput))
-    VisionUtils::displayImage("GoalExtraction", bgrMat[toUType(activeCamera)]);
+  if (GET_DVAR(int, displayOutput)) {
+    VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+    waitKey(0);
+  }
 }
 
 void GoalExtraction::refreshGoalPosts()
@@ -206,6 +208,10 @@ bool GoalExtraction::filterGoalLines(vector<LinearScannedLinePtr>& horGoalLines)
     for (const auto& rr : robotRegions) {
       if (!rr) continue;
       if (rr->sr->rect.contains(Point(mean, gl->baseIndex))) {
+        gl.reset();
+        break;
+      }
+      if (rr->bodySr->rect.contains(Point(mean, gl->baseIndex))) {
         gl.reset();
         break;
       }
@@ -496,9 +502,14 @@ void GoalExtraction::findGoalSide(GoalInfo<float>& goalInfo)
     // If robot is within 80cm of the goal mid along the goal posts
     // in either direction and 65cm in front of it then mark it as goal keeper
     if (closest < 0.65 && distFromCenter < 0.8) {
-      if (bestRobotRegion->ourTeam) {
+      if (bestRobotRegion->obstacleType == ObstacleType::teammate ||
+          bestRobotRegion->obstacleType == ObstacleType::teammateFallen)
+      {
         goalInfo.type = GoalPostType::ourTeam;
-      } else {
+      } else if (
+        bestRobotRegion->obstacleType == ObstacleType::opponent ||
+        bestRobotRegion->obstacleType == ObstacleType::opponentFallen)
+      {
         goalInfo.type = GoalPostType::opponentTeam;
       }
     }
@@ -516,29 +527,10 @@ void GoalExtraction::addGoalObstacle(const GoalPostPtr& goalPost)
   auto robotPose2D = ROBOT_POSE_2D_IN(VisionModule);
   Obstacle<float> obs(ObstacleType::goalPost);
   obs.center = goalPost->world;
-  obs.front =
-    TNRSLine<float>(
-      Point2f(goalPost->world.x, goalPost->world.y - 0.05),
-      Point2f(goalPost->world.x, goalPost->world.y + 0.05)
-    );
-  obs.back =
-    TNRSLine<float>(
-      obs.front.p1 + obs.front.perp * obs.depth,
-      obs.front.p2 + obs.front.perp * obs.depth
-    );
-  obs.frontT =
-    TNRSLine<float>(
-      robotPose2D.transform(obs.front.p1),
-      robotPose2D.transform(obs.front.p2)
-    );
-  obs.backT =
-    TNRSLine<float>(
-      robotPose2D.transform(obs.back.p1),
-      robotPose2D.transform(obs.back.p2)
-    );
+  obs.center.x += obs.depth;
+  obs.centerT = robotPose2D.transform(obs.center);
   OBSTACLES_OBS_OUT(VisionModule).data.push_back(obs);
 }
-
 
 void GoalExtraction::addGoalLandmark(const GoalPostPtr& goalPost)
 {

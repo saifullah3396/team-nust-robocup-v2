@@ -120,8 +120,9 @@ RobotScan::RobotScan(
   const bool& direction) :
   Scan(TNColors::white, lowStep, highStep, direction)
 {
-  falseColorThreshold = 1;
+  falseColorThreshold = 0;
   trueColorThreshold = 0;
+  otherColorThreshold = 0;
 }
 
 void RobotScan::lineFound(const int& lowIndex, const int& highIndex) {
@@ -138,24 +139,21 @@ void RobotScan::lineFound(const int& lowIndex, const int& highIndex) {
 }
 
 void RobotScan::onScanLimitReached(const int& limitIndex, const int& highIndex) {
-  if (falseColor > falseColorThreshold)
-  {
-    lineFound(limitIndex, highIndex);
-    otherColor = 0;
-    trueColor = 0;
-    falseColor = 0;
-  }
+  lineFound(limitIndex, highIndex);
+  otherColor = 0;
+  trueColor = 0;
+  falseColor = 0;
 }
 
 void RobotScan::update(const TNColors& color, const int& lowIndex, const int& highIndex) {
   if (color == this->color) {
-    if (trueColor > trueColorThreshold && falseColor <= falseColorThreshold)
-      trueColor += falseColor;
+    //if (trueColor > trueColorThreshold && falseColor <= falseColorThreshold)
+    //  trueColor += falseColor;
     trueColor++;
     falseColor = 0;
   } else if (color != TNColors::green) {
-    if (falseColor <= falseColorThreshold)
-      otherColor += falseColor;
+    //if (falseColor <= falseColorThreshold)
+    //  otherColor += falseColor;
     otherColor++;
     falseColor = 0;
   } else {
@@ -204,8 +202,9 @@ BallScan::BallScan(
   const bool& direction) :
   Scan(TNColors::black, lowStep, highStep, direction)
 {
-  falseColorThreshold = 1;
+  falseColorThreshold = 0;
   trueColorThreshold = 0;
+  otherColorThreshold = 0;
 }
 
 void BallScan::lineFound(const int& lowIndex, const int& highIndex) {
@@ -232,7 +231,7 @@ void BallScan::onScanLimitReached(const int& limitIndex, const int& highIndex) {
 }
 
 void BallScan::update(const TNColors& color, const int& lowIndex, const int& highIndex) {
-  if (color == this->color) {
+  /*if (color == this->color) {
     if (trueColor > trueColorThreshold && falseColor <= falseColorThreshold)
       trueColor += falseColor;
     trueColor++;
@@ -251,7 +250,27 @@ void BallScan::update(const TNColors& color, const int& lowIndex, const int& hig
       falseColor = 0;
     }
     falseColor++;
-  }
+  }*/
+  if (color == TNColors::white) {
+      if (trueColor > trueColorThreshold && falseColor <= falseColorThreshold)
+        trueColor += falseColor;
+      trueColor++;
+      falseColor = 0;
+    } else if (color != TNColors::green) {
+      if (falseColor <= falseColorThreshold)
+        otherColor += falseColor;
+      otherColor++;
+      falseColor = 0;
+    } else {
+      if (falseColor > falseColorThreshold)
+      {
+        lineFound(lowIndex, highIndex);
+        otherColor = 0;
+        trueColor = 0;
+        falseColor = 0;
+      }
+      falseColor++;
+    }
 }
 
 void BallScan::draw(cv::Mat& image) {

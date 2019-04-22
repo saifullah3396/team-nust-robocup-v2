@@ -4,18 +4,17 @@ project (tnrs-vision-module)
 
 include($ENV{PATH_TO_TEAM_NUST_DIR}/make/cmake/common.cmake)
 include_directories(include)
-include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/remote-depends)
 
 find_path(EIGEN3_INCLUDE_DIRS "Eigen" PATHS "${SDK_DIR}/include" PATH_SUFFIXES "eigen3")
 if (EIGEN3_INCLUDE_DIRS)
   include_directories ("${EIGEN3_INCLUDE_DIRS}")
 endif (EIGEN3_INCLUDE_DIRS)
 
-file (GLOB TNRS_VISION_MODULE_SRC 
+file (GLOB TNRS_VISION_MODULE_SRC
       "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/CameraModule/*.cpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/FeatureExtraction/*.cpp")
-      
+
 # Building the code for remote usage.
 if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
   add_library (tnrs-vision-module SHARED ${TNRS_VISION_MODULE_SRC})
@@ -40,55 +39,56 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
 
   # Linking external libraries installed as pre-requisites.
   # For remote usage the libraries can just be installed on the local pc.
-  link_directories($ENV{PATH_TO_TEAM_NUST_DIR}/remote-depends/lib)
-  target_link_libraries(tnrs-vision-module -lfftw3 -lfftw3f -lm -llapack -lpthread -ldl)
+  include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources/tensorflow)
+  find_library(TENSORFLOW_LIBRARY tensorflow-lite HINTS $ENV{PATH_TO_TEAM_NUST_DIR}/resources/tensorflow/lib)
+  target_link_libraries(tnrs-vision-module -lfftw3 -lfftw3f -lm -llapack -lpthread -ldl ${TENSORFLOW_LIBRARY})
 else()
   add_library (tnrs-vision-module SHARED ${TNRS_VISION_MODULE_SRC})
   # Linking libraries from the sdk.
 
   if(${ROBOT_VERSION} STREQUAL "V6")
-  qi_use_lib(
-    tnrs-vision-module
-    QI
-    BOOST
-    BOOST_FILESYSTEM
-    BOOST_IOSTREAMS
-    BLAS
-    LAPACK
-    OPENCV3_CORE
-    OPENCV3_HIGHGUI
-    OPENCV3_CALIB3D
-    OPENCV3_OBJDETECT
-    OPENCV3_VIDEO
-    OPENCV3_FEATURES2D
-    OPENCV3_FLANN
-    V4L
-  )
-  target_link_libraries(tnrs-vision-module -lm)
+    qi_use_lib(
+      tnrs-vision-module
+      QI
+      BOOST
+      BOOST_FILESYSTEM
+      BOOST_IOSTREAMS
+      BLAS
+      LAPACK
+      OPENCV3_CORE
+      OPENCV3_HIGHGUI
+      OPENCV3_CALIB3D
+      OPENCV3_OBJDETECT
+      OPENCV3_VIDEO
+      OPENCV3_FEATURES2D
+      OPENCV3_FLANN
+      V4L
+    )
+    target_link_libraries(tnrs-vision-module -lm -ljsoncpp libtensorflow-lite.a)
   else()
-  qi_use_lib(
-    tnrs-vision-module
-    ALCOMMON
-    ALPROXIES
-    PTHREAD
-    BOOST
-    BOOST_FILESYSTEM
-    BOOST_IOSTREAMS
-    ALVISION
-    OPENCV2_CORE
-    OPENCV2_HIGHGUI
-    OPENCV2_CALIB3D
-    OPENCV2_OBJDETECT
-    OPENCV2_VIDEO
-    OPENCV2_FEATURES2D
-    OPENCV2_FLANN
-    V4L
-  )
+    qi_use_lib(
+      tnrs-vision-module
+      ALCOMMON
+      ALPROXIES
+      PTHREAD
+      BOOST
+      BOOST_FILESYSTEM
+      BOOST_IOSTREAMS
+      ALVISION
+      OPENCV2_CORE
+      OPENCV2_HIGHGUI
+      OPENCV2_CALIB3D
+      OPENCV2_OBJDETECT
+      OPENCV2_VIDEO
+      OPENCV2_FEATURES2D
+      OPENCV2_FLANN
+      V4L
+    )
 
-  # Linking external libraries installed as pre-requisites in the toolchain
-  # These libraries are compiled on the virtual-nao in virtualbox robot env
-  # and placed in the folder cross-toolchain/cross/i686-aldebaran-linux-gnu/lib
-  target_link_libraries(tnrs-vision-module -lm -llapack -lrefblas -lgfortran)
+    # Linking external libraries installed as pre-requisites in the toolchain
+    # These libraries are compiled on the virtual-nao in virtualbox robot env
+    # and placed in the folder cross-toolchain/cross/i686-aldebaran-linux-gnu/lib
+    target_link_libraries(tnrs-vision-module -lm -llapack -lrefblas -lgfortran libtensorflow-lite.a)
   endif()
 endif()
 
@@ -98,7 +98,7 @@ target_link_libraries(tnrs-vision-module
   libtnrs-user-comm-module.so
   libtnrs-behavior-manager.so
 )
-    
+
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
     file (GLOB TESTS RELATIVE "${test_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")

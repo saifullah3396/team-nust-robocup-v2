@@ -23,7 +23,7 @@
 #include "Utils/include/VisionUtils.h"
 
 RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
-  FeatureExtraction(visionModule),
+  FeatureExtraction(visionModule, "RegionSegmentation"),
   DebugBase("RegionSegmentation", this)
 {
   initDebugBase();
@@ -64,8 +64,9 @@ RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
     //new FieldScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::field)], hScanStepHigh[defaultCamera], false);
   hScans[toUType(ScanTypes::robot)] =
     new RobotScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::robot)], hScanStepHigh[defaultCamera], false);
-  hScans[toUType(ScanTypes::ball)] =
-    new BallScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], hScanStepHigh[defaultCamera], false);
+  //hScans[toUType(ScanTypes::ball)] = hScans[toUType(ScanTypes::robot)];
+  //hScans[toUType(ScanTypes::ball)] =
+//    new BallScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], hScanStepHigh[defaultCamera], false);
   hScans[toUType(ScanTypes::ourJersey)] =
     new JerseyScan(ourColor, hScanStepSizes[defaultCamera][toUType(ScanTypes::ourJersey)], hScanStepHigh[defaultCamera], false);
   hScans[toUType(ScanTypes::oppJersey)] =
@@ -79,8 +80,9 @@ RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
     new FieldScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::field)], vScanStepHigh[defaultCamera], true);
   vScans[toUType(ScanTypes::robot)] =
     new RobotScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::robot)], vScanStepHigh[defaultCamera], true);
-  vScans[toUType(ScanTypes::ball)] =
-    new BallScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], vScanStepHigh[defaultCamera], true);
+  //vScans[toUType(ScanTypes::ball)] =
+  //  new BallScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], vScanStepHigh[defaultCamera], true);
+  //vScans[toUType(ScanTypes::ball)] = vScans[toUType(ScanTypes::robot)];
   vScans[toUType(ScanTypes::ourJersey)] =
     new JerseyScan(ourColor, vScanStepSizes[defaultCamera][toUType(ScanTypes::ourJersey)], vScanStepHigh[defaultCamera], true);
   vScans[toUType(ScanTypes::oppJersey)] =
@@ -182,7 +184,8 @@ void RegionSegmentation::processImage()
   }
   drawResults();
   if (GET_DVAR(int, displayOutput)) {
-    VisionUtils::displayImage("RegionSegmentation", bgrMat[toUType(activeCamera)]);
+    VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+    waitKey(0);
   }
 }
 
@@ -259,6 +262,13 @@ void RegionSegmentation::horizontalScan()
             if (scan && scan->enabled && scan->scanTables[toUType(activeCamera)][x])
               scan->update(color, x, y);
           }
+          if (color == TNColors::white)
+            bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(0, 0, 0);
+          else if (color == TNColors::green)
+            bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(0, 255, 0);
+          else {
+            bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(0, 255, 255);
+          }
         } else {
           auto& ourScan = hScans[toUType(ScanTypes::ourJersey)];
           auto& oppScan = hScans[toUType(ScanTypes::oppJersey)];
@@ -286,12 +296,16 @@ void RegionSegmentation::horizontalScan()
           if (goalScan->enabled && goalScan->scanTables[toUType(activeCamera)][x]) {
             goalScan->update(color, x, y);
           }
+          if (color == TNColors::white)
+            bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(0, 0, 0);
+          else if (color == TNColors::green)
+            bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(0, 255, 0);
+          else {
+            bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(0, 255, 255);
+          }
         }
-        //bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(255,0,0);
       }
-      //hScans[toUType(ScanTypes::ourJersey)]->draw(bgrMat[toUType(activeCamera)]);
-      //VisionUtils::displayImage("bgrMat[toUType(activeCamera)]:", bgrMat[toUType(activeCamera)]);
-      //waitKey(0);
+      //hScans[toUType(ScanTypes::robot)]->draw(bgrMat[toUType(activeCamera)]);
     }
   } else {
     for (int y = 0; y < getImageHeight(); y = y + hScanStepHigh[toUType(activeCamera)]) {
@@ -377,6 +391,7 @@ void RegionSegmentation::verticalScan()
       }
       if (GET_DVAR(int, drawVerticalLines))
         vScans[toUType(ScanTypes::field)]->draw(bgrMat[toUType(activeCamera)]);
+      //vScans[toUType(ScanTypes::robot)]->draw(bgrMat[toUType(activeCamera)]);
       //VisionUtils::displayImage("bgrMat[toUType(activeCamera)]:", bgrMat[toUType(activeCamera)]);
       //waitKey(0);
       if (static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldFound) {

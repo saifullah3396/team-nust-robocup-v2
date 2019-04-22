@@ -50,9 +50,10 @@ class FeatureExtraction : public MemoryBase
 public:
   /**
    * @brief FeatureExtraction Constructor
-   * @param visionModule Pointer to base vision module
+   * @param visionModule Pointer to base vision modul
+   * @param name Module name
    */
-  FeatureExtraction(VisionModule* visionModule);
+  FeatureExtraction(VisionModule* visionModule, const string& name);
 
   /**
    * @brief ~FeatureExtraction Destructor
@@ -122,6 +123,7 @@ public:
     { this->enabled = enabled; }
 
   ///< Getters
+  const string& getName() const { return name; }
   const bool& isEnabled() const { return enabled; }
   const CameraId& getActiveCamera() const { return activeCamera; }
   static const uint8_t* getYuv422Image(const unsigned& index) { return image[index]; }
@@ -289,6 +291,9 @@ protected:
 
   ///< VisionModule pointer
   VisionModule* visionModule;
+
+  ///< Class name
+  string name;
 private:
   ///< Pointer to camera module class.
   static CameraModulePtr camModule;

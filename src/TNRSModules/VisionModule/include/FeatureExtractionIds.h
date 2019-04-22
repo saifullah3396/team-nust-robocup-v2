@@ -19,8 +19,8 @@ enum class FeatureExtractionIds : unsigned int
 {
   segmentation,
   field,
-  ball,
   robot,
+  ball,
   goal,
   lines,
   count
