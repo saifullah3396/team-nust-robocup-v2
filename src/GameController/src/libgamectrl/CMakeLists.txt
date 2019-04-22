@@ -3,8 +3,7 @@ project(gamectrl)
 
 find_package(qibuild)
 
-add_definitions(-std=gnu++0x)
-
+include($ENV{PATH_TO_TEAM_NUST_DIR}/make/cmake/common.cmake)
 include_directories(../../include)
 
 set(_srcs
@@ -12,6 +11,10 @@ set(_srcs
     UdpComm.h
     UdpComm.cpp)
 
-qi_create_lib(gamectrl SHARED ${_srcs} SUBFOLDER naoqi)
-
+if(${ROBOT_VERSION} STREQUAL "V6")
+add_executable(gamectrl ${_srcs})
+qi_use_lib(gamectrl QI BOOST)
+else()
+add_library(gamectrl SHARED ${_srcs})
 qi_use_lib(gamectrl ALCOMMON BOOST)
+endif()

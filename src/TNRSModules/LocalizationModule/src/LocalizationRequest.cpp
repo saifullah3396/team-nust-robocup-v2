@@ -18,6 +18,7 @@ DEFINE_MODULE_REQUEST(
   (LocalizationRequestIds, initiateLocalizer, InitiateLocalizer),
   (LocalizationRequestIds, resetLocalizer, ResetLocalizer),
   (LocalizationRequestIds, positionUpdate, PositionUpdate),
+  (LocalizationRequestIds, velocityUpdate, VelocityUpdate),
   (LocalizationRequestIds, knownLandmarksUpdate, KnownLandmarksUpdate),
   (LocalizationRequestIds, unknownLandmarksUpdate, UnknownLandmarksUpdate),
 );

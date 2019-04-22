@@ -3,6 +3,6 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 1,
-  "startState" : "LocalizationLostState",
+  "startState" : "OccupancyMapTest",
   "logData" : false
 }

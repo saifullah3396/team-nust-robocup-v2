@@ -242,7 +242,7 @@ int main(int argc, char* argv[])
 {
     help();
     Settings s;
-    string path = ROOT_DIR + string("/../Config/");
+    string path = ROOT_DIR + string("/../logs/");
     string robotName = "", camera = "", imageFilePath = "";
     if(cmdOptionExists(argv, argv+argc, "--robot"))
     {
@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
     }
     if (robotName != "" && camera != "") {
       imageFilePath = 
-        ROOT_DIR + string("/../Config/Robots/") + robotName + "/" + camera + "Images.txt";
+        ROOT_DIR + string("/../logs/Robots/") + robotName + "/" + camera + "Images.txt";
     }
     const string inputSettingsFile = path + "CameraCalibrator.xml";
     FileStorage fs(inputSettingsFile, FileStorage::READ); // Read the settings

@@ -57,7 +57,8 @@ LocalizationModule::LocalizationModule(void* processingModule) :
   BaseModule(
     processingModule,
     TNSPLModules::localization,
-    "LocalizationModule")
+    "LocalizationModule",
+    50)
 {
 }
 
@@ -144,6 +145,9 @@ void LocalizationModule::handleRequests()
       } else if (reqId == (unsigned)LocalizationRequestIds::positionUpdate) {
         auto pu = boost::static_pointer_cast <PositionUpdate>(request);
         particleFilter->addPositionInput(pu->input);
+      } else if (reqId == (unsigned)LocalizationRequestIds::velocityUpdate) {
+        auto vu = boost::static_pointer_cast <VelocityUpdate>(request);
+        particleFilter->addVelocityInput(vu->input);
       } else if (reqId == (unsigned)LocalizationRequestIds::knownLandmarksUpdate) {
         auto klu = boost::static_pointer_cast <KnownLandmarksUpdate>(request);
         particleFilter->setKnownLandmarks(klu->landmarks);

@@ -48,7 +48,7 @@ RobotPose2D<OtherScalar> RobotPose2D<Scalar>::transform(const RobotPose2D<OtherS
     RobotPose2D<OtherScalar>(
       getX() + p.getX() * ct - p.getY() * st,
       getY() + p.getX() * st + p.getY() * ct,
-      MathsUtils::rangeToPi(p.getTheta() + getTheta())
+      MathsUtils::addAngles(static_cast<Scalar>(p.getTheta()), getTheta())
     );
 }
 template RobotPose2D<float> RobotPose2D<float>::transform(const RobotPose2D<float>& p) const;
@@ -64,7 +64,7 @@ Matrix<OtherScalar, 3, 1> RobotPose2D<Scalar>::transform(const Matrix<OtherScala
     Matrix<OtherScalar, 3, 1>(
       getX() + p[0] * ct - p[1] * st,
       getY() + p[0] * st + p[1] * ct,
-      MathsUtils::rangeToPi(p[2] + getTheta())
+      MathsUtils::addAngles(static_cast<Scalar>(p[2]), getTheta())
     );
 }
 template Matrix<float, 3, 1> RobotPose2D<float>::transform(const Matrix<float, 3, 1>& p) const;

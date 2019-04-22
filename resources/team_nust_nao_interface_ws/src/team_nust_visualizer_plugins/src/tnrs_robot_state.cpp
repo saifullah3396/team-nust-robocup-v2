@@ -77,6 +77,7 @@ enum class ModulesStateItems : unsigned int {
   localizerThreadPeriod,
   userCommThreadPeriod,
   gameCommThreadPeriod,
+  lolaThreadPeriod,
   motionThreadTimeTaken,
   planningThreadTimeTaken,
   gbThreadTimeTaken,
@@ -84,6 +85,7 @@ enum class ModulesStateItems : unsigned int {
   localizerThreadTimeTaken,
   userCommThreadTimeTaken,
   gameCommThreadTimeTaken,
+  lolaThreadTimeTaken,
   count
 };
 
@@ -95,13 +97,15 @@ string modules_state_items_names[toUType(ModulesStateItems::count)] {
   "localizationThreadPeriod",
   "userCommThreadPeriod",
   "gameCommThreadPeriod",
+  "lolaThreadPeriod",
   "motionThreadTimeTaken",
   "planningThreadTimeTaken",
   "gbThreadTimeTaken",
   "visionThreadTimeTaken",
   "localizationThreadTimeTaken",
   "userCommThreadTimeTaken",
-  "gameCommThreadTimeTaken"
+  "gameCommThreadTimeTaken",
+  "lolaThreadTimeTaken"
 };
 
 enum class RobotStateItems : unsigned int {
@@ -319,7 +323,7 @@ void RobotState::setModulesState(const team_nust_msgs::TeamNUSTState::ConstPtr& 
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::visionThreadPeriod, QString::number(state->vision_thread_period));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::localizerThreadPeriod, QString::number(state->localization_thread_period));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::userCommThreadPeriod, QString::number(state->user_comm_thread_period));
-  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::gameCommThreadPeriod, QString::number(state->game_comm_thread_period));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::lolaThreadPeriod, QString::number(state->lola_thread_period));
 
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::motionThreadTimeTaken, QString::number(state->motion_time_taken));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::planningThreadTimeTaken, QString::number(state->planning_time_taken));
@@ -328,6 +332,7 @@ void RobotState::setModulesState(const team_nust_msgs::TeamNUSTState::ConstPtr& 
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::localizerThreadTimeTaken, QString::number(state->localization_time_taken));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::userCommThreadTimeTaken, QString::number(state->user_comm_time_taken));
   SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::gameCommThreadTimeTaken, QString::number(state->game_comm_time_taken));
+  SET_ITEM_VALUE(StateTables::modulesState, ModulesStateItems::lolaThreadTimeTaken, QString::number(state->lola_time_taken));
 }
 
 void RobotState::setRobotState(const team_nust_msgs::TeamNUSTState::ConstPtr& state)

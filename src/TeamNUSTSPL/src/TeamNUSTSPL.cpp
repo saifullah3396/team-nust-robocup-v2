@@ -238,6 +238,18 @@ void TeamNUSTSPL::setupTNRSModules()
     BaseModule::publishModuleRequest(vRequest);
     auto sliRequest = boost::make_shared<SwitchLogImages>(true, static_cast<CameraId>(SAVE_IMAGES));
     BaseModule::publishModuleRequest(sliRequest);
+    BaseModule::publishModuleRequest(
+      boost::make_shared<SwitchFeatureExtModule>(false, FeatureExtractionIds::segmentation));
+    BaseModule::publishModuleRequest(
+      boost::make_shared<SwitchFeatureExtModule>(false, FeatureExtractionIds::field));
+    BaseModule::publishModuleRequest(
+      boost::make_shared<SwitchFeatureExtModule>(false, FeatureExtractionIds::robot));
+    BaseModule::publishModuleRequest(
+      boost::make_shared<SwitchFeatureExtModule>(false, FeatureExtractionIds::lines));
+    BaseModule::publishModuleRequest(
+      boost::make_shared<SwitchFeatureExtModule>(false, FeatureExtractionIds::goal));
+    BaseModule::publishModuleRequest(
+      boost::make_shared<SwitchFeatureExtModule>(false, FeatureExtractionIds::ball));
   }
   if (PROJECT_FIELD == 1) {
     auto vRequest = boost::make_shared<SwitchVision>(true);
@@ -288,6 +300,11 @@ void TeamNUSTSPL::setupTNRSModules()
       childModules[i]->start();
     }
   }
+  //auto sliRequest1 = boost::make_shared<SwitchLogImages>(true, CameraId::headTop);
+  //BaseModule::publishModuleRequest(sliRequest1);
+  //auto sliRequest2 = boost::make_shared<SwitchLogImages>(true, CameraId::headBottom);
+  //BaseModule::publishModuleRequest(sliRequest2);
+
   //auto vRequest = boost::make_shared<SwitchVision>(true);
   //BaseModule::publishModuleRequest(vRequest);
   /* DebugMsgs test

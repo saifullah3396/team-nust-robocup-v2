@@ -1,8 +1,14 @@
-#!/bin/sh
+#!/bin/bash
+
+baseDir="$(cd "$(dirname "$(which "$0")")" && pwd)"
+bhDir="$(dirname "${baseDir}")"
+includeDir="${baseDir}/Include/"
+
+source "${includeDir}/bhumanBase"
 
 FILES=""
 BUILD=""
-ROBOTS="Nu-11/Nu-12/Nu-13/Nu-14/Nu-15"
+ROBOTS="Nu-11/Nu-12/Nu-13/Nu-14/Nu-15/Nu-16/Nu-17"
 ROBOT=""
 IP_PREFIX="192.168.30"
 WLAN_PREFIX="10.0.30"
@@ -45,7 +51,9 @@ if [ "$ROBOT" != "Nu-11" ] &&
    [ "$ROBOT" != "Nu-12" ] && 
    [ "$ROBOT" != "Nu-13" ] && 
    [ "$ROBOT" != "Nu-14" ] && 
-   [ "$ROBOT" != "Nu-15" ]; then
+   [ "$ROBOT" != "Nu-15" ] &&
+   [ "$ROBOT" != "Nu-16" ] &&
+   [ "$ROBOT" != "Nu-17" ]; then
     echo "Invalid robot name: $ROBOT . Options are: ( $ROBOTS )."
     exit 1;
 fi
@@ -61,7 +69,15 @@ elif [ "$ROBOT" = "Nu-14" ]; then
   ROBOT_NUM=4
 elif [ "$ROBOT" = "Nu-15" ]; then
   ROBOT_NUM=5
+elif [ "$ROBOT" = "Nu-16" ]; then
+  ROBOT_NUM=6
+elif [ "$ROBOT" = "Nu-17" ]; then
+  ROBOT_NUM=7
 fi
 
+rsyncOptions="${rsyncOptions} --links -v -r"
+echo ${rsyncOptions} 
+echo ${sshCommand}
+
 LOG_DIR_PATH=$PATH_TO_TEAM_NUST_DIR/logs/Robots/Nu-1$ROBOT_NUM
-rsync -r nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/team_nust/logs/* $LOG_DIR_PATH -v
+rsync ${rsyncOptions} -e "${sshCommand}" nao@$IP_PREFIX.$ROBOT_NUM:/home/nao/team_nust/logs/* $LOG_DIR_PATH

@@ -1,45 +1,44 @@
 /**
- * @file MotionModule/src/KinematicsModule/RobotTracker.cpp
+ * @file MotionModule/src/KinematicsModule/ObstacleTracker.cpp
  *
- * This file implements the class RobotTracker
+ * This file implements the class ObstacleTracker
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 12 Jan 2018
+ * @date 22 April 2019
  */
 
 #include <boost/make_shared.hpp>
-#include "VisionModule/include/FeatureExtraction/RobotTracker.h"
-#include "VisionModule/include/FeatureExtraction/RobotRegion.h"
+#include "LocalizationModule/include/ObstacleTracker.h"
 #include "Utils/include/JsonUtils.h"
 
-float RobotTracker::dt = 0.05;
-Matrix<float, 12, 12> RobotTracker::A;
-Matrix<float, 12, 12> RobotTracker::Q;
-Matrix<float, 10, 10> RobotTracker::R;
-Matrix<float, 12, 1> RobotTracker::B;
-Matrix<float, 10, 12> RobotTracker::H;
+float ObstacleTracker::dt = 0.05;
+Matrix<float, STATE_SIZE, STATE_SIZE> ObstacleTracker::A;
+Matrix<float, STATE_SIZE, STATE_SIZE> ObstacleTracker::Q;
+Matrix<float, MEAS_SIZE, MEAS_SIZE> ObstacleTracker::R;
+Matrix<float, STATE_SIZE, 1> ObstacleTracker::B;
+Matrix<float, MEAS_SIZE, STATE_SIZE> ObstacleTracker::H;
 
-void RobotTracker::init(
-  const Matrix<float, 12, 1>& initState,
+void ObstacleTracker::init(
+  const Matrix<float, STATE_SIZE, 1>& initState,
   const float& dt,
   const float& time)
 {
   loadModel(dt);
   model =
-    boost::shared_ptr<ProcessModel<float, 12, 1, 1> >(
-      new ProcessModel<float, 12, 1, 1>(A, B));
+    boost::shared_ptr<ProcessModel<float, STATE_SIZE, 1, 1> >(
+      new ProcessModel<float, STATE_SIZE, 1, 1>(A, B));
   model->setNoiseCovMatrix(Q);
   model->setState(initState);
   filter =
-    boost::shared_ptr<KalmanFilter<float, 12, 10, 1, 1> >(
-      new KalmanFilter<float, 12, 10, 1, 1>(model, H));
+    boost::shared_ptr<KalmanFilter<float, STATE_SIZE, MEAS_SIZE, 1, 1> >(
+      new KalmanFilter<float, STATE_SIZE, MEAS_SIZE, 1, 1>(model, H));
   filter->setMeasMatrix(H);
   filter->setMeasNoiseCov(R);
   timeUpdated = time;
   initiated = true;
 }
 
-void RobotTracker::loadModel(const float& dt)
+void ObstacleTracker::loadModel(const float& dt)
 {
   static auto loaded = false;
   if (!loaded) {
@@ -48,7 +47,7 @@ void RobotTracker::loadModel(const float& dt)
     try {
       using namespace std;
       static string measFilePath =
-        ConfigManager::getCommonConfigDirPath() + "RobotTracker.json";
+        ConfigManager::getCommonConfigDirPath() + "ObstacleTracker.json";
       ifstream config(measFilePath, ifstream::binary);
       config >> json;
     } catch (const Json::Exception& e) {
@@ -65,29 +64,22 @@ void RobotTracker::loadModel(const float& dt)
     B.setZero();
     ///< Process Noise Covariance Matrix Q
     Q.setZero();
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < STATE_SIZE; ++i)
       Q(i, i) = json["procVariance"][i].asFloat();
 
-    H << 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-         0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-         0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-         0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
-         0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-         0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-         0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
-         0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1;
-    for (int i = 0; i < 10; ++i)
+    H << 1, 0, 0, 0;
+         0, 1, 0, 0;
+
+    for (int i = 0; i < MEAS_SIZE; ++i)
       R(i, i) = json["measVariance"][i].asFloat();
     loaded = true;
   }
 }
 
-void RobotTracker::update(const Matrix<float, 10, 1>& meas, const float& time)
+void ObstacleTracker::update(const Matrix<float, MEAS_SIZE, 1>& meas, const float& time)
 {
-  Matrix<float, 10, 1> measFixed = meas;
-  for (size_t i = 0; i < 10; ++i) {
+  Matrix<float, MEAS_SIZE, 1> measFixed = meas;
+  for (size_t i = 0; i < MEAS_SIZE; ++i) {
     if (measFixed[i] != measFixed[i]) {
       filter->setMeasNoiseCov(1e9, i, i);
       measFixed[i] = 0.0;
@@ -100,7 +92,7 @@ void RobotTracker::update(const Matrix<float, 10, 1>& meas, const float& time)
   timeUpdated = time;
 }
 
-void RobotTracker::reset(const Matrix<float, 12, 1>& state)
+void ObstacleTracker::reset(const Matrix<float, STATE_SIZE, 1>& state)
 {
   model->setState(state);
   filter->reset();

@@ -80,6 +80,7 @@
       if(ArgParseUtils::cmdOptionExists(argv, argv+argc, "--save-images"))
       {
         string option = ArgParseUtils::getCmdOption(argv, argv + argc, "--save-images");
+        cout << "option: " << option << endl;
         if (option == "Top") {
           SAVE_IMAGES = 0;
         } else if (option == "Bottom") {
@@ -207,8 +208,10 @@
     app.start();
     qi::SessionPtr session = app.session();
     session->registerService("TeamNUSTSPL", qi::AnyObject(boost::make_shared<TeamNUSTSPL>(session)));
-    //auto teamNUSTSPL = boost::make_shared<TeamNUSTSPL>(session);
-    //teamNUSTSPL->init();
+    qi::AnyObject teamNUSTSPL = session->service("TeamNUSTSPL");
+    teamNUSTSPL.async<void>("init");
+    app.run();
+    cout << "TeamNUSTSPL session finished." << endl;
     app.run();
     return 0;
   }

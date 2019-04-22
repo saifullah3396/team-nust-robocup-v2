@@ -28,6 +28,7 @@ template <typename T>
 Camera<T>::Camera(const string& name) :
   name(name)
 {
+  #ifndef V6_CROSS_BUILD
   settings.resize(toUType(CameraSettings::count));
   settings[toUType(CameraSettings::autoExposition)] =
     V4L2Settings("autoExposition", V4L2_CID_EXPOSURE_AUTO, 0, 0, 3);
@@ -77,6 +78,35 @@ Camera<T>::Camera(const string& name) :
   //  V4L2Settings("maxDigAnalogGain", V4L2_MT9M114_AE_MAX_VIRT_DGAIN, 132, 0, 65535);
   //settings[toUType(CameraSettings::aeWeightTable)] =
   //  V4L2Settings("verticalFlip", V4L2_MT9M114_AE_WEIGHT_TABLE_0_0, 0, 128, 65535);
+  #else
+  settings.resize(toUType(CameraSettings::count));
+  settings[toUType(CameraSettings::autoExposition)] =
+    V4L2Settings("autoExposition", V4L2_CID_EXPOSURE_AUTO, 0, 0, 3);
+  settings[toUType(CameraSettings::autoWhiteBalance)] =
+    V4L2Settings("autoWhiteBalance", V4L2_CID_AUTO_WHITE_BALANCE, 1, 0, 1);
+  settings[toUType(CameraSettings::brightness)] =
+    V4L2Settings("brightness", V4L2_CID_BRIGHTNESS, 0, 0, 255);
+  settings[toUType(CameraSettings::contrast)] =
+    V4L2Settings("contrast", V4L2_CID_CONTRAST, 32, 0, 255);
+  settings[toUType(CameraSettings::exposure)] =
+    V4L2Settings("exposure", V4L2_CID_EXPOSURE, 512, 0, 1048575);
+  settings[toUType(CameraSettings::gain)] =
+    V4L2Settings("gain", V4L2_CID_GAIN, 16, 0, 1023);
+  settings[toUType(CameraSettings::hueAuto)] =
+     V4L2Settings("hueAuto", V4L2_CID_HUE_AUTO, 0, 0, 1);
+  settings[toUType(CameraSettings::hue)] =
+    V4L2Settings("hue", V4L2_CID_HUE, 0, -180, 180);
+  settings[toUType(CameraSettings::saturation)] =
+    V4L2Settings("saturation", V4L2_CID_SATURATION, 64, 0, 255);
+  settings[toUType(CameraSettings::sharpness)] =
+    V4L2Settings("sharpness", V4L2_CID_SHARPNESS, 4, 0, 9);
+  settings[toUType(CameraSettings::whiteBalance)] =
+    V4L2Settings("whiteBalance", V4L2_CID_WHITE_BALANCE_TEMPERATURE, 2500, 2500, 6500);
+  settings[toUType(CameraSettings::focusAbsolute)] =
+    V4L2Settings("focusAbsolute", V4L2_CID_FOCUS_ABSOLUTE, 0, 0, 250);
+  settings[toUType(CameraSettings::focusAuto)] =
+    V4L2Settings("focusAuto", V4L2_CID_FOCUS_AUTO, 0, 0, 1);
+  #endif
 }
 #endif
 
@@ -226,10 +256,12 @@ void Camera<T>::setControl(const CameraSettings& id) {
     ///< Only changeable when ae is disabled
       if (settings[toUType(CameraSettings::autoExposition)].ctrl.value == 0)
         xioctl(fd, VIDIOC_S_CTRL, &settings[toUType(id)].ctrl);
+  #ifndef V6_CROSS_BUILD
   } else if (id == CameraSettings::backlightCompensation) {
     ///< Only changeable when ae is enabled
       if (settings[toUType(CameraSettings::autoExposition)].ctrl.value != 0)
         xioctl(fd, VIDIOC_S_CTRL, &settings[toUType(id)].ctrl);
+  #endif
   } else {
     xioctl(fd, VIDIOC_S_CTRL, &settings[toUType(id)].ctrl);
   }

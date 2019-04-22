@@ -352,6 +352,14 @@ class TeamNUSTStatePublisher(ROSPublisher):
         self._msg.game_comm_thread_period = int(game_comm_thread_period)
 
     @property
+    def lola_thread_period(self):
+        return self._msg.lola_thread_period
+
+    @lola_thread_period.setter
+    def lola_thread_period(self, lola_thread_period):
+        self._msg.lola_thread_period = int(lola_thread_period)
+
+    @property
     def motion_time_taken(self):
         return self._msg.motion_time_taken
 
@@ -406,6 +414,14 @@ class TeamNUSTStatePublisher(ROSPublisher):
     @game_comm_time_taken.setter
     def game_comm_time_taken(self, game_comm_time_taken):
         self._msg.game_comm_time_taken = int(game_comm_time_taken)
+        
+    @property
+    def lola_time_taken(self):
+        return self._msg.lola_time_taken
+
+    @lola_time_taken.setter
+    def lola_time_taken(self, lola_time_taken):
+        self._msg.lola_time_taken = int(lola_time_taken)
 
     @property
     def heart_beat(self):

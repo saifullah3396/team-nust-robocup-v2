@@ -22,9 +22,10 @@ qi_use_lib(tnrs-user-comm-module
   BOOST_SERIALIZATION
   OPENCV2_CORE
 )
-target_link_libraries(tnrs-user-comm-module 
-  libtnrs-utils.so 
+target_link_libraries(tnrs-user-comm-module
+  libtnrs-utils.so
   libtnrs-base.so
+  -ljsoncpp
 )
 else()
 qi_use_lib(tnrs-user-comm-module
@@ -39,16 +40,16 @@ target_link_libraries(tnrs-user-comm-module
   libtnrs-base.so
 )
 endif()
-    
+
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
     file (GLOB TESTS RELATIVE "${test_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
     foreach (testname ${TESTS})
         string(REPLACE ".cpp" "" targetname "${testname}")
         add_executable  (${targetname} "${test_DIR}/${testname}")
-        target_link_libraries (${targetname} 
+        target_link_libraries (${targetname}
           tnrs-user-comm-module
-          libtnrs-utils.so 
+          libtnrs-utils.so
           libtnrs-base.so
           -ljsoncpp)
     endforeach (testname ${TESTS})

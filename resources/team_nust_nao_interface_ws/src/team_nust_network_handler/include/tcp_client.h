@@ -99,6 +99,9 @@ protected:
 
   ///< Robot server port
   string port;
+
+  ///< Whether we are currently reconnecting
+  bool reconnecting = {false};
 };
 
 /**

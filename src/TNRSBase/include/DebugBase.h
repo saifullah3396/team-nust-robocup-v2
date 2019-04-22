@@ -44,6 +44,16 @@
  */
 #define GET_DVAR(type, var) static_cast<Variable<type>*>(variables[static_cast<int>(DebugVar::var)])->getValue()
 
+/**
+ * \def GET_DVAR_REF(type, var)
+ *
+ * This macro returns the reference to the local debug variable.
+ *
+ * @param type: Type of the variable.
+ * @param var: Index of the variable.
+ */
+#define GET_DVAR_REF(type, var) static_cast<Variable<type>*>(variables[static_cast<int>(DebugVar::var)])->getValueRef()
+
 #define DEFINE_DBG_VARIABLE(type, name, value) \
 { \
   Variable<type> * obj = new Variable<type>(#name, value); \

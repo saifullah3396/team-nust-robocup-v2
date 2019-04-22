@@ -82,9 +82,10 @@ void RequestBehavior::setStartPosture()
 }
 
 void RequestBehavior::SetPosture::onRun() {
-  if (bPtr->startPosture == PostureState::unknown)
+  if (bPtr->startPosture == PostureState::unknown) {
     nextState = bPtr->chestButtonWait.get();
-  else {
+    LOG_INFO("Press the robot chest button to continue...");
+  } else {
     if (bPtr->setPostureAndStiffness(bPtr->startPosture, StiffnessState::max, MOTION_1))
       nextState = bPtr->chestButtonWait.get();
   }
@@ -98,11 +99,7 @@ void RequestBehavior::ChestButtonWait::onRun() {
     }
     wait += bPtr->cycleTime;
   #else
-  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   auto& switchSensors = SWITCH_SENSORS_OUT_REL(PlanningModule, bPtr);
-  #else
-  const auto& switchSensors = SWITCH_SENSORS_IN_REL(PlanningModule, bPtr);
-  #endif
   if (switchSensors[toUType(SwitchSensors::chestBoardButton)] > 0.1)
     nextState = bPtr->startRequested.get();
   #endif

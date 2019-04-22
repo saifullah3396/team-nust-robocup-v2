@@ -118,6 +118,7 @@ namespace JsonUtils
   }
   template Json::Value getJson<bool>(const bool&);
   template Json::Value getJson<unsigned>(const unsigned&);
+  template Json::Value getJson<size_t>(const size_t&);
   template Json::Value getJson<int>(const int&);
   template Json::Value getJson<float>(const float&);
   template Json::Value getJson<double>(const double&);
@@ -386,6 +387,10 @@ namespace JsonUtils
     return matrixToJson(mat);
   }
 
+  Json::Value getJson(const Vector3d& mat) {
+    return matrixToJson(mat);
+  }
+
   Json::Value getJson(const VectorXf& mat) {
     return matrixToJson(mat);
   }
@@ -435,6 +440,13 @@ namespace JsonUtils
   }
 
   void jsonToType(unsigned& var, Json::Value val, const unsigned& def) {
+    if (!val.empty())
+      var = val.asUInt();
+    else
+      var = def;
+  }
+
+  void jsonToType(size_t& var, Json::Value val, const size_t& def) {
     if (!val.empty())
       var = val.asUInt();
     else
@@ -601,6 +613,17 @@ namespace JsonUtils
     if (!val.empty()) {
       var[0] = val[0].asFloat();
       var[1] = val[1].asFloat();
+    } else {
+      var = def;
+    }
+  }
+
+  void jsonToType(Vector3d& var, Json::Value val, const Vector3d& def)
+  {
+    if (!val.empty()) {
+      var[0] = val[0].asFloat();
+      var[1] = val[1].asFloat();
+      var[2] = val[2].asFloat();
     } else {
       var = def;
     }

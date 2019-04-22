@@ -6,12 +6,14 @@ int32 vision_thread_period
 int32 localization_thread_period
 int32 game_comm_thread_period
 int32 user_comm_thread_period
+int32 lola_thread_period
 int32 motion_time_taken
 int32 planning_time_taken
 int32 gb_time_taken
 int32 vision_time_taken
 int32 localization_time_taken
 int32 game_comm_time_taken
+int32 lola_time_taken
 int32 user_comm_time_taken
 int32 heart_beat
 int32 player_number

@@ -60,6 +60,8 @@ class MemoryDataPublisher:
               self.team_nust_state_publisher.game_comm_thread_period = memory_data[name]
             elif name == 'userCommThreadPeriod':
               self.team_nust_state_publisher.user_comm_thread_period = memory_data[name]
+            elif name == 'lolaThreadPeriod':
+              self.team_nust_state_publisher.l_thread_period = memory_data[name]
             elif name == 'motionThreadTimeTaken':
               self.team_nust_state_publisher.motion_time_taken = memory_data[name]
             elif name == 'planningThreadTimeTaken':
@@ -74,6 +76,8 @@ class MemoryDataPublisher:
               self.team_nust_state_publisher.game_comm_time_taken = memory_data[name]
             elif name == 'userCommThreadTimeTaken':
               self.team_nust_state_publisher.user_comm_time_taken = memory_data[name]
+            elif name == 'lolaThreadTimeTaken':
+              self.team_nust_state_publisher.lola_time_taken = memory_data[name]
             elif name == 'heartBeat':
               self.team_nust_state_publisher.heart_beat = memory_data[name]
             elif name == 'jointPositionSensors':

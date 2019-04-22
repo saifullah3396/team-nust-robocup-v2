@@ -45,14 +45,25 @@ void PlanTowards::reinitiate(const boost::shared_ptr<BehaviorConfig>& cfg)
 
 void PlanTowards::update()
 {
-  const auto& robotPose2D = ROBOT_POSE_2D_IN(PlanningModule);
-  if (robotPose2D.getX() == robotPose2D.getX()) {
-    *velocityInput =
-      potentialField2D->update(
-        ROBOT_POSE_2D_IN(PlanningModule),
-        getBehaviorCast()->goal,
-        OBSTACLES_OBS_IN(PlanningModule).data);
-    executeMotionAction();
+  if (ROBOT_LOCALIZED_IN(PlanningModule)) {
+    const auto& robotPose2D = ROBOT_POSE_2D_IN(PlanningModule);
+    cout << "OBSTACLES_OBS_IN(PlanningModule).data: " << OBSTACLES_OBS_IN(PlanningModule).data.size() << endl;
+    auto goal = getBehaviorCast()->goal;
+    if (getBehaviorCast()->reachClosest) {
+      goal.x() = fabsf(goal.getX() - robotPose2D.getX()) <= 0.25 ? robotPose2D.getX() : goal.getX();
+      goal.y() = fabsf(goal.getY() - robotPose2D.getY()) <= 0.25 ? robotPose2D.getY() : goal.getY();
+      goal.theta() = fabsf(goal.getTheta() - robotPose2D.getTheta()) <= Angle::DEG_15 ? robotPose2D.getTheta() : goal.getTheta();
+    }
+    if (robotPose2D.getX() == robotPose2D.getX()) {
+      *velocityInput =
+        potentialField2D->update(
+          robotPose2D,
+          goal,
+          OBSTACLES_OBS_IN(PlanningModule).data);
+      executeMotionAction();
+    }
+  } else {
+    this->killAllMotionBehaviors();
   }
 }
 

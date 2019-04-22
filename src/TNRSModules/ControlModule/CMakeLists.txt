@@ -37,6 +37,7 @@ qi_use_lib(tnrs-control-module
 target_link_libraries(tnrs-control-module
   libtnrs-utils.so
   libtnrs-base.so
+  -ljsoncpp
 )
 else()
 add_library (tnrs-control-module SHARED ${TNRS_CONTROL_MODULE_SRC})

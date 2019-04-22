@@ -8,7 +8,7 @@ source "${includeDir}/bhumanBase"
 
 FILES=""
 BUILD=""
-ROBOTS="Nu-11/Nu-12/Nu-13/Nu-14/Nu-15/Nu-16"
+ROBOTS="Nu-11/Nu-12/Nu-13/Nu-14/Nu-15/Nu-16/Nu-17"
 ROBOT=""
 IP_PREFIX="192.168.30"
 WLAN_PREFIX="10.0.30"
@@ -69,7 +69,8 @@ if [ "$ROBOT" != "Nu-11" ] &&
    [ "$ROBOT" != "Nu-13" ] && 
    [ "$ROBOT" != "Nu-14" ] && 
    [ "$ROBOT" != "Nu-15" ] &&
-   [ "$ROBOT" != "Nu-16" ]; then
+   [ "$ROBOT" != "Nu-16" ] &&
+   [ "$ROBOT" != "Nu-17" ]; then
     echo "Invalid robot name: $ROBOT . Options are: ( $ROBOTS )."
     exit 1;
 fi
@@ -100,6 +101,8 @@ elif [ "$ROBOT" = "Nu-15" ]; then
   ROBOT_NUM=5
 elif [ "$ROBOT" = "Nu-16" ]; then
   ROBOT_NUM=6
+elif [ "$ROBOT" = "Nu-17" ]; then
+  ROBOT_NUM=7
 fi
 
 rsyncOptions="${rsyncOptions} --links -v -r"

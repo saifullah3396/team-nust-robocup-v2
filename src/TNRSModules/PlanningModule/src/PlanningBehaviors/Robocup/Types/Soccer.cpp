@@ -576,7 +576,7 @@ bool Soccer::behindObstacle(const Point2f& target)
   for (auto obs : OBSTACLES_OBS_IN(PlanningModule).data) {
     targetLine.p2 = target;
     Point2f inter;
-    if (obs.frontT.findIntersection(targetLine, inter)) {
+    /*if (obs.frontT.findIntersection(targetLine, inter)) {
       Point2f diffInter = inter - obs.frontT.p1;
       auto magInter = norm(diffInter);
       auto unitInter = Point2f(diffInter.x / magInter, diffInter.y / magInter);
@@ -588,7 +588,7 @@ bool Soccer::behindObstacle(const Point2f& target)
           return true;
         }
       }
-    }
+    }*/
   }
   return false;
 }

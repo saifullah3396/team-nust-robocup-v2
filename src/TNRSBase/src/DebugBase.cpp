@@ -5,7 +5,7 @@
  *
  * @author Team-Nust 2015
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 09 Nov 2017  
+ * @date 09 Nov 2017
  */
 
 #include "TNRSBase/include/DebugBase.h"
@@ -39,6 +39,7 @@ string DebugBase::processDebugMsg(const Json::Value& root)
     pthread_mutex_lock(&classMapAccessMutex);
     classPtr = classMap[className];
     auto vars = root[className];
+    cout << "var received:" << vars << endl;
     for (const auto& var : vars.getMemberNames()) {
       try {
         classPtr->updateDebugVar(var, vars[var]);

@@ -42,8 +42,8 @@ template double aCotan<double>(const double& var);
 template<typename Scalar>
 Scalar rangeToPi(const Scalar& angle)
 {
-  if (angle > M_PI) return angle - M_2_PI;
-  else if (angle < -M_PI) return angle + M_2_PI;
+  if (angle > M_PI) return angle - M_TWICE_PI;
+  else if (angle < -M_PI) return angle + M_TWICE_PI;
   return angle;
 }
 template float rangeToPi<float>(const float& angle);
@@ -53,25 +53,23 @@ template<typename Scalar>
 Scalar diffAngle(const Scalar& a1, const Scalar& a2)
 {
   ASSERT(abs(a1) < M_PI && abs(a2) < M_PI);
-  if (a1 * a2 >= 0) return rangeToPi(a1 - a2);
-  if (a1 < 0) return rangeToPi(M_2_PI + a1 - a2);
-  return rangeToPi(a1 - (M_2_PI + a2));
+  if (a1 * a2 >= 0) return a1 - a2;
+  if (a1 < 0) return M_TWICE_PI + a1 - a2;
+  return a1 - (M_TWICE_PI + a2);
 }
 template float diffAngle<float>(const float& a1, const float& a2);
 template double diffAngle<double>(const double& a1, const double& a2);
 
 template<typename Scalar>
-Scalar addAngles(const Scalar& a1, const Scalar& a2, const Scalar& factor2)
+Scalar addAngles(const Scalar& a1, const Scalar& a2)
 {
   ASSERT(abs(a1) < M_PI && abs(a2) < M_PI);
-  auto ca1 = rangeToPi(a1);
-  auto ca2 = rangeToPi(a2);
-  ca1 = (ca1 < 0) ? ca1 + M_2_PI : ca1;
-  ca2 = (ca2 < 0) ? ca2 + M_2_PI : ca2;
-  return rangeToPi(ca1 + factor2 * a2);
+  auto ca1 = (a1 < 0) ? a1 + M_TWICE_PI : a1;
+  auto ca2 = (a2 < 0) ? a2 + M_TWICE_PI : a2;
+  return rangeToPi(ca1 + ca2);
 }
-template float addAngles<float>(const float& a1, const float& a2, const float& factor2);
-template double addAngles<double>(const double& a1, const double& a2, const double& factor2);
+template float addAngles<float>(const float& a1, const float& a2);
+template double addAngles<double>(const double& a1, const double& a2);
 
 template<typename Scalar>
 Scalar dist(const Scalar& x1, const Scalar& y1, const Scalar& x2, const Scalar& y2)

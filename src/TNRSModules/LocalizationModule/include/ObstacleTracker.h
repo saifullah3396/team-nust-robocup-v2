@@ -1,44 +1,48 @@
 /**
- * @file MotionModule/include/KinematicsModule/RobotTracker.h
+ * @file MotionModule/include/KinematicsModule/ObstacleTracker.h
  *
- * This file declares the class RobotTracker
+ * This file declares the class ObstacleTracker
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 12 Jan 2018
+ * @date 22 April 2019
  */
 
 #include "Utils/include/Filters/KalmanFilter.h"
 #include "Utils/include/DataHolders/ObstacleType.h"
 
+#define STATE_SIZE 4
+#define MEAS_SIZE 2
+
 /**
- * @class RobotTracker
+ * @class ObstacleTracker
  * @brief A kalman filter based robot position tracker
  */
-class RobotTracker
+class ObstacleTracker
 {
 public:
   /**
-   * @brief RobotTracker Constructor
+   * @brief ObstacleTracker Constructor
    */
-  RobotTracker() = default;
-  RobotTracker(const RobotTracker&) = default;
-  RobotTracker(RobotTracker&&) = default;
-  RobotTracker& operator=(const RobotTracker&) & = default;
-  RobotTracker& operator=(RobotTracker&&) & = default;
+  ObstacleTracker() = default;
+  ObstacleTracker(const ObstacleTracker&) = default;
+  ObstacleTracker(ObstacleTracker&&) = default;
+  ObstacleTracker& operator=(const ObstacleTracker&) & = default;
+  ObstacleTracker& operator=(ObstacleTracker&&) & = default;
 
   /**
-   * @brief RobotTracker Constructor
+   * @brief ObstacleTracker Constructor
    * @param obstacleType Type of robot obstacle tracked
+   * @param radius Obstacle radius
    */
-  RobotTracker(const ObstacleType& obstacleType) :
-    obstacleType(obstacleType)
+  ObstacleTracker(const ObstacleType& obstacleType, const float& radius) :
+    obstacleType(obstacleType), radius(radius)
   {
   }
 
   /**
-   * @brief ~RobotTracker Destructor
+   * @brief ~ObstacleTracker Destructor
    */
-  virtual ~RobotTracker() {}
+  virtual ~ObstacleTracker() {}
 
   /**
    * @brief init Sets up the filter and initiates it with the given state vector
@@ -48,7 +52,7 @@ public:
    * @param time Time at initiation
    */
   void init(
-    const Matrix<float, 12, 1>& initState,
+    const Matrix<float, STATE_SIZE, 1>& initState,
     const float& dt,
     const float& time);
 
@@ -57,13 +61,13 @@ public:
    *
    * @param state the reset state for the filter
    */
-  void reset(const Matrix<float, 12, 1>& state);
+  void reset(const Matrix<float, STATE_SIZE, 1>& state);
 
   /**
    * @brief setState Sets the state of the joint
    * @param state Input state
    */
-  void setState(const Matrix<float, 12, 1>& state) {
+  void setState(const Matrix<float, STATE_SIZE, 1>& state) {
     model->setState(state);
   }
 
@@ -73,7 +77,7 @@ public:
    *
    * @param meas The new measurement
    */
-  void update(const Matrix<float, 10, 1>& meas, const float& time);
+  void update(const Matrix<float, MEAS_SIZE, 1>& meas, const float& time);
 
   /**
    * @brief updateInput Updates the input for the underlying model and performs
@@ -84,7 +88,7 @@ public:
   /**
    * @brief getState Returns the current system state
    */
-  const Matrix<float, 12, 1>& getState() { return model->getState(); }
+  const Matrix<float, STATE_SIZE, 1>& getState() { return model->getState(); }
 
   /**
    * @brief obstacleType Returns the type of obstacle
@@ -94,8 +98,12 @@ public:
   /**
    * @brief getModel Returns the process model used
    */
-  boost::shared_ptr<ProcessModel<float, 12, 1, 1> > getModel() { return model; }
+  boost::shared_ptr<ProcessModel<float, STATE_SIZE, 1, 1> > getModel() { return model; }
 
+  /**
+   * @brief getLastUpdateTime Time of last update
+   * @return float
+   */
   const float& getLastUpdateTime() { return timeUpdated; }
 
   /**
@@ -106,6 +114,12 @@ public:
     const auto& state = model->getState();
     return sqrt(state[0] * state[0] + state[1] * state[1]);
   }
+
+  /**
+   * @brief getRadius Returns the obstacle radius
+   * @return float
+   */
+  const float& getRadius() { return radius; }
 
   /**
    * Returns true if the filter is already initiated
@@ -119,11 +133,11 @@ private:
    */
   void loadModel(const float& dt);
 
-  ///< Kalman filter
-  boost::shared_ptr<::KalmanFilter<float, 12, 10, 1, 1> > filter;
+  ///< Kalman filter (Conflicts with opencv KalmanFilter in namespace)
+  boost::shared_ptr<::KalmanFilter<float, STATE_SIZE, MEAS_SIZE, 1, 1> > filter;
 
   ///< Joint state transition model
-  boost::shared_ptr<ProcessModel<float, 12, 1, 1> > model;
+  boost::shared_ptr<ProcessModel<float, STATE_SIZE, 1, 1> > model;
 
   ///< Whether the filter has been initiated or not
   bool initiated;
@@ -132,19 +146,22 @@ private:
   static float dt;
 
   ///< State transition and noise matrices
-  static Matrix<float, 12, 12> A, Q;
+  static Matrix<float, STATE_SIZE, STATE_SIZE> A, Q;
 
   ///< Measurment noise covariance
-  static Matrix<float, 10, 10> R;
+  static Matrix<float, MEAS_SIZE, MEAS_SIZE> R;
 
   ///< Input transition matrix
-  static Matrix<float, 12, 1> B;
+  static Matrix<float, STATE_SIZE, 1> B;
 
   ///< Measure Matrix H
-  static Matrix<float, 10, 12> H;
+  static Matrix<float, MEAS_SIZE, STATE_SIZE> H;
 
   ///< Time at which it was last updated
   float timeUpdated;
+
+  ///< Obstacle radius
+  float radius;
 
   ///< Robot obstacle type
   ObstacleType obstacleType;
