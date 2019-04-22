@@ -84,6 +84,14 @@ private:
     setPosture,
     walk
   };
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  AL::ALValue moveConfig;
+  const float frequency = 1.0; // Minimum from naoqi motion config
+  const float minStepPeriod = 0.42; // Minimum from naoqi motion config
+  const float maxStepPeriod = 0.6; // Minimum from naoqi motion config
+  Matrix<Scalar, 4, 4> lastOdomTrans = Matrix<Scalar, 4, 4>::Zero();
+  #endif
 };
 
 typedef boost::shared_ptr<NaoqiMoveToward<MType> > NaoqiMoveTowardPtr;

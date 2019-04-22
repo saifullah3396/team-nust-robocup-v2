@@ -434,7 +434,7 @@ void MotionModule::mainRoutine()
     for (const auto& sl : sensorLayers)
       if (sl) sl->update();
     #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-    auto steps = memoryProxy->getData("Motion/Walk/NbStep");
+    float steps = memoryProxy->getData("Motion/Walk/NbStep");
     N_FOOTSTEPS_OUT(MotionModule) = static_cast<int>(steps);
     #endif
   }

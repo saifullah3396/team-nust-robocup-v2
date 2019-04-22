@@ -69,6 +69,7 @@ void JSOImpKick<Scalar>::setupKickBase()
       this->ballToTargetUnit =
         Matrix<Scalar, 3, 1>(cos(this->targetAngle), sin(this->targetAngle), 0.0);
       this->desImpactVel = reqVel.x * this->ballToTargetUnit;
+      this->desImpactVel[2] = 0.1;
       this->desImpactVelKnown = true;
     } else if (targetDistAngle[0] != -1.f) { // if target is defined use this
       targetDistAngle[1] *= M_PI / 180.0;
@@ -90,6 +91,9 @@ void JSOImpKick<Scalar>::setupKickBase()
         false
       );
     }
+    this->kM->setGlobalBase(
+      static_cast<RobotFeet>(this->supportLeg), LegEEs::footCenter);
+
     Scalar footSpacing = this->kickLeg == LinkChains::rLeg ? this->kM->getFootSpacing() : -this->kM->getFootSpacing();
     // Sending ball from feet center frame to base support leg frame
     this->ballPosition[1] -= footSpacing / 2;
@@ -130,7 +134,7 @@ void JSOImpKick<Scalar>::setupKickBase()
     this->zmpControlCfgInKick->target[0] = -0.02;
     this->zmpControlCfgInKick->target[1] = 0.0;
 
-    /*Matrix<Scalar, Dynamic, 1> postureTarget(toUType(Joints::count));
+    Matrix<Scalar, Dynamic, 1> postureTarget(toUType(Joints::count));
     if (this->supportLeg == LinkChains::lLeg) {
       postureTarget = Matrix<Scalar, Dynamic, 1>::Map(
         &balanceDefs[0][0],
@@ -139,13 +143,16 @@ void JSOImpKick<Scalar>::setupKickBase()
       postureTarget = Matrix<Scalar, Dynamic, 1>::Map(
         &balanceDefs[1][0],
         sizeof(balanceDefs[1]) / sizeof(balanceDefs[1][0]));
-    }*/
-    //this->kM->setJointPositions(0, postureTarget, JointStateType::sim);
-    this->setTransformFrames(JointStateType::actual);
-    //this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
-    //this->setTransformFrames(JointStateType::sim);
-    //findBestEEAndImpactPose();
-    //this->defineTrajectory();
+    }
+    /*this->kM->setJointPositions(Joints::first, postureTarget, JointStateType::sim);
+    ///< Set the transformation frames
+    this->setTransformFrames(JointStateType::sim);
+    ///< Solve the impact conditions
+    this->solveForImpact();
+    ///< Plan kicking trajectory
+    this->defineTrajectory();
+    ///< Plot the kicking trajectory
+    this->plotKick();*/
     if (this->config->logData) {
       Json::Value jsonSetup;
       JSON_ASSIGN(jsonSetup, "targetPosition", JsonUtils::matrixToJson(this->targetPosition));

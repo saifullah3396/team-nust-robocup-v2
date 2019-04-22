@@ -160,9 +160,6 @@ protected:
   ///< Wait time after balance to kick
   static Scalar afterBalanceWait;
 
-  ///< Whether the requested kick is not acheivable
-  bool kickFailed = {false};
-
   ///< Minumum limit for the total optimized trajectory time
   Scalar minTimeToKick = {1.0};
 

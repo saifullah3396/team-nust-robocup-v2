@@ -272,6 +272,56 @@ bool MotionGenerator<Scalar>::naoqiMoveIsActive() {
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+AL::ALValue MotionGenerator<Scalar>::getMoveConfig()
+{
+  try {
+    #ifndef V6_CROSS_BUILD
+      return motionProxy->getMoveConfig("Default");
+    #else
+      motionProxy.call<void>("getMoveConfig");
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+    return AL::ALValue();
+  }
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+void MotionGenerator<Scalar>::setMoveConfig(const AL::ALValue& config)
+{
+  try {
+    #ifndef V6_CROSS_BUILD
+      motionProxy->setMotionConfig(config);
+    #else
+      motionProxy.call<void>("setMotionConfig", config);
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+vector<float> MotionGenerator<Scalar>::getRobotPosition(const bool& useSensors)
+{
+  try {
+    #ifndef V6_CROSS_BUILD
+      return motionProxy->getRobotPosition(useSensors);
+    #else
+      return motionProxy.call<vector<float>>("getRobotPosition", useSensors);
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+    return vector<float>({NAN, NAN, NAN});
+  }
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
 void MotionGenerator<Scalar>::naoqiMoveToward(const float& vx, const float& vy, const float& vtheta)
 {
   try {

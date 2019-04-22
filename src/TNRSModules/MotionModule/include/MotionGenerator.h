@@ -171,6 +171,28 @@ public:
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
+   * @brief getMoveConfig Wrapper for MotionGenerator::getMoveConfig()
+   */
+  AL::ALValue getMoveConfig();
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
+   * @brief setMoveConfig Wrapper for MotionGenerator::setMoveConfig()
+   */
+  void setMoveConfig(const AL::ALValue& config);
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
+   * @brief getRobotPosition Returns robots pose in absolute frame using odometry
+   * @param useSensors Base pose estimate on actual sensor data
+   */
+  vector<float> getRobotPosition(const bool& useSensors);
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
    * Uses naoqi setAngles() to set the desired angles for given joints
    *
    * @param names: Joint names as defined in naoqi

@@ -113,6 +113,28 @@ public:
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
+   * @brief getMoveConfig Wrapper for MotionGenerator::getMoveConfig()
+   */
+  AL::ALValue getMoveConfig();
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
+   * @brief getRobotPosition Wrapper for MotionGenerator::getRobotPosition()
+   * @param useSensors Base position on actual sensor data
+   */
+  vector<float> getRobotPosition(const bool& useSensors);
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
+   * @brief setMoveConfig Wrapper for MotionGenerator::setMoveConfig()
+   */
+  void setMoveConfig(const AL::ALValue& config);
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
    * @brief naoqiSetAngles Wrapper for MotionGenerator::naoqiSetAngles()
    */
   #ifndef V6_CROSS_BUILD_REMOVED

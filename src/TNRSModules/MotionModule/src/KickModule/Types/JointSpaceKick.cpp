@@ -29,6 +29,7 @@
 #include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
 #include "Utils/include/Splines/CubicSpline.h"
 #include "Utils/include/ConfigMacros.h"
+#include "Utils/include/Constants.h"
 #include "Utils/include/JsonLogger.h"
 #include "Utils/include/PlotEnv.h"
 #include "Utils/include/VisionUtils.h"
@@ -169,7 +170,7 @@ void JointSpaceKick<Scalar>::PlanKick::onRun() {
   ///< Plan kicking trajectory
   this->bPtr->defineTrajectory();
   ///< Plot the kicking trajectory
-  //this->bPtr->plotKick();
+  this->bPtr->plotKick();
   if (!this->bPtr->kickFailed) {
     this->nextState = this->bPtr->executeKick.get();
   } else {
@@ -285,8 +286,23 @@ void JointSpaceKick<Scalar>::loadExternalConfig()
 template <typename Scalar>
 void JointSpaceKick<Scalar>::defineTrajectory()
 {
+  auto kickChain = this->kM->getLinkChain(this->kickLeg);
+  unsigned chainStart = kickChain->start;
+  unsigned chainSize = kickChain->size;
+  Matrix<Scalar, Dynamic, 1> velLimits;
+  velLimits.resize(kickChain->size);
+  auto kickJoints =
+    this->kM->getJoints(static_cast<Joints>(kickChain->start), kickChain->size);
+  for (size_t i = 0; i < kickChain->size; ++i) {
+    velLimits[i] = kickJoints[i]->maxVelocity * 0.90;
+  }
+
   ///< Get end-effector transformation in support leg frame
+  cout << "this->supportToKick:" << this->supportToKick << endl;
+  cout << "this->endEffector:" << this->endEffector << endl;
+  ///
   Matrix<Scalar, 4, 4> eeTrans = this->supportToKick * this->endEffector;
+  cout << "this->eeTrans:" << eeTrans << endl;
   ///< Define via points for pre-impact phase.
   const Scalar balldx = this->ballRadius * this->ballToTargetUnit[0];
   const Scalar balldy = this->ballRadius * this->ballToTargetUnit[1];
@@ -323,12 +339,11 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   //cPosesPre.push_back(preImpactPose3);
   cPosesPre.push_back(this->impactPose);
   cPosesPost.push_back(this->impactPose);
+  cout << "impactJoints:" << this->impactPose << endl;
+  cout << "endeffector:" << this->endEffector << endl;
   cPosesPost.push_back(postImpactPose1);
   cPosesPost.push_back(postImpactPose2);
   ///< Setup for inverse kinematics
-  auto kickChain = this->kM->getLinkChain(this->kickLeg);
-  unsigned chainStart = kickChain->start;
-  unsigned chainSize = kickChain->size;
   Matrix<Scalar, Dynamic, Dynamic> jointPosPre;
   jointPosPre.resize(cPosesPre.size(), chainSize);
   jointPosPre.setZero();
@@ -343,15 +358,16 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   activeJoints[0] = false;
   jointPosPre.row(0) =
     this->kM->getJointPositions(
-      static_cast<Joints>(chainStart), chainSize).transpose();
+      static_cast<Joints>(chainStart), chainSize, JointStateType::sim).transpose();
   ///< Solve inverse kinematics for poses 1-4. This process is really expensive
+  cout << "(Scalar)this->desImpactVel:" << this->desImpactVel << endl;
   for (int i = 1; i < jointPosPre.rows(); ++i) {
     //if (i >= 5) {
     //  activeResidual[3] = 1.0;
     //  activeResidual[4] = 1.0;
     //  activeResidual[5] = 1.0;
     //}
-    this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
+    //this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
     //this->kM->setChainPositions(this->kickLeg, jointPosPre.row(i-1).transpose(), JointStateType::sim);
     Matrix<Scalar, Dynamic, 1> angles;
     //if (this->kickLeg == LinkChains::lLeg)
@@ -359,6 +375,8 @@ void JointSpaceKick<Scalar>::defineTrajectory()
     //else
     // angles = this->kM->inverseRightLeg(this->endEffector, cPosesPre[i])[0];
     angles = this->kM->solveJacobianIK(this->kickLeg, this->endEffector, cPosesPre[i], numIkIterations, activeJoints, activeResidual);
+    cout << "cPosesPre[i]:" << cPosesPre[i] << endl;
+    cout << "angles:" << angles << endl;
     if (angles[0] != angles[0]) {
         LOG_ERROR("Requested kick cannot be performed.")
         this->kickFailed = true;
@@ -435,6 +453,10 @@ void JointSpaceKick<Scalar>::defineTrajectory()
       jacobian,
       Matrix<Scalar, Dynamic, 1>(desCartesianVel.block(0, 0, 3, 1)));
   }
+  cout << "preImpJVel:" << preImpJVel << endl;
+  for (size_t i = 0; i < kickChain->size; ++i) {
+    preImpJVel[i] = min(velLimits[i], preImpJVel[i]);
+  }
   Matrix<Scalar, Dynamic, Dynamic> jointBoundVels;
   jointBoundVels.resize(2, chainSize);
   jointBoundVels.setZero();
@@ -482,15 +504,8 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   Matrix<Scalar, Dynamic, 1> prevJoints = impactJoints;
   Matrix<Scalar, Dynamic, 1> prevJointsVel = preImpJVel;
   desCartesianVel.block(0, 0, 3, 1) = this->desImpactVel;
-  Matrix<Scalar, Dynamic, 1> velLimits;
-  velLimits.resize(kickChain->size);
-  auto kickJoints =
-    this->kM->getJoints(static_cast<Joints>(kickChain->start), kickChain->size);
-  for (size_t i = 0; i < kickChain->size; ++i) {
-    velLimits[i] = kickJoints[i]->maxVelocity * 0.95;
-  }
   for (size_t i = 0; i < maxConstantVelIterations; ++i) {
-    this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
+    //this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
     this->kM->setChainPositions(this->kickLeg, prevJoints, JointStateType::sim); // impact pose joints
     Matrix<Scalar, 4, 4> eeTrans =
       this->supportToTorso *
@@ -509,36 +524,33 @@ void JointSpaceKick<Scalar>::defineTrajectory()
     for (size_t i = 0; i < jointTrajectories.size(); ++i)
       jointTrajectories[i].push_back(angles[i]);
     auto distFromBall = (eeTrans.block(0, 3, 3, 1) - this->ballPosition).norm();
-    //LOG_INFO("distFromBall: " << distFromBall)
     if (distFromBall < this->ballRadius * constantVelCutoffDist) {
       break;
     }
-    prevJointsVel = (angles - prevJoints) / this->cycleTime;
-    if (((prevJointsVel.array().abs() - velLimits.array()) > 0.0).any())
-      break;
+    //if (((prevJointsVel.array().abs() - velLimits.array()) > 0.0).any())
+    //  break;
+    for (size_t i = 0; i < kickChain->size; ++i) {
+      prevJointsVel[i] = (angles[i] - prevJoints[i]) / this->cycleTime;
+      prevJointsVel[i] = min(velLimits[i], prevJointsVel[i]);
+      angles[i] = prevJoints[i] + prevJointsVel[i] * this->cycleTime;
+    }
     prevJoints = angles;
   }
   ///< Post impact phase
   ///< Second trajectory optimization
   vector < vector<Scalar> > jointTrajectories2;
   jointBoundVels.setZero();
-  ///< If constant velocity phase is not used use the preImpJVel here
-  //jointBoundVels.row(0) = preImpJVel.transpose();
-  ///< Else use prevJointsVel
   jointBoundVels.row(0) = prevJointsVel.transpose(); // First row
   knots.resize(cPosesPost.size()-1); // 3 poses for post-impact trajectory
   Matrix<Scalar, Dynamic, Dynamic> jointPosPost;
   jointPosPost.resize(cPosesPost.size(), chainSize);
-  ///< If constant velocity phase is not used use the impact pose as first pose
-  //requiredJoints.row(0) = impactJoints.transpose();
-  ///< Else use the final pose of constant velocity phase
   jointPosPost.row(0) = prevJoints.transpose();
   activeResidual[3] = 1.0;
   activeResidual[4] = 1.0;
   activeResidual[5] = 1.0;
   ///< Solve inverse kinematics for post impact poses
   for (int i = 1; i < jointPosPost.rows(); ++i) { ///< First pos is known
-    this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
+    //this->kM->setStateFromTo(JointStateType::actual, JointStateType::sim);
     //this->kM->setChainPositions(this->kickLeg, jointPosPost.row(i-1).transpose(), JointStateType::sim);
     Matrix<Scalar, Dynamic, 1> angles;
     angles = this->kM->solveJacobianIK(this->kickLeg, this->endEffector, cPosesPost[i], numIkIterations, activeJoints, activeResidual);
@@ -774,7 +786,7 @@ void JointSpaceKick<Scalar>::requestExecution(const bool& addArmsMovement)
     }
     this->totalTimeToKick = (trajStep + 1) * this->cycleTime;
     //this->kickTimeStep = 0.f;
-    this->naoqiJointInterpolation(jointIds, jointTimes, jointPositions, true);
+    this->naoqiJointInterpolation(jointIds, jointTimes, jointPositions, false);
     //plotJointTrajectories();
   }
 }

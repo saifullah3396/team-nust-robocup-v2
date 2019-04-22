@@ -4,9 +4,9 @@
  * This file declares the class CbOptimizer
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 Jul 2018  
+ * @date 17 Jul 2018
  */
- 
+
 #pragma once
 
 #include "MotionModule/include/MTypeHeader.h"
@@ -28,9 +28,9 @@ public:
   /**
    * Constructor.
    *
-   * @param motionModule Pointer to base motion module 
+   * @param motionModule Pointer to base motion module
    * @param chainIndex leg chain index according to kinematics module
-   * @param chainIndex base leg chain index according to kinematics module 
+   * @param chainIndex base leg chain index according to kinematics module
    *   if balancing is needed
    * @param cb The cubic spline object which is to be optimized.
    * @param innerPointsPerKnot Number of inner points to be used for evaluation
@@ -46,15 +46,15 @@ public:
     cb(cb),
     innerPointsPerKnot(innerPointsPerKnot)
   {
-    ASSERT(this->chainSize == this->cb->getSplineDim());
+    ASSERT(this->chainSize == this->cb->getDim());
   }
-  
+
   /**
    * Constructor.
    *
-   * @param motionModule Pointer to base motion module 
+   * @param motionModule Pointer to base motion module
    * @param chainIndex leg chain index according to kinematics module
-   * @param chainIndex base leg chain index according to kinematics module 
+   * @param chainIndex base leg chain index according to kinematics module
    *   if balancing is needed
    * @param endEffector endeffector transformation matrix from chain end
    * @param eeVelMax maximum velocity constraints on end-effector
@@ -75,9 +75,9 @@ public:
     innerPointsPerKnot(innerPointsPerKnot),
     endEffector(endEffector)
   {
-    ASSERT(this->chainSize == this->cb->getSplineDim());
+    ASSERT(this->chainSize == this->cb->getDim());
   }
-  
+
   /**
    * Default destructor for this class.
    */
@@ -87,11 +87,11 @@ public:
 
   /**
    * Sets the cb spline object.
-   */ 
-  void setCB(CubicSpline<Scalar>* cb) 
-  { 
+   */
+  void setCB(CubicSpline<Scalar>* cb)
+  {
     this->cb = cb;
-    ASSERT(this->chainSize == this->cb->getSplineDim());
+    ASSERT(this->chainSize == this->cb->getDim());
   }
 
   /**
@@ -124,7 +124,7 @@ private:
   void
   ineqConstraints(unsigned nCons, double *result, unsigned nVars,
     const double* knots, double* grad, void* data);
-    
+
   /**
    * Evaluates the minimum time objective function
    */
@@ -133,7 +133,7 @@ private:
 
   /**
    * Computes dynamic constraints such as zmp or torque using inverse dynamics.
-   */  
+   */
   vector<Scalar> computeDynCons(
     const Matrix<Scalar, Dynamic, 1>& times,
     const vector<Matrix<Scalar, Dynamic, Dynamic> >& coeffs);
@@ -145,7 +145,7 @@ private:
 
   ///< Matrix defining the end-effector transformation frame from chain end
   Matrix<Scalar, 4, 4> endEffector;
-  
+
   ///< Number of inner points to be used for evaluation for each knot
   unsigned innerPointsPerKnot;
 
