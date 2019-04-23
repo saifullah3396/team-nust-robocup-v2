@@ -245,8 +245,10 @@ void BallExtraction::processImage()
       LOG_INFO("classifiedBalls found: " << classifiedBalls.size());
     }
     if (GET_DVAR(int, displayOutput)) {
-      VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
-      waitKey(0);
+      if (this->ballTracker->getBallFound()) {
+        VisionUtils::displayImage(name, bgrMat[toUType(BALL_INFO_OUT(VisionModule).cameraNext)]);
+      }
+      //waitKey(0);
     }
   } catch (exception& e){
     LOG_EXCEPTION("Exception raised in BallExtraction:\n\t" << e.what());
@@ -635,6 +637,9 @@ void BallExtraction::findCandidatesWithBallFeatures(
       ballExpected.height = ballExpected.width;
       ballExpected.y = center.y - ballExpected.height / 2;
 
+      if (ballExpected.width <= 5)
+        continue;
+
       //! Window size for adaptive threshold
       int windowSize = ballExpected.width / adaptiveThresholdWindowSizeRatio;
 
@@ -646,7 +651,9 @@ void BallExtraction::findCandidatesWithBallFeatures(
 
       //! Get binary image using adaptive threshold
       Mat binary;
+      //VisionUtils::displayImage("gray", gray);
       adaptiveThreshold(gray, binary, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY_INV, windowSize, subC);
+      //VisionUtils::displayImage("binary", binary);
 
       vector<vector<Point>> contours;
       vector<Vec4i> hierarchy;
@@ -718,7 +725,7 @@ void BallExtraction::findCandidatesWithBallFeatures(
       if (pentagons.size() < minPentagonsRequired ||
           pentagons.size() >= maxPentagonsRequired)
       {
-        if (pentagons.size() > minPentagonsPoorCandidates) {
+        if (pentagons.size() >= minPentagonsPoorCandidates) {
           auto center = (pentagons[0]->center + pentagons[1]->center) * 0.5;
           auto radius = cv::norm(pentagons[0]->center - pentagons[1]->center) * 2;
           ballExpected.x = center.x - radius + offset.x;
@@ -1106,15 +1113,13 @@ unsigned BallExtraction::getBallFrameInNextCycle(BallInfo<float>& ballInfo)
       ballInOther.y > imageHeight[toUType(otherCam)] / 2 ?
       imageHeight[toUType(otherCam)] - ballInOther.y  : ballInOther.y;
     yBoundaryInOther /= imageHeight[toUType(otherCam)];
-    //cout << "yBoundaryInOther: " << yBoundaryInOther << endl;
-    //cout << "yBoundary: " << yBoundary << endl;
     if (yBoundaryInOther > yBoundary) {
-      ballInfo.cameraNext = static_cast<CameraId>(otherCam);
+      ballInfo.cameraNext = otherCam;
     } else {
-      ballInfo.cameraNext = static_cast<CameraId>(activeCamera);
+      ballInfo.cameraNext = activeCamera;
     }
   }
-  ballInfo.cameraNext = static_cast<CameraId>(activeCamera);
+  ballInfo.cameraNext = activeCamera;
 }
 
 bool BallExtraction::getBallFound()
