@@ -1,0 +1,33 @@
+{
+	"FieldMap" : {
+		"debug" : {
+			"debug" : 0,
+			"sendParticles" : 0,
+			"sendObstacleMap" : 0,
+			"drawParticles" : 0,
+			"displayOutput" : 0,
+			"displayInfo" : 0
+		}
+	},
+
+	"ParticleFilter" : {
+		"debug" : {
+			"displayLandmarksMap" : 0,
+			"displayVoronoiMap" : 0
+		},
+		"params" : {
+			"_comment_1" : "Number of particles used.",
+			"nParticles" : 40,
+			"_comment_2" : "New states generation standard deviation in x-y-theta.",
+			"genStd" : [0.008333333, 0.008333333, 0.029074074],
+			"_comment_3" : "Motion prediction standard deviation in x-y-theta when robot is in motion.",
+			"motionStd" : [0.008333333, 0.008333333, 0.0058178],
+			"_comment_4" : "Prediction standard deviation in x-y-theta when robot is not moving.",
+			"predStd" : [0.008333333, 0.008333333, 0.029074074],
+			"_comment_5" : "Measurement standard deviation in x-y-theta.",
+			"measStd" : [0.066666667, 0.066666667, 0.058148148],
+			"_comment_1" : "Grid resolution for field landmarks",
+			"lGridResolution" : 0.2
+		}
+	}
+};
