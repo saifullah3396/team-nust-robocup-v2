@@ -25,16 +25,16 @@
         0
     ],
     "type" : 0,
-    "balanceConfig1" : {
+    "balanceConfig" : {
         "baseType" : 0,
         "id" : 4,
         "maxRuntime" : 45,
         "supportLeg" : 3,
-        "timeToReachB" : 0.75,
+        "timeToReachB" : 1.5,
         "type" : 0,
         "logData" : false
     },
-    "balanceConfig" : {
+    "balanceConfig-ignore" : {
         "baseType" : 0,
         "id" : 4,
         "keepOtherLegContact" : true,

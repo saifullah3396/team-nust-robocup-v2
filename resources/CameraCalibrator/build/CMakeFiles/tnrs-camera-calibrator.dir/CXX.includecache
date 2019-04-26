@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/resources/CameraCalibrator/src/CameraCalibrator.cpp
+iostream
+-
+sstream
+-
+fstream
+-
+time.h
+-
+stdio.h
+-
+opencv2/core/core.hpp
+-
+opencv2/imgproc/imgproc.hpp
+-
+opencv2/calib3d/calib3d.hpp
+-
+opencv2/highgui/highgui.hpp
+-
+

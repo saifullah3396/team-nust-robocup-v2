@@ -6,7 +6,7 @@
     "type" : 0,
     "scanLowerArea" : false,
     "totalWaitTime" : 1,
-    "scanMaxYaw" : 0.785,
+    "scanMaxYaw" : 1.5,
     "scanMaxPitch" : 0.279111111,
     "logData" : false
 }

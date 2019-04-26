@@ -232,6 +232,11 @@ bool CameraModule::setupCameras()
           yuv.data = cams[toUType(index)]->image;
           cv::Mat bgr;
           cvtColor(yuv, bgr, COLOR_YUV2BGR_YUY2);
+          if (index == CameraId::headTop) {
+            VisionUtils::displayImage("Top", bgr);
+          } else {
+            VisionUtils::displayImage("Bottom", bgr);
+          }
           imwrite(imageStr, bgr);
         }
         #ifndef V6_CROSS_BUILD

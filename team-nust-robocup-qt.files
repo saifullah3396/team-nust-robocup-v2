@@ -1701,3 +1701,4 @@ src/Utils/tests/Hold/PotentialFieldTest.cpp
 src/TNRSModules/MotionModule/src/MovementModule/Types/KinResolutionWalk.cpp
 src/TNRSModules/MotionModule/include/MovementModule/Types/KinResolutionWalk.h
 config/BehaviorConfigs/MBConfigs/MovementModule/KinResolutionWalk.json
+config/BehaviorConfigs/MBConfigs/GetupModule/KFMGetup.json

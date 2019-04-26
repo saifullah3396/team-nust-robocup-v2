@@ -1,0 +1,15 @@
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles/package.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles/package_source.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles/edit_cache.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles/rebuild_cache.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles/list_install_components.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles/install.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles/install/local.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/CMakeFiles/package.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/CMakeFiles/package_source.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/CMakeFiles/edit_cache.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/CMakeFiles/rebuild_cache.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/CMakeFiles/list_install_components.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/CMakeFiles/install.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/CMakeFiles/install/local.dir
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/CMakeFiles/tnrs-camera-calibrator.dir

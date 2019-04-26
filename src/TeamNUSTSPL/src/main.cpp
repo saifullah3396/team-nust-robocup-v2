@@ -89,10 +89,10 @@
           LOG_ERROR("Please add argument value Top/Bottom for required camera input.")
           exit(1);
         }
-        LOG_INFO("Press ENTER key to start receiving image input from the concerned camera."
+        /*LOG_INFO("Press ENTER key to start receiving image input from the concerned camera."
           "Please save images of a checker board from the concerned camera for calibration.\n"
           "Before Continuing, don't forget to update the file: \nConfig/CameraCalibration.xml.\n");
-        if(cin.get() == '\n');
+        if(cin.get() == '\n');*/
       }
 
       if(ArgParseUtils::cmdOptionExists(argv, argv+argc, "--robot"))

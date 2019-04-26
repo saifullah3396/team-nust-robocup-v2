@@ -1,0 +1,38 @@
+
+(cl:in-package :asdf)
+
+(defsystem "team_nust_msgs-msg"
+  :depends-on (:roslisp-msg-protocol :roslisp-utils :geometry_msgs-msg
+               :humanoid_nav_msgs-msg
+               :std_msgs-msg
+)
+  :components ((:file "_package")
+    (:file "BallInfo" :depends-on ("_package_BallInfo"))
+    (:file "_package_BallInfo" :depends-on ("_package"))
+    (:file "ObsObstacles" :depends-on ("_package_ObsObstacles"))
+    (:file "_package_ObsObstacles" :depends-on ("_package"))
+    (:file "Landmark" :depends-on ("_package_Landmark"))
+    (:file "_package_Landmark" :depends-on ("_package"))
+    (:file "LocalizationState" :depends-on ("_package_LocalizationState"))
+    (:file "_package_LocalizationState" :depends-on ("_package"))
+    (:file "TeamRobot" :depends-on ("_package_TeamRobot"))
+    (:file "_package_TeamRobot" :depends-on ("_package"))
+    (:file "BehaviorInfo" :depends-on ("_package_BehaviorInfo"))
+    (:file "_package_BehaviorInfo" :depends-on ("_package"))
+    (:file "Obstacle" :depends-on ("_package_Obstacle"))
+    (:file "_package_Obstacle" :depends-on ("_package"))
+    (:file "TeamNUSTState" :depends-on ("_package_TeamNUSTState"))
+    (:file "_package_TeamNUSTState" :depends-on ("_package"))
+    (:file "TeamInfo" :depends-on ("_package_TeamInfo"))
+    (:file "_package_TeamInfo" :depends-on ("_package"))
+    (:file "ObsLandmarks" :depends-on ("_package_ObsLandmarks"))
+    (:file "_package_ObsLandmarks" :depends-on ("_package"))
+    (:file "GoalInfo" :depends-on ("_package_GoalInfo"))
+    (:file "_package_GoalInfo" :depends-on ("_package"))
+    (:file "JointInfo" :depends-on ("_package_JointInfo"))
+    (:file "_package_JointInfo" :depends-on ("_package"))
+    (:file "StepTargetArr" :depends-on ("_package_StepTargetArr"))
+    (:file "_package_StepTargetArr" :depends-on ("_package"))
+    (:file "SensorState" :depends-on ("_package_SensorState"))
+    (:file "_package_SensorState" :depends-on ("_package"))
+  ))

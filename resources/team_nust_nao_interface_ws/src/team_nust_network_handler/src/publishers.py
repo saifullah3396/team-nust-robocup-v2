@@ -937,7 +937,7 @@ class ImagePublisher:
 
     def handle_image_msg(self, image_msg):
         np_bytes_array = np.frombuffer(bytearray.fromhex(image_msg), dtype=np.uint8)
-        np_image = cv2.imdecode(np_bytes_array, cv2.CV_LOAD_IMAGE_COLOR)
+        np_image = cv2.imdecode(np_bytes_array, 1)
         self._image_msg = self._bridge.cv2_to_imgmsg(np_image)
 
 

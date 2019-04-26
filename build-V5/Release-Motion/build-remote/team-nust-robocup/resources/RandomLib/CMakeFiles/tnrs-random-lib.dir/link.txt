@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -O3 -DNDEBUG  -shared -Wl,-soname,libtnrs-random-lib.so -o ../../../../remote/lib/libtnrs-random-lib.so CMakeFiles/tnrs-random-lib.dir/src/Random.cpp.o  -L/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/remote/lib  -L/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/resources/RandomLib/lib 
