@@ -492,6 +492,7 @@ namespace JsonUtils
     }
   }
   template void jsonToType(vector<int>& var, Json::Value val, const vector<int>& def);
+  template void jsonToType(vector<vector<int>>& var, Json::Value val, const vector<vector<int>>& def);
   template void jsonToType(vector<unsigned>& var, Json::Value val, const vector<unsigned>& def);
   template void jsonToType(vector<float>& var, Json::Value val, const vector<float>& def);
   template void jsonToType(vector<TeamRobot<float> >& var, Json::Value val, const vector<TeamRobot<float> >& def);
