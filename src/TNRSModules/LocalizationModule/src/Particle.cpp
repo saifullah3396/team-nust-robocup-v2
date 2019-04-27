@@ -15,6 +15,11 @@ Particle::Particle(const float& x, const float& y, const float& theta) :
 {
 }
 
+Particle::Particle(const float& x, const float& y, const float& theta, const double& weight) :
+  RobotPose2D<float>(x, y, theta), weight(weight)
+{
+}
+
 template <typename OtherScalar>
 Particle Particle::transform(const RobotPose2D<OtherScalar>& pose)
 {
@@ -22,7 +27,8 @@ Particle Particle::transform(const RobotPose2D<OtherScalar>& pose)
     Particle(
       getX() + pose.getX() * ct - pose.getY() * st,
       getY() + pose.getX() * st + pose.getY() * ct,
-      MathsUtils::rangeToPi(pose.getTheta() + getTheta())
+      MathsUtils::addAngles(static_cast<float>(pose.getTheta()), getTheta()),
+      this->weight
     );
 }
 template Particle Particle::transform(const RobotPose2D<float>& p);

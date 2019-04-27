@@ -15,6 +15,7 @@
 #include "TNRSBase/include/ModuleRequestMacros.h"
 #include "Utils/include/SwitchRequest.h"
 #include "Utils/include/DataHolders/PositionInput.h"
+#include "Utils/include/DataHolders/VelocityInput.h"
 #include "Utils/include/DataHolders/Landmark.h"
 
 /**
@@ -30,6 +31,7 @@ enum class LocalizationRequestIds {
   initiateLocalizer,
   resetLocalizer,
   positionUpdate,
+  velocityUpdate,
   knownLandmarksUpdate,
   unknownLandmarksUpdate
 };
@@ -131,6 +133,19 @@ DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
   LocalizationRequestIds,
   positionUpdate,
   (PositionInput<float>, input, PositionInput<float>(0.0, 0.0, 0.0))
+);
+
+/**
+ * @class VelocityUpdate
+ * @brief A request to update the velocity of the robot estimates
+ */
+DECLARE_MODULE_REQUEST_TYPE_WITH_VARS(
+  VelocityUpdate,
+  VelocityUpdatePtr,
+  LocalizationRequest,
+  LocalizationRequestIds,
+  velocityUpdate,
+  (VelocityInput<float>, input, VelocityInput<float>(0.0, 0.0, 0.0))
 );
 
 /**

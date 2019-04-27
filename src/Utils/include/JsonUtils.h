@@ -214,11 +214,13 @@ namespace JsonUtils
   Json::Value getJson(const Matrix4f& mat);
   Json::Value getJson(const Matrix4d& mat);
   Json::Value getJson(const Vector2f& mat);
+  Json::Value getJson(const Vector3d& mat);
   Json::Value getJson(const VectorXf& mat);
   Json::Value getJson(const cv::Mat& mat);
 
   DECLARE_JSON_TO_TYPE(int)
   DECLARE_JSON_TO_TYPE(unsigned)
+  DECLARE_JSON_TO_TYPE(size_t)
   DECLARE_JSON_TO_TYPE(float)
   DECLARE_JSON_TO_TYPE(double)
   DECLARE_JSON_TO_TYPE(bool)
@@ -237,6 +239,7 @@ namespace JsonUtils
   template <typename Scalar, size_t Rows, size_t Cols> void jsonToType(Matrix<Scalar, Rows, Cols>& var, Json::Value val, const Matrix<Scalar, Rows, Cols>& def);
   template <typename T> void jsonToType(cv::Point_<T>& var, Json::Value val, const cv::Point_<T>& def);
   DECLARE_JSON_TO_TYPE(Vector2f)
+  DECLARE_JSON_TO_TYPE(Vector3d)
   DECLARE_JSON_TO_TYPE(VectorXf)
   typedef Matrix<unsigned, 3, 1> MatrixU31;
   DECLARE_JSON_TO_TYPE(MatrixU31)

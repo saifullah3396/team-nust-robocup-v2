@@ -4,7 +4,7 @@
  * This file declares the class KickModule
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 15 May 2017  
+ * @date 15 May 2017
  */
 
 #pragma once
@@ -19,7 +19,7 @@ template <typename Scalar>
 class MaxMomentumEEOpt;
 struct MBKickConfig;
 
-/** 
+/**
  * @class KickModule
  * @brief The base class for defining different kinds of kick engines
  */
@@ -38,7 +38,7 @@ public:
     MotionModule* motionModule,
     const boost::shared_ptr<MBKickConfig>& config,
     const string& name = "KickModule");
-  
+
   /**
    * @brief ~KickModule Destructor
    */
@@ -54,18 +54,18 @@ public:
    */
   static boost::shared_ptr<KickModule<Scalar> > getType(
     MotionModule* motionModule, const BehaviorConfigPtr& cfg);
-    
+
   /**
    * @brief loadExternalConfig See Behavior::loadExternalConfig()
    */
   virtual void loadExternalConfig() override;
-  
+
 protected:
   /**
    * @brief setupPosture Sets the required posture config as a child
    */
   void setupPosture();
-	
+
   /**
    * @brief setupPosture Sets the required balance config as a child
    */
@@ -96,7 +96,7 @@ protected:
    * @return True if successful
    */
   bool setEndEffectorXY(const Scalar& angle);
-    
+
   /**
    * @brief Sets the end-effector Z-X coordinates based on foot contour
    *   approximation
@@ -138,10 +138,10 @@ protected:
    * @brief plotFootSurfaces Plots the foot front surfaces in 3D
    */
   //void plotFootSurfaces();
-  
+
   /**
    * @brief makeFootSurfaces3D Makes the feet surface matrix
-   */ 
+   */
   //void makeFootSurfaces3D(
   //  const bool& leftFoot, fstream& log, fstream& zxLog, Mat& surfaceMat);
 
@@ -150,10 +150,10 @@ protected:
 
   ///< Ball radius
   static Scalar ballRadius;
-  
+
   ///< Ball static friction coefficient
   static Scalar sf;
-  
+
   ///< Ball rolling friction coefficient
   static Scalar rf;
 
@@ -178,21 +178,21 @@ protected:
   ///< Distance between the feet frames.
   Scalar footSpacing;
 
-  ///< Kicking Leg 
+  ///< Kicking Leg
   LinkChains kickLeg;
 
-  ///< Support Leg 
+  ///< Support Leg
   LinkChains supportLeg;
-  
+
   ///< End-Effector frame wrt kick leg base
   Matrix<Scalar, 4, 4> endEffector;
 
   ///< End-effector pose at impact wrt the support leg frame
-  Matrix<Scalar, 4, 4> impactPose;	
+  Matrix<Scalar, 4, 4> impactPose;
 
   ///< Transformation matrix from support leg frame to end effector frame
   Matrix<Scalar, 4, 4> supportToKick;
-  
+
   ///< Transformation matrix from torso to support leg frame
   Matrix<Scalar, 4, 4> torsoToSupport;
 
@@ -208,6 +208,9 @@ protected:
   ///< Whether to compute desImpactVel based on distance // Impulse/Vm based solution
   bool desImpactVelKnown;
 
+  ///< Whether the requested kick is not acheivable
+  bool kickFailed = {false};
+
   ///< Kick task active joints
   vector<bool> kickTaskJoints;
 
@@ -217,22 +220,27 @@ protected:
   ///< Time taken by the overall kick trajectory
   Scalar totalTimeToKick;
 
-  ///< BSpline defining the left foot contour 
+  ///< BSpline defining the left foot contour
   static BSpline<Scalar>* lFootContour;
-  
-  ///< BSpline defining the right foot contour 
+
+  ///< BSpline defining the right foot contour
   static BSpline<Scalar>* rFootContour;
-  
+
   ///< Foot rectangle defined by position vectors to four corners
   static vector<Matrix<Scalar, 3, 1> > footRect;
 
   ///< Maximum momentum optimizer is friend as it uses kick module
   ///< functions and variables
   friend class MaxMomentumEEOpt<Scalar>;
+
+  ///< Foot contour matrix in ZX direction
+  static Matrix<Scalar, 4, 4> bezierMat;
+  static Matrix<Scalar, 4, 3> contourMat;
+
 private:
   /**
    * Returns the cast of config to MBKickConfigPtr
-   */ 
+   */
   boost::shared_ptr<MBKickConfig> getBehaviorCast();
 
 public:

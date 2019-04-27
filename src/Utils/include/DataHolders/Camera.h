@@ -139,6 +139,7 @@ struct CameraSettings
  *
  * @enum CameraSettings
  */
+#ifndef V6_CROSS_BUILD
 enum class CameraSettings : unsigned int
 {
   autoExposition,
@@ -167,6 +168,27 @@ enum class CameraSettings : unsigned int
   first = autoExposition,
   last = verticalFlip
 };
+#else
+enum class CameraSettings : unsigned int
+{
+  autoExposition,
+  autoWhiteBalance,
+  brightness,
+  contrast,
+  exposure,
+  gain,
+  hue,
+  hueAuto, //! only in V6
+  focusAbsolute, //! only in V6
+  focusAuto, //! only in V6
+  saturation,
+  sharpness,
+  whiteBalance,
+  count,
+  first = autoExposition,
+  last = whiteBalance
+};
+#endif
 DECLARE_SPECIALIZED_ENUM(CameraSettings);
 #endif
 

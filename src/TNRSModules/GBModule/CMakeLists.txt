@@ -45,6 +45,7 @@ else()
     target_link_libraries(tnrs-gb-module
       #-lfftw3
       -lfftw3f
+      -ljsoncpp
       libtnrs-utils.so
       libtnrs-base.so
       ${ALSA_LIBRARIES})

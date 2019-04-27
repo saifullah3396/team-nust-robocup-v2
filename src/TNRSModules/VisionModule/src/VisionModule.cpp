@@ -199,15 +199,19 @@ void VisionModule::mainRoutine()
   OBSTACLES_OBS_OUT(VisionModule).data.clear();
   // Execution of this module is decided by planning module.
   if (runVision) {
+    //cout << "lastIterationTimeMS:" << lastIterationTimeMS << endl;
     // update cameras and get images
     cameraUpdate();
     // save video if required
     //handleVideoWriting();
     // process image for extracting new features
-    //Mat image = FeatureExtraction::makeYuvMat(static_cast<CameraId>(0));
-    //Mat out;
-    ////colorHandler->getBinary(image, out, TNColors::red);
-    //VisionUtils::displayImage("Top", out);
+    /*Mat image = FeatureExtraction::makeYuvMat(static_cast<CameraId>(0));
+    for (int i = 0; i < toUType(TNColors::count); ++i) {
+      Mat out;
+      colorHandler->getBinary(image, out, static_cast<TNColors>(i));
+      VisionUtils::displayImage(colorNames[i], out);
+    }
+    waitKey(0);*/
     FeatureExtraction::updateImageMatrices(activeCamera, bool(GET_DVAR(int, debug)));
     if (activeCamera == CameraId::headBottom)
       FeatureExtraction::createYuvHist(activeCamera, false);
@@ -222,6 +226,9 @@ void VisionModule::mainRoutine()
       sendKnownLandmarksInfo();
       sendUnknownLandmarksInfo();
       sendImages();
+      #ifndef MODULE_IS_REMOTE
+      saveImages();
+      #endif
     }
     // Update the id of newly observed obstacles
     OBSTACLES_OBS_OUT(VisionModule).resetId();
@@ -269,7 +276,11 @@ bool VisionModule::featureExtractionUpdate()
     for (const auto& fe : featureExt) {
       if (fe->isEnabled()) {
         fe->setActiveCamera(activeCamera);
-        fe->processImage();
+        try {
+          fe->processImage();
+        } catch (exception& e) {
+          LOG_EXCEPTION("Exception raised in " << fe->getName() << "::processImage():\n\t" << e.what());
+        }
       }
     }
     return true;
@@ -287,8 +298,8 @@ void VisionModule::updateLandmarksInfo()
       FeatureExtraction::getUnknownLandmarks());
   BaseModule::publishModuleRequest(klu);
   BaseModule::publishModuleRequest(ulu);
-  LOG_INFO("N landmarks seen: " << klu->landmarks.size());
-  /*for (auto l : klu->landmarks) {
+  /*LOG_INFO("N landmarks seen: " << klu->landmarks.size());
+  for (auto l : klu->landmarks) {
     if (l->type == 0) {
       cout << "l->type:" << l->type << endl;
       cout << "l->pos: "<< l->pos << endl;
@@ -344,7 +355,7 @@ void VisionModule::setupFeatureExtraction()
 {
   auto& ourTeam = GAME_DATA_IN(VisionModule).teams[0].teamColour;
   auto& oppTeam = GAME_DATA_IN(VisionModule).teams[1].teamColour;
-  TNColors ourColor = TNColors::yellow, oppColor = TNColors::blue;
+  TNColors ourColor = TNColors::yellow, oppColor = TNColors::red;
   if (ourTeam == TEAM_BLACK) ourColor = TNColors::black;
   else if (ourTeam == TEAM_BLUE) ourColor = TNColors::blue;
   else if (ourTeam == TEAM_RED) ourColor = TNColors::red;
@@ -358,7 +369,7 @@ void VisionModule::setupFeatureExtraction()
     ourColor == TNColors::black || oppColor == TNColors::black;
   FeatureExtraction::setup(this);
   ourColor = TNColors::yellow;
-  oppColor = TNColors::blue;
+  oppColor = TNColors::red;
   FeatureExtraction::updateColorInfo(ourColor, oppColor, blackJerseyExists);
 
   featureExt.resize(toUType(FeatureExtractionIds::count));
@@ -441,20 +452,55 @@ void VisionModule::sendUnknownLandmarksInfo()
 
 void VisionModule::sendImages()
 {
-  if (GET_DVAR(int, sendBinaryImage) >= 0) {
-    ASSERT(GET_DVAR(int, sendBinaryImage) < toUType(TNColors::count));
-    Mat image = FeatureExtraction::makeYuvMat(static_cast<CameraId>(GET_DVAR(int, debugImageIndex)));
-    Mat out;
-    colorHandler->getBinary(image, out, static_cast<TNColors>(GET_DVAR(int, sendBinaryImage)));
-    image = out;
-    UserCommRequestPtr request =
-      boost::make_shared<SendImageRequest>(image);
-    BaseModule::publishModuleRequest(request);
-  } else {
-    Mat image = FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex));
-    cv::resize(image, image, Size(160, 120));
-    UserCommRequestPtr request =
-      boost::make_shared<SendImageRequest>(image);
-    BaseModule::publishModuleRequest(request);
+  auto cameraIndex = GET_DVAR(int, debugImageIndex);
+  if (cameraIndex < toUType(CameraId::count)) {
+    if (GET_DVAR(int, sendBinaryImage) >= 0) {
+      ASSERT(GET_DVAR(int, sendBinaryImage) < toUType(TNColors::count));
+      Mat image = FeatureExtraction::makeYuvMat(static_cast<CameraId>(GET_DVAR(int, debugImageIndex)));
+      Mat out;
+      colorHandler->getBinary(image, out, static_cast<TNColors>(GET_DVAR(int, sendBinaryImage)));
+      image = out;
+      UserCommRequestPtr request =
+        boost::make_shared<SendImageRequest>(image);
+      BaseModule::publishModuleRequest(request);
+    } else {
+      Mat image = FeatureExtraction::getBgrMat(cameraIndex);
+      cv::resize(image, image, Size(160, 120));
+      UserCommRequestPtr request =
+        boost::make_shared<SendImageRequest>(image);
+      BaseModule::publishModuleRequest(request);
+    }
   }
 }
+
+#ifndef MODULE_IS_REMOTE
+void VisionModule::saveImages()
+{
+  auto cameraIndex = GET_DVAR(int, debugImageIndex);
+  if (logImages[cameraIndex] &&
+      toUType(activeCamera) == cameraIndex)
+  {
+    static string imagesDir = ConfigManager::getLogsDirPath() + "Images";
+    static string topDir = ConfigManager::getLogsDirPath() + "Images/Top";
+    static string bottomDir = ConfigManager::getLogsDirPath() + "Images/Bottom";
+    if (!boost::filesystem::exists(imagesDir)) {
+      boost::filesystem::create_directory(imagesDir);
+    }
+    if (!boost::filesystem::exists(topDir)) {
+      boost::filesystem::create_directory(topDir);
+    }
+    if (!boost::filesystem::exists(bottomDir)) {
+      boost::filesystem::create_directory(bottomDir);
+    }
+    string imageStr;
+    if (activeCamera == CameraId::headTop) {
+      imageStr = topDir + "/" + DataUtils::getCurrentDateTime() + ".jpg";
+    } else {
+      imageStr = bottomDir + "/" + DataUtils::getCurrentDateTime() + ".jpg";
+    }
+    Mat image = FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex));
+
+    imwrite(imageStr, image);
+  }
+}
+#endif

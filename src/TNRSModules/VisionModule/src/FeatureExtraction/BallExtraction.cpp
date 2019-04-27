@@ -7,6 +7,7 @@
  * @date 05 Feb 2017
  */
 
+#include <algorithm>
 #include "TNRSBase/include/MemoryIOMacros.h"
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/TNColors.h"
@@ -17,26 +18,40 @@
 #include "VisionModule/include/FeatureExtraction/BallExtraction.h"
 #include "VisionModule/include/FeatureExtraction/BallTracker.h"
 #include "VisionModule/include/FeatureExtraction/FieldExtraction.h"
+#include "VisionModule/include/FeatureExtraction/RobotExtraction.h"
+#include "VisionModule/include/FeatureExtraction/RobotRegion.h"
 #include "VisionModule/include/FeatureExtraction/RegionSegmentation.h"
 #include "VisionModule/include/FeatureExtraction/RegionScanners.h"
 #include "VisionModule/include/FeatureExtraction/ScannedRegion.h"
 #include "VisionModule/include/FeatureExtraction/ScannedLine.h"
 #include "VisionModule/include/VisionExceptions.h"
+#include "Utils/include/AngleDefinitions.h"
+
+struct Blob {
+  Blob (const Rect& rect, const Point& center, const vector<Point>& contour) :
+    rect(rect), center(center), contour(contour)
+  {
+    size = rect.area();
+  }
+
+  float size;
+  Point center;
+  Rect rect;
+  vector<Point> contour;
+};
+
+struct Triangle {
+  Triangle () = default;
+  vector<Point> points;
+  vector<boost::shared_ptr<Blob> > pentagons;
+};
 
 BallExtraction::BallExtraction(VisionModule* visionModule) :
-  FeatureExtraction(visionModule),
+  FeatureExtraction(visionModule, "BallExtraction"),
   DebugBase("BallExtraction", this),
-  gridSizeTop(Point(160, 120)),
-  gridSizeBottom(Point(80, 60)),
   ballType(1) // For checkered ball, see config VisionConfig.ini.
 {
   initDebugBase();
-  int tempSendTime;
-  int tempDrawPredictionState;
-  int tempDrawScannedRegions;
-  int tempDrawBallContour;
-  int tempDisplayInfo;
-  int tempDisplayOutput;
   GET_CONFIG(
     "EnvProperties",
     (int, ballType, ballType),
@@ -45,28 +60,71 @@ BallExtraction::BallExtraction(VisionModule* visionModule) :
     (float, coeffRF, coeffRF),
   )
 
-  GET_CONFIG(
-    "VisionConfig",
-    (float, BallExtraction.ballRadiusMin, ballRadiusMin),
-    (float, BallExtraction.ballRadiusMax, ballRadiusMax),
-    (int, BallExtraction.sendTime, tempSendTime),
-    (int, BallExtraction.drawPredictionState, tempDrawPredictionState),
-    (int, BallExtraction.drawScannedRegions, tempDrawScannedRegions),
-    (int, BallExtraction.drawBallContour, tempDrawBallContour),
-    (int, BallExtraction.displayInfo, tempDisplayInfo),
-    (int, BallExtraction.displayOutput, tempDisplayOutput),
-    (int, BallExtraction.scanStepLow, scanStepLow),
-    (int, BallExtraction.scanStepHigh, scanStepHigh),
-  )
+  GET_DEBUG_CONFIG(
+    VisionConfig,
+    BallExtraction,
+    (int, sendTime),
+    (int, drawPredictionState),
+    (int, drawScannedLines),
+    (int, drawUnlinkedScannedRegions),
+    (int, drawClassifiedPentagons),
+    (int, drawClassifiedTriangles),
+    (int, drawBallCircles),
+    (int, drawScannedRegions),
+    (int, drawBallContour),
+    (int, drawPredictionROI),
+    (int, displayInfo),
+    (int, displayOutput),
+  );
 
-  SET_DVAR(int, sendTime, tempSendTime);
-  SET_DVAR(int, drawScannedRegions, tempDrawScannedRegions);
-  SET_DVAR(int, drawBallContour, tempDrawBallContour);
-  SET_DVAR(int, displayInfo, tempDisplayInfo);
-  SET_DVAR(int, displayOutput, tempDisplayOutput);
+  GET_CLASS_CONFIG(
+    VisionConfig,
+    BallExtraction,
+    lineLinkHorXTolRatio,
+    lineLinkHorYTolRatio,
+    lineLinkVerXTolRatio,
+    lineLinkVerYTolRatio,
+    maxLineLengthDiffRatio,
+    regionsXDiffTol,
+    regionsYDiffTol,
+    maxRegionSizeDiffRatio,
+    regionFilterMinWidth,
+    regionFilterMinHeight,
+    regionFilterMaxAspectRatio,
+    robotFilterHeightRatio,
+    fallenRobotFilterHeightRatio,
+    robotMaxOverlapTop,
+    robotMaxOverlapBottom,
+    minOverlapAreaThreshold,
+    maxBallRegionSizeRatio,
+    ballRegionPaddingRatio,
+    adaptiveThresholdWindowSizeRatio,
+    adaptiveThresholdSubConstantRatio,
+    maxBallBlobSizeRatio,
+    minBallBlobSizeRatio,
+    ballBlobMaxAspectRatio,
+    maxBallBlobIntensity,
+    minPentagonsRequired,
+    maxPentagonsRequired,
+    minPentagonsPoorCandidates,
+    maxBlobToBlobSizeDiffRatio,
+    gaussianSizeX,
+    gaussianSizeY,
+    gaussianSigmaX,
+    gaussianSigmaY,
+    houghCirclesMethod,
+    houghCirclesMinDistRatio,
+    minRadiusPixelTolerance,
+    maxRadiusPixelTolerance,
+    triangleToCircleMaxDistRatio,
+    cascadePaddingRatio,
+    CNNClassificationTolerance,
+    predictedAreaRoiRatio,
+  );
 
   ///< Get other extraction classes
   fieldExt = GET_FEATURE_EXT_CLASS(FieldExtraction, FeatureExtractionIds::field);
+  robotExt = GET_FEATURE_EXT_CLASS(RobotExtraction, FeatureExtractionIds::robot);
   regionSeg = GET_FEATURE_EXT_CLASS(RegionSegmentation, FeatureExtractionIds::segmentation);
 
   ///< Make a ball tracker
@@ -80,44 +138,15 @@ BallExtraction::BallExtraction(VisionModule* visionModule) :
     LOG_EXCEPTION(e.what());
   }
 
-  ///< Ball scan parameters
-  regionsDist.resize(static_cast<size_t>(CameraId::count));
-  regionsDist[0] = 50;
-  regionsDist[1] = 200;
-  int gridDivX = 640 / gridSizeTop.x;
-  int gridDivY = 480 / gridSizeTop.y;
-  for (int x = 0; x < gridDivX; ++x) {
-    for (int y = 0; y < gridDivY; ++y) {
-      topXYPairs.push_back(Point(x, y));
-    }
-  }
-  gridDivX = 160 / (gridSizeBottom.x);
-  gridDivY = 120 / (gridSizeBottom.y);
-  for (int x = 0; x < gridDivX; ++x) {
-    for (int y = 0; y < gridDivY; ++y) {
-      bottomXYPairs.push_back(Point(x, y));
-    }
-  }
+  string tfliteFile =
+    ConfigManager::getCommonConfigDirPath() +
+  "/Classifiers/quantized_model.tflite";
 
-  ///< Initialize processing times
-  processTime = 0.f;
-  resetBallTrackerTime = 0.f;
-  ballDetectionTime = 0.f;
-  scanTime = 0.f;
-  regionFilterTime = 0.f;
-  regionClassificationTime = 0.f;
-  updateBallInfoTime = 0.f;
-  findBallRegionsTime = 0.f;
-
-  //string tfliteFile =
-  //  ConfigManager::getConfigDirPath() +
-  //"/Classifiers/quantized_model.tflite";
-
-  //model = FlatBufferModel::BuildFromFile(tfliteFile.c_str());
-  //InterpreterBuilder builder(*model, resolver);
-  //builder(&interpreter);
+  model = FlatBufferModel::BuildFromFile(tfliteFile.c_str());
+  InterpreterBuilder builder(*model, resolver);
+  builder(&interpreter);
   // Resize input tensors, if desired.
-  //interpreter->AllocateTensors();
+  interpreter->AllocateTensors();
 }
 
 void BallExtraction::loadBallClassifier()
@@ -141,35 +170,85 @@ void BallExtraction::processImage()
   try {
     auto tStart = high_resolution_clock::now();
     ///< Whether the ball extraction class is working on the lower cam
+    vector<Rect> bestCandidates;
+    vector<Rect> poorCandidates;
     if (resetBallTracker()) {
-      foundBall.clear();
+      classifiedBalls.clear();
       ///< Update ball tracker prediction
       Mat predState = ballTracker->predict();
+      if (GET_DVAR(int, drawPredictionState))
+        drawState(predState, Scalar(0, 255, 0));
+
+      vector<ScannedRegionPtr> ballRegions;
+      if (ballType == 1) {
+        findBallRegions(ballRegions);
+        if (activeCamera == CameraId::headTop)
+          filterFromRobotRegions(ballRegions);
+      }
+
+      Rect roi = Rect(0, 0, getImageWidth(), getImageHeight());
       if (ballTracker->getBallFound()) {
-        findBallFromPredState(predState);
+        findBallROIFromPredState(roi, predState);
+      }
+
+      if (GET_DVAR(int, drawPredictionROI))
+        rectangle(bgrMat[toUType(activeCamera)], roi, Scalar(255, 255, 255), 0);
+
+      if (ballType == 0) {
+        redBallDetector(roi);
+      } else if (ballType == 1) {
+        for (auto& br : ballRegions) {
+          if (!br) continue;
+          br->rect = br->rect & roi;
+          if (br->rect.area() <= 100) {
+            br.reset();
+            continue;
+          }
+          br->resetParams();
+        }
+      }
+
+      findCandidatesWithBallFeatures(ballRegions, bestCandidates, poorCandidates);
+      for (const auto& c : bestCandidates) {
+        rectangle(bgrMat[toUType(activeCamera)], c, Scalar(255, 0, 0), 2);
+      }
+      for (const auto& c : poorCandidates) {
+        rectangle(bgrMat[toUType(activeCamera)], c, Scalar(0, 0, 255), 2);
+      }
+      if (!bestCandidates.empty()) {
+        classifyRegionsCNN(bestCandidates);
       } else {
-        findBallRegions();
+        classifyRegionsCascade(poorCandidates);
       }
       ///< Perform ball tracker correction step
-      ballTracker->updateFilter(foundBall);
+      ballTracker->updateFilter(classifiedBalls);
       ///< Update ball info in memory
       updateBallInfo();
       drawResults();
     }
     duration<double> timeSpan = high_resolution_clock::now() - tStart;
     processTime = timeSpan.count();
-    if (GET_DVAR(int, displayOutput))
-      VisionUtils::displayImage("BallExtraction", bgrMat[toUType(activeCamera)]);
     if (GET_DVAR(int, displayInfo)) {
-      LOG_INFO("BallExtraction Results");
-      LOG_INFO("Time taken by overall process: " << processTime);
-      LOG_INFO("Time taken by resetting ball tracker: " << resetBallTrackerTime);
-      LOG_INFO("Time taken by scan: " << scanTime);
-      LOG_INFO("Time taken by regions filteration: " << regionFilterTime);
-      LOG_INFO("Time taken by regions classification: " << regionClassificationTime);
-      LOG_INFO("Time taken by ball detection: " << ballDetectionTime);
-      LOG_INFO("Time taken by updating ball in memory: " << updateBallInfoTime);
-      LOG_INFO("Ball found: " << ballTracker->getBallFound());
+      LOG_INFO("BallExtraction Results:");
+      LOG_INFO("Time taken by processImage(): " << processTime);
+      LOG_INFO("Time taken by resetBallTracker(): " << resetBallTrackerTime);
+      LOG_INFO("Time taken by findBallFromPredState(): " << findBallFromPredStateTime);
+      LOG_INFO("Time taken by findBallRegions(): " << findBallRegionsTime);
+      LOG_INFO("Time taken by filterFromRobotRegions(): " << filterFromRobotRegionsTime);
+      LOG_INFO("Time taken by findCandidatesWithBallFeatures(): " << findCandidatesWithBallFeaturesTime);
+      LOG_INFO("Time taken by classifyRegionsCascade(): " << classifyRegionsCascadeTime);
+      LOG_INFO("Time taken by classifyRegionsCNN(): " << classifyRegionsCNNTime);
+      LOG_INFO("Time taken by redBallDetector(): " << redBallDetectorTime);
+      LOG_INFO("Time taken by updateBallInfo(): " << updateBallInfoTime);
+      LOG_INFO("bestCandidates found: " << bestCandidates.size());
+      LOG_INFO("poorCandidates found: " << poorCandidates.size());
+      LOG_INFO("classifiedBalls found: " << classifiedBalls.size());
+    }
+    if (GET_DVAR(int, displayOutput)) {
+      if (this->ballTracker->getBallFound()) {
+        VisionUtils::displayImage(name, bgrMat[toUType(BALL_INFO_OUT(VisionModule).cameraNext)]);
+      }
+      //waitKey(0);
     }
   } catch (exception& e){
     LOG_EXCEPTION("Exception raised in BallExtraction:\n\t" << e.what());
@@ -226,8 +305,9 @@ bool BallExtraction::resetBallTracker()
   return continueProcessing;
 }
 
-void BallExtraction::findBallFromPredState(Mat& predState)
+void BallExtraction::findBallROIFromPredState(Rect& roi, Mat& predState)
 {
+  auto tStart = high_resolution_clock::now();
   ///< Update predicted position with new position for current
   ///< camera transformation matrix. This is important for when
   ///< robot head is moving during scan
@@ -241,25 +321,13 @@ void BallExtraction::findBallFromPredState(Mat& predState)
   predState.at<float>(6) = newImagePos(0, 0);
   predState.at<float>(7) = newImagePos(1, 0);
 
-  Rect predRoi;
-  getPredRoi(predRoi, predState);
-  if (GET_DVAR(int, drawPredictionState))
-    drawState(predState, Scalar(0, 255, 0));
-  if (ballType == 0) {
-    redBallDetector(predRoi);
-  } else if (ballType == 1) {
-    if (activeCamera == CameraId::headTop) findBallUpperCam(predRoi);
-    else findBallLowerCam(predRoi);
-  }
-}
-
-void BallExtraction::getPredRoi(Rect& predRoi, const Mat& predState)
-{
-  predRoi.width = predState.at<float>(10);
-  predRoi.height = predState.at<float>(11);
-  predRoi.x = predState.at<float>(6) - predRoi.width / 2;
-  predRoi.y = predState.at<float>(7) - predRoi.height / 2;
-  predRoi = predRoi & Rect(0, 0, getImageWidth(), getImageHeight());
+  roi.width = predState.at<float>(10) * predictedAreaRoiRatio;
+  roi.height = predState.at<float>(11) * predictedAreaRoiRatio;
+  roi.x = predState.at<float>(6) - roi.width / 2;
+  roi.y = predState.at<float>(7) - roi.height / 2;
+  roi = roi & Rect(0, 0, getImageWidth(), getImageHeight());
+  duration<double> timeSpan = high_resolution_clock::now() - tStart;
+  findBallFromPredStateTime = timeSpan.count();
 }
 
 void BallExtraction::redBallDetector(const Rect& origRect)
@@ -298,7 +366,7 @@ void BallExtraction::redBallDetector(const Rect& origRect)
     Rect ball = boundingRect(possibleBall);
     ball.x = scaled.x + ball.x;
     ball.y = scaled.y + ball.y;
-    foundBall.push_back(ball);
+    classifiedBalls.push_back(ball);
     /*rectangle(
       bgrMat[toUType(activeCamera)],
       ball,
@@ -314,365 +382,573 @@ void BallExtraction::redBallDetector(const Rect& origRect)
   //VisionUtils::displayImage(cropped, "croppedImage");
   //VisionUtils::displayImage(redImage, "redImage");
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
-  ballDetectionTime = timeSpan.count();
+  redBallDetectorTime = timeSpan.count();
 }
 
-void BallExtraction::findBallRegions()
+void BallExtraction::findBallRegions(vector<ScannedRegionPtr>& ballRegions)
 {
   auto tStart = high_resolution_clock::now();
-  auto verBallLines = regionSeg->getVerticalScan(ScanTypes::ball)->scanLines;
-  auto horBallLines = regionSeg->getHorizontalScan(ScanTypes::ball)->scanLines;
-  //regionSeg->getVerticalScan(ScanTypes::ball)->draw(bgrMat[toUType(activeCamera)]);
-  //regionSeg->getHorizontalScan(ScanTypes::ball)->draw(bgrMat[toUType(activeCamera)]);
+  //! Filter out horizontal lines above border
+  if (activeCamera == CameraId::headTop) {
+    auto& verBallLines = regionSeg->getVerticalScan(ScanTypes::robot)->scanLines;
+    auto& horBallLines = regionSeg->getHorizontalScan(ScanTypes::robot)->scanLines;
 
-  vector<ScannedRegionPtr> verBallRegions;
-  vector<ScannedRegionPtr> horBallRegions;
-  auto verLineLinkXTol =
-    regionSeg->getVerticalScan(ScanTypes::ball)->highStep * 1.5; // pixels
-  auto verLineLinkYTol = verLineLinkXTol;
-  auto horLineLinkXTol =
-    regionSeg->getHorizontalScan(ScanTypes::ball)->highStep * 1.5; // pixels
-  auto horLineLinkYTol = horLineLinkXTol;
-  auto maxLineLengthDiffRatio = 1.5;
-  findRegions(
-    verBallRegions,
-    verBallLines,
-    verLineLinkXTol,
-    verLineLinkYTol,
-    maxLineLengthDiffRatio,
-    bgrMat[toUType(activeCamera)]);
-  findRegions(
-    horBallRegions,
-    horBallLines,
-    horLineLinkXTol,
-    horLineLinkYTol,
-    maxLineLengthDiffRatio,
-    bgrMat[toUType(activeCamera)]);
-  //ScannedRegion::drawRegions(
-  //  bgrMat[toUType(activeCamera)], verBallRegions, Scalar(255,0,0));
-  //ScannedRegion::drawRegions(
-  //  bgrMat[toUType(activeCamera)], horBallRegions, Scalar(0,255,0));
-  horBallRegions.insert(
-    horBallRegions.end(),
-    verBallRegions.begin(),
-    verBallRegions.end());
-  vector<ScannedRegionPtr> regionsFiltered;
-  static const auto regionsXDiffTol = 16; // pixels
-  static const auto regionsYDiffTol = 16; // pixels
-  static const auto maxRegionSizeDiffRatio = 2.5;
-  ScannedRegion::linkRegions(
-    regionsFiltered,
-    horBallRegions,
-    regionsXDiffTol,
-    regionsYDiffTol,
-    maxRegionSizeDiffRatio,
-    bgrMat[toUType(activeCamera)]);
-  //ScannedRegion::drawRegions(
-  //  bgrMat[toUType(activeCamera)], regionsFiltered, Scalar(0,0,255));
-  for (const auto& br : regionsFiltered) {
-    if (br) {
-      if (br->rect.width > 5 && br->rect.height > 5 &&
-          br->rect.width > 5 * br->rect.height ||
-          br->rect.height > 5 * br->rect.width)
-        continue;
-      auto& r = br->rect;
-      auto wHRatio = r.width / (float) r.height;
-      auto newCenter = Point(r.x + r.width / 2, r.y + r.height / 2);
-      r = Rect(
-        newCenter - Point(r.width / wHRatio / 2, r.height / 2),
-        Size(r.width / wHRatio, r.height));
-      auto ratio = 1.25;
-      r -= Point(r.width / (2 * ratio), r.height / (2 * ratio));
-      r += Size(r.width / ratio, r.height / ratio);
-      r = r & Rect(0, 0, getImageWidth(), getImageHeight());
-      Mat croppedImage = getGrayImage()(r);
-      applyClassifier(br->rect, croppedImage);
-      if (GET_DVAR(int, drawScannedRegions))
-        br->draw(bgrMat[toUType(activeCamera)], Scalar(0, 0, 0));
+    //! Remove horizontal lines above border average height in image
+    const auto& fh = fieldExt->getFieldHeight();
+    for (auto& rl : horBallLines) {
+      if (rl && rl->baseIndex < fh)
+        rl.reset();
     }
+
+    const auto& border = fieldExt->getBorder();
+    //! Remove vertical lines above border in image
+    for (auto& rl : verBallLines) {
+      if (!rl) continue;
+      rl->start = max(rl->start, border[rl->baseIndex]);
+    }
+
+    if (GET_DVAR(int, drawScannedLines)) {
+      //! Draw vertical scan lines
+      regionSeg->getVerticalScan(ScanTypes::robot)->draw(bgrMat[toUType(activeCamera)]);
+      //! Draw horizontal scan lines
+      regionSeg->getHorizontalScan(ScanTypes::robot)->draw(bgrMat[toUType(activeCamera)]);
+    }
+
+    vector<ScannedRegionPtr> verBallRegions;
+    vector<ScannedRegionPtr> horBallRegions;
+
+    auto horLineLinkXTol = regionSeg->getHorizontalScan(ScanTypes::robot)->highStep * lineLinkHorXTolRatio; // pixels
+    auto horLineLinkYTol = regionSeg->getHorizontalScan(ScanTypes::robot)->highStep * lineLinkHorYTolRatio; // pixels
+    auto verLineLinkXTol = regionSeg->getVerticalScan(ScanTypes::robot)->highStep * lineLinkVerXTolRatio; // pixels
+    auto verLineLinkYTol = regionSeg->getVerticalScan(ScanTypes::robot)->highStep * lineLinkVerYTolRatio; // pixels
+
+    //! Find regions based on horizontal scan lines
+    findRegions(
+      horBallRegions,
+      horBallLines,
+      horLineLinkXTol,
+      horLineLinkYTol,
+      maxLineLengthDiffRatio,
+      bgrMat[toUType(activeCamera)]);
+
+    //! Find regions based on vertical scan lines
+    findRegions(
+      verBallRegions,
+      verBallLines,
+      verLineLinkXTol,
+      verLineLinkYTol,
+      maxLineLengthDiffRatio,
+      bgrMat[toUType(activeCamera)]);
+
+    if (GET_DVAR(int, drawUnlinkedScannedRegions)) {
+      ScannedRegion::drawRegions(
+        bgrMat[toUType(activeCamera)], verBallRegions, Scalar(255,0,0));
+      ScannedRegion::drawRegions(
+        bgrMat[toUType(activeCamera)], horBallRegions, Scalar(0,255,0));
+    }
+
+    horBallRegions.insert(
+      horBallRegions.end(),
+      verBallRegions.begin(),
+      verBallRegions.end());
+
+    ScannedRegion::linkRegions(
+      ballRegions,
+      horBallRegions,
+      regionsXDiffTol,
+      regionsYDiffTol,
+      maxRegionSizeDiffRatio,
+      bgrMat[toUType(activeCamera)]);
+  } else {
+    //! Ball regions are obtained from robot regions directly for lower camera
+    ballRegions = robotExt->getLowerCamRobotRegions();
+  }
+
+  //! Remove out regions too small in size or having bad aspect ratio
+  for (auto& br : ballRegions) {
+    if (br) {
+      if (br->rect.width < regionFilterMinWidth ||
+          br->rect.height < regionFilterMinHeight ||
+          br->rect.width > regionFilterMaxAspectRatio * br->rect.height ||
+          br->rect.height > regionFilterMaxAspectRatio * br->rect.width)
+      {
+        br.reset();
+        continue;
+      }
+    }
+    if (GET_DVAR(int, drawScannedRegions))
+      br->draw(bgrMat[toUType(activeCamera)], Scalar(255, 255, 255));
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   findBallRegionsTime = timeSpan.count();
 }
 
-void BallExtraction::findBallUpperCam(const Rect& roi)
+void BallExtraction::filterFromRobotRegions(
+  vector<boost::shared_ptr<ScannedRegion> >& ballRegions)
 {
   auto tStart = high_resolution_clock::now();
-  vector<RectPtr> boundRects;
-  scanRoi(boundRects, roi);
-  filterRegions(boundRects, 50);
-  for (int j = 0; j < boundRects.size(); ++j) {
-    if (!boundRects[j])
-    continue;
-    auto r = *boundRects[j];
-    if (GET_DVAR(int, drawScannedRegions))
-      rectangle(bgrMat[toUType(activeCamera)], r, Scalar(255,0,0), 1);
-    float factorX = roi.width / boundRects[j]->width;
-    float factorY = roi.height / boundRects[j]->height;
-    r = r - Point((boundRects[j]->width * factorX) / 2, (boundRects[j]->height * factorY) / 2);
-    r += Size(boundRects[j]->width * factorX, boundRects[j]->height * factorY);
-    float wHRatio = r.width / (float) r.height;
-    Point newCenter = Point(r.x + r.width / 2, r.y + r.height / 2);
-    //VisionUtils::drawPoint(newCenter, bgrMat[toUType(activeCamera)]);
-    r = Rect(
-      newCenter - Point(r.width / wHRatio / 2, r.height / 2),
-      Size(r.width / wHRatio, r.height));
-    r = r & Rect(0, 0, getImageWidth(), getImageHeight());
-    *boundRects[j] = r;
-    if (GET_DVAR(int, drawScannedRegions))
-      rectangle(bgrMat[toUType(activeCamera)], *boundRects[j], Scalar(255,0,0), 2);
-  }
-  classifyRegions(boundRects);
-  //rectangle(bgrMat[toUType(activeCamera)], roi, Scalar(255,0,255), 1);
-  //VisionUtils::displayImage(bgrMat[toUType(activeCamera)], "after prediction");
-  //waitKey(0);
-  duration<double> timeSpan = high_resolution_clock::now() - tStart;
-  ballDetectionTime = timeSpan.count();
-}
+  const auto& robotRegions = robotExt->getRobotRegions();
+  auto maxWidth = getImageWidth() * maxBallRegionSizeRatio;
+  auto maxHeight = getImageHeight() * maxBallRegionSizeRatio;
+  for (const auto& rr : robotRegions) {
+    //! Make a rect for upper region
+    auto top = rr->sr->rect;
+    auto bottom = rr->bodySr->rect;
+    if (
+      rr->obstacleType == ObstacleType::teammate ||
+      rr->obstacleType == ObstacleType::opponent)
+    {
+      //! Make a rect for lower region
+      bottom.height *= robotFilterHeightRatio;
+    } else if (
+      rr->obstacleType == ObstacleType::teammateFallen ||
+      rr->obstacleType == ObstacleType::opponentFallen)
+    {
+      bottom.height *= fallenRobotFilterHeightRatio;
+    }
 
-void BallExtraction::findBall(vector<int>& pairIndices)
-{
-  auto tStart = high_resolution_clock::now();
-  srand(visionModule->getModuleTime() * 100);
-  random_shuffle(pairIndices.begin(), pairIndices.end());
-  vector<RectPtr> boundRects;
-  scanRandom(boundRects, pairIndices, 4);
-  for (int j = 0; j < boundRects.size(); ++j) {
-    if (!boundRects[j])
-    continue;
-    //rectangle(bgrMat[toUType(activeCamera)], *boundRects[j], Scalar(0,255,255), 2);
-  }
-  filterRegions(boundRects, 50);
-  for (int j = 0; j < boundRects.size(); ++j) {
-    if (!boundRects[j])
-    continue;
-    if (!boundRects[j]) continue;
-    //r//ectangle(bgrMat[toUType(activeCamera)], *boundRects[j], Scalar(255,255,255), 1);
-    //VisionUtils::displayImage(bgrMat[toUType(activeCamera)], "bgrMat[toUType(activeCamera)]");
-    //waitKey(0);
-    Rect r = *boundRects[j];
-    float wHRatio = r.width / (float) r.height;
-    Point newCenter = Point(r.x + r.width / 2, r.y + r.height / 2);
-    VisionUtils::drawPoint(newCenter, bgrMat[toUType(activeCamera)]);
-    r = Rect(
-      newCenter - Point(r.width / wHRatio / 2, r.height / 2),
-      Size(r.width / wHRatio, r.height));
-    int ratio = 1.25;
-    r -= Point(r.width / (2 * ratio), r.height / (2 * ratio));
-    r += Size(r.width / ratio, r.height / ratio);
-    r = r & Rect(0, 0, getImageWidth(), getImageHeight());
-    *boundRects[j] = r;
-    //rectangle(bgrMat[toUType(activeCamera)], *boundRects[j], Scalar(0,255,0), 2);
-  }
-  //VisionUtils::displayImage(bgrMat[toUType(activeCamera)], "bgrmat");
-  //waitKey(0);
+    //rectangle(bgrMat[toUType(activeCamera)], top, Scalar(255,255,255), 2);
+    //rectangle(bgrMat[toUType(activeCamera)], bottom, Scalar(255,255,255), 2);
+    for (auto& br : ballRegions) {
+      if (!br) continue;
+      auto topOverlap = (br->rect & top);
+      auto topArea = topOverlap.area();
+      auto topOverlapRatio = topArea / (float) br->rect.area();
+      if (topOverlapRatio >= robotMaxOverlapTop) {
+        br.reset();
+        continue;
+      }
 
-  classifyRegions(boundRects);
-  duration<double> timeSpan = high_resolution_clock::now() - tStart;
-  ballDetectionTime = timeSpan.count();
-}
+      auto bottomOverlap = (br->rect & bottom);
+      auto bottomArea = bottomOverlap.area();
+      auto bottomOverlapRatio = bottomArea / (float) br->rect.area();
+      if (bottomOverlapRatio >= robotMaxOverlapBottom) {
+        br.reset();
+        continue;
+      }
 
-void BallExtraction::findBallLowerCam(const Rect& roi)
-{
-  auto tStart = high_resolution_clock::now();
-  vector<RectPtr> boundRects;
-  scanRoi(boundRects, roi);
-  filterRegions(boundRects, 50);
-  for (int j = 0; j < boundRects.size(); ++j) {
-    if (!boundRects[j])
-    continue;
-      //rectangle(bgrMat[toUType(activeCamera)], *boundRects[j], Scalar(255,0,0), 1);
-    float factorX = roi.width / boundRects[j]->width;
-    float factorY = roi.height / boundRects[j]->height;
-    *boundRects[j] = *boundRects[j] - Point((boundRects[j]->width * factorX) / 2, (boundRects[j]->height * factorY) / 2);
-    *boundRects[j] += Size(boundRects[j]->width * factorX, boundRects[j]->height * factorY);
-    *boundRects[j] = *boundRects[j] & Rect(0, 0, getImageWidth(), getImageHeight());
-    //rectangle(bgrMat[toUType(activeCamera)], *boundRects[j], Scalar(255,0,0), 2);
-  }
-  classifyRegions(boundRects);
-  duration<double> timeSpan = high_resolution_clock::now() - tStart;
-  ballDetectionTime = timeSpan.count();
-}
+      if (topArea <= minOverlapAreaThreshold &&
+          bottomArea <= minOverlapAreaThreshold)
+      {
+        continue;
+      }
 
-void BallExtraction::scanRandom(
-  vector<RectPtr>& boundRects,
-  const vector<int>& pairIndices,
-  const int& iters)
-{
-  auto tStart = high_resolution_clock::now();
-  vector<Point> pairs;
-  pairs = activeCamera == CameraId::headTop ? topXYPairs : bottomXYPairs;
-  Point gridSize = activeCamera == CameraId::headTop ? gridSizeTop : gridSizeBottom;
-  for (int i = 0; i < pairIndices.size(); ++i) {
-    if (i >= iters) break;
-    auto index = pairIndices[i];
-    auto x = pairs[index].x * gridSize.x;
-    auto y = pairs[index].y * gridSize.y;
-    xySeen.push_back(index);
-    Mat cropped =
-      getGrayImage()(
-        Rect(x, y, gridSize.x, gridSize.y) & Rect( 0, 0, getImageWidth(), getImageHeight()
-      ));
-    //rectangle(
-    //  bgrMat[toUType(activeCamera)],
-   //   Rect(x, y, gridSize.x, gridSize.y) & Rect(0, 0, getImageWidth(), getImageHeight()),
-   //   Scalar(255,255,255), 1);
-    //VisionUtils::displayImage(cropped, "cropped1");
-    cropped.convertTo(cropped, -1, 1.25, 0);
-    Mat black;
-    //threshold(cropped, black, 50, 255, CV_THRESH_BINARY|CV_THRESH_OTSU);
-    colorHandler->getBinary(cropped, black, TNColors::black);
-    //VisionUtils::displayImage(cropped, "cropped2");
-    //for (int i = 0; i < 100; ++i) {
-    //int subC = activeCamera == toUType(CameraId::headTop) ? 15 : 15;
-    //adaptiveThreshold(cropped, black, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 3, -subC);
-    //  cout << "i: " << i << endl;
-    //}
-    //VisionUtils::displayImage(cropped, "cropped");
-    //VisionUtils::displayImage(black, "black");
-    //waitKey(0);
-    //threshold(cropped, black, 50, 255, 2);
-    if (countNonZero(black) <= 0) continue;
-    dilate(black, black, Mat(), Point(-1, -1));
-    vector < vector<Point> > contours;
-    vector < Vec4i > hierarchy;
-    //auto offset = Point(0, fHeight);
-    //auto offset = Point(x, y >= fHeight ? y : fHeight);
-    auto offset = Point(x, y);
-    findContours(
-      black,
-      contours,
-      hierarchy,
-      CV_RETR_EXTERNAL,
-      CV_CHAIN_APPROX_SIMPLE,
-      offset);
-    for (int i = 0; i < contours.size(); i++) {
-      //cout << "countour: " << i << endl;
-      //drawContours(bgrMat[toUType(activeCamera)], contours, i, Scalar(0,255,0), 2, 8, hierarchy, 0, Point() );
-      Rect boundRect = boundingRect(contours[i]);
-      //rectangle(bgrMat[toUType(activeCamera)], boundRect, Scalar(255,255,255), 1);
-      float ratio = boundRect.width / (float) boundRect.height;
-      if (ratio < 0.333333333 || ratio > 3.0) continue;
-      boundRects.push_back(boost::make_shared < Rect > (boundRect));
+      //rectangle(bgrMat[toUType(activeCamera)], topOverlap, Scalar(0,255,0), 2);
+      //br->draw(bgrMat[toUType(activeCamera)], Scalar(0, 0, 0), 2);
+      //VisionUtils::displayImage("bgr", bgrMat[toUType(activeCamera)]);
+      //waitKey(0);
+
+      if (topArea > 0) {
+        if (topOverlap.width / (float) br->rect.width >=
+            topOverlap.height / (float) br->rect.height)
+        {
+          auto overlapBaseY = topOverlap.y + topOverlap.height;
+          if (overlapBaseY < br->leftBase.y) {
+            br->rect.y = (topOverlap.y + topOverlap.height);
+            br->rect.height = br->leftBase.y - br->rect.y;
+          } else if (topOverlap.y > br->rect.y) {
+            br->rect.height -= topOverlap.height;
+          }
+
+          br->resetParams();
+          //br->draw(bgrMat[toUType(activeCamera)], Scalar(255, 0, 0), 4);
+        } else {
+          auto overlapEndX = topOverlap.x + topOverlap.width;
+          if (overlapEndX < br->rightBase.x) {
+            br->rect.x = (topOverlap.x + topOverlap.width);
+            br->rect.width = br->rightBase.x - br->rect.x;
+          } else if (topOverlap.x > br->rect.x) {
+            br->rect.width -= topOverlap.width;
+          }
+          br->resetParams();
+          //br->draw(bgrMat[toUType(activeCamera)], Scalar(0, 0, 255), 4);
+        }
+      }
+
+      bottomOverlap = (br->rect & bottom);
+      if (bottomArea > 0) {
+        if (bottomOverlap.area() > minOverlapAreaThreshold) {
+          if (br->rect.height == bottomOverlap.height) {
+            br.reset();
+            continue;
+          }
+
+          auto overlapBaseY = topOverlap.y + bottomOverlap.height;
+          if (overlapBaseY < br->leftBase.y) {
+            br->rect.y = (bottomOverlap.y + bottomOverlap.height);
+            br->rect.height = br->leftBase.y - br->rect.y;
+          } else if (bottomOverlap.y > br->rect.y) {
+            br->rect.height -= bottomOverlap.height;
+          }
+
+          br->resetParams();
+          //br->draw(bgrMat[toUType(activeCamera)], Scalar(0, 255, 255), 4);
+        }
+      }
+      //br->draw(bgrMat[toUType(activeCamera)], Scalar(0, 255, 255), 4);
+
+      if (br->rect.width > maxWidth || br->rect.height > maxHeight) {
+        br.reset();
+        continue;
+      }
     }
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
-  scanTime = timeSpan.count();
-}
-
-void BallExtraction::scanRoi(vector<RectPtr>& boundRects, const Rect& roi)
-{
-  auto tStart = high_resolution_clock::now();
-  Rect scaled = roi;
-  int factor = 1.5;
-  scaled = scaled - Point((scaled.width * factor) / 2, (scaled.height * factor) / 2);
-  scaled += Size(scaled.width * factor, scaled.height * factor);
-  scaled = scaled & Rect(0, 0, getImageWidth(), getImageHeight());
-  Mat cropped = getGrayImage()(scaled);
-  Mat black;
-  threshold(cropped, black, 50, 255, 1);
-  //int subC = activeCamera == toUType(CameraId::headTop) ? 5 : 15;
-  //adaptiveThreshold(cropped, black, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 3, -subC);
-  //VisionUtils::displayImage(black, "black");
-  if (countNonZero(black) <= 0) return;
-  dilate(black, black, Mat(), Point(-1, -1));
-  vector < vector<Point> > contours;
-  vector < Vec4i > hierarchy;
-  auto offset = Point(scaled.x, scaled.y);
-  findContours(
-    black,
-    contours,
-    hierarchy,
-    CV_RETR_EXTERNAL,
-    CV_CHAIN_APPROX_SIMPLE,
-    offset);
-  for (int i = 0; i < contours.size(); i++) {
-    //drawContours(bgrMat[toUType(activeCamera)], contours, i, Scalar(0,255,0), 2, 8, hierarchy, 0, Point() );
-    Rect boundRect = boundingRect(contours[i]);
-    //rectangle(bgrMat[toUType(activeCamera)], boundRect, Scalar(255,255,255), 1);
-    //rectangle(bgrMat[toUType(activeCamera)], roi, Scalar(255,255,0), 1);
-    float ratio = boundRect.width / (float) boundRect.height;
-    if (ratio < 0.333333333 || ratio > 3.0) continue;
-    boundRects.push_back(boost::make_shared<Rect> (boundRect));
-  }
-  //VisionUtils::displayImage(bgrMat[toUType(activeCamera)], "bgr");
+  filterFromRobotRegionsTime = timeSpan.count();
+  //for (auto& br : ballRegions) {
+  //  if (br) br->draw(bgrMat[toUType(activeCamera)], Scalar(0, 255, 0), 2);
+  //}
+  //VisionUtils::displayImage("bgr", bgrMat[toUType(activeCamera)]);
   //waitKey(0);
-  duration<double> timeSpan = high_resolution_clock::now() - tStart;
-  scanTime = timeSpan.count();
 }
 
-void BallExtraction::filterRegions(
-  vector<RectPtr>& boundRects,
-  const float& threshold)
+void BallExtraction::findCandidatesWithBallFeatures(
+  vector<boost::shared_ptr<ScannedRegion> >& ballRegions,
+  vector<Rect>& bestCandidates,
+  vector<Rect>& poorCandidates)
 {
   auto tStart = high_resolution_clock::now();
-  for (size_t j = 0; j < boundRects.size(); ++j) {
-    if (!boundRects[j]) continue;
-    auto r1 = *boundRects[j];
-    for (size_t k = 0; k < boundRects.size(); ++k) {
-      if (!boundRects[k]) continue;
-      if (j != k) {
-        auto r2 = *boundRects[k];
-        Point c1 = Point(r1.x + r1.width / 2, r1.y + r1.height / 2);
-        Point c2 = Point(r2.x + r2.width / 2, r2.y + r2.height / 2);
-        if (norm(c1 - c2) < threshold) {
-          r1 = r1 | r2;
-          *boundRects[j] = r1;
-          boundRects[k].reset();
+  for (const auto& br : ballRegions) {
+    if (br) {
+      //! Increase the region size for given padding ratio
+      auto& r = br->rect;
+      r -= Point(r.width / (2 * ballRegionPaddingRatio), r.height / (2 * ballRegionPaddingRatio));
+      r += Size(r.width / ballRegionPaddingRatio, r.height / ballRegionPaddingRatio);
+      r = r & Rect(0, 0, getImageWidth(), getImageHeight());
+
+      //! Region offset in original image
+      auto offset = Point(r.x, r.y);
+
+      //! Get gray scale image
+      auto gray = getGrayImage()(r);
+
+      //! Get the expected ball size in image for this region
+      auto center = Point(gray.rows / 2, gray.cols / 2) + offset;
+      Point2f centerWorld;
+      cameraTransforms[toUType(activeCamera)]->imageToWorld(centerWorld, center, 0.05);
+      auto worldCenterL = cv::Point3_<float>(centerWorld.x, centerWorld.y - this->ballRadius, 0.05);
+      auto worldCenterR = cv::Point3_<float>(centerWorld.x, centerWorld.y + this->ballRadius, 0.05);
+      cv::Point_<float> imageL, imageR;
+      cameraTransforms[toUType(activeCamera)]->worldToImage(worldCenterL, imageL);
+      cameraTransforms[toUType(activeCamera)]->worldToImage(worldCenterR, imageR);
+      Rect ballExpected;
+      ballExpected.x = min(imageL.x, imageR.x);
+      ballExpected.width = abs(imageR.x - imageL.x);
+      ballExpected.height = ballExpected.width;
+      ballExpected.y = center.y - ballExpected.height / 2;
+
+      if (ballExpected.width <= 5)
+        continue;
+
+      //! Window size for adaptive threshold
+      int windowSize = ballExpected.width / adaptiveThresholdWindowSizeRatio;
+
+      //! Get it into odd number
+      windowSize = windowSize % 2 == 0 ? windowSize + 1 : windowSize;
+
+      //! Subtraction constant
+      int subC = ballExpected.width / adaptiveThresholdSubConstantRatio;
+
+      //! Get binary image using adaptive threshold
+      Mat binary;
+      //VisionUtils::displayImage("gray", gray);
+      adaptiveThreshold(gray, binary, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY_INV, windowSize, subC);
+      //VisionUtils::displayImage("binary", binary);
+
+      vector<vector<Point>> contours;
+      vector<Vec4i> hierarchy;
+      findContours(
+        binary.clone(), //! Clone the image since it is needed later on and findContours destroys it
+        contours,
+        hierarchy,
+        CV_RETR_TREE,
+        CV_CHAIN_APPROX_SIMPLE,
+        Point());
+
+      auto maxBlobSize = maxBallBlobSizeRatio * ballExpected.width;
+      auto minBlobSize = minBallBlobSizeRatio * ballExpected.width;
+      vector<boost::shared_ptr<Blob> > pentagons;
+      for (size_t i = 0; i < contours.size(); i++) {
+        //! Make a bounding box for contour
+        Rect boundRect = boundingRect(contours[i]);
+
+        //! Ignore contour if it is too small
+        if (
+            boundRect.width < minBlobSize ||
+            boundRect.height < minBlobSize)
+        {
+          continue;
+        }
+
+        //! Ignore contour if its width is close to expected width but set it as ball expected width
+        if (fabsf(boundRect.width - ballExpected.width) / ballExpected.width < 0.3) {
+          ballExpected.width = max(boundRect.width, ballExpected.width);
+          continue;
+        }
+
+        //! Ignore contour if its height is close to expected height but set it as ball expected height
+        if (fabsf(boundRect.height - ballExpected.height) / ballExpected.height < 0.3) {
+          ballExpected.height = max(boundRect.height, ballExpected.height);
+          continue;
+        }
+
+        //! Ignore contour if it is too big wrt expected ball size
+        if (
+            boundRect.width > maxBlobSize ||
+            boundRect.height > maxBlobSize)
+        {
+          continue;
+        }
+
+        //! Ignore if region aspect ratio is above max ratio
+        auto ratio = boundRect.width / (float) boundRect.height;
+        if (1.0 / ratio > ballBlobMaxAspectRatio || ratio > ballBlobMaxAspectRatio)
+          continue;
+
+        //! Ignore if mean intensity of the blob is above the threshold
+        if (mean(gray(boundRect))[0] > maxBallBlobIntensity)
+          continue;
+
+        //! Get the contour center
+        auto pc =
+          Point (boundRect.x + boundRect.width * 0.5,
+                 boundRect.y + boundRect.height * 0.5);
+
+        if (GET_DVAR(int, drawClassifiedPentagons))
+          drawContours(bgrMat[toUType(activeCamera)], contours, i, Scalar(0,255,255), -1, 8, hierarchy, 0, offset);
+
+        //! Add contour as a ball blob
+        pentagons.push_back(boost::make_shared<Blob> (boundRect, pc, contours[i]));
+      }
+
+      //! Ignore if the number of pentagons are too many or less than required
+      if (pentagons.size() < minPentagonsRequired ||
+          pentagons.size() >= maxPentagonsRequired)
+      {
+        if (pentagons.size() >= minPentagonsPoorCandidates) {
+          auto center = (pentagons[0]->center + pentagons[1]->center) * 0.5;
+          auto radius = cv::norm(pentagons[0]->center - pentagons[1]->center) * 2;
+          ballExpected.x = center.x - radius + offset.x;
+          ballExpected.y = center.y - radius + offset.y;
+          ballExpected.width = radius * 2;
+          ballExpected.height = radius * 2;
+          poorCandidates.push_back(ballExpected);
+        }
+        continue;
+      }
+
+      //! Make triangle combinations
+      static const int triangleN = 3;
+      vector<boost::shared_ptr<Triangle>> triangles;
+      vector<bool> v(pentagons.size());
+      fill(v.end() - triangleN, v.end(), true);
+      do {
+          triangles.push_back(boost::make_shared<Triangle>());
+          auto& t = triangles.back();
+          auto sizeMean = 0.f;
+          for (size_t i = 0; i < pentagons.size(); ++i) {
+              if (v[i]) {//! A triangle combination
+                t->points.push_back(pentagons[i]->center);
+                t->pentagons.push_back(pentagons[i]);
+                sizeMean += pentagons[i]->size;
+              }
+          }
+
+          //! Mean size of combination pentagons
+          sizeMean /= (float) triangleN;
+          for (const auto& p : t->pentagons) {
+            //! Ignore combination if their sizes are too far apart
+            if (fabsf(p->size - sizeMean) / sizeMean > maxBlobToBlobSizeDiffRatio) {
+              t.reset();
+              continue;
+            }
+          }
+      } while (std::next_permutation(v.begin(), v.end()));
+
+      //! Filter out pentagon triangles a bit more
+      for (auto& t : triangles) {
+        if (!t) continue;
+        auto d1 = norm(t->points[0] - t->points[1]);
+        auto d2 = norm(t->points[1] - t->points[2]);
+        auto d3 = norm(t->points[2] - t->points[0]);
+
+        //! Cosine law
+        auto a1 = acos((d2*d2 + d3*d3 - d1*d1) / (2.f * d2 * d3));
+        auto a2 = acos((d1*d1 + d3*d3 - d2*d2) / (2.f * d1 * d3));
+
+        //! Triangle property, find the largest angle
+        auto a3 = Angle::DEG_180 - (a1 + a2);
+        auto maxA = max(max(a1, a2), a3);
+        if (maxA < Angle::DEG_90) { //! Maximum angle is at least below 90 degrees
+          for (const auto& p : pentagons) { //! Check if there is another pentagon in the triangle from all the pentagons
+            //! Ignore pentagons associated with this triangle
+            if (std::find(t->pentagons.begin(), t->pentagons.end(), p) != t->pentagons.end())
+              continue;
+
+            //! Check if exists between the region of this triangle
+            if (cv::pointPolygonTest(t->points, Point2f(p->center.x, p->center.y), false) >= 0) {
+              t.reset();
+              break;
+            }
+          }
+        } else {
+          t.reset();
+        }
+      }
+
+      //! Take the inverse of binary image
+      cv::bitwise_not(binary, binary);
+      for (auto& t : triangles) {
+        if (!t) continue;
+        if (GET_DVAR(int, drawClassifiedTriangles)) {
+          vector<vector<Point> > triangles;
+          triangles.push_back(t->points);
+          drawContours(bgrMat[toUType(activeCamera)], triangles, 0, Scalar(255, 0, 0), 1, 8, hierarchy, 0, offset);
+        }
+        auto centroid = (t->points[0] + t->points[1] + t->points[2]) * (1.0 / 3.0);
+        vector<vector<Point> > contours;
+        for (size_t i = 0; i < triangleN; ++i) {
+          contours.push_back(t->pentagons[i]->contour);
+          //! This draw command is a part of algorithm, do not comment
+          //! Draw pentagons on binary image
+          drawContours(binary, contours, i, Scalar(255), -1);
+        }
+        //! Smooth out the image
+        GaussianBlur(binary, binary, Size(gaussianSizeX, gaussianSizeY), gaussianSigmaX, gaussianSigmaY);
+
+        //VisionUtils::displayImage("binary", binary);
+        vector<Vec3f> circles;
+        auto expRadius = max(ballExpected.width, ballExpected.height);
+        HoughCircles(
+          binary,
+          circles,
+          CV_HOUGH_GRADIENT,
+          2,
+          binary.rows / houghCirclesMinDistRatio,
+          max(10, expRadius - minRadiusPixelTolerance),
+          expRadius + maxRadiusPixelTolerance);
+
+        //! If a circle is found, set it as expected ball bounding box
+        if (!circles.empty()) {
+          for (const auto& c : circles)
+          {
+            Point center(cvRound(c[0]), cvRound(c[1]));
+            int radius = cvRound(c[2]);
+
+            if (GET_DVAR(int, drawBallCircles)) {
+              circle(bgrMat[toUType(activeCamera)], center, radius, Scalar(255, 0, 0));
+            }
+
+            if (cv::norm(centroid - center) < ballExpected.width / triangleToCircleMaxDistRatio) { // center to centroid minimum
+              ballExpected.x = center.x - radius + offset.x;
+              ballExpected.y = center.y - radius + offset.y;
+              ballExpected.width = radius * 2;
+              ballExpected.height = radius * 2;
+              bestCandidates.push_back(ballExpected);
+            }
+          }
+        } else {
+          ballExpected.x = centroid.x - ballExpected.width / 2 + offset.x;
+          ballExpected.y = centroid.y - ballExpected.height / 2 + offset.y;
+          poorCandidates.push_back(ballExpected);
         }
       }
     }
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
-  regionFilterTime = timeSpan.count();
+  findCandidatesWithBallFeaturesTime = timeSpan.count();
 }
 
-void BallExtraction::classifyRegions(vector<RectPtr>& boundRects)
+#define CNN_IMAGES_MEAN 80.98907329963235
+#define CNN_IMAGES_STD 74.59484120515009
+#define CNN_INPUT_IMAGE_SIZE 32
+
+void BallExtraction::classifyRegionsCNN(vector<Rect>& boundRects)
 {
   auto tStart = high_resolution_clock::now();
-  for (size_t j = 0; j < boundRects.size(); ++j) {
-    if (!boundRects[j])
-      continue;
-      //cout << "getting gray imag1..." << endl;
-    Mat croppedImage = getGrayImage()(*boundRects[j]);
-    //cout << "getting gray imag2..." << endl;
-    applyClassifier(*boundRects[j], croppedImage);
+  for (auto& br : boundRects) {
+    br = br & Rect(0, 0, getImageWidth(), getImageHeight());
+    Mat cropped = getGrayImage()(br);
+    resize(cropped, cropped, Size(CNN_INPUT_IMAGE_SIZE, CNN_INPUT_IMAGE_SIZE));
+
+    Mat floatMat = Mat(cropped.size(), CV_32F);
+    cropped.convertTo(floatMat, CV_32F);
+    floatMat = (floatMat - CNN_IMAGES_MEAN) / CNN_IMAGES_STD;
+    float* inputMat = floatMat.ptr<float>();
+    float* input = interpreter->typed_input_tensor<float>(0);
+    for (int i = 0; i < CNN_INPUT_IMAGE_SIZE * CNN_INPUT_IMAGE_SIZE; ++i) {
+      *input++ = *inputMat++;
+    }
+    interpreter->Invoke();
+    float* ballLabel = interpreter->typed_output_tensor<float>(0);
+    if (fabsf(*(++ballLabel) - 1.f) < CNNClassificationTolerance) {
+      classifiedBalls.push_back(br);
+    }
   }
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
-  regionClassificationTime = timeSpan.count();
+  classifyRegionsCNNTime = timeSpan.count();
+}
+
+void BallExtraction::classifyRegionsCascade(vector<Rect>& boundRects)
+{
+  auto tStart = high_resolution_clock::now();
+  for (auto& br : boundRects) {
+    auto wHRatio = br.width / (float) br.height;
+    auto newCenter = Point(br.x + br.width / 2, br.y + br.height / 2);
+    br = Rect(
+      newCenter - Point(br.width / wHRatio / 2, br.height / 2),
+      Size(br.width / wHRatio, br.height));
+    br -= Point(br.width / (2 * cascadePaddingRatio), br.height / (2 * cascadePaddingRatio));
+    br += Size(br.width / cascadePaddingRatio, br.height / cascadePaddingRatio);
+    br = br & Rect(0, 0, getImageWidth(), getImageHeight());
+    Mat cropped = getGrayImage()(br);
+
+    auto ratioY = cropped.rows / (float)br.height;
+    auto ratioX = cropped.cols / (float)br.width;
+
+    vector<Rect> ballsFound;
+    cascade.detectMultiScale(cropped, ballsFound, 1.05, 1);
+    for (auto& b : ballsFound) {
+      b.x = b.x / ratioX + br.x;
+      b.y = b.y / ratioY + br.y;
+      b.width = b.width / ratioX;
+      b.height = b.height / ratioY;
+      classifiedBalls.push_back(b);
+    }
+  }
+  duration<double> timeSpan = high_resolution_clock::now() - tStart;
+  classifyRegionsCascadeTime = timeSpan.count();
 }
 
 void BallExtraction::applyClassifier(const Rect& origRect, Mat& croppedImage)
 {
   if (croppedImage.cols < 5 || croppedImage.rows < 5) return;
-  //if (croppedImage.rows > 35) {
-  //  ratio = 35.f / (float) croppedImage.rows;
-  //  resize(croppedImage, croppedImage, cv::Size(), ratio, ratio);
-  //}
-  //cascade.detectMultiScale(croppedImage, ball, 1.05, 1);
-  //float* input = interpreter->typed_input_tensor<float>(0);
+
+  /*float* input = interpreter->typed_input_tensor<float>(0);
   float ratioY = croppedImage.rows;
   float ratioX = croppedImage.cols;
-  vector<Rect> balls;
+  //vector<Rect> balls;
+  auto centerX = croppedImage.rows / 2;
+  auto centerY = croppedImage.cols / 2;
+  croppedImage = croppedImage(Rect(centerX - 24, centerY - 24, 48, 48));
   resize(croppedImage, croppedImage, cv::Size(32, 32));
   ratioY = croppedImage.rows / ratioY;
-  ratioX = croppedImage.cols / ratioX;
-  cascade.detectMultiScale(croppedImage, balls, 1.05, 1);
+  ratioX = croppedImage.cols / ratioX;*/
+  //cascade.detectMultiScale(croppedImage, balls, 1.05, 1);
   //cout << "balls: " << balls.size() << endl;
-  //VisionUtils::displayImage("cropped", croppedImage);
-  for (size_t i = 0; i < balls.size(); ++i) {
-    auto ball = balls[i];
+  //for (size_t i = 0; i < balls.size(); ++i) {
+  //  auto ball = balls[i];
     /*rectangle(
       croppedImage,
       ball,
       cv::Scalar(255,255,255),
       1
     );*/
-    ball.x = ball.x / ratioX + origRect.x;
-    ball.y = ball.y / ratioY + origRect.y;
-    ball.width = ball.width / ratioX;
-    ball.height = ball.height / ratioY;
-    foundBall.push_back(ball);
+  //  ball.x = ball.x / ratioX + origRect.x;
+ //   ball.y = ball.y / ratioY + origRect.y;
+ //   ball.width = ball.width / ratioX;
+ //   ball.height = ball.height / ratioY;
+ //   classifiedBalls.push_back(ball);
     /*rectangle(
       bgrMat[toUType(activeCamera)],
       origRect,
@@ -688,25 +964,29 @@ void BallExtraction::applyClassifier(const Rect& origRect, Mat& croppedImage)
     //VisionUtils::displayImage(croppedImage, "croppedImage");
     //VisionUtils::displayImage(bgrMat[toUType(activeCamera)], "bgr");
     //waitKey(0);
+ // }
+  /*Mat floatMat = Mat(croppedImage.size(), CV_32F);
+  croppedImage.convertTo(floatMat, CV_32F);
+  float mean = 80.98907329963235;
+  float std = 74.59484120515009;
+  floatMat = (floatMat - mean) / std;
+  float* inputMat = floatMat.ptr<float>();
+  for (int i = 0; i < 32*32; ++i) {
+    *input++ = *inputMat++;
   }
-  //Mat floatMat = Mat(croppedImage.size(), CV_32F);
-  //croppedImage.convertTo(floatMat, CV_32F);
-  //float mean = 80.98907329963235;
-  //float std = 74.59484120515009;
-  //floatMat = (floatMat - mean) / std;
-  //float* inputMat = floatMat.ptr<float>();
-  //for (int i = 0; i < 32*32; ++i) {
-  //  *input++ = *inputMat++;
-  //}
 
   // Fill `input`.
-  //auto start = high_resolution_clock::now();
-  //interpreter->Invoke();
-  //duration<double> td = high_resolution_clock::now() - start;
-  //cout << "time: " << td.count() << endl;
-  //printf("=== Post-invoke Interpreter State ===\n");
-  /*float* ballLabel = interpreter->typed_output_tensor<float>(0);
-  ballLabel++;
+  auto start = high_resolution_clock::now();
+  interpreter->Invoke();
+  duration<double> td = high_resolution_clock::now() - start;
+  cout << "time: " << td.count() << endl;
+  printf("=== Post-invoke Interpreter State ===\n");
+  float* ballLabel = interpreter->typed_output_tensor<float>(0);
+  cout << "ballLabel1: " << *ballLabel << endl;
+  cout << "ballLabel2: " << *(++ballLabel) << endl;
+  VisionUtils::displayImage("cropped", croppedImage);
+  waitKey(0);*/
+  /*ballLabel++;
   if (fabsf(*ballLabel - 1.f) < 0.75) {
     float* boundingBox = interpreter->typed_output_tensor<float>(1);
     float* o2 = boundingBox;
@@ -720,7 +1000,7 @@ void BallExtraction::applyClassifier(const Rect& origRect, Mat& croppedImage)
     ball.x = origRect.x + *(++boundingBox) * 32 / ratioX;
     ball.height = *(++boundingBox) * 32 / ratioY;
     ball.width = *(++boundingBox) * 32 / ratioX;
-    foundBall.push_back(ball);*/
+    classifiedBalls.push_back(ball);*/
     /*rectangle(
       croppedImage,
       r,
@@ -767,8 +1047,8 @@ void BallExtraction::drawState(const Mat& state, const Scalar& color)
 void BallExtraction::drawResults()
 {
   if (GET_DVAR(int, drawBallContour)) {
-    for (int i = 0; i < foundBall.size(); ++i) {
-      rectangle(bgrMat[toUType(activeCamera)], foundBall[i], Scalar(0,0,255), 3);
+    for (int i = 0; i < classifiedBalls.size(); ++i) {
+      rectangle(bgrMat[toUType(activeCamera)], classifiedBalls[i], Scalar(0,0,255), 3);
     }
   }
 }
@@ -833,15 +1113,13 @@ unsigned BallExtraction::getBallFrameInNextCycle(BallInfo<float>& ballInfo)
       ballInOther.y > imageHeight[toUType(otherCam)] / 2 ?
       imageHeight[toUType(otherCam)] - ballInOther.y  : ballInOther.y;
     yBoundaryInOther /= imageHeight[toUType(otherCam)];
-    //cout << "yBoundaryInOther: " << yBoundaryInOther << endl;
-    //cout << "yBoundary: " << yBoundary << endl;
     if (yBoundaryInOther > yBoundary) {
-      ballInfo.cameraNext = static_cast<CameraId>(otherCam);
+      ballInfo.cameraNext = otherCam;
     } else {
-      ballInfo.cameraNext = static_cast<CameraId>(activeCamera);
+      ballInfo.cameraNext = activeCamera;
     }
   }
-  ballInfo.cameraNext = static_cast<CameraId>(activeCamera);
+  ballInfo.cameraNext = activeCamera;
 }
 
 bool BallExtraction::getBallFound()
@@ -878,7 +1156,7 @@ bool BallExtraction::getBallFound()
   ball.y = origRect.y + center.y;
   ball.width = origRect.width;
   ball.height = origRect.height;
-  foundBall.push_back(ball);
+  classifiedBalls.push_back(ball);
   //polylines(croppedImage, result, false, Scalar(255), 2);
   //for( int i = 0; i < contours.size(); i++ )
   //{

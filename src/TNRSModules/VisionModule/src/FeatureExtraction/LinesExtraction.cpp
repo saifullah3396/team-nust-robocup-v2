@@ -16,6 +16,7 @@
 #include "Utils/include/DataHolders/RobotPose2D.h"
 #include "Utils/include/DataHolders/Landmark.h"
 #include "Utils/include/HardwareIds.h"
+#include "Utils/include/MathsUtils.h"
 #include "Utils/include/TNRSLine.h"
 #include "VisionModule/include/VisionModule.h"
 #include "VisionModule/include/CameraTransform.h"
@@ -32,7 +33,7 @@
 #include "VisionModule/include/FeatureExtraction/ScannedRegion.h"
 
 LinesExtraction::LinesExtraction(VisionModule* visionModule) :
-  FeatureExtraction(visionModule),
+  FeatureExtraction(visionModule,"LinesExtraction"),
   DebugBase("LinesExtraction", this)
 {
   ///< Initialize debug variables
@@ -222,10 +223,13 @@ void LinesExtraction::processImage()
     LOG_INFO("Time taken by finding circle: " << findCircleTime);
     LOG_INFO("Time taken by adding landmarks: " << addLandmarksTime);
     LOG_INFO("Time taken by overall processing: " << processTime);
+    LOG_INFO("Number of known landmarks: " << knownLandmarks.size());
+    LOG_INFO("Number of unknown landmarks: " << unknownLandmarks.size());
   }
   if (GET_DVAR(int, displayOutput)) {
     VisionUtils::displayImage("LinesExtraction Image", bgrMat[toUType(activeCamera)]);
     VisionUtils::displayImage("LinesExtraction World", worldImage);
+    waitKey(0);
   }
 }
 
@@ -242,22 +246,29 @@ bool LinesExtraction::scanForEdges(
     edgeScanTime = timeSpan.count();
     return false;
   }
-  auto iter = verImagePoints.begin();
-  while (iter != verImagePoints.end()) {
-    if ((*iter).y > border[(*iter).x]) {
-      bool inRobotRegion = false;
-      for (const auto& rr : robotRegions) {
-        if (rr->sr->rect.contains((*iter))) {
-          inRobotRegion = true;
-          break;
+  if (activeCamera == CameraId::headTop) {
+    auto iter = verImagePoints.begin();
+    while (iter != verImagePoints.end()) {
+      if ((*iter).y > border[(*iter).x]) {
+        bool inRobotRegion = false;
+        for (const auto& rr : robotRegions) {
+          if (rr->sr->rect.contains((*iter))) {
+            inRobotRegion = true;
+            break;
+          }
+
+          if (rr->bodySr->rect.contains((*iter))) {
+            inRobotRegion = true;
+            break;
+          }
         }
-      }
-      if (!inRobotRegion)
-        ++iter;
-      else
+        if (!inRobotRegion)
+          ++iter;
+        else
+          iter = verImagePoints.erase(iter);
+      } else {
         iter = verImagePoints.erase(iter);
-    } else {
-      iter = verImagePoints.erase(iter);
+      }
     }
   }
 
@@ -333,6 +344,7 @@ void LinesExtraction::findConnectedEdges(
     se->angleW = 1000;
     se->bestNeighbor.reset();
     se->bestTo.reset();
+    se->pred.reset();
     if (pred) se->pred = pred;
     pred = se;
   }
@@ -520,7 +532,7 @@ void LinesExtraction::findLinesFromEdges(
         /*if (GET_DVAR(int, drawWorldLines)) {
           Point2f p11 = worldToImage(fl->p1);
           Point2f p12 = worldToImage(fl->p2);
-          line(worldImage, p11, p12, Scalar(0,255,255), 2);
+          line(worldImage, p11, p12, Scalar(255, 0, 0), 1);
         }*/
       }
     }
@@ -562,19 +574,25 @@ void LinesExtraction::filterLines(
     line(worldImage, p11, p12, Scalar(0,255,255), 1);
   }
   auto angleL = atan2(borderLine->unit.y, borderLine->unit.x);
-  angleL = angleL > M_PI_2 ? M_PI - angleL : angleL;
-  angleL = angleL < 0 ? M_PI + angleL : angleL;
+  angleL = MathsUtils::rangeToPi(angleL);
+  //angleL = angleL > M_PI_2 ? M_PI - angleL : angleL;
+  //angleL = angleL < 0 ? M_PI + angleL : angleL;
   const auto minDistFromBorder = 0.1f;
 
   ///< Filter lines based on relationship with border line
   for (auto& wl : worldLines) {
     if (!wl) continue;
+    //Point2f p11 = worldToImage(wl->p1);
+    //Point2f p12 = worldToImage(wl->p2);
+    //line(worldImage, p11, p12, Scalar(255, 0, 0), 1);
     ///< Find perpendicular distance from border line
-    auto dist = borderLine->findShortest(*wl);
+    auto dist = fabsf(borderLine->findShortest(*wl));
     ///< Reject line if it is too close to border perpendicularly
-    if (fabsf(dist) < minDistFromBorder) {
+    if (dist < minDistFromBorder) {
       //cout << "Too close to border... rejected" << endl;
       wl.reset();
+      //imshow("worldImage", worldImage);
+      //waitKey(0);
       continue;
     }
 
@@ -584,35 +602,52 @@ void LinesExtraction::filterLines(
       auto diff1 = norm(inter - wl->p1);
       auto diff2 = norm(inter - wl->p2);
       auto ratio = diff1 / wl->d + diff2 / wl->d;
+      VisionUtils::drawPoint(Point(inter.x, inter.y), worldImage);
+      //cout << "diff1:" << diff1 << endl;
+      //cout << "diff2:" << diff2 << endl;
+      //cout << "ratio:" << ratio << endl;
       ///< Reject line if it is intersecting with the border
-      if (diff1 < 0.35 || diff2 < 0.35 || (ratio > 0.9 && ratio < 1.1)) {
+      if (diff1 < 0.1 || diff2 < 0.1 || (ratio > 0.9 && ratio < 1.1)) {
         //cout << "Intersecting with border... rejected" << endl;
         wl.reset();
+        //imshow("worldImage", worldImage);
+        //waitKey(0);
         continue;
       }
     }
 
     ///< Find line angle and compare with borderline angle
     wl->angle = atan2(wl->unit.y, wl->unit.x);
-    wl->angle = wl->angle < 0 ? M_PI + wl->angle : wl->angle;
+    wl->angle = MathsUtils::rangeToPi(wl->angle);
+    //wl->angle = wl->angle < 0 ? M_PI + wl->angle : wl->angle;
+    //cout << "angleL: " << angleL * 180 / 3.14 << endl;
     //cout << "wl->angle: " << wl->angle * 180 / 3.14 << endl;
-    auto angleD = abs(wl->angle - angleL);
+    auto angleD = MathsUtils::rangeToPi(MathsUtils::diffAngle(wl->angle, angleL));
+    angleD = angleD > M_PI_2 ? M_PI - angleD : angleD;
+    angleD = angleD < 0 ? M_PI + angleD : angleD;
+    //cout << "AngleDiff:" << angleD * 180 / 3.14  << endl;
     ///< 15-75 degrees the difference between border line angle and the estimated world line angle
     ///< Might have to increase the tolerance in real world
-    if (angleD >= Angle::DEG_15 && angleD <= Angle::DEG_75) {
+    if (fabsf(angleD - M_PI_2) >= Angle::DEG_15) { //! Not perpendicular
       ///< If line is far from border, add it as circle line
-      if (wl->d < 1.0f && fabsf(dist) > 2.5f) {
+      //cout << "wl->d: " << wl->d << endl;
+      //cout << "dist: " << dist << endl;
+      if (wl->d < 1.0f && dist > 1.5f) {
         auto points = *(wl->points);
         //line(worldImage, worldToImage(wl->p1),  worldToImage(wl->p2), Scalar(255,0,255), 1);
         //cout << "circleLine: "<< endl;
         circlePoints.insert(circlePoints.begin(), points.begin(), points.end());
         wl->circleLine = true;
-      } else { ///< Reject line if it is not far yet too far in angles from border
+      } else if (angleD >= Angle::DEG_15) { ///< Reject line if it is not parallel and too close to the border
         wl.reset();
         //cout << "Not parallel or perpendicular to border... rejected" << endl;
+        //imshow("worldImage", worldImage);
+        //waitKey(0);
         continue;
       }
     }
+    //imshow("worldImage", worldImage);
+    //waitKey(0);
   }
 
   const auto minLineFilterDist = 0.1f;
@@ -664,8 +699,6 @@ void LinesExtraction::filterLines(
       auto p2 = worldToImage(wl1->p2);
       line(worldImage, p1, p2, Scalar(0, 0, 255), 1);
     }
-    //imshow("worldImage", worldImage);
-    //waitKey(0);
   }
 
   /**

@@ -17,17 +17,18 @@ add_library (tnrs-localization-module SHARED ${TNRS_LOCALIZATION_MODULE_SRC})
 if(${ROBOT_VERSION} STREQUAL "V6")
 qi_use_lib(tnrs-localization-module
   BOOST
+  OPENCV3_CORE
+  OPENCV3_HIGHGUI
+  OPENCV3_CALIB3D
+  OPENCV3_OBJDETECT
+  OPENCV3_VIDEO
 )
 target_link_libraries(tnrs-localization-module
   libtnrs-utils.so
   libtnrs-base.so
   libtnrs-user-comm-module.so
   libtnrs-random-lib.so
-  -lopencv_core
-  -lopencv_highgui
-  -lopencv_calib3d
-  -lopencv_objdetect
-  -lopencv_video
+  -ljsoncpp
 )
 else()
 qi_use_lib(tnrs-localization-module
@@ -49,7 +50,7 @@ target_link_libraries(tnrs-localization-module
   libtnrs-random-lib.so
 )
 endif()
-    
+
 if (BUILD_TNRS_TESTS)
     set (test_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
     file (GLOB TESTS RELATIVE "${test_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")

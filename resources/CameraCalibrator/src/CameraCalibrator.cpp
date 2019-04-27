@@ -244,8 +244,10 @@ int main(int argc, char* argv[])
 {
     help();
     Settings s;
+
     string path = ROOT_DIR + string("/../config/");
     string robotName = "", imageFilePath = "";
+
     if(cmdOptionExists(argv, argv+argc, "--robot"))
     {
       robotName = getCmdOption(argv, argv + argc, "--robot");

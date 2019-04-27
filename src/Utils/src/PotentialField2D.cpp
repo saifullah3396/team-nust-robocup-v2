@@ -7,10 +7,11 @@
  * @date 05 Feb 2017
  */
 
-#include "Utils/include/PotentialField2D.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
 #include "Utils/include/DataHolders/VelocityInput.h"
 #include "Utils/include/DataHolders/Obstacle.h"
+#include "Utils/include/MathsUtils.h"
+#include "Utils/include/PotentialField2D.h"
 
 template <typename Scalar>
 PotentialField2D<Scalar>::PotentialField2D(
@@ -39,7 +40,10 @@ VelocityInput<Scalar> PotentialField2D<Scalar>::update(
   const vector<Obstacle<Scalar>>& obstacles)
 {
   ///< Attractive potential
-  Matrix<Scalar, 3, 1> goalDiff = robotPose.get() - goalPose.get();
+  Matrix<Scalar, 3, 1> goalDiff;
+  goalDiff[0] = robotPose.getX() - goalPose.getX();
+  goalDiff[1] = robotPose.getY() - goalPose.getY();
+  goalDiff[2] = MathsUtils::diffAngle(robotPose.getTheta(), goalPose.getTheta());
   Scalar goalDist = goalDiff.norm();
   Matrix<Scalar, 3, 1> fAtt;
   if (goalDist < distThresholdAtt)
@@ -49,36 +53,12 @@ VelocityInput<Scalar> PotentialField2D<Scalar>::update(
 
   Matrix<Scalar, 2, 1> totalFRep;
   totalFRep.setZero();
-  Scalar cTheta = cos(robotPose.getTheta());
-  Scalar sTheta = sin(robotPose.getTheta());
-  for (int i = 0; i < obstacles.size(); ++i) {
-    /*Obstacle obs = obstacles[i];
-    Scalar worldLX = robotPose.getX() + obs.leftBound.x * cTheta - obs.leftBound.y * sTheta;
-    Scalar worldLY = robotPose.getY() + obs.leftBound.x * sTheta + obs.leftBound.y * cTheta;
-    Scalar worldRX = robotPose.getX() + obs.rightBound.x * cTheta - obs.rightBound.y * sTheta;
-    Scalar worldRY = robotPose.getY() + obs.rightBound.x * sTheta + obs.rightBound.y * cTheta;
-    Scalar midX = (worldLX + worldRX) / 2.0;
-    Scalar midY = (worldLY + worldRY) / 2.0;
-    Scalar obsDepth = obs.depth;
-    Scalar obsSlope =
-      (worldRY - worldLY) / (worldRX - worldLX);
-    Scalar obsSlopeInv = -1 / obsSlope;
-    Point2f tempPoint(
-      worldLX + 0.1,
-      0.1 * obsSlopeInv + worldLY);
-    Point2f diff = tempPoint - obs.leftBound;
-    Scalar mag = norm(diff);
-    Point2f unit = Point2f(diff.x / mag, diff.y / mag);
-    midX += unit.x * obsDepth;
-    midY += unit.y * obsDepth;*/
-    Matrix<Scalar, 2, 1> obsPose;
-    obsPose[0] = 1.0;
-    obsPose[1] = 0.1;
-    if (i==1)
-      obsPose[1] *= -1;
+  for (const auto& obs : obstacles)
+  {
+    auto obsCenter = obs.centerT;
     Matrix<Scalar, 2, 1> obsDiff;
-    obsDiff[0] = robotPose.getX() - obsPose[0];
-    obsDiff[1] = robotPose.getY() - obsPose[1];
+    obsDiff[0] = robotPose.getX() - obsCenter.x;
+    obsDiff[1] = robotPose.getY() - obsCenter.y;
     Scalar obsDist = obsDiff.norm();
     Matrix<Scalar, 2, 1> fRepParallel, fRepPerp, minDistPosToGoal;
     if (obsDist < distThresholdRep) {
@@ -88,19 +68,21 @@ VelocityInput<Scalar> PotentialField2D<Scalar>::update(
       //cout << "distThresholdRep: " << distThresholdRep << endl;
       //cout << "unitDir: " << unitDir.transpose() << endl;
       fRepParallel = (1.0 / obsDist - 1.0 / distThresholdRep) * unitDir / (obsDist * obsDist);
-      auto minDistPos = obsPose + unitDir * distThresholdRep;
+      Matrix<Scalar, 2, 1> minDistPos;
+      minDistPos[0] = obsCenter.x + unitDir[0] * distThresholdRep;
+      minDistPos[1] = obsCenter.y + unitDir[1] * distThresholdRep;
       minDistPosToGoal[0] = goalPose.getX() - minDistPos[0];
       minDistPosToGoal[1] = goalPose.getY() - minDistPos[1];
       auto angleObsToMinDist = atan2(unitDir[1], unitDir[0]);
       auto angleMinDisToGoal = atan2(minDistPosToGoal[1], minDistPosToGoal[0]);
       auto angleDiff = angleObsToMinDist - angleMinDisToGoal;
-     // if (angleDiff >= 0 && angleDiff < M_PI) {
-     //   fRepPerp[0] = fRepParallel[1]; // -90 degrees
-     //   fRepPerp[1] = -fRepParallel[0]; // -90 degrees
-     // } else {
+      if (angleDiff >= 0 && angleDiff < M_PI) {
+        fRepPerp[0] = fRepParallel[1]; // -90 degrees
+        fRepPerp[1] = -fRepParallel[0]; // -90 degrees
+      } else {
         fRepPerp[0] = -fRepParallel[1]; // 90 degrees
         fRepPerp[1] = fRepParallel[0]; // 90 degrees
-     // }
+      }
     } else {
       fRepParallel.setZero();
       fRepPerp.setZero();
@@ -115,10 +97,11 @@ VelocityInput<Scalar> PotentialField2D<Scalar>::update(
   fAtt[1] += totalFRep[1];
   ///< Transform back to robot coordinates
   VelocityInput<Scalar> cmd;
-  //cmd.mat[0] = fAtt[0] * cTheta + fAtt[1] * sTheta;
-  //cmd.mat[1] = -fAtt[0] * sTheta + fAtt[1] * cTheta;
-  //cmd.mat[2] = fAtt[2];
-  cmd.set(fAtt);
+  const Scalar& cTheta = robotPose.getCTheta();
+  const Scalar& sTheta = robotPose.getSTheta();
+  cmd.x() = fAtt[0] * cTheta + fAtt[1] * sTheta;
+  cmd.y() = -fAtt[0] * sTheta + fAtt[1] * cTheta;
+  cmd.theta() = fAtt[2];
   return cmd;
 }
 

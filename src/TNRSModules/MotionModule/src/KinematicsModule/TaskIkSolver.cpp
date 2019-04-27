@@ -119,7 +119,7 @@ template <typename Scalar>
 bool TaskIkSolver<Scalar>::step(
   Eigen::Matrix<Scalar, Dynamic, 1>& qd, const bool& final)
 {
-  ASSERT(P.rows() == P.cols() && P.rows() = nDof);
+  ASSERT(P.rows() == P.cols() && P.rows() == nDof);
   ASSERT(v.rows() == nDof);
   P.setZero();
   v.setZero();
@@ -292,6 +292,7 @@ Eigen::Matrix<Scalar, Dynamic, 1> TaskIkSolver<Scalar>::solve(const unsigned& ma
   for (size_t j = 0; j < activeJoints.size(); ++j) {
     if (!activeJoints[j]) joints[j] = NAN; // || fabsf(joints[j] - aj[j]) < 1e-9
   }
+  km->setJointPositions(Joints::first, startJoints, JointStateType::sim);
   return joints;
 }
 

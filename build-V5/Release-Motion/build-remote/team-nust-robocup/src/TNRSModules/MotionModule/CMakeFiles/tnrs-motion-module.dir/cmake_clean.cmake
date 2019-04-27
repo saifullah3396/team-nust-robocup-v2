@@ -46,6 +46,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o"
   "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o"
   "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/SpeedWalk.cpp.o"
+  "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.o"
   "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o"
   "CMakeFiles/tnrs-motion-module.dir/src/BallThrow/BallThrow.cpp.o"
   "CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Types/WBBallThrow.cpp.o"

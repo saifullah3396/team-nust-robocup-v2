@@ -21,14 +21,15 @@ qi_use_lib(tnrs-game-comm-module
 target_link_libraries(tnrs-game-comm-module
   libtnrs-utils.so
   libtnrs-base.so
+  -ljsoncpp
 )
 else()
 qi_use_lib(tnrs-game-comm-module
   BOOST
   OPENCV2_CORE
 )
-target_link_libraries(tnrs-game-comm-module 
-  libtnrs-utils.so 
+target_link_libraries(tnrs-game-comm-module
+  libtnrs-utils.so
   libtnrs-base.so
 )
 endif()
@@ -39,9 +40,9 @@ if (BUILD_TNRS_TESTS)
     foreach (testname ${TESTS})
         string(REPLACE ".cpp" "" targetname "${testname}")
         add_executable  (${targetname} "${test_DIR}/${testname}")
-        target_link_libraries (${targetname} 
+        target_link_libraries (${targetname}
           tnrs-game-comm-module
-          libtnrs-utils.so 
+          libtnrs-utils.so
           libtnrs-base.so)
     endforeach (testname ${TESTS})
 endif (BUILD_TNRS_TESTS)

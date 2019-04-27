@@ -10,6 +10,8 @@
 #pragma once
 
 #include "Utils/include/VisionUtils.h"
+#include "Utils/include/DataHolders/ObstacleType.h"
+#include "VisionModule/include/FeatureExtraction/ScannedRegion.h"
 
 /**
  * @struct RobotRegion
@@ -30,19 +32,16 @@ struct RobotRegion
    */
   RobotRegion(
     const boost::shared_ptr<ScannedRegion>& sr,
-    const bool& ourTeam) :
-    ourTeam(ourTeam), sr(sr)
+    const ObstacleType& obstacleType) :
+    obstacleType(obstacleType), sr(sr)
   {
   }
 
   cv::Point2f world; ///< Position in world
   cv::Point2f frontLeft; ///< Position of left front in world
   cv::Point2f frontRight; ///< Position of right front in world
-  bool refresh = {true}; ///< Refresh region
-  float timeDetected = {0.f}; ///< Time of first detection
-  bool ourTeam = {false}; ///< Our teammate or not
-  bool fallen = {false}; ///< Fallen or not
-  bool posFromJersey = {false}; ///< Position
+  ObstacleType obstacleType; ///< Type of obstacle
   boost::shared_ptr<ScannedRegion> sr;
+  boost::shared_ptr<ScannedRegion> bodySr;
 };
 typedef boost::shared_ptr<RobotRegion> RobotRegionPtr;

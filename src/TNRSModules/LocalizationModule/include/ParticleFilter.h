@@ -20,6 +20,7 @@
 #include "TNRSBase/include/DebugBase.h"
 #include "RandomLib/include/Random.hpp"
 #include "Utils/include/DataHolders/PositionInput.h"
+#include "Utils/include/DataHolders/VelocityInput.h"
 
 template <typename Scalar> struct RobotPose2D;
 template <typename Scalar> struct Landmark;
@@ -123,6 +124,12 @@ public:
   void addPositionInput(const PositionInput<float>& input);
 
   /**
+   * @brief addPositionInput Adds a velocity input
+   * @param input Input
+   */
+  void addVelocityInput(const VelocityInput<float>& input);
+
+  /**
    * @brief setKnownLandmarks Sets the known landmarks vector
    * @param landmarks Vector
    */
@@ -146,11 +153,6 @@ private:
   void setupVoronoiMap();
 
   /**
-   * Sets up the camera range vectors. Called once in constructor.
-   */
-  void setupViewVectors();
-
-  /**
    * Tries to determine the robots position according to known landmarks
    * information.
    */
@@ -167,12 +169,6 @@ private:
    *   landmarks information
    */
   void estimateFromLandmarks();
-
-  /**
-   * @brief minMaxGroundDist Finds the minimum and maximum distance that is in
-   *   view of camera of the robot. This info is used to remove outlier particles
-   */
-  void minMaxGroundDist();
 
   /**
    * @brief prediction This function updates the particles according to the motion
@@ -301,17 +297,6 @@ private:
   ///< Starting index of each type of landmark
   vector<unsigned> landmarkTypeStarts;
 
-  ///< The unit vector that represents the minimum field of view angle
-  ///< from the lower camera frame and maximum field of view angle from
-  ///< the upper camera frame
-  vector<Vector3f> unitVecY;
-
-  ///< The minimum distance from the camera view on the ground
-  float minDistGround;
-
-  ///< The maximum distance from the camera view on the ground
-  float maxDistGround;
-
   ///< Random  library object
   Random random;
 
@@ -339,8 +324,11 @@ private:
   ///< Cycle time of the filter loop
   float cycleTime;
 
-  ///< Queue containing all the prediction control inputs
+  ///< Queue containing all the prediction position inputs
   queue<PositionInput<float> > positionInputs;
+
+  ///< Queue containing all the prediction velocity inputs
+  queue<VelocityInput<float> > velocityInputs;
 
   ///< Queue containing latest known landmarks observation.
   vector<KnownLandmarkPtr> knownLandmarks;

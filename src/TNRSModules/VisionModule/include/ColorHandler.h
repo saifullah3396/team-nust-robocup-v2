@@ -34,9 +34,9 @@ struct ColorTable
     lutV.resize(nTables);
   }
 
-  vector<Matrix<unsigned, 1, 255> > lutY;
-  vector<Matrix<unsigned, 1, 255> > lutU;
-  vector<Matrix<unsigned, 1, 255> > lutV;
+  vector<Matrix<unsigned, 1, 256> > lutY;
+  vector<Matrix<unsigned, 1, 256> > lutU;
+  vector<Matrix<unsigned, 1, 256> > lutV;
   vector<TNColor> lower;
   vector<TNColor> upper;
   unsigned nTables;

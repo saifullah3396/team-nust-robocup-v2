@@ -100,6 +100,30 @@ bool MotionBehavior<Scalar>::naoqiMoveIsActive()
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+AL::ALValue MotionBehavior<Scalar>::getMoveConfig()
+{
+  return mG->getMoveConfig();
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+void MotionBehavior<Scalar>::setMoveConfig(const AL::ALValue& config)
+{
+  mG->setMoveConfig(config);
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
+vector<float> MotionBehavior<Scalar>::getRobotPosition(const bool& useSensors)
+{
+  return mG->getRobotPosition(useSensors);
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
 #ifndef V6_CROSS_BUILD_REMOVED
 void MotionBehavior<Scalar>::naoqiSetAngles(
   const AL::ALValue& names,

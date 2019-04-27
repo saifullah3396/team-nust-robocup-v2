@@ -23,11 +23,12 @@ LocalizationTestSuite::LocalizationTestSuite(
   const boost::shared_ptr<LocalizationTestSuiteConfig>& config) :
   TestSuite(planningModule, config, "LocalizationTestSuite")
 {
+  DEFINE_FSM_STATE(LocalizationTestSuite, OccupancyMapTest, occupancyMapTest);
   DEFINE_FSM_STATE(LocalizationTestSuite, SideLineLocalization, sideLineLocalization);
   DEFINE_FSM_STATE(LocalizationTestSuite, LocalizationLostState, localizationLostState);
   DEFINE_FSM_STATE(LocalizationTestSuite, LocalizationPrediction, localizationPrediction);
   DEFINE_FSM_STATE(LocalizationTestSuite, LocalizationWithMovement, localizationWithMovement);
-  DEFINE_FSM(fsm, LocalizationTestSuite, sideLineLocalization);
+  DEFINE_FSM(fsm, LocalizationTestSuite, occupancyMapTest);
 }
 
 bool LocalizationTestSuite::initiate()
@@ -97,6 +98,28 @@ LocalizationTestSuiteConfigPtr LocalizationTestSuite::getBehaviorCast()
   return boost::static_pointer_cast <LocalizationTestSuiteConfig> (config);
 }
 
+void LocalizationTestSuite::OccupancyMapTest::onStart()
+{
+  ON_SIDE_LINE_OUT_REL(PlanningModule, bPtr) = false;
+  BaseModule::publishModuleRequest(
+    boost::make_shared<InitiateLocalizer>(RobotPose2D<float>(0.0, 0.0, 0.0)));
+  BaseModule::publishModuleRequest(boost::make_shared<SwitchParticleFilter>(false));
+  #ifdef MODULE_IS_REMOTE
+  Json::Value value;
+  //value["RobotExtraction"]["displayInfo"] = 1;
+  //value["GoalExtraction"]["displayInfo"] = 1;
+  value["FieldMap"]["displayInfo"] = 1;
+  value["FieldMap"]["displayOutput"] = 1;
+  DebugBase::processDebugMsg(value);
+  #endif
+
+}
+
+void LocalizationTestSuite::OccupancyMapTest::onRun()
+{
+  //! Do nothing
+}
+
 void LocalizationTestSuite::SideLineLocalization::onStart()
 {
   ON_SIDE_LINE_OUT_REL(PlanningModule, bPtr) = true;
@@ -139,7 +162,7 @@ void LocalizationTestSuite::LocalizationLostState::onRun()
       mConfig->headTargetType = HeadTargetTypes::goal;
       // Robot is on sidelines with other robots so keep scan range minimum.
       mConfig->scanConfig = boost::make_shared<HeadScanConfig>();
-      mConfig->scanConfig->scanMaxYaw = Angle::DEG_45;
+      mConfig->scanConfig->scanMaxYaw = Angle::DEG_90;
       bPtr->setupMBRequest(MOTION_1, mConfig);
     }
   } else {
@@ -175,7 +198,7 @@ void LocalizationTestSuite::LocalizationPrediction::onRun()
       //  boost::make_shared <HeadTargetTrackConfig> (HeadTargetTypes::GOAL);
       //setupMBRequest(MOTION_1, hcConfig);
       auto planConfig =
-        boost::make_shared<GoToTargetConfig>();
+        boost::make_shared<PlanTowardsConfig>();
       planConfig->goal = goalPose;
       planConfig->reachClosest = true;
       planConfig->startPosture =

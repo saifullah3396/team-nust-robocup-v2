@@ -4,9 +4,9 @@
  * This file declares the class MaxMomentumEEOpt
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
- * @date 17 Jul 2018  
+ * @date 17 Jul 2018
  */
- 
+
 #pragma once
 #include "MotionModule/include/MTypeHeader.h"
 #include "MotionModule/include/KinematicsModule/KinematicsModule.h"
@@ -17,8 +17,8 @@ class KickModule;
 
 /**
  * @class MaxMomentumEEOpt
- * @brief A class to solve for the best end-effector for a kick with 
- *   maximimum product of virtual mass and possible velocity hence 
+ * @brief A class to solve for the best end-effector for a kick with
+ *   maximimum product of virtual mass and possible velocity hence
  *   momentum.
  */
 template <typename Scalar>
@@ -27,12 +27,12 @@ class MaxMomentumEEOpt : public NLOptimizer
 public:
   /**
    * Constructor
-   * 
-   * @param kickModule: Associated kick module for solving the 
+   *
+   * @param kickModule: Associated kick module for solving the
    *   optimization problem
    */
   MaxMomentumEEOpt(KickModule<Scalar>* kickModule);
-  
+
   /**
    * Destructor
    */
@@ -44,7 +44,7 @@ public:
    * Optimizes the knots for minimum time under given constraints
    */
   void optDef();
-  
+
 private:
   /**
    * NLOPT based function for defining inequality constraints
@@ -52,7 +52,7 @@ private:
   void
   ineqConstraints(unsigned nCons, double *result, unsigned nVars,
     const double* vars, double* grad, void* data);
-    
+
   /**
    * Evaluates the minimum time objective function
    */
@@ -61,12 +61,28 @@ private:
 
   ///< Associated kick module
   KickModule<Scalar>* kickModulePtr;
-  
+
   ///< Velocity constraints
   Matrix<Scalar, Dynamic, 1> velLimits;
-  
+
   ///< Kinematics  module
   boost::shared_ptr<KinematicsModule<Scalar> > kM;
+
+  ///< Residual for solving ik
+  vector<float> activeResidual = {vector<float>(6, 1.0)};
+
+  ///< Active joints for solving ik
+  ///< Remove HipYawPitch joint from calclation of inverse kinematics
+  vector<bool> activeJoints;
+
+  ///< Link chain start
+  unsigned chainStart;
+
+  ///< Link chain size
+  unsigned chainSize;
+
+  ///< Velocity direction
+  Matrix<Scalar, 3, 1> direction;
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

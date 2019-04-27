@@ -41,14 +41,17 @@ void TcpClient::handleConnect(const boost::system::error_code& e,
   {
     onConnection();
   } else if (boost::asio::error::already_connected != e) {
-    ROS_WARN("%s", e.message().c_str());
+    if (!reconnecting)
+      ROS_WARN("%s", e.message().c_str());
     reconnect();
   }
 }
 
 void TcpClient::reconnect()
 {
-  ROS_INFO("Trying to reconnect with server at ip %s and port %s", host.c_str(), port.c_str());
+  if (!reconnecting)
+    ROS_INFO("Trying to reconnect with server at ip %s and port %s", host.c_str(), port.c_str());
+  reconnecting = true;
   boost::asio::ip::tcp::resolver resolver(*ioService);
   boost::asio::ip::tcp::resolver::query query(host, port);
   boost::asio::ip::tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
@@ -83,7 +86,8 @@ void DataClient::handleWrite(
       (boost::asio::error::broken_pipe == e))
     {
       ///< Disconnected from the client. Remove the associated connection
-      ROS_FATAL("Connection lost to server with message: %s", e.message().c_str());
+      if (!reconnecting)
+        ROS_FATAL("Connection lost to server with message: %s", e.message().c_str());
       conn.socket().close();
       reconnect();
     } else {
@@ -165,6 +169,7 @@ void DataClient::update() {
 void DataClient::onConnection()
 {
   ROS_INFO("Data client connected to server.");
+  reconnecting = false;
   if (Utils::compress("DataClient connected.", outMessage)) {
     conn.async_write(
       outMessage,

@@ -19,7 +19,7 @@
 #include "Utils/include/DataUtils.h"
 
 FieldExtraction::FieldExtraction(VisionModule* visionModule) :
-  FeatureExtraction(visionModule),
+  FeatureExtraction(visionModule, "FieldExtraction"),
   DebugBase("FieldExtraction", this)
 {
   initDebugBase();
@@ -71,8 +71,10 @@ void FieldExtraction::processImage()
   drawResults();
   duration<double> timeSpan = high_resolution_clock::now() - tStart;
   processTime = timeSpan.count();
-  if (GET_DVAR(int, displayOutput))
-    VisionUtils::displayImage("FieldExtraction", bgrMat[toUType(activeCamera)]);
+  if (GET_DVAR(int, displayOutput)) {
+    VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+    waitKey(0);
+  }
   if (GET_DVAR(int, displayInfo)) {
     LOG_INFO("FieldExtraction Results:");
     LOG_INFO("Time taken by filtering points: " << pointsFilterTime);

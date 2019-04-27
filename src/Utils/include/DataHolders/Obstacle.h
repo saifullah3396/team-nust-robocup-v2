@@ -45,6 +45,7 @@ struct Obstacle : public DataHolder
       Obstacle,
       (type, static_cast<unsigned>(this->type)),
       (center, center),
+      (centerT, centerT),
       (depth, depth),
     );
   }
@@ -54,16 +55,14 @@ struct Obstacle : public DataHolder
     Json::Value val;
     JSON_ASSIGN_(val, type, static_cast<unsigned>(type));
     JSON_ASSIGN_(val, center, JsonUtils::getJson(center));
+    JSON_ASSIGN_(val, centerT, JsonUtils::getJson(centerT));
     JSON_ASSIGN_(val, depth, depth);
     return val;
   }
 
-  TNRSLine<T> front; ///< Obstacle front line in image
-  TNRSLine<T> back; ///< Obstacle back line in image
-  TNRSLine<T> frontT; ///< Obstacle front line in world
-  TNRSLine<T> backT; ///< Obstacle front line in world
   ObstacleType type = {ObstacleType::unknown}; ///< Obstacle type
   cv::Point_<T> center; ///< Obstacle center
+  cv::Point_<T> centerT; ///< Obstacle center in world space
   T depth = {0}; ///< Obstacle depth
 
   static constexpr float goalPoseObsDepth = 0.1f; ///< Goal post depth
@@ -73,7 +72,7 @@ struct Obstacle : public DataHolder
 
 /**
  * @struct ObsObstacles
- * @brief A struct that holds the information about all the latest 
+ * @brief A struct that holds the information about all the latest
  *   observed obstacles.
  */
 template <typename T = float>

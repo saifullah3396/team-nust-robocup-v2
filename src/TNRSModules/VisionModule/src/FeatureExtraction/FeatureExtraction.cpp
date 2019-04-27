@@ -41,9 +41,10 @@ ColorHandlerPtr FeatureExtraction::colorHandler;
 vector<boost::shared_ptr<KnownLandmark<float> > > FeatureExtraction::knownLandmarks;
 vector<boost::shared_ptr<UnknownLandmark<float> > > FeatureExtraction::unknownLandmarks;
 
-FeatureExtraction::FeatureExtraction(VisionModule* visionModule) :
+FeatureExtraction::FeatureExtraction(VisionModule* visionModule, const string& name) :
   MemoryBase(visionModule),
   visionModule(visionModule),
+  name(name),
   activeCamera(CameraId::headTop)
 {
   cycleTime = visionModule->getPeriodMinMS() / ((float) 1000);
@@ -129,10 +130,6 @@ TNColor FeatureExtraction::getYUV(const int32_t& x, const int32_t& y) {
 }
 
 TNColor FeatureExtraction::getYUV(const int& index, const int32_t& x, const int32_t& y) {
-  cout << "x() :" << x << endl;
-  cout << "y() :" << y << endl;
-  cout << "getImageWidth() :" << imageWidth[index] << endl;
-  cout << "image[index]: " << image[index] << endl;
   return TNColor(
     (int) image[index][(x + y * imageWidth[index]) << 1],
     (int) image[index][(((x + y * imageWidth[index]) >> 1) << 2) + 1],
@@ -194,6 +191,7 @@ void FeatureExtraction::linkScannedLines(
   LinearScannedLinePtr pred;
   for (const auto& sl : scannedLines) {
     sl->closestDist = 1000;
+    sl->pred.reset();
     sl->bestNeighbor.reset();
     if (pred) sl->pred = pred;
     pred = sl;
@@ -202,9 +200,13 @@ void FeatureExtraction::linkScannedLines(
   //Mat image2 = image.clone();
   auto maxDist = sqrt(highTol * highTol + lowTol * lowTol);
   for (const auto& sl : scannedLines) {
+    //cout << "sl:" << sl <<endl;
     //sl->draw(image2, cv::Scalar(255,0,0));
     auto neighbor = sl->pred;
+    //cout << "neighbor:" << neighbor<<endl;
     while (neighbor) {
+      //cout << "neighbor:" << neighbor<<endl;
+      //cout << "sl:" << sl <<endl;
       //neighbor->draw(image2, cv::Scalar(0,0,255));
       auto diffLen = abs(sl->len - neighbor->len);
       //cout << "len threshold: " << diffLen / (float) sl->len << endl;

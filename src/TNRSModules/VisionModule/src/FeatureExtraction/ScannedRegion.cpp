@@ -15,6 +15,8 @@ using namespace std;
 
 ScannedRegion::ScannedRegion(const std::vector<cv::Point>& pts) {
   rect = boundingRect(pts);
+  rect.x = max(rect.x, 0);
+  rect.y = max(rect.y, 0);
   int yBase = rect.y + rect.height;
   center =
     cv::Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -23,6 +25,14 @@ ScannedRegion::ScannedRegion(const std::vector<cv::Point>& pts) {
 }
 
 ScannedRegion::ScannedRegion(const cv::Rect& rect) : rect(rect) {
+  int yBase = rect.y + rect.height;
+  center =
+    cv::Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
+  leftBase = cv::Point(rect.x, yBase);
+  rightBase = cv::Point(rect.x + rect.width, yBase);
+}
+
+void ScannedRegion::resetParams() {
   int yBase = rect.y + rect.height;
   center =
     cv::Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -88,6 +98,7 @@ void ScannedRegion::linkRegions(
   ///< Preceding regions
   ScannedRegionPtr rPred;
   for (const auto& sr : regions) {
+    sr->pred.reset();
     sr->bestNeighbor.reset();
     if (rPred) sr->pred = rPred;
     rPred = sr;
@@ -133,6 +144,64 @@ void ScannedRegion::linkRegions(
       }
       //VisionUtils::displayImage("image2", image2);
       //cv::waitKey(0);
+      neighbor = neighbor->pred;
+    }
+  }
+
+  reverse(regions.begin(), regions.end());
+  for (const auto& sr : regions) {
+    if (sr->assigned) continue; ///< Not a chain parent
+    auto neighbor = sr->bestNeighbor;
+    while (neighbor != 0) {
+      sr->join(*neighbor);
+      neighbor = neighbor->bestNeighbor;
+    }
+    int yBase = sr->rect.y + sr->rect.height;
+    sr->center =
+      cv::Point(sr->rect.x + sr->rect.width / 2, sr->rect.y + sr->rect.height / 2);
+    sr->leftBase = cv::Point(sr->rect.x, yBase);
+    sr->rightBase = cv::Point(sr->rect.x + sr->rect.width, yBase);
+    linked.push_back(sr);
+  }
+}
+
+void ScannedRegion::linkRegions(
+  std::vector<ScannedRegionPtr>& linked,
+  std::vector<ScannedRegionPtr>& regions,
+  const double& sizeRatioTol,
+  cv::Mat image)
+{
+  ///< Remove small regions
+  filterRegionsBasedOnSize(regions, 5, 5);
+
+  ///< Sort regions
+  sort(regions.begin(), regions.end(), [](
+    const ScannedRegionPtr& sr1,
+    const ScannedRegionPtr& sr2)
+  { return sr1->rect.x < sr2->rect.x;});
+
+  ///< Preceding regions
+  ScannedRegionPtr rPred;
+  for (const auto& sr : regions) {
+    sr->bestNeighbor.reset();
+    sr->pred.reset();
+    if (rPred) sr->pred = rPred;
+    rPred = sr;
+  }
+
+  for (const auto& sr : regions) {
+    auto neighbor = sr->pred;
+    while (neighbor && !neighbor->assigned) { ///< If neighbor exists
+      auto srSize = sr->rect.area();
+      auto neighborSize = neighbor->rect.area();
+      auto ratio =
+        srSize > neighborSize ?
+        srSize / (float) neighborSize : neighborSize / (float) srSize;
+      if (ratio < sizeRatioTol) {
+          sr->bestNeighbor = neighbor;
+          neighbor->assigned = true;
+          break;
+      }
       neighbor = neighbor->pred;
     }
   }

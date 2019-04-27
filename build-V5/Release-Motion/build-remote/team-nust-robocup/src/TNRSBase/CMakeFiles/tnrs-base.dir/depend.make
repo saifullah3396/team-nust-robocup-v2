@@ -2688,6 +2688,7 @@ src/TNRSBase/CMakeFiles/tnrs-base.dir/src/ModuleRequest.cpp.o: ../../../../src/U
 src/TNRSBase/CMakeFiles/tnrs-base.dir/src/ModuleRequest.cpp.o: ../../../../src/Utils/include/DataHolders/Landmark.h
 src/TNRSBase/CMakeFiles/tnrs-base.dir/src/ModuleRequest.cpp.o: ../../../../src/Utils/include/DataHolders/PositionInput.h
 src/TNRSBase/CMakeFiles/tnrs-base.dir/src/ModuleRequest.cpp.o: ../../../../src/Utils/include/DataHolders/RobotPose2D.h
+src/TNRSBase/CMakeFiles/tnrs-base.dir/src/ModuleRequest.cpp.o: ../../../../src/Utils/include/DataHolders/VelocityInput.h
 src/TNRSBase/CMakeFiles/tnrs-base.dir/src/ModuleRequest.cpp.o: ../../../../src/Utils/include/DataUtils.h
 src/TNRSBase/CMakeFiles/tnrs-base.dir/src/ModuleRequest.cpp.o: ../../../../src/Utils/include/EnumUtils.h
 src/TNRSBase/CMakeFiles/tnrs-base.dir/src/ModuleRequest.cpp.o: ../../../../src/Utils/include/Exceptions/TNRSException.h

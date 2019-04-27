@@ -60,9 +60,7 @@ public:
   /**
    * Destructor
    */
-  ~RegionSegmentation()
-  {
-  }
+  ~RegionSegmentation();
 
   /**
    * @brief processImage Derived from FeatureExtraction
@@ -134,9 +132,9 @@ private:
   FieldExtractionPtr fieldExt; ///< Field Extraction module object
   int vScanLimitIdx; ///< Vertical scan limiting image index
   int hScanLimitIdx; ///< Horizontal scan limiting image index
-  double horizontalScanTime; ///< Time taken by horizontal scan
-  double verticalScanTime; ///< Time taken by vertical scan
-  double processTime; ///< Time taken by overall processing
+  double horizontalScanTime = {0.0}; ///< Time taken by horizontal scan
+  double verticalScanTime = {0.0}; ///< Time taken by vertical scan
+  double processTime = {0.0}; ///< Time taken by overall processing
   vector<Point> borderPoints; ///< A vector of extracted field border points
   int avgHeight; ///< Average field height
   int minBestHeight; ///< Minimum best field height

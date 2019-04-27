@@ -105,7 +105,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"runtime\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Development\" \"Unspecified\" \"runtime\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -264,6 +264,33 @@ src/LocalizationRequest.cpp.s:
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build.make src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.s
 .PHONY : src/LocalizationRequest.cpp.s
 
+src/ObstacleTracker.o: src/ObstacleTracker.cpp.o
+
+.PHONY : src/ObstacleTracker.o
+
+# target to build an object file
+src/ObstacleTracker.cpp.o:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build.make src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o
+.PHONY : src/ObstacleTracker.cpp.o
+
+src/ObstacleTracker.i: src/ObstacleTracker.cpp.i
+
+.PHONY : src/ObstacleTracker.i
+
+# target to preprocess a source file
+src/ObstacleTracker.cpp.i:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build.make src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.i
+.PHONY : src/ObstacleTracker.cpp.i
+
+src/ObstacleTracker.s: src/ObstacleTracker.cpp.s
+
+.PHONY : src/ObstacleTracker.s
+
+# target to generate assembly for a file
+src/ObstacleTracker.cpp.s:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build.make src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.s
+.PHONY : src/ObstacleTracker.cpp.s
+
 src/Particle.o: src/Particle.cpp.o
 
 .PHONY : src/Particle.o
@@ -341,6 +368,9 @@ help:
 	@echo "... src/LocalizationRequest.o"
 	@echo "... src/LocalizationRequest.i"
 	@echo "... src/LocalizationRequest.s"
+	@echo "... src/ObstacleTracker.o"
+	@echo "... src/ObstacleTracker.i"
+	@echo "... src/ObstacleTracker.s"
 	@echo "... src/Particle.o"
 	@echo "... src/Particle.i"
 	@echo "... src/Particle.s"

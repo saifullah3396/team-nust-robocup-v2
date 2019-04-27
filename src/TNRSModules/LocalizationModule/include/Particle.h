@@ -33,6 +33,15 @@ struct Particle : public RobotPose2D<float>
   Particle(const float& x, const float& y, const float& theta);
 
   /**
+   * @brief Particle Constructor.
+   * @param x X-coordinate of the particle.
+   * @param y Y-coordinate of the particle.
+   * @param theta Theta-coordinate of the particle.
+   * @param weight Particle weight.
+   */
+  Particle(const float& x, const float& y, const float& theta, const double& weight);
+
+  /**
    * @brief transform Transforms a given pose from particle pose
    * @param pose Any given pose
    * @return Particle

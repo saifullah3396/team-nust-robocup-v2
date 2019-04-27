@@ -16,10 +16,12 @@
 #include "MotionModule/include/KickModule/Types/JSE2DImpKick.h"
 #include "MotionModule/include/KickModule/Types/CSpaceBSplineKick.h"
 #include "MotionModule/include/KickModule/KickFootMap.h"
+#include "MotionModule/include/KickModule/FootContours.h"
 #include "MotionModule/include/BalanceModule/BalanceDefinitions.h"
 #include "BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBPostureConfig.h"
 #include "BehaviorConfigs/include/MBConfigs/MBKickConfig.h"
+#include "Utils/include/AngleDefinitions.h"
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/Constants.h"
 #include "Utils/include/DataHolders/PostureState.h"
@@ -43,6 +45,11 @@ template <typename Scalar>
 BSpline<Scalar>* KickModule<Scalar>::rFootContour;
 template <typename Scalar>
 vector<Matrix<Scalar, 3, 1>> KickModule<Scalar>::footRect;
+
+template <typename Scalar>
+Matrix<Scalar, 4, 4> KickModule<Scalar>::bezierMat;
+template <typename Scalar>
+Matrix<Scalar, 4, 3> KickModule<Scalar>::contourMat;
 
 template <typename Scalar>
 KickModule<Scalar>::KickModule(
@@ -111,6 +118,22 @@ void KickModule<Scalar>::loadExternalConfig()
     footRect.push_back(bl);
     footRect.push_back(br);
     logFootContours();
+
+    bezierMat << 1, 0, 0, 0, -3, 3, 0, 0, 3, -6, 3, 0, -1, 3, -3, 1;
+    contourMat <<
+      zxFootContour[0][0],
+      zxFootContour[0][1],
+      zxFootContour[0][2],
+      zxFootContour[1][0],
+      zxFootContour[1][1],
+      zxFootContour[1][2],
+      zxFootContour[2][0],
+      zxFootContour[2][1],
+      zxFootContour[2][2],
+      zxFootContour[3][0],
+      zxFootContour[3][1],
+      zxFootContour[3][2];
+    contourMat = bezierMat * contourMat;
     loaded = true;
   }
 }
@@ -124,12 +147,10 @@ MBKickConfigPtr KickModule<Scalar>::getBehaviorCast()
 template <typename Scalar>
 bool KickModule<Scalar>::setKickSupportLegs()
 {
-  kickLeg = LinkChains::rLeg;
-  supportLeg = kickLeg == LinkChains::rLeg ? LinkChains::lLeg : LinkChains::rLeg;
-  return true;
   if (ballPosition[0] > 0.180)
     return false;
-  auto angle = targetAngle * 180.0 / M_PI;
+  auto angle = targetAngle * MathsUtils::DEG_TO_RAD;
+  cout << "Angle:" << angle << endl;
   for (size_t i = 0; i < 14; ++i) {
     if (
         ballPosition[1] >= kickFootMap[i][1] &&
@@ -137,6 +158,7 @@ bool KickModule<Scalar>::setKickSupportLegs()
         angle >= kickFootMap[i][3] &&
         angle <= kickFootMap[i][4])
     {
+      cout << "Angle:" << angle << endl;
       kickLeg = static_cast<LinkChains>(kickFootMap[i][0]);
       supportLeg = kickLeg == LinkChains::rLeg ? LinkChains::lLeg : LinkChains::rLeg;
       return true;
@@ -195,31 +217,13 @@ bool KickModule<Scalar>::setEndEffectorXY(const Scalar& angle)
   Matrix<Scalar, 3, 1> contourPoint;
   auto normal = Matrix<Scalar, 3, 1>(cos(angle), sin(angle), 0.f);
   Matrix<Scalar, 2, 1> tBounds;
-  if (angle >= 0) {
-    if (kickLeg == LinkChains::lLeg) {
-      if (angle >= M_PI / 4)
-        tBounds = Matrix<Scalar, 2, 1>(0.0, 0.3);
-      else
-        tBounds = Matrix<Scalar, 2, 1>(0.0, 0.625);
-    } else {
-      if (angle >= M_PI / 4)
-        tBounds = Matrix<Scalar, 2, 1>(0.7, 1.0);
-      else
-        tBounds = Matrix<Scalar, 2, 1>(0.375, 1.0);
-    }
-  } else {
-    if (kickLeg == LinkChains::lLeg) {
-      if (angle <= M_PI / 4)
-        tBounds = Matrix<Scalar, 2, 1>(0.7, 1.0);
-      else
-        tBounds = Matrix<Scalar, 2, 1>(0.375, 1.0);
-    } else {
-      if (angle <= M_PI / 4)
-        tBounds = Matrix<Scalar, 2, 1>(0.0, 0.625);
-      else
-        tBounds = Matrix<Scalar, 2, 1>(0.0, 0.3);
-    }
-  }
+  Scalar tForAngle;
+  if (this->kickLeg == LinkChains::lLeg)
+    tForAngle = (Angle::DEG_90 - angle) / Angle::DEG_180;
+  else
+    tForAngle = (Angle::DEG_90 + angle) / Angle::DEG_180;
+  cout << "tangle:" << tForAngle << endl;
+  tBounds = Matrix<Scalar, 2, 1>(tForAngle - 0.05, tForAngle + 0.05);
   if (kickLeg == LinkChains::lLeg) {
     success = lFootContour->findNormalToVec(normal, contourPoint, tBounds);
     if (!success)
@@ -227,8 +231,9 @@ bool KickModule<Scalar>::setEndEffectorXY(const Scalar& angle)
     endEffector(0, 3) = contourPoint[0];
     endEffector(1, 3) = contourPoint[1];
     endEffector(2, 3) = contourPoint[2];
-    this->kM->setEndEffector(
-      kickLeg, toUType(LegEEs::kickEE), endEffector.block(0, 3, 4, 1));
+
+    //this->kM->setEndEffector(
+    //  kickLeg, toUType(LegEEs::kickEE), endEffector.block(0, 3, 3, 1));
     return true;
   } else if (kickLeg == LinkChains::rLeg) {
     success = rFootContour->findNormalToVec(normal, contourPoint, tBounds);
@@ -237,8 +242,8 @@ bool KickModule<Scalar>::setEndEffectorXY(const Scalar& angle)
     endEffector(0, 3) = contourPoint[0];
     endEffector(1, 3) = contourPoint[1];
     endEffector(2, 3) = contourPoint[2];
-    this->kM->setEndEffector(
-      kickLeg, toUType(LegEEs::kickEE), endEffector.block(0, 3, 4, 1));
+    //this->kM->setEndEffector(
+    //  kickLeg, toUType(LegEEs::kickEE), endEffector.block(0, 3, 3, 1));
     return true;
   }
 }
@@ -246,24 +251,21 @@ bool KickModule<Scalar>::setEndEffectorXY(const Scalar& angle)
 template <typename Scalar>
 void KickModule<Scalar>::setEndEffectorZX(const Scalar& t)
 {
-  /*Matrix4f bezierMat;
-  Matrix<Scalar, 4, 3> contourMat;
-  bezierMat << 1, 0, 0, 0, -3, 3, 0, 0, 3, -6, 3, 0, -1, 3, -3, 1;
-  Vector4f tVector;
-  Matrix<Scalar, 3, 1> contourPoint;
-  fstream footCurveLog;
+  /*fstream footCurveLog;
   footCurveLog.open(
   (ConfigManager::getLogsDirPath() + string("KickModule/FootCurveZX.txt")).c_str(),
     std::ofstream::out | std::ofstream::trunc);
   footCurveLog << "# t     X     Y    Z" << endl;
-  footCurveLog.close();
-  contourMat << zxFootContour[0][0], zxFootContour[0][1], zxFootContour[0][2], zxFootContour[1][0], zxFootContour[1][1], zxFootContour[1][2], zxFootContour[2][0], zxFootContour[2][1], zxFootContour[2][2], zxFootContour[3][0], zxFootContour[3][1], zxFootContour[3][2];
-  contourMat = bezierMat * contourMat;
+  footCurveLog.close();*/
+  Matrix<Scalar, 1, 4> tVector;
+  Matrix<Scalar, 1, 3> contourPoint;
   tVector << 1, t, pow(t, 2), pow(t, 3);
-  contourPoint = (tVector.transpose() * contourMat).transpose();
+  contourPoint = tVector * contourMat;
   endEffector(0, 3) = contourPoint[0];
   endEffector(2, 3) = contourPoint[2];
-  footCurveLog.open(
+  //this->kM->setEndEffector(
+  //  kickLeg, toUType(LegEEs::kickEE), endEffector.block(0, 3, 3, 1));
+  /*footCurveLog.open(
   (ConfigManager::getConfigDirPath() + string("KickModule/FootCurveZX.txt")).c_str(),
     std::ofstream::out | std::ofstream::trunc);
   for (Scalar ti = 0.0; ti <= 1.0; ti = ti + 0.01) {
@@ -273,8 +275,9 @@ void KickModule<Scalar>::setEndEffectorZX(const Scalar& t)
     tVector(3, 0) = pow(ti, 3);
     Matrix<Scalar, 3, 1> point = (tVector.transpose() * contourMat).transpose();
     footCurveLog << ti << "    " << point[0] << "    " << point[1] << "    " << point[2] << endl;
+
   }
-  footCurveLog.close();*/
+  //footCurveLog.close();*/
 }
 
 template <typename Scalar>
@@ -431,13 +434,17 @@ void KickModule<Scalar>::logFootContours()
   fstream logL, logR;
   logL.open(logLPath, std::fstream::out | std::fstream::trunc);
   for (int i = 0; i < spline.rows(); ++i) {
-      logL << spline(i, 0) << " " << spline(i, 1) + 0.05 << " " << spline(i, 2) + footHeight << endl;
+      logL << spline(i, 0) - Constants::footOriginShiftX << " "
+           << spline(i, 1) + Constants::footSeparation / 2 << " "
+           << spline(i, 2) + footHeight << endl;
   }
 
   spline = rFootContour->getSpline(0);
   logR.open(logRPath, std::fstream::out | std::fstream::trunc);
   for (int i = 0; i < spline.rows(); ++i) {
-      logR << spline(i, 0) << " " << spline(i, 1) - 0.05 << " " << spline(i, 2) + footHeight  << endl;
+      logR << spline(i, 0) - Constants::footOriginShiftX
+           << " " << spline(i, 1) - Constants::footSeparation / 2
+           << " " << spline(i, 2) + footHeight  << endl;
   }
   logL.close();
   logR.close();

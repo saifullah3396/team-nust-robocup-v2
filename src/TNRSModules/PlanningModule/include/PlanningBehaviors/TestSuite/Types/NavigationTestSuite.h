@@ -67,6 +67,12 @@ protected:
   ///< GoToTarget: Tests sending the robot to a specified target
   DECLARE_FSM_STATE(NavigationTestSuite, GoToTarget, goToTarget, onStart, onRun,)
 
+  ///< GoToTarget: Tests sending the robot to a specified target using plan towards
+  DECLARE_FSM_STATE(NavigationTestSuite, PlanTowards, planTowards, onStart, onRun,)
+
+  ///< GoToTarget: Tests sending the robot to the ball using plan towards
+  DECLARE_FSM_STATE(NavigationTestSuite, FollowBall, followBall, onStart, onRun,)
+
   ///< GoalChangedReplan: Tests replanning of path on goal change
   DECLARE_FSM_STATE(NavigationTestSuite, GoalChangedReplan, goalChangedReplan, onStart, onRun,)
 

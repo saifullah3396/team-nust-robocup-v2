@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(team_nust_msgs)
 
+include($ENV{PATH_TO_TEAM_NUST_DIR}/resources/team_nust_nao_interface_ws/src/cmake/common.cmake)
+
 find_package(catkin REQUIRED COMPONENTS
    roscpp
    rospy

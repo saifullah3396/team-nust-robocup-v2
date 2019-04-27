@@ -13,8 +13,8 @@
 #include "TNRSBase/include/DebugBase.h"
 #include "Utils/include/DataHolders/ObstacleType.h"
 #include "VisionModule/include/FeatureExtraction/FeatureExtraction.h"
+#include "VisionModule/include/FeatureExtraction/RobotTracker.h"
 
-class BallExtraction;
 class RegionSegmentation;
 class FieldExtraction;
 class RobotRegion;
@@ -33,8 +33,8 @@ class RobotExtraction : public FeatureExtraction, public DebugBase
     (int, drawScannedLines, 0),
     ///< Option to draw the bounding boxes for extracted jerseys
     (int, drawJerseyRegions, 0),
-    ///< Option to draw stray obstacles
-    (int, drawStrayRegions, 0),
+    ///< Option to draw LowerBody obstacles
+    (int, drawLowerBodyRegions, 0),
     ///< Option to draw robot scanned regions
     (int, drawRobotRegions, 0),
     ///< Option to display info about extraction results
@@ -62,16 +62,22 @@ public:
   void processImage();
 
   /**
-   * @brief getRobotRegions Returns the robot regions found
+   * @brief getRobotRegions Returns the robot regions in image found
    * @return
    */
-  vector<RobotRegionPtr>& getRobotRegions() { return filtRobotRegions; }
+  const vector<RobotRegionPtr>& getRobotRegions() { return classifiedRobotRegions; }
 
   /**
-   * @brief getStrayRegions Returns the unknown regions found in field
-   * @return
+   * @brief getRobotRegions Returns the robot regions found in lower cam
+   * @return Robot regions
    */
-  vector<Rect>& getStrayRegions() { return strayRegions; }
+  const vector<ScannedRegionPtr>& getLowerCamRobotRegions() { return lowerCamRobotRegions; }
+
+  /**
+   * @brief getTrackedRobots Returns the vector containing robot trackers
+   */
+  const vector<boost::shared_ptr<RobotTracker>>& getTrackedRobots()
+    { return trackedRobots; }
 
 private:
   /**
@@ -92,51 +98,36 @@ private:
   void filterRobotLines();
 
   /**
-   * @brief filterBallRegions Filter out lines in ball region
-   * @param robotLines Lines to filter
-   * @param direction Direction of filter, false for horizontal, true for vertical
-   */
-  void filterBallRegions(
-    vector<boost::shared_ptr<LinearScannedLine> >& robotLines, const bool& direction);
-
-  /**
    * @brief findJerseys Finds jersey regions from jersey scanned lines
+   * @param jerseyRegions Output jersey regions
    */
-  void findJerseys();
+  void findJerseys(vector<RobotRegionPtr>& outputRegions);
 
   /**
    * @brief classifyRobots Integrates the info from robot scanned lines
    *   and jersey regions to find overall robot regions
+   * @param robotRegions Output robot regions extracted from jerseys
+   * @param jerseyRegions Regions extracted from jerseys
    */
-  void classifyRobots();
+  void classifyRobots(vector<RobotRegionPtr>& robotRegions, vector<RobotRegionPtr>& jerseyRegions);
 
   /**
-   * @brief findStrayRegions Finds stray regions that do not count as robots
+   * @brief findLowerBodyRegions Finds LowerBody regions that do not count as robots
+   * @param robotRegions Output robot regions
    */
-  void findStrayRegions();
+  void findLowerBodyRegions(vector<RobotRegionPtr>& robotRegions);
+
+  /**
+   * @brief updateRobotTrackers Updates robot trackers with new robots information
+   * @param robotRegions New robot regions found
+   */
+  void updateRobotTrackers(
+    const vector<boost::shared_ptr<RobotRegion>>& robotRegions);
 
   /**
    * @brief updateRobotsInfo Updates robots info in memory
    */
   void updateRobotsInfo();
-
-  ///< Robot Regions
-  vector<RobotRegionPtr> jerseyRegions;
-
-  ///< Robot Regions
-  vector<RobotRegionPtr> filtRobotRegions;
-
-  ///< Robot vertical scanned lines
-  vector<LinearScannedLinePtr> verRobotLines;
-
-  ///< Robot horizontal scanned lines
-  vector<LinearScannedLinePtr> horRobotLines;
-
-  ///< Field border
-  vector<int> border;
-
-  ///< Vector of regions that are not part of lines.
-  vector<Rect> strayRegions;
 
   /**
    * @brief drawResults Derived from FeatureExtraction
@@ -147,14 +138,20 @@ private:
   // Not used anymore
   //CascadeClassifier classifier;
 
-  ///< Ball Extraction module object.
-  boost::shared_ptr<BallExtraction> ballExt;
-
   ///< Field Extraction module object.
   boost::shared_ptr<FieldExtraction> fieldExt;
 
   ///< Lines Extraction module object.
   boost::shared_ptr<RegionSegmentation> regionSeg;
+
+  ///< Tracked robot Regions
+  vector<boost::shared_ptr<RobotTracker>> trackedRobots;
+
+  ///< Tracked robot Regions obtained from trackers
+  vector<boost::shared_ptr<RobotRegion>> classifiedRobotRegions;
+
+  ///< Lower cam robot regions
+  vector<boost::shared_ptr<ScannedRegion>> lowerCamRobotRegions;
 
   ///< Processing times
   float processTime;
@@ -167,5 +164,23 @@ private:
   typedef vector<RobotRegionPtr>::iterator RRIter;
 
   ///< Time taken to refresh previous robot information
-  static constexpr float refreshTime = 0.01f;
+  static float refreshTime;
+
+  ///< Max number of robots that can be tracked at a time
+  static unsigned maxRobotTrackers;
+
+  ///< Threshold for maximum width of a standing robot in real world
+  static float maxRobotWorldWidth;
+
+  ///< Threshold for maximum width of a fallen robot in real world
+  static float fallenRobotWidth;
+
+  ///< Maximum distance between two robots to be considered the same
+  static float robotMatchMaxDistance;
+
+  ///< Approximate height of jersey for computations when robot feet cannot be seen
+  static float jerseyApproxHeight;
+
+  ///< Maximum jersey width possible with respect to
+  static float maxJerseyWidthRatio;
 };

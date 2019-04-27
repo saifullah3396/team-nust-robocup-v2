@@ -105,7 +105,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"runtime\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Development\" \"Unspecified\" \"runtime\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -507,6 +507,33 @@ src/FeatureExtraction/RobotExtraction.cpp.s:
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/build.make src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.s
 .PHONY : src/FeatureExtraction/RobotExtraction.cpp.s
 
+src/FeatureExtraction/RobotTracker.o: src/FeatureExtraction/RobotTracker.cpp.o
+
+.PHONY : src/FeatureExtraction/RobotTracker.o
+
+# target to build an object file
+src/FeatureExtraction/RobotTracker.cpp.o:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/build.make src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.o
+.PHONY : src/FeatureExtraction/RobotTracker.cpp.o
+
+src/FeatureExtraction/RobotTracker.i: src/FeatureExtraction/RobotTracker.cpp.i
+
+.PHONY : src/FeatureExtraction/RobotTracker.i
+
+# target to preprocess a source file
+src/FeatureExtraction/RobotTracker.cpp.i:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/build.make src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.i
+.PHONY : src/FeatureExtraction/RobotTracker.cpp.i
+
+src/FeatureExtraction/RobotTracker.s: src/FeatureExtraction/RobotTracker.cpp.s
+
+.PHONY : src/FeatureExtraction/RobotTracker.s
+
+# target to generate assembly for a file
+src/FeatureExtraction/RobotTracker.cpp.s:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/build.make src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.s
+.PHONY : src/FeatureExtraction/RobotTracker.cpp.s
+
 src/FeatureExtraction/ScannedEdge.o: src/FeatureExtraction/ScannedEdge.cpp.o
 
 .PHONY : src/FeatureExtraction/ScannedEdge.o
@@ -665,6 +692,9 @@ help:
 	@echo "... src/FeatureExtraction/RobotExtraction.o"
 	@echo "... src/FeatureExtraction/RobotExtraction.i"
 	@echo "... src/FeatureExtraction/RobotExtraction.s"
+	@echo "... src/FeatureExtraction/RobotTracker.o"
+	@echo "... src/FeatureExtraction/RobotTracker.i"
+	@echo "... src/FeatureExtraction/RobotTracker.s"
 	@echo "... src/FeatureExtraction/ScannedEdge.o"
 	@echo "... src/FeatureExtraction/ScannedEdge.i"
 	@echo "... src/FeatureExtraction/ScannedEdge.s"

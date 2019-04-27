@@ -23,15 +23,14 @@
 #include "Utils/include/VisionUtils.h"
 
 RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
-  FeatureExtraction(visionModule),
+  FeatureExtraction(visionModule, "RegionSegmentation"),
   DebugBase("RegionSegmentation", this)
 {
+  //! Set up debug base and get debug variables from configuration file
   initDebugBase();
   getDebugVars();
 
-  ourColor = TNColors::yellow;
-  oppColor = TNColors::blue;
-
+  //! Set up scan parameters
   auto top = toUType(CameraId::headTop);
   auto bottom = toUType(CameraId::headBottom);
   hScans.resize(toUType(ScanTypes::count));
@@ -45,27 +44,30 @@ RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
   hScanStepSizes[top].resize(toUType(ScanTypes::count));
   vScanStepSizes[bottom].resize(toUType(ScanTypes::count));
 
-  auto root =
-    JsonUtils::readJson(ConfigManager::getCommonConfigDirPath() + "VisionConfig.json");
-  JsonUtils::jsonToType(hScanStepHigh, root["hScanStepHigh"], vector<int>());
-  JsonUtils::jsonToType(vScanStepHigh, root["vScanStepHigh"], vector<int>());
-  JsonUtils::jsonToType(hScanStepSizes[top], root["upperCamHScanSteps"], vector<int>());
-  JsonUtils::jsonToType(vScanStepSizes[top], root["upperCamVScanSteps"], vector<int>());
-  JsonUtils::jsonToType(hScanStepSizes[bottom], root["lowerCamHScanSteps"], vector<int>());
-  JsonUtils::jsonToType(vScanStepSizes[bottom], root["lowerCamVScanSteps"], vector<int>());
+  //! Get scan parameters from configuration file
+  GET_CLASS_CONFIG(
+    VisionConfig, RegionSegmentation,
+    hScanStepHigh,
+    vScanStepHigh,
+    hScanStepSizes,
+    vScanStepSizes,
+  )
+
+  //! Set minimum scan step as the smallest of all possible step sizes for both cameras
   hMinScanStepLow[top] = *std::min_element(begin(hScanStepSizes[top]), end(hScanStepSizes[top]));
   vMinScanStepLow[top] = *std::min_element(begin(vScanStepSizes[top]), end(vScanStepSizes[top]));
   hMinScanStepLow[bottom] = *std::min_element(begin(hScanStepSizes[bottom]), end(hScanStepSizes[bottom]));
   vMinScanStepLow[bottom] = *std::min_element(begin(vScanStepSizes[bottom]), end(vScanStepSizes[bottom]));
 
+  //! Initialize horizontal scanners for different region types
   auto defaultCamera = top;
-  //auto ballType = root["ballType"].asInt();
   //hScans[toUType(ScanTypes::field)] =
     //new FieldScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::field)], hScanStepHigh[defaultCamera], false);
   hScans[toUType(ScanTypes::robot)] =
     new RobotScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::robot)], hScanStepHigh[defaultCamera], false);
-  hScans[toUType(ScanTypes::ball)] =
-    new BallScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], hScanStepHigh[defaultCamera], false);
+  //hScans[toUType(ScanTypes::ball)] = hScans[toUType(ScanTypes::robot)];
+  //hScans[toUType(ScanTypes::ball)] =
+  //  new BallScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], hScanStepHigh[defaultCamera], false);
   hScans[toUType(ScanTypes::ourJersey)] =
     new JerseyScan(ourColor, hScanStepSizes[defaultCamera][toUType(ScanTypes::ourJersey)], hScanStepHigh[defaultCamera], false);
   hScans[toUType(ScanTypes::oppJersey)] =
@@ -75,12 +77,14 @@ RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
   hScans[toUType(ScanTypes::goal)] =
     new GoalScan(hScanStepSizes[defaultCamera][toUType(ScanTypes::goal)], hScanStepHigh[defaultCamera], false);
 
+  //! Initialize vertical scanners for different region types
   vScans[toUType(ScanTypes::field)] =
     new FieldScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::field)], vScanStepHigh[defaultCamera], true);
   vScans[toUType(ScanTypes::robot)] =
     new RobotScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::robot)], vScanStepHigh[defaultCamera], true);
-  vScans[toUType(ScanTypes::ball)] =
-    new BallScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], vScanStepHigh[defaultCamera], true);
+  //vScans[toUType(ScanTypes::ball)] =
+  //  new BallScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::ball)], vScanStepHigh[defaultCamera], true);
+  //vScans[toUType(ScanTypes::ball)] = vScans[toUType(ScanTypes::robot)];
   vScans[toUType(ScanTypes::ourJersey)] =
     new JerseyScan(ourColor, vScanStepSizes[defaultCamera][toUType(ScanTypes::ourJersey)], vScanStepHigh[defaultCamera], true);
   vScans[toUType(ScanTypes::oppJersey)] =
@@ -90,14 +94,7 @@ RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
   //vScans[toUType(ScanTypes::goal)] =
     //new GoalScan(vScanStepSizes[defaultCamera][toUType(ScanTypes::goal)], vScanStepHigh[defaultCamera], true);
 
-  /*if (ballType == 0) {
-    hScans[toUType(ScanTypes::ball)]->color = TNColors::red;
-    vScans[toUType(ScanTypes::ball)]->color = TNColors::red;
-  } else {
-    hScans[toUType(ScanTypes::ball)]->color = TNColors::black;
-    vScans[toUType(ScanTypes::ball)]->color = TNColors::black;
-  }*/
-
+  //! Make horizontal scan lookup tables for upper and lower cameras
   for (size_t i = 0; i < hScans.size(); ++i) {
     auto& scan = hScans[i];
     if (scan) {
@@ -113,6 +110,8 @@ RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
       }
     }
   }
+
+  //! Make vertical scan lookup tables for upper and lower cameras
   for (size_t i = 0; i < vScans.size(); ++i) {
     auto& scan = vScans[i];
     if (scan) {
@@ -128,37 +127,34 @@ RegionSegmentation::RegionSegmentation(VisionModule* visionModule) :
       }
     }
   }
+}
 
-
-  ///< Initializing processing times
-  horizontalScanTime = 0.0;
-  verticalScanTime = 0.0;
-  processTime = 0.0;
+RegionSegmentation::~RegionSegmentation()
+{
+  for (size_t i = 0; i < vScans.size(); ++i) {
+    if (vScans[i])
+      delete vScans[i];
+  }
+  for (size_t i = 0; i < hScans.size(); ++i) {
+    if (hScans[i])
+      delete hScans[i];
+  }
+  vScans.clear();
+  hScans.clear();
 }
 
 void RegionSegmentation::getDebugVars()
 {
-  int tempSendTime;
-  int tempDrawVerticalLines;
-  int tempDrawHorizontalLines;
-  int tempDrawPoints;
-  int tempDisplayInfo;
-  int tempDisplayOutput;
-  GET_CONFIG(
-    "VisionConfig",
-    (int, RegionSegmentation.sendTime, tempSendTime),
-    (int, RegionSegmentation.drawHorizontalLines, tempDrawHorizontalLines),
-    (int, RegionSegmentation.drawVerticalLines, tempDrawVerticalLines),
-    (int, RegionSegmentation.drawPoints, tempDrawPoints),
-    (int, RegionSegmentation.displayInfo, tempDisplayInfo),
-    (int, RegionSegmentation.displayOutput, tempDisplayOutput),
+  GET_DEBUG_CONFIG(
+    VisionConfig,
+    RegionSegmentation,
+    (int, sendTime),
+    (int, drawHorizontalLines),
+    (int, drawVerticalLines),
+    (int, drawPoints),
+    (int, displayInfo),
+    (int, displayOutput),
   );
-  SET_DVAR(int, sendTime, tempSendTime);
-  SET_DVAR(int, drawVerticalLines, tempDrawVerticalLines);
-  SET_DVAR(int, drawHorizontalLines, tempDrawHorizontalLines);
-  SET_DVAR(int, drawPoints, tempDrawPoints);
-  SET_DVAR(int, displayInfo, tempDisplayInfo);
-  SET_DVAR(int, displayOutput, tempDisplayOutput);
 }
 
 void RegionSegmentation::processImage()
@@ -182,7 +178,7 @@ void RegionSegmentation::processImage()
   }
   drawResults();
   if (GET_DVAR(int, displayOutput)) {
-    VisionUtils::displayImage("RegionSegmentation", bgrMat[toUType(activeCamera)]);
+    VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
   }
 }
 
@@ -236,33 +232,41 @@ void RegionSegmentation::setScanSettings()
 void RegionSegmentation::horizontalScan()
 {
   auto tStart = high_resolution_clock::now();
+
+  //! Get the minimum step size for scans
   auto minScanStepLow = hMinScanStepLow[toUType(activeCamera)];
-  if (activeCamera == CameraId::headTop) {
+  if (activeCamera == CameraId::headTop) { //! Upper cam scan
     ///< Last field height with some margin
     auto lastHeight = fieldExt->getFieldHeight() - 50;
     for (int y = 0; y < getImageHeight(); y = y + hScanStepHigh[toUType(activeCamera)]) {
+      //! Find the height of field in image
       bool scanInField = y > lastHeight;
-      for (const auto& scan : hScans) {
+      for (const auto& scan : hScans) { //! Reset all scans
         if (scan && scan->enabled) scan->reset();
       }
       for (int x = 0; x < getImageWidth(); x = x + minScanStepLow) {
-        if (scanInField) {
-          if (x >= hScanLimitIdx) {
+        if (scanInField) { //! Scan below border
+          if (x >= hScanLimitIdx) { //! If image end is reached
             for (const auto& scan : hScans) {
               if (scan && scan->enabled) scan->onScanLimitReached(x, y);
             }
             break;
           }
+          //! Get the yuv of the pixel
           auto pixel = getYUV(x, y);
+
+          //! Find color of this pixel
           TNColors color = colorHandler->whichColor(pixel);
-          for (const auto& scan : hScans) {
+          for (const auto& scan : hScans) { //! Perform scan for each region
             if (scan && scan->enabled && scan->scanTables[toUType(activeCamera)][x])
               scan->update(color, x, y);
           }
-        } else {
+        } else { //! For regions above the field only scan for jerseys and goal
           auto& ourScan = hScans[toUType(ScanTypes::ourJersey)];
           auto& oppScan = hScans[toUType(ScanTypes::oppJersey)];
           auto& goalScan = hScans[toUType(ScanTypes::goal)];
+
+           //! If image end is reached
           if (x >= hScanLimitIdx) {
             if (ourScan->enabled) {
               ourScan->onScanLimitReached(x, y);
@@ -275,8 +279,13 @@ void RegionSegmentation::horizontalScan()
             }
             break;
           }
+          //! Get the yuv of the pixel
           auto pixel = getYUV(x, y);
+
+          //! Find color of this pixel
           TNColors color = colorHandler->whichColor(pixel);
+
+          //! Perform scan for each region
           if (ourScan->enabled && ourScan->scanTables[toUType(activeCamera)][x]) {
             ourScan->update(color, x, y);
           }
@@ -287,13 +296,10 @@ void RegionSegmentation::horizontalScan()
             goalScan->update(color, x, y);
           }
         }
-        //bgrMat[toUType(activeCamera)].at<Vec3b>(y, x) = Vec3b(255,0,0);
       }
-      //hScans[toUType(ScanTypes::ourJersey)]->draw(bgrMat[toUType(activeCamera)]);
-      //VisionUtils::displayImage("bgrMat[toUType(activeCamera)]:", bgrMat[toUType(activeCamera)]);
-      //waitKey(0);
+      //hScans[toUType(ScanTypes::robot)]->draw(bgrMat[toUType(activeCamera)]);
     }
-  } else {
+  } else { //! Lower cam scan
     for (int y = 0; y < getImageHeight(); y = y + hScanStepHigh[toUType(activeCamera)]) {
       for (const auto& scan : hScans) {
         if (scan && scan->enabled) scan->reset();
@@ -322,6 +328,8 @@ void RegionSegmentation::horizontalScan()
 void RegionSegmentation::verticalScan()
 {
   auto tStart = high_resolution_clock::now();
+
+  //! Get the minimum step size for scans
   auto minScanStepLow = vMinScanStepLow[toUType(activeCamera)];
   if (activeCamera == CameraId::headTop) {
     ///< Last field height with some margin
@@ -377,26 +385,32 @@ void RegionSegmentation::verticalScan()
       }
       if (GET_DVAR(int, drawVerticalLines))
         vScans[toUType(ScanTypes::field)]->draw(bgrMat[toUType(activeCamera)]);
-      //VisionUtils::displayImage("bgrMat[toUType(activeCamera)]:", bgrMat[toUType(activeCamera)]);
-      //waitKey(0);
-      if (static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldFound) {
-        if (static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldFound &&
-            static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin != getImageHeight())
+
+      auto fieldScan = static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)]);
+      if (fieldScan->fieldFound) {
+        if (fieldScan->fieldFound && fieldScan->fieldMin != getImageHeight())
         {
-          borderPoints.push_back(Point(x, static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin));
-          //borderPoints.push_back(Point(x, static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMax));
+          //! Add minimum height field points as border points
+          borderPoints.push_back(Point(x, fieldScan->fieldMin));
+          //borderPoints.push_back(Point(x, fieldScan->fieldMax));
+
+          //! Find the minimum height of the field
           minBestHeight =
-            static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin < minBestHeight ?
-            static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin : minBestHeight;
-          avgHeight += static_cast<FieldScan*>(vScans[toUType(ScanTypes::field)])->fieldMin;
+            fieldScan->fieldMin < minBestHeight ?
+            fieldScan->fieldMin : minBestHeight;
+
+          //! Find the average height of the field
+          avgHeight += fieldScan->fieldMin;
         }
       }
     }
+
+    //! If border points has some points
     if (borderPoints.size() > 1)
       avgHeight /= borderPoints.size();
     else
       avgHeight = 0;
-  } else {
+  } else { //! Lower cam scan
     for (int x = 0; x < getImageWidth(); x = x + vScanStepHigh[toUType(activeCamera)]) {
       for (const auto& scan : vScans) {
         if (scan && scan->enabled) scan->reset();

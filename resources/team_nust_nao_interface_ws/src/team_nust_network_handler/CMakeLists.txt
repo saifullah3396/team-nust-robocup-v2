@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(team_nust_network_handler)
+
+include($ENV{PATH_TO_TEAM_NUST_DIR}/resources/team_nust_nao_interface_ws/src/cmake/common.cmake)
+
 add_compile_options(-std=c++11 -DVISUALIZER_BUILD -DROOT_DIR="$ENV{PATH_TO_TEAM_NUST_DIR}/src")
 find_package(qibuild)
 find_package(catkin REQUIRED COMPONENTS

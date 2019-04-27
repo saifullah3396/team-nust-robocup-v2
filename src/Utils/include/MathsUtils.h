@@ -31,6 +31,7 @@ namespace MathsUtils
 {
   const double DEG_TO_RAD = 0.0174532925199433;
   const double RAD_TO_DEG = 57.2957795130823;
+  const double M_TWICE_PI = 2 * M_PI;
 
   /**
    * @brief Return the sign of a value
@@ -81,7 +82,7 @@ namespace MathsUtils
    * @return Scalar Addition of angles
    */
   template<typename Scalar>
-  Scalar addAngles(const Scalar& a1, const Scalar& a2, const Scalar& factor2);
+  Scalar addAngles(const Scalar& a1, const Scalar& a2);
 
   /**
    * @brief Returns the Euclidean distance between two 2D points.

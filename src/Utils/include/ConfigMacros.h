@@ -98,4 +98,52 @@
     } \
   }
 #endif
+
+#define SET_VAR_FROM_JSON(VAR) \
+  JsonUtils::jsonToType(VAR, classParams[#VAR], VAR);
+
+#define SET_DVAR_FROM_JSON_2(TYPE, VAR) \
+  JsonUtils::jsonToType(GET_DVAR_REF(TYPE, VAR), debugParams[#VAR], GET_DVAR_REF(TYPE, VAR));
+
+#define SET_DVAR_FROM_JSON(TYPE_VAR) \
+  SET_DVAR_FROM_JSON_2( \
+    M_GET_ELEM(0,UNPAREN(TYPE_VAR)), \
+    M_GET_ELEM(1,UNPAREN(TYPE_VAR)) \
+  );
+
+#define GET_DEBUG_CONFIG(ConfigName, ClassName, ...) \
+{ \
+  auto path = string(ConfigManager::getConfigDirPath() + #ConfigName + string(".json")); \
+  if (boost::filesystem::exists(path)) { \
+    auto debugParams = JsonUtils::readJson(path)[#ClassName]["debug"]; \
+    FOR_EACH(SET_DVAR_FROM_JSON, __VA_ARGS__) \
+  } else { \
+    auto path = string(ConfigManager::getCommonConfigDirPath() + #ConfigName + string(".json")); \
+    if (boost::filesystem::exists(path)) { \
+      auto debugParams = JsonUtils::readJson(path)[#ClassName]["debug"]; \
+      FOR_EACH(SET_DVAR_FROM_JSON, __VA_ARGS__) \
+    } else { \
+      LOG_ERROR("Configuration file: " << path <<" does not exist."); \
+    } \
+  } \
+}
+
+#define GET_CLASS_CONFIG(ConfigName, ClassName, ...) \
+{ \
+  auto path = string(ConfigManager::getConfigDirPath() + #ConfigName + string(".json")); \
+  if (boost::filesystem::exists(path)) { \
+    auto classParams = JsonUtils::readJson(path)[#ClassName]["params"]; \
+    FOR_EACH(SET_VAR_FROM_JSON, __VA_ARGS__);\
+  } else { \
+    auto path = string(ConfigManager::getCommonConfigDirPath() + #ConfigName + string(".json")); \
+    if (boost::filesystem::exists(path)) { \
+      auto classParams = JsonUtils::readJson(path)[#ClassName]["params"]; \
+      FOR_EACH(SET_VAR_FROM_JSON, __VA_ARGS__); \
+    } else { \
+      LOG_ERROR("Configuration file: " << path <<" does not exist."); \
+    } \
+  } \
+}
+
+
 #endif ///<_CONFIGMACROS_H_

@@ -25,24 +25,24 @@
          "whiteBalance" : 5800
       },
       "distortion" : {
-         "a" : 0.0,
-         "b" : 0.0,
+         "a" : -1.5387200626156887e-02,
+         "b" : -4.5787425480480265e-01,
          "c" : 0.0,
          "d" : 0.0,
-         "e" : 0.0
+         "e" : 1.3158960661410695e+00
       },
       "intrinsic" : {
-         "centerOffX" : 80,
-         "centerOffY" : 60,
-         "focalX" : 135.88999999999999,
-         "focalY" : 135.91,
+         "centerOffX" : 7.8872924497374470e+01,
+         "centerOffY" : 5.6450373043181209e+01,
+         "focalX" : 1.4242925072499841e+02,
+         "focalY" : 1.4239137222629338e+02,
          "fovX" : 60.969999999999999,
          "fovY" : 47.640000000000001
       },
       "subscription" : {
          "cameraName" : "visionBottom",
          "colorSpace" : 9,
-         "fps" : 30,
+         "fps" : 15,
          "height" : 240,
          "width" : 320
       }
@@ -73,24 +73,24 @@
          "whiteBalance" : 5800
       },
       "distortion" : {
-         "a" : 0.0,
-         "b" : 0.0,
+         "a" : -7.5272771561047364e-02,
+         "b" : 8.9603417038931384e-03,
          "c" : 0.0,
          "d" : 0.0,
-         "e" : 0.0
+         "e" : 1.9674977497011578e-01
       },
       "intrinsic" : {
-         "centerOffX" : 324.37957538430817,
-         "centerOffY" : 222.6340833034254,
-         "focalX" : 556.153682688819,
-         "focalY" : 556.43345704373291,
+         "centerOffX" : 3.2560004211685089e+02,
+         "centerOffY" : 2.2968491492884655e+02,
+         "focalX" : 5.5190352533801286e+02,
+         "focalY" : 5.5018821705824689e+02,
          "fovX" : 60.969999999999999,
          "fovY" : 47.640000000000001
       },
       "subscription" : {
          "cameraName" : "visionTop",
          "colorSpace" : 9,
-         "fps" : 30,
+         "fps" : 15,
          "height" : 480,
          "width" : 640
       }

@@ -15,6 +15,7 @@
 
 class ParticleFilter;
 class LocalizationModule;
+class ObstacleTracker;
 
 /**
  * @class FieldMap
@@ -31,8 +32,10 @@ class FieldMap : public MemoryBase, DebugBase
     (int, sendObstacleMap, 0),
     ///< Draws the particles on the map
     (int, drawParticles, 0),
-    ///< Displays particle map
+    ///< Displays occupancy map as output
     (int, displayOutput, 0),
+    ///< Displays information about the results
+    (int, displayInfo, 0),
   );
 public:
   /**
@@ -78,11 +81,39 @@ private:
    */
   void updateOccupancyMap();
 
+  /**
+   * @brief updateObstacleTrackers Updates the obstacle trackers with
+   *   new obstacle data
+   */
+  void updateObstacleTrackers();
+
+  /**
+   * @brief setupViewVectors Sets up the field of view min-max vectors
+   */
+  void setupViewVectors();
+
+  /**
+   * @brief obstacleInFOV Returns true if the given obstacle is within FOV of robot
+   * @param obsTracker Obstacle
+   * @return boolean
+   */
+  bool obstacleInFOV(const boost::shared_ptr<ObstacleTracker>& obsTracker);
+
   ///< Pointer to localizer
   boost::shared_ptr<ParticleFilter> localizer;
 
   ///< Base matrix for generating occupancy map
   Mat occupancyMapBase;
+
+  ///< The unit vector that represents the minimum field of view angle
+  ///< from the lower camera frame and maximum field of view angle from
+  ///< the upper camera frame
+  vector<Vector3f> unitVecX;
+
+  ///< The unit vector that represents the minimum field of view angle
+  ///< from the lower camera frame and maximum field of view angle from
+  ///< the upper camera frame
+  vector<Vector3f> unitVecY;
 
   //Mat worldImage;
   //Mat mapDrawing;
@@ -95,4 +126,25 @@ private:
 
   ///< Radius of the ball used for obstacle generation
   float ballRadius = {0.05};
+
+  ///< Maximum distance ratio to be considered a match with a previous obstacle
+  float obstacleMatchMaxDistanceRatio = {0.5};
+
+  ///< Maximum possible trackers that can exist
+  unsigned maxObstacleTrackers = {5};
+
+  ///< Refresh time for removing obstacles after prologed periods
+  float refreshTime = {10};
+
+  ///< Refresh time when obstacle is within view but not updated
+  float refreshTimeForObsInFOV = {1};
+
+  ///< Container for tracked obstacles in world
+  vector<boost::shared_ptr<ObstacleTracker>> trackedObstacles;
+
+  ///< Module cycle time
+  float cycleTime = {0.05};
+
+  ///< Pointer to the base localization module
+  LocalizationModule* localizationModule;
 };

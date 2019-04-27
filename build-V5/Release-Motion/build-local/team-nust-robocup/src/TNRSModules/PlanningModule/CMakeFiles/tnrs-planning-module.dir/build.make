@@ -54,15 +54,11 @@ CMAKE_BINARY_DIR = /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-
 # Include any dependencies generated for this target.
 include src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/depend.make
 
-# Include the progress variables for this target.
-include src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/progress.make
-
 # Include the compile flags for this target's objects.
 include src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehavior.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehavior.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehavior.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehavior.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehavior.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehavior.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehavior.cpp.i: cmake_force
@@ -86,7 +82,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningModule.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningModule.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningModule.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningModule.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningModule.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningModule.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningModule.cpp.i: cmake_force
@@ -110,7 +105,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningM
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PBManager.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PBManager.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PBManager.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PBManager.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PBManager.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PBManager.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PBManager.cpp.i: cmake_force
@@ -134,7 +128,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PBManager
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningRequest.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningRequest.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningRequest.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningRequest.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningRequest.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningRequest.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningRequest.cpp.i: cmake_force
@@ -158,7 +151,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningR
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/NavigationBehavior.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/NavigationBehavior.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/NavigationBehavior/NavigationBehavior.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/NavigationBehavior.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/NavigationBehavior.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/NavigationBehavior/NavigationBehavior.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/NavigationBehavior.cpp.i: cmake_force
@@ -182,7 +174,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/GoToTarget.cpp.i: cmake_force
@@ -206,7 +197,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/NavigationBehavior/Types/PlanTowards.cpp.i: cmake_force
@@ -230,7 +220,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/RobotStartup.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/RobotStartup.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/RobotStartup/RobotStartup.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/RobotStartup.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/RobotStartup.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/RobotStartup/RobotStartup.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/RobotStartup.cpp.i: cmake_force
@@ -254,7 +243,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/Types/RequestBehavior.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/Types/RequestBehavior.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/RobotStartup/Types/RequestBehavior.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/Types/RequestBehavior.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/Types/RequestBehavior.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/RobotStartup/Types/RequestBehavior.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/RobotStartup/Types/RequestBehavior.cpp.i: cmake_force
@@ -278,7 +266,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Robocup.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Robocup.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Robocup.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Robocup.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Robocup.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Robocup.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Robocup.cpp.i: cmake_force
@@ -302,7 +289,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Defender.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Defender.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/Defender.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Defender.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Defender.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/Defender.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Defender.cpp.i: cmake_force
@@ -326,7 +312,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Soccer.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Soccer.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/Soccer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Soccer.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Soccer.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/Soccer.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Soccer.cpp.i: cmake_force
@@ -350,7 +335,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupPenalties.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupPenalties.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/RobocupPenalties.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupPenalties.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupPenalties.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/RobocupPenalties.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupPenalties.cpp.i: cmake_force
@@ -374,7 +358,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/GoalKeeper.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/GoalKeeper.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/GoalKeeper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/GoalKeeper.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/GoalKeeper.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/GoalKeeper.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/GoalKeeper.cpp.i: cmake_force
@@ -398,7 +381,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupSetup.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupSetup.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/RobocupSetup.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupSetup.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupSetup.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/RobocupSetup.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/RobocupSetup.cpp.i: cmake_force
@@ -422,7 +404,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Attacker.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Attacker.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/Attacker.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Attacker.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Attacker.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/Robocup/Types/Attacker.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/Robocup/Types/Attacker.cpp.i: cmake_force
@@ -446,7 +427,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/TestSuite.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/TestSuite.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/TestSuite.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/TestSuite.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/TestSuite.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/TestSuite.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/TestSuite.cpp.i: cmake_force
@@ -470,7 +450,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/MotionTestSuite.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/MotionTestSuite.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/Types/MotionTestSuite.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/MotionTestSuite.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/MotionTestSuite.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/Types/MotionTestSuite.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/MotionTestSuite.cpp.i: cmake_force
@@ -494,7 +473,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/LocalizationTestSuite.cpp.i: cmake_force
@@ -518,7 +496,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.cpp.i: cmake_force
@@ -542,7 +519,6 @@ src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningB
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/VisionTestSuite.cpp.o: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/flags.make
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/VisionTestSuite.cpp.o: ../../../../src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/Types/VisionTestSuite.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/VisionTestSuite.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/VisionTestSuite.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/PlanningModule/src/PlanningBehaviors/TestSuite/Types/VisionTestSuite.cpp
 
 src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/src/PlanningBehaviors/TestSuite/Types/VisionTestSuite.cpp.i: cmake_force
@@ -669,7 +645,6 @@ tnrs__planning__module_EXTERNAL_OBJECTS =
 ../../cross/lib/libtnrs-planning-module.so: /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/libnaoqi/lib/libopencv_video.so
 ../../cross/lib/libtnrs-planning-module.so: /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/lib/libpthread.so
 ../../cross/lib/libtnrs-planning-module.so: src/TNRSModules/PlanningModule/CMakeFiles/tnrs-planning-module.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Linking CXX shared library ../../../../../cross/lib/libtnrs-planning-module.so"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/PlanningModule && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tnrs-planning-module.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

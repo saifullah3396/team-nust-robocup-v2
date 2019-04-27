@@ -31,7 +31,7 @@ else
 
   # if install is executed on a installed robot, / is read-only, therefore remount it,
   # otherwise this line will have no effect
-  #mount -n -o remount,rw /
+  mount -n -o remount,rw /
   
   # Change name
   cp ${baseDir}/Robot/hostname /etc/hostname

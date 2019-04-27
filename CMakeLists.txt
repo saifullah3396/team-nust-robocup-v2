@@ -13,14 +13,18 @@ include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources/fftw3/api)
 include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources/qpOASES/include)
 include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources/msgpack/include)
 
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/fftw3)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/jsoncpp)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/nlopt)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/qpOASES)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/RandomLib)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/SbplLib)
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/CameraCalibrator)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/CameraCalibrator)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/Utils)
+
+
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSBase)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/BehaviorManager)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/GameCommModule)
@@ -32,3 +36,4 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/PlanningModule)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/VisionModule)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TNRSModules/LocalizationModule)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/TeamNUSTSPL)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/GameController/src/libgamectrl)

@@ -1,8 +1,8 @@
 {
     "ball" :
     [
-        0.16,
-        -0.05
+        0.14,
+        -0.0554
     ],
     "baseType" : 0,
     "id" : 1,
@@ -11,7 +11,7 @@
     "logData" : true,
     "reqVel" :
     [
-        0.75,
+        0.95,
         0
     ],
     "target" :
@@ -48,5 +48,5 @@
         "timeToReachB" : 1.0,
         "target" : [-0.02, 0.0]
     },
-    "inKickBalance" : true
+    "inKickBalance" : false
 }

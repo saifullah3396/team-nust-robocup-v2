@@ -61,8 +61,10 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
     #-lsymengine
     #-lteuchos
     #-lbfd
+
     #-lgmp
 
+    #-lgmp)
 else()
   add_library (tnrs-motion-module SHARED ${TNRS_MOTION_MODULE_SRC})
   # Linking libraries from the sdk.

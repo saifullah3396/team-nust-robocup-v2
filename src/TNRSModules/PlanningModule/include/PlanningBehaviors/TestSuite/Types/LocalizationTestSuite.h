@@ -68,6 +68,11 @@ private:
   DECLARE_FSM(fsm, LocalizationTestSuite);
 
   /**
+   * @brief OccupancyMapTest Tests the update of occupancy map while observing obstacles
+   */
+  DECLARE_FSM_STATE(LocalizationTestSuite, OccupancyMapTest, occupancyMapTest, onStart, onRun,);
+
+  /**
    * @brief SideLineLocalization Tests localization for robot standing
    *   on sidelines
    */
