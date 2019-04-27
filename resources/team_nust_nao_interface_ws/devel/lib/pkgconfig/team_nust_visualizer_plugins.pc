@@ -1,0 +1,8 @@
+prefix=/home/muptii/Documents/robocup/team-nust-robocup-v2/resources/team_nust_nao_interface_ws/devel
+
+Name: team_nust_visualizer_plugins
+Description: Description of team_nust_visualizer_plugins
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/muptii/Documents/robocup/team-nust-robocup-v2/resources/team_nust_nao_interface_ws/devel/lib 
+Requires: roscpp std_msgs team_nust_msgs

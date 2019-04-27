@@ -213,6 +213,7 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/jsoncpp/include/json/value.h
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/jsoncpp/include/json/version.h
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/jsoncpp/include/json/writer.h
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/msgpack/include/msgpack.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/msgpack/include/msgpack/adaptor/adaptor_base.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/msgpack/include/msgpack/adaptor/adaptor_base_decl.hpp
@@ -755,6 +756,8 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/msgpack/include/msgpack/zone.h
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/msgpack/include/msgpack/zone.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../resources/msgpack/include/msgpack/zone_decl.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../src/TNRSModules/ControlModule/include/ActuatorRequests.h
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../src/TNRSModules/ControlModule/include/HardwareLayer.h
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: ../../../../src/Utils/include/ConfigManager.h
@@ -825,7 +828,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/config/select_platform_config.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/config/select_stdlib_config.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/config/suffix.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/config/warning_disable.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/cstdint.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/current_function.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/date_time/adjust_functors.hpp
@@ -1005,6 +1011,7 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/functional/hash/hash.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/functional/hash/hash_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/functional/hash_fwd.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/adapted/mpl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/adapted/mpl/detail/at_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/adapted/mpl/detail/begin_impl.hpp
@@ -1235,6 +1242,8 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/view/single_view/detail/value_of_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/view/single_view/single_view.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/view/single_view/single_view_iterator.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/get_pointer.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/integer.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/integer/static_log2.hpp
@@ -1258,18 +1267,27 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/iterator/reverse_iterator.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/limits.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/make_shared.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/math/common_factor_ct.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/math/common_factor_rt.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/math_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mem_fn.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/memory_order.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/algorithm.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/core.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/detail/config_begin.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/detail/config_end.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/detail/meta_utils.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/iterator.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/move.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/traits.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/utility.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/O1_size.hpp
@@ -1295,7 +1313,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/arity.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/arity_spec.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/at_impl.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/back_impl.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/begin_end_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/clear_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/common_name_wknd.hpp
@@ -1332,8 +1353,11 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/contains_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/count_args.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/empty_impl.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/erase_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/erase_key_impl.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/find_if_pred.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/fold_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/fold_impl_body.hpp
@@ -1347,15 +1371,21 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/has_tag.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/has_type.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/include_preprocessed.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/insert_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/insert_range_impl.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/inserter_algorithm.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/integral_wrapper.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/is_msvc_eti_arg.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/iter_apply.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/iter_fold_if_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/iter_fold_impl.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/iter_push_front.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/joint_iter.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/lambda_arity_param.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/lambda_no_ctps.hpp
@@ -1377,7 +1407,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/numeric_cast_utils.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/numeric_op.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/overload_names.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/pop_back_impl.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/pop_front_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/preprocessor/add.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/preprocessor/def_params_tail.hpp
@@ -1408,7 +1441,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/unwrap.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/value_wknd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/yes_no.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/back.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/back_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/back_inserter.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/base.hpp
@@ -1431,6 +1467,7 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/distance.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/distance_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/empty.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/empty_base.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/empty_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/end.hpp
@@ -1439,6 +1476,11 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase_key.hpp
+=======
+src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/empty_fwd.hpp
+src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/equal_to.hpp
+src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase_fwd.hpp
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase_key_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/eval_if.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/find.hpp
@@ -1455,11 +1497,15 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/has_xxx.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/identity.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/if.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/inherit.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert_range.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert_range_fwd.hpp
+=======
+src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert_fwd.hpp
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/inserter.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/int.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/int_fwd.hpp
@@ -1480,10 +1526,15 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/less.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/less_equal.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/arity.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/list.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/unrolling.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/vector.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/list.hpp
+=======
+src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/unrolling.hpp
+src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/vector.hpp
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/logical.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/long.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/long_fwd.hpp
@@ -1502,7 +1553,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pair_view.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/placeholders.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/plus.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pop_back.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pop_back_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pop_front.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pop_front_fwd.hpp
@@ -1540,7 +1594,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/size_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/size_t.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/size_t_fwd.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/sizeof.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/tag.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/times.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/transform.hpp
@@ -2148,7 +2205,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/remove_pointer.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/remove_reference.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/remove_volatile.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/same_traits.hpp
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/type_with_alignment.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/typeof/dmc/typeof_impl.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/typeof/encode_decode.hpp
@@ -2182,6 +2242,7 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/detail/in_place_factory_suffix.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/enable_if.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/in_place_factory.hpp
+<<<<<<< Updated upstream
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/result_of.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/string_ref.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/string_ref_fwd.hpp
@@ -2217,6 +2278,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/variant/variant.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/variant/variant_fwd.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/variant/visitor_ptr.hpp
+=======
+src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/swap.hpp
+src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/value_init.hpp
+>>>>>>> Stashed changes
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/version.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/visit_each.hpp
 src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLayer.cpp.o: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/weak_ptr.hpp

@@ -70,7 +70,7 @@ if [ "$TOOLCHAIN" = "" ]; then
   exit 1
 fi
 
-cd $PATH_TO_TEAM_NUST_DIR/Config/Robots/$ROBOT/ImageLogs/$CAM
+cd $PATH_TO_TEAM_NUST_DIR/logs/Robots/$ROBOT/Images/$CAM
 
 ROBOT_NUM=""
 if [ "$ROBOT" = "Nu-11" ]; then
@@ -100,14 +100,26 @@ if [ "$REFRESH" = "y" ]; then
   if [ "$(ls -A . | grep .jpg)" ]; then
     mv *.jpg backup/
   fi
+<<<<<<< Updated upstream
   $PATH_TO_TEAM_NUST_DIR/build-V5/Release-Motion/remote/bin/team-nust-spl --save-images $CAM --robot $ROBOT --pip "192.168.30.""$ROBOT_NUM";
+=======
+  $PATH_TO_TEAM_NUST_DIR/build-V5/Release-Motion/remote/bin/tnrs-module --save-images $CAM --robot $ROBOT --pip "10.0.30.""$ROBOT_NUM";
+>>>>>>> Stashed changes
 fi
 
 if [ "$(ls -A . | grep .jpg)" ]; then
   ls -d "$PWD"/*.jpg > ../../"$CAM"Images.txt 
 else
+<<<<<<< Updated upstream
   echo "No image data found. Please save '.jpg' image files in  the directory $PATH_TO_TEAM_NUST_DIR/logs/Robots/$ROBOT/ImageLogs/$CAM to continue."
   exit 1
 fi
 
 $PATH_TO_TEAM_NUST_DIR/build-$ROBOT_VERSION/Release-Motion/$TOOLCHAIN/bin/camera-calibrator --robot $ROBOT --camera $CAM
+=======
+  echo "No image data found. Please save '.jpg' image files in  the directory $PATH_TO_TEAM_NUST_DIR/logs/Robots/$ROBOT/Images/$CAM to continue."
+  exit 1
+fi
+
+$PATH_TO_TEAM_NUST_DIR/build-V5/Release-Motion/remote/bin/tnrs-camera-calibrator --robot $ROBOT --camera $CAM
+>>>>>>> Stashed changes

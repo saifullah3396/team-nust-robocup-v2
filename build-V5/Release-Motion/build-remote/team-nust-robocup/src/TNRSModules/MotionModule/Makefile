@@ -1371,6 +1371,7 @@ src/MovementModule/Types/NaoqiFootsteps.cpp.s:
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/build.make src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.s
 .PHONY : src/MovementModule/Types/NaoqiFootsteps.cpp.s
 
+<<<<<<< Updated upstream
 src/MovementModule/Types/NaoqiMoveTo.o: src/MovementModule/Types/NaoqiMoveTo.cpp.o
 
 .PHONY : src/MovementModule/Types/NaoqiMoveTo.o
@@ -1398,6 +1399,8 @@ src/MovementModule/Types/NaoqiMoveTo.cpp.s:
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/build.make src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.s
 .PHONY : src/MovementModule/Types/NaoqiMoveTo.cpp.s
 
+=======
+>>>>>>> Stashed changes
 src/MovementModule/Types/NaoqiMoveToward.o: src/MovementModule/Types/NaoqiMoveToward.cpp.o
 
 .PHONY : src/MovementModule/Types/NaoqiMoveToward.o
@@ -1922,9 +1925,12 @@ help:
 	@echo "... src/MovementModule/Types/NaoqiFootsteps.o"
 	@echo "... src/MovementModule/Types/NaoqiFootsteps.i"
 	@echo "... src/MovementModule/Types/NaoqiFootsteps.s"
+<<<<<<< Updated upstream
 	@echo "... src/MovementModule/Types/NaoqiMoveTo.o"
 	@echo "... src/MovementModule/Types/NaoqiMoveTo.i"
 	@echo "... src/MovementModule/Types/NaoqiMoveTo.s"
+=======
+>>>>>>> Stashed changes
 	@echo "... src/MovementModule/Types/NaoqiMoveToward.o"
 	@echo "... src/MovementModule/Types/NaoqiMoveToward.i"
 	@echo "... src/MovementModule/Types/NaoqiMoveToward.s"

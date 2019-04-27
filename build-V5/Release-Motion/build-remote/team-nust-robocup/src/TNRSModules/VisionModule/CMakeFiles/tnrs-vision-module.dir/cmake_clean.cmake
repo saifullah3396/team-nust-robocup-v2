@@ -6,7 +6,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/tnrs-vision-module.dir/src/VisionRequest.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallExtraction.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallTracker.cpp.o"
+<<<<<<< Updated upstream
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.o"
+=======
+>>>>>>> Stashed changes
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedRegion.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionSegmentation.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.o"

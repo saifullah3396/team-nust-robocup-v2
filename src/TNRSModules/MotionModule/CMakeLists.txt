@@ -57,11 +57,20 @@ if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
     libtnrs-behavior-manager.so
     -lnlopt
     -ljsoncpp
+<<<<<<< Updated upstream
     -lqpOASES)
     #-lsymengine
     #-lteuchos
     #-lbfd
     #-lgmp)
+=======
+    -lqpOASES
+   # -lsymengine
+   # -lteuchos
+   # -lbfd
+   # -lgmp
+)
+>>>>>>> Stashed changes
 else()
   add_library (tnrs-motion-module SHARED ${TNRS_MOTION_MODULE_SRC})
   # Linking libraries from the sdk.

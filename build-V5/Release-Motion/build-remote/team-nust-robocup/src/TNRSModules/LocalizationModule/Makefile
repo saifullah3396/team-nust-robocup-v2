@@ -264,6 +264,7 @@ src/LocalizationRequest.cpp.s:
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build.make src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.s
 .PHONY : src/LocalizationRequest.cpp.s
 
+<<<<<<< Updated upstream
 src/ObstacleTracker.o: src/ObstacleTracker.cpp.o
 
 .PHONY : src/ObstacleTracker.o
@@ -291,6 +292,8 @@ src/ObstacleTracker.cpp.s:
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build.make src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.s
 .PHONY : src/ObstacleTracker.cpp.s
 
+=======
+>>>>>>> Stashed changes
 src/Particle.o: src/Particle.cpp.o
 
 .PHONY : src/Particle.o
@@ -368,9 +371,12 @@ help:
 	@echo "... src/LocalizationRequest.o"
 	@echo "... src/LocalizationRequest.i"
 	@echo "... src/LocalizationRequest.s"
+<<<<<<< Updated upstream
 	@echo "... src/ObstacleTracker.o"
 	@echo "... src/ObstacleTracker.i"
 	@echo "... src/ObstacleTracker.s"
+=======
+>>>>>>> Stashed changes
 	@echo "... src/Particle.o"
 	@echo "... src/Particle.i"
 	@echo "... src/Particle.s"

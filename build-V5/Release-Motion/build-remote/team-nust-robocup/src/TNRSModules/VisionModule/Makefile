@@ -507,6 +507,7 @@ src/FeatureExtraction/RobotExtraction.cpp.s:
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/build.make src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.s
 .PHONY : src/FeatureExtraction/RobotExtraction.cpp.s
 
+<<<<<<< Updated upstream
 src/FeatureExtraction/RobotTracker.o: src/FeatureExtraction/RobotTracker.cpp.o
 
 .PHONY : src/FeatureExtraction/RobotTracker.o
@@ -534,6 +535,8 @@ src/FeatureExtraction/RobotTracker.cpp.s:
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup && $(MAKE) -f src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/build.make src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.s
 .PHONY : src/FeatureExtraction/RobotTracker.cpp.s
 
+=======
+>>>>>>> Stashed changes
 src/FeatureExtraction/ScannedEdge.o: src/FeatureExtraction/ScannedEdge.cpp.o
 
 .PHONY : src/FeatureExtraction/ScannedEdge.o
@@ -692,9 +695,12 @@ help:
 	@echo "... src/FeatureExtraction/RobotExtraction.o"
 	@echo "... src/FeatureExtraction/RobotExtraction.i"
 	@echo "... src/FeatureExtraction/RobotExtraction.s"
+<<<<<<< Updated upstream
 	@echo "... src/FeatureExtraction/RobotTracker.o"
 	@echo "... src/FeatureExtraction/RobotTracker.i"
 	@echo "... src/FeatureExtraction/RobotTracker.s"
+=======
+>>>>>>> Stashed changes
 	@echo "... src/FeatureExtraction/ScannedEdge.o"
 	@echo "... src/FeatureExtraction/ScannedEdge.i"
 	@echo "... src/FeatureExtraction/ScannedEdge.s"

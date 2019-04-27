@@ -1,5 +1,8 @@
 file(REMOVE_RECURSE
+<<<<<<< Updated upstream
   "CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o"
+=======
+>>>>>>> Stashed changes
   "CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o"
   "CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.o"
   "CMakeFiles/tnrs-localization-module.dir/src/LocalizationModule.cpp.o"

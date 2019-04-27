@@ -2,7 +2,11 @@ include $(PATH_TO_TEAM_NUST_DIR)/make/common.mk
 .PHONY: clean configure install
 
 interface:
+<<<<<<< Updated upstream
 	catkin_make -C $(PATH_TO_TEAM_NUST_DIR)/resources/team_nust_nao_interface_ws -j4 -DROBOT_VERSION=$(ROBOT_VERSION) -DCATKIN_DEVEL_PREFIX=$(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)
+=======
+	catkin_make -C $(PATH_TO_TEAM_NUST_DIR)/resources/team_nust_nao_interface_ws -j4
+>>>>>>> Stashed changes
 
 configure:
 	@if [ "$(strip $(CONFFLAGS))" = "" ]; then\
@@ -16,7 +20,12 @@ install:
 		echo "Please define either CROSS=<cross toolchain name>, REMOTE=<remote toolchain name> or SIMULATION=<sim toolchain name> to continue)";\
 		exit 1; \
 	fi
+<<<<<<< Updated upstream
         qibuild make $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)
+=======
+	qibuild make $(TOOLCHAIN_FLAG) --build-prefix $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX) -j4
+
+>>>>>>> Stashed changes
 clean:
 	ifdef CROSS
 		rm -rf $(PATH_TO_TEAM_NUST_DIR)/build-$(ROBOT_VERSION)/$(BUILD_PREFIX)/cross

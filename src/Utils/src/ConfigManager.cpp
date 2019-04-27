@@ -71,6 +71,12 @@ void ConfigManager::setDirPaths(const string& robotDir)
   mbConfigsDirPath = configDirPath + "BehaviorConfigs/MBConfigs/";
   gbConfigsDirPath = configDirPath + "BehaviorConfigs/GBConfigs/";
   robotDirPath = configDirPath + robotDir;
+  if (!boost::filesystem::exists(logsDirPath)) {
+    boost::filesystem::create_directory(logsDirPath);
+  }
+  if (!boost::filesystem::exists(logsDirPath + "Robots")) {
+    boost::filesystem::create_directory(logsDirPath + "Robots");
+  }
   logsDirPath = logsDirPath + robotDir;
 }
 

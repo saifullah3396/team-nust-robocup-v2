@@ -10,7 +10,7 @@
 #include "Utils/include/PrintUtils.h"
 #include "Utils/include/ConfigManager.h"
 
-string PrintUtils::fileName = ConfigManager::getLogsDirPath() + "Output.txt";
+string PrintUtils::fileName;
 fstream PrintUtils::mainLog;
 std::stringstream PrintUtils::stream;
 pthread_mutex_t PrintUtils::printMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -38,11 +38,12 @@ void PrintUtils::startSendingOutputOverNetwork() {
 void PrintUtils::addMessage(const std::stringstream& stream) {
   if (!sendOutputOverNetwork) {
     //#ifndef MODULE_IS_LOCAL_SIMULATED
-    cout << stream.str();
+    //cout << stream.str();
     //#endif
     if (mainLog.is_open()) {
       mainLog << stream.str();
     } else {
+      fileName = ConfigManager::getLogsDirPath() + "Output.txt";
       mainLog.open(fileName, std::ofstream::out | std::ofstream::trunc);
       mainLog << stream.str();
     }

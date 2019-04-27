@@ -1,0 +1,33 @@
+(cl:defpackage team_nust_msgs-msg
+  (:use )
+  (:export
+   "<OBSTACLE>"
+   "OBSTACLE"
+   "<TEAMROBOT>"
+   "TEAMROBOT"
+   "<BEHAVIORINFO>"
+   "BEHAVIORINFO"
+   "<GOALINFO>"
+   "GOALINFO"
+   "<OBSLANDMARKS>"
+   "OBSLANDMARKS"
+   "<SENSORSTATE>"
+   "SENSORSTATE"
+   "<TEAMINFO>"
+   "TEAMINFO"
+   "<BALLINFO>"
+   "BALLINFO"
+   "<LANDMARK>"
+   "LANDMARK"
+   "<TEAMNUSTSTATE>"
+   "TEAMNUSTSTATE"
+   "<JOINTINFO>"
+   "JOINTINFO"
+   "<LOCALIZATIONSTATE>"
+   "LOCALIZATIONSTATE"
+   "<OBSOBSTACLES>"
+   "OBSOBSTACLES"
+   "<STEPTARGETARR>"
+   "STEPTARGETARR"
+  ))
+

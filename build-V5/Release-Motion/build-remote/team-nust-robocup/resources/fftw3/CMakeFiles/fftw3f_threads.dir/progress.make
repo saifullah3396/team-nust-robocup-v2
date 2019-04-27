@@ -1,5 +1,9 @@
 CMAKE_PROGRESS_1 = 
+<<<<<<< Updated upstream
 CMAKE_PROGRESS_2 = 80
+=======
+CMAKE_PROGRESS_2 = 
+>>>>>>> Stashed changes
 CMAKE_PROGRESS_3 = 
 CMAKE_PROGRESS_4 = 
 CMAKE_PROGRESS_5 = 

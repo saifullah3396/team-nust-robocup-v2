@@ -218,6 +218,22 @@ fftw3f/preinstall:
 .PHONY : fftw3f/preinstall
 
 #=============================================================================
+<<<<<<< Updated upstream
+=======
+# Target rules for targets named tnrs-camera-calibrator
+
+# Build rule for target.
+tnrs-camera-calibrator: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tnrs-camera-calibrator
+.PHONY : tnrs-camera-calibrator
+
+# fast build rule for target.
+tnrs-camera-calibrator/fast:
+	$(MAKE) -f resources/CameraCalibrator/CMakeFiles/tnrs-camera-calibrator.dir/build.make resources/CameraCalibrator/CMakeFiles/tnrs-camera-calibrator.dir/build
+.PHONY : tnrs-camera-calibrator/fast
+
+#=============================================================================
+>>>>>>> Stashed changes
 # Target rules for targets named ContinuousSubmit
 
 # Build rule for target.
@@ -1072,6 +1088,7 @@ tnrs-module/fast:
 	$(MAKE) -f src/TeamNUSTSPL/CMakeFiles/tnrs-module.dir/build.make src/TeamNUSTSPL/CMakeFiles/tnrs-module.dir/build
 .PHONY : tnrs-module/fast
 
+<<<<<<< Updated upstream
 #=============================================================================
 # Target rules for targets named gamectrl
 
@@ -1085,6 +1102,8 @@ gamectrl/fast:
 	$(MAKE) -f src/GameController/src/libgamectrl/CMakeFiles/gamectrl.dir/build.make src/GameController/src/libgamectrl/CMakeFiles/gamectrl.dir/build
 .PHONY : gamectrl/fast
 
+=======
+>>>>>>> Stashed changes
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1101,6 +1120,10 @@ help:
 	@echo "... bench"
 	@echo "... fftw3f_threads"
 	@echo "... fftw3f"
+<<<<<<< Updated upstream
+=======
+	@echo "... tnrs-camera-calibrator"
+>>>>>>> Stashed changes
 	@echo "... ContinuousSubmit"
 	@echo "... ContinuousCoverage"
 	@echo "... ContinuousTest"
@@ -1166,7 +1189,10 @@ help:
 	@echo "... tnrs-vision-module"
 	@echo "... tnrs-localization-module"
 	@echo "... tnrs-module"
+<<<<<<< Updated upstream
 	@echo "... gamectrl"
+=======
+>>>>>>> Stashed changes
 .PHONY : help
 
 

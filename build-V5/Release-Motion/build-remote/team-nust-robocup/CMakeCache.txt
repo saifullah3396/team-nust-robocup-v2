@@ -416,8 +416,11 @@ ENABLE_SSE2:BOOL=ON
 //Use pthread for multithreading
 ENABLE_THREADS:BOOL=ON
 
+<<<<<<< Updated upstream
 GAMECTRL_DEPENDS:STRING=ALCOMMON;ALVALUE;ALERROR;QIMESSAGING;QITYPE;BOOST_DATE_TIME;BOOST_SIGNALS;RTTOOLS;QI;BOOST_CHRONO;BOOST_FILESYSTEM;BOOST_SYSTEM;BOOST_PROGRAM_OPTIONS;BOOST_REGEX;BOOST_LOCALE;BOOST_THREAD;PTHREAD;RT;DL;BOOST
 
+=======
+>>>>>>> Stashed changes
 //Path to a program.
 GITCOMMAND:FILEPATH=/usr/bin/git
 
@@ -667,9 +670,12 @@ SLURM_SRUN_COMMAND:FILEPATH=SLURM_SRUN_COMMAND-NOTFOUND
 //Path to a program.
 SVNCOMMAND:FILEPATH=/usr/bin/svn
 
+<<<<<<< Updated upstream
 //Path to a library.
 TENSORFLOW_LIBRARY:FILEPATH=/home/muptii/Documents/robocup/team-nust-robocup-v2/resources/tensorflow/lib/libtensorflow-lite.a
 
+=======
+>>>>>>> Stashed changes
 //Thread local keyword
 THREADLOCAL:STRING=__thread
 
@@ -677,6 +683,11 @@ TNRS-BASE_DEPENDS:STRING=BOOST;BOOST_SYSTEM;OPENCV2_CORE;ZLIB;PTHREAD;V4L
 
 TNRS-BEHAVIOR-MANAGER_DEPENDS:STRING=BOOST;OPENCV2_CORE;ZLIB
 
+<<<<<<< Updated upstream
+=======
+TNRS-CAMERA-CALIBRATOR_DEPENDS:STRING=OPENCV2_HIGHGUI;OPENCV2_IMGPROC;OPENCV2_CALIB3D;OPENCV2_OBJDETECT;OPENCV2_VIDEO;OPENCV2_FEATURES2D;OPENCV2_FLANN;OPENCV2_CORE;ZLIB
+
+>>>>>>> Stashed changes
 TNRS-CONTROL-MODULE_DEPENDS:STRING=ALPROXIES;ALCOMMON;BOOST_SIGNALS;RTTOOLS;ALVALUE;ALERROR;QIMESSAGING;QITYPE;QI;BOOST_CHRONO;BOOST_FILESYSTEM;BOOST_PROGRAM_OPTIONS;BOOST_REGEX;DL;RT;BOOST;BOOST_DATE_TIME;BOOST_SYSTEM;BOOST_LOCALE;BOOST_THREAD;PTHREAD
 
 TNRS-GAME-COMM-MODULE_DEPENDS:STRING=BOOST;OPENCV2_CORE;ZLIB
@@ -754,6 +765,7 @@ fftw_BINARY_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/build
 //Value Computed by CMake
 fftw_SOURCE_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/resources/fftw3
 
+<<<<<<< Updated upstream
 //Value Computed by CMake
 gamectrl_BINARY_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/GameController/src/libgamectrl
 
@@ -763,6 +775,8 @@ gamectrl_LIB_DEPENDS:STATIC=general;/home/muptii/Documents/robocup/naoqi-sdk-2.1
 //Value Computed by CMake
 gamectrl_SOURCE_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/src/GameController/src/libgamectrl
 
+=======
+>>>>>>> Stashed changes
 //Dependencies for target
 jsoncpp_lib_LIB_DEPENDS:STATIC=
 
@@ -824,6 +838,15 @@ tnrs-behavior-manager_LIB_DEPENDS:STATIC=general;/home/muptii/Documents/robocup/
 tnrs-behavior-manager_SOURCE_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/src/BehaviorManager
 
 //Value Computed by CMake
+<<<<<<< Updated upstream
+=======
+tnrs-camera-calibrator_BINARY_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator
+
+//Value Computed by CMake
+tnrs-camera-calibrator_SOURCE_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/resources/CameraCalibrator
+
+//Value Computed by CMake
+>>>>>>> Stashed changes
 tnrs-control-module_BINARY_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/ControlModule
 
 //Dependencies for the target
@@ -923,7 +946,11 @@ tnrs-utils_SOURCE_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2
 tnrs-vision-module_BINARY_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule
 
 //Dependencies for the target
+<<<<<<< Updated upstream
 tnrs-vision-module_LIB_DEPENDS:STATIC=general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_iostreams.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalvision.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalextractor.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalthread.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalproxies.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalcommon.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_signals.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/librttools.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalvalue.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalerror.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libqimessaging.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libqitype.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libqi.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_chrono.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_filesystem.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_program_options.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_regex.so;general;/usr/lib/x86_64-linux-gnu/libdl.so;general;/usr/lib/x86_64-linux-gnu/librt.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_date_time.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_system.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_locale.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_thread.so;general;-lpthread;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_highgui.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_imgproc.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_calib3d.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_objdetect.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_video.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_features2d.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_flann.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_core.so;optimized;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libz.so;debug;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libz.so;general;/usr/lib/x86_64-linux-gnu/libv4l1.so;general;/usr/lib/x86_64-linux-gnu/libv4l2.so;general;/usr/lib/x86_64-linux-gnu/libv4lconvert.so;general;-lfftw3;general;-lfftw3f;general;-lm;general;-llapack;general;-lpthread;general;-ldl;general;/home/muptii/Documents/robocup/team-nust-robocup-v2/resources/tensorflow/lib/libtensorflow-lite.a;general;libtnrs-utils.so;general;libtnrs-base.so;general;libtnrs-user-comm-module.so;general;libtnrs-behavior-manager.so;
+=======
+tnrs-vision-module_LIB_DEPENDS:STATIC=general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_iostreams.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalvision.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalextractor.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalthread.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalproxies.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalcommon.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_signals.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/librttools.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalvalue.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libalerror.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libqimessaging.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libqitype.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libqi.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_chrono.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_filesystem.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_program_options.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_regex.so;general;/usr/lib/x86_64-linux-gnu/libdl.so;general;/usr/lib/x86_64-linux-gnu/librt.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_date_time.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_system.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_locale.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_thread.so;general;-lpthread;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_highgui.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_imgproc.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_calib3d.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_objdetect.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_video.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_features2d.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_flann.so;general;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libopencv_core.so;optimized;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libz.so;debug;/home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libz.so;general;/usr/lib/x86_64-linux-gnu/libv4l1.so;general;/usr/lib/x86_64-linux-gnu/libv4l2.so;general;/usr/lib/x86_64-linux-gnu/libv4lconvert.so;general;-lfftw3;general;-lfftw3f;general;-lm;general;-llapack;general;-lpthread;general;-ldl;general;libtnrs-utils.so;general;libtnrs-base.so;general;libtnrs-user-comm-module.so;general;libtnrs-behavior-manager.so;
+>>>>>>> Stashed changes
 
 //Value Computed by CMake
 tnrs-vision-module_SOURCE_DIR:STATIC=/home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule
@@ -1238,8 +1265,11 @@ DL_PACKAGE_FOUND:INTERNAL=TRUE
 DL_SEARCHED:INTERNAL=TRUE
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+<<<<<<< Updated upstream
 //ADVANCED property for variable: GAMECTRL_DEPENDS
 GAMECTRL_DEPENDS-ADVANCED:INTERNAL=1
+=======
+>>>>>>> Stashed changes
 //ADVANCED property for variable: GITCOMMAND
 GITCOMMAND-ADVANCED:INTERNAL=1
 //Have symbol alloca
@@ -1563,6 +1593,11 @@ SYSTEM_HAS_CXX:INTERNAL=1
 TNRS-BASE_DEPENDS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: TNRS-BEHAVIOR-MANAGER_DEPENDS
 TNRS-BEHAVIOR-MANAGER_DEPENDS-ADVANCED:INTERNAL=1
+<<<<<<< Updated upstream
+=======
+//ADVANCED property for variable: TNRS-CAMERA-CALIBRATOR_DEPENDS
+TNRS-CAMERA-CALIBRATOR_DEPENDS-ADVANCED:INTERNAL=1
+>>>>>>> Stashed changes
 //ADVANCED property for variable: TNRS-CONTROL-MODULE_DEPENDS
 TNRS-CONTROL-MODULE_DEPENDS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: TNRS-GAME-COMM-MODULE_DEPENDS

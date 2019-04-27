@@ -18,5 +18,9 @@ CMAKE_PROGRESS_17 =
 CMAKE_PROGRESS_18 = 
 CMAKE_PROGRESS_19 = 
 CMAKE_PROGRESS_20 = 
+<<<<<<< Updated upstream
 CMAKE_PROGRESS_21 = 
+=======
+CMAKE_PROGRESS_21 = 95
+>>>>>>> Stashed changes
 

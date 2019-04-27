@@ -14,6 +14,10 @@ include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources/qpOASES/include)
 include_directories($ENV{PATH_TO_TEAM_NUST_DIR}/resources/msgpack/include)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/fftw3)
+<<<<<<< Updated upstream
+=======
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/CameraCalibrator)
+>>>>>>> Stashed changes
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/jsoncpp)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/nlopt)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/resources/qpOASES)

@@ -6413,8 +6413,11 @@ Utils/include/SwitchRequest.h
 ../../../../src/TNRSModules/LocalizationModule/include/Utils/include/SwitchRequest.h
 Utils/include/DataHolders/PositionInput.h
 ../../../../src/TNRSModules/LocalizationModule/include/Utils/include/DataHolders/PositionInput.h
+<<<<<<< Updated upstream
 Utils/include/DataHolders/VelocityInput.h
 ../../../../src/TNRSModules/LocalizationModule/include/Utils/include/DataHolders/VelocityInput.h
+=======
+>>>>>>> Stashed changes
 Utils/include/DataHolders/Landmark.h
 ../../../../src/TNRSModules/LocalizationModule/include/Utils/include/DataHolders/Landmark.h
 
@@ -6574,10 +6577,13 @@ MotionModule/include/MotionRequest.h
 ControlModule/include/LolaRequest.h
 ../../../../src/TNRSModules/MotionModule/include/ControlModule/include/LolaRequest.h
 
+<<<<<<< Updated upstream
 ../../../../src/TNRSModules/MotionModule/include/KickModule/FootContours.h
 MotionModule/include/MTypeHeader.h
 ../../../../src/TNRSModules/MotionModule/include/KickModule/MotionModule/include/MTypeHeader.h
 
+=======
+>>>>>>> Stashed changes
 ../../../../src/TNRSModules/MotionModule/include/KickModule/KickFootMap.h
 Utils/include/HardwareIds.h
 ../../../../src/TNRSModules/MotionModule/include/KickModule/Utils/include/HardwareIds.h
@@ -27391,8 +27397,11 @@ MotionModule/include/KickModule/Types/CSpaceBSplineKick.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/MotionModule/include/KickModule/Types/CSpaceBSplineKick.h
 MotionModule/include/KickModule/KickFootMap.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/MotionModule/include/KickModule/KickFootMap.h
+<<<<<<< Updated upstream
 MotionModule/include/KickModule/FootContours.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/MotionModule/include/KickModule/FootContours.h
+=======
+>>>>>>> Stashed changes
 MotionModule/include/BalanceModule/BalanceDefinitions.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/MotionModule/include/BalanceModule/BalanceDefinitions.h
 BehaviorConfigs/include/MBConfigs/MBBalanceConfig.h
@@ -27401,8 +27410,11 @@ BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
 BehaviorConfigs/include/MBConfigs/MBKickConfig.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/BehaviorConfigs/include/MBConfigs/MBKickConfig.h
+<<<<<<< Updated upstream
 Utils/include/AngleDefinitions.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/Utils/include/AngleDefinitions.h
+=======
+>>>>>>> Stashed changes
 Utils/include/ConfigMacros.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/Utils/include/ConfigMacros.h
 Utils/include/Constants.h
@@ -27427,8 +27439,11 @@ MotionModule/include/KickModule/MaxMomentumEEOpt.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/MotionModule/include/KickModule/MaxMomentumEEOpt.h
 MotionModule/include/KickModule/KickModule.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/MotionModule/include/KickModule/KickModule.h
+<<<<<<< Updated upstream
 Utils/include/PrintUtils.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/Utils/include/PrintUtils.h
+=======
+>>>>>>> Stashed changes
 
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/Types/CSpaceBSplineKick.cpp
 MotionModule/include/KickModule/Types/CSpaceBSplineKick.h
@@ -27545,8 +27560,11 @@ Utils/include/Splines/CubicSpline.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/Types/Utils/include/Splines/CubicSpline.h
 Utils/include/ConfigMacros.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/Types/Utils/include/ConfigMacros.h
+<<<<<<< Updated upstream
 Utils/include/Constants.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/Types/Utils/include/Constants.h
+=======
+>>>>>>> Stashed changes
 Utils/include/JsonLogger.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/KickModule/Types/Utils/include/JsonLogger.h
 Utils/include/PlotEnv.h
@@ -27982,6 +28000,7 @@ Utils/include/MathsUtils.h
 Utils/include/PathPlanner/State.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/Utils/include/PathPlanner/State.h
 
+<<<<<<< Updated upstream
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiMoveTo.cpp
 
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiMoveToward.cpp
@@ -27989,16 +28008,26 @@ BehaviorConfigs/include/MBConfigs/MBMovementConfig.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/BehaviorConfigs/include/MBConfigs/MBMovementConfig.h
 BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
+=======
+/home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiMoveToward.cpp
+>>>>>>> Stashed changes
 MotionModule/include/MotionModule.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/MotionModule/include/MotionModule.h
 MotionModule/include/MovementModule/Types/NaoqiMoveToward.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/MotionModule/include/MovementModule/Types/NaoqiMoveToward.h
 TNRSBase/include/MemoryIOMacros.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/TNRSBase/include/MemoryIOMacros.h
+<<<<<<< Updated upstream
 LocalizationModule/include/LocalizationRequest.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/LocalizationModule/include/LocalizationRequest.h
 Utils/include/Constants.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/Utils/include/Constants.h
+=======
+BehaviorConfigs/include/MBConfigs/MBMovementConfig.h
+/home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/BehaviorConfigs/include/MBConfigs/MBMovementConfig.h
+BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
+/home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/BehaviorConfigs/include/MBConfigs/MBPostureConfig.h
+>>>>>>> Stashed changes
 
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/SpeedWalk.cpp
 BehaviorManager/include/StateMachine.h

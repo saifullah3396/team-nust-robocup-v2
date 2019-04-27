@@ -58,6 +58,10 @@ set(CMAKE_MAKEFILE_DEPENDS
   "dependencies.cmake"
   "resources/nlopt/fpclassify.c"
   "../../../../make/cmake/common.cmake"
+<<<<<<< Updated upstream
+=======
+  "../../../../resources/CameraCalibrator/CMakeLists.txt"
+>>>>>>> Stashed changes
   "../../../../resources/RandomLib/CMakeLists.txt"
   "../../../../resources/SbplLib/CMakeLists.txt"
   "../../../../resources/fftw3/CMakeLists.txt"
@@ -78,7 +82,10 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../../../../resources/nlopt/api/nlopt.h"
   "../../../../resources/qpOASES/CMakeLists.txt"
   "../../../../src/BehaviorManager/CMakeLists.txt"
+<<<<<<< Updated upstream
   "../../../../src/GameController/src/libgamectrl/CMakeLists.txt"
+=======
+>>>>>>> Stashed changes
   "../../../../src/TNRSBase/CMakeLists.txt"
   "../../../../src/TNRSModules/ControlModule/CMakeLists.txt"
   "../../../../src/TNRSModules/GBModule/CMakeLists.txt"
@@ -184,6 +191,10 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "resources/fftw3/CMakeFiles/CMakeDirectoryInformation.cmake"
+<<<<<<< Updated upstream
+=======
+  "resources/CameraCalibrator/CMakeFiles/CMakeDirectoryInformation.cmake"
+>>>>>>> Stashed changes
   "resources/jsoncpp/CMakeFiles/CMakeDirectoryInformation.cmake"
   "resources/jsoncpp/src/CMakeFiles/CMakeDirectoryInformation.cmake"
   "resources/jsoncpp/src/lib_json/CMakeFiles/CMakeDirectoryInformation.cmake"
@@ -206,7 +217,10 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "src/TNRSModules/VisionModule/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/TNRSModules/LocalizationModule/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/TeamNUSTSPL/CMakeFiles/CMakeDirectoryInformation.cmake"
+<<<<<<< Updated upstream
   "src/GameController/src/libgamectrl/CMakeFiles/CMakeDirectoryInformation.cmake"
+=======
+>>>>>>> Stashed changes
   )
 
 # Dependency information for all targets:
@@ -214,6 +228,10 @@ set(CMAKE_DEPEND_INFO_FILES
   "resources/fftw3/CMakeFiles/bench.dir/DependInfo.cmake"
   "resources/fftw3/CMakeFiles/fftw3f_threads.dir/DependInfo.cmake"
   "resources/fftw3/CMakeFiles/fftw3f.dir/DependInfo.cmake"
+<<<<<<< Updated upstream
+=======
+  "resources/CameraCalibrator/CMakeFiles/tnrs-camera-calibrator.dir/DependInfo.cmake"
+>>>>>>> Stashed changes
   "resources/jsoncpp/CMakeFiles/ContinuousSubmit.dir/DependInfo.cmake"
   "resources/jsoncpp/CMakeFiles/ContinuousCoverage.dir/DependInfo.cmake"
   "resources/jsoncpp/CMakeFiles/ContinuousTest.dir/DependInfo.cmake"
@@ -279,5 +297,8 @@ set(CMAKE_DEPEND_INFO_FILES
   "src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/DependInfo.cmake"
   "src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/DependInfo.cmake"
   "src/TeamNUSTSPL/CMakeFiles/tnrs-module.dir/DependInfo.cmake"
+<<<<<<< Updated upstream
   "src/GameController/src/libgamectrl/CMakeFiles/gamectrl.dir/DependInfo.cmake"
+=======
+>>>>>>> Stashed changes
   )

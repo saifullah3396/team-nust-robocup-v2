@@ -4672,6 +4672,7 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../resources/jsoncpp/include/json/value.h
  ../../../../resources/jsoncpp/include/json/version.h
  ../../../../resources/jsoncpp/include/json/writer.h
+<<<<<<< Updated upstream
  ../../../../resources/tensorflow/flatbuffers/base.h
  ../../../../resources/tensorflow/flatbuffers/flatbuffers.h
  ../../../../resources/tensorflow/flatbuffers/stl_emulation.h
@@ -4694,6 +4695,8 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../resources/tensorflow/lite/stderr_reporter.h
  ../../../../resources/tensorflow/lite/string.h
  ../../../../resources/tensorflow/lite/util.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSBase/include/BaseIncludes.h
  ../../../../src/TNRSBase/include/BaseModule.h
  ../../../../src/TNRSBase/include/ConnectorMacro.h
@@ -4715,20 +4718,27 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/FieldExtraction.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RegionScanners.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RegionSegmentation.h
+<<<<<<< Updated upstream
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotExtraction.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotRegion.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotTracker.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedLine.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedRegion.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtractionIds.h
  ../../../../src/TNRSModules/VisionModule/include/VisionExceptions.h
  ../../../../src/TNRSModules/VisionModule/include/VisionModule.h
+<<<<<<< Updated upstream
  ../../../../src/Utils/include/AngleDefinitions.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/Utils/include/ConfigMacros.h
  ../../../../src/Utils/include/ConfigManager.h
  ../../../../src/Utils/include/DataHolders/BallInfo.h
  ../../../../src/Utils/include/DataHolders/DataHeader.h
  ../../../../src/Utils/include/DataHolders/DataHolder.h
+<<<<<<< Updated upstream
  ../../../../src/Utils/include/DataHolders/ObstacleType.h
  ../../../../src/Utils/include/DataUtils.h
  ../../../../src/Utils/include/DebugUtils.h
@@ -4736,6 +4746,11 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/Utils/include/Exceptions/TNRSException.h
  ../../../../src/Utils/include/Filters/KalmanFilter.h
  ../../../../src/Utils/include/Filters/ProcessModel.h
+=======
+ ../../../../src/Utils/include/DataUtils.h
+ ../../../../src/Utils/include/EnumUtils.h
+ ../../../../src/Utils/include/Exceptions/TNRSException.h
+>>>>>>> Stashed changes
  ../../../../src/Utils/include/HardwareIds.h
  ../../../../src/Utils/include/JsonUtils.h
  ../../../../src/Utils/include/MathsUtils.h
@@ -11022,7 +11037,10 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RegionSegmentation.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotExtraction.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotRegion.h
+<<<<<<< Updated upstream
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotTracker.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedLine.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedRegion.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtractionIds.h
@@ -11037,10 +11055,14 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/Utils/include/DataHolders/ObstacleType.h
  ../../../../src/Utils/include/DataHolders/RobotPose2D.h
  ../../../../src/Utils/include/DataUtils.h
+<<<<<<< Updated upstream
  ../../../../src/Utils/include/DebugUtils.h
  ../../../../src/Utils/include/EnumUtils.h
  ../../../../src/Utils/include/Filters/KalmanFilter.h
  ../../../../src/Utils/include/Filters/ProcessModel.h
+=======
+ ../../../../src/Utils/include/EnumUtils.h
+>>>>>>> Stashed changes
  ../../../../src/Utils/include/HardwareIds.h
  ../../../../src/Utils/include/JsonUtils.h
  ../../../../src/Utils/include/MathsUtils.h
@@ -12322,7 +12344,10 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../resources/Eigen/LU
  ../../../../resources/Eigen/QR
  ../../../../resources/Eigen/SVD
+<<<<<<< Updated upstream
  ../../../../resources/Eigen/StdVector
+=======
+>>>>>>> Stashed changes
  ../../../../resources/Eigen/src/Cholesky/LDLT.h
  ../../../../resources/Eigen/src/Cholesky/LLT.h
  ../../../../resources/Eigen/src/Cholesky/LLT_MKL.h
@@ -12504,8 +12529,11 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../resources/Eigen/src/SVD/JacobiSVD.h
  ../../../../resources/Eigen/src/SVD/JacobiSVD_MKL.h
  ../../../../resources/Eigen/src/SVD/UpperBidiagonalization.h
+<<<<<<< Updated upstream
  ../../../../resources/Eigen/src/StlSupport/StdVector.h
  ../../../../resources/Eigen/src/StlSupport/details.h
+=======
+>>>>>>> Stashed changes
  ../../../../resources/Eigen/src/misc/Image.h
  ../../../../resources/Eigen/src/misc/Kernel.h
  ../../../../resources/Eigen/src/misc/Solve.h
@@ -12550,7 +12578,10 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RegionSegmentation.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotExtraction.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotRegion.h
+<<<<<<< Updated upstream
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotTracker.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedEdge.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedRegion.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtractionIds.h
@@ -12563,6 +12594,7 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/Utils/include/DataHolders/ObstacleType.h
  ../../../../src/Utils/include/DataHolders/RobotPose2D.h
  ../../../../src/Utils/include/DataUtils.h
+<<<<<<< Updated upstream
  ../../../../src/Utils/include/DebugUtils.h
  ../../../../src/Utils/include/EnumUtils.h
  ../../../../src/Utils/include/Filters/KalmanFilter.h
@@ -12570,6 +12602,11 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/Utils/include/HardwareIds.h
  ../../../../src/Utils/include/JsonUtils.h
  ../../../../src/Utils/include/MathsUtils.h
+=======
+ ../../../../src/Utils/include/EnumUtils.h
+ ../../../../src/Utils/include/HardwareIds.h
+ ../../../../src/Utils/include/JsonUtils.h
+>>>>>>> Stashed changes
  ../../../../src/Utils/include/PrintUtils.h
  ../../../../src/Utils/include/TNColors.h
  ../../../../src/Utils/include/TNRSLine.h
@@ -14521,6 +14558,7 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../resources/jsoncpp/include/json/value.h
  ../../../../resources/jsoncpp/include/json/version.h
  ../../../../resources/jsoncpp/include/json/writer.h
+<<<<<<< Updated upstream
  ../../../../resources/tensorflow/flatbuffers/base.h
  ../../../../resources/tensorflow/flatbuffers/flatbuffers.h
  ../../../../resources/tensorflow/flatbuffers/stl_emulation.h
@@ -14543,6 +14581,8 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../resources/tensorflow/lite/stderr_reporter.h
  ../../../../resources/tensorflow/lite/string.h
  ../../../../resources/tensorflow/lite/util.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSBase/include/BaseIncludes.h
  ../../../../src/TNRSBase/include/BaseModule.h
  ../../../../src/TNRSBase/include/ConnectorMacro.h
@@ -15842,7 +15882,10 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../resources/Eigen/LU
  ../../../../resources/Eigen/QR
  ../../../../resources/Eigen/SVD
+<<<<<<< Updated upstream
  ../../../../resources/Eigen/StdVector
+=======
+>>>>>>> Stashed changes
  ../../../../resources/Eigen/src/Cholesky/LDLT.h
  ../../../../resources/Eigen/src/Cholesky/LLT.h
  ../../../../resources/Eigen/src/Cholesky/LLT_MKL.h
@@ -16024,8 +16067,11 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../resources/Eigen/src/SVD/JacobiSVD.h
  ../../../../resources/Eigen/src/SVD/JacobiSVD_MKL.h
  ../../../../resources/Eigen/src/SVD/UpperBidiagonalization.h
+<<<<<<< Updated upstream
  ../../../../resources/Eigen/src/StlSupport/StdVector.h
  ../../../../resources/Eigen/src/StlSupport/details.h
+=======
+>>>>>>> Stashed changes
  ../../../../resources/Eigen/src/misc/Image.h
  ../../../../resources/Eigen/src/misc/Kernel.h
  ../../../../resources/Eigen/src/misc/Solve.h
@@ -16060,13 +16106,20 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/TNRSBase/include/SharedMemory.h
  ../../../../src/TNRSModules/VisionModule/include/CameraTransform.h
  ../../../../src/TNRSModules/VisionModule/include/ColorHandler.h
+<<<<<<< Updated upstream
+=======
+ ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/BallExtraction.h
+>>>>>>> Stashed changes
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/FeatureExtraction.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/FieldExtraction.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RegionScanners.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RegionSegmentation.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotExtraction.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotRegion.h
+<<<<<<< Updated upstream
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotTracker.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedLine.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedRegion.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtractionIds.h
@@ -16081,6 +16134,7 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/Utils/include/DataHolders/ObstacleType.h
  ../../../../src/Utils/include/DataHolders/RobotPose2D.h
  ../../../../src/Utils/include/DataUtils.h
+<<<<<<< Updated upstream
  ../../../../src/Utils/include/DebugUtils.h
  ../../../../src/Utils/include/EnumUtils.h
  ../../../../src/Utils/include/Exceptions/TNRSException.h
@@ -16089,6 +16143,12 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  ../../../../src/Utils/include/HardwareIds.h
  ../../../../src/Utils/include/JsonUtils.h
  ../../../../src/Utils/include/MathsUtils.h
+=======
+ ../../../../src/Utils/include/EnumUtils.h
+ ../../../../src/Utils/include/Exceptions/TNRSException.h
+ ../../../../src/Utils/include/HardwareIds.h
+ ../../../../src/Utils/include/JsonUtils.h
+>>>>>>> Stashed changes
  ../../../../src/Utils/include/PrintUtils.h
  ../../../../src/Utils/include/StringEnum.h
  ../../../../src/Utils/include/TNColors.h
@@ -17295,6 +17355,10 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/opencv2/highgui/highgui_c.h
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/opencv2/imgproc/imgproc.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/opencv2/imgproc/types_c.h
+<<<<<<< Updated upstream
+=======
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/opencv2/objdetect/objdetect.hpp
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/qi/api.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/qi/atomic.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/qi/buffer.hpp
@@ -17356,6 +17420,7 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/qitype/typeinterface.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/qitype/typeobject.hpp
  /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/RobotExtraction.cpp
+<<<<<<< Updated upstream
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.o
  ../../../../resources/Eigen/Cholesky
  ../../../../resources/Eigen/Core
@@ -18424,6 +18489,10 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
  /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/RobotTracker.cpp
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedEdge.cpp.o
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedEdge.h
+=======
+src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedEdge.cpp.o
+ ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedEdge.h
+>>>>>>> Stashed changes
  ../../../../src/Utils/include/VisionUtils.h
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/assert.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/checked_delete.hpp
@@ -18940,7 +19009,10 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.
  ../../../../resources/Eigen/LU
  ../../../../resources/Eigen/QR
  ../../../../resources/Eigen/SVD
+<<<<<<< Updated upstream
  ../../../../resources/Eigen/StdVector
+=======
+>>>>>>> Stashed changes
  ../../../../resources/Eigen/src/Cholesky/LDLT.h
  ../../../../resources/Eigen/src/Cholesky/LLT.h
  ../../../../resources/Eigen/src/Cholesky/LLT_MKL.h
@@ -19122,8 +19194,11 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.
  ../../../../resources/Eigen/src/SVD/JacobiSVD.h
  ../../../../resources/Eigen/src/SVD/JacobiSVD_MKL.h
  ../../../../resources/Eigen/src/SVD/UpperBidiagonalization.h
+<<<<<<< Updated upstream
  ../../../../resources/Eigen/src/StlSupport/StdVector.h
  ../../../../resources/Eigen/src/StlSupport/details.h
+=======
+>>>>>>> Stashed changes
  ../../../../resources/Eigen/src/misc/Image.h
  ../../../../resources/Eigen/src/misc/Kernel.h
  ../../../../resources/Eigen/src/misc/Solve.h
@@ -19144,6 +19219,7 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.
  ../../../../resources/jsoncpp/include/json/value.h
  ../../../../resources/jsoncpp/include/json/version.h
  ../../../../resources/jsoncpp/include/json/writer.h
+<<<<<<< Updated upstream
  ../../../../resources/tensorflow/flatbuffers/base.h
  ../../../../resources/tensorflow/flatbuffers/flatbuffers.h
  ../../../../resources/tensorflow/flatbuffers/stl_emulation.h
@@ -19166,6 +19242,8 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.
  ../../../../resources/tensorflow/lite/stderr_reporter.h
  ../../../../resources/tensorflow/lite/string.h
  ../../../../resources/tensorflow/lite/util.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSBase/include/BaseIncludes.h
  ../../../../src/TNRSBase/include/BaseModule.h
  ../../../../src/TNRSBase/include/ConnectorMacro.h
@@ -19191,7 +19269,10 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/LinesExtraction.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RegionSegmentation.h
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotExtraction.h
+<<<<<<< Updated upstream
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotTracker.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSModules/VisionModule/include/FeatureExtractionIds.h
  ../../../../src/TNRSModules/VisionModule/include/VisionModule.h
  ../../../../src/TNRSModules/VisionModule/include/VisionRequest.h
@@ -19213,16 +19294,24 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.
  ../../../../src/Utils/include/DataHolders/RoboCupGameControlData.h
  ../../../../src/Utils/include/DataHolders/RobotPose2D.h
  ../../../../src/Utils/include/DataHolders/SPLCoachMessage.h
+<<<<<<< Updated upstream
  ../../../../src/Utils/include/DataHolders/VelocityInput.h
+=======
+>>>>>>> Stashed changes
  ../../../../src/Utils/include/DataUtils.h
  ../../../../src/Utils/include/DebugUtils.h
  ../../../../src/Utils/include/EnumUtils.h
  ../../../../src/Utils/include/Exceptions/TNRSException.h
+<<<<<<< Updated upstream
  ../../../../src/Utils/include/Filters/KalmanFilter.h
  ../../../../src/Utils/include/Filters/ProcessModel.h
  ../../../../src/Utils/include/HardwareIds.h
  ../../../../src/Utils/include/JsonUtils.h
  ../../../../src/Utils/include/MathsUtils.h
+=======
+ ../../../../src/Utils/include/HardwareIds.h
+ ../../../../src/Utils/include/JsonUtils.h
+>>>>>>> Stashed changes
  ../../../../src/Utils/include/PrintUtils.h
  ../../../../src/Utils/include/StringEnum.h
  ../../../../src/Utils/include/SwitchRequest.h

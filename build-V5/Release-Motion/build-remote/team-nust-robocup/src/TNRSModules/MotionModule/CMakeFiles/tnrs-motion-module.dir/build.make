@@ -1140,6 +1140,7 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModul
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/SpeedWalk.cpp.o.provides.build: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/SpeedWalk.cpp.o
 
 
+<<<<<<< Updated upstream
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.o: ../../../../src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiMoveTo.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.o"
@@ -1167,6 +1168,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModul
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o: ../../../../src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiFootsteps.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o"
+=======
+src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
+src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o: ../../../../src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiFootsteps.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiFootsteps.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.i: cmake_force
@@ -1190,7 +1196,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModul
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o: ../../../../src/TNRSModules/MotionModule/src/MovementModule/Types/KinResolutionWalk.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/KinResolutionWalk.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.i: cmake_force
@@ -1214,7 +1224,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModul
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o: ../../../../src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiMoveToward.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/MovementModule/Types/NaoqiMoveToward.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.i: cmake_force
@@ -1238,7 +1252,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModul
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/BallThrow.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/BallThrow.cpp.o: ../../../../src/TNRSModules/MotionModule/src/BallThrow/BallThrow.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/BallThrow.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/BallThrow.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/BallThrow/BallThrow.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/BallThrow/BallThrow.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/BallThrow.cpp.i: cmake_force
@@ -1262,7 +1280,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Bal
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Types/WBBallThrow.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Types/WBBallThrow.cpp.o: ../../../../src/TNRSModules/MotionModule/src/BallThrow/Types/WBBallThrow.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Types/WBBallThrow.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Types/WBBallThrow.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Types/WBBallThrow.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/BallThrow/Types/WBBallThrow.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Types/WBBallThrow.cpp.i: cmake_force
@@ -1286,7 +1308,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/BallThrow/Typ
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/GetupModule.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/GetupModule.cpp.o: ../../../../src/TNRSModules/MotionModule/src/GetupModule/GetupModule.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/GetupModule.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/GetupModule.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/GetupModule/GetupModule.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/GetupModule/GetupModule.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/GetupModule.cpp.i: cmake_force
@@ -1310,7 +1336,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/G
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/Types/KeyFrameMotionGetup.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/Types/KeyFrameMotionGetup.cpp.o: ../../../../src/TNRSModules/MotionModule/src/GetupModule/Types/KeyFrameMotionGetup.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/Types/KeyFrameMotionGetup.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/Types/KeyFrameMotionGetup.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/GetupModule/Types/KeyFrameMotionGetup.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/GetupModule/Types/KeyFrameMotionGetup.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/Types/KeyFrameMotionGetup.cpp.i: cmake_force
@@ -1334,7 +1364,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/GetupModule/T
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/HeadControl.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/HeadControl.cpp.o: ../../../../src/TNRSModules/MotionModule/src/HeadControl/HeadControl.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/HeadControl.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/HeadControl.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/HeadControl/HeadControl.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/HeadControl/HeadControl.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/HeadControl.cpp.i: cmake_force
@@ -1358,7 +1392,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/H
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadTargetTrack.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadTargetTrack.cpp.o: ../../../../src/TNRSModules/MotionModule/src/HeadControl/Types/HeadTargetTrack.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadTargetTrack.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadTargetTrack.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadTargetTrack.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/HeadControl/Types/HeadTargetTrack.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadTargetTrack.cpp.i: cmake_force
@@ -1382,7 +1420,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/T
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadScan.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadScan.cpp.o: ../../../../src/TNRSModules/MotionModule/src/HeadControl/Types/HeadScan.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadScan.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadScan.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadScan.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/HeadControl/Types/HeadScan.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/Types/HeadScan.cpp.i: cmake_force
@@ -1406,7 +1448,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/HeadControl/T
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/DiveModule.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/DiveModule.cpp.o: ../../../../src/TNRSModules/MotionModule/src/DiveModule/DiveModule.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/DiveModule.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/DiveModule.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/DiveModule/DiveModule.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/DiveModule/DiveModule.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/DiveModule.cpp.i: cmake_force
@@ -1430,7 +1476,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Di
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/KeyFrameMotionDive.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/KeyFrameMotionDive.cpp.o: ../../../../src/TNRSModules/MotionModule/src/DiveModule/Types/KeyFrameMotionDive.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/KeyFrameMotionDive.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/KeyFrameMotionDive.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/KeyFrameMotionDive.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/DiveModule/Types/KeyFrameMotionDive.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/KeyFrameMotionDive.cpp.i: cmake_force
@@ -1454,7 +1504,11 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Ty
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/HandSaveDive.cpp.o: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/flags.make
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/HandSaveDive.cpp.o: ../../../../src/TNRSModules/MotionModule/src/DiveModule/Types/HandSaveDive.cpp
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/HandSaveDive.cpp.o"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/HandSaveDive.cpp.o"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/HandSaveDive.cpp.o -c /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/MotionModule/src/DiveModule/Types/HandSaveDive.cpp
 
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/DiveModule/Types/HandSaveDive.cpp.i: cmake_force
@@ -1523,7 +1577,10 @@ tnrs__motion__module_OBJECTS = \
 "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/MovementModule.cpp.o" \
 "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/WalkParameters.cpp.o" \
 "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/SpeedWalk.cpp.o" \
+<<<<<<< Updated upstream
 "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.o" \
+=======
+>>>>>>> Stashed changes
 "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o" \
 "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o" \
 "CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o" \
@@ -1586,7 +1643,10 @@ tnrs__motion__module_EXTERNAL_OBJECTS =
 ../../remote/lib/libtnrs-motion-module.so: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/MovementModule.cpp.o
 ../../remote/lib/libtnrs-motion-module.so: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/WalkParameters.cpp.o
 ../../remote/lib/libtnrs-motion-module.so: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/SpeedWalk.cpp.o
+<<<<<<< Updated upstream
 ../../remote/lib/libtnrs-motion-module.so: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.o
+=======
+>>>>>>> Stashed changes
 ../../remote/lib/libtnrs-motion-module.so: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o
 ../../remote/lib/libtnrs-motion-module.so: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o
 ../../remote/lib/libtnrs-motion-module.so: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o
@@ -1621,7 +1681,11 @@ tnrs__motion__module_EXTERNAL_OBJECTS =
 ../../remote/lib/libtnrs-motion-module.so: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_locale.so
 ../../remote/lib/libtnrs-motion-module.so: /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/lib/libboost_thread.so
 ../../remote/lib/libtnrs-motion-module.so: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/link.txt
+<<<<<<< Updated upstream
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Linking CXX shared library ../../../../../remote/lib/libtnrs-motion-module.so"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Linking CXX shared library ../../../../../remote/lib/libtnrs-motion-module.so"
+>>>>>>> Stashed changes
 	cd /home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/MotionModule && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tnrs-motion-module.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -1674,7 +1738,10 @@ src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/requires: src/TNR
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/requires: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/MovementModule.cpp.o.requires
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/requires: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/WalkParameters.cpp.o.requires
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/requires: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/SpeedWalk.cpp.o.requires
+<<<<<<< Updated upstream
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/requires: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.o.requires
+=======
+>>>>>>> Stashed changes
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/requires: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.o.requires
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/requires: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/KinResolutionWalk.cpp.o.requires
 src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/requires: src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveToward.cpp.o.requires

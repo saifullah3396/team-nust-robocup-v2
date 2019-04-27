@@ -1136,6 +1136,7 @@ string
 vector
 -
 
+<<<<<<< Updated upstream
 ../../../../resources/tensorflow/flatbuffers/base.h
 assert.h
 -
@@ -1362,6 +1363,8 @@ vector
 tensorflow/lite/c/c_api_internal.h
 ../../../../resources/tensorflow/lite/tensorflow/lite/c/c_api_internal.h
 
+=======
+>>>>>>> Stashed changes
 ../../../../src/TNRSBase/include/BaseIncludes.h
 TNRSBase/include/BaseModule.h
 ../../../../src/TNRSBase/include/TNRSBase/include/BaseModule.h
@@ -1465,8 +1468,11 @@ Utils/include/SwitchRequest.h
 ../../../../src/TNRSModules/LocalizationModule/include/Utils/include/SwitchRequest.h
 Utils/include/DataHolders/PositionInput.h
 ../../../../src/TNRSModules/LocalizationModule/include/Utils/include/DataHolders/PositionInput.h
+<<<<<<< Updated upstream
 Utils/include/DataHolders/VelocityInput.h
 ../../../../src/TNRSModules/LocalizationModule/include/Utils/include/DataHolders/VelocityInput.h
+=======
+>>>>>>> Stashed changes
 Utils/include/DataHolders/Landmark.h
 ../../../../src/TNRSModules/LocalizationModule/include/Utils/include/DataHolders/Landmark.h
 
@@ -1647,12 +1653,16 @@ Utils/include/DataHolders/ObstacleType.h
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/Utils/include/DataHolders/ObstacleType.h
 VisionModule/include/FeatureExtraction/FeatureExtraction.h
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/VisionModule/include/FeatureExtraction/FeatureExtraction.h
+<<<<<<< Updated upstream
 VisionModule/include/FeatureExtraction/RobotTracker.h
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/VisionModule/include/FeatureExtraction/RobotTracker.h
+=======
+>>>>>>> Stashed changes
 
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/RobotRegion.h
 Utils/include/VisionUtils.h
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/Utils/include/VisionUtils.h
+<<<<<<< Updated upstream
 Utils/include/DataHolders/ObstacleType.h
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/Utils/include/DataHolders/ObstacleType.h
 VisionModule/include/FeatureExtraction/ScannedRegion.h
@@ -1663,6 +1673,8 @@ Utils/include/Filters/KalmanFilter.h
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/Utils/include/Filters/KalmanFilter.h
 Utils/include/DataHolders/ObstacleType.h
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/Utils/include/DataHolders/ObstacleType.h
+=======
+>>>>>>> Stashed changes
 
 ../../../../src/TNRSModules/VisionModule/include/FeatureExtraction/ScannedCurve.h
 Utils/include/VisionUtils.h
@@ -1886,12 +1898,15 @@ Utils/include/TNRSPoint.h
 stdint.h
 -
 
+<<<<<<< Updated upstream
 ../../../../src/Utils/include/DataHolders/VelocityInput.h
 Utils/include/DataHolders/RobotPose2D.h
 ../../../../src/Utils/include/DataHolders/Utils/include/DataHolders/RobotPose2D.h
 Utils/include/JsonUtils.h
 ../../../../src/Utils/include/DataHolders/Utils/include/JsonUtils.h
 
+=======
+>>>>>>> Stashed changes
 ../../../../src/Utils/include/DataUtils.h
 boost/shared_ptr.hpp
 -
@@ -1936,6 +1951,7 @@ boost/filesystem.hpp
 iostream
 -
 
+<<<<<<< Updated upstream
 ../../../../src/Utils/include/Filters/KalmanFilter.h
 Utils/include/MathsUtils.h
 ../../../../src/Utils/include/Filters/Utils/include/MathsUtils.h
@@ -1950,6 +1966,8 @@ Utils/include/MathsUtils.h
 Utils/include/PrintUtils.h
 ../../../../src/Utils/include/Filters/Utils/include/PrintUtils.h
 
+=======
+>>>>>>> Stashed changes
 ../../../../src/Utils/include/HardwareIds.h
 Utils/include/EnumUtils.h
 ../../../../src/Utils/include/Utils/include/EnumUtils.h
@@ -27687,8 +27705,11 @@ VisionModule/include/VisionModule.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/VisionModule/include/VisionModule.h
 
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/BallExtraction.cpp
+<<<<<<< Updated upstream
 algorithm
 -
+=======
+>>>>>>> Stashed changes
 TNRSBase/include/MemoryIOMacros.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/TNRSBase/include/MemoryIOMacros.h
 Utils/include/ConfigMacros.h
@@ -27709,10 +27730,13 @@ VisionModule/include/FeatureExtraction/BallTracker.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/FeatureExtraction/BallTracker.h
 VisionModule/include/FeatureExtraction/FieldExtraction.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/FeatureExtraction/FieldExtraction.h
+<<<<<<< Updated upstream
 VisionModule/include/FeatureExtraction/RobotExtraction.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/FeatureExtraction/RobotExtraction.h
 VisionModule/include/FeatureExtraction/RobotRegion.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/FeatureExtraction/RobotRegion.h
+=======
+>>>>>>> Stashed changes
 VisionModule/include/FeatureExtraction/RegionSegmentation.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/FeatureExtraction/RegionSegmentation.h
 VisionModule/include/FeatureExtraction/RegionScanners.h
@@ -27723,8 +27747,11 @@ VisionModule/include/FeatureExtraction/ScannedLine.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/FeatureExtraction/ScannedLine.h
 VisionModule/include/VisionExceptions.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/VisionExceptions.h
+<<<<<<< Updated upstream
 Utils/include/AngleDefinitions.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/Utils/include/AngleDefinitions.h
+=======
+>>>>>>> Stashed changes
 
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/BallTracker.cpp
 VisionModule/include/FeatureExtraction/BallTracker.h
@@ -27839,8 +27866,11 @@ Utils/include/DataHolders/Landmark.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/Utils/include/DataHolders/Landmark.h
 Utils/include/HardwareIds.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/Utils/include/HardwareIds.h
+<<<<<<< Updated upstream
 Utils/include/MathsUtils.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/Utils/include/MathsUtils.h
+=======
+>>>>>>> Stashed changes
 Utils/include/TNRSLine.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/Utils/include/TNRSLine.h
 VisionModule/include/VisionModule.h
@@ -27929,6 +27959,11 @@ VisionModule/include/CameraTransform.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/CameraTransform.h
 VisionModule/include/ColorHandler.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/ColorHandler.h
+<<<<<<< Updated upstream
+=======
+VisionModule/include/FeatureExtraction/BallExtraction.h
+/home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/FeatureExtraction/BallExtraction.h
+>>>>>>> Stashed changes
 VisionModule/include/FeatureExtraction/RegionSegmentation.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/FeatureExtraction/RegionSegmentation.h
 VisionModule/include/FeatureExtraction/RegionScanners.h
@@ -27948,6 +27983,7 @@ VisionModule/include/VisionModule.h
 VisionModule/include/VisionExceptions.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/VisionModule/include/VisionExceptions.h
 
+<<<<<<< Updated upstream
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/RobotTracker.cpp
 boost/make_shared.hpp
 -
@@ -27958,6 +27994,8 @@ VisionModule/include/FeatureExtraction/RobotRegion.h
 Utils/include/JsonUtils.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/Utils/include/JsonUtils.h
 
+=======
+>>>>>>> Stashed changes
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/ScannedEdge.cpp
 FeatureExtraction/ScannedEdge.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/FeatureExtraction/ScannedEdge.h

@@ -10,8 +10,8 @@
 		"intrinsic": {
 			"fovX": 60.97,
 			"fovY": 47.64,
-			"focalX": 557.64176368131677,
-			"focalY": 557.27280845417295,
+			"focalX": 5.4571126499999707e+02,
+			"focalY": 5.4466697683533391e+02,
 			"centerOffX": 333.64913562336505,
 			"centerOffY": 253
 		},
@@ -55,8 +55,8 @@
 		"intrinsic": {
 			"fovX": 60.97,
 			"fovY": 47.64,
-			"focalX": 135.89,
-			"focalY": 135.91,
+			"focalX": 1.3680055083471950e+02,
+			"focalY": 1.3639317870236479e+02,
 			"centerOffX": 80,
 			"centerOffY": 65
 		},

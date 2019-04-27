@@ -51,6 +51,10 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/fftw3/cmake_install.cmake")
+<<<<<<< Updated upstream
+=======
+  include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/CameraCalibrator/cmake_install.cmake")
+>>>>>>> Stashed changes
   include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/jsoncpp/cmake_install.cmake")
   include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/nlopt/cmake_install.cmake")
   include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/resources/qpOASES/cmake_install.cmake")
@@ -68,7 +72,10 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule/cmake_install.cmake")
   include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/LocalizationModule/cmake_install.cmake")
   include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TeamNUSTSPL/cmake_install.cmake")
+<<<<<<< Updated upstream
   include("/home/muptii/Documents/robocup/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/GameController/src/libgamectrl/cmake_install.cmake")
+=======
+>>>>>>> Stashed changes
 
 endif()
 

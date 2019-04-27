@@ -15575,16 +15575,24 @@ Utils/include/PathPlanner/helper.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/PathPlanner/Utils/include/PathPlanner/helper.h
 
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/PotentialField2D.cpp
+<<<<<<< Updated upstream
+=======
+Utils/include/PotentialField2D.h
+/home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/Utils/include/PotentialField2D.h
+>>>>>>> Stashed changes
 Utils/include/DataHolders/RobotPose2D.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/Utils/include/DataHolders/RobotPose2D.h
 Utils/include/DataHolders/VelocityInput.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/Utils/include/DataHolders/VelocityInput.h
 Utils/include/DataHolders/Obstacle.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/Utils/include/DataHolders/Obstacle.h
+<<<<<<< Updated upstream
 Utils/include/MathsUtils.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/Utils/include/MathsUtils.h
 Utils/include/PotentialField2D.h
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/Utils/include/PotentialField2D.h
+=======
+>>>>>>> Stashed changes
 
 /home/muptii/Documents/robocup/team-nust-robocup-v2/src/Utils/src/PrintUtils.cpp
 Utils/include/PrintUtils.h

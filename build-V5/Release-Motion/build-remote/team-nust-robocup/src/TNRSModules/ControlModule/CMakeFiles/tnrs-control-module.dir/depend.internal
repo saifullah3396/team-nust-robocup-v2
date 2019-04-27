@@ -214,6 +214,7 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  ../../../../resources/jsoncpp/include/json/value.h
  ../../../../resources/jsoncpp/include/json/version.h
  ../../../../resources/jsoncpp/include/json/writer.h
+<<<<<<< Updated upstream
  ../../../../resources/msgpack/include/msgpack.hpp
  ../../../../resources/msgpack/include/msgpack/adaptor/adaptor_base.hpp
  ../../../../resources/msgpack/include/msgpack/adaptor/adaptor_base_decl.hpp
@@ -756,6 +757,8 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  ../../../../resources/msgpack/include/msgpack/zone.h
  ../../../../resources/msgpack/include/msgpack/zone.hpp
  ../../../../resources/msgpack/include/msgpack/zone_decl.hpp
+=======
+>>>>>>> Stashed changes
  ../../../../src/TNRSModules/ControlModule/include/ActuatorRequests.h
  ../../../../src/TNRSModules/ControlModule/include/HardwareLayer.h
  ../../../../src/Utils/include/ConfigManager.h
@@ -826,7 +829,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/config/select_platform_config.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/config/select_stdlib_config.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/config/suffix.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/config/warning_disable.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/cstdint.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/current_function.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/date_time/adjust_functors.hpp
@@ -1006,6 +1012,7 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/functional/hash/hash.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/functional/hash/hash_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/functional/hash_fwd.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/adapted/mpl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/adapted/mpl/detail/at_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/adapted/mpl/detail/begin_impl.hpp
@@ -1236,6 +1243,8 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/view/single_view/detail/value_of_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/view/single_view/single_view.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/fusion/view/single_view/single_view_iterator.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/get_pointer.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/integer.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/integer/static_log2.hpp
@@ -1259,18 +1268,27 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/iterator/reverse_iterator.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/limits.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/make_shared.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/math/common_factor_ct.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/math/common_factor_rt.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/math_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mem_fn.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/memory_order.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/algorithm.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/core.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/detail/config_begin.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/detail/config_end.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/detail/meta_utils.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/iterator.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/move.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/traits.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/move/utility.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/O1_size.hpp
@@ -1296,7 +1314,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/arity.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/arity_spec.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/at_impl.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/back_impl.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/begin_end_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/clear_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/common_name_wknd.hpp
@@ -1333,8 +1354,11 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/contains_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/count_args.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/empty_impl.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/erase_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/erase_key_impl.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/find_if_pred.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/fold_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/fold_impl_body.hpp
@@ -1348,15 +1372,21 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/has_tag.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/has_type.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/include_preprocessed.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/insert_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/insert_range_impl.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/inserter_algorithm.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/integral_wrapper.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/is_msvc_eti_arg.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/iter_apply.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/iter_fold_if_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/iter_fold_impl.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/iter_push_front.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/joint_iter.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/lambda_arity_param.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/lambda_no_ctps.hpp
@@ -1378,7 +1408,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/numeric_cast_utils.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/numeric_op.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/overload_names.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/pop_back_impl.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/pop_front_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/preprocessor/add.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/preprocessor/def_params_tail.hpp
@@ -1409,7 +1442,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/unwrap.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/value_wknd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/aux_/yes_no.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/back.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/back_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/back_inserter.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/base.hpp
@@ -1432,6 +1468,7 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/distance.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/distance_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/empty.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/empty_base.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/empty_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/end.hpp
@@ -1440,6 +1477,11 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase_key.hpp
+=======
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/empty_fwd.hpp
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/equal_to.hpp
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase_fwd.hpp
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/erase_key_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/eval_if.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/find.hpp
@@ -1456,11 +1498,15 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/has_xxx.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/identity.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/if.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/inherit.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert_range.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert_range_fwd.hpp
+=======
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/insert_fwd.hpp
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/inserter.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/int.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/int_fwd.hpp
@@ -1481,10 +1527,15 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/less.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/less_equal.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/arity.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/list.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/unrolling.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/vector.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/list.hpp
+=======
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/unrolling.hpp
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/limits/vector.hpp
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/logical.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/long.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/long_fwd.hpp
@@ -1503,7 +1554,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pair_view.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/placeholders.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/plus.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pop_back.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pop_back_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pop_front.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/pop_front_fwd.hpp
@@ -1541,7 +1595,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/size_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/size_t.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/size_t_fwd.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/sizeof.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/tag.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/times.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/mpl/transform.hpp
@@ -2149,7 +2206,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/remove_pointer.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/remove_reference.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/remove_volatile.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/same_traits.hpp
+=======
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/type_traits/type_with_alignment.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/typeof/dmc/typeof_impl.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/typeof/encode_decode.hpp
@@ -2183,6 +2243,7 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/detail/in_place_factory_suffix.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/enable_if.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/in_place_factory.hpp
+<<<<<<< Updated upstream
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/result_of.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/string_ref.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/string_ref_fwd.hpp
@@ -2218,6 +2279,10 @@ src/TNRSModules/ControlModule/CMakeFiles/tnrs-control-module.dir/src/HardwareLay
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/variant/variant.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/variant/variant_fwd.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/variant/visitor_ptr.hpp
+=======
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/swap.hpp
+ /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/utility/value_init.hpp
+>>>>>>> Stashed changes
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/version.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/visit_each.hpp
  /home/muptii/Documents/robocup/naoqi-sdk-2.1.4.13-linux64/include/boost/weak_ptr.hpp
