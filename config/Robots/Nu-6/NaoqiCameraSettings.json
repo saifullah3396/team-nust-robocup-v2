@@ -1,0 +1,100 @@
+{
+    "visionTop": {
+        "subscription": {
+            "cameraName": "visionTop",
+            "width": 640,
+            "height": 480,
+            "colorSpace": 9,
+            "fps": 15,
+            "resolution" : 2
+        },
+        "intrinsic": {
+            "fovX": 60.97,
+            "fovY": 47.64,
+            "focalX": 556.15368268881900,
+            "focalY": 556.43345704373291,
+            "centerOffX": 324.37957538430817,
+            "centerOffY": 222.63408330342540
+        },
+        "distortion": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0,
+            "d": 0.0,
+            "e": 0.0
+        },
+        "calibration" : {
+           "aeTargetGain" : 9,
+           "autoExposition" : 1,
+           "autoWhiteBalance" : 1,
+           "backlightCompensation" : 0,
+           "brightness" : 132,
+           "contrast" : 41,
+           "exposure" : 175,
+           "exposureAlgorithm" : 1,
+           "fadeToBlack" : 0,
+           "freq" : 1,
+           "gain" : 255,
+           "gamma" : 202,
+           "horizontalFlip" : 1,
+           "hue" : -13,
+           "maxDigAnalogGain" : 1,
+           "maxVirtAnalogGain" : 8,
+           "minDigAnalogGain" : 1,
+           "minVirtAnalogGain" : 4,
+           "saturation" : 154,
+           "sharpness" : 1,
+           "verticalFlip" : 1,
+           "whiteBalance" : 5800
+        }
+    },
+    "visionBottom": {
+        "subscription": {
+            "cameraName": "visionBottom",
+            "width": 320,
+            "height": 240,
+            "colorSpace": 9,
+            "fps": 15,
+            "resolution" : 0
+        },
+        "intrinsic": {
+            "centerOffX" : 80,
+            "centerOffY" : 60,
+            "focalX" : 135.88999999999999,
+            "focalY" : 135.91,
+            "fovX" : 60.969999999999999,
+            "fovY" : 47.640000000000001
+        },
+        "distortion": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0,
+            "d": 0.0,
+            "e": 0.0
+        },
+        "calibration": {
+            "aeTargetGain" : 9,
+            "autoExposition" : 1,
+            "autoWhiteBalance" : 1,
+            "backlightCompensation" : 0,
+            "brightness" : 126,
+            "contrast" : 51,
+            "exposure" : 120,
+            "exposureAlgorithm" : 1,
+            "fadeToBlack" : 0,
+            "freq" : 1,
+            "gain" : 255,
+            "gamma" : 199,
+            "horizontalFlip" : 0,
+            "hue" : -15,
+            "maxDigAnalogGain" : 1,
+            "maxVirtAnalogGain" : 8,
+            "minDigAnalogGain" : 1,
+            "minVirtAnalogGain" : 4,
+            "saturation" : 160,
+            "sharpness" : 2,
+            "verticalFlip" : 0,
+            "whiteBalance" : 5800
+        }
+    }
+}

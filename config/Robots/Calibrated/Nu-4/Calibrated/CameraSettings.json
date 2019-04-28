@@ -1,0 +1,80 @@
+{
+   "visionBottom" : {
+      "calibration" : {
+         "autoExposition" : 1,
+         "autoWhiteBalance" : 1,
+         "brightness" : 15,
+         "contrast" : 51,
+         "exposure" : 120,
+         "focusAbsolute" : 0,
+         "focusAuto" : 0,
+         "gain" : 282,
+         "hue" : 0,
+         "hueAuto" : 0,
+         "saturation" : 128,
+         "sharpness" : 2,
+         "whiteBalance" : 5800
+      },
+      "distortion" : {
+         "a" : 0.11841405046730222,
+         "b" : -0.57020975978719401,
+         "c" : 0.0,
+         "d" : 0.0,
+         "e" : 0.69177228553826176
+      },
+      "intrinsic" : {
+         "centerOffX" : 163.72735755928727,
+         "centerOffY" : 118.33879643803836,
+         "focalX" : 298.85089696671605,
+         "focalY" : 302.66611708508589,
+         "fovX" : 56.299999999999997,
+         "fovY" : 43.700000000000003
+      },
+      "subscription" : {
+         "cameraName" : "visionBottom",
+         "colorSpace" : 9,
+         "fps" : 15,
+         "height" : 240,
+         "width" : 320
+      }
+   },
+   "visionTop" : {
+      "calibration" : {
+         "autoExposition" : 1,
+         "autoWhiteBalance" : 1,
+         "brightness" : 15,
+         "contrast" : 51,
+         "exposure" : 120,
+         "focusAbsolute" : 0,
+         "focusAuto" : 0,
+         "gain" : 282,
+         "hue" : 0,
+         "hueAuto" : 0,
+         "saturation" : 128,
+         "sharpness" : 2,
+         "whiteBalance" : 5800
+      },
+      "distortion" : {
+         "a" : 0.12969875208422846,
+         "b" : -0.57101379147185227,
+         "c" : 0.0,
+         "d" : 0.0,
+         "e" : 0.75402798125232551
+      },
+      "intrinsic" : {
+         "centerOffX" : 321.46427517429112,
+         "centerOffY" : 238.74863658259136,
+         "focalX" : 614.53299380218266,
+         "focalY" : 616.32214848781905,
+         "fovX" : 56.299999999999997,
+         "fovY" : 43.700000000000003
+      },
+      "subscription" : {
+         "cameraName" : "visionTop",
+         "colorSpace" : 9,
+         "fps" : 15,
+         "height" : 480,
+         "width" : 640
+      }
+   }
+}

@@ -11,7 +11,7 @@
     "logData" : true,
     "reqVel" :
     [
-        0.95,
+        1.2,
         0
     ],
     "target" :

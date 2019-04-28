@@ -3,8 +3,9 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 0,
-  "testType" : "BallExtraction",
+  "testType" : "LogImages",
   "startPose" : [0.0, 0.0, 0.0],
+  "loggingCam" : 1,
   "logData" : false
 }
 

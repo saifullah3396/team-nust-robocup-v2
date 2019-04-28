@@ -2,7 +2,7 @@
     "baseType" : 0,
     "id" : 2,
     "maxRuntime" : 3600,
-    "type" : 2,
+    "type" : 3,
     "logData" : false,
     "velocityInput" : [0.0, 0.5, 0.0],
     "refOffset" : [0.0, -0.015],

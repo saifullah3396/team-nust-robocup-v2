@@ -3,5 +3,6 @@
     "id" : 2,
     "maxRuntime" : 3600,
     "type" : 1,
-    "logData" : false
+    "logData" : false,
+    "velocityInput" : [0.5, 0.0, 0.0]
 }

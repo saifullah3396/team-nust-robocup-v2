@@ -1,50 +1,40 @@
 {
-	"baseType" : 2,
-	"id" : 2,
-	"maxRuntime" : 3600,
-	"type" : 1,
+    "baseType" : 2,
+    "id" : 2,
+    "maxRuntime" : 3600,
+    "type" : 1,
     "startPose" : [-4.25, 0.0, 0.0],
     "startPoseKnown" : true,
     "onSideAtStart" : false,
-    "hsConfig" : {
-        "baseType" : 0,
-        "headTargetType" : 0,
-        "id" : 5,
-        "maxRuntime" : 15,
-        "scanLowerArea" : true,
-        "scanMaxPitch" : 0.27925267815589905,
-        "scanMaxYaw" : 1.57,
-        "totalWaitTime" : 1,
-        "type" : 2
-    },
     "httConfig" : {
         "baseType" : 0,
         "headTargetType" : 0,
         "id" : 5,
         "maxRuntime" : 15,
-        "type" : 0,
-        "htsConfig" : {
+        "type" : 1,
+        "scanConfig" : {
             "baseType" : 0,
             "headTargetType" : 0,
             "id" : 5,
-            "maxRuntime" : 15,
-            "scanLowerArea" : true,
-            "scanMaxPitch" : 0.27925267815589905,
-            "scanMaxYaw" : 0.785,
+            "maxRuntime" : 15.0,
+            "type" : 0,
+            "scanLowerArea" : false,
             "totalWaitTime" : 0.25,
-            "type" : 1
+            "scanMaxPitch" : 0.27925267815589905,
+            "scanMaxYaw" : 1.57,
+            "logData" : false
         }
     },
-    "htsConfig" : {
+    "hsConfig" : {
         "baseType" : 0,
         "headTargetType" : 0,
         "id" : 5,
         "maxRuntime" : 15,
-        "scanLowerArea" : true,
+        "scanLowerArea" : false,
         "scanMaxPitch" : 0.27925267815589905,
         "scanMaxYaw" : 1.57,
-        "totalWaitTime" : 1.0,
-        "type" : 1
+        "totalWaitTime" : 1,
+        "type" : 0
     },
     "logData" : false
 }

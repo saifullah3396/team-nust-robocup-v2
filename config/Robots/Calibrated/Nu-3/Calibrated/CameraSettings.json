@@ -1,0 +1,80 @@
+{
+   "visionBottom" : {
+      "calibration" : {
+         "autoExposition" : 1,
+         "autoWhiteBalance" : 1,
+         "brightness" : 15,
+         "contrast" : 51,
+         "exposure" : 120,
+         "focusAbsolute" : 0,
+         "focusAuto" : 0,
+         "gain" : 282,
+         "hue" : 0,
+         "hueAuto" : 0,
+         "saturation" : 128,
+         "sharpness" : 2,
+         "whiteBalance" : 5800
+      },
+      "distortion" : {
+         "a" : 0.0,
+         "b" : 0.0,
+         "c" : 0.0,
+         "d" : 0.0,
+         "e" : 0.0
+      },
+      "intrinsic" : {
+         "centerOffX" : 80,
+         "centerOffY" : 60,
+         "focalX" : 135.88999999999999,
+         "focalY" : 135.91,
+         "fovX" : 56.299999999999997,
+         "fovY" : 43.700000000000003
+      },
+      "subscription" : {
+         "cameraName" : "visionBottom",
+         "colorSpace" : 9,
+         "fps" : 15,
+         "height" : 240,
+         "width" : 320
+      }
+   },
+   "visionTop" : {
+      "calibration" : {
+         "autoExposition" : 1,
+         "autoWhiteBalance" : 1,
+         "brightness" : 15,
+         "contrast" : 51,
+         "exposure" : 120,
+         "focusAbsolute" : 0,
+         "focusAuto" : 0,
+         "gain" : 282,
+         "hue" : 0,
+         "hueAuto" : 0,
+         "saturation" : 128,
+         "sharpness" : 2,
+         "whiteBalance" : 5800
+      },
+      "distortion" : {
+         "a" : 0.077612562259177356,
+         "b" : -0.23882433107022114,
+         "c" : 0.0,
+         "d" : 0.0,
+         "e" : 0.047206843862811647
+      },
+      "intrinsic" : {
+         "centerOffX" : 315.98503992259145,
+         "centerOffY" : 239.4292303734878,
+         "focalX" : 612.79553337996379,
+         "focalY" : 611.24142497209675,
+         "fovX" : 56.299999999999997,
+         "fovY" : 43.700000000000003
+      },
+      "subscription" : {
+         "cameraName" : "visionTop",
+         "colorSpace" : 9,
+         "fps" : 15,
+         "height" : 480,
+         "width" : 640
+      }
+   }
+}

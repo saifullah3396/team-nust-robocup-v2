@@ -3,6 +3,7 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 1,
-  "startState" : "OccupancyMapTest",
+  "_comment_1" : "Possible states: OccupancyMapTest/SideLineLocalization/LocalizationLostState/LocalizationPrediction/LocalizationWithMovement",
+  "startState" : "LocalizationWithMovement",
   "logData" : false
 }

@@ -3,6 +3,6 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 2,
-  "requestedBehavior" : "KickModule/JSOImpKick.json",
+  "requestedBehavior" : "MovementModule/NaoqiMoveToward.json",
   "logData" : false
 }
