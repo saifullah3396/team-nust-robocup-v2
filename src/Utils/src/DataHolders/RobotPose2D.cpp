@@ -103,6 +103,23 @@ template cv::Point_<float> RobotPose2D<double>::transform(const cv::Point_<float
 template cv::Point_<double> RobotPose2D<float>::transform(const cv::Point_<double>& p) const;
 template cv::Point_<double> RobotPose2D<double>::transform(const cv::Point_<double>& p) const;
 
+template <typename Scalar>
+template <typename OtherScalar>
+cv::Point_<OtherScalar> RobotPose2D<Scalar>::rotate(const cv::Point_<OtherScalar>& p) const
+{
+  return
+    cv::Point_<OtherScalar>(
+      p.x * ct - p.y * st,
+      p.x * st + p.y * ct
+    );
+}
+template cv::Point_<int> RobotPose2D<float>::rotate(const cv::Point_<int>& p) const;
+template cv::Point_<int> RobotPose2D<double>::rotate(const cv::Point_<int>& p) const;
+template cv::Point_<float> RobotPose2D<float>::rotate(const cv::Point_<float>& p) const;
+template cv::Point_<float> RobotPose2D<double>::rotate(const cv::Point_<float>& p) const;
+template cv::Point_<double> RobotPose2D<float>::rotate(const cv::Point_<double>& p) const;
+template cv::Point_<double> RobotPose2D<double>::rotate(const cv::Point_<double>& p) const;
+
 /*template <typename Scalar>
 cv::Point2f RobotPose2D<Scalar>::transform(const cv::Point2f& p)
 {

@@ -179,6 +179,16 @@ public:
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
+   * @brief naoqiMoveTo Wrapper for MotionGenerator::naoqiMoveTo()
+   */
+  void naoqiMoveTo(
+    const float& x,
+    const float& y,
+    const float& t);
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
    * @brief naoqiSetFootsteps Wrapper for MotionGenerator::naoqiSetFootsteps()
    */
   #ifndef V6_CROSS_BUILD_REMOVED

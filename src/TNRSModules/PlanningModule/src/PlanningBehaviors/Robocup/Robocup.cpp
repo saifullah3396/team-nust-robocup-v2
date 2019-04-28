@@ -32,6 +32,7 @@
 #include "Utils/include/DataHolders/WorldBallInfo.h"
 #include "Utils/include/TeamPositions.h"
 #include "Utils/include/VisionUtils.h"
+#include "Utils/include/MathsUtils.h"
 #include "VisionModule/include/VisionRequest.h"
 
 Robocup::Robocup(
@@ -46,6 +47,8 @@ Robocup::Robocup(
   moveTarget(RobotPose2D<float>(100, 100, 100)),
   ballMotionModel(BallMotionModel::damped)
 {
+  velocityInput = unique_ptr<VelocityInput<float>>(new VelocityInput<float>());
+  potentialField2D = unique_ptr<PotentialField2D<float>>(new PotentialField2D<float>(10.0));
 }
 
 boost::shared_ptr<Robocup> Robocup::getType(
@@ -268,20 +271,68 @@ bool Robocup::getupFromGround(
   }
 }
 
-void Robocup::setNavigationConfig(const RobotPose2D<float>& target,
+void Robocup::setPlanTowardsConfig(
+  const RobotPose2D<float>& target,
+  const bool& keepMoving,
+  const RobotPose2D<float>& targetTol,
+  const VelocityInput<float>& maxLimit,
   const boost::shared_ptr<InterpToPostureConfig>& startPosture,
   const boost::shared_ptr<InterpToPostureConfig>& endPosture)
 {
   //if (this->getChild())
   //  return;
-  auto config =
+  /*auto config =
     boost::make_shared<PlanTowardsConfig>();
   config->goal = target;
-  config->reachClosest = true;
+  config->maxLimit = maxLimit;
+  config->keepMoving = keepMoving;
   if (startPosture)
     config->startPosture = startPosture;
   if (endPosture)
     config->endPosture = endPosture;
+  config->tolerance = targetTol;
+  this->moveTarget = target;
+  this->setupChildRequest(config, true);*/
+  const auto& robotPose2D = ROBOT_POSE_2D_IN(PlanningModule);
+  if (robotPose2D.getX() == robotPose2D.getX()) {
+    *velocityInput =
+      potentialField2D->update(
+        robotPose2D,
+        target,
+        OBSTACLES_OBS_IN(PlanningModule).data,
+        targetTol);
+    if (velocityInput->norm() <= 1e-3) {
+      if (keepMoving)
+        velocityInput->x() = 0.001;
+      else
+        return;
+    }
+    cout << "robotPose2D: " << robotPose2D.get().transpose() << endl;
+    cout << "target: " << target.get().transpose() << endl;
+    cout << "velocityInput: " << velocityInput->get().transpose() << endl;
+    velocityInput->clip(-maxLimit.getX(), maxLimit.getX());
+    auto mConfig = boost::make_shared<NaoqiMoveTowardConfig>(*(this->velocityInput));
+    mConfig->startPosture = startPosture;
+    mConfig->endPosture = endPosture;
+    setupMBRequest(MOTION_2, mConfig);
+    MOVE_TARGET_OUT(PlanningModule) = target;
+  }
+}
+
+void Robocup::setGoToTargetConfig(
+  const RobotPose2D<float>& target,
+  const bool& reachClosest,
+  const boost::shared_ptr<InterpToPostureConfig>& startPosture,
+  const boost::shared_ptr<InterpToPostureConfig>& endPosture)
+{
+  auto config =
+    boost::make_shared<GoToTargetConfig>();
+  config->goal = target;
+  if (startPosture)
+    config->startPosture = startPosture;
+  if (endPosture)
+    config->endPosture = endPosture;
+  config->reachClosest = reachClosest;
   this->moveTarget = target;
   this->setupChildRequest(config, true);
 }

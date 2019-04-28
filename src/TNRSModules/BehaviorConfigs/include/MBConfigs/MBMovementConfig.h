@@ -61,8 +61,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
 
 /**
  * @struct NaoqiMoveTowardConfig
- * @brief Replays stored motion commands based on logged
- *   motion behavior configurations
+ * @brief Velocity input based movement using Naoqi
  */
 DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   NaoqiMoveTowardConfig,
@@ -70,6 +69,18 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   MBMovementTypes::naoqiMoveToward,
   NaoqiMoveTowardConfigPtr,
   (VelocityInput<float>, velocityInput, VelocityInput<float>()),
+);
+
+/**
+ * @struct NaoqiMoveToConfig
+ * @brief Goal based movement using naoqi
+ */
+DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
+  NaoqiMoveToConfig,
+  MBMovementConfig,
+  MBMovementTypes::naoqiMoveTo,
+  NaoqiMoveToConfigPtr,
+  (RobotPose2D<float>, goal, RobotPose2D<float>()),
 );
 
 /**

@@ -29,6 +29,7 @@ DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(
   VisionTestSuiteConfigPtr,
   (string, testType, ""),
   (RobotPose2D<float>, startPose, RobotPose2D<float>(0.0, 0.0, 0.0)),
+  (unsigned, loggingCam, 0),
 );
 
 DECLARE_BEHAVIOR_CONFIG_TYPE_WITH_VARS(

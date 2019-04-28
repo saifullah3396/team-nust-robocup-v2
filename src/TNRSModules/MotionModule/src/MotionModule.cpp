@@ -228,16 +228,24 @@ void MotionModule::init()
       LOG_INFO("Disabling Naoqi fall manager...")
       motionProxy->setFallManagerEnabled(false);
       LOG_INFO("Waking Robot Up...")
-      motionProxy->wakeUp();
+      //motionProxy->wakeUp();
       motionProxy->setMoveArmsEnabled(false, false);
     #endif
   #else
     #ifndef REALTIME_LOLA_AVAILABLE
-      ///< Disable NaoQi's fall manager
-      LOG_INFO("Disabling Naoqi fall manager...")
-      motionProxy.call<void>("setFallManagerEnabled", false);
-      motionProxy.call<void>("wakeUp");
-      motionProxy.call<void>("setMoveArmsEnabled", false, false);
+      try {
+        ///< Disable NaoQi's fall manager
+        LOG_INFO("Setting setFallManagerEnabled()...")
+        motionProxy.call<void>("setFallManagerEnabled", false);
+
+        LOG_INFO("Setting wakeUp()...")
+        //motionProxy.call<void>("wakeUp");
+
+        LOG_INFO("Setting setMoveArmsEnabled()...")
+        motionProxy.call<void>("setMoveArmsEnabled", false, false);
+      } catch (exception& e) {
+        LOG_EXCEPTION(e.what());
+      }
     #endif
   #endif
   ///< Create kinematics module
@@ -338,52 +346,76 @@ void MotionModule::setupActuators()
 
 void MotionModule::handleRequests()
 {
-  if (inRequests.isEmpty())
-    return;
-  auto request = inRequests.queueFront();
-  if (boost::static_pointer_cast <MotionRequest>(request)) {
-    auto reqId = request->getRequestId();
-    #ifndef V6_CROSS_BUILD
-    //! Realtime actuator requests through MotionModule are only available in V5s
-    if (reqId == toUType(MotionRequestIds::jointRequest)) {
-      actuatorLayers[toUType(MotionActuators::jointActuators)]->addRequest(
-        boost::static_pointer_cast<JointRequest>(request)
-      );
-    } else if (reqId == toUType(MotionRequestIds::handsRequest)) {
-      actuatorLayers[toUType(MotionActuators::handActuators)]->addRequest(
-        boost::static_pointer_cast<HandsRequest>(request)
-      );
-    } else if (reqId == toUType(MotionRequestIds::behaviorRequest)) {
-    #else
-    if (reqId == toUType(MotionRequestIds::behaviorRequest)) {
-    #endif
-      auto rmb =
-        boost::static_pointer_cast<RequestMotionBehavior>(request);
-      if (mbManagers.find(rmb->mbManagerId) != mbManagers.end()) {
-        mbManagers[rmb->mbManagerId]->manageRequest(rmb);
-      } else {
-        ///< Create motion behavior manager
-        mbManagers.insert(
-          pair<unsigned, MBManagerPtr>(
-            rmb->mbManagerId,
-            boost::shared_ptr<MBManager<MType> >(new MBManager<MType>(this))
-          ));
-        mbManagers[rmb->mbManagerId]->manageRequest(rmb);
-      }
-    } else if (reqId == toUType(MotionRequestIds::killBehavior)) {
-      auto rmb =
-        boost::static_pointer_cast<KillMotionBehavior>(request);
-      if (mbManagers.find(rmb->mbManagerId) != mbManagers.end()) {
-        mbManagers[rmb->mbManagerId]->killBehavior();
-      }
-    } else if (reqId == toUType(MotionRequestIds::killBehaviors)) {
-      for (size_t i = 0; i < mbManagers.size(); ++i) {
-        if (mbManagers[i])
-          mbManagers[i]->killBehavior();
+  //cout << "handling requests: " << inRequests.getSize() << endl;
+  while(!inRequests.isEmpty()) {
+    auto request = inRequests.queueFront();
+    if (boost::static_pointer_cast <MotionRequest>(request)) {
+      auto reqId = request->getRequestId();
+      #ifndef V6_CROSS_BUILD
+      //! Realtime actuator requests through MotionModule are only available in V5s
+      if (reqId == toUType(MotionRequestIds::jointRequest)) {
+        actuatorLayers[toUType(MotionActuators::jointActuators)]->addRequest(
+          boost::static_pointer_cast<JointRequest>(request)
+        );
+      } else if (reqId == toUType(MotionRequestIds::handsRequest)) {
+        actuatorLayers[toUType(MotionActuators::handActuators)]->addRequest(
+          boost::static_pointer_cast<HandsRequest>(request)
+        );
+      } else if (reqId == toUType(MotionRequestIds::behaviorRequest)) {
+      #else
+      if (reqId == toUType(MotionRequestIds::behaviorRequest)) {
+      #endif
+        auto rmb =
+          boost::static_pointer_cast<RequestMotionBehavior>(request);
+        //cout << "handling requests id: " << rmb->getReqConfig()->id << endl;
+        //cout << "handling requests type: " << rmb->getReqConfig()->type << endl;
+        if (mbManagers.find(rmb->mbManagerId) != mbManagers.end()) {
+          /*cout << "rmb->mbManagerIda already exists." << endl;
+          auto configs = mbManagers[rmb->mbManagerId]->getBehaviorInfo().getConfigsTree();
+          for (int i = 0; i < configs.size(); ++i) {
+            cout << "config[" << i << "]:\n" << configs[i]->getJson() << endl;
+          }*/
+          mbManagers[rmb->mbManagerId]->manageRequest(rmb);
+        } else {
+          ///< Create motion behavior manager
+          mbManagers.insert(
+            pair<unsigned, MBManagerPtr>(
+              rmb->mbManagerId,
+              boost::shared_ptr<MBManager<MType> >(new MBManager<MType>(this))
+            ));
+          mbManagers[rmb->mbManagerId]->manageRequest(rmb);
+        }
+      } else if (reqId == toUType(MotionRequestIds::killBehavior)) {
+        auto rmb =
+          boost::static_pointer_cast<KillMotionBehavior>(request);
+        if (mbManagers.find(rmb->mbManagerId) != mbManagers.end()) {
+          mbManagers[rmb->mbManagerId]->killBehavior();
+        }
+      } else if (reqId == toUType(MotionRequestIds::killBehaviors)) {
+        for (size_t i = 0; i < mbManagers.size(); ++i) {
+          if (mbManagers[i])
+            mbManagers[i]->killBehavior();
+        }
       }
     }
+    for (auto it = mbManagers.begin(); it != mbManagers.end(); )
+    {
+      it->second->update();
+      MB_INFO_OUT(MotionModule).insert(
+        pair<unsigned, BehaviorInfo>(it->first, it->second->getBehaviorInfo())
+      );
+      //auto configs = it->second->getBehaviorInfo().getConfigsTree();
+      //for (int i = 0; i < configs.size(); ++i) {
+      //  cout << "config[" << i << "]:\n" << configs[i]->getJson() << endl;
+      //}
+      if (it->second->getBehaviorInfo().isFinished()) {
+        it = mbManagers.erase(it);
+      } else {
+        ++it;
+      }
+    }
+    inRequests.popQueue();
   }
-  inRequests.popQueue();
 }
 
 void MotionModule::mainRoutine()
@@ -399,6 +431,17 @@ void MotionModule::mainRoutine()
     #endif
   #endif
   motionGenerator->reset();
+  #ifdef V6_CROSS_BUILD
+  try {
+    #ifndef REALTIME_LOLA_AVAILABLE
+      JOINT_POSITIONS_OUT(MotionModule) = motionProxy.call<vector<float>>("getAngles", Constants::jointNames, true);
+    #else
+      JOINT_POSITIONS_IN(MotionModule) = motionProxy.call<vector<float>>("getAngles", Constants::jointNames, true);
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
+  #endif
   kinematicsModule->update();
   fallDetector->update();
   for (auto it = mbManagers.begin(); it != mbManagers.end(); )
@@ -450,8 +493,6 @@ void MotionModule::mainRoutine()
     {
       for (const auto& sl : sensorLayers)
         if (sl) sl->update();
-      float steps = memoryProxy.call<float>("getData", "Lala's Voice");
-      N_FOOTSTEPS_OUT(MotionModule) = static_cast<int>(steps);
     }
   #endif
 #endif

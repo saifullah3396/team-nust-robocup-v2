@@ -55,7 +55,9 @@ void VisionTestSuite::update()
   if (shutdownCallBack()) return;
   try {
     auto& testType = getBehaviorCast()->testType;
-    if (testType == "Segmentation") {
+    if (testType == "LogImages") {
+      logImages();
+    } else if (testType == "Segmentation") {
       testSegmentation();
     } else if (testType == "FieldExtraction") {
       testFieldExtraction();
@@ -91,6 +93,19 @@ void VisionTestSuite::finish()
 {
   LOG_INFO("VisionTestSuite.finish()")
   inBehavior = false;
+}
+
+void VisionTestSuite::logImages()
+{
+  ///< Switch on field extraction modules
+  BaseModule::publishModuleRequest(boost::make_shared<SwitchLocalization>(false));
+
+  Json::Value value;
+  value["VisionModule"]["debugImageIndex"] = getBehaviorCast()->loggingCam;
+  DebugBase::processDebugMsg(value);
+  auto sliRequest =
+    boost::make_shared<SwitchLogImages>(true, static_cast<CameraId>(getBehaviorCast()->loggingCam));
+  BaseModule::publishModuleRequest(sliRequest);
 }
 
 void VisionTestSuite::testSegmentation()
@@ -137,11 +152,11 @@ void VisionTestSuite::testFieldExtraction()
     setupMBRequest(0, mConfig);
   }*/
   Json::Value value;
-  #ifdef MODULE_IS_REMOTE
   value["RegionSegmentation"]["drawPoints"] = 1;
   value["FieldExtraction"]["drawFiltPoints"] = 1;
   value["FieldExtraction"]["drawBorder"] = 1;
   value["FieldExtraction"]["drawBorderLines"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["FieldExtraction"]["displayOutput"] = 1;
   #endif
   value["FieldExtraction"]["displayInfo"] = 1;
@@ -170,12 +185,12 @@ void VisionTestSuite::testGoalExtraction()
     setupMBRequest(0, mConfig);
   }*/
   Json::Value value;
-  #ifdef MODULE_IS_REMOTE
   value["GoalExtraction"]["drawScannedLines"] = 1;
   value["GoalExtraction"]["drawScannedRegions"] = 1;
   value["GoalExtraction"]["drawGoalBaseWindows"] = 1;
   value["GoalExtraction"]["drawShiftedBorderLines"] = 1;
   value["GoalExtraction"]["drawGoalPostBases"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["GoalExtraction"]["displayOutput"] = 1;
   #endif
   value["GoalExtraction"]["displayInfo"] = 1;
@@ -204,7 +219,6 @@ void VisionTestSuite::testBallExtraction()
     setupMBRequest(0, mConfig);
   }*/
   Json::Value value;
-  #ifdef MODULE_IS_REMOTE
   value["BallExtraction"]["drawPredictionState"] = 1;
   value["BallExtraction"]["drawPredictionState"] = 1;
   value["BallExtraction"]["drawScannedLines"] = 1;
@@ -214,6 +228,7 @@ void VisionTestSuite::testBallExtraction()
   value["BallExtraction"]["drawScannedRegions"] = 1;
   value["BallExtraction"]["drawBallContour"] = 1;
   value["BallExtraction"]["drawPredictionROI"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["BallExtraction"]["displayOutput"] = 1;
   #endif
   value["BallExtraction"]["displayInfo"] = 1;
@@ -239,11 +254,11 @@ void VisionTestSuite::testRobotExtraction()
     setupMBRequest(0, mConfig);
   }*/
   Json::Value value;
-  #ifdef MODULE_IS_REMOTE
   //value["RobotExtraction"]["drawScannedLines"] = 1;
   value["RobotExtraction"]["drawJerseyRegions"] = 1;
   value["RobotExtraction"]["drawRobotRegions"] = 1;
   value["RobotExtraction"]["drawStrayRegions"] = 1;
+  #ifdef MODULE_IS_REMOTE
   value["RobotExtraction"]["displayOutput"] = 1;
   #endif
   value["RobotExtraction"]["displayInfo"] = 1;

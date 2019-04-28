@@ -10,7 +10,7 @@
 #include "Utils/include/PrintUtils.h"
 #include "Utils/include/ConfigManager.h"
 
-string PrintUtils::fileName = ConfigManager::getLogsDirPath() + "Output.txt";
+string PrintUtils::fileName;
 fstream PrintUtils::mainLog;
 std::stringstream PrintUtils::stream;
 pthread_mutex_t PrintUtils::printMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -43,11 +43,13 @@ void PrintUtils::addMessage(const std::stringstream& stream) {
     if (mainLog.is_open()) {
       mainLog << stream.str();
     } else {
+      fileName = ConfigManager::getLogsDirPath() + "Output.txt";
       mainLog.open(fileName, std::ofstream::out | std::ofstream::trunc);
       mainLog << stream.str();
     }
   } else {
     messagesQueue.pushToQueue(stream.str());
+    cout << stream.str();
   }
   PrintUtils::stream.str("");
 }

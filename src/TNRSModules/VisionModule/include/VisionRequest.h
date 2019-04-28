@@ -28,7 +28,8 @@ enum class VisionRequestIds {
   switchFieldProjection,
   switchLogImages,
   switchUseLoggedImages,
-  switchFeatureExtModule
+  switchFeatureExtModule,
+  count
 };
 
 /**

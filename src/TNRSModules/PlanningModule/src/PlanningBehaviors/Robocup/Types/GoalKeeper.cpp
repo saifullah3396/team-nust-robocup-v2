@@ -53,6 +53,7 @@ bool GoalKeeper::initiate()
 {
   LOG_INFO("GoalKeeper.initiated() called...")
   ROBOCUP_ROLE_OUT(PlanningModule) = (int)RobocupRole::goalKeeper;
+  keepMovingWhileNav = false;
   return Soccer::initiate();
 }
 
@@ -78,17 +79,7 @@ void GoalKeeper::ReactGoalKeeper::onRun()
   } else if (GOAL_KEEPER_PTR->robotIsPenalised()) {
     nextState = GOAL_KEEPER_PTR->waitForPenalty.get();
   } else {
-    /*
-    if (!GOAL_KEEPER_PTR->mbInProgress()) {
-      auto hsConfig =
-        boost::make_shared<HeadScanConfig>();
-      *hsConfig =
-      *boost::static_pointer_cast<HeadScanConfig>(
-        GOAL_KEEPER_PTR->getBehaviorCast()->hsConfig);
-      GOAL_KEEPER_PTR->setupMBRequest(MOTION_1, hsConfig);
-    }
-    */
-    if (!GOAL_KEEPER_PTR->mbInProgress()) {
+    if (!GOAL_KEEPER_PTR->mbInProgress(MOTION_1)) {
       auto httConfig =
         boost::make_shared<HeadTargetTrackConfig>();
       *httConfig =
@@ -105,11 +96,10 @@ void GoalKeeper::ReactGoalKeeper::onRun()
     if (GOAL_KEEPER_PTR->shouldPlayBall()) {
       nextState = GOAL_KEEPER_PTR->playBall.get();
     } else if (GOAL_KEEPER_PTR->ballFound()) {
+      cout << "ballfound: "<<endl;
       Vector2f endPosition;
       float timeToReach;
       if (GOAL_KEEPER_PTR->ballIncoming(endPosition, timeToReach)) {
-        //cout << "time to reach:" << timeToReach << endl;
-        //cout << "endPosition:" << endPosition << endl;
         ///< If ball will reach within 'diveReactionTime' seconds, try to dive.
         if (timeToReach <= GOAL_KEEPER_PTR->diveReactionTime) {
           GOAL_KEEPER_PTR->interceptTarget.x() = -penaltyBoxMidX;
@@ -126,6 +116,7 @@ void GoalKeeper::ReactGoalKeeper::onRun()
           nextState = GOAL_KEEPER_PTR->interceptBall.get();
         }
       } else {
+        cout << "ball not crossing goal" << endl;
         ///< if ball is not cross the goal
         GOAL_KEEPER_PTR->interceptTarget.x() = -penaltyBoxMidX;
         GOAL_KEEPER_PTR->interceptTarget.theta() = 0.f;
@@ -146,8 +137,9 @@ void GoalKeeper::ReactGoalKeeper::onRun()
 
 bool GoalKeeper::ballIncoming(Vector2f& endPosition, float& timeToReach)
 {
-  auto& ballWorld = WORLD_BALL_INFO_OUT(PlanningModule).posWorld;
-  auto& ballWorldVel = WORLD_BALL_INFO_OUT(PlanningModule).velWorld;
+  auto robotPose2D = ROBOT_POSE_2D_IN(PlanningModule);
+  auto ballWorld = robotPose2D.transform(BALL_INFO_IN(PlanningModule).posRel);
+  auto ballWorldVel = robotPose2D.rotate(BALL_INFO_IN(PlanningModule).velRel);
   MotionEquationSolver* meSolver;
   if (ballMotionModel == BallMotionModel::damped) {
     meSolver = new DampedMESolver(
@@ -164,6 +156,8 @@ bool GoalKeeper::ballIncoming(Vector2f& endPosition, float& timeToReach)
       coeffFriction
     );
   }
+  cout << "ballVel: " << BALL_INFO_IN(PlanningModule).velRel << endl;
+  cout << "ballWorldVel: " << ballWorldVel << endl;
   meSolver->optDef();
   endPosition = meSolver->getEndPosition();
   if (endPosition[0] <= -penaltyBoxMinX &&
@@ -171,10 +165,14 @@ bool GoalKeeper::ballIncoming(Vector2f& endPosition, float& timeToReach)
       endPosition[1] <= goalPostY)
   {
     timeToReach = meSolver->getTimeToReach();
+    cout << "time to reach:" << timeToReach << endl;
+    cout << "endPosition:" << endPosition << endl;
     delete meSolver;
     return true;
   } else {
     timeToReach = meSolver->getTimeToReach();
+    cout << "time to reach:" << timeToReach << endl;
+    cout << "endPosition:" << endPosition << endl;
     delete meSolver;
     return false;
   }
@@ -201,8 +199,7 @@ void GoalKeeper::InterceptBall::onRun()
           (ROBOT_POSE_2D_IN_REL(PlanningModule, GOAL_KEEPER_PTR) - GOAL_KEEPER_PTR->interceptTarget).get().norm() >
           GOAL_KEEPER_PTR->interceptBallPosTol)
       {
-        cout << "Setting navigation config..." << endl;
-        GOAL_KEEPER_PTR->setNavigationConfig(GOAL_KEEPER_PTR->interceptTarget);
+        GOAL_KEEPER_PTR->setPlanTowardsConfig(GOAL_KEEPER_PTR->interceptTarget);
         GOAL_KEEPER_PTR->goingToTarget = GoingToTarget::interceptBall;
         ROBOT_INTENTION_OUT_REL(PlanningModule, GOAL_KEEPER_PTR) = 1;
       }
@@ -255,7 +252,7 @@ bool GoalKeeper::divePossible()
 
 void GoalKeeper::Dive::onStart()
 {
-  GOAL_KEEPER_PTR->killMotionBehavior(MOTION_1);
+  GOAL_KEEPER_PTR->killMotionBehavior(MOTION_2);
   GOAL_KEEPER_PTR->killChild();
 }
 
@@ -269,11 +266,11 @@ void GoalKeeper::Dive::onRun()
   } else {
     cout << "lastDiveTargetType: " << GOAL_KEEPER_PTR->lastDiveTargetType << endl;
     if (GOAL_KEEPER_PTR->lastDiveTargetType != -1) {
-      if (!GOAL_KEEPER_PTR->mbInProgress()) {
+      if (!GOAL_KEEPER_PTR->mbInProgress(MOTION_2)) {
         auto dConfig =
           boost::make_shared <KFMDiveConfig> (
             (KeyFrameDiveTypes) GOAL_KEEPER_PTR->lastDiveTargetType);
-        GOAL_KEEPER_PTR->setupMBRequest(MOTION_1, dConfig);
+        GOAL_KEEPER_PTR->setupMBRequest(MOTION_2, dConfig);
         GOAL_KEEPER_PTR->lastDiveTargetType = -1;
         nextState = GOAL_KEEPER_PTR->postDive.get();
       }
@@ -289,13 +286,13 @@ void GoalKeeper::PostDive::onRun()
   } else if (GOAL_KEEPER_PTR->robotIsPenalised()) {
     nextState = GOAL_KEEPER_PTR->waitForPenalty.get();
   } else {
-    if (!GOAL_KEEPER_PTR->mbInProgress()) {
-      auto pConfig =
-        boost::make_shared<InterpToPostureConfig>();
-      pConfig->targetPosture = PostureState::standHandsBehind;
-      pConfig->timeToReachP = 2.f;
-      GOAL_KEEPER_PTR->setupMBRequest(MOTION_1, pConfig);
-      nextState = GOAL_KEEPER_PTR->react.get();
+    if (!GOAL_KEEPER_PTR->mbInProgress(MOTION_2)) {
+      if (GOAL_KEEPER_PTR->setPostureAndStiffness(
+          PostureState::standHandsBehind,
+          StiffnessState::robocup, MOTION_2))
+      {
+        nextState = GOAL_KEEPER_PTR->react.get();
+      }
     }
   }
 }

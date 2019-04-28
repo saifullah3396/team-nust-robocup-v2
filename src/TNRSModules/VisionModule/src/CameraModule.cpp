@@ -7,6 +7,12 @@
  * @date 05 Feb 2017
  */
 
+#ifdef V6_CROSS_BUILD
+#include <linux/usb/video.h>
+#include <linux/uvcvideo.h>
+#include <sys/ioctl.h>
+#include <stdint.h>
+#endif
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/DataHolders/Camera.h"
 #include "Utils/include/EnumUtils.h"
@@ -45,7 +51,24 @@ CameraModule::CameraModule() :
     vector<int>(toUType(CameraSettings::count) + 1, -1000)
   ); ///< First parameter is camera index
   if (setupCameras())
-    LOG_INFO("Cameras setup complete.")
+  LOG_INFO("Cameras setup complete.")
+  #ifdef V6_CROSS_BUILD //! Fix for upper camera flip in V6
+  struct uvc_xu_control_query query;
+  query.unit = 3; //! Always 3 as mentioned in documenation of nao-v6-hints.pdf
+  query.selector = 12;
+  query.query = UVC_SET_CUR;
+  query.size = 2;
+  uint8_t* data = new uint8_t[2];
+  data[0] = 1;
+  data[1] = 1;
+  query.data = data;
+  xioctl(cams[toUType(CameraId::headTop)]->fd, UVCIOC_CTRL_QUERY, &query);
+  query.selector = 13;
+  query.query = UVC_SET_CUR;
+  query.size = 2;
+  query.data = data;
+  xioctl(cams[toUType(CameraId::headTop)]->fd, UVCIOC_CTRL_QUERY, &query);
+  #endif
 }
 #endif
 

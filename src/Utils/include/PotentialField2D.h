@@ -28,8 +28,8 @@ public:
    */
   PotentialField2D(
     const Scalar& kAtt = 1.0,
-    const Scalar&kRep = 0.01,
-    const Scalar& kRepPerp = 0.01,
+    const Scalar& kRep = 1.0,
+    const Scalar& kRepPerp = 1.0,
     const Scalar& distThresholdAtt = 1.0, // 1m range
     const Scalar& distThresholdRep = 0.5);
 
@@ -41,7 +41,8 @@ public:
   VelocityInput<Scalar> update(
     const RobotPose2D<Scalar>& robotPose,
     const RobotPose2D<Scalar>& goalPose,
-    const vector<Obstacle<Scalar>>& obstacles);
+    const vector<Obstacle<Scalar>>& obstacles,
+    const RobotPose2D<Scalar>& tolerance);
 
 private:
   vector<Obstacle<Scalar>> obstacles;

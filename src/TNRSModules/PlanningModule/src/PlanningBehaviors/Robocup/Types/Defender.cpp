@@ -51,7 +51,6 @@ bool Defender::initiate()
 
 void Defender::ReactDefender::onRun()
 {
-  cout << "ReactDefender" << endl;
   if (DEFENDER_PTR->robotIsFalling()) {
     nextState = DEFENDER_PTR->fallRecovery.get();
   } else if (DEFENDER_PTR->robotIsPenalised()) {
@@ -68,7 +67,6 @@ void Defender::ReactDefender::onRun()
     }
     */
     if (!DEFENDER_PTR->mbInProgress()) {
-      cout << "Setting head config" << endl;
       auto httConfig =
         boost::make_shared<HeadTargetTrackConfig>();
       *httConfig =

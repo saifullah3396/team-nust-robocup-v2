@@ -25,7 +25,8 @@ enum class LolaRequestIds {
   jointRequest,
   handsRequest,
   stiffnessRequest,
-  ledRequest
+  ledRequest,
+  count
 };
 
 /**

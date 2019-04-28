@@ -150,7 +150,6 @@ bool KickModule<Scalar>::setKickSupportLegs()
   if (ballPosition[0] > 0.180)
     return false;
   auto angle = targetAngle * MathsUtils::DEG_TO_RAD;
-  cout << "Angle:" << angle << endl;
   for (size_t i = 0; i < 14; ++i) {
     if (
         ballPosition[1] >= kickFootMap[i][1] &&
@@ -158,7 +157,6 @@ bool KickModule<Scalar>::setKickSupportLegs()
         angle >= kickFootMap[i][3] &&
         angle <= kickFootMap[i][4])
     {
-      cout << "Angle:" << angle << endl;
       kickLeg = static_cast<LinkChains>(kickFootMap[i][0]);
       supportLeg = kickLeg == LinkChains::rLeg ? LinkChains::lLeg : LinkChains::rLeg;
       return true;
@@ -222,7 +220,6 @@ bool KickModule<Scalar>::setEndEffectorXY(const Scalar& angle)
     tForAngle = (Angle::DEG_90 - angle) / Angle::DEG_180;
   else
     tForAngle = (Angle::DEG_90 + angle) / Angle::DEG_180;
-  cout << "tangle:" << tForAngle << endl;
   tBounds = Matrix<Scalar, 2, 1>(tForAngle - 0.05, tForAngle + 0.05);
   if (kickLeg == LinkChains::lLeg) {
     success = lFootContour->findNormalToVec(normal, contourPoint, tBounds);
@@ -332,8 +329,8 @@ void KickModule<Scalar>::setupPosture()
   } else {
     auto postureConfig =
       boost::shared_ptr<InterpToPostureConfig>(new InterpToPostureConfig());
-    postureConfig->targetPosture = PostureState::stand;
-    postureConfig->timeToReachP = 1.0;
+    postureConfig->targetPosture = PostureState::standHandsBehind;
+    postureConfig->timeToReachP = 0.5;
     this->setupChildRequest(postureConfig);
   }
 }

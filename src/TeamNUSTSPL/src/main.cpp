@@ -100,17 +100,22 @@
       {
         ROBOT_NAME = ArgParseUtils::getCmdOption(argv, argv + argc, "--robot");
         if (!(ROBOT_NAME == "Sim" ||
-            ROBOT_NAME == "Nu-11" ||
-            ROBOT_NAME == "Nu-12" ||
-            ROBOT_NAME == "Nu-13" ||
-            ROBOT_NAME == "Nu-14" ||
-            ROBOT_NAME == "Nu-15"))
+            ROBOT_NAME == "Nu-1" ||
+            ROBOT_NAME == "Nu-2" ||
+            ROBOT_NAME == "Nu-3" ||
+            ROBOT_NAME == "Nu-4" ||
+            ROBOT_NAME == "Nu-5" ||
+            ROBOT_NAME == "Nu-6" ||
+            ROBOT_NAME == "Nu-7" ||
+            ROBOT_NAME == "Nu-8" ||
+            ROBOT_NAME == "Nu-9" ||
+            ROBOT_NAME == "Nu-10"))
         {
           LOG_ERROR(
             "Invalid robot name: '" <<
             ROBOT_NAME <<
             "'. Possible names are: " <<
-            "\n1. Nu-11\n2. Nu-12\n3. Nu-13\n4. Nu-14\n5. Nu-15\n6. Sim")
+            "Nu-1(to 7) or Sim")
           exit(1);
         }
       }

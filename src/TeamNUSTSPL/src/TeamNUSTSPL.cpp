@@ -300,11 +300,6 @@ void TeamNUSTSPL::setupTNRSModules()
       childModules[i]->start();
     }
   }
-  //auto sliRequest1 = boost::make_shared<SwitchLogImages>(true, CameraId::headTop);
-  //BaseModule::publishModuleRequest(sliRequest1);
-  //auto sliRequest2 = boost::make_shared<SwitchLogImages>(true, CameraId::headBottom);
-  //BaseModule::publishModuleRequest(sliRequest2);
-
   //auto vRequest = boost::make_shared<SwitchVision>(true);
   //BaseModule::publishModuleRequest(vRequest);
   /* DebugMsgs test

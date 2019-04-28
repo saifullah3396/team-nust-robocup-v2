@@ -33,6 +33,16 @@ class LocalizationModule;
 using namespace RandomLib;
 
 /**
+ * @enum FieldHalf
+ * @brief The enumeration for top and bottom halves
+ *   of the field
+ */
+enum class FieldHalf : unsigned int {
+  teamHalf,
+  oppHalf
+};
+
+/**
  * @class ParticleFilter
  * @brief The class for implementing particle filter for robot
  *   localization.
@@ -98,11 +108,11 @@ public:
   const bool isLocalized() const { return localized; }
 
   /**
-   * Gets the current average state of the robot.
+   * Gets the current best state of the robot.
    *
    * @return RobotPose2D<float>
    */
-  RobotPose2D<float> getFilteredState() const { return avgFilteredState; }
+  RobotPose2D<float> getBestState() const;
 
   /**
    * @brief getParticles Gets the current particles
@@ -239,7 +249,7 @@ private:
    * @param p Particle
    * @param image Map image
    */
-  void drawParticle(const Particle& p, Mat& image, const Scalar& color = Scalar(255, 0, 0));
+  void drawParticle(const RobotPose2D<float>& p, Mat& image, const Scalar& color = Scalar(255, 0, 0));
 
   ///< Whether the filter has been initiated with some initial estimate
   bool initiated = {false};
@@ -303,11 +313,14 @@ private:
   ///< Parameters for augmented monte-carlo localization method
   double wSlow, wFast;
 
+  ///< Current best state of the robot
+  Particle* bestParticle;
+
   ///< Current average state of the robot
-  RobotPose2D<float> avgFilteredState = {RobotPose2D<float>(NAN, NAN, NAN)};
+  RobotPose2D<float> avgState = {RobotPose2D<float>(NAN, NAN, NAN)};
 
   ///< Last known half the robot is in: 0 us/1 opponents.
-  unsigned lastKnownHalf = {BOTTOM_HALF};
+  FieldHalf lastKnownHalf = {FieldHalf::teamHalf};
 
   ///< Filter prediction standard deviation when the robot is standing
   Vector3d predictionStd;
@@ -344,14 +357,4 @@ private:
 
   ///< Pointer to localization module object
   LocalizationModule* lModule;
-
-  /**
-   * @enum FieldHalf
-   * @brief The enumeration for top and bottom halves
-   *   of the field
-   */
-  enum FieldHalf {
-    BOTTOM_HALF,
-    TOP_HALF
-  };
 };

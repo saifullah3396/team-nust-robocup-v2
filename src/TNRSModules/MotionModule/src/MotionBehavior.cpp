@@ -171,6 +171,17 @@ void MotionBehavior<Scalar>::naoqiMoveToward(
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+void MotionBehavior<Scalar>::naoqiMoveTo(
+  const float& x,
+  const float& y,
+  const float& t)
+{
+  mG->naoqiMoveTo(x, y, t);
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
 #ifndef V6_CROSS_BUILD_REMOVED
 void MotionBehavior<Scalar>::naoqiSetFootsteps(
   const AL::ALValue& footName,

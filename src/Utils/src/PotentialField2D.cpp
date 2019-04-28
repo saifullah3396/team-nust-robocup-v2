@@ -37,13 +37,23 @@ template <typename Scalar>
 VelocityInput<Scalar> PotentialField2D<Scalar>::update(
   const RobotPose2D<Scalar>& robotPose,
   const RobotPose2D<Scalar>& goalPose,
-  const vector<Obstacle<Scalar>>& obstacles)
+  const vector<Obstacle<Scalar>>& obstacles,
+  const RobotPose2D<Scalar>& tolerance)
 {
-  ///< Attractive potential
+  //! Find the difference
   Matrix<Scalar, 3, 1> goalDiff;
   goalDiff[0] = robotPose.getX() - goalPose.getX();
   goalDiff[1] = robotPose.getY() - goalPose.getY();
-  goalDiff[2] = MathsUtils::diffAngle(robotPose.getTheta(), goalPose.getTheta());
+  goalDiff[2] = MathsUtils::rangeToPi(MathsUtils::diffAngle(robotPose.getTheta(), goalPose.getTheta()));
+
+  //cout << "goalDiff: " << goalDiff << endl;
+
+  //! Check if goal is within tolerance
+  goalDiff[0] = fabsf(goalDiff[0]) <= tolerance.getX() ? 0.0 : goalDiff[0];
+  goalDiff[1] = fabsf(goalDiff[1]) <= tolerance.getY() ? 0.0 : goalDiff[1];
+  goalDiff[2] = fabsf(goalDiff[2]) <= tolerance.getTheta() ? 0.0 : goalDiff[2];
+
+  //! Attractive potential
   Scalar goalDist = goalDiff.norm();
   Matrix<Scalar, 3, 1> fAtt;
   if (goalDist < distThresholdAtt)

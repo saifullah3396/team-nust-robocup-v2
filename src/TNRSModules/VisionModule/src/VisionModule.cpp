@@ -298,8 +298,10 @@ void VisionModule::updateLandmarksInfo()
       FeatureExtraction::getUnknownLandmarks());
   BaseModule::publishModuleRequest(klu);
   BaseModule::publishModuleRequest(ulu);
-  /*LOG_INFO("N landmarks seen: " << klu->landmarks.size());
-  for (auto l : klu->landmarks) {
+  LOG_INFO("N landmarks seen1: " << ulu->landmarks.size());
+  LOG_INFO("N landmarks seen2: " << klu->landmarks.size());
+  LOG_INFO("LastIterationTimeMS: " << this->lastIterationTimeMS);
+  /*for (auto l : klu->landmarks) {
     if (l->type == 0) {
       cout << "l->type:" << l->type << endl;
       cout << "l->pos: "<< l->pos << endl;
@@ -465,7 +467,7 @@ void VisionModule::sendImages()
       BaseModule::publishModuleRequest(request);
     } else {
       Mat image = FeatureExtraction::getBgrMat(cameraIndex);
-      cv::resize(image, image, Size(160, 120));
+      ///cv::resize(image, image, Size(160, 120));
       UserCommRequestPtr request =
         boost::make_shared<SendImageRequest>(image);
       BaseModule::publishModuleRequest(request);
@@ -498,6 +500,7 @@ void VisionModule::saveImages()
     } else {
       imageStr = bottomDir + "/" + DataUtils::getCurrentDateTime() + ".jpg";
     }
+    LOG_INFO("Writing image: "  << imageStr);
     Mat image = FeatureExtraction::getBgrMat(GET_DVAR(int, debugImageIndex));
     imwrite(imageStr, image);
   }

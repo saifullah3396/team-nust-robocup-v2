@@ -22,6 +22,7 @@
 #include "Utils/include/ConfigMacros.h"
 #include "Utils/include/HardwareIds.h"
 #include "Utils/include/MathsUtils.h"
+#include "Utils/include/TNRSLine.h"
 
 FieldMap::FieldMap(LocalizationModule* localizationModule) :
   MemoryBase(localizationModule), DebugBase("FieldMap", this),
@@ -68,12 +69,9 @@ FieldMap::FieldMap(LocalizationModule* localizationModule) :
 
 void FieldMap::update()
 {
-  cout << "updating robot pose..." << endl;
+  updateFOVLines();
   updateRobotPose2D();
-  cout << "updating obstacle trackers..." << endl;
   updateObstacleTrackers();
-
-  cout << "updating occupancy map..." << endl;
   updateOccupancyMap();
   if (GET_DVAR(int, displayInfo)) {
     LOG_INFO("Current robot pose: " << ROBOT_POSE_2D_OUT(LocalizationModule).get().transpose());
@@ -82,17 +80,38 @@ void FieldMap::update()
   if (GET_DVAR(int, displayOutput)) {
     auto& occupancyMap = OCCUPANCY_MAP_OUT(LocalizationModule);
     VisionUtils::displayImage("Occupancy Map", occupancyMap.data, 0.5);
-    waitKey(0);
+    //waitKey(0);
+  }
+}
+
+void FieldMap::updateFOVLines()
+{
+  auto& robotPose2D = ROBOT_POSE_2D_OUT(LocalizationModule);
+  if (robotPose2D.getX() == robotPose2D.getX()) {
+    //! Get top camera transformation for finding current robot FOV
+    Matrix<float, 4, 4> T = UPPER_CAM_TRANS_IN(LocalizationModule);
+
+    //! Transform fov from camera frame to robot frame
+    Matrix<float, 3, 1> unitX =
+      MathsUtils::getTInverse(T).block(0, 0, 3, 3) *
+      unitVecX[toUType(CameraId::headTop)];
+    auto leftFOVLineEnd = Point2f(unitX[0], unitX[1]) * maxFOVDistance;
+    auto rightFOVLineEnd = Point2f(unitX[0], -unitX[1]) * maxFOVDistance;
+
+    //! Transform fov lines from robot frame to world frame
+    leftFOVLineEnd = robotPose2D.transform(leftFOVLineEnd);
+    rightFOVLineEnd = robotPose2D.transform(rightFOVLineEnd);
+
+    auto lineStart = Point2f(robotPose2D.getX(), robotPose2D.getY());
+    leftFOVLine = boost::make_shared<TNRSLine<float>>(lineStart, leftFOVLineEnd);
+    rightFOVLine = boost::make_shared<TNRSLine<float>>(lineStart, rightFOVLineEnd);
   }
 }
 
 void FieldMap::updateRobotPose2D()
 {
   auto& robotPose2D = ROBOT_POSE_2D_OUT(LocalizationModule);
-  robotPose2D.x() = 0.0;
-  robotPose2D.y() = 0.0;
-  robotPose2D.theta() = 0.0;
-  robotPose2D = localizer->getFilteredState();
+  robotPose2D = localizer->getBestState();
   robotPose2D.ct = cos(robotPose2D.getTheta());
   robotPose2D.st = sin(robotPose2D.getTheta());
 }
@@ -107,7 +126,6 @@ void FieldMap::updateObstacleTrackers()
       if (currentTime - (*iter)->getLastUpdateTime() < refreshTime) {
         ++iter;
       } else {
-        cout << "erased dye to time" << endl;
         iter = trackedObstacles.erase(iter);
       }
     } else {
@@ -121,7 +139,6 @@ void FieldMap::updateObstacleTrackers()
     obstacles.id != prevObsId &&
     !obstacles.data.empty())
   {
-    cout << "obstacles observed: " << obstacles.data.size() << endl;
     auto& occupancyMap = OCCUPANCY_MAP_OUT(LocalizationModule);
     for (const auto& obs : obstacles.data) {
       if (obs.centerT.x != obs.centerT.x)
@@ -129,25 +146,18 @@ void FieldMap::updateObstacleTrackers()
       // Update new regions and check if a obstacle already exists in the vicinity
       auto closest = 1000;
       boost::shared_ptr<ObstacleTracker> bestMatch;
-      cout << "obs: " << obs.centerT << endl;
-      cout << "obs.depth: "<< obs.depth << endl;
       for (auto& to : trackedObstacles) {
         const auto& state = to->getState();
         auto dx = obs.centerT.x - state[0];
         auto dy = obs.centerT.y - state[1];
-        cout << "toX: " << state[0] << endl;
-        cout << "toY: " << state[1] << endl;
         auto dist = sqrt(dx * dx + dy * dy);
         auto distRatio = 1 - (obs.depth - dist) / obs.depth;
-        cout << "dist: " << dist << endl;
-        cout << "distRatio: " << distRatio << endl;
         if (distRatio > 0 && distRatio < obstacleMatchMaxDistanceRatio && dist < closest) {
           closest = dist;
           bestMatch = to;
         }
       }
 
-      cout << "best match not found." << endl;
       if (bestMatch &&
           (obs.type == bestMatch->getObstacleType() ||
           obs.type == ObstacleType::unknown))
@@ -158,7 +168,6 @@ void FieldMap::updateObstacleTrackers()
         auto currentTime = localizationModule->getModuleTime();
         bestMatch->update(meas, currentTime);
       } else {
-        cout << "Adding new obstacle tracker..."  << endl;
         bool addNewTracker = false;
         if (trackedObstacles.size() < maxObstacleTrackers) {
           addNewTracker = true;
@@ -176,9 +185,6 @@ void FieldMap::updateObstacleTrackers()
           trackedObstacles.push_back(newTracked);
         }
       }
-      circle(occupancyMap.data, worldToMap(Point2f(obs.centerT)), obs.depth / occupancyMap.resolution, Scalar(0, 0, 0), -1);
-      VisionUtils::displayImage("Occupancy Map", occupancyMap.data, 0.5);
-      waitKey(0);
     }
     sort(trackedObstacles.begin(), trackedObstacles.end(), [](
       const boost::shared_ptr<ObstacleTracker>& tr1,
@@ -203,46 +209,59 @@ void FieldMap::updateObstacleTrackers()
 
 bool FieldMap::obstacleInFOV(const boost::shared_ptr<ObstacleTracker>& obsTracker)
 {
+  if (leftFOVLine) {
+    const auto& state = obsTracker->getState();
+    auto angle = atan2(state[1], state[0]);
+    if (angle >= rightFOVLine->angle && angle <= leftFOVLine->angle) {
+      return true;
+    }
+  }
   return false;
 }
 
 void FieldMap::updateOccupancyMap()
 {
-  //CameraId activeCamera = CameraId::headTop;
-  //Matrix<float, 4, 4> T;
-  //if (activeCamera == CameraId::headTop)
-  //  T = UPPER_CAM_TRANS_IN(LocalizationModule);
-  //else
-  //  T = LOWER_CAM_TRANS_IN(LocalizationModule);
-  //Matrix<float, 3, 1> unitX = T.block(0, 0, 3, 3) * unitVecX[toUType(activeCamera)];
-  //Matrix<float, 3, 1> unitY = T.block(0, 0, 3, 3) * unitVecY[toUType(activeCamera)];
-  /*minDistGround =
-    slopes[static_cast<int>(CameraId::headBottom)] *
-      (0.0 - T[static_cast<int>(CameraId::headBottom)](2, 3)) +
-      T[static_cast<int>(CameraId::headBottom)](0, 3);
-  */
-
   ///< Check if robot is localized
   //if (!localizer->isLocalized()) return;
-  auto& occupancyMap = OCCUPANCY_MAP_OUT(LocalizationModule);
-  occupancyMap.data = occupancyMapBase.clone();
-  for (auto& to : trackedObstacles) {
-    const auto& state = to->getState();
-    cout << "to->getRadius() / occupancyMap.resolution: "<< to->getRadius() / occupancyMap.resolution << endl;
-    circle(occupancyMap.data, worldToMap(Point2f(state[0], state[1])), to->getRadius() / occupancyMap.resolution, Scalar(0, 0, 0), -1);
-  }
 
-  if (addBallObstacle) {
-    ///< Draw ball as an obstacle if required
-    const auto& wbInfo = WORLD_BALL_INFO_IN(LocalizationModule);
-    if (wbInfo.found) {
-      circle(
-        occupancyMap.data,
-        worldToMap(wbInfo.posWorld),
-        ballRadius / occupancyMap.resolution,
-        Scalar(0, 0, 0),
-        -1);
+  useOccupancyMap = true;
+  if (useOccupancyMap) {
+    auto& occupancyMap = OCCUPANCY_MAP_OUT(LocalizationModule);
+    occupancyMap.data = occupancyMapBase.clone();
+    for (auto& to : trackedObstacles) {
+      const auto& state = to->getState();
+      circle(occupancyMap.data, worldToMap(Point2f(state[0], state[1])), to->getRadius() / occupancyMap.resolution, Scalar(0, 0, 0), -1);
     }
+
+    if (addBallObstacle) {
+      ///< Draw ball as an obstacle if required
+      const auto& wbInfo = WORLD_BALL_INFO_IN(LocalizationModule);
+      if (wbInfo.found) {
+        circle(
+          occupancyMap.data,
+          worldToMap(wbInfo.posWorld),
+          ballRadius / occupancyMap.resolution,
+          Scalar(0, 0, 0),
+          -1);
+      }
+    }
+    /*if (GET_DVAR(int, drawFOVLines)) {
+      line(
+        occupancyMap.data,
+        worldToMap(Point2f(robotPose2D.getX(), robotPose2D.getY())),
+        worldToMap(Point2f(leftFOVLine.x, leftFOVLine.y)),
+        Scalar(0),
+        2);
+      line(
+        occupancyMap.data,
+        worldToMap(Point2f(robotPose2D.getX(), robotPose2D.getY())),
+        worldToMap(Point2f(rightFOVLine.x, rightFOVLine.y)),
+        Scalar(0),
+        2);
+    }*/
+    //for (auto p : FOVPoly) {
+    //  VisionUtils::drawPoints(worldToMap(p), occupancyMap.data());
+    //}
   }
 }
 
@@ -252,8 +271,8 @@ cv::Point_<int> FieldMap::worldToMap(const cv::Point_<T>& p)
   auto& occupancyMap = OCCUPANCY_MAP_OUT(LocalizationModule);
   return
     cv::Point_<int> (
-      p.x / occupancyMap.resolution + occupancyMap.originPose.x, p.y /
-      occupancyMap.resolution + occupancyMap.originPose.y);
+      p.x / occupancyMap.resolution + occupancyMap.originPose.x,
+      occupancyMap.originPose.y - p.y / occupancyMap.resolution);
 }
 
 void FieldMap::setupViewVectors()
@@ -273,16 +292,20 @@ void FieldMap::setupViewVectors()
   JsonUtils::jsonToType(fovY[toUType(CameraId::headBottom)], settings["visionTop"]["intrinsic"]["fovY"], 0.0);
   fovX *= MathsUtils::DEG_TO_RAD;
   fovY *= MathsUtils::DEG_TO_RAD;
+  fovX /= 2.0;
+  fovY /= 2.0;
   for (size_t i = 0; i < toUType(CameraId::count); ++i) {
     unitVecX[i][1] = 0;
-    unitVecY[i][1] = 0;
+    unitVecY[i][0] = 0;
     if (i == static_cast<int>(CameraId::headTop)) {
-      unitVecY[i][1] = -sin(fovY[i] / 2);
-      unitVecX[i][0] = -cos(fovX[i] / 2);
+      unitVecX[i][0] = -sin(fovX[i]);
+      unitVecY[i][1] = -sin(fovY[i]);
     } else {
-      unitVecY[i][1] = sin(fovY[i] / 2);
-      unitVecX[i][0] = cos(fovX[i] / 2);
+      unitVecX[i][0] = sin(fovX[i]);
+      unitVecY[i][1] = sin(fovY[i]);
     }
+    unitVecX[i][2] = cos(fovX[i]);
+    unitVecY[i][2] = cos(fovY[i]);
   }
 }
 

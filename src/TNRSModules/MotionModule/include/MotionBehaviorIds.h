@@ -87,6 +87,7 @@ enum class MBMovementTypes
 : unsigned int {
   naoqiFootsteps,
   naoqiMoveToward,
+  naoqiMoveTo,
   speedWalk,
   kinResolutionWalk,
   count

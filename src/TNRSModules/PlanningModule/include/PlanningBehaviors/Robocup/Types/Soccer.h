@@ -67,12 +67,15 @@ protected:
 
   const float goalPosTol = 0.25f; ///< 0.25 meters
   const float goalAngleTol = 0.261666667; ///< 15 degrees in radians
-  const float ballKickDist = 0.25f; ///< 0.2 meters
+  const float ballKickDist = 0.16; ///< 0.13 meters
+  const float ballKickDistTol = 0.15f; ///< 10 meters
   const float ballMovedVelMin = 0.5f; ///< 0.5 meters / s
   Point2f lastKickTarget;
 
   static float coeffDamping;
   static float coeffFriction;
+
+  bool keepMovingWhileNav = {true};
 
   enum class GoingToTarget : unsigned {
     initPosition,

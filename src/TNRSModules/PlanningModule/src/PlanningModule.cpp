@@ -343,7 +343,6 @@ void PlanningModule::mainRoutine()
     AL::ALValue value = memoryProxy->getData("GameCtrl/RoboCupGameControlData");
     if (value.isBinary() && value.getSize() == sizeof(RoboCupGameControlData))
       memcpy(&gameControlData, value, sizeof(RoboCupGameControlData));
-    gameControlData.teams[1].teamColour = 2;
     GAME_DATA_OUT(PlanningModule) = gameControlData;
   }
 #else

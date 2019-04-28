@@ -78,6 +78,7 @@ void MPComControl<Scalar>::update()
     finish();
   #else
   if (this->runTime > timeToReachB) {
+    POSTURE_STATE_OUT(MotionModule) = PostureState::standKick;
     finish();
   } else {
     auto step = this->runTime / timeToReachB;

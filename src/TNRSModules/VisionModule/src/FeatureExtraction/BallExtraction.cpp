@@ -404,7 +404,8 @@ void BallExtraction::findBallRegions(vector<ScannedRegionPtr>& ballRegions)
     //! Remove vertical lines above border in image
     for (auto& rl : verBallLines) {
       if (!rl) continue;
-      rl->start = max(rl->start, border[rl->baseIndex]);
+      if (rl->baseIndex >=0 && rl->baseIndex < border.size())
+        rl->start = max(rl->start, border[rl->baseIndex]);
     }
 
     if (GET_DVAR(int, drawScannedLines)) {

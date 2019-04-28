@@ -2416,10 +2416,10 @@ Matrix<Scalar, 4, 4> KinematicsModule<Scalar>::getFeetCenterT()
   Matrix<Scalar, 4, 4> ee;
   if (footOnGround == RobotFeet::rFoot) {
     MathsUtils::makeTranslation(ee, Constants::footOriginShiftX, Constants::footSeparation / 2, 0.0);
-    T = L_FOOT_TRANS_OUT(MotionModule) * ee;
+    T = R_FOOT_TRANS_OUT(MotionModule) * ee;
   } else { ///< If left or unknown
     MathsUtils::makeTranslation(ee, Constants::footOriginShiftX, -Constants::footSeparation / 2, 0.0);
-    T = R_FOOT_TRANS_OUT(MotionModule) * ee;
+    T = L_FOOT_TRANS_OUT(MotionModule) * ee;
   }
   return T;
 }

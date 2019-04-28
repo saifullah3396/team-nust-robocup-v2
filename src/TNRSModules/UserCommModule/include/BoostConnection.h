@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <boost/asio.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -19,6 +20,8 @@
 #include <string>
 #include <sstream>
 #include <vector>
+
+using namespace std;
 
 /**
  * @class Connection
@@ -145,6 +148,7 @@ public:
       catch (std::exception& e)
       {
         // Unable to decode data.
+        cout << "e.whaT() : " << e.what() << endl;
         boost::system::error_code error(boost::asio::error::invalid_argument);
         boost::get<0>(handler)(error);
         return;
