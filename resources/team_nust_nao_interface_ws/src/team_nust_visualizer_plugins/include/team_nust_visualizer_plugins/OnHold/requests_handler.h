@@ -27,67 +27,65 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <string>
+#pragma once
+
 #include <vector>
-#include "Utils/include/JsonUtils.h"
-#include "Utils/include/HardwareIds.h"
+#include <std_msgs/String.h>
+#include <ros/ros.h>
+#include <rviz/panel.h>
+
+class QComboBox;
+class QPushButton;
+class QSlider;
+class QLineEdit;
+class QTableWidget;
+class QTableWidgetItem;
+class QVBoxLayout;
+class QStackedWidget;
+
+#define MAX_TEXT_BUFFER 100
 
 namespace team_nust_visualizer_plugins
 {
 
-#define NUM_ROBOT_NAMES 9
-
-enum TNColors : unsigned int
+class RequestsHandler: public rviz::Panel
 {
-  white = 0,
-  black,
-  green,
-  blue,
-  red,
-  yellow,
-  count
+Q_OBJECT
+public:
+  RequestsHandler(QWidget* parent = 0);
+  ~RequestsHandler() {}
+
+public Q_SLOTS:
+  void updateModuleLayout();
+  void updateRequestLayout();
+
+private Q_SLOTS:
+  void publishSettings();
+
+private:
+  //! Drop down menu for module types
+  QComboBox* modules_combo_;
+
+  //! Current JSON for request that is under consideration
+  Json::Value currentRequest;
+
+  //! Drop down menu for request types
+  std::vector<QComboBox*> requests_combo_;
+
+  //! Module layouts
+  QStackedWidget* modules_stack_;
+
+  //! Requests layouts for each module
+  std::vector<QStackedWidget*> request_widgets_stack_;
+
+  // Main vertical layout
+  QVBoxLayout* v_layout_;
+
+  // Publishes the output to robot as a user command
+  ros::Publisher requests_publisher_;
+
+  // The ROS node handle.
+  ros::NodeHandle nh_;
 };
 
-static const std::string tn_colors[toUType(TNColors::count)] {
-  "White",
-  "Black",
-  "Green",
-  "Blue",
-  "Red",
-  "Yellow"
-};
-
-static const std::string slider_names[6] {
-  "Ymin:", "Umin:", "Vmin:",
-  "Ymax:", "Umax:", "Vmax:"
-};
-
-static const std::string camera_names[toUType(CameraId::count)] {
-  "visionTop",
-  "visionBottom"
-};
-
-static const std::string robot_names[NUM_ROBOT_NAMES]
-{
- "Sim",
- "Nu-1",
- "Nu-2",
- "Nu-3",
- "Nu-4",
- "Nu-5",
- "Nu-6",
- "Nu-7",
- "Nu-8"
-};
-
-static const unsigned n_color_tables[toUType(TNColors::count)] {
-  2,
-  1,
-  3,
-  1,
-  1,
-  1
-};
-
-} // end namespace team_nust_visualizer_plugins
+} // team_nust_visualizer_plugins
