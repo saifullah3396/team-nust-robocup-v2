@@ -9,6 +9,12 @@
 
 #pragma once
 
+#ifdef V6_CROSS_BUILD
+#include <linux/usb/video.h>
+#include <linux/uvcvideo.h>
+#include <sys/ioctl.h>
+#include <stdint.h>
+#endif
 #ifndef NAOQI_VIDEO_PROXY_AVAILABLE
 #include <stdio.h>
 #include <stdlib.h>
@@ -88,27 +94,62 @@ static void xioctl(int fh, unsigned long int request, void *arg)
 #endif
 
 #ifndef NAOQI_VIDEO_PROXY_AVAILABLE
-struct V4L2Settings {
-  V4L2Settings() = default;
-  V4L2Settings(
-    const string& name,
-    const int& id,
-    const int& value,
-    const int& min,
-    const int& max) :
-    name(name),
-    min(min),
-    max(max)
-  {
-    ctrl.id = id;
-    ctrl.value = value;
-  }
+  struct CameraCtrlSettings {
+    CameraCtrlSettings() = default;
+    CameraCtrlSettings(
+      const string& name,
+      const int& min,
+      const int& max) :
+      name(name),
+      min(min),
+      max(max)
+    {
+    }
 
-  string name;
-  struct v4l2_control ctrl;
-  int min = {0};
-  int max = {0};
-};
+    string name = {""};
+    int min = {0};
+    int max = {0};
+  };
+
+  struct V4L2Settings : public CameraCtrlSettings {
+    V4L2Settings() = default;
+    V4L2Settings(
+      const string& name,
+      const int& id,
+      const int& value,
+      const int& min,
+      const int& max) :
+      CameraCtrlSettings(name, min, max)
+    {
+      ctrl.id = id;
+      ctrl.value = value;
+    }
+
+    struct v4l2_control ctrl;
+  };
+
+  #ifdef V6_CROSS_BUILD
+  struct UVCSettings : public CameraCtrlSettings {
+    UVCSettings() = default;
+    UVCSettings(
+      const string& name,
+      const int& selectorId,
+      const int& size,
+      uint8_t* data,
+      const int& min,
+      const int& max) :
+      CameraCtrlSettings(name, min, max)
+    {
+      query.unit = 3; //! Always 3 as mentioned in documenation of nao-v6-hints.pdf
+      query.selector = selectorId;
+      query.query = UVC_SET_CUR;
+      query.size = size;
+      query.data = data;
+    }
+
+    struct uvc_xu_control_query query;
+  };
+  #endif
 #endif
 
 #ifdef NAOQI_VIDEO_PROXY_AVAILABLE

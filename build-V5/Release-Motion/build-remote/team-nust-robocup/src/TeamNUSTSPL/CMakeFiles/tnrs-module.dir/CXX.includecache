@@ -6193,6 +6193,14 @@ Utils/include/VariadicMacros.h
 ../../../../src/Utils/include/Utils/include/VariadicMacros.h
 
 ../../../../src/Utils/include/DataHolders/Camera.h
+linux/usb/video.h
+-
+linux/uvcvideo.h
+-
+sys/ioctl.h
+-
+stdint.h
+-
 stdio.h
 -
 stdlib.h

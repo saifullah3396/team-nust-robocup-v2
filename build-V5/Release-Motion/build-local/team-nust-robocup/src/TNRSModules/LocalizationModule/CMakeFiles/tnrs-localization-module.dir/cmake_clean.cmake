@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/tnrs-localization-module.dir/src/LocalizationModule.cpp.o"
   "CMakeFiles/tnrs-localization-module.dir/src/Particle.cpp.o"
   "CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.o"
+  "CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o"
   "CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o"
   "CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o"
   "../../../../../cross/lib/libtnrs-localization-module.pdb"

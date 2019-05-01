@@ -20,10 +20,17 @@ ColorHandler::ColorHandler() :
   auto root = JsonUtils::readJson(ConfigManager::getConfigDirPath() + "ColorConfig.json");
   colorTables.resize(toUType(TNColors::count));
   for (int i = 0; i < toUType(TNColors::count); ++i) {
-    colorTables[i] = new ColorTable(root[colorNames[i]]["tables"].asInt());
+     auto colorName = colorNames[i];
+#ifdef NAOQI_VIDEO_PROXY_AVAILABLE
+     if(colorName == "Blue")
+         colorName = "Yellow";
+     else if (colorName == "Yellow")
+         colorName = "Blue";
+#endif
+    colorTables[i] = new ColorTable(root[colorName]["tables"].asInt());
     for (int j = 0; j < colorTables[i]->nTables; ++j) {
-      JsonUtils::jsonToType(colorTables[i]->lower[j].yuv, root[colorNames[i]]["lower"][j], colorTables[i]->lower[j].yuv);
-      JsonUtils::jsonToType(colorTables[i]->upper[j].yuv, root[colorNames[i]]["upper"][j], colorTables[i]->upper[j].yuv);
+      JsonUtils::jsonToType(colorTables[i]->lower[j].yuv, root[colorName]["lower"][j], colorTables[i]->lower[j].yuv);
+      JsonUtils::jsonToType(colorTables[i]->upper[j].yuv, root[colorName]["upper"][j], colorTables[i]->upper[j].yuv);
       for (size_t k = 0; k < 256; ++k) {
         colorTables[i]->lutY[j][k] = k >= colorTables[i]->lower[j].y() && k <= colorTables[i]->upper[j].y();
         colorTables[i]->lutU[j][k] = k >= colorTables[i]->lower[j].u() && k <= colorTables[i]->upper[j].u();

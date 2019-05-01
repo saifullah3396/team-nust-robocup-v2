@@ -179,6 +179,7 @@ void RegionSegmentation::processImage()
   drawResults();
   if (GET_DVAR(int, displayOutput)) {
     VisionUtils::displayImage(name, bgrMat[toUType(activeCamera)]);
+    waitKey(0);
   }
 }
 

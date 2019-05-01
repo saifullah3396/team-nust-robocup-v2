@@ -160,6 +160,9 @@ protected:
   ///< Wait time after balance to kick
   static Scalar afterBalanceWait;
 
+  ///< Wait time after posture to balance
+  static Scalar afterPostureWait;
+
   ///< Minumum limit for the total optimized trajectory time
   Scalar minTimeToKick = {1.0};
 

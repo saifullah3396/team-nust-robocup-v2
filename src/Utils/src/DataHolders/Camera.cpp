@@ -240,11 +240,11 @@ template <typename T>
 void Camera<T>::setControl(const CameraSettings& id) {
   if (settings[toUType(id)].ctrl.value == -1000)
     return;
-  cout <<
-    "Setting control:" <<
+  LOG_INFO(
+    "Setting camera control:" <<
     settings[toUType(id)].name <<
     ": " <<
-    settings[toUType(id)].ctrl.value << endl;
+    settings[toUType(id)].ctrl.value);
   if (id == CameraSettings::whiteBalance) {
     ///< Only changeable when wb is disabled
     if (settings[toUType(CameraSettings::autoWhiteBalance)].ctrl.value == 0)

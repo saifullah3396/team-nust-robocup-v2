@@ -7,6 +7,7 @@
   "_comment_3": "For possible values of type, see PlanningModule/PlanningBehaviorIds.h, MotionModule/MotionBehaviorIds.h and GBModule/GeneralBehaviorsIds.h",
   "type" : 1,
   "goal" : [0.001, 0.0, 0.0],
+  "tolerance" : [0.05, 0.05, 0.087222222],
   "reachClosest" : true,
   "_comment_5": "The requested start posture behavior to run. For details, see BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h",
   "startPosture" :

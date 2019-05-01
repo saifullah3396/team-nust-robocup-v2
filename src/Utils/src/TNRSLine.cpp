@@ -81,5 +81,19 @@ T TNRSLine<T>::findShortest(const boost::shared_ptr<TNRSLine<U> >& other) {
   return perp.x * other->p1.x + perp.y * other->p1.y - perpDist;
 }
 
+template<typename T>
+bool TNRSLine<T>::findIntersectionWithCircle(const cv::Point_<T>& circleCenter, const T& radius)
+{
+  auto p1c = p1 - circleCenter;
+  auto p2c = p2 - circleCenter;
+  auto diff = p2c - p1c;
+  auto sqrdDiff = diff.x * diff.x + diff.y * diff.y;
+  auto D = p1c.x*p2c.y - p2c.x*p1c.y;
+  return radius * radius * sqrdDiff > D * D;
+}
+
+template bool TNRSLine<float>::findIntersectionWithCircle(const cv::Point_<float>& circleCenter, const float& radius);
+template bool TNRSLine<double>::findIntersectionWithCircle(const cv::Point_<double>& circleCenter, const double& radius);
+
 template class TNRSLine<float>;
 template class TNRSLine<double>;

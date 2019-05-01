@@ -20,9 +20,7 @@ double BSplineNormalFinder<Scalar>::costFunction(
   vector<Matrix<Scalar, Dynamic, 1>> splineAtStep;
   bSplinePtr->generateSplineAtStep(splineAtStep, vars[0]);
   Matrix<Scalar, Dynamic, 1> unit = splineAtStep[1] / splineAtStep[1].norm();
-  cout << "t " << vars[0] << endl;
   double angle = acos(unit.dot(normal));
-  cout << "angle:: " << angle * 180 / M_PI << endl;
   f = abs(angle * 180 / M_PI - 90);
   return f;
 }
@@ -51,8 +49,6 @@ void BSplineNormalFinder<Scalar>::optDef()
   ub[0] = tBounds[1]; ///< Upper bound for parameterized curve.
   for (int i = 0; i < lb.size(); ++i)
     var0.push_back(tBounds[0]);
-
-  cout << "tBounds:" << tBounds << endl;
 
   opt.set_lower_bounds(lb);
   opt.set_upper_bounds(ub);

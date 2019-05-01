@@ -27,7 +27,8 @@ enum class GBRequestIds {
   stiffnessRequest,
   ledRequest,
   behaviorRequest,
-  killBehavior
+  killBehavior,
+  count
 };
 #else //! No realtime actuator requests here in V6
 /**

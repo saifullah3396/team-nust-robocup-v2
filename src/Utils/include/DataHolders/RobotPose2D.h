@@ -85,6 +85,14 @@ public:
   cv::Point_<OtherScalar> transform(const cv::Point_<OtherScalar>& p) const;
 
   /**
+   * @brief rotate Rotates the input point with respect to this pose
+   * @param p Input point
+   * @return Rotated point
+   */
+  template <typename OtherScalar>
+  cv::Point_<OtherScalar> rotate(const cv::Point_<OtherScalar>& p) const;
+
+  /**
    * @brief transform Transforms the input point with respect to this pose
    * @param p Input point
    * @return Transformed point

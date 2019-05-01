@@ -12,6 +12,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallExtraction.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallTracker.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/LinesExtraction.cpp.o"
+  "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/GoalExtraction.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionSegmentation.cpp.o"
   "CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.o"

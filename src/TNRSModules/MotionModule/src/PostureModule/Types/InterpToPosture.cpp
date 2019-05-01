@@ -43,6 +43,7 @@ bool InterpToPosture<Scalar>::initiate()
   this->jointsDelta = jointsToReach - this->jointsI;
   Matrix<bool, Dynamic, 1> activeJoints = this->jointsDelta.cwiseAbs().array() > Angle::DEG_1;
   if (!activeJoints.any()) { ///< Posture already reached
+    cout << "posture already rached" <<endl;
     POSTURE_STATE_OUT(MotionModule) = this->getBehaviorCast()->targetPosture;
     return false;
   } else {

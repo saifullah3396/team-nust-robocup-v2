@@ -118,7 +118,9 @@ namespace JsonUtils
   }
   template Json::Value getJson<bool>(const bool&);
   template Json::Value getJson<unsigned>(const unsigned&);
-  template Json::Value getJson<size_t>(const size_t&);
+  //#ifndef V6_CROSS_BUILD
+  //template Json::Value getJson<size_t>(const size_t&);
+  //#endif
   template Json::Value getJson<int>(const int&);
   template Json::Value getJson<float>(const float&);
   template Json::Value getJson<double>(const double&);
@@ -446,12 +448,14 @@ namespace JsonUtils
       var = def;
   }
 
-  void jsonToType(size_t& var, Json::Value val, const size_t& def) {
+  #ifndef V6_CROSS_BUILD
+  void jsonToType(unsigned long& var, Json::Value val, const size_t& def) {
     if (!val.empty())
       var = val.asUInt();
     else
       var = def;
   }
+  #endif
 
   void jsonToType(float& var, Json::Value val, const float& def) {
     if (!val.empty())

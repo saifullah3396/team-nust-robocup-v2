@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ $(whoami) != root ]; then
+  sudo $0 $*
+  exit 0
+fi
+
+cp ../../files/V5/autoload_remote.tnust /etc/naoqi/autoload.ini

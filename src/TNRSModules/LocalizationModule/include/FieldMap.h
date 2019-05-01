@@ -13,6 +13,8 @@
 #include "TNRSBase/include/BaseIncludes.h"
 #include "TNRSBase/include/DebugBase.h"
 
+template <typename Scalar>
+struct TNRSLine;
 class ParticleFilter;
 class LocalizationModule;
 class ObstacleTracker;
@@ -32,6 +34,8 @@ class FieldMap : public MemoryBase, DebugBase
     (int, sendObstacleMap, 0),
     ///< Draws the particles on the map
     (int, drawParticles, 0),
+    ///< Draws the FOV lines on the map
+    (int, drawFOVLines, 0),
     ///< Displays occupancy map as output
     (int, displayOutput, 0),
     ///< Displays information about the results
@@ -73,9 +77,12 @@ public:
     { this->addBallObstacle = addBallObstacle; }
 
 private:
-  //void updateWorldImage();
-  //void drawField();
-  //void drawRobot();
+  /**
+   * @brief updateFOVLines Updates the field of view lines in
+   *   the field
+   */
+  void updateFOVLines();
+
   /**
    * @brief updateOccupancyMap Updates the occupancy map
    */
@@ -115,8 +122,12 @@ private:
   ///< the upper camera frame
   vector<Vector3f> unitVecY;
 
-  //Mat worldImage;
-  //Mat mapDrawing;
+  ///< Field of view lines
+  boost::shared_ptr<TNRSLine<float> > leftFOVLine;
+  boost::shared_ptr<TNRSLine<float> > rightFOVLine;
+
+  ///< Whether to update the occupancy map or not
+  bool useOccupancyMap = {false};
 
   ///< Previous id of the observed obstacles
   int prevObsId = {0};
@@ -138,6 +149,9 @@ private:
 
   ///< Refresh time when obstacle is within view but not updated
   float refreshTimeForObsInFOV = {1};
+
+  ///< Maximum field of view distance from robot, 3m
+  float maxFOVDistance = {3};
 
   ///< Container for tracked obstacles in world
   vector<boost::shared_ptr<ObstacleTracker>> trackedObstacles;

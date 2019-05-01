@@ -33,7 +33,8 @@ enum class LocalizationRequestIds {
   positionUpdate,
   velocityUpdate,
   knownLandmarksUpdate,
-  unknownLandmarksUpdate
+  unknownLandmarksUpdate,
+  count
 };
 
 /**

@@ -132,9 +132,33 @@ src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/L
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.o.provides.build: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.o
 
 
+src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/flags.make
+src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o: ../../../../src/TNRSModules/LocalizationModule/src/ObstacleTracker.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o"
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/LocalizationModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/ObstacleTracker.cpp
+
+src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.i"
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/LocalizationModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/ObstacleTracker.cpp > CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.i
+
+src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.s"
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/LocalizationModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/ObstacleTracker.cpp -o CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.s
+
+src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o.requires:
+
+.PHONY : src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o.requires
+
+src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o.provides: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o.requires
+	$(MAKE) -f src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build.make src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o.provides.build
+.PHONY : src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o.provides
+
+src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o.provides.build: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o
+
+
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/flags.make
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o: ../../../../src/TNRSModules/LocalizationModule/src/FieldMap.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/LocalizationModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/FieldMap.cpp
 
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.i: cmake_force
@@ -158,7 +182,7 @@ src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/F
 
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/flags.make
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o: ../../../../src/TNRSModules/LocalizationModule/src/ParticleFilter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/LocalizationModule && /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/local/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/ParticleFilter.cpp
 
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.i: cmake_force
@@ -185,6 +209,7 @@ tnrs__localization__module_OBJECTS = \
 "CMakeFiles/tnrs-localization-module.dir/src/LocalizationModule.cpp.o" \
 "CMakeFiles/tnrs-localization-module.dir/src/Particle.cpp.o" \
 "CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.o" \
+"CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o" \
 "CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o" \
 "CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o"
 
@@ -194,6 +219,7 @@ tnrs__localization__module_EXTERNAL_OBJECTS =
 ../../cross/lib/libtnrs-localization-module.so: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/LocalizationModule.cpp.o
 ../../cross/lib/libtnrs-localization-module.so: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/Particle.cpp.o
 ../../cross/lib/libtnrs-localization-module.so: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.o
+../../cross/lib/libtnrs-localization-module.so: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o
 ../../cross/lib/libtnrs-localization-module.so: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o
 ../../cross/lib/libtnrs-localization-module.so: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o
 ../../cross/lib/libtnrs-localization-module.so: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build.make
@@ -253,7 +279,7 @@ tnrs__localization__module_EXTERNAL_OBJECTS =
 ../../cross/lib/libtnrs-localization-module.so: /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/libnaoqi/lib/libopencv_video.so
 ../../cross/lib/libtnrs-localization-module.so: /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/usr/lib/libpthread.so
 ../../cross/lib/libtnrs-localization-module.so: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX shared library ../../../../../cross/lib/libtnrs-localization-module.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX shared library ../../../../../cross/lib/libtnrs-localization-module.so"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/src/TNRSModules/LocalizationModule && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tnrs-localization-module.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -264,6 +290,7 @@ src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/build
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/requires: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/LocalizationModule.cpp.o.requires
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/requires: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/Particle.cpp.o.requires
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/requires: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/LocalizationRequest.cpp.o.requires
+src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/requires: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ObstacleTracker.cpp.o.requires
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/requires: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/FieldMap.cpp.o.requires
 src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/requires: src/TNRSModules/LocalizationModule/CMakeFiles/tnrs-localization-module.dir/src/ParticleFilter.cpp.o.requires
 

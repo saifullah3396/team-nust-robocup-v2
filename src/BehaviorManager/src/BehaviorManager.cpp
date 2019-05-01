@@ -156,6 +156,7 @@ void BehaviorManager::updateBehavior(BehaviorPtr& bPtr)
   ///< If a child exists now
   if (child) {
     ///< Update the child
+    //cout << "updating child..." << endl;
     updateBehavior(child);
     if (!bPtr->getChildInParallel())
       return;
@@ -163,6 +164,7 @@ void BehaviorManager::updateBehavior(BehaviorPtr& bPtr)
     bPtr->setChildInParallel(false);
   }
 
+  //cout << "updating behavior..." << endl;
   ///< Initiate if not, update otherwise
   bPtr->manage();
 

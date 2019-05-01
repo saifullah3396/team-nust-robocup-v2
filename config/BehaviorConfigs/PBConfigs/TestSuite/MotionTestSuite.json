@@ -3,6 +3,6 @@
   "id" : 5,
   "maxRuntime" : 9999,
   "type" : 2,
-  "requestedBehavior" : "HeadControl/HeadTargetTrack.json",
+  "requestedBehavior" : "KickModule/JSOImpKick.json",
   "logData" : false
 }

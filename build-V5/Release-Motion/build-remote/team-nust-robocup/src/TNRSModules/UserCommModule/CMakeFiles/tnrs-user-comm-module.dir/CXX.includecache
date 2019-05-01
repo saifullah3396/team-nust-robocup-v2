@@ -1211,6 +1211,8 @@ TNRSBase/include/MemoryVariable.h
 ../../../../src/TNRSBase/include/TNRSBase/include/MemoryVariable.h
 
 ../../../../src/TNRSModules/UserCommModule/include/BoostConnection.h
+iostream
+-
 boost/asio.hpp
 -
 boost/archive/text_iarchive.hpp

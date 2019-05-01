@@ -23,6 +23,7 @@ using namespace cv;
  * @enum GameCommRequestIds
  */
 enum class GameCommRequestIds {
+  count
 };
 
 /**

@@ -26,6 +26,9 @@ void MPComControlConfig::validate()
     supportLeg != LinkChains::rLeg ||
     timeToReachB < 0.5)
   {
+    LOG_INFO("Config parameters: ");
+    LOG_INFO("supportLeg: " << toUType(supportLeg));
+    LOG_INFO("timeToReachB: " << timeToReachB);
     throw
       BConfigException(
         this,

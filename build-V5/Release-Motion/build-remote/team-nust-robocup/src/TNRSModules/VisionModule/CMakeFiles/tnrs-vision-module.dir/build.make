@@ -54,15 +54,11 @@ CMAKE_BINARY_DIR = /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-
 # Include any dependencies generated for this target.
 include src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/depend.make
 
-# Include the progress variables for this target.
-include src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/progress.make
-
 # Include the compile flags for this target's objects.
 include src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionRequest.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionRequest.cpp.o: ../../../../src/TNRSModules/VisionModule/src/VisionRequest.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionRequest.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/VisionRequest.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/VisionRequest.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionRequest.cpp.i: cmake_force
@@ -86,7 +82,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionRequest
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.cpp.o: ../../../../src/TNRSModules/VisionModule/src/VisionModule.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/VisionModule.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/VisionModule.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.cpp.i: cmake_force
@@ -110,7 +105,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/VisionModule.
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraModule.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraModule.cpp.o: ../../../../src/TNRSModules/VisionModule/src/CameraModule.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraModule.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/CameraModule.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/CameraModule.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraModule.cpp.i: cmake_force
@@ -134,7 +128,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraModule.
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraTransform.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraTransform.cpp.o: ../../../../src/TNRSModules/VisionModule/src/CameraTransform.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraTransform.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/CameraTransform.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/CameraTransform.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraTransform.cpp.i: cmake_force
@@ -158,7 +151,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/CameraTransfo
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/ColorHandler.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/ColorHandler.cpp.o: ../../../../src/TNRSModules/VisionModule/src/ColorHandler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/ColorHandler.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/ColorHandler.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/ColorHandler.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/ColorHandler.cpp.i: cmake_force
@@ -182,7 +174,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/ColorHandler.
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionScanners.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionScanners.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/RegionScanners.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionScanners.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionScanners.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/RegionScanners.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionScanners.cpp.i: cmake_force
@@ -206,7 +197,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FieldExtraction.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FieldExtraction.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/FieldExtraction.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FieldExtraction.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FieldExtraction.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/FieldExtraction.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FieldExtraction.cpp.i: cmake_force
@@ -230,7 +220,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedRegion.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedRegion.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/ScannedRegion.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedRegion.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedRegion.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/ScannedRegion.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedRegion.cpp.i: cmake_force
@@ -254,7 +243,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FeatureExtraction.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FeatureExtraction.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/FeatureExtraction.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FeatureExtraction.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FeatureExtraction.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/FeatureExtraction.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/FeatureExtraction.cpp.i: cmake_force
@@ -278,7 +266,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedEdge.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedEdge.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/ScannedEdge.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedEdge.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedEdge.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/ScannedEdge.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/ScannedEdge.cpp.i: cmake_force
@@ -302,7 +289,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallExtraction.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallExtraction.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/BallExtraction.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallExtraction.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallExtraction.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/BallExtraction.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallExtraction.cpp.i: cmake_force
@@ -326,7 +312,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallTracker.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallTracker.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/BallTracker.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallTracker.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallTracker.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/BallTracker.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/BallTracker.cpp.i: cmake_force
@@ -350,7 +335,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/LinesExtraction.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/LinesExtraction.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/LinesExtraction.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/LinesExtraction.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/LinesExtraction.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/LinesExtraction.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/LinesExtraction.cpp.i: cmake_force
@@ -374,7 +358,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/RobotTracker.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/RobotTracker.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotTracker.cpp.i: cmake_force
@@ -398,7 +381,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/GoalExtraction.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/GoalExtraction.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/GoalExtraction.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/GoalExtraction.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/GoalExtraction.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/GoalExtraction.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/GoalExtraction.cpp.i: cmake_force
@@ -422,7 +404,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionSegmentation.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionSegmentation.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/RegionSegmentation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionSegmentation.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionSegmentation.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/RegionSegmentation.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RegionSegmentation.cpp.i: cmake_force
@@ -446,7 +427,6 @@ src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtrac
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.o: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/flags.make
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.o: ../../../../src/TNRSModules/VisionModule/src/FeatureExtraction/RobotExtraction.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.o"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/FeatureExtraction/RobotExtraction.cpp
 
 src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/src/FeatureExtraction/RobotExtraction.cpp.i: cmake_force
@@ -559,7 +539,6 @@ tnrs__vision__module_EXTERNAL_OBJECTS =
 ../../remote/lib/libtnrs-vision-module.so: /usr/lib/x86_64-linux-gnu/libv4lconvert.so
 ../../remote/lib/libtnrs-vision-module.so: ../../../../resources/tensorflow/lib/libtensorflow-lite.a
 ../../remote/lib/libtnrs-vision-module.so: src/TNRSModules/VisionModule/CMakeFiles/tnrs-vision-module.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Linking CXX shared library ../../../../../remote/lib/libtnrs-vision-module.so"
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-remote/team-nust-robocup/src/TNRSModules/VisionModule && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/tnrs-vision-module.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

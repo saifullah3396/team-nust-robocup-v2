@@ -1756,3 +1756,14 @@ src/TNRSModules/VisionModule/include/FeatureExtraction/VisionConfigMacros.h
 src/TNRSModules/LocalizationModule/src/ObstacleTracker.cpp
 src/TNRSModules/LocalizationModule/include/ObstacleTracker.h
 >>>>>>> 7c2a59f5a208e19f258eaaf0cf35545b50a954b7
+config/Robots/Nu-1/Calibration.txt
+config/Robots/Nu-1/CamCalibration.xml
+config/Robots/Nu-1/CameraSettings.json
+config/Robots/Nu-1/ColorConfig.json
+config/Robots/Nu-1/JointEstimator.json
+config/Robots/Nu-1/KinCalibration.ini
+config/Robots/Nu-1/MotionBehaviors.ini
+config/Robots/Nu-1/NaoqiCameraSettings.json
+config/Robots/Nu-1/network.cfg
+config/Robots/Nu-1/PlanningBehaviors.ini
+config/Robots/Nu-1/TeamInfo.ini

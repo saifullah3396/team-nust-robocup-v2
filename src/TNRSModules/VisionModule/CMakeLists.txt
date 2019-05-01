@@ -64,7 +64,7 @@ else()
       OPENCV3_FLANN
       V4L
     )
-    target_link_libraries(tnrs-vision-module -lm -ljsoncpp libtensorflow-lite.a)
+    target_link_libraries(tnrs-vision-module -lm -ljsoncpp)
   else()
     qi_use_lib(
       tnrs-vision-module

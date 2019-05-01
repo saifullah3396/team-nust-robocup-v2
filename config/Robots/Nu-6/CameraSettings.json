@@ -1,0 +1,98 @@
+{
+   "visionBottom" : {
+      "calibration" : {
+         "aeTargetGain" : 9,
+         "autoExposition" : 1,
+         "autoWhiteBalance" : 1,
+         "backlightCompensation" : 0,
+         "brightness" : 126,
+         "contrast" : 51,
+         "exposure" : 120,
+         "exposureAlgorithm" : 1,
+         "fadeToBlack" : 0,
+         "freq" : 1,
+         "gain" : 255,
+         "gamma" : 199,
+         "horizontalFlip" : 0,
+         "hue" : -15,
+         "maxDigAnalogGain" : 1,
+         "maxVirtAnalogGain" : 8,
+         "minDigAnalogGain" : 1,
+         "minVirtAnalogGain" : 4,
+         "saturation" : 160,
+         "sharpness" : 2,
+         "verticalFlip" : 0,
+         "whiteBalance" : 5800
+      },
+      "distortion" : {
+         "a" : -0.061289088640961775,
+         "b" : -0.23474251535528692,
+         "c" : 0.0,
+         "d" : 0.0,
+         "e" : 0.93078752605442949
+      },
+      "intrinsic" : {
+         "centerOffX" : 160.83569025554002,
+         "centerOffY" : 111.64780177609973,
+         "focalX" : 283.01923564917803,
+         "focalY" : 283.21035128025289,
+         "fovX" : 60.969999999999999,
+         "fovY" : 47.640000000000001
+      },
+      "subscription" : {
+         "cameraName" : "visionBottom",
+         "colorSpace" : 9,
+         "fps" : 15,
+         "height" : 240,
+         "width" : 320
+      }
+   },
+   "visionTop" : {
+      "calibration" : {
+         "aeTargetGain" : 9,
+         "autoExposition" : 1,
+         "autoWhiteBalance" : 1,
+         "backlightCompensation" : 0,
+         "brightness" : 132,
+         "contrast" : 41,
+         "exposure" : 175,
+         "exposureAlgorithm" : 1,
+         "fadeToBlack" : 0,
+         "freq" : 1,
+         "gain" : 255,
+         "gamma" : 202,
+         "horizontalFlip" : 1,
+         "hue" : -13,
+         "maxDigAnalogGain" : 1,
+         "maxVirtAnalogGain" : 8,
+         "minDigAnalogGain" : 1,
+         "minVirtAnalogGain" : 4,
+         "saturation" : 154,
+         "sharpness" : 1,
+         "verticalFlip" : 1,
+         "whiteBalance" : 5800
+      },
+      "distortion" : {
+         "a" : -0.081856311288218686,
+         "b" : 0.043024358241335048,
+         "c" : 0.0,
+         "d" : 0.0,
+         "e" : 0.11825015249743386
+      },
+      "intrinsic" : {
+         "centerOffX" : 324.76357371630576,
+         "centerOffY" : 224.10028149334406,
+         "focalX" : 544.88365638693415,
+         "focalY" : 543.61447421548905,
+         "fovX" : 60.969999999999999,
+         "fovY" : 47.640000000000001
+      },
+      "subscription" : {
+         "cameraName" : "visionTop",
+         "colorSpace" : 9,
+         "fps" : 15,
+         "height" : 480,
+         "width" : 640
+      }
+   }
+}

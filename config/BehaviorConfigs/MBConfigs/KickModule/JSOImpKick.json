@@ -8,10 +8,10 @@
     "id" : 1,
     "maxRuntime" : 999,
     "minTimeToKick" : 1,
-    "logData" : true,
+    "logData" : false,
     "reqVel" :
     [
-        0.95,
+        1.2,
         0
     ],
     "target" :
@@ -48,5 +48,16 @@
         "timeToReachB" : 1.0,
         "target" : [-0.02, 0.0]
     },
-    "inKickBalance" : false
+    "inKickBalance" : false,
+    "postureConfig" : {
+        "baseType" : 0,
+        "id" : 0,
+        "jointsToReach" : null,
+        "maxRuntime" : 10,
+        "targetPosture" : 4,
+        "timeToReachP" : 2.0,
+        "type" : 0,
+        "logData" : false
+    }
+
 }

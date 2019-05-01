@@ -1169,16 +1169,16 @@ memory
 -
 functional
 -
-flatbuffers/stl_emulation.h
-../../../../resources/tensorflow/flatbuffers/flatbuffers/stl_emulation.h
+stl_emulation.h
+../../../../resources/tensorflow/flatbuffers/stl_emulation.h
 string_view
 -
 experimental/string_view
 -
 
 ../../../../resources/tensorflow/flatbuffers/flatbuffers.h
-flatbuffers/base.h
-../../../../resources/tensorflow/flatbuffers/flatbuffers/base.h
+base.h
+../../../../resources/tensorflow/flatbuffers/base.h
 
 ../../../../resources/tensorflow/flatbuffers/stl_emulation.h
 string
@@ -1333,8 +1333,8 @@ cstdint
 -
 
 ../../../../resources/tensorflow/lite/schema/schema_generated.h
-flatbuffers/flatbuffers.h
-../../../../resources/tensorflow/lite/schema/flatbuffers/flatbuffers.h
+../../flatbuffers/flatbuffers.h
+../../../../resources/tensorflow/flatbuffers/flatbuffers.h
 
 ../../../../resources/tensorflow/lite/simple_memory_arena.h
 list
@@ -1771,6 +1771,14 @@ Utils/include/JsonUtils.h
 ../../../../src/Utils/include/DataHolders/Utils/include/JsonUtils.h
 
 ../../../../src/Utils/include/DataHolders/Camera.h
+linux/usb/video.h
+-
+linux/uvcvideo.h
+-
+sys/ioctl.h
+-
+stdint.h
+-
 stdio.h
 -
 stdlib.h
@@ -27641,6 +27649,14 @@ qitype/anyfunction.hpp
 -
 
 /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/CameraModule.cpp
+linux/usb/video.h
+-
+linux/uvcvideo.h
+-
+sys/ioctl.h
+-
+stdint.h
+-
 Utils/include/ConfigMacros.h
 /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/VisionModule/src/Utils/include/ConfigMacros.h
 Utils/include/DataHolders/Camera.h

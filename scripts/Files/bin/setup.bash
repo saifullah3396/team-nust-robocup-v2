@@ -1,1 +1,0 @@
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/nao/team_nust/lib/:/home/nao/team_nust/depends/lib

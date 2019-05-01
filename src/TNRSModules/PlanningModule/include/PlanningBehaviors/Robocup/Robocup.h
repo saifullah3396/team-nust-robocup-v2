@@ -12,6 +12,9 @@
 #include "BehaviorManager/include/StateMachineMacros.h"
 #include "PlanningModule/include/PlanningBehavior.h"
 #include "Utils/include/DataHolders/RobotPose2D.h"
+#include "Utils/include/DataHolders/VelocityInput.h"
+#include "Utils/include/PotentialField2D.h"
+#include "Utils/include/AngleDefinitions.h"
 
 enum class KeyFrameGetupTypes : unsigned int;
 struct MBHeadControlConfig;
@@ -60,8 +63,16 @@ protected:
   void getupBack();
   void getupSit();
   void printGameData();
-  void setNavigationConfig(
+  void setPlanTowardsConfig(
     const RobotPose2D<float>& target,
+    const bool& keepMoving = true,
+    const RobotPose2D<float>& targetTol = RobotPose2D<float>(0.05, 0.05, Angle::DEG_10),
+    const VelocityInput<float>& maxLimit = VelocityInput<float>(1.0, 1.0, 1.0),
+    const boost::shared_ptr<InterpToPostureConfig>& startPosture = boost::shared_ptr<InterpToPostureConfig>(),
+    const boost::shared_ptr<InterpToPostureConfig>& endPosture = boost::shared_ptr<InterpToPostureConfig>());
+  void setGoToTargetConfig(
+    const RobotPose2D<float>& target,
+    const bool& reachClosest = false,
     const boost::shared_ptr<InterpToPostureConfig>& startPosture = boost::shared_ptr<InterpToPostureConfig>(),
     const boost::shared_ptr<InterpToPostureConfig>& endPosture = boost::shared_ptr<InterpToPostureConfig>());
   void resetLocalizer();
@@ -80,12 +91,16 @@ protected:
 
   enum MBManagerIds {
     MOTION_1,
+    MOTION_2
   };
 
   enum class BallMotionModel {
     damped,
     friction
   } ballMotionModel;
+
+  std::unique_ptr<VelocityInput<float>> velocityInput;
+  std::unique_ptr<PotentialField2D<float>> potentialField2D;
 };
 
 typedef boost::shared_ptr<Robocup> RobocupPtr;

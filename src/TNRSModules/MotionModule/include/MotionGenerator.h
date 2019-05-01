@@ -245,6 +245,16 @@ public:
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   /**
+   * @brief naoqiMoveToward Moves the robot to given goal position
+   * @param x Relative x
+   * @param y Relative y
+   * @param t Relative theta
+   */
+  void naoqiMoveTo(const float& x, const float& y, const float& t);
+  #endif
+
+  #ifdef NAOQI_MOTION_PROXY_AVAILABLE
+  /**
    * Uses naoqi setFootsteps() to set the required footsteps
    *
    * @param footNames: A vector of names for required feet

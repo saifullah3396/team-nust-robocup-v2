@@ -59,6 +59,7 @@ private:
   void gameplaySequenceAction();
 
   bool setSequenceFinished;
+  bool keepMovingWhileNav = false;
   unsigned behaviorState;
   enum BehaviorState {
     startup,

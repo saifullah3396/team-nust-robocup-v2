@@ -13,7 +13,22 @@ find_package(catkin REQUIRED COMPONENTS
    humanoid_nav_msgs
 )
 
-find_package(Boost REQUIRED COMPONENTS thread system serialization iostreams)
+if(${ROBOT_VERSION} STREQUAL "V6")
+  set(Boost_LIBRARIES
+    $ENV{PATH_TO_TEAM_NUST_DIR}/resources/boost_1_59_0/stage/lib/libboost_system.so 
+    $ENV{PATH_TO_TEAM_NUST_DIR}/resources/boost_1_59_0/stage/lib/libboost_thread.so 
+    $ENV{PATH_TO_TEAM_NUST_DIR}/resources/boost_1_59_0/stage/lib/libboost_serialization.so 
+    $ENV{PATH_TO_TEAM_NUST_DIR}/resources/boost_1_59_0/stage/lib/libboost_iostreams.so)
+
+  set(Boost_INCLUDE_DIRS $ENV{PATH_TO_TEAM_NUST_DIR}/resources/boost_1_59_0/)
+
+  link_directories(${PATH_TO_TEAM_NUST_DIR}/resources/boost_1_59_0/stage/lib/)
+else()
+  find_package(Boost REQUIRED COMPONENTS thread system serialization iostreams)
+endif()
+
+MESSAGE(STATUS ${Boost_LIBRARIES})
+
 catkin_python_setup()
 catkin_package(
   INCLUDE_DIRS launch
@@ -25,6 +40,7 @@ set (JSON_DIR "$ENV{PATH_TO_TEAM_NUST_DIR}/resources/jsoncpp")
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
   $ENV{PATH_TO_TEAM_NUST_DIR}/src/
   $ENV{PATH_TO_TEAM_NUST_DIR}/src/TNRSModules/
   $ENV{PATH_TO_TEAM_NUST_DIR}/resources/

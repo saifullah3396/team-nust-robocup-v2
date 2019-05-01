@@ -1,13 +1,14 @@
 #!/bin/bash
 
-if [ -z "${bhDir:-""}" ]; then
+if [ -z "${tnDir:-""}" ]; then
   echo "This script is only useful when included into other scripts"
   exit 125
 fi
 
+export binDir="${baseDir}/bin/"
 export fileDir="${baseDir}/Files/"
-export configDir="${bhDir}/config/"
-export makeDir="${bhDir}/Make/"
+export configDir="${tnDir}/config/"
+export makeDir="${tnDir}/Make/"
 
 export robotsFile="${configDir}/Robots/robots.cfg"
 

@@ -25,7 +25,8 @@ using namespace cv;
  */
 enum class UserCommRequestIds {
   sendMsgRequest,
-  sendImageRequest
+  sendImageRequest,
+  count
 };
 
 /**

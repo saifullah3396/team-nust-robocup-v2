@@ -393,12 +393,9 @@ void LinesScan::lineFound(const int& lowIndex, const int& highIndex) {
 }
 
 void LinesScan::onScanLimitReached(const int& limitIndex, const int& highIndex) {
-  if (falseColor > falseColorThreshold)
-  {
-    lineFound(limitIndex, highIndex);
-    trueColor = 0;
-    falseColor = 0;
-  }
+  lineFound(limitIndex, highIndex);
+  trueColor = 0;
+  falseColor = 0;
 }
 
 void LinesScan::update(const TNColors& color, const int& lowIndex, const int& highIndex) {

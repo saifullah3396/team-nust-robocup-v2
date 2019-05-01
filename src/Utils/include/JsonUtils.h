@@ -220,7 +220,7 @@ namespace JsonUtils
 
   DECLARE_JSON_TO_TYPE(int)
   DECLARE_JSON_TO_TYPE(unsigned)
-  DECLARE_JSON_TO_TYPE(size_t)
+  DECLARE_JSON_TO_TYPE(unsigned long)
   DECLARE_JSON_TO_TYPE(float)
   DECLARE_JSON_TO_TYPE(double)
   DECLARE_JSON_TO_TYPE(bool)

@@ -32,6 +32,8 @@ struct TNRSLine
   template <typename U>
   bool findIntersection(const TNRSLine<U>& l, cv::Point_<T>& inter);
 
+  bool findIntersectionWithCircle(const cv::Point_<T>& circleCenter, const T& radius);
+
   template <typename U>
   T findShortest(const TNRSLine<U>& other);
 

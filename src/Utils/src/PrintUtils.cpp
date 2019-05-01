@@ -49,6 +49,7 @@ void PrintUtils::addMessage(const std::stringstream& stream) {
     }
   } else {
     messagesQueue.pushToQueue(stream.str());
+    cout << stream.str();
   }
   PrintUtils::stream.str("");
 }

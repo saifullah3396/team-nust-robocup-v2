@@ -338,6 +338,22 @@ void MotionGenerator<Scalar>::naoqiMoveToward(const float& vx, const float& vy, 
 
 #ifdef NAOQI_MOTION_PROXY_AVAILABLE
 template <typename Scalar>
+void MotionGenerator<Scalar>::naoqiMoveTo(const float& x, const float& y, const float& t)
+{
+  try {
+    #ifndef V6_CROSS_BUILD
+      motionProxy->post.moveTo(x, y, t);
+    #else
+      motionProxy.async<void>("moveTo", x, y, t);
+    #endif
+  } catch (exception& e) {
+    LOG_EXCEPTION(e.what());
+  }
+}
+#endif
+
+#ifdef NAOQI_MOTION_PROXY_AVAILABLE
+template <typename Scalar>
 #ifndef V6_CROSS_BUILD_REMOVED
 void MotionGenerator<Scalar>::naoqiSetFootsteps(
   const AL::ALValue& footName,
@@ -408,18 +424,30 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
   try {
     if (postCommand) {
       #ifndef V6_CROSS_BUILD
+        motionProxy->killAll();
         motionProxy->post.angleInterpolation(
           names, positionLists, timesList, true);
       #else
-        motionProxy.call<void>(
+        motionProxy.call<void>("killAll");
+        motionProxy.async<void>(
           "angleInterpolation", names, positionLists, timesList, true);
+
+        /*auto tasks = this->getNaoqiTaskList();
+        cout <<"tasls: "<< tasks << endl;
+        while(tasks.getSize() == 0) {
+          tasks = this->getNaoqiTaskList();
+        }
+        cout << "tasks: " << tasks << endl;*/
+
       #endif
     } else {
       #ifndef V6_CROSS_BUILD
+        motionProxy->killAll();
         motionProxy->angleInterpolation(
           names, positionLists, timesList, true);
       #else
-        motionProxy.async<void>(
+        motionProxy->killAll();
+        motionProxy.call<void>(
           "angleInterpolation", names, positionLists, timesList, true);
       #endif
     }
@@ -479,18 +507,30 @@ void MotionGenerator<Scalar>::naoqiJointInterpolation(
   try {
     if (postCommand) {
       #ifndef V6_CROSS_BUILD
+        motionProxy->killAll();
         motionProxy->post.angleInterpolation(
           names, positionLists, timesList, true);
       #else
-        motionProxy.call<void>(
+        motionProxy.call<void>("killAll");
+        motionProxy.async<void>(
           "angleInterpolation", names, positionLists, timesList, true);
+
+        /*auto tasks = this->getNaoqiTaskList();
+        cout <<"tasls: "<< tasks << endl;
+        while(tasks.getSize() == 0) {
+          tasks = this->getNaoqiTaskList();
+        }
+        cout << "tasks: " << tasks << endl;*/
+
       #endif
     } else {
       #ifndef V6_CROSS_BUILD
+        motionProxy->killAll();
         motionProxy->angleInterpolation(
           names, positionLists, timesList, true);
       #else
-        motionProxy.async<void>(
+        motionProxy->killAll();
+        motionProxy.call<void>(
           "angleInterpolation", names, positionLists, timesList, true);
       #endif
     }

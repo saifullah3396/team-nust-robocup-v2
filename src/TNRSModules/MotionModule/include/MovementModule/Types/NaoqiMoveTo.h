@@ -1,7 +1,7 @@
 /**
- * @file MotionModule/include/MovementModule/Types/NaoqiMoveToward.h
+ * @file MotionModule/include/MovementModule/Types/NaoqiMoveTo.h
  *
- * This file declares the class NaoqiMoveToward
+ * This file declares the class NaoqiMoveTo
  *
  * @author <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
  * @date 21 Jul 2018
@@ -9,43 +9,38 @@
 
 #pragma once
 
+#include "BehaviorManager/include/StateMachineMacros.h"
 #include "MotionModule/include/MovementModule/MovementModule.h"
 
-struct NaoqiMoveTowardConfig;
+struct NaoqiMoveToConfig;
 
 /**
- * @class NaoqiMoveToward
+ * @class NaoqiMoveTo
  * @brief A class for defining movement of the robot using naoqi based
- *   moveToward() that moves robot based on desired velocity
+ *   moveTo() that moves robot to the desired relative position
  */
 template <typename Scalar>
-class NaoqiMoveToward : public MovementModule<Scalar>
+class NaoqiMoveTo : public MovementModule<Scalar>
 {
 public:
   /**
-   * @brief NaoqiMoveToward Constructor
+   * @brief NaoqiMoveTo Constructor
    *
    * @param motionModule: Pointer to base motion module
    * @param config: Configuration of the behavior
    */
-  NaoqiMoveToward(
+  NaoqiMoveTo(
     MotionModule* motionModule,
-    const boost::shared_ptr<NaoqiMoveTowardConfig>& config);
+    const boost::shared_ptr<NaoqiMoveToConfig>& config);
 
   /**
-   * @brief ~NaoqiMoveToward Destructor
+   * @brief ~NaoqiMoveTo Destructor
    */
-  ~NaoqiMoveToward() final {}
+  ~NaoqiMoveTo() final {}
   /**
    * @brief initiate See Behavior::initiate()
    */
   bool initiate() final;
-
-  /**
-   * @brief reinitiate See Behavior::reinitiate()
-   * @param cfg New configuration
-   */
-  virtual void reinitiate(const BehaviorConfigPtr& cfg);
 
   /**
    * @brief update See Behavior::update()
@@ -64,26 +59,19 @@ public:
 
 private:
   /**
-   * @brief getBehaviorCast Casts the config to NaoqiMoveTowardConfig
-   * @return boost::shared_ptr<NaoqiMoveTowardConfig>
+   * @brief getBehaviorCast Casts the config to NaoqiMoveToConfig
+   * @return boost::shared_ptr<NaoqiMoveToConfig>
    */
-  boost::shared_ptr<NaoqiMoveTowardConfig> getBehaviorCast();
+  boost::shared_ptr<NaoqiMoveToConfig> getBehaviorCast();
 
-  void setPostureAction();
-  void walkAction();
+  ///< Finite state machine for this behavior
+  DECLARE_FSM(fsm, NaoqiMoveTo<Scalar>)
 
-  unsigned behaviorState;
+  ///< SetPosture: State for setting initial posture
+  DECLARE_FSM_STATE(NaoqiMoveTo<Scalar>, SetPosture, setPosture, onStart, onRun,)
 
-  /**
-   * States of this behavior
-   *
-   * @enum BehaviorState
-   */
-  enum BehaviorState
-  {
-    setPosture,
-    walk
-  };
+  ///< MoveTo: Move to state
+  DECLARE_FSM_STATE(NaoqiMoveTo<Scalar>, MoveTo, moveTo, onStart, onRun,)
 
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
   AL::ALValue moveConfig;
@@ -94,4 +82,4 @@ private:
   #endif
 };
 
-typedef boost::shared_ptr<NaoqiMoveToward<MType> > NaoqiMoveTowardPtr;
+typedef boost::shared_ptr<NaoqiMoveTo<MType> > NaoqiMoveToPtr;

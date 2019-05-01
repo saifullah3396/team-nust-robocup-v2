@@ -1,8 +1,0 @@
-#!/bin/sh
-
-if [ $(whoami) != root ]; then
-  sudo $0 $*
-  exit 0
-fi
-
-cp /home/nao/team_nust/bin/autoload.tnust /etc/naoqi/autoload.ini

@@ -71,9 +71,9 @@ DataClient::DataClient(
 {
   dataSubscriber =
     nh.subscribe(
-      "team_nust_user_cmds", 2, &DataClient::commandToMessage, this);
+      "team_nust_user_cmds", 1, &DataClient::commandToMessage, this);
   dataPublisher =
-    nh.advertise<std_msgs::String>(publisher_name, 10000);
+    nh.advertise<std_msgs::String>(publisher_name, 1);
 }
 
 void DataClient::handleWrite(
@@ -186,7 +186,7 @@ ImageClient::ImageClient(
   const std::string& publisher_name) :
   TcpClient(ioService, host, port)
 {
-  dataPublisher = nh.advertise<std_msgs::String>(publisher_name, 10000);
+  dataPublisher = nh.advertise<std_msgs::String>(publisher_name, 1);
 }
 
 void ImageClient::handleWrite(

@@ -169,7 +169,7 @@ void LocalizationTestSuite::LocalizationLostState::onRun()
     bPtr->killAllMotionBehaviors();
     //cout << "Localized..." << endl;
     cout << "Robot pose: " << ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr).get().transpose() << endl;
-    //nextState = nullptr;
+    nextState = nullptr;
   }
 }
 
@@ -200,7 +200,6 @@ void LocalizationTestSuite::LocalizationPrediction::onRun()
       auto planConfig =
         boost::make_shared<PlanTowardsConfig>();
       planConfig->goal = goalPose;
-      planConfig->reachClosest = true;
       planConfig->startPosture =
         boost::make_shared<InterpToPostureConfig>();
       planConfig->startPosture->targetPosture = PostureState::standHandsBehind;
@@ -232,21 +231,22 @@ void LocalizationTestSuite::LocalizationWithMovement::onRun()
       auto mConfig =
         boost::make_shared <HeadTargetTrackConfig> ();
       mConfig->headTargetType = HeadTargetTypes::goal;
-      mConfig->scanConfig->scanMaxYaw = 45 * M_PI / 180;
+      mConfig->scanConfig =
+        boost::make_shared <HeadScanConfig> ();
+      mConfig->scanConfig->scanMaxYaw = Angle::DEG_90;
       bPtr->setupMBRequest(MOTION_1, mConfig);
     }
   } else {
-    auto pose = ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr);
-    RobotPose2D<float> goalPose;
-    RobotPose2D<float> relPose = RobotPose2D<float>(1.0, 2.0, 0.0);
-    goalPose = pose.transform(relPose);
-    bPtr->killGeneralBehavior();
-    bPtr->killMotionBehavior(MOTION_1);
-    auto hcConfig =
-      boost::make_shared <HeadTargetTrackConfig> ();
-    hcConfig->headTargetType = HeadTargetTypes::goal;
-    bPtr->setupMBRequest(MOTION_1, hcConfig);
-    auto planConfig =
+    if (!bPtr->mbInProgress()) {
+      auto hcConfig =
+        boost::make_shared <HeadScanConfig> ();
+      bPtr->setupMBRequest(MOTION_1, hcConfig);
+    }
+    RobotPose2D<float> goalPose = RobotPose2D<float>(-1.0, 0.0, 0.0);
+    auto planConfig = boost::make_shared<PlanTowardsConfig>();
+    planConfig->goal = goalPose;
+    planConfig->tolerance = RobotPose2D<float>(0.05, 0.05, Angle::DEG_30);
+    /*auto planConfig =
       boost::make_shared<GoToTargetConfig>();
     planConfig->goal = goalPose;
     planConfig->reachClosest = true;
@@ -257,9 +257,9 @@ void LocalizationTestSuite::LocalizationWithMovement::onRun()
     planConfig->endPosture =
       boost::make_shared<InterpToPostureConfig>();
     planConfig->endPosture->targetPosture = PostureState::standHandsBehind;
-    planConfig->endPosture->timeToReachP = 1.0;
+    planConfig->endPosture->timeToReachP = 1.0;*/
     bPtr->setupChildRequest(planConfig, true);
     ON_SIDE_LINE_OUT_REL(PlanningModule, bPtr) = false;
-    LOCALIZE_LAST_KNOWN_OUT_REL(PlanningModule, bPtr) = true;
+    LOCALIZE_LAST_KNOWN_OUT_REL(PlanningModule, bPtr) = false;
   }
 }

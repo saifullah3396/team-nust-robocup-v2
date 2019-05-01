@@ -63,6 +63,8 @@ template <typename Scalar>
 Scalar JointSpaceKick<Scalar>::afterKickWait = 0.1;
 template <typename Scalar>
 Scalar JointSpaceKick<Scalar>::afterBalanceWait = 0.25;
+template <typename Scalar>
+Scalar JointSpaceKick<Scalar>::afterPostureWait = 0.25;
 
 template <typename Scalar>
 JointSpaceKick<Scalar>::JointSpaceKick(
@@ -84,6 +86,9 @@ bool JointSpaceKick<Scalar>::initiate()
 {
   LOG_INFO("JointSpaceKick.initiate() called...")
   try {
+    while (this->naoqiMoveIsActive()) {
+      this->stopMove();
+    }
     setupKickBase();
   } catch (TNRSException& e) {
     LOG_EXCEPTION(e.what());
@@ -122,7 +127,17 @@ void JointSpaceKick<Scalar>::SetStartPosture::onStart() {
 template <typename Scalar>
 void JointSpaceKick<Scalar>::SetStartPosture::onRun()
 {
-  this->nextState = this->bPtr->goToBalance.get();
+  static Scalar wait = 0.0;
+  if (
+    wait >
+    this->bPtr->afterPostureWait)
+  {
+    ///< If balance is reached change the state to kicking
+    this->nextState = this->bPtr->goToBalance.get();
+    wait = 0.0;
+  } else {
+    wait += this->bPtr->cycleTime;
+  }
 }
 
 template <typename Scalar>
@@ -170,7 +185,7 @@ void JointSpaceKick<Scalar>::PlanKick::onRun() {
   ///< Plan kicking trajectory
   this->bPtr->defineTrajectory();
   ///< Plot the kicking trajectory
-  this->bPtr->plotKick();
+  //this->bPtr->plotKick();
   if (!this->bPtr->kickFailed) {
     this->nextState = this->bPtr->executeKick.get();
   } else {
@@ -203,7 +218,7 @@ template <typename Scalar>
 void JointSpaceKick<Scalar>::ExecuteKick::onRun()
 {
   #ifdef NAOQI_MOTION_PROXY_AVAILABLE
-  if (this->bPtr->execTime > this->bPtr->totalTimeToKick) {
+  if (this->bPtr->execTime > this->bPtr->totalTimeToKick + this->bPtr->afterKickWait) {
     this->nextState = this->bPtr->setPostKickPosture.get();
   } else {
     this->bPtr->logEndEffectorActual();
@@ -222,7 +237,6 @@ void JointSpaceKick<Scalar>::ExecuteKick::onRun()
   if (this->bPtr->getBehaviorCast()->balanceConfig->type == (int)MBBalanceTypes::mpComControl) {
     this->bPtr->setJointCmds(desJoints);
   } else if (this->bPtr->getBehaviorCast()->balanceConfig->type == (int)MBBalanceTypes::zmpControl) {
-    cout << "Adding posture task..." << endl;
     auto kickTask = this->bPtr->kM->makePostureTask(desJoints, this->bPtr->kickTaskJoints, 10, 1.0);
     this->bPtr->addMotionTask(kickTask);
   }
@@ -238,13 +252,7 @@ void JointSpaceKick<Scalar>::ExecuteKick::onRun()
 template <typename Scalar>
 void JointSpaceKick<Scalar>::SetPostKickPosture::onStart() {
   ///< Sets the posture as a blocking child after required wait time
-  static float wait = 0.f;
-  if (wait < this->bPtr->afterKickWait) {
-    wait += this->bPtr->cycleTime;
-  } else {
-    wait = 0.0;
-    this->bPtr->setupPosture();
-  }
+  this->bPtr->setupPosture();
 }
 
 template <typename Scalar>
@@ -279,6 +287,7 @@ void JointSpaceKick<Scalar>::loadExternalConfig()
       (Scalar, JointSpaceKick.constantVelCutoffDist, constantVelCutoffDist),
       (Scalar, JointSpaceKick.afterKickWait, afterKickWait),
       (Scalar, JointSpaceKick.afterBalanceWait, afterBalanceWait),
+      (Scalar, JointSpaceKick.afterPostureWait, afterPostureWait),
     )
   }
 }
@@ -298,11 +307,11 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   }
 
   ///< Get end-effector transformation in support leg frame
-  cout << "this->supportToKick:" << this->supportToKick << endl;
-  cout << "this->endEffector:" << this->endEffector << endl;
+  //cout << "this->supportToKick:" << this->supportToKick << endl;
+  //cout << "this->endEffector:" << this->endEffector << endl;
   ///
   Matrix<Scalar, 4, 4> eeTrans = this->supportToKick * this->endEffector;
-  cout << "this->eeTrans:" << eeTrans << endl;
+  //cout << "this->eeTrans:" << eeTrans << endl;
   ///< Define via points for pre-impact phase.
   const Scalar balldx = this->ballRadius * this->ballToTargetUnit[0];
   const Scalar balldy = this->ballRadius * this->ballToTargetUnit[1];
@@ -339,8 +348,8 @@ void JointSpaceKick<Scalar>::defineTrajectory()
   //cPosesPre.push_back(preImpactPose3);
   cPosesPre.push_back(this->impactPose);
   cPosesPost.push_back(this->impactPose);
-  cout << "impactJoints:" << this->impactPose << endl;
-  cout << "endeffector:" << this->endEffector << endl;
+  //cout << "impactJoints:" << this->impactPose << endl;
+  //cout << "endeffector:" << this->endEffector << endl;
   cPosesPost.push_back(postImpactPose1);
   cPosesPost.push_back(postImpactPose2);
   ///< Setup for inverse kinematics
@@ -360,7 +369,7 @@ void JointSpaceKick<Scalar>::defineTrajectory()
     this->kM->getJointPositions(
       static_cast<Joints>(chainStart), chainSize, JointStateType::sim).transpose();
   ///< Solve inverse kinematics for poses 1-4. This process is really expensive
-  cout << "(Scalar)this->desImpactVel:" << this->desImpactVel << endl;
+  //cout << "(Scalar)this->desImpactVel:" << this->desImpactVel << endl;
   for (int i = 1; i < jointPosPre.rows(); ++i) {
     //if (i >= 5) {
     //  activeResidual[3] = 1.0;
@@ -375,8 +384,8 @@ void JointSpaceKick<Scalar>::defineTrajectory()
     //else
     // angles = this->kM->inverseRightLeg(this->endEffector, cPosesPre[i])[0];
     angles = this->kM->solveJacobianIK(this->kickLeg, this->endEffector, cPosesPre[i], numIkIterations, activeJoints, activeResidual);
-    cout << "cPosesPre[i]:" << cPosesPre[i] << endl;
-    cout << "angles:" << angles << endl;
+    //cout << "cPosesPre[i]:" << cPosesPre[i] << endl;
+    //cout << "angles:" << angles << endl;
     if (angles[0] != angles[0]) {
         LOG_ERROR("Requested kick cannot be performed.")
         this->kickFailed = true;
@@ -453,7 +462,7 @@ void JointSpaceKick<Scalar>::defineTrajectory()
       jacobian,
       Matrix<Scalar, Dynamic, 1>(desCartesianVel.block(0, 0, 3, 1)));
   }
-  cout << "preImpJVel:" << preImpJVel << endl;
+  //cout << "preImpJVel:" << preImpJVel << endl;
   for (size_t i = 0; i < kickChain->size; ++i) {
     preImpJVel[i] = min(velLimits[i], preImpJVel[i]);
   }
@@ -786,7 +795,7 @@ void JointSpaceKick<Scalar>::requestExecution(const bool& addArmsMovement)
     }
     this->totalTimeToKick = (trajStep + 1) * this->cycleTime;
     //this->kickTimeStep = 0.f;
-    this->naoqiJointInterpolation(jointIds, jointTimes, jointPositions, false);
+    this->naoqiJointInterpolation(jointIds, jointTimes, jointPositions, true);
     //plotJointTrajectories();
   }
 }
@@ -808,26 +817,28 @@ void JointSpaceKick<Scalar>::logJointStatesActual()
 template <typename Scalar>
 void JointSpaceKick<Scalar>::logEndEffectorActual()
 {
-  this->setTransformFrames(JointStateType::actual);
-  Json::Value& root = this->dataLogger->getRoot();
-  Matrix<Scalar, 4, 4> supportToEE =
-    this->supportToKick * this->endEffector;
-  JSON_APPEND(
-    root["endEffector"],
-    "actualTrans",
-    JsonUtils::matrixToJson(supportToEE)
-  );
-  Matrix<Scalar, 3, 1> eePos = Matrix<Scalar, 3, 1>(supportToEE(0, 3), supportToEE(1, 3), supportToEE(2, 3));
-  static Matrix<Scalar, 3, 1> eePrevPos = eePos;
-  Matrix<Scalar, 3, 1> eeVel = (eePos - eePrevPos) / this->cycleTime;
-  Matrix<Scalar, 6, 1> eeTraj;
-  eeTraj << eePos, eeVel;
-  JSON_APPEND(
-    root["endEffector"],
-    "actualTraj",
-    JsonUtils::matrixToJson(eeTraj)
-  );
-  eePrevPos = eePos;
+  if (this->config->logData) {
+    this->setTransformFrames(JointStateType::actual);
+    Json::Value& root = this->dataLogger->getRoot();
+    Matrix<Scalar, 4, 4> supportToEE =
+      this->supportToKick * this->endEffector;
+    JSON_APPEND(
+      root["endEffector"],
+      "actualTrans",
+      JsonUtils::matrixToJson(supportToEE)
+    );
+    Matrix<Scalar, 3, 1> eePos = Matrix<Scalar, 3, 1>(supportToEE(0, 3), supportToEE(1, 3), supportToEE(2, 3));
+    static Matrix<Scalar, 3, 1> eePrevPos = eePos;
+    Matrix<Scalar, 3, 1> eeVel = (eePos - eePrevPos) / this->cycleTime;
+    Matrix<Scalar, 6, 1> eeTraj;
+    eeTraj << eePos, eeVel;
+    JSON_APPEND(
+      root["endEffector"],
+      "actualTraj",
+      JsonUtils::matrixToJson(eeTraj)
+    );
+    eePrevPos = eePos;
+  }
 }
 
 template <typename Scalar>

@@ -70,8 +70,6 @@ public:
   /**
    * Derived from Behavior
    */
-  virtual bool initiate() override;
-  virtual void reinitiate(const BehaviorConfigPtr& cfg) override;
   virtual void update() override;
   virtual void finish() override;
 

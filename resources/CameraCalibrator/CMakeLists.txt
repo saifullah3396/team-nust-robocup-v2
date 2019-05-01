@@ -12,6 +12,7 @@ include_directories(../)
 if(MODULE_IS_REMOTE OR MODULE_IS_LOCAL_SIMULATED)
   file (GLOB SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
   add_executable (tnrs-camera-calibrator ${SOURCE})
+  target_link_libraries(tnrs-camera-calibrator -ljsoncpp )
   # Linking libraries from the sdk.
   qi_use_lib(tnrs-camera-calibrator
     OPENCV2_CORE

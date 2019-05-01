@@ -12761,6 +12761,8 @@ Utils/include/HardwareIds.h
 /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/Utils/include/HardwareIds.h
 Utils/include/MathsUtils.h
 /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/Utils/include/MathsUtils.h
+Utils/include/TNRSLine.h
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/Utils/include/TNRSLine.h
 
 /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/src/TNRSModules/LocalizationModule/src/LocalizationModule.cpp
 boost/make_shared.hpp

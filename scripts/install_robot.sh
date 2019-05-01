@@ -1,14 +1,13 @@
 #!/bin/bash
 
 baseDir="$(cd "$(dirname "$(which "$0")")" && pwd)"
-bhDir="$(dirname "${baseDir}")"
+tnDir="$(dirname "${baseDir}")"
 includeDir="${baseDir}/Include/"
 
 source "${includeDir}/bhumanBase"
 
 FILES=""
 BUILD=""
-ROBOTS="Nu-11/Nu-12/Nu-13/Nu-14/Nu-15/Nu-16/Nu-17"
 ROBOT=""
 IP_PREFIX="192.168.30"
 WLAN_PREFIX="10.0.30"
@@ -22,7 +21,7 @@ usage()
     echo " -h | --help : Displays the help"
     echo " -b | --build : Build type (Release/Debug/Release-Motion)"
     echo " -t | --tool-chain : Toolchain name used in code compilation (" $TOOLCHAIN ")"
-    echo " -r | --robot : Name of the robot for which calibration is needed (" $ROBOTS ")"
+    echo " -r | --robot : Name of the robot for which calibration is needed (" Nu-<ROBOT_NUMBER> ")"
     echo " -f | --files: Files to be copied on to the robot (ALL/DEPENDS/CONFIG/LIBS)"
     echo " -w | --robot : If the robot is connected through the lan network"
     echo " -rv | --robot-version : V5 or V6 robot"
@@ -64,19 +63,9 @@ while [ "$1" != "" ]; do
     shift
 done
 
-if [ "$ROBOT" != "Nu-11" ] && 
-   [ "$ROBOT" != "Nu-12" ] && 
-   [ "$ROBOT" != "Nu-13" ] && 
-   [ "$ROBOT" != "Nu-14" ] && 
-   [ "$ROBOT" != "Nu-15" ] &&
-   [ "$ROBOT" != "Nu-16" ] &&
-   [ "$ROBOT" != "Nu-17" ]; then
-    echo "Invalid robot name: $ROBOT . Options are: ( $ROBOTS )."
-    exit 1;
-fi
-
 if [ "$BUILD" = "" ]; then
   echo "Please provide the build type to continue."
+  usage
   exit 1
 fi
 
@@ -88,30 +77,30 @@ if [ "$TOOLCHAIN" = "" ]; then
   TOOLCHAIN="cross"
 fi
 
-ROBOT_NUM=""
-if [ "$ROBOT" = "Nu-11" ]; then
-  ROBOT_NUM=1
-elif [ "$ROBOT" = "Nu-12" ]; then
-  ROBOT_NUM=2
-elif [ "$ROBOT" = "Nu-13" ]; then
-  ROBOT_NUM=3
-elif [ "$ROBOT" = "Nu-14" ]; then
-  ROBOT_NUM=4
-elif [ "$ROBOT" = "Nu-15" ]; then
-  ROBOT_NUM=5
-elif [ "$ROBOT" = "Nu-16" ]; then
-  ROBOT_NUM=6
-elif [ "$ROBOT" = "Nu-17" ]; then
-  ROBOT_NUM=7
+PREFIX="${ROBOT:0:3}"
+NUMBER_LEN=`expr 3 + ${#ROBOT} - 3`
+ROBOT_NUM="${ROBOT:3:${NUMBER_LEN}}"
+if [ "$PREFIX" != "Nu-" ]; then
+  echo "Invalid robot name: $ROBOT . Options are: ( Nu-<RobotNumber> )."
+  usage
+  exit 1;
+fi
+
+if [ "$ROBOT_NUM" = "" ]; then
+  echo "Invalid robot name: $ROBOT . Options are: ( Nu-<RobotNumber> )."
+  usage
+  exit 1;
 fi
 
 rsyncOptions="${rsyncOptions} --links -v -r"
 echo ${rsyncOptions} 
 echo ${sshCommand}
 
+NAOQI_PREF_TARGET=/home/nao/team_nust/pref
 VIDEO_DRIVER_TARGET=/lib/modules/2.6.33.9-rt31-aldebaran-rt/kernel/drivers/media/video
 DEPENDS_TARGET=/home/nao/team_nust/depends
 BIN_TARGET=/home/nao/team_nust/bin
+FILES_TARGET=/home/nao/team_nust/files
 LIB_TARGET=/home/nao/team_nust/lib
 CONFIG_TARGET=/home/nao/team_nust/config
 LOGS_TARGET=/home/nao/team_nust/logs
@@ -127,9 +116,7 @@ BUILD_DIR=$PATH_TO_TEAM_NUST_DIR/build-$ROBOT_VERSION/$BUILD/$TOOLCHAIN/lib
 echo $BUILD_DIR
 if [ "$FILES" = "ALL" ]; then
   # Copy naoqi config over to the robot
-  rsync ${rsyncOptions} -e "${sshCommand}" ./Files/autoload.tnust nao@$IP_PREFIX.$ROBOT_NUM:${BIN_TARGET} || fatal "Can't copy to '${BIN_TARGET}' on NAO"
-  rsync ${rsyncOptions} -e "${sshCommand}" ./Files/autoload_remote.tnust nao@$IP_PREFIX.$ROBOT_NUM:${BIN_TARGET} || fatal "Can't copy to '${BIN_TARGET}' on NAO"
-  rsync ${rsyncOptions} -e "${sshCommand}" ./Files/bin/* nao@$IP_PREFIX.$ROBOT_NUM:${BIN_TARGET} || fatal "Can't copy to '${BIN_TARGET}' on NAO"
+  rsync ${rsyncOptions} -e "${sshCommand}" ./Files/* nao@$IP_PREFIX.$ROBOT_NUM:${FILES_TARGET} || fatal "Can't copy to '${FILES_TARGET}' on NAO"
   # Copy configuration files to the robot 
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
@@ -155,7 +142,10 @@ elif [ "$FILES" = "CONFIG" ]; then
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/* nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../BehaviorConfigs nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
   rsync ${rsyncOptions} -e "${sshCommand}" $ROBOT_DIR/../../Common/* nao@$IP_PREFIX.$ROBOT_NUM:${CONFIG_TARGET} || fatal "Can't copy to '${CONFIG_TARGET}' on NAO"
+elif [ "$FILES" = "NAOQI_PREF" ]; then
+  rsync ${rsyncOptions} -e "${sshCommand}" ./naoqi_preferences/* nao@$IP_PREFIX.$ROBOT_NUM:${NAOQI_PREF_TARGET} || fatal "Can't copy to '${NAOQI_PREF_TARGET}' on NAO"
 elif [ "$FILES" = "BIN" ]; then
+  rsync ${rsyncOptions} -e "${sshCommand}" ./bin/* nao@$IP_PREFIX.$ROBOT_NUM:${BIN_TARGET} || fatal "Can't copy to '${BIN_TARGET}' on NAO"
   if [ "$ROBOT_VERSION" = "V6" ]; then
     # Copy camera driver if it is V5 robot
     rsync ${rsyncOptions} -e "${sshCommand}" $BUILD_DIR/../bin/* nao@$IP_PREFIX.$ROBOT_NUM:${BIN_TARGET} || fatal "Can't copy to '${BIN_TARGET}' on NAO"

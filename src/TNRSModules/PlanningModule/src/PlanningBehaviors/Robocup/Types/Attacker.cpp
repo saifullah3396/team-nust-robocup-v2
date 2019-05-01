@@ -44,17 +44,20 @@ boost::shared_ptr<AttackerConfig> Attacker::getBehaviorCast()
 bool Attacker::initiate()
 {
   LOG_INFO("Attacker.initiated() called...")
-  BaseModule::publishModuleRequest(boost::make_shared<SwitchBallObstacle>(true));
+  BaseModule::publishModuleRequest(boost::make_shared<SwitchBallObstacle>(false));
   ROBOCUP_ROLE_OUT(PlanningModule) = (int)RobocupRole::attacker;
   return Soccer::initiate();
 }
 
 void Attacker::ReactAttacker::onRun()
 {
+  //cout << "In react..." << endl;
   if (ATTACKER_PTR->robotIsFalling()) {
     nextState = ATTACKER_PTR->fallRecovery.get();
+    //cout << "robot is falling..." << endl;
   } else if (ATTACKER_PTR->robotIsPenalised()) {
     nextState = ATTACKER_PTR->waitForPenalty.get();
+    //cout << "robot is penalized..." << endl;
   } else {
     /*
     if (!ATTACKER_PTR->mbInProgress()) {
@@ -76,14 +79,17 @@ void Attacker::ReactAttacker::onRun()
     }
 
     if (!ATTACKER_PTR->isLocalized()) {
+      //cout << "robot is not localized..." << endl;
       nextState = ATTACKER_PTR->localize.get();
       return;
     }
 
     if (ATTACKER_PTR->shouldPlayBall()) {
       nextState = ATTACKER_PTR->playBall.get();
+      //cout << "should play ball" << endl;
     } else {
       nextState = ATTACKER_PTR->goToPosition.get();
+      //cout << "should go to position" << endl;
     }
   }
 }

@@ -1191,6 +1191,14 @@ Utils/include/DataHolders/DataHolder.h
 ../../../../src/Utils/include/DataHolders/Utils/include/DataHolders/DataHolder.h
 
 ../../../../src/Utils/include/DataHolders/Camera.h
+linux/usb/video.h
+-
+linux/uvcvideo.h
+-
+sys/ioctl.h
+-
+stdint.h
+-
 stdio.h
 -
 stdlib.h

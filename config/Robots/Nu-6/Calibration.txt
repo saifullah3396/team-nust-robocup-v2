@@ -1,0 +1,4 @@
+Top True
+Bottom True
+Torso False
+Imu False

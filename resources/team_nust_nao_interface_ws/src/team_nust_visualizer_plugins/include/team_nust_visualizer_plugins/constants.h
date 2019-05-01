@@ -26,7 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -68,17 +68,17 @@ static const std::string camera_names[toUType(CameraId::count)] {
   "visionBottom"
 };
 
-static const std::string robot_names[NUM_ROBOT_NAMES] 
+static const std::string robot_names[NUM_ROBOT_NAMES]
 {
  "Sim",
- "Nu-11",
- "Nu-12",
- "Nu-13",
- "Nu-14",
- "Nu-15",
- "Nu-16",
- "Nu-17",
- "Nu-18"
+ "Nu-1",
+ "Nu-2",
+ "Nu-3",
+ "Nu-4",
+ "Nu-5",
+ "Nu-6",
+ "Nu-7",
+ "Nu-8"
 };
 
 static const unsigned n_color_tables[toUType(TNColors::count)] {

@@ -8,6 +8,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <json/json.h>
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 # define _CRT_SECURE_NO_WARNINGS
@@ -244,10 +245,8 @@ int main(int argc, char* argv[])
 {
     help();
     Settings s;
-
     string path = ROOT_DIR + string("/../config/");
     string robotName = "", imageFilePath = "";
-
     if(cmdOptionExists(argv, argv+argc, "--robot"))
     {
       robotName = getCmdOption(argv, argv + argc, "--robot");
@@ -257,7 +256,7 @@ int main(int argc, char* argv[])
       camera = getCmdOption(argv, argv + argc, "--camera");
     }
     if (robotName != "" && camera != "") {
-      imageFilePath = 
+      imageFilePath =
         ROOT_DIR + string("/../logs/Robots/") + robotName + "/" + camera + "Images.txt";
     }
     const string inputSettingsFile = path + "CameraCalibrator.xml";
@@ -530,7 +529,41 @@ static void saveCameraParams( Settings& s, Size& imageSize, Mat& cameraMatrix, M
                               const vector<float>& reprojErrs, const vector<vector<Point2f> >& imagePoints,
                               double totalAvgErr )
 {
-    string outputFile = ROOT_DIR + string("/../config/Robots/") + s.outputFileName + "/" + "CamCalibration-" + camera + ".xml";
+
+    string jsonFile = ROOT_DIR + string("/../config/Robots/") + s.outputFileName + "/" + "CameraSettings.json";
+    string outputFile = ROOT_DIR + string("/../config/Robots/") + s.outputFileName + "/" + "CamCalibration.xml";
+    try {
+      Json::Value json;
+      using namespace std;
+      ifstream config(jsonFile, ifstream::binary);
+      config >> json;
+      string cameraName;
+      if (camera == "Top")
+        cameraName = "visionTop";
+      else if (camera == "Bottom")
+        cameraName = "visionBottom";
+      config.close();
+
+      json[cameraName]["intrinsic"]["focalX"] = cameraMatrix.at<float>(0, 0);
+      json[cameraName]["intrinsic"]["focalY"] = cameraMatrix.at<float>(1, 1);
+      json[cameraName]["intrinsic"]["centerOffX"] = cameraMatrix.at<float>(0, 2);
+      json[cameraName]["intrinsic"]["centerOffY"] = cameraMatrix.at<float>(1, 2);
+
+      json[cameraName]["distortion"]["a"] = distCoeffs.at<float>(0, 0);
+      json[cameraName]["distortion"]["b"] = distCoeffs.at<float>(1, 0);
+      json[cameraName]["distortion"]["c"] = distCoeffs.at<float>(2, 0);
+      json[cameraName]["distortion"]["d"] = distCoeffs.at<float>(3, 0);
+      json[cameraName]["distortion"]["e"] = distCoeffs.at<float>(4, 0);
+
+      std::ofstream out;
+      out.open(jsonFile);
+      Json::StyledWriter styledWriter;
+      out << styledWriter.write(json);
+      out.close();
+
+    } catch (Json::Exception& e) {
+      cout << "Error while reading json configuration:\n\t" << jsonFile << "\n" << e.what() << endl;
+    }
     cout << "output FILe : " << outputFile << endl;
     FileStorage fs( outputFile, FileStorage::WRITE );
     time_t tm;
@@ -562,7 +595,6 @@ static void saveCameraParams( Settings& s, Size& imageSize, Mat& cameraMatrix, M
         cvWriteComment( *fs, buf, 0 );
 
     }
-
     fs << "flagValue" << s.flag;
 
     fs << "Camera_Matrix" << cameraMatrix;

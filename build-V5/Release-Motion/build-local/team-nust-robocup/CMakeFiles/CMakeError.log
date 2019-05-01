@@ -3452,3 +3452,1887 @@ make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-
 
 Source file was:
 int main() { return 0; }
+Determining if the include file altivec.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a3ea4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_a3ea4.dir/build.make CMakeFiles/cmTC_a3ea4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a3ea4.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_a3ea4.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: altivec.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_a3ea4.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_a3ea4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file c_asm.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f81d7/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f81d7.dir/build.make CMakeFiles/cmTC_f81d7.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f81d7.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_f81d7.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:19: fatal error: c_asm.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_f81d7.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f81d7/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file intrinsics.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ef686/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_ef686.dir/build.make CMakeFiles/cmTC_ef686.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ef686.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_ef686.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:24: fatal error: intrinsics.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_ef686.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_ef686/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file mach/mach_time.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_54410/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_54410.dir/build.make CMakeFiles/cmTC_54410.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_54410.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_54410.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_54410.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_54410/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file uintptr.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_bec17/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_bec17.dir/build.make CMakeFiles/cmTC_bec17.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bec17.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_bec17.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: uintptr.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_bec17.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_bec17/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the clock_gettime exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fff2d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_fff2d.dir/build.make CMakeFiles/cmTC_fff2d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fff2d.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_fff2d.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_fff2d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fff2d.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_fff2d.dir/CheckSymbolExists.c.o  -o cmTC_fff2d -rdynamic 
+CMakeFiles/cmTC_fff2d.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `clock_gettime'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_fff2d] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_fff2d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef clock_gettime
+  return ((int*)(&clock_gettime))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the mach_absolute_time exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_97fd4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_97fd4.dir/build.make CMakeFiles/cmTC_97fd4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_97fd4.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_97fd4.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:2:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_97fd4.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_97fd4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <mach/mach_time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef mach_absolute_time
+  return ((int*)(&mach_absolute_time))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the sysctl exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fa378/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_fa378.dir/build.make CMakeFiles/cmTC_fa378.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fa378.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_fa378.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: 'sysctl' undeclared (first use in this function)
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[2]: *** [CMakeFiles/cmTC_fa378.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_fa378/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sysctl
+  return ((int*)(&sysctl))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7add4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_7add4.dir/build.make CMakeFiles/cmTC_7add4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7add4.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_7add4.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_7add4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7add4.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_7add4.dir/CheckSymbolExists.c.o  -o cmTC_7add4 -rdynamic -lm 
+CMakeFiles/cmTC_7add4.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `pthread_create'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_7add4] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_7add4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b0e11/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b0e11.dir/build.make CMakeFiles/cmTC_b0e11.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b0e11.dir/CheckFunctionExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_b0e11.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_b0e11
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b0e11.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create  -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_b0e11.dir/CheckFunctionExists.c.o  -o cmTC_b0e11 -rdynamic -lpthreads -lm 
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/../lib/gcc/i686-aldebaran-linux-gnu/4.5.3/../../../../i686-aldebaran-linux-gnu/bin/ld: cannot find -lpthreads
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_b0e11] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b0e11/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9188e/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_9188e.dir/build.make CMakeFiles/cmTC_9188e.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9188e.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   -mavx2 -o CMakeFiles/cmTC_9188e.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+cc1: error: unrecognized command line option "-mavx2"
+make[2]: *** [CMakeFiles/cmTC_9188e.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_9188e/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c6c74/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_c6c74.dir/build.make CMakeFiles/cmTC_c6c74.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c6c74.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   /arch:AVX2 -o CMakeFiles/cmTC_c6c74.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+i686-aldebaran-linux-gnu-gcc: /arch:AVX2: No such file or directory
+make[2]: *** [CMakeFiles/cmTC_c6c74.dir/src.c.o] Error 1
+make[2]: *** Deleting file `CMakeFiles/cmTC_c6c74.dir/src.c.o'
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_c6c74/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_THREAD_LOCAL_STORAGE failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f35f9/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f35f9.dir/build.make CMakeFiles/cmTC_f35f9.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f35f9.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_THREAD_LOCAL_STORAGE   -o CMakeFiles/cmTC_f35f9.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c: In function '__declspec':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:3:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:2:28: error: declaration for parameter 'tls' but no such parameter
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:5:5: error: expected '{' at end of input
+make[2]: *** [CMakeFiles/cmTC_f35f9.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f35f9/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+
+    __declspec(thread) int tls;
+    int main(void) {
+        return 0;
+    }
+Performing C++ SOURCE FILE Test SUPPORTS_STDCXX11 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_75597/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_75597.dir/build.make CMakeFiles/cmTC_75597.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_75597.dir/src.cxx.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-g++     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DSUPPORTS_STDCXX11   -std=c++11 -o CMakeFiles/cmTC_75597.dir/src.cxx.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: error: unrecognized command line option "-std=c++11"
+make[2]: *** [CMakeFiles/cmTC_75597.dir/src.cxx.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_75597/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Determining if the include file altivec.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_58aab/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_58aab.dir/build.make CMakeFiles/cmTC_58aab.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_58aab.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_58aab.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: altivec.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_58aab.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_58aab/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file c_asm.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_eae20/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_eae20.dir/build.make CMakeFiles/cmTC_eae20.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_eae20.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_eae20.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:19: fatal error: c_asm.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_eae20.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_eae20/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file intrinsics.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7b523/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_7b523.dir/build.make CMakeFiles/cmTC_7b523.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7b523.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_7b523.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:24: fatal error: intrinsics.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_7b523.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_7b523/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file mach/mach_time.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8f361/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_8f361.dir/build.make CMakeFiles/cmTC_8f361.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8f361.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_8f361.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_8f361.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_8f361/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file uintptr.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_6eaff/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_6eaff.dir/build.make CMakeFiles/cmTC_6eaff.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_6eaff.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_6eaff.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: uintptr.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_6eaff.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_6eaff/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the clock_gettime exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_82e20/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_82e20.dir/build.make CMakeFiles/cmTC_82e20.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_82e20.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_82e20.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_82e20
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_82e20.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_82e20.dir/CheckSymbolExists.c.o  -o cmTC_82e20 -rdynamic 
+CMakeFiles/cmTC_82e20.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `clock_gettime'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_82e20] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_82e20/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef clock_gettime
+  return ((int*)(&clock_gettime))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the mach_absolute_time exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_37142/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_37142.dir/build.make CMakeFiles/cmTC_37142.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_37142.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_37142.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:2:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_37142.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_37142/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <mach/mach_time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef mach_absolute_time
+  return ((int*)(&mach_absolute_time))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the sysctl exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f64f4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f64f4.dir/build.make CMakeFiles/cmTC_f64f4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f64f4.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_f64f4.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: 'sysctl' undeclared (first use in this function)
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[2]: *** [CMakeFiles/cmTC_f64f4.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f64f4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sysctl
+  return ((int*)(&sysctl))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_01c0d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_01c0d.dir/build.make CMakeFiles/cmTC_01c0d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_01c0d.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_01c0d.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_01c0d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_01c0d.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_01c0d.dir/CheckSymbolExists.c.o  -o cmTC_01c0d -rdynamic -lm 
+CMakeFiles/cmTC_01c0d.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `pthread_create'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_01c0d] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_01c0d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_fecfe/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_fecfe.dir/build.make CMakeFiles/cmTC_fecfe.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fecfe.dir/CheckFunctionExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_fecfe.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_fecfe
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fecfe.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create  -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_fecfe.dir/CheckFunctionExists.c.o  -o cmTC_fecfe -rdynamic -lpthreads -lm 
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/../lib/gcc/i686-aldebaran-linux-gnu/4.5.3/../../../../i686-aldebaran-linux-gnu/bin/ld: cannot find -lpthreads
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_fecfe] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_fecfe/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_46303/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_46303.dir/build.make CMakeFiles/cmTC_46303.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_46303.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   -mavx2 -o CMakeFiles/cmTC_46303.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+cc1: error: unrecognized command line option "-mavx2"
+make[2]: *** [CMakeFiles/cmTC_46303.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_46303/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_bb2df/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_bb2df.dir/build.make CMakeFiles/cmTC_bb2df.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bb2df.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   /arch:AVX2 -o CMakeFiles/cmTC_bb2df.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+i686-aldebaran-linux-gnu-gcc: /arch:AVX2: No such file or directory
+make[2]: *** [CMakeFiles/cmTC_bb2df.dir/src.c.o] Error 1
+make[2]: *** Deleting file `CMakeFiles/cmTC_bb2df.dir/src.c.o'
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_bb2df/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_THREAD_LOCAL_STORAGE failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_40c3a/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_40c3a.dir/build.make CMakeFiles/cmTC_40c3a.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_40c3a.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_THREAD_LOCAL_STORAGE   -o CMakeFiles/cmTC_40c3a.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c: In function '__declspec':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:3:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:2:28: error: declaration for parameter 'tls' but no such parameter
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:5:5: error: expected '{' at end of input
+make[2]: *** [CMakeFiles/cmTC_40c3a.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_40c3a/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+
+    __declspec(thread) int tls;
+    int main(void) {
+        return 0;
+    }
+Performing C++ SOURCE FILE Test SUPPORTS_STDCXX11 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_c233c/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_c233c.dir/build.make CMakeFiles/cmTC_c233c.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_c233c.dir/src.cxx.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-g++     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DSUPPORTS_STDCXX11   -std=c++11 -o CMakeFiles/cmTC_c233c.dir/src.cxx.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: error: unrecognized command line option "-std=c++11"
+make[2]: *** [CMakeFiles/cmTC_c233c.dir/src.cxx.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_c233c/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Determining if the include file altivec.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_989d5/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_989d5.dir/build.make CMakeFiles/cmTC_989d5.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_989d5.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_989d5.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: altivec.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_989d5.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_989d5/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file c_asm.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b9ebb/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b9ebb.dir/build.make CMakeFiles/cmTC_b9ebb.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b9ebb.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_b9ebb.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:19: fatal error: c_asm.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_b9ebb.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b9ebb/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file intrinsics.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_28e4f/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_28e4f.dir/build.make CMakeFiles/cmTC_28e4f.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_28e4f.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_28e4f.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:24: fatal error: intrinsics.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_28e4f.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_28e4f/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file mach/mach_time.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8990e/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_8990e.dir/build.make CMakeFiles/cmTC_8990e.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8990e.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_8990e.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_8990e.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_8990e/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file uintptr.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5f671/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_5f671.dir/build.make CMakeFiles/cmTC_5f671.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5f671.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_5f671.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: uintptr.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_5f671.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_5f671/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the clock_gettime exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_54c63/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_54c63.dir/build.make CMakeFiles/cmTC_54c63.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_54c63.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_54c63.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_54c63
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_54c63.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_54c63.dir/CheckSymbolExists.c.o  -o cmTC_54c63 -rdynamic 
+CMakeFiles/cmTC_54c63.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `clock_gettime'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_54c63] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_54c63/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef clock_gettime
+  return ((int*)(&clock_gettime))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the mach_absolute_time exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_0799b/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_0799b.dir/build.make CMakeFiles/cmTC_0799b.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0799b.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_0799b.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:2:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_0799b.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_0799b/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <mach/mach_time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef mach_absolute_time
+  return ((int*)(&mach_absolute_time))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the sysctl exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_68137/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_68137.dir/build.make CMakeFiles/cmTC_68137.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_68137.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_68137.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: 'sysctl' undeclared (first use in this function)
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[2]: *** [CMakeFiles/cmTC_68137.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_68137/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sysctl
+  return ((int*)(&sysctl))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_926a6/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_926a6.dir/build.make CMakeFiles/cmTC_926a6.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_926a6.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_926a6.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_926a6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_926a6.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_926a6.dir/CheckSymbolExists.c.o  -o cmTC_926a6 -rdynamic -lm 
+CMakeFiles/cmTC_926a6.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `pthread_create'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_926a6] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_926a6/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9b46c/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_9b46c.dir/build.make CMakeFiles/cmTC_9b46c.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9b46c.dir/CheckFunctionExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_9b46c.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_9b46c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9b46c.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create  -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_9b46c.dir/CheckFunctionExists.c.o  -o cmTC_9b46c -rdynamic -lpthreads -lm 
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/../lib/gcc/i686-aldebaran-linux-gnu/4.5.3/../../../../i686-aldebaran-linux-gnu/bin/ld: cannot find -lpthreads
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_9b46c] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_9b46c/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4d7c9/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_4d7c9.dir/build.make CMakeFiles/cmTC_4d7c9.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4d7c9.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   -mavx2 -o CMakeFiles/cmTC_4d7c9.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+cc1: error: unrecognized command line option "-mavx2"
+make[2]: *** [CMakeFiles/cmTC_4d7c9.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_4d7c9/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9d5c5/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_9d5c5.dir/build.make CMakeFiles/cmTC_9d5c5.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9d5c5.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   /arch:AVX2 -o CMakeFiles/cmTC_9d5c5.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+i686-aldebaran-linux-gnu-gcc: /arch:AVX2: No such file or directory
+make[2]: *** [CMakeFiles/cmTC_9d5c5.dir/src.c.o] Error 1
+make[2]: *** Deleting file `CMakeFiles/cmTC_9d5c5.dir/src.c.o'
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_9d5c5/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_THREAD_LOCAL_STORAGE failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_1d670/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_1d670.dir/build.make CMakeFiles/cmTC_1d670.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1d670.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_THREAD_LOCAL_STORAGE   -o CMakeFiles/cmTC_1d670.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c: In function '__declspec':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:3:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:2:28: error: declaration for parameter 'tls' but no such parameter
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:5:5: error: expected '{' at end of input
+make[2]: *** [CMakeFiles/cmTC_1d670.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_1d670/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+
+    __declspec(thread) int tls;
+    int main(void) {
+        return 0;
+    }
+Performing C++ SOURCE FILE Test SUPPORTS_STDCXX11 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_879f0/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_879f0.dir/build.make CMakeFiles/cmTC_879f0.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_879f0.dir/src.cxx.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-g++     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DSUPPORTS_STDCXX11   -std=c++11 -o CMakeFiles/cmTC_879f0.dir/src.cxx.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: error: unrecognized command line option "-std=c++11"
+make[2]: *** [CMakeFiles/cmTC_879f0.dir/src.cxx.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_879f0/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Determining if the include file altivec.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4fdeb/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_4fdeb.dir/build.make CMakeFiles/cmTC_4fdeb.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4fdeb.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_4fdeb.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: altivec.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_4fdeb.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_4fdeb/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file c_asm.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_51da9/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_51da9.dir/build.make CMakeFiles/cmTC_51da9.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_51da9.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_51da9.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:19: fatal error: c_asm.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_51da9.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_51da9/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file intrinsics.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_277a8/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_277a8.dir/build.make CMakeFiles/cmTC_277a8.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_277a8.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_277a8.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:24: fatal error: intrinsics.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_277a8.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_277a8/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file mach/mach_time.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_40252/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_40252.dir/build.make CMakeFiles/cmTC_40252.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_40252.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_40252.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_40252.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_40252/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file uintptr.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_df270/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_df270.dir/build.make CMakeFiles/cmTC_df270.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_df270.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_df270.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: uintptr.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_df270.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_df270/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the clock_gettime exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_68b91/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_68b91.dir/build.make CMakeFiles/cmTC_68b91.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_68b91.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_68b91.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_68b91
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_68b91.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_68b91.dir/CheckSymbolExists.c.o  -o cmTC_68b91 -rdynamic 
+CMakeFiles/cmTC_68b91.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `clock_gettime'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_68b91] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_68b91/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef clock_gettime
+  return ((int*)(&clock_gettime))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the mach_absolute_time exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_40d74/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_40d74.dir/build.make CMakeFiles/cmTC_40d74.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_40d74.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_40d74.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:2:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_40d74.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_40d74/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <mach/mach_time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef mach_absolute_time
+  return ((int*)(&mach_absolute_time))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the sysctl exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_dbde2/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_dbde2.dir/build.make CMakeFiles/cmTC_dbde2.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_dbde2.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_dbde2.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: 'sysctl' undeclared (first use in this function)
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[2]: *** [CMakeFiles/cmTC_dbde2.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_dbde2/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sysctl
+  return ((int*)(&sysctl))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_398bb/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_398bb.dir/build.make CMakeFiles/cmTC_398bb.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_398bb.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_398bb.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_398bb
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_398bb.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_398bb.dir/CheckSymbolExists.c.o  -o cmTC_398bb -rdynamic -lm 
+CMakeFiles/cmTC_398bb.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `pthread_create'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_398bb] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_398bb/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9d27d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_9d27d.dir/build.make CMakeFiles/cmTC_9d27d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9d27d.dir/CheckFunctionExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_9d27d.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_9d27d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9d27d.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create  -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_9d27d.dir/CheckFunctionExists.c.o  -o cmTC_9d27d -rdynamic -lpthreads -lm 
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/../lib/gcc/i686-aldebaran-linux-gnu/4.5.3/../../../../i686-aldebaran-linux-gnu/bin/ld: cannot find -lpthreads
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_9d27d] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_9d27d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4cdf6/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_4cdf6.dir/build.make CMakeFiles/cmTC_4cdf6.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4cdf6.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   -mavx2 -o CMakeFiles/cmTC_4cdf6.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+cc1: error: unrecognized command line option "-mavx2"
+make[2]: *** [CMakeFiles/cmTC_4cdf6.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_4cdf6/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_586fe/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_586fe.dir/build.make CMakeFiles/cmTC_586fe.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_586fe.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   /arch:AVX2 -o CMakeFiles/cmTC_586fe.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+i686-aldebaran-linux-gnu-gcc: /arch:AVX2: No such file or directory
+make[2]: *** [CMakeFiles/cmTC_586fe.dir/src.c.o] Error 1
+make[2]: *** Deleting file `CMakeFiles/cmTC_586fe.dir/src.c.o'
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_586fe/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_THREAD_LOCAL_STORAGE failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_28a6e/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_28a6e.dir/build.make CMakeFiles/cmTC_28a6e.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_28a6e.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_THREAD_LOCAL_STORAGE   -o CMakeFiles/cmTC_28a6e.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c: In function '__declspec':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:3:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:2:28: error: declaration for parameter 'tls' but no such parameter
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:5:5: error: expected '{' at end of input
+make[2]: *** [CMakeFiles/cmTC_28a6e.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_28a6e/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+
+    __declspec(thread) int tls;
+    int main(void) {
+        return 0;
+    }
+Performing C++ SOURCE FILE Test SUPPORTS_STDCXX11 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_905c4/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_905c4.dir/build.make CMakeFiles/cmTC_905c4.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_905c4.dir/src.cxx.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-g++     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DSUPPORTS_STDCXX11   -std=c++11 -o CMakeFiles/cmTC_905c4.dir/src.cxx.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: error: unrecognized command line option "-std=c++11"
+make[2]: *** [CMakeFiles/cmTC_905c4.dir/src.cxx.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_905c4/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Determining if the include file altivec.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f6bd0/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f6bd0.dir/build.make CMakeFiles/cmTC_f6bd0.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f6bd0.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_f6bd0.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: altivec.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_f6bd0.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f6bd0/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file c_asm.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_a3cb7/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_a3cb7.dir/build.make CMakeFiles/cmTC_a3cb7.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a3cb7.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_a3cb7.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:19: fatal error: c_asm.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_a3cb7.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_a3cb7/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file intrinsics.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_825bd/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_825bd.dir/build.make CMakeFiles/cmTC_825bd.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_825bd.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_825bd.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:24: fatal error: intrinsics.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_825bd.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_825bd/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file mach/mach_time.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_652ef/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_652ef.dir/build.make CMakeFiles/cmTC_652ef.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_652ef.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_652ef.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_652ef.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_652ef/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file uintptr.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_463ab/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_463ab.dir/build.make CMakeFiles/cmTC_463ab.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_463ab.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_463ab.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: uintptr.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_463ab.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_463ab/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the clock_gettime exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f320f/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f320f.dir/build.make CMakeFiles/cmTC_f320f.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f320f.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_f320f.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_f320f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f320f.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_f320f.dir/CheckSymbolExists.c.o  -o cmTC_f320f -rdynamic 
+CMakeFiles/cmTC_f320f.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `clock_gettime'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_f320f] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f320f/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef clock_gettime
+  return ((int*)(&clock_gettime))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the mach_absolute_time exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b0096/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b0096.dir/build.make CMakeFiles/cmTC_b0096.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b0096.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_b0096.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:2:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_b0096.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b0096/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <mach/mach_time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef mach_absolute_time
+  return ((int*)(&mach_absolute_time))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the sysctl exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_74bbd/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_74bbd.dir/build.make CMakeFiles/cmTC_74bbd.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_74bbd.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_74bbd.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: 'sysctl' undeclared (first use in this function)
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[2]: *** [CMakeFiles/cmTC_74bbd.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_74bbd/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sysctl
+  return ((int*)(&sysctl))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_923a9/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_923a9.dir/build.make CMakeFiles/cmTC_923a9.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_923a9.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_923a9.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_923a9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_923a9.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_923a9.dir/CheckSymbolExists.c.o  -o cmTC_923a9 -rdynamic -lm 
+CMakeFiles/cmTC_923a9.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `pthread_create'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_923a9] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_923a9/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5ca64/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_5ca64.dir/build.make CMakeFiles/cmTC_5ca64.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5ca64.dir/CheckFunctionExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_5ca64.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_5ca64
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5ca64.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create  -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_5ca64.dir/CheckFunctionExists.c.o  -o cmTC_5ca64 -rdynamic -lpthreads -lm 
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/../lib/gcc/i686-aldebaran-linux-gnu/4.5.3/../../../../i686-aldebaran-linux-gnu/bin/ld: cannot find -lpthreads
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_5ca64] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_5ca64/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_369d1/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_369d1.dir/build.make CMakeFiles/cmTC_369d1.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_369d1.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   -mavx2 -o CMakeFiles/cmTC_369d1.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+cc1: error: unrecognized command line option "-mavx2"
+make[2]: *** [CMakeFiles/cmTC_369d1.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_369d1/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_29e6a/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_29e6a.dir/build.make CMakeFiles/cmTC_29e6a.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_29e6a.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   /arch:AVX2 -o CMakeFiles/cmTC_29e6a.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+i686-aldebaran-linux-gnu-gcc: /arch:AVX2: No such file or directory
+make[2]: *** [CMakeFiles/cmTC_29e6a.dir/src.c.o] Error 1
+make[2]: *** Deleting file `CMakeFiles/cmTC_29e6a.dir/src.c.o'
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_29e6a/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_THREAD_LOCAL_STORAGE failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4729b/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_4729b.dir/build.make CMakeFiles/cmTC_4729b.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4729b.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_THREAD_LOCAL_STORAGE   -o CMakeFiles/cmTC_4729b.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c: In function '__declspec':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:3:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:2:28: error: declaration for parameter 'tls' but no such parameter
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:5:5: error: expected '{' at end of input
+make[2]: *** [CMakeFiles/cmTC_4729b.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_4729b/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+
+    __declspec(thread) int tls;
+    int main(void) {
+        return 0;
+    }
+Performing C++ SOURCE FILE Test SUPPORTS_STDCXX11 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e5356/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_e5356.dir/build.make CMakeFiles/cmTC_e5356.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_e5356.dir/src.cxx.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-g++     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DSUPPORTS_STDCXX11   -std=c++11 -o CMakeFiles/cmTC_e5356.dir/src.cxx.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: error: unrecognized command line option "-std=c++11"
+make[2]: *** [CMakeFiles/cmTC_e5356.dir/src.cxx.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_e5356/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Determining if the include file altivec.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_82254/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_82254.dir/build.make CMakeFiles/cmTC_82254.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_82254.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_82254.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: altivec.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_82254.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_82254/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file c_asm.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_dca18/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_dca18.dir/build.make CMakeFiles/cmTC_dca18.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_dca18.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_dca18.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:19: fatal error: c_asm.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_dca18.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_dca18/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file intrinsics.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f2838/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f2838.dir/build.make CMakeFiles/cmTC_f2838.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f2838.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_f2838.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:24: fatal error: intrinsics.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_f2838.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f2838/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file mach/mach_time.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_cdddf/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_cdddf.dir/build.make CMakeFiles/cmTC_cdddf.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cdddf.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_cdddf.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_cdddf.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_cdddf/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the include file uintptr.h exists failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_23161/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_23161.dir/build.make CMakeFiles/cmTC_23161.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_23161.dir/CheckIncludeFile.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_23161.dir/CheckIncludeFile.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:21: fatal error: uintptr.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_23161.dir/CheckIncludeFile.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_23161/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Determining if the clock_gettime exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5b8e3/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_5b8e3.dir/build.make CMakeFiles/cmTC_5b8e3.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5b8e3.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_5b8e3.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_5b8e3
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5b8e3.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_5b8e3.dir/CheckSymbolExists.c.o  -o cmTC_5b8e3 -rdynamic 
+CMakeFiles/cmTC_5b8e3.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `clock_gettime'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_5b8e3] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_5b8e3/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef clock_gettime
+  return ((int*)(&clock_gettime))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the mach_absolute_time exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_af8bf/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_af8bf.dir/build.make CMakeFiles/cmTC_af8bf.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_af8bf.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_af8bf.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:2:28: fatal error: mach/mach_time.h: No such file or directory
+compilation terminated.
+make[2]: *** [CMakeFiles/cmTC_af8bf.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_af8bf/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <mach/mach_time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef mach_absolute_time
+  return ((int*)(&mach_absolute_time))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the sysctl exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4ffbb/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_4ffbb.dir/build.make CMakeFiles/cmTC_4ffbb.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4ffbb.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_4ffbb.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: 'sysctl' undeclared (first use in this function)
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+make[2]: *** [CMakeFiles/cmTC_4ffbb.dir/CheckSymbolExists.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_4ffbb/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sysctl
+  return ((int*)(&sysctl))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ff760/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_ff760.dir/build.make CMakeFiles/cmTC_ff760.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ff760.dir/CheckSymbolExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic    -o CMakeFiles/cmTC_ff760.dir/CheckSymbolExists.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_ff760
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ff760.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic   -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_ff760.dir/CheckSymbolExists.c.o  -o cmTC_ff760 -rdynamic -lm 
+CMakeFiles/cmTC_ff760.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1): undefined reference to `pthread_create'
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_ff760] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_ff760/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+File /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_bcf7e/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_bcf7e.dir/build.make CMakeFiles/cmTC_bcf7e.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bcf7e.dir/CheckFunctionExists.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_bcf7e.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_bcf7e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bcf7e.dir/link.txt --verbose=1
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DCHECK_FUNCTION_EXISTS=pthread_create  -Wl,--as-needed,--sysroot,/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/  CMakeFiles/cmTC_bcf7e.dir/CheckFunctionExists.c.o  -o cmTC_bcf7e -rdynamic -lpthreads -lm 
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/../lib/gcc/i686-aldebaran-linux-gnu/4.5.3/../../../../i686-aldebaran-linux-gnu/bin/ld: cannot find -lpthreads
+collect2: ld returned 1 exit status
+make[2]: *** [cmTC_bcf7e] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_bcf7e/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_f52b9/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f52b9.dir/build.make CMakeFiles/cmTC_f52b9.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f52b9.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   -mavx2 -o CMakeFiles/cmTC_f52b9.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+cc1: error: unrecognized command line option "-mavx2"
+make[2]: *** [CMakeFiles/cmTC_f52b9.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_f52b9/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_AVX2 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b1979/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_b1979.dir/build.make CMakeFiles/cmTC_b1979.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b1979.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_AVX2   /arch:AVX2 -o CMakeFiles/cmTC_b1979.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+i686-aldebaran-linux-gnu-gcc: /arch:AVX2: No such file or directory
+make[2]: *** [CMakeFiles/cmTC_b1979.dir/src.c.o] Error 1
+make[2]: *** Deleting file `CMakeFiles/cmTC_b1979.dir/src.c.o'
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_b1979/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_THREAD_LOCAL_STORAGE failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_354ee/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_354ee.dir/build.make CMakeFiles/cmTC_354ee.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_354ee.dir/src.c.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-gcc    -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DHAVE_THREAD_LOCAL_STORAGE   -o CMakeFiles/cmTC_354ee.dir/src.c.o   -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c: In function '__declspec':
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:3:20: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:2:28: error: declaration for parameter 'tls' but no such parameter
+/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.c:5:5: error: expected '{' at end of input
+make[2]: *** [CMakeFiles/cmTC_354ee.dir/src.c.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_354ee/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+
+    __declspec(thread) int tls;
+    int main(void) {
+        return 0;
+    }
+Performing C++ SOURCE FILE Test SUPPORTS_STDCXX11 failed with the following output:
+Change Dir: /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_62a9d/fast"
+make[1]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_62a9d.dir/build.make CMakeFiles/cmTC_62a9d.dir/build
+make[2]: Entering directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_62a9d.dir/src.cxx.o
+/home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/bin/i686-aldebaran-linux-gnu-g++     -DI_AM_A_ROBOT --sysroot /home/umaidzz/Documents/team-nust/ctc-linux32-atom-2.1.4.13/cross/i686-aldebaran-linux-gnu/sysroot/ -pipe -fomit-frame-pointer -fno-align-jumps -fno-align-functions -fno-align-labels -fno-align-loops -m32 -mtune=generic -DSUPPORTS_STDCXX11   -std=c++11 -o CMakeFiles/cmTC_62a9d.dir/src.cxx.o -c /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp/src.cxx
+cc1plus: error: unrecognized command line option "-std=c++11"
+make[2]: *** [CMakeFiles/cmTC_62a9d.dir/src.cxx.o] Error 1
+make[2]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTC_62a9d/fast] Error 2
+make[1]: Leaving directory `/home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }

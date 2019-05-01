@@ -34,6 +34,12 @@ public:
    */
   ~GoToTarget() final {}
 
+  /**
+   * Derived from Behavior
+   */
+  virtual bool initiate() override;
+  virtual void reinitiate(const BehaviorConfigPtr& cfg) override;
+
 protected:
   /**
    * @brief executeMotionAction See NavigationBehavior::executeMotionAction()

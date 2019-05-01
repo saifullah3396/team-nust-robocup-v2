@@ -134,19 +134,36 @@ void PlanningBehavior::setupGBRequest(const GBConfigPtr& config)
 void PlanningBehavior::setupMBRequest(
   const unsigned& mbManagerId, const MBConfigPtr& config)
 {
+  //cout << "beheavior name: " << this->name << endl;
+  //cout << "Setting mb request..." << endl;
   int id = mbManagerId + mbIdOffset;
+  //cout << "mbid: "<< id << endl;
   auto rmb = boost::make_shared<RequestMotionBehavior>(id, config);
+  //cout << "req id: "<< config->id << endl;
+  //cout << "req type: "<< config->type << endl;
   lastMotionRequest = rmb;
   BaseModule::publishModuleRequest(rmb);
   mRequestTime = pModule->getModuleTime();
   if (std::find(mbManagerIds.begin(), mbManagerIds.end(), id) == mbManagerIds.end()) {
     mbManagerIds.push_back(id);
   }
+  lastMBManagerId = id;
+  //cout << "Setting lastMBManagerId: " << lastMBManagerId << endl;
 }
 
 bool PlanningBehavior::gbInProgress()
 {
   return behaviorInProgress(GB_INFO_IN(PlanningModule));
+}
+
+bool PlanningBehavior::mbInProgress(const unsigned& id)
+{
+  const auto& mbInfo = MB_INFO_IN(PlanningModule);
+  if (mbInfo.find(id) != mbInfo.end()) {
+    if (behaviorInProgress(mbInfo.at(id)))
+      return true;
+  }
+  return false;
 }
 
 bool PlanningBehavior::mbInProgress()
@@ -174,22 +191,25 @@ bool PlanningBehavior::behaviorInProgress(const BehaviorInfo& info)
 
 bool PlanningBehavior::requestInProgress()
 {
-  bool inProgress = false;
+  if (lastMBManagerId == -1 && !lastGeneralRequest)
+    return false;
   if(requestInProgress(lastGeneralRequest, lastGBConfig, GB_INFO_IN(PlanningModule), gRequestTime))
-    inProgress = true;
+    return true;
   const auto& mbInfo = MB_INFO_IN(PlanningModule);
-  for (size_t i = 0; i < mbManagerIds.size(); ++i)
-  {
-    if (mbInfo.find(mbManagerIds[i]) == mbInfo.end()) {
-      mbManagerIds.erase(mbManagerIds.begin()+i);
-    } else {
-      if (i == mbManagerIds.size()-1) {
-        if(requestInProgress(lastMotionRequest, lastMBConfig, mbInfo.at(mbManagerIds[i]), mRequestTime))
-          inProgress = true;
-      }
-    }
+  //cout << "mbInfo: "  << mbInfo.size() << endl;
+  //cout << "lastMBManagerId: " << lastMBManagerId << endl;
+
+  if (mbInfo.find(lastMBManagerId) == mbInfo.end()) {
+    //cout << "waiting for feedback " << endl;
+    // waiting for feedback
+    return true;
   }
-  return inProgress;
+  if(requestInProgress(lastMotionRequest, lastMBConfig, mbInfo.at(lastMBManagerId), mRequestTime)) {
+    //cout << "still in progress..." << endl;
+    return true;
+  }
+  lastMBManagerId = -1;
+  return false;
 }
 
 bool PlanningBehavior::requestInProgress(

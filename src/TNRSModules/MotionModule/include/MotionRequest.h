@@ -27,7 +27,8 @@
     handsRequest,
     behaviorRequest,
     killBehavior,
-    killBehaviors
+    killBehaviors,
+    count
   };
 #else
   #ifndef REALTIME_LOLA_AVAILABLE

@@ -1382,6 +1382,33 @@ src/MovementModule/Types/NaoqiFootsteps.cpp.s:
 	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup && $(MAKE) -f src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/build.make src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiFootsteps.cpp.s
 .PHONY : src/MovementModule/Types/NaoqiFootsteps.cpp.s
 
+src/MovementModule/Types/NaoqiMoveTo.o: src/MovementModule/Types/NaoqiMoveTo.cpp.o
+
+.PHONY : src/MovementModule/Types/NaoqiMoveTo.o
+
+# target to build an object file
+src/MovementModule/Types/NaoqiMoveTo.cpp.o:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup && $(MAKE) -f src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/build.make src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.o
+.PHONY : src/MovementModule/Types/NaoqiMoveTo.cpp.o
+
+src/MovementModule/Types/NaoqiMoveTo.i: src/MovementModule/Types/NaoqiMoveTo.cpp.i
+
+.PHONY : src/MovementModule/Types/NaoqiMoveTo.i
+
+# target to preprocess a source file
+src/MovementModule/Types/NaoqiMoveTo.cpp.i:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup && $(MAKE) -f src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/build.make src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.i
+.PHONY : src/MovementModule/Types/NaoqiMoveTo.cpp.i
+
+src/MovementModule/Types/NaoqiMoveTo.s: src/MovementModule/Types/NaoqiMoveTo.cpp.s
+
+.PHONY : src/MovementModule/Types/NaoqiMoveTo.s
+
+# target to generate assembly for a file
+src/MovementModule/Types/NaoqiMoveTo.cpp.s:
+	cd /home/umaidzz/Documents/team-nust/team-nust-robocup-v2/build-V5/Release-Motion/build-local/team-nust-robocup && $(MAKE) -f src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/build.make src/TNRSModules/MotionModule/CMakeFiles/tnrs-motion-module.dir/src/MovementModule/Types/NaoqiMoveTo.cpp.s
+.PHONY : src/MovementModule/Types/NaoqiMoveTo.cpp.s
+
 src/MovementModule/Types/NaoqiMoveToward.o: src/MovementModule/Types/NaoqiMoveToward.cpp.o
 
 .PHONY : src/MovementModule/Types/NaoqiMoveToward.o
@@ -1907,6 +1934,9 @@ help:
 	@echo "... src/MovementModule/Types/NaoqiFootsteps.o"
 	@echo "... src/MovementModule/Types/NaoqiFootsteps.i"
 	@echo "... src/MovementModule/Types/NaoqiFootsteps.s"
+	@echo "... src/MovementModule/Types/NaoqiMoveTo.o"
+	@echo "... src/MovementModule/Types/NaoqiMoveTo.i"
+	@echo "... src/MovementModule/Types/NaoqiMoveTo.s"
 	@echo "... src/MovementModule/Types/NaoqiMoveToward.o"
 	@echo "... src/MovementModule/Types/NaoqiMoveToward.i"
 	@echo "... src/MovementModule/Types/NaoqiMoveToward.s"

@@ -39,7 +39,6 @@ string DebugBase::processDebugMsg(const Json::Value& root)
     pthread_mutex_lock(&classMapAccessMutex);
     classPtr = classMap[className];
     auto vars = root[className];
-    cout << "var received:" << vars << endl;
     for (const auto& var : vars.getMemberNames()) {
       try {
         classPtr->updateDebugVar(var, vars[var]);

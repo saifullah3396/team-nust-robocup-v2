@@ -7,21 +7,22 @@ export baseDir=$(dirname ${scriptPath})
 if [ "$(whoami)" != "root" ]; then
   # We are still user nao  
   
-  # Create B-Human directory
-  mkdir -p /home/nao/Config
+  # Create team nust directory
+  mkdir -p /home/nao/team_nust/config
 
   # Create logs dir for logger
-  mkdir -p /home/nao/logs
+  mkdir -p /home/nao/team_nust/logs
 
   # Copy wireless profiles
-  cp -r ${baseDir}/Robot/Profiles /home/nao
+  cp -r ${baseDir}/Robot/Profiles /home/nao/team_nust
 
   # Add /home/nao to search path (.profile is needed by putty? and .bashrc for bush)
   cp ${baseDir}/profile /home/nao/.profile
   cp ${baseDir}/profile /home/nao/.bashrc
 
-  # Add commands to /home/nao/bin
-  cp -R ${baseDir}/bin /home/nao
+  # Add commands to /home/nao/team_nust/bin
+  mkdir -p /home/nao/team_nust/bin
+  cp -R ${baseDir}/bin/* /home/nao/team_nust/bin
   
   # Continue as root
   echo "Please enter password for user 'root' (usually also 'root')."
@@ -29,13 +30,14 @@ if [ "$(whoami)" != "root" ]; then
 else
   # Now we are root
 
+  echo "Remounting"
   # if install is executed on a installed robot, / is read-only, therefore remount it,
   # otherwise this line will have no effect
-  mount -n -o remount,rw /
+  #mount -n -o remount,rw /
   
   # Change name
   cp ${baseDir}/Robot/hostname /etc/hostname
-  python bin/setRobotName.py $(cat /etc/hostname) | grep -v '[I]'
+  python team_nust/bin/setRobotName.py $(cat /etc/hostname) | grep -v '[I]'
 
   # Make sudo work
   cp -f ${baseDir}/sudoers /etc
@@ -66,15 +68,17 @@ else
   # wpa_supplicant
   cp ${baseDir}/Robot/wired /etc/init.d
   cp ${baseDir}/Robot/wireless /etc/init.d
-  system
-  #rc-update add wired boot
-  #rc-update add wireless boot
 
+  rc-update add wired boot
+  rc-update add wireless boot
+
+  echo "Setting hostname config"
   # Do not verify remote hostname via DNS
   if [ ! -f "/etc/ssh.conf/sshd_config" -o -z "$(grep "UseDNS no" "/etc/ssh.conf/sshd_config" 2>/dev/null)" ]; then
     echo "UseDNS no" >> "/etc/ssh.conf/sshd_config"
   fi
 
+  echo "Setting timezone"
   # Set the timezone and localtime
   cp /usr/share/zoneinfo/Asia/Karachi /etc/localtime
   echo "Asia/Karachi" > /etc/timezone
@@ -83,17 +87,17 @@ else
   if [ ! -f /etc/naoqi/autoload.org ] ; then
     cp -n /etc/naoqi/autoload.ini /etc/naoqi/autoload.org
   fi
-  cp ${baseDir}/autoload.ini /etc/naoqi/autoload.tnust
-  /home/nao/bin/toteamnust
+  #cp ${baseDir}/autoload.tnust /etc/naoqi/autoload.ini
+  #/home/nao/team_nust/bin/toteamnust
 
   # Remove all services not needed
-  #rc-update >${baseDir}/temp
-  #for i in crash-report-uploader proxydaemon vsftpd nginx naopathe laser bootprogress_0 bootprogress_25 bootprogress_50 bootprogress_75 bootprogress_100 avahi-daemon lircd bluetooth hwclock sysctl local urandom termencoding netmount mtab sysklogd savecache firewall_mode ofono pulseaudio qimessaging-json udev-postmount
-  #do
-  #  if [ ! -z "$(grep "$i |" ${baseDir}/temp)" ]; then
-  #    rc-update del $(echo "$(grep "$i |" ${baseDir}/temp)" | sed "s%[ ]*\([^ ]*\) |[ ]*\([^ ]*\).*%\1 \2%")
-  #  fi
-  #done
+  rc-update >${baseDir}/temp
+  for i in crash-report-uploader proxydaemon vsftpd nginx naopathe laser bootprogress_0 bootprogress_25 bootprogress_50 bootprogress_75 bootprogress_100 avahi-daemon lircd bluetooth hwclock sysctl local urandom termencoding netmount mtab sysklogd savecache firewall_mode ofono pulseaudio qimessaging-json udev-postmount
+  do
+    if [ ! -z "$(grep "$i |" ${baseDir}/temp)" ]; then
+      rc-update del $(echo "$(grep "$i |" ${baseDir}/temp)" | sed "s%[ ]*\([^ ]*\) |[ ]*\([^ ]*\).*%\1 \2%")
+    fi
+  done
 
   # Load sshd later
   #rc-update add sshd
@@ -101,8 +105,8 @@ else
   # Install alternative modules
   # cp -r ${baseDir}/kernel/2.6.33.9-rt31-aldebaran-rt /lib/modules
   
-  sync
+  #sync
 
-  echo "[INFO] rebooting"
-  reboot
+  #echo "[INFO] rebooting"
+  #reboot
 fi

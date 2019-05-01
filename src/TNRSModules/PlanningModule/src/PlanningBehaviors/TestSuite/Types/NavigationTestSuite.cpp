@@ -7,6 +7,7 @@
  * @date 21 Jul 2018
  */
 
+#include "TNRSBase/include/DebugBase.h"
 #include "LocalizationModule/include/LocalizationRequest.h"
 #include "PlanningModule/include/PlanningRequest.h"
 #include "PlanningModule/include/PlanningBehaviors/TestSuite/Types/NavigationTestSuite.h"
@@ -14,6 +15,7 @@
 #include "BehaviorConfigs/include/PBConfigs/PBNavigationConfig.h"
 #include "BehaviorConfigs/include/PBConfigs/TestSuiteConfig.h"
 #include "VisionModule/include/VisionRequest.h"
+#include "Utils/include/DataHolders/BallInfo.h"
 #include "Utils/include/DataHolders/WorldBallInfo.h"
 
 NavigationTestSuite::NavigationTestSuite(
@@ -56,6 +58,8 @@ bool NavigationTestSuite::initiate()
       boost::make_shared<SwitchFeatureExtModule>(true, FeatureExtractionIds::lines));
     BaseModule::publishModuleRequest(
       boost::make_shared<SwitchFeatureExtModule>(true, FeatureExtractionIds::goal));
+    BaseModule::publishModuleRequest(
+      boost::make_shared<SwitchFeatureExtModule>(true, FeatureExtractionIds::ball));
     BaseModule::publishModuleRequest(
       boost::make_shared<InitiateLocalizer>(getBehaviorCast()->startPose)
     );
@@ -124,28 +128,42 @@ void NavigationTestSuite::GoToTarget::onRun()
 void NavigationTestSuite::FollowBall::onStart()
 {
   LOG_INFO("FollowBall.onStart()");
+  //Json::Value value;
+  #ifdef MODULE_IS_REMOTE
+  //value["BallExtraction"]["drawPredictionState"] = 1;
+  //value["BallExtraction"]["drawBallContour"] = 1;
+  //value["BallExtraction"]["drawPredictionROI"] = 1;
+  //value["BallExtraction"]["displayOutput"] = 1;
+  #endif
+ // DebugBase::processDebugMsg(value);
   bPtr->killGeneralBehavior();
   bPtr->killMotionBehavior(MOTION_1);
 }
 
 void NavigationTestSuite::FollowBall::onRun()
 {
-  RobotPose2D<float> target;
-  const auto& wbInfo = WORLD_BALL_INFO_OUT_REL(PlanningModule, bPtr);
+  if (bPtr->getChild())
+    boost::static_pointer_cast<PlanningBehavior>(bPtr->getChild())->setMBIdOffset(MOTION_1+1);
+  if (!bPtr->mbInProgress()) {
+    auto httConfig =
+      boost::make_shared<HeadTargetTrackConfig>();
+    httConfig->headTargetType = HeadTargetTypes::ball;
+    bPtr->setupMBRequest(MOTION_1, httConfig);
+  }
   const auto& robotPose2D = ROBOT_POSE_2D_IN_REL(PlanningModule, bPtr);
-  if (wbInfo.found) {
-    const auto& ballWorld = wbInfo.posWorld;
-    auto angle =
-        atan2(
-          ballWorld.y - robotPose2D.getY(),
-          ballWorld.x - robotPose2D.getX());
-    cout << "angle: " << angle * 180 / M_PI << endl;
-    cout << "ballWorld:" << ballWorld << endl;
-    target.x() = ballWorld.x - 0.2 * cos(0.0);
-    target.y() = ballWorld.y - 0.2 * sin(0.0);
-    target.theta() = angle;
+  const auto& bInfo = BALL_INFO_IN_REL(PlanningModule, bPtr);
+  if (bInfo.found) {
+    auto rToBallAngle = atan2(bInfo.posRel.y, bInfo.posRel.x);
+    auto targetWorld =
+      RobotPose2D<float>(bInfo.posRel.x - 0.15 * cos(rToBallAngle), bInfo.posRel.y - 0.15 * sin(rToBallAngle), rToBallAngle);
+    targetWorld = robotPose2D.transform(targetWorld);
     auto planConfig = boost::make_shared<PlanTowardsConfig>();
-    planConfig->goal = target;
+    planConfig->goal = targetWorld;
+    planConfig->tolerance = RobotPose2D<float>(0.05, 0.05, Angle::DEG_30);
+    bPtr->setupChildRequest(planConfig, true);
+  } else {
+    auto planConfig = boost::make_shared<PlanTowardsConfig>();
+    planConfig->goal = robotPose2D;
     bPtr->setupChildRequest(planConfig, true);
   }
 }

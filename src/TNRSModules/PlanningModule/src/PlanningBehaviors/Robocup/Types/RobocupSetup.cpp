@@ -61,7 +61,7 @@ void RobocupSetup::update()
   LOG_INFO("In RobocupSetup.update()...");
   // Update required input data
   updateRobotData(); /// Tested
-  //printGameData();
+  printGameData();
   if(waitForPenalty()) { /// Tested
     LOG_INFO("In waitForPenalty()...");
     // Robot is penalised so turn off vision and localization modules
@@ -134,9 +134,9 @@ void RobocupSetup::cfgHandlingAction()
   ///gameData.secondaryState = STATE2_PENALTYSHOOT;
   ///gameData.kickOffTeam = 30;
   ///Example states for checking gameplay behavior
-  gameData.state = STATE_READY;
-  gameData.secondaryState = STATE2_NORMAL;
-  gameData.kickOffTeam = 30;
+  //gameData.state = STATE_SET;
+  //gameData.secondaryState = STATE2_NORMAL;
+  //gameData.kickOffTeam = 30;
   if ((unsigned) gameData.state == STATE_INITIAL) {
     LOG_INFO("GameCtrlState: STATE_INITIAL")
   } else if ((unsigned) gameData.state == STATE_READY) {
@@ -299,7 +299,7 @@ void RobocupSetup::getInPositionAction()
               }
             }
           }
-          setNavigationConfig(target);
+          setPlanTowardsConfig(target, keepMovingWhileNav);
           behaviorState = goingToPosition;
           ON_SIDE_LINE_OUT(PlanningModule) = false;
         } else {
@@ -314,7 +314,7 @@ void RobocupSetup::getInPositionAction()
           //if (this->lastChildCfg &&
           //    this->lastChildCfg->id == (unsigned)PBIds::NAVIGATION)
           //{ // If last child running was navigation behavior
-          setNavigationConfig(target);
+          setPlanTowardsConfig(target, keepMovingWhileNav);
           behaviorState = goingToPosition;
         }
       }

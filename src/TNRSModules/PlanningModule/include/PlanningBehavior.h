@@ -146,6 +146,7 @@ protected:
    */
   bool mbInProgress();
 
+  bool mbInProgress(const unsigned& id);
   /**
    * Sets up a request to call a general behavior
    *
@@ -192,6 +193,9 @@ protected:
 
   ///< Offset for motion behavior ids to be used
   int mbIdOffset;
+
+  ///< Last MBmanaager id
+  int lastMBManagerId = {-1};
 
   ///< Configuration of the currently running motion behavior
   BehaviorConfigPtr lastMBConfig;
