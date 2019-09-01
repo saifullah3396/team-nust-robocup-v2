@@ -13,6 +13,10 @@ multiagent   localization.
 ## Built With
 * [NAOQI](http://doc.aldebaran.com/2-1) - The Naoqi documentation
 
+## Official Documentation
+* The official documentation for the code base can be found at:
+https://docs.google.com/document/d/1H9NFfVEYYqDxaf2ef4AEArm_PaG9ix4DcYhPoQEpLxI/edit?usp=sharing
+
 ## Authors
 * <A href="mailto:saifullah3396@gmail.com">Saifullah</A>
 
